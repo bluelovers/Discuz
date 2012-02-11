@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_doing.php 22037 2011-04-20 08:34:44Z cnteacher $
+ *      $Id: spacecp_doing.php 27225 2012-01-11 08:45:41Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -27,7 +27,7 @@ if(submitcheck('addsubmit')) {
 		showmessage('operating_too_fast', '', array('waittime' => $waittime));
 	}
 
-	$message = getstr($_POST['message'], 200, 1, 1, 1);
+	$message = getstr($_POST['message'], 200, 0, 0, 1);
 	$message = preg_replace("/\<br.*?\>/i", ' ', $message);
 	if(strlen($message) < 1) {
 		showmessage('should_write_that');
@@ -53,7 +53,7 @@ if(submitcheck('addsubmit')) {
 		'ip' => $_G['clientip'],
 		'status' => $doing_status,
 	);
-	$newdoid = DB::insert('home_doing', $setarr, 1);
+	$newdoid = C::t('home_doing')->insert($setarr, 1);
 
 	$setarr = array('recentnote'=>$message, 'spacenote'=>$message);
 	$credit = $experience = 0;
@@ -61,14 +61,19 @@ if(submitcheck('addsubmit')) {
 
 	updatecreditbyaction('doing', 0, $extrasql);
 
-	DB::update('common_member_field_home', $setarr, "uid='$_G[uid]'");
+	C::t('common_member_field_home')->update($_G['uid'], $setarr);
 
 	if($_POST['to_signhtml'] && $_G['group']['maxsigsize']) {
-		$signhtml = cutstr(strip_tags($message), $_G['group']['maxsigsize']);
-		DB::update('common_member_field_forum', array('sightml'=>$signhtml), "uid='$_G[uid]'");
+		if($_G['group']['maxsigsize'] < 200) {
+			$signhtml = getstr($_POST['message'], $_G['group']['maxsigsize'], 0, 0, 1);
+			$signhtml = preg_replace("/\<br.*?\>/i", ' ', $signhtml);
+		} else {
+			$signhtml = $message;
+		}
+		C::t('common_member_field_forum')->update($_G['uid'], array('sightml'=>$signhtml));
 	}
 
-	if(ckprivacy('doing', 'feed') && $doing_status == '0') {
+	if($_G['setting']['homestatus'] && ckprivacy('doing', 'feed') && $doing_status == '0') {
 		$feedarr = array(
 			'appid' => '',
 			'icon' => 'doing',
@@ -76,13 +81,13 @@ if(submitcheck('addsubmit')) {
 			'username' => $_G['username'],
 			'dateline' => $_G['timestamp'],
 			'title_template' => lang('feed', 'feed_doing_title'),
-			'title_data' => daddslashes(serialize(dstripslashes(array('message'=>$message)))),
+			'title_data' => serialize(array('message'=>$message)),
 			'body_template' => '',
 			'body_data' => '',
 			'id' => $newdoid,
 			'idtype' => 'doid'
 		);
-		DB::insert('home_feed', $feedarr);
+		C::t('home_feed')->insert($feedarr);
 	}
 	if($doing_status == '1') {
 		updatemoderate('doid', $newdoid);
@@ -91,11 +96,11 @@ if(submitcheck('addsubmit')) {
 
 	require_once libfile('function/stat');
 	updatestat('doing');
-	DB::update('common_member_status', array('lastpost' => $_G['timestamp']), array('uid' => $_G['uid']));
-	if(!empty($_G['gp_fromcard'])) {
+	C::t('common_member_status')->update($_G['uid'], array('lastpost' => TIMESTAMP), 'UNBUFFERED');
+	if(!empty($_GET['fromcard'])) {
 		showmessage($message.lang('spacecp','card_update_doing'));
 	} else {
-		showmessage('do_success', dreferer(), array('doid' => $newdoid), $_G['gp_spacenote'] ? array('showmsg' => false):array('header' => true));
+		showmessage('do_success', dreferer(), array('doid' => $newdoid), $_GET['spacenote'] ? array('showmsg' => false):array('header' => true));
 	}
 
 } elseif (submitcheck('commentsubmit')) {
@@ -110,7 +115,7 @@ if(submitcheck('addsubmit')) {
 		showmessage('operating_too_fast', '', array('waittime' => $waittime));
 	}
 
-	$message = getstr($_POST['message'], 200, 1, 1, 1);
+	$message = getstr($_POST['message'], 200, 0, 0, 1);
 	$message = preg_replace("/\<br.*?\>/i", ' ', $message);
 	if(strlen($message) < 1) {
 		showmessage('should_write_that');
@@ -120,12 +125,10 @@ if(submitcheck('addsubmit')) {
 
 	$updo = array();
 	if($id) {
-		$query = DB::query("SELECT * FROM ".DB::table('home_docomment')." WHERE id='$id'");
-		$updo = DB::fetch($query);
+		$updo = C::t('home_docomment')->fetch($id);
 	}
 	if(empty($updo) && $doid) {
-		$query = DB::query("SELECT * FROM ".DB::table('home_doing')." WHERE doid='$doid'");
-		$updo = DB::fetch($query);
+		$updo = C::t('home_doing')->fetch($doid);
 	}
 	if(empty($updo)) {
 		showmessage('docomment_error');
@@ -153,9 +156,9 @@ if(submitcheck('addsubmit')) {
 		$setarr['upid'] = $updo['upid'];
 	}
 
-	$newid = DB::insert('home_docomment', $setarr, 1);
+	$newid = C::t('home_docomment')->insert($setarr, true);
 
-	DB::query("UPDATE ".DB::table('home_doing')." SET replynum=replynum+1 WHERE doid='$updo[doid]'");
+	C::t('home_doing')->update_replynum_by_doid(1, $updo['doid']);
 
 	if($updo['uid'] != $_G['uid']) {
 		notification_add($updo['uid'], 'doing', 'doing_reply', array(
@@ -167,7 +170,7 @@ if(submitcheck('addsubmit')) {
 
 	include_once libfile('function/stat');
 	updatestat('docomment');
-	DB::update('common_member_status', array('lastpost' => $_G['timestamp']), array('uid' => $_G['uid']));
+	C::t('common_member_status')->update($_G['uid'], array('lastpost' => TIMESTAMP), 'UNBUFFERED');
 	showmessage('do_success', dreferer(), array('doid' => $updo['doid']));
 }
 
@@ -176,14 +179,15 @@ if($_GET['op'] == 'delete') {
 	if(submitcheck('deletesubmit')) {
 		if($id) {
 			$allowmanage = checkperm('managedoing');
-			$query = DB::query("SELECT dc.*, d.uid as duid FROM ".DB::table('home_docomment')." dc, ".DB::table('home_doing')." d WHERE dc.id='$id' AND dc.doid=d.doid");
-			if($value = DB::fetch($query)) {
+			if($value = C::t('home_docomment')->fetch($id)) {
+				$home_doing = C::t('home_doing')->fetch($value['doid']);
+				$value['duid'] = $home_doing['uid'];
 				if($allowmanage || $value['uid'] == $_G['uid'] || $value['duid'] == $_G['uid'] ) {
-					DB::update('home_docomment', array('uid'=>0, 'username'=>'', 'message'=>''), "id='$id'");
+					C::t('home_docomment')->update($id, array('uid' => 0, 'username' => '', 'message' => ''));
 					if($value['uid'] != $_G['uid'] && $value['duid'] != $_G['uid']) {
 						batchupdatecredit('comment', $value['uid'], array(), -1);
 					}
-					DB::query("UPDATE ".DB::table('home_doing')." SET replynum=replynum-'1' WHERE doid='$doid'");
+					C::t('home_doing')->update_replynum_by_doid(-1, $updo['doid']);
 				}
 			}
 		} else {
@@ -197,16 +201,15 @@ if($_GET['op'] == 'delete') {
 
 } elseif ($_GET['op'] == 'getcomment') {
 
-	include_once(DISCUZ_ROOT.'./source/class/class_tree.php');
-	$tree = new tree();
+	include_once(DISCUZ_ROOT.'./source/class/lib/lib_tree.php');
+	$tree = new lib_tree();
 
 	$list = array();
 	$highlight = 0;
 	$count = 0;
 
 	if(empty($_GET['close'])) {
-		$query = DB::query("SELECT * FROM ".DB::table('home_docomment')." WHERE doid='$doid' ORDER BY dateline");
-		while ($value = DB::fetch($query)) {
+		foreach(C::t('home_docomment')->fetch_all_by_doid($doid) as $value) {
 			$tree->setNode($value['id'], $value['upid'], $value);
 			$count++;
 			if($value['authorid'] == $space['uid']) $highlight = $value['id'];

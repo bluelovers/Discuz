@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_image.php 19369 2010-12-29 04:29:52Z zhengqingpeng $
+ *      $Id: class_image.php 26205 2011-12-05 10:09:32Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -26,24 +26,22 @@ class image {
 
 	function image() {
 		global $_G;
-		$s = &$_G['setting'];
 		$this->param = array(
-			'imagelib'		=> $s['imagelib'],
-			'imageimpath'		=> $s['imageimpath'],
-			'thumbquality'		=> $s['thumbquality'],
-			'watermarkstatus'	=> unserialize($s['watermarkstatus']),
-			'watermarkminwidth'	=> unserialize($s['watermarkminwidth']),
-			'watermarkminheight'	=> unserialize($s['watermarkminheight']),
-			'watermarktype'		=> $s['watermarktype'],
-			'watermarktext'		=> $s['watermarktext'],
-			'watermarktrans'	=> unserialize($s['watermarktrans']),
-			'watermarkquality'	=> unserialize($s['watermarkquality']),
+			'imagelib'		=> $_G['setting']['imagelib'],
+			'imageimpath'		=> $_G['setting']['imageimpath'],
+			'thumbquality'		=> $_G['setting']['thumbquality'],
+			'watermarkstatus'	=> dunserialize($_G['setting']['watermarkstatus']),
+			'watermarkminwidth'	=> dunserialize($_G['setting']['watermarkminwidth']),
+			'watermarkminheight'	=> dunserialize($_G['setting']['watermarkminheight']),
+			'watermarktype'		=> $_G['setting']['watermarktype'],
+			'watermarktext'		=> $_G['setting']['watermarktext'],
+			'watermarktrans'	=> dunserialize($_G['setting']['watermarktrans']),
+			'watermarkquality'	=> dunserialize($_G['setting']['watermarkquality']),
 		);
 	}
 
 
 	function Thumb($source, $target, $thumbwidth, $thumbheight, $thumbtype = 1, $nosuffix = 0) {
-		global $_G;
 		$return = $this->init('thumb', $source, $target, $nosuffix);
 		if($return <= 0) {
 			return $this->returncode($return);
@@ -65,8 +63,26 @@ class image {
 		return $this->sleep($return);
 	}
 
+	function Cropper($source, $target, $dstwidth, $dstheight, $srcx = 0, $srcy = 0, $srcwidth = 0, $srcheight = 0) {
+
+		$return = $this->init('thumb', $source, $target, 1);
+		if($return <= 0) {
+			return $this->returncode($return);
+		}
+		if($dstwidth < 0 || $dstheight < 0) {
+			return false;
+		}
+		$this->param['dstwidth'] = $dstwidth;
+		$this->param['dstheight'] = $dstheight;
+		$this->param['srcx'] = $srcx;
+		$this->param['srcy'] = $srcy;
+		$this->param['srcwidth'] = $srcwidth ? $srcwidth : $dstwidth;
+		$this->param['srcheight'] = $srcheight ? $srcheight : $dstheight;
+
+		$return = !$this->libmethod ? $this->Cropper_GD() : $this->Cropper_IM();
+	}
+
 	function Watermark($source, $target = '', $type = 'forum') {
-		global $_G;
 		$return = $this->init('watermask', $source, $target);
 		if($return <= 0) {
 			return $this->returncode($return);
@@ -185,14 +201,6 @@ class image {
 		}
 	}
 
-	function exec($execstr) {
-		exec($execstr, $output, $return);
-		if(!empty($return) || !empty($output)) {
-			return -3;
-		}
-		return true;
-	}
-
 	function sizevalue($method) {
 		$x = $y = $w = $h = 0;
 		if($method > 0) {
@@ -239,8 +247,6 @@ class image {
 	}
 
 	function Thumb_GD() {
-		global $_G;
-
 		if(!function_exists('imagecreatetruecolor') || !function_exists('imagecopyresampled') || !function_exists('imagejpeg') || !function_exists('imagecopymerge')) {
 			return -4;
 		}
@@ -296,16 +302,14 @@ class image {
 	}
 
 	function Thumb_IM() {
-		global $_G;
-
 		switch($this->param['thumbtype']) {
 			case 'fixnone':
 			case 1:
 				if($this->imginfo['width'] >= $this->param['thumbwidth'] || $this->imginfo['height'] >= $this->param['thumbheight']) {
 					$exec_str = $this->param['imageimpath'].'/convert -quality '.intval($this->param['thumbquality']).' -geometry '.$this->param['thumbwidth'].'x'.$this->param['thumbheight'].' '.$this->source.' '.$this->target;
-					$return = $this->exec($exec_str);
-					if($return < 0) {
-						return $return;
+					$return = exec($exec_str);
+					if(!file_exists($this->target)) {
+						return -3;
 					}
 				}
 				break;
@@ -314,27 +318,27 @@ class image {
 				if(!($this->imginfo['width'] <= $this->param['thumbwidth'] || $this->imginfo['height'] <= $this->param['thumbheight'])) {
 					list($startx, $starty, $cutw, $cuth) = $this->sizevalue(1);
 					$exec_str = $this->param['imageimpath'].'/convert -quality '.intval($this->param['thumbquality']).' -crop '.$cutw.'x'.$cuth.'+'.$startx.'+'.$starty.' '.$this->source.' '.$this->target;
-					$return = $this->exec($exec_str);
-					if($return < 0) {
-						return $return;
+					exec($exec_str);
+					if(!file_exists($this->target)) {
+						return -3;
 					}
-					$exec_str = $this->param['imageimpath'].'/convert -quality '.intval($this->param['thumbquality']).' -thumbnail \''.$this->param['thumbwidth'].'x'.$this->param['thumbheight'].'>\' -resize '.$this->param['thumbwidth'].'x'.$this->param['thumbheight'].' -gravity center -extent '.$this->param['thumbwidth'].'x'.$this->param['thumbheight'].' '.$this->target.' '.$this->target;
-					$return = $this->exec($exec_str);
-					if($return < 0) {
-						return $return;
+					$exec_str = $this->param['imageimpath'].'/convert -quality '.intval($this->param['thumbquality']).' -thumbnail \''.$this->param['thumbwidth'].'x'.$this->param['thumbheight'].'\' -resize '.$this->param['thumbwidth'].'x'.$this->param['thumbheight'].' -gravity center -extent '.$this->param['thumbwidth'].'x'.$this->param['thumbheight'].' '.$this->target.' '.$this->target;
+					exec($exec_str);
+					if(!file_exists($this->target)) {
+						return -3;
 					}
 				} else {
 					$startx = -($this->param['thumbwidth'] - $this->imginfo['width']) / 2;
 					$starty = -($this->param['thumbheight'] - $this->imginfo['height']) / 2;
 					$exec_str = $this->param['imageimpath'].'/convert -quality '.intval($this->param['thumbquality']).' -crop '.$this->param['thumbwidth'].'x'.$this->param['thumbheight'].'+'.$startx.'+'.$starty.' '.$this->source.' '.$this->target;
-					$return = $this->exec($exec_str);
-					if($return < 0) {
-						return $return;
+					exec($exec_str);
+					if(!file_exists($this->target)) {
+						return -3;
 					}
 					$exec_str = $this->param['imageimpath'].'/convert -quality '.intval($this->param['thumbquality']).' -thumbnail \''.$this->param['thumbwidth'].'x'.$this->param['thumbheight'].'>\' -gravity center -extent '.$this->param['thumbwidth'].'x'.$this->param['thumbheight'].' '.$this->target.' '.$this->target;
-					$return = $this->exec($exec_str);
-					if($return < 0) {
-						return $return;
+					exec($exec_str);
+					if(!file_exists($this->target)) {
+						return -3;
 					}
 				}
 				break;
@@ -342,9 +346,29 @@ class image {
 		return 1;
 	}
 
-	function Watermark_GD($type = 'forum') {
-		global $_G;
+	function Cropper_GD() {
+		$image = $this->loadsource();
+		if($image < 0) {
+			return $image;
+		}
+		$newimage = imagecreatetruecolor($this->param['dstwidth'], $this->param['dstheight']);
+		imagecopyresampled($newimage, $image, 0, 0, $this->param['srcx'], $this->param['srcy'], $this->param['dstwidth'], $this->param['dstheight'], $this->param['srcwidth'], $this->param['srcheight']);
+		ImageJpeg($newimage, $this->target, 100);
+		imagedestroy($newimage);
+		imagedestroy($image);
+		return true;
+	}
+	function Cropper_IM() {
+		$exec_str = $this->param['imageimpath'].'/convert -quality 100 '.
+			'-crop '.$this->param['srcwidth'].'x'.$this->param['srcheight'].'+'.$this->param['srcx'].'+'.$this->param['srcy'].' '.
+			'-geometry '.$this->param['dstwidth'].'x'.$this->param['dstheight'].' '.$this->source.' '.$this->target;
+		exec($exec_str);
+		if(!file_exists($this->target)) {
+			return -3;
+		}
+	}
 
+	function Watermark_GD($type = 'forum') {
 		if(!function_exists('imagecreatetruecolor')) {
 			return -4;
 		}
@@ -462,8 +486,6 @@ class image {
 	}
 
 	function Watermark_IM($type = 'forum') {
-		global $_G;
-
 		switch($this->param['watermarkstatus'][$type]) {
 			case 1:
 				$gravity = 'NorthWest';
@@ -523,7 +545,11 @@ class image {
 					' text 0,0 \''.$watermarktextcvt.'\'"'.
 				' '.$this->source.' '.$this->target;
 		}
-		return $this->exec($exec_str);
+		exec($exec_str);
+		if(!file_exists($this->target)) {
+			return -3;
+		}
+		return 1;
 	}
 
 }

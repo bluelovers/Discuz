@@ -2,10 +2,9 @@
 	<!--{if !$post['first'] && !empty($post[subject])}-->
 		<h2>$post[subject]</h2>
 	<!--{/if}-->
-
-<!--{if $_G['adminid'] != 1 && $_G['setting']['bannedmessages'] & 1 && ($post['memberstatus'] == '-1' || ($post['authorid'] && !$post['username']) || ($post['groupid'] == 4 || $post['groupid'] == 5) || $post['memberstatus'])}-->
+<!--{if !$_G['forum']['ismoderator'] && $_G['setting']['bannedmessages'] & 1 && (($post['authorid'] && !$post['username']) || ($_G['thread']['digest'] == 0 && ($post['groupid'] == 4 || $post['groupid'] == 5 || $post['memberstatus'] == '-1')))}-->
 	<div class="locked">{lang message_banned}</div>
-<!--{elseif $_G['adminid'] != 1 && $post['status'] & 1}-->
+<!--{elseif !$_G['forum']['ismoderator'] && $post['status'] & 1}-->
 	<div class="locked">{lang message_single_banned}</div>
 <!--{elseif $needhiddenreply}-->
 	<div class="locked">{lang message_ishidden_hiddenreplies}</div>
@@ -13,10 +12,13 @@
 	<!--{template forum/viewthread_pay}-->
 <!--{else}-->
 	<!--{hook/viewthread_posttop $postcount}-->
-	<!--{if $_G['setting']['bannedmessages'] & 1 && ($post['memberstatus'] == '-1' || ($post['authorid'] && !$post['username']) || ($post['groupid'] == 4 || $post['groupid'] == 5))}-->
+	<!--{if $_G['setting']['bannedmessages'] & 1 && (($post['authorid'] && !$post['username']) || ($_G['thread']['digest'] == 0 && ($post['groupid'] == 4 || $post['groupid'] == 5 || $post['memberstatus'] == '-1')))}-->
 		<div class="locked">{lang admin_message_banned}</div>
 	<!--{elseif $post['status'] & 1}-->
 		<div class="locked">{lang admin_message_single_banned}</div>
+	<!--{/if}-->
+	<!--{if !$post['first'] && $hiddenreplies && $_G['forum']['ismoderator']}-->
+		<div class="locked">{lang message_ishidden_hiddenreplies}</div>
 	<!--{/if}-->
 	<!--{if $post['first']}-->
 		<!--{if $_G['forum_thread']['price'] > 0 && $_G['forum_thread']['special'] == 0}-->
@@ -68,7 +70,7 @@
 				<!--{template forum/viewthread_activity}-->
 			<!--{elseif $_G[forum_thread][special] == 5}-->
 				<!--{template forum/viewthread_debate}-->
-			<!--{elseif $threadplughtml}-->
+			<!--{elseif $_G[forum_thread][special] == 127}-->
 				$threadplughtml
 				<table cellspacing="0" cellpadding="0"><tr><td class="t_f" id="postmessage_$post[pid]">$post[message]</td></tr></table>
 			<!--{/if}-->
@@ -79,11 +81,16 @@
 					$ad_a_pr
 				<!--{/if}-->
 			<!--{/if}-->
-			$post[message]</td></tr></table>
+			<!--{if $post['invisible'] != '-2' || $_G['forum']['ismoderator']}-->$post[message]<!--{else}--><span class="xg1">{lang moderate_need}</span><!--{/if}--></td></tr></table>
 		<!--{/if}-->
 
 		<!--{if $post['attachment']}-->
-			<div class="locked">{lang attachment}: <em><!--{if $_G['uid']}-->{lang attach_nopermission}<!--{else}-->{lang attach_nopermission_login} <!--{hook/global_login_text}--><!--{/if}--></em></div>
+			<div class="attach_nopermission">
+				<div>
+					<h3>{lang attach_nopermission_notice}</h3>
+					<p><!--{if $_G['uid']}-->{lang attach_nopermission}<!--{else}-->{lang attach_nopermission_login} <!--{hook/global_login_text}--><!--{/if}--></p>
+				</div>
+			</div>
 		<!--{elseif $post['imagelist'] || $post['attachlist']}-->
 			<div class="pattl">
 				<!--{if $post['imagelist'] && $_G['setting']['imagelistthumb'] && $post['imagelistcount'] >= $_G['setting']['imagelistthumb']}-->
@@ -116,11 +123,8 @@
 				<div class="psta"><a href="home.php?mod=space&uid=$rpost[authorid]" c="1">$rpost[avatar]</a></div>
 				<div class="psti">
 					<p>
-						<a href="home.php?mod=space&uid=$rpost[authorid]" class="xi2 xw1">$rpost[author]</a> {lang published_in_floor}
-						<span class="xi2">
-							&nbsp;<a href="javascript:;" onclick="window.open('forum.php?mod=redirect&goto=findpost&ptid=$rpost[tid]&pid=$rpost[pid]')" class="xi2">{lang view_full_content}</a>
-							<!--{if $_G['group']['allowstickreply']}-->&nbsp;<a href="javascript:;" onclick="modaction('stickreply', $rpost[pid], '&undo=yes')" class="xi2">{lang admin_unstickreply}</a><!--{/if}-->
-						</span>
+						<a href="home.php?mod=space&uid=$rpost[authorid]" class="xi2 xw1">$rpost[author]</a> <a href="javascript:;" onclick="window.open('forum.php?mod=redirect&goto=findpost&ptid=$rpost[tid]&pid=$rpost[pid]')" class="xi2">{lang published_in_floor}</a>
+						<!--{if $_G['group']['allowstickreply'] || $_G['forum_thread']['authorid'] == $_G['uid']}-->&nbsp;<a href="javascript:;" onclick="modaction('stickreply', $rpost[pid], '&undo=yes')" class="xi2">{lang admin_unstickreply}</a><!--{/if}-->
 					</p>
 					<div class="mtn">$rpost[message]</div>
 				</div>
@@ -144,7 +148,7 @@
 					&nbsp;$comment[comment]&nbsp;
 					<!--{if $comment[rpid]}-->
 						<a href="forum.php?mod=redirect&goto=findpost&pid=$comment[rpid]&ptid=$_G[tid]" class="xi2">{lang detail}</a>
-						<a href="forum.php?mod=post&action=reply&fid=$_G[fid]&tid=$_G[tid]&repquote=$comment[rpid]&extra=$_G[gp_extra]&page=$page{if $_G[gp_from]}&from=$_G[gp_from]{/if}" class="xi2" onclick="showWindow('reply', this.href)">{lang reply}</a>
+						<a href="forum.php?mod=post&action=reply&fid=$_G[fid]&tid=$_G[tid]&repquote=$comment[rpid]&extra=$_GET[extra]&page=$page{if $_GET[from]}&from=$_GET[from]{/if}" class="xi2" onclick="showWindow('reply', this.href)">{lang reply}</a>
 					<!--{/if}-->
 					<span class="xg1">
 						{lang poston} $comment[dateline]

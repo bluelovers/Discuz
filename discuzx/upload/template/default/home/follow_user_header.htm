@@ -1,0 +1,53 @@
+<!--{if !$viewself}-->
+	<div id="flw_uheader" class="cl">
+		<div class="z"><a href="home.php?mod=space&uid=$uid{$hrefsuffix}"><!--{avatar($uid)}--></a></div>
+		<div class="z flw_stat_mn">
+			<h1>
+				<a href="home.php?mod=space&uid=$uid{$hrefsuffix}">$space[username]</a>
+				<span class="xs1 xg1 xw0">
+					<span id="followbkame_{$uid}"><!--{if isset($flag[$_G['uid']]) && $flag[$_G['uid']]['bkname']}-->$flag[$_G['uid']]['bkname']<!--{/if}--></span>
+					[<a href="home.php?mod=spacecp&ac=follow&op=bkname&fuid=$uid&handlekey=followbkame_$uid" id="fbkname_{$uid}" onclick="showWindow('followbkame_{$uid}', this.href, 'get', 0);"><!--{if isset($flag[$_G['uid']]) && $flag[$_G['uid']]['bkname']}-->修改备注<!--{else}-->添加备注<!--{/if}--></a>]
+				</span>
+			</h1>
+			<p class="mbm xg1 xs0"><a href="home.php?mod=space&uid=$uid{$hrefsuffix}">{$_G[siteurl]}home.php?mod=space&uid=$uid{$hrefsuffix}</a></p>
+			<div class="tns">
+			<table cellspacing="0" cellpadding="0">
+				<tr>
+					<th>
+						<p><a href="home.php?mod=space&uid=$uid{$hrefsuffix}" class="xi2 xw1">$space['feeds']</a></p>
+						<span><a href="home.php?mod=space&uid=$uid{$hrefsuffix}" class="xi2">广播</a></span>
+					</th>
+					<th>
+						<p><a href="home.php?mod=follow&do=following&uid=$uid" class="xi2 xw1">$space['following']</a></p>
+						<span><a href="home.php?mod=follow&do=following&uid=$uid" class="xi2">收听</a></span>
+					</th>
+					<td>
+						<p><a href="home.php?mod=follow&do=follower&uid=$uid" id="followernum_$uid" class="xi2 xw1">$space['follower']</a></p>
+						<span><a href="home.php?mod=follow&do=follower&uid=$uid" id="followernum_$uid" class="xi2">听众</a></span>
+					</td>
+				</tr>
+			</table>
+			</div>
+			<div class="mtm o cl">
+				<!--{if $_G['setting']['homestatus']}-->
+				<a href="home.php?mod=space&uid=$uid&do=index" class="y flw_linktohome xi2">查看空间</a>
+				<!--{/if}-->
+				<div id="followflag" {if !isset($flag[$_G['uid']])}style="display: none"{/if}>
+					<a href="home.php?mod=spacecp&ac=follow&op=add&special={if $flag[$_G['uid']]['status'] == 1}2{else}1{/if}&fuid=$uid&from=head" class="{if $flag[$_G['uid']]['status'] == 1}flw_specialunfo{else}flw_specialfo{/if}" id="specialflag_$uid" onclick="ajaxget(this.href);doane(event);" tip="{if $flag[$_G['uid']]['status'] == 1}取消特别收听{else}加入特别收听{/if}" onmouseover="showTip(this)">{if $flag[$_G['uid']]['status'] == 1}取消特别收听{else}加入特别收听{/if}</a>
+					<!--{if $flag[$_G['uid']]['mutual']}-->
+					<span class="z flw_status_2">相互收听</span>
+					<!--{else}-->
+					<span class="z flw_status_1">已收听,</span>
+					<!--{/if}-->
+					<a id="a_followmod_{$uid}" href="home.php?mod=spacecp&ac=follow&op=del&fuid=$uid&from=head" onclick="ajaxget(this.href);doane(event);" class="xi2">取消收听</a>
+				</div>
+				<div id="unfollowflag" {if isset($flag[$_G['uid']])}style="display: none"{/if}>
+					<!--{if isset($flag[$uid])}-->
+					<span class="z flw_status_1">TA已收听您</span>
+					<!--{/if}-->
+					<a id="a_followmod_{$uid}" href="home.php?mod=spacecp&ac=follow&op=add&fuid=$uid&from=head" onclick="ajaxget(this.href);doane(event);" class="flw_btn_fo">收听</a>
+				</div>
+			</div>
+		</div>
+	</div>
+<!--{/if}-->

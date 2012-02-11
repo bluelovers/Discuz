@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_cache.php 22398 2011-05-05 11:16:36Z yexinhao $
+ *      $Id: function_cache.php 26447 2011-12-13 07:16:43Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -127,9 +127,8 @@ function pluginsettingvalue($type) {
 		}
 	}
 	if($varids) {
-		$query = DB::query("SELECT pluginvarid, variable, value FROM ".DB::table('common_pluginvar')." WHERE pluginvarid IN (".dimplode($varids).")");
-		while($plugin = DB::fetch($query)) {
-			$values = (array)unserialize($plugin['value']);
+		foreach(C::t('common_pluginvar')->fetch_all($varids) as $plugin) {
+			$values = (array)dunserialize($plugin['value']);
 			foreach($values as $id => $value) {
 				$pluginvalue[$id][$pluginids[$plugin['pluginvarid']]][$plugin['variable']] = $value;
 			}
@@ -137,6 +136,16 @@ function pluginsettingvalue($type) {
 	}
 
 	return $pluginvalue;
+}
+
+function cleartemplatecache() {
+	$tpl = dir(DISCUZ_ROOT.'./data/template');
+	while($entry = $tpl->read()) {
+		if(preg_match("/\.tpl\.php$/", $entry)) {
+			@unlink(DISCUZ_ROOT.'./data/template/'.$entry);
+		}
+	}
+	$tpl->close();
 }
 
 ?>

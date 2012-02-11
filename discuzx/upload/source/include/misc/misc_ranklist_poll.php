@@ -4,9 +4,9 @@ if(!defined('IN_DISCUZ')) {
 }
 
 $polllist = '';
-$orderby = $_G['gp_orderby'];
+$orderby = $_GET['orderby'];
 $navname = $_G['setting']['navs'][8]['navname'];
-switch($_G['gp_view']) {
+switch($_GET['view']) {
 	case 'heats':
 		$gettype = 'heat';
 		break;
@@ -17,9 +17,9 @@ switch($_G['gp_view']) {
 		$gettype = 'favorite';
 		break;
 	default:
-		$_G['gp_view'] = 'heats';
+		$_GET['view'] = 'heats';
 }
-$view = $_G['gp_view'];
+$view = $_GET['view'];
 
 $polllist = getranklistdata($type, $view, $orderby);
 $lastupdate = $_G['lastupdate'];

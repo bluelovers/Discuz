@@ -4,7 +4,7 @@
  *	  [Discuz! X] (C)2001-2099 Comsenz Inc.
  *	  This is NOT a freeware, use is subject to license terms
  *
- *	  $Id: spacecp.inc.php 19663 2011-01-13 05:55:18Z monkey $
+ *	  $Id: spacecp.inc.php 27608 2012-02-07 05:45:43Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -15,18 +15,16 @@ if(!$_G['uid']) {
 	showmessage('not_loggedin', NULL, array(), array('login' => 1));
 }
 
-require_once libfile('function/connect');
-
-$pluginop = !empty($_G['gp_pluginop']) ? $_G['gp_pluginop'] : 'config';
-if (!in_array($pluginop, array('config', 'share', 'new'))) {
+$pluginop = !empty($_GET['pluginop']) ? $_GET['pluginop'] : 'config';
+if (!in_array($pluginop, array('config', 'share', 'new', 'sync_tthread'))) {
 	showmessage('undefined_action');
 }
-$sh_type = trim(intval($_G['gp_sh_type']));
-$tid = trim(intval($_G['gp_thread_id']));
-
+$sh_type = trim(intval($_GET['sh_type']));
+$tid = trim(intval($_GET['thread_id']));
+$connectService = Cloud::loadClass('Service_Connect');
 if ($pluginop == 'config') {
 
-	connect_merge_member();
+	$connectService->connectMergeMember();
 
 	$_G['connect']['is_oauth_user'] = true;
 	if (empty($_G['member']['conuinsecret'])) {
@@ -34,7 +32,7 @@ if ($pluginop == 'config') {
 	}
 
 	$referer = str_replace($_G['siteurl'], '', dreferer());
-	if(!empty($_G['gp_connect_autoshare'])) {
+	if(!empty($_GET['connect_autoshare'])) {
 		if(strpos($referer, '?') !== false) {
 			$referer .= '&connect_autoshare=1';
 		} else {
@@ -46,83 +44,264 @@ if ($pluginop == 'config') {
 
 } elseif ($pluginop == 'share') {
 
-	$_G['gp_share_url'] = $_G['connect']['discuz_new_share_url'];
+	$_GET['share_url'] = $_G['connect']['discuz_new_share_url'];
 
-	$posttable = getposttablebytid($tid);
-	$post = DB::fetch_first("SELECT * FROM ".DB::table($posttable)." WHERE tid = '$tid' AND first='1' AND invisible='0'");
-	$thread = DB::fetch_first("SELECT * FROM ".DB::table('forum_thread')." WHERE tid = '$tid' AND displayorder >= 0");
+	$post = C::t('forum_post')->fetch_threadpost_by_tid_invisible($tid, 0);
+	$thread = C::t('forum_thread')->fetch_by_tid_displayorder($tid, 0);
 
-	if ($_G['group']['allowgetimage'] && $thread['price'] == 0) {
-		connect_parse_bbcode($post['message'], $thread['fid'], $post['pid'], $post['htmlon'], $attach_images);
+	if ($_G['group']['allowgetimage'] && $thread['price'] == 0 && $post['pid']) {
+		$connectService->connectParseBbcode($post['message'], $thread['fid'], $post['pid'], $post['htmlon'], $attach_images);
 		if ($attach_images && is_array($attach_images)) {
-			$_G['gp_share_images'] = array_slice($attach_images, 0, 3);
+			$_GET['share_images'] = array_slice($attach_images, 0, 3);
 
 			$attach_images = array();
-			foreach ($_G['gp_share_images'] as $image) {
+			foreach ($_GET['share_images'] as $image) {
 				$attach_images[] = $image['big'];
 			}
-			$_G['gp_attach_image'] = implode('|', $attach_images);
+			$_GET['attach_image'] = implode('|', $attach_images);
 			unset($attach_images);
 		}
 	}
 
 } elseif ($pluginop == 'new') {
 
-	$sh_type = trim(intval($_G['gp_sh_type']));
-	$tid = trim(intval($_G['gp_thread_id']));
-	$dialog_id = $_G['gp_dialog_id'];
-	$sync_post = $_G['gp_sync_post'];
+	$sh_type = intval(trim($_POST['sh_type']));
+	$tid = intval(trim($_POST['thread_id']));
+	$dialog_id = $_POST['dialog_id'];
 
-	connect_merge_member();
+	$connectService->connectMergeMember();
 
-	$api_url = $_G['connect']['api_url'] . '/connect/share/new';
-
-	$extra = array();
-	$extra['oauth_token'] = $_G['member']['conuin'];
-	$sig_params = connect_get_oauth_signature_params($extra);
-	$oauth_token_secret = $_G['member']['conuinsecret'];
-	$sig_params['oauth_signature'] = connect_get_oauth_signature($api_url, $sig_params, 'POST', $oauth_token_secret);
-
-	$params['sh_type'] = $sh_type;
-	$params['subject'] = $_G['gp_subject'];
-	$params['share_subject'] = $_G['gp_share_subject'];
-	$params['thread_id'] = $_G['gp_thread_id'];
-	$params['author'] = $_G['gp_author'];
-	$params['author_id'] = $_G['gp_author_id'];
-	$params['forum_id'] = $_G['gp_forum_id'];
-	$params['p_id'] = $_G['gp_post_id'];
-	$parmas['u_id'] = $_G['uid'];
-	$params['reason'] = $_G['gp_reason'];
-	$params['content'] = $_G['gp_html_content'];
-	$params['client_ip'] = $_G['clientip'];
-	$params['attach_images'] = $_G['gp_attach_image'];
-	$params = array_merge($sig_params, $params);
-
-	$response = connect_output_php($api_url . '?', cloud_http_build_query($params, '', '&'));
-	if(!isset($response['status'])) {
-		$code = 100;
-		connect_errlog($code, lang('connect', 'connect_errlog_server_no_response'));
-		$message = lang('connect', 'server_busy');
+	if($_G['setting']['rewritestatus'] && in_array('forum_viewthread', $_G['setting']['rewritestatus'])) {
+		$url = rewriteoutput('forum_viewthread', 1, $_G['siteurl'], $tid);
 	} else {
-		if ($response['status'] == 0) {
-			$code = $response['status'];
-			if ($sh_type == 2) {
-				$message = lang('connect', 'broadcast_success');
+		$url = $_G['siteurl'].'forum.php?mod=viewthread&tid='.$tid;
+	}
+
+	$connectOAuthClient = Cloud::loadClass('Service_Client_ConnectOAuth');
+	$connectService = Cloud::loadClass('Service_Connect');
+	if($sh_type == 1 || $sh_type == 3) {
+
+		$firstpost = C::t('forum_post')->fetch_threadpost_by_tid_invisible($tid, 0);
+		$summary = $connectService->connectParseBbcode($firstpost['message'], $firstpost['fid'], $firstpost['pid'], $firstpost['htmlon'], $attach_images);
+
+		$qzone_params = array(
+			'title' => $_POST['share_subject'],
+			'url' => $url,
+			'comment' => $_POST['reason'],
+			'summary' => $summary,
+			'images' => $_POST['attach_image'],
+		);
+
+		try {
+			$response = $connectOAuthClient->connectAddShare($_G['member']['conopenid'], $_G['member']['conuin'], $_G['member']['conuinsecret'], $qzone_params);
+		} catch(Exception $e) {
+			$errorCode = $e->getCode();
+		}
+
+		if($errorCode) {
+			$code = $errorCode;
+			if($errorCode == 41001) {
+				$message = lang('connect', 'user_unauthorized', array('login_url' => $_G['connect']['login_url'].'&reauthorize=yes&formhash='.FORMHASH));
+			} elseif($errorCode == 41003 || $errorCode == 40006) { // access token失效或非法
+				$message = lang('connect', 'share_token_outofdate', array('login_url' => $_G['connect']['login_url']));
+			} elseif ($errorCode == 3021) {
+				$message = lang('connect', 'qzone_share_same_url');
 			} else {
-				$message = lang('connect', 'share_success');
+				$code = 100;
+				$message = lang('connect', 'server_busy');
+				$connectService->connectErrlog($code, lang('connect', 'connect_errlog_server_no_response'));
 			}
 		} else {
-			$message = lang('connect', 'server_busy');
-			$code = $response['status'];
-			if ($response['status'] == 6022 || $response['status'] == 6023 || $response['status'] == 6029) {
-				$message = $response['result'];
-				connect_errlog($code, $message);
-			} elseif ($response['status'] == 20000) {
-				$message = lang('connect', 'user_unauthorized');
-			} elseif ($response['status'] == 30000) {
+			$code = $response['ret'];
+			$message = lang('connect', 'share_success');
+		}
+	} elseif($sh_type == 2) {
+
+		$t_params = array(
+			'content' => $_POST['reason'],
+		);
+
+		$aid = intval($_POST['attach_image_id']);
+		if ($aid) {
+			$method = 'connectAddPicT';
+			$attach = C::t('forum_attachment_n')->fetch('aid:'.$aid, $aid);
+			if($attach['remote']) {
+				$t_params['pic'] = $_G['setting']['ftp']['attachurl'].'forum/'.$attach['attachment'];
+				$t_params['remote'] = true;
+			} else {
+				$t_params['pic'] = $_G['setting']['attachdir'].'forum/'.$attach['attachment'];
+			}
+		} else {
+			$method = 'connectAddT';
+		}
+
+		try {
+			$response = $connectOAuthClient->$method($_G['member']['conopenid'], $_G['member']['conuin'], $_G['member']['conuinsecret'], $t_params);
+		} catch(Exception $e) {
+			$errorCode = $e->getCode();
+		}
+
+		if($errorCode) {
+			$code = $errorCode;
+			if($errorCode == 41001) {
+				$message = lang('connect', 'user_unauthorized', array('login_url' => $_G['connect']['login_url'].'&reauthorize=yes&formhash='.FORMHASH));
+			} elseif($errorCode == 41003 || $errorCode == 40006) { // access token失效或非法
+				$message = lang('connect', 'share_token_outofdate', array('login_url' => $_G['connect']['login_url']));
+			} elseif ($errorCode == 3013) {
+				$message = lang('connect', 'weibo_same_content');
+			} else if($errorCode == 3020) {
 				$message = lang('connect', 'weibo_account_not_signup');
+			} else {
+				$code = 100;
+				$message = lang('connect', 'server_busy');
+				$connectService->connectErrlog($code, lang('connect', 'connect_errlog_server_no_response'));
+			}
+		} else {
+			$thread = C::t('forum_thread')->fetch($tid);
+			if($response['id'] && $_G['setting']['connect']['t']['reply'] && $thread['tid'] && !$thread['closed'] && !getstatus($thread['status'], 3)) {
+
+				DB::insert('connect_tthreadlog', array(
+					'twid' => $response['id'],
+					'tid' => $tid,
+					'conopenid' => $_G['member']['conopenid'],
+					'pagetime' => 0,
+					'lasttwid' => '0',
+					'nexttime' => $_G['timestamp'] + 30 * 60,
+					'updatetime' => 0,
+					'dateline' => $_G['timestamp'],
+				));
+			}
+			$code = $response['ret'];
+			$message = lang('connect', 'broadcast_success');
+    	}
+	}
+} elseif($pluginop == 'sync_tthread') {
+	if(!$_G['setting']['connect']['t']['reply']) {
+		exit;
+	}
+	$tid = $_GET['tid'];
+	$processname = 'connect_tthread_'.$tid.'_cache';
+	if(discuz_process::islocked($processname, 600)) {
+		exit;
+	}
+	$thread = C::t('forum_thread')->fetch($tid);
+	if(!$thread || $thread['closed'] == 1 || getstatus($thread['status'], 3) || $thread['displayorder'] < 0) {
+		discuz_process::unlock($processname);
+		exit;
+	}
+
+	$updatetime = DB::result_first("SELECT updatetime FROM ".DB::table('connect_tthreadlog')." WHERE tid='$tid' ORDER BY updatetime DESC LIMIT 1");
+	if($_G['timestamp'] < $updatetime + 30 * 60) {
+		discuz_process::unlock($processname);
+		exit;
+	}
+	$tthread = DB::fetch_first("SELECT * FROM ".DB::table('connect_tthreadlog')." WHERE tid='$tid' ORDER BY nexttime ASC LIMIT 1");
+	if(empty($tthread)) {
+		discuz_process::unlock($processname);
+		exit;
+	}
+	$api_url = $_G['connect']['api_url'] . '/connect/mblog/list';
+
+	$param = array();
+	$param['oauth_consumer_key'] = $_G['setting']['connectappid'];
+	$param['openid'] = $tthread['conopenid'];
+	$param['thread_id'] = $tid;
+	$param['root_id'] = $tthread['twid'];
+	$param['page_flag'] = 2;
+	$param['page_time'] = $tthread['pagetime'];
+	$param['req_num'] = 20;
+	$param['twitter_id'] = $tthread['lasttwid'];
+	$param['sig'] = $connectService->connectGetSig($param, $connectService->connectGetSigKey());
+
+	$setarr = array();
+	$utilService = Cloud::loadClass('Service_Util');
+	$response = $connectService->connectOutputPhp($api_url . '?', $utilService->httpBuildQuery($param, '', '&'));
+	if($response && $response['status'] == 0 && $response['result']) {
+
+		include_once libfile('function/forum');
+		$forum = C::t('forum_forum')->fetch($thread['fid']);
+		$pinvisible = $forum['modnewposts'] ? -2 : 0;
+
+		$pids = array();
+		$i = 0;
+		foreach($response['result'] as $post) {
+			$message = diconv(trim($post['content']), 'UTF-8');
+			$post['username'] = diconv(trim($post['username']), 'UTF-8');
+			$post['nick'] = diconv(trim($post['nick']), 'UTF-8');
+			$message = preg_replace("/((https?|ftp|gopher|news|telnet|rtsp|mms|callto):\/\/|www\.)([a-z0-9\/\-_+=.~!%@?#%&;:$\\()|]+\s*)/i", '', $message);
+			if($message) {
+				$newmessage = censor($message, null, true);
+				if($message != $newmessage) {
+					continue;
+				}
+			} else {
+				$message = lang('connect', 'connect_tthread_broadcast');
+			}
+			if($_G['setting']['connect']['t']['reply_showauthor']) {
+				$message .= lang('connect', 'connect_tthread_message', array('username' => $post['username'], 'nick' => $post['nick']));
+			}
+
+			$pid = insertpost(array(
+				'fid' => $thread['fid'],
+				'tid' => $thread['tid'],
+				'first' => '0',
+				'author' => '',
+				'authorid' => '0',
+				'subject' => '',
+				'dateline' => $_G['timestamp'] + $i,
+				'message' => $message,
+				'useip' => '',
+				'invisible' => $pinvisible,
+				'anonymous' => '0',
+				'usesig' => '0',
+				'htmlon' => '1',
+				'bbcodeoff' => '0',
+				'smileyoff' => '0',
+				'parseurloff' => '0',
+				'attachment' => '0',
+				'status' => 16,
+			));
+			if($pid) {
+				$pids[] = $pid;
+			}
+			$i++;
+		}
+
+		if($pinvisible) {
+			updatemoderate('pid', $pids);
+			C::t('forum_forum')->update_forum_counter($thread['fid'], 0, 0, count($pids), 1);
+		} else {
+			$fieldarr = array(
+				'lastposter' => array(''),
+				'replies' => count($pids),
+			);
+			if($thread['lastpost'] < $_G['timestamp']) {
+				$fieldarr['lastpost'] = array($_G['timestamp']);
+			}
+			C::t('forum_thread')->increase($tid, $fieldarr);
+
+			$lastpost = "$thread[tid]\t$thread[subject]\t$_G[timestamp]\t".'';
+			C::t('forum_forum')->update($thread['fid'], array('lastpost' => $lastpost));
+			C::t('forum_forum')->update_forum_counter($thread['fid'], 0, count($pids), count($pids));
+			if($forum['type'] == 'sub') {
+				C::t('forum_forum')->update($forum['fup'], array('lastpost' => $lastpost));
 			}
 		}
+
+		$setarr['pagetime'] = $post['time'];
+		$setarr['lasttwid'] = $post['twitterId'];
+		if(count($response['result']) < $param['req_num']) {
+			$setarr['nexttime'] = $_G['timestamp'] + 2 * 3600;
+		} else {
+			$setarr['nexttime'] = $_G['timestamp'] + 30 * 60;
+		}
+	} else {
+		$setarr['nexttime'] = $_G['timestamp'] + 3 * 3600;
 	}
+	$setarr['updatetime'] = $_G['timestamp'];
+	DB::update('connect_tthreadlog', $setarr, array('twid' => $tthread['twid']));
+
+	discuz_process::unlock($processname);
+	exit;
 }
 ?>

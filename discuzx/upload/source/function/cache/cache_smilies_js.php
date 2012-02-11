@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_smilies_js.php 21292 2011-03-22 08:19:48Z monkey $
+ *      $Id: cache_smilies_js.php 24968 2011-10-19 09:51:28Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -14,21 +14,18 @@ if(!defined('IN_DISCUZ')) {
 function build_cache_smilies_js() {
 	global $_G;
 
-	$query = DB::query("SELECT typeid, name, directory FROM ".DB::table('forum_imagetype')." WHERE type='smiley' AND available='1' ORDER BY displayorder");
-	$fastsmiley = (array)unserialize(DB::result_first("SELECT svalue FROM ".DB::table('common_setting')." WHERE skey='fastsmiley'"));
+	$fastsmiley = C::t('common_setting')->fetch('fastsmiley', true);
 	$return_type = 'var smilies_type = new Array();';
 	$return_array = 'var smilies_array = new Array();var smilies_fast = new Array();';
 	$spp = $_G['setting']['smcols'] * $_G['setting']['smrows'];
 	$fpre = '';
-	while($type = DB::fetch($query)) {
+	foreach(C::t('forum_imagetype')->fetch_all_by_type('smiley', 1) as $type) {
 		$return_data = array();
 		$return_datakey = '';
-		$squery = DB::query("SELECT id, code, url FROM ".DB::table('common_smiley')." WHERE type='smiley' AND code<>'' AND typeid='$type[typeid]' ORDER BY displayorder");
-		if(DB::num_rows($squery)) {
 			$i = 0;$j = 1;$pre = '';
 			$return_type .= 'smilies_type[\'_'.$type['typeid'].'\'] = [\''.str_replace('\'', '\\\'', $type['name']).'\', \''.str_replace('\'', '\\\'', $type['directory']).'\'];';
 			$return_datakey .= 'smilies_array['.$type['typeid'].'] = new Array();';
-			while($smiley = DB::fetch($squery)) {
+			foreach(C::t('common_smiley')->fetch_all_by_type_code_typeid('smiley', $type['typeid']) as $smiley) {
 				if($i >= $spp) {
 					$return_data[$j] = 'smilies_array['.$type['typeid'].']['.$j.'] = ['.$return_data[$j].'];';
 					$j++;$i = 0;$pre = '';
@@ -52,7 +49,6 @@ function build_cache_smilies_js() {
 				$i++;
 			}
 			$return_data[$j] = 'smilies_array['.$type['typeid'].']['.$j.'] = ['.$return_data[$j].'];';
-		}
 		$return_array .= $return_datakey.implode('', $return_data);
 	}
 	$cachedir = DISCUZ_ROOT.'./data/cache/';

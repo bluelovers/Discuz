@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: magic_repent.php 21648 2011-04-06 09:13:41Z liulanbo $
+ *      $Id: magic_repent.php 26754 2011-12-22 08:14:22Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -49,23 +49,24 @@ class magic_repent {
 
 	function usesubmit() {
 		global $_G;
-		if(empty($_G['gp_pid'])) {
+		if(empty($_GET['pid'])) {
 			showmessage(lang('magic/repent', 'repent_info_nonexistence'));
 		}
-		$_G['tid'] = $_G['gp_ptid'];
+		$_G['tid'] = $_GET['ptid'];
 
-		$post = getpostinfo($_G['gp_pid'], 'pid', array('p.first', 'p.tid', 'p.fid', 'p.authorid', 'p.replycredit', 't.status as thread_status'));
+		$post = getpostinfo($_GET['pid'], 'pid', array('p.first', 'p.tid', 'p.fid', 'p.authorid', 'p.replycredit', 't.status as thread_status'));
 		$this->_check($post);
 
 		require_once libfile('function/post');
 		require_once libfile('function/delete');
 		if($post['first']) {
-			if($have_replycredit = DB::fetch_first("SELECT * FROM ".DB::table('forum_replycredit')." WHERE tid ='$post[tid]' LIMIT 1")) {
-				if($replycredit = DB::result_first("SELECT replycredit FROM ".DB::table('forum_thread')." WHERE tid = '$post[tid]'")) {
+			if($have_replycredit = C::t('forum_replycredit')->fetch($post['tid'])) {
+				$thread = C::t('forum_thread')->fetch($post['tid']);
+				if($thread['replycredit']) {
 					updatemembercount($post['authorid'], array($_G['setting']['creditstransextra'][10] => $replycredit));
 				}
-				DB::delete('forum_replycredit', "tid = '$post[tid]'");
-				DB::delete('common_credit_log', "operation IN ('RCT', 'RCA', 'RCB') AND relatedid IN($post[tid])");
+				C::t('forum_replycredit')->delete($post['tid']);
+				C::t('common_credit_log')->delete_by_operation_relatedid(array('RCT', 'RCA', 'RCB'), $post['tid']);
 			}
 
 			deletethread(array($post['tid']));
@@ -73,24 +74,24 @@ class magic_repent {
 		} else {
 			if($post['replycredit'] > 0) {
 				updatemembercount($post['authorid'], array($_G['setting']['creditstransextra'][10] => -$post['replycredit']));
-				DB::delete('common_credit_log', "uid = '$post[authorid]' AND operation = 'RCA' AND relatedid IN($post[tid])");
+				C::t('common_credit_log')->delete_by_uid_operation_relatedid($post['authorid'], 'RCA', $post['tid']);
 			}
-			deletepost(array($_G['gp_pid']));
+			deletepost(array($_GET['pid']));
 			updatethreadcount($post['tid']);
 		}
 
 		usemagic($this->magic['magicid'], $this->magic['num']);
 		updatemagiclog($this->magic['magicid'], '2', '1', '0', 0, 'tid', $_G['tid']);
 
-		showmessage(lang('magic/repent', 'repent_succeed'), $post['first'] ? 'forum.php?mod=forumdisplay&fid='.$post['fid'] : dreferer(), array(), array('showdialog' => 1, 'locationtime' => true));
+		showmessage(lang('magic/repent', 'repent_succeed'), $post['first'] ? 'forum.php?mod=forumdisplay&fid='.$post['fid'] : dreferer(), array(), array('alert' => 'right', 'showdialog' => 1, 'locationtime' => true));
 	}
 
 	function show() {
 		global $_G;
-		$pid = !empty($_G['gp_id']) ? htmlspecialchars($_G['gp_id']) : '';
+		$pid = !empty($_GET['id']) ? htmlspecialchars($_GET['id']) : '';
 		list($pid, $_G['tid']) = explode(':', $pid);
 		if($_G['tid']) {
-			$post = getpostinfo($_G['gp_id'], 'pid', array('p.fid', 'p.authorid', 't.status as thread_status'));
+			$post = getpostinfo($_GET['id'], 'pid', array('p.fid', 'p.authorid', 't.status as thread_status'));
 			$this->_check($post);
 		}
 		magicshowtype('top');
@@ -101,9 +102,9 @@ class magic_repent {
 
 	function buy() {
 		global $_G;
-		if(!empty($_G['gp_id'])) {
-			list($_G['gp_id'], $_G['tid']) = explode(':', $_G['gp_id']);
-			$post = getpostinfo($_G['gp_id'], 'pid', array('p.fid', 'p.authorid'));
+		if(!empty($_GET['id'])) {
+			list($_GET['id'], $_G['tid']) = explode(':', $_GET['id']);
+			$post = getpostinfo($_GET['id'], 'pid', array('p.fid', 'p.authorid'));
 			$this->_check($post);
 		}
 	}

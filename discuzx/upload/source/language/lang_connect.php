@@ -4,42 +4,53 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_connect.php 22869 2011-05-27 09:27:31Z fengning $
+ *      $Id: lang_connect.php 27449 2012-02-01 05:32:35Z zhangguosheng $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 $lang = array
 (
 
-	'feed_sync_success' => 'åŒæ­¥ç™¼ Feed æˆåŠŸ',
-	'deletethread_sync_success' => 'åˆªé™¤ä¸»é¡ŒåŒæ­¥æˆåŠŸ',
-	'deletethread_sync_failed' => 'åˆªé™¤ä¸»é¡ŒåŒæ­¥å¤±æ•—',
-	'server_busy' => 'æŠ±æ­‰ï¼Œç•¶å‰å­˜åœ¨ç¶²çµ¡å•é¡Œæˆ–æœå‹™å™¨ç¹å¿™ï¼Œè«‹æ‚¨ç¨å€™å†è©¦ã€‚è¬è¬ã€‚',
-	'share_success' => 'åˆ†äº«æˆåŠŸ',
-	'broadcast_success' => 'è½‰æ’­æˆåŠŸ',
+	'feed_sync_success' => 'Í¬²½·¢ Feed ³É¹¦',
+	'deletethread_sync_success' => 'É¾³ýÖ÷ÌâÍ¬²½³É¹¦',
+	'deletethread_sync_failed' => 'É¾³ýÖ÷ÌâÍ¬²½Ê§°Ü',
+	'server_busy' => '±§Ç¸£¬µ±Ç°´æÔÚÍøÂçÎÊÌâ»ò·þÎñÆ÷·±Ã¦£¬ÇëÄúÉÔºòÔÙÊÔ¡£Ð»Ð»¡£',
+    'share_token_outofdate' => 'ÎªÁËÄúµÄÕËºÅ°²È«£¬ÇëÊ¹ÓÃQQÕÊºÅÖØÐÂµÇÂ¼£¬½«ÎªÄúÉý¼¶ÕÊºÅ°²È«»úÖÆ<br/><br/>µã»÷<a href={login_url}><img src=static/image/common/qq_login.gif class=vm alt=QQµÇÂ¼ /></a>Ò³Ãæ½«·¢ÉúÌø×ª',
+	'share_success' => '·ÖÏí³É¹¦',
+	'broadcast_success' => '×ª²¥³É¹¦',
 
-	'qzone_title' => 'æ¨™é¡Œ',
-	'qzone_reason' => 'ç†ç”±',
-	'qzone_picture' => 'åœ–ç‰‡',
-	'qzone_shareto' => 'åˆ†äº«åˆ°QQç©ºé–“',
-	'qzone_to_friend' => 'åˆ†äº«çµ¦å¥½å‹',
-	'qzone_reason_default' => 'å¯ä»¥åœ¨é€™è£¡è¼¸å…¥åˆ†äº«åŽŸå› æˆ–è©³ç´°å…§å®¹',
-	'qzone_subject_is_empty' => 'åˆ†äº«æ¨™é¡Œä¸èƒ½ç‚ºç©º',
-	'qzone_subject_is_long' => 'åˆ†äº«æ¨™é¡Œè¶…éŽäº†é•·åº¦é™åˆ¶',
-	'qzone_reason_is_long' => 'åˆ†äº«ç†ç”±è¶…éŽäº†é•·åº¦é™åˆ¶',
+	'qzone_title' => '±êÌâ',
+	'qzone_reason' => 'ÀíÓÉ',
+	'qzone_picture' => 'Í¼Æ¬',
+	'qzone_shareto' => '·ÖÏíµ½QQ¿Õ¼ä',
+	'qzone_to_friend' => '·ÖÏí¸øºÃÓÑ',
+	'qzone_reason_default' => '¿ÉÒÔÔÚÕâÀïÊäÈë·ÖÏíÔ­Òò»òÏêÏ¸ÄÚÈÝ',
+	'qzone_subject_is_empty' => '·ÖÏí±êÌâ²»ÄÜÎª¿Õ',
+	'qzone_subject_is_long' => '·ÖÏí±êÌâ³¬¹ýÁË³¤¶ÈÏÞÖÆ',
+	'qzone_reason_is_long' => '·ÖÏíÀíÓÉ³¬¹ýÁË³¤¶ÈÏÞÖÆ',
+    'qzone_share_same_url' => '¸ÃÌû×ÓÄúÒÑ¾­·ÖÏí¹ý£¬²»ÐèÒªÖØ¸´·ÖÏí',
 
-	'weibo_title' => 'åˆ†äº«åˆ°æˆ‘çš„å¾®åšï¼Œé †ä¾¿èªªé»žä»€éº¼å§',
-	'weibo_input' => 'é‚„èƒ½è¼¸å…¥<strong id=checklen></strong>å­—',
-	'weibo_select_picture' => 'è«‹é¸æ“‡åˆ†äº«åœ–ç‰‡',
-	'weibo_share' => 'è½‰æ’­',
-	'weibo_share_to' => 'è½‰æ’­åˆ°é¨°è¨Šå¾®åš',
-	'weibo_reason_is_long' => 'å¾®åšå…§å®¹è¶…éŽäº†é•·åº¦é™åˆ¶',
-	'weibo_account_not_signup' => 'æŠ±æ­‰ï¼Œæ‚¨é‚„æœªé–‹é€šå¾®åšè³¬è™Ÿï¼Œç„¡æ³•åˆ†äº«å…§å®¹ï¼Œ<a href=http://t.qq.com/reg/index.php target=_blank>é»žæ“Šé€™è£¡é¦¬ä¸Šé–‹é€š</a>ã€‚',
-	'user_unauthorized' => 'æŠ±æ­‰ï¼Œæ‚¨æœªæŽˆæ¬Šåˆ†äº«ä¸»é¡Œåˆ°QQç©ºé–“ã€é¨°è¨Šå¾®åšå’Œé¨°è¨Šæœ‹å‹ã€‚',
+	'weibo_title' => '·ÖÏíµ½ÎÒµÄÎ¢²©£¬Ë³±ãËµµãÊ²Ã´°É',
+	'weibo_input' => '»¹ÄÜÊäÈë<strong id=checklen></strong>×Ö',
+	'weibo_select_picture' => 'ÇëÑ¡Ôñ·ÖÏíÍ¼Æ¬',
+	'weibo_share' => '×ª²¥',
+	'weibo_share_to' => '×ª²¥µ½ÌÚÑ¶Î¢²©',
+	'weibo_reason_is_long' => 'Î¢²©ÄÚÈÝ³¬¹ýÁË³¤¶ÈÏÞÖÆ',
+    'weibo_same_content' => '¸ÃÌû×ÓÄúÒÑ¾­×ª²¥¹ý£¬²»ÐèÒªÖØ¸´×ª²¥',
+	'weibo_account_not_signup' => '±§Ç¸£¬Äú»¹Î´¿ªÍ¨Î¢²©ÕËºÅ£¬ÎÞ·¨·ÖÏíÄÚÈÝ£¬<a href=http://t.qq.com/reg/index.php target=_blank style=color:#336699>µã»÷ÕâÀïÂíÉÏ¿ªÍ¨</a>',
+	'user_unauthorized' => '±§Ç¸£¬ÄúÎ´ÊÚÈ¨·ÖÏíÖ÷Ìâµ½QQ¿Õ¼ä¡¢ÌÚÑ¶Î¢²©ºÍÌÚÑ¶ÅóÓÑ£¬µã»÷<a href={login_url}><img src=static/image/common/qq_login.gif class=vm alt=QQµÇÂ¼ /></a>£¬ÂíÉÏÍêÉÆÊÚÈ¨',
 
-	'connect_errlog_server_no_response' => 'æœå‹™å™¨ç„¡éŸ¿æ‡‰',
-	'connect_errlog_access_token_incomplete' => 'æŽ¥å£è¿”å›žçš„AccessTokenæ•¸æ“šä¸å®Œæ•´',
-	'connect_errlog_request_token_not_authorized' => 'ç”¨æˆ¶TmpTokenæœªæŽˆæ¬Šæˆ–è¿”å›žçš„æ•¸æ“šä¸å®Œæ•´',
-	'connect_errlog_sig_incorrect' => 'URLç°½åä¸æ­£ç¢º',
+	'connect_errlog_server_no_response' => '·þÎñÆ÷ÎÞÏìÓ¦',
+	'connect_errlog_access_token_incomplete' => '½Ó¿Ú·µ»ØµÄAccessTokenÊý¾Ý²»ÍêÕû',
+	'connect_errlog_request_token_not_authorized' => 'ÓÃ»§TmpTokenÎ´ÊÚÈ¨»ò·µ»ØµÄÊý¾Ý²»ÍêÕû',
+	'connect_errlog_sig_incorrect' => 'URLÇ©Ãû²»ÕýÈ·',
+
+	'connect_tthread_broadcast' => '×ª²¥Î¢²©',
+	'connect_tthread_message' => "\r\n\r\n".'[img]static/image/common/weibo.png[/img][url=http://t.qq.com/{username}]À´×Ô {nick} µÄÌÚÑ¶Î¢²©[/url]',
+	'connect_tthread_comment' => 'Î¢²©ÆÀÂÛ',
 );
 
 ?>

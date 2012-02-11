@@ -1,16 +1,16 @@
 /*
-	[Discuz!] (C)2001-2009 Comsenz Inc.
+	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: space_diy.js 21831 2011-04-13 08:53:11Z maruitao $
+	$Id: space_diy.js 23838 2011-08-11 06:51:58Z monkey $
 */
 
 var drag = new Drag();
 drag.extend({
 
 	setDefalutMenu : function () {
-		this.addMenu('default', 'åˆªé™¤', 'drag.removeBlock(event)');
-		this.addMenu('block', 'å±¬æ€§', 'drag.openBlockEdit(event)');
+		this.addMenu('default', 'É¾³ı', 'drag.removeBlock(event)');
+		this.addMenu('block', 'ÊôĞÔ', 'drag.openBlockEdit(event)');
 	},
 	removeBlock : function (e) {
 		if ( typeof e !== 'string') {
@@ -19,7 +19,7 @@ drag.extend({
 		} else {
 			id = e;
 		}
-		if (!confirm('æ‚¨ç¢ºå¯¦è¦åˆªé™¤å—,åˆªé™¤ä»¥å¾Œå°‡ä¸å¯æ¢å¾©')) return false;
+		if (!confirm('ÄúÈ·ÊµÒªÉ¾³ıÂğ,É¾³ıÒÔºó½«²»¿É»Ö¸´')) return false;
 		$(id).parentNode.removeChild($(id));
 		var el = $('chk'+id);
 		if (el != null) el.className = '';
@@ -63,7 +63,7 @@ drag.extend({
 					el  = document.createElement("div");
 					el.className = drag.blockClass + ' ' + drag.moveableObject;
 					el.id = blockname;
-					s = s.replace(/\<script.*\<\/script\>/ig,'<font color="red"> [javascriptè…³æœ¬ä¿å­˜å¾Œé¡¯ç¤º] </font>');
+					s = s.replace(/\<script.*\<\/script\>/ig,'<font color="red"> [javascript½Å±¾±£´æºóÏÔÊ¾] </font>');
 					el.innerHTML = s;
 					var id = drag.data['diypage'][0]['columns']['frame1_left']['children'][0]['name'];
 					$('frame1_left').insertBefore(el,$(id));
@@ -191,7 +191,7 @@ spaceDiy.extend({
 			if (!$('infoedit')) {
 				var dom = document.createElement('em');
 				dom.id = 'infoedit';
-				dom.innerHTML = 'ç·¨è¼¯';
+				dom.innerHTML = '±à¼­';
 				$('spacename').appendChild(dom);
 			}
 			$('spaceinfoshow').onmousedown = function () {spaceDiy.showEditSpaceInfo();};
@@ -208,7 +208,7 @@ spaceDiy.extend({
 		var nv = $('editnvinfo');
 		if(!nv) {
 			var dom = document.createElement('div');
-			dom.innerHTML = '<span id="editnvinfo" class="edit" style="background-color:#336699;" onclick="spaceDiy.opNvEditInfo();">è¨­ç½®</span>';
+			dom.innerHTML = '<span id="editnvinfo" class="edit" style="background-color:#336699;" onclick="spaceDiy.opNvEditInfo();">ÉèÖÃ</span>';
 			$('nv').appendChild(dom.childNodes[0]);
 		} else {
 			nv.style.display = '';

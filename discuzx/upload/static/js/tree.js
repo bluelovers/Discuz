@@ -1,8 +1,8 @@
 /*
-	[Discuz!] (C)2001-2009 Comsenz Inc.
+	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: tree.js 15149 2010-08-19 08:02:46Z monkey $
+	$Id: tree.js 23838 2011-08-11 06:51:58Z monkey $
 */
 
 var icon = new Object();

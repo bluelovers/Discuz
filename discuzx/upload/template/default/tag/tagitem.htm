@@ -1,7 +1,6 @@
 <!--{template common/header}-->
 <!--{if $tagname}-->
 <div id="pt" class="bm cl">
-	<!--{subtemplate common/simplesearchform}-->
 	<div class="z">
 		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
 		<a href="misc.php?mod=tag">{lang tag}</a>
@@ -38,7 +37,7 @@
 						<!--{loop $threadlist $thread}-->
 							<tr>
 								<td class="icn">
-									<a href="forum.php?mod=viewthread&tid=$thread[tid]{if $_G['gp_archiveid']}&archiveid={$_G['gp_archiveid']}{/if}" title="{lang target_blank}" target="_blank">
+									<a href="forum.php?mod=viewthread&tid=$thread[tid]{if $_GET['archiveid']}&archiveid={$_GET['archiveid']}{/if}" title="{lang target_blank}" target="_blank">
 									<!--{if $thread[folder] == 'lock'}-->
 										<img src="{IMGDIR}/folder_lock.gif" />
 									<!--{elseif $thread['special'] == 1}-->
@@ -114,7 +113,7 @@
 		</div>
 	<!--{/if}-->
 
-	<!--{if empty($showtype) || $showtype == 'blog'}-->
+	<!--{if $_G['setting']['homestatus'] && (empty($showtype) || $showtype == 'blog')}-->
 		<div class="bm">
 			<div class="bm_h">
 				<h2>{lang related_blog}</h2>

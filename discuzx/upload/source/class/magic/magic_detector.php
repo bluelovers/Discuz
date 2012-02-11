@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: magic_money.php 7830 2010-04-14 02:22:32Z monkey $
+ *      $Id: magic_detector.php 27375 2012-01-19 04:47:27Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -50,22 +50,22 @@ class magic_detector {
 		$list = $uids = array();
 		$num = !empty($this->parameters['num']) ? intval($this->parameters['num']) : 10;
 		$limit = $num + 20;
-		loadcache('magics');
-		$mid = !empty($_G['magics']['gift']) ? intval($_G['magics']['gift']['magicid']) : 0;
+		$giftMagicID = C::t('common_magic')->fetch_by_identifier('gift');
+		$mid = $giftMagicID['available'] ? intval($giftMagicID['magicid']) : 0;
 		if($mid) {
-			$query = DB::query('SELECT * FROM '.DB::table('common_magiclog')." WHERE magicid = '$mid' AND action='2' AND uid != '$_G[uid]' ORDER BY dateline DESC LIMIT 0,$limit");
-			while($value=DB::fetch($query)) {
+			foreach(C::t('common_magiclog')->fetch_all_by_magicid_action_uid($mid, 2, $_G['uid'], 0, $limit) as $value) {
 				$uids[] = intval($value['uid']);
 			}
 		}
 		if($uids) {
 			$counter = 0;
-			$query = DB::query('SELECT m.username, mfh.uid, mfh.magicgift FROM '.DB::table('common_member')." m LEFT JOIN ".DB::table('common_member_field_home')." mfh USING(uid) WHERE m.uid IN (".dimplode($uids).")");
-			while($value=DB::fetch($query)) {
+			$members = C::t('common_member')->fetch_all($uids);
+			foreach(C::t('common_member_field_home')->fetch_all($uids) as $uid => $value) {
+				$value = array_merge($members[$uid], $value);
 				$info = !empty($value['magicgift']) ? unserialize($value['magicgift']) : array();
 				if(!empty($info['left']) && (empty($info['receiver']) || !in_array($_G['uid'], $info['receiver']))) {
-					$value['avatar'] = addcslashes(avatar($value['uid'], 'small'), "'");
-					$list[$value['uid']] = $value;
+					$value['avatar'] = addcslashes(avatar($uid, 'small'), "'");
+					$list[$uid] = $value;
 					$counter++;
 					if($counter>=$num) {
 						break;

@@ -1,16 +1,16 @@
 <p class="tbmu">
-	<a href="forum.php?mod=group&action=manage&op=group&fid=$_G[fid]"{if $_G['gp_op'] == 'group'} class="a"{/if}>{lang group_setup}</a>
+	<a href="forum.php?mod=group&action=manage&op=group&fid=$_G[fid]"{if $_GET['op'] == 'group'} class="a"{/if}>{lang group_setup}</a>
 <!--{if !empty($groupmanagers[$_G[uid]]) || $_G['adminid'] == 1}-->
-	<span class="pipe">|</span><a href="forum.php?mod=group&action=manage&op=checkuser&fid=$_G[fid]"{if $_G['gp_op'] == 'checkuser'} class="a"{/if}>{lang group_member_moderate}</a>
-	<span class="pipe">|</span><a href="forum.php?mod=group&action=manage&op=manageuser&fid=$_G[fid]"{if $_G['gp_op'] == 'manageuser'} class="a"{/if}>{lang group_member_management}</a>
+	<span class="pipe">|</span><a href="forum.php?mod=group&action=manage&op=checkuser&fid=$_G[fid]"{if $_GET['op'] == 'checkuser'} class="a"{/if}>{lang group_member_moderate}</a>
+	<span class="pipe">|</span><a href="forum.php?mod=group&action=manage&op=manageuser&fid=$_G[fid]"{if $_GET['op'] == 'manageuser'} class="a"{/if}>{lang group_member_management}</a>
 <!--{/if}-->
 <!--{if $_G['forum']['founderuid'] == $_G['uid'] || $_G['adminid'] == 1}-->
-	<span class="pipe">|</span><a href="forum.php?mod=group&action=manage&op=threadtype&fid=$_G[fid]"{if $_G['gp_op'] == 'threadtype'} class="a"{/if}>{lang group_threadtype}</a>
-	<span class="pipe">|</span><a href="forum.php?mod=group&action=manage&op=demise&fid=$_G[fid]"{if $_G['gp_op'] == 'demise'} class="a"{/if}>{lang group_demise}</a>
+	<span class="pipe">|</span><a href="forum.php?mod=group&action=manage&op=threadtype&fid=$_G[fid]"{if $_GET['op'] == 'threadtype'} class="a"{/if}>{lang group_threadtype}</a>
+	<span class="pipe">|</span><a href="forum.php?mod=group&action=manage&op=demise&fid=$_G[fid]"{if $_GET['op'] == 'demise'} class="a"{/if}>{lang group_demise}</a>
 <!--{/if}-->
 </p>
 
-<!--{if $_G['gp_op'] == 'group'}-->
+<!--{if $_GET['op'] == 'group'}-->
 	<div class="bm bw0">
 		<form enctype="multipart/form-data" action="forum.php?mod=group&action=manage&op=group&fid=$_G[fid]" name="manage" method="post" autocomplete="off">
 			<input type="hidden" value="{FORMHASH}" name="formhash" />
@@ -30,16 +30,32 @@
 					<tr>
 						<th><span class="rq">*</span>{lang group_category}:</th>
 						<td>
-							<select tabindex="2" class="ps" onchange="ajaxget('forum.php?mod=ajax&action=secondgroup&fupid='+ this.value, 'secondgroup');">
+							<select name="parentid" tabindex="2" class="ps" onchange="ajaxget('forum.php?mod=ajax&action=secondgroup&fupid='+ this.value, 'secondgroup');">
 								$groupselect[first]
 							</select>
-							<em id="secondgroup"><select id="fup" name="fup" class="ps" >$groupselect[second]</select></em>
+							<em id="secondgroup"><!--{if $groupselect['second']}--><select id="fup" name="fup" class="ps" >$groupselect[second]</select><!--{/if}--></em>
 						</td>
 					</tr>
 					<!--{/if}-->
 					<tr>
 						<th>{lang group_description}</th>
-						<td><textarea name="descriptionnew" class="pt" rows="3" cols="40">$_G[forum][descriptionnew]</textarea></td>
+						<td>
+							<script type="text/javascript">
+								var allowbbcode = allowimgcode = 1;
+								var allowhtml = forumallowhtml = allowsmilies = 0;
+							</script>
+							<script type="text/javascript" src="{$_G[setting][jspath]}bbcode.js?{VERHASH}"></script>
+							<div id="descriptionpreview"></div>
+							<div class="tedt">
+								<div class="bar">
+									<div class="y"><a href="javascript:;" onclick="$('descriptionpreview').innerHTML = bbcode2html($('descriptionmessage').value)">{lang group_description_preview}</a></div>
+									<!--{eval $seditor = array('description', array('bold', 'color', 'img', 'link'));}-->
+									<!--{subtemplate common/seditor}-->
+								</div>
+								<div class="area">
+									<textarea id="descriptionmessage" name="descriptionnew" class="pt" rows="8">$_G[forum][descriptionnew]</textarea>
+								</div>
+							</div>
 					</tr>
 					<tr>
 						<th>{lang group_perm_visit}</th>
@@ -86,11 +102,13 @@
 						<td>
 							<img onload="thumbImg(this, 1)" _width="544" _height="400" src="$_G[forum][banner]?{TIMESTAMP}" />
 				<!--{/if}-->
-							<!--{if $_G[setting][group_imgsizelimit]}-->
 								<p class="d">
-									{lang group_image_filesize_limit}
+									<!--{if $_G[setting][group_imgsizelimit]}-->
+									{lang group_image_filesize_limit} &nbsp;
+									<!--{/if}-->
+									{lang group_image_filesize_advise}
 								</p>
-							<!--{/if}-->
+							
 						</td>
 					</tr>
 					<!--{/if}-->
@@ -99,7 +117,7 @@
 						<td>
 							<input type="file" id="iconnew" class="pf vm" size="25" name="iconnew" />
 							<p class="d">
-								{lang group_icon_resize} &nbsp; 
+								{lang group_icon_resize} &nbsp;
 								<!--{if $_G[setting][group_imgsizelimit]}-->
 									{lang group_image_filesize_limit}
 								<!--{/if}--></p>
@@ -116,7 +134,7 @@
 			</table>
 		</form>
 	</div>
-<!--{elseif $_G['gp_op'] == 'checkuser'}-->
+<!--{elseif $_GET['op'] == 'checkuser'}-->
 	<!--{if $checkusers}-->
 		<p class="tbmu cl">
 			<span class="y">
@@ -137,7 +155,7 @@
 	<!--{else}-->
 		<p class="emp">{lang group_no_member_moderated}</p>
 	<!--{/if}-->
-<!--{elseif $_G['gp_op'] == 'manageuser'}-->
+<!--{elseif $_GET['op'] == 'manageuser'}-->
 	<script type="text/javascript">
 		function groupManageUser(targetlevel_val) {
 			$('targetlevel').value = targetlevel_val;
@@ -147,7 +165,7 @@
 	<!--{if $_G['forum']['membernum'] > 50}-->
 	<div class="bm_c pns">
 		<form action="forum.php?mod=group&action=manage&op=manageuser&fid=$_G[fid]" method="post">
-		<input type="text" {if empty($_G['gp_srchuser'])}onclick="$('groupsearch').value=''"{/if} value="{if $_G['gp_srchuser']}$_G[gp_srchuser]{else}{lang enter_member_user}{/if}" size="15" class="px p_fre vm" id="groupsearch" name="srchuser">&nbsp;
+		<input type="text" {if empty($_GET['srchuser'])}onclick="$('groupsearch').value=''"{/if} value="{if $_GET['srchuser']}$_GET[srchuser]{else}{lang enter_member_user}{/if}" size="15" class="px p_fre vm" id="groupsearch" name="srchuser">&nbsp;
 		<button class="pn vm" type="submit"><span>{lang search}</span></button>
 		</form>
 	</div>
@@ -229,7 +247,7 @@
             <!--{/loop}-->
 		</div>
 	</form>
-<!--{elseif $_G['gp_op'] == 'threadtype'}-->
+<!--{elseif $_GET['op'] == 'threadtype'}-->
 	<div class="bm bw0">
 		<!--{if empty($specialswitch['allowthreadtype'])}-->
 			{lang group_level_cannot_do}
@@ -335,7 +353,7 @@
 		</div>
 		<!--{/if}-->
 	</div>
-<!--{elseif $_G['gp_op'] == 'demise'}-->
+<!--{elseif $_GET['op'] == 'demise'}-->
 	<div class="bm bw0">
 		<!--{if $groupmanagers}-->
 			<div class="tbmu">

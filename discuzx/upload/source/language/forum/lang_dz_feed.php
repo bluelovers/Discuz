@@ -4,53 +4,57 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_dz_feed.php 20562 2011-02-28 02:11:17Z congyushuai $
+ *      $Id: lang_dz_feed.php 27449 2012-02-01 05:32:35Z zhangguosheng $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 $lang = array
 (
-	'feed_thread_pin_title' =>		'{actor} ç™¼è¡¨çš„ä¸»é¡Œ {subject} è¢« {operater} ç½®é ‚',
+	'feed_thread_pin_title' =>		'{actor} ·¢±íµÄÖ÷Ìâ {subject} ±» {operater} ÖÃ¶¥',
 
-	'feed_thread_digest_title' =>		'{actor} ç™¼è¡¨çš„ä¸»é¡Œ {subject} è¢« {operater} åŠ ç²¾',
+	'feed_thread_digest_title' =>		'{actor} ·¢±íµÄÖ÷Ìâ {subject} ±» {operater} ¼Ó¾«',
 
-	'feed_thread_highlight_title' =>	'{actor} ç™¼è¡¨çš„ä¸»é¡Œ {subject} è¢« {operater} é«˜äº®',
+	'feed_thread_highlight_title' =>	'{actor} ·¢±íµÄÖ÷Ìâ {subject} ±» {operater} ¸ßÁÁ',
 
-	'feed_thread_del_title' =>		'{actor} ç™¼è¡¨çš„ä¸»é¡Œ {subject} è¢« {operater} åˆªé™¤',
+	'feed_thread_del_title' =>		'{actor} ·¢±íµÄÖ÷Ìâ {subject} ±» {operater} É¾³ý',
 
-	'feed_thread_move_title' =>		'{actor} ç™¼è¡¨çš„ä¸»é¡Œ {subject} è¢« {operater} ç§»å‹•',
+	'feed_thread_move_title' =>		'{actor} ·¢±íµÄÖ÷Ìâ {subject} ±» {operater} ÒÆ¶¯',
 
-	'feed_thread_views_title' =>		'{actor} ç™¼è¡¨çš„ä¸»é¡Œ {subject} æŸ¥çœ‹æ•¸è¶…éŽäº† {count}',
+	'feed_thread_views_title' =>		'{actor} ·¢±íµÄÖ÷Ìâ {subject} ²é¿´Êý³¬¹ýÁË {count}',
 
-	'feed_thread_replies_title' =>		'{actor} ç™¼è¡¨çš„ä¸»é¡Œ {subject} å›žè¤‡æ•¸è¶…éŽäº† {count}',
+	'feed_thread_replies_title' =>		'{actor} ·¢±íµÄÖ÷Ìâ {subject} »Ø¸´Êý³¬¹ýÁË {count}',
 
-	'feed_thread_rate_title' =>		'{actor} ç™¼è¡¨çš„ä¸»é¡Œ {subject} è©•åˆ†è¶…éŽäº† {count}',
+	'feed_thread_rate_title' =>		'{actor} ·¢±íµÄÖ÷Ìâ {subject} ÆÀ·Ö³¬¹ýÁË {count}',
 
-	'feed_thread_magic_title' =>		'{actor} ç™¼è¡¨çš„ä¸»é¡Œ {subject} è¢« {operater} ä½¿ç”¨äº† {magiccard}',
+	'feed_thread_magic_title' =>		'{actor} ·¢±íµÄÖ÷Ìâ {subject} ±» {operater} Ê¹ÓÃÁË {magiccard}',
 
-	'feed_thread_recommend_title' =>	'{actor} ç™¼è¡¨çš„ä¸»é¡Œ {subject} è¢«ç‰ˆä¸»æŽ¨è–¦',
+	'feed_thread_recommend_title' =>	'{actor} ·¢±íµÄÖ÷Ìâ {subject} ±»°æÖ÷ÍÆ¼ö',
 
-	'feed_post_rate_title' =>		'{actor} åœ¨ {thread} çš„å›žå¾©è©•åˆ†è¶…éŽäº†{count}',
+	'feed_post_rate_title' =>		'{actor} ÔÚ {thread} µÄ»Ø¸´ÆÀ·Ö³¬¹ýÁË{count}',
 
-	'feed_post_magic_title' =>		'{actor} åœ¨ {thread} çš„å›žå¾©è¢« {operater} ä½¿ç”¨äº† {magiccard}',
+	'feed_post_magic_title' =>		'{actor} ÔÚ {thread} µÄ»Ø¸´±» {operater} Ê¹ÓÃÁË {magiccard}',
 
-	'feed_user_profile_title' =>		'{actor} æ›´æ–°äº†è‡ªå·±çš„å€‹äººè³‡æ–™',
+	'feed_user_profile_title' =>		'{actor} ¸üÐÂÁË×Ô¼ºµÄ¸öÈË×ÊÁÏ',
 
-	'feed_user_usergroup_title' =>		'{actor} çš„ç”¨æˆ¶çµ„å‡ç´šç‚º {usergroup}',
+	'feed_user_usergroup_title' =>		'{actor} µÄÓÃ»§×éÉý¼¶Îª {usergroup}',
 
-	'feed_user_credit_title' =>		'{actor} çš„ç¸½ç©åˆ†é”åˆ° {count}',
+	'feed_user_credit_title' =>		'{actor} µÄ×Ü»ý·Ö´ïµ½ {count}',
 
-	'feed_user_threads_title' =>		'{actor} ç™¼è¡¨çš„ä¸»é¡Œæ•¸é”åˆ° {count}',
+	'feed_user_threads_title' =>		'{actor} ·¢±íµÄÖ÷ÌâÊý´ïµ½ {count}',
 
-	'feed_user_posts_title' =>		'{actor} çš„ç™¼å¸–æ•¸é”åˆ° {count}',
+	'feed_user_posts_title' =>		'{actor} µÄ·¢ÌûÊý´ïµ½ {count}',
 
-	'feed_user_digest_title' =>		'{actor} çš„ç²¾è¯å¸–æ•¸é”åˆ° {count}',
+	'feed_user_digest_title' =>		'{actor} µÄ¾«»ªÌûÊý´ïµ½ {count}',
 
-	'feed_user_medal_title' =>		'{actor} å¾—åˆ°å‹³ç«  {medal} çŽå‹µ',
+	'feed_user_medal_title' =>		'{actor} µÃµ½Ñ«ÕÂ {medal} ½±Àø',
 
-	'feed_announce_title' =>		'å…¬å‘Š: {subject}',
+	'feed_announce_title' =>		'¹«¸æ: {subject}',
 	'feed_announce_body' =>			'{message}',
 
-	'you' => 'ä½ ',
+	'you' => 'Äú',
 
 );
 

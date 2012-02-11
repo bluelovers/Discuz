@@ -40,10 +40,10 @@ function renewContent() {
 		}
 	};
 
-	if(window.confirm('æ‚¨ç¢ºå®šè¦æ¢å¾©ä¸Šæ¬¡ä¿å­˜?')) {
+	if(window.confirm('ÄúÈ·¶¨Òª»Ö¸´ÉÏ´Î±£´æ?')) {
 		var data = loadUserdata('home');
 		if(in_array((data = trim(data)), ['', 'null', 'false', null, false])) {
-			parent.showDialog('æ²’æœ‰å¯ä»¥æ¢å¾©çš„æ•¸æ“šï¼');
+			parent.showDialog('Ã»ÓĞ¿ÉÒÔ»Ö¸´µÄÊı¾İ£¡');
 			return;
 		}
 		var data = data.split(/\x09\x09/);
@@ -196,7 +196,6 @@ var arrMatch = {
 	imgInOut:"divInOut",
 	faceBox:"editFaceBox",
 	icoUrl:"createUrl",
-	icoImg:"createImg",
 	icoSwf:"createSwf",
 	icoPage:"createPage"
 }
@@ -206,13 +205,13 @@ function format(type, para){
 	if(!gIsIE){
 		switch(type){
 			case "Cut":
-				sAlert = "æ‚¨çš„ç€è¦½å™¨å®‰å…¨è¨­ç½®ä¸å…è¨±ç·¨è¼¯å™¨è‡ªå‹•åŸ·è¡Œå‰ªåˆ‡æ“ä½œ,è«‹ä½¿ç”¨éµç›¤å¿«æ·éµ(Ctrl+X)ä¾†å®Œæˆ";
+				sAlert = "ÄúµÄä¯ÀÀÆ÷°²È«ÉèÖÃ²»ÔÊĞí±à¼­Æ÷×Ô¶¯Ö´ĞĞ¼ôÇĞ²Ù×÷,ÇëÊ¹ÓÃ¼üÅÌ¿ì½İ¼ü(Ctrl+X)À´Íê³É";
 				break;
 			case "Copy":
-				sAlert = "æ‚¨çš„ç€è¦½å™¨å®‰å…¨è¨­ç½®ä¸å…è¨±ç·¨è¼¯å™¨è‡ªå‹•åŸ·è¡Œæ‹·è²æ“ä½œ,è«‹ä½¿ç”¨éµç›¤å¿«æ·éµ(Ctrl+C)ä¾†å®Œæˆ";
+				sAlert = "ÄúµÄä¯ÀÀÆ÷°²È«ÉèÖÃ²»ÔÊĞí±à¼­Æ÷×Ô¶¯Ö´ĞĞ¿½±´²Ù×÷,ÇëÊ¹ÓÃ¼üÅÌ¿ì½İ¼ü(Ctrl+C)À´Íê³É";
 				break;
 			case "Paste":
-				sAlert = "æ‚¨çš„ç€è¦½å™¨å®‰å…¨è¨­ç½®ä¸å…è¨±ç·¨è¼¯å™¨è‡ªå‹•åŸ·è¡Œç²˜è²¼æ“ä½œ,è«‹ä½¿ç”¨éµç›¤å¿«æ·éµ(Ctrl+V)ä¾†å®Œæˆ";
+				sAlert = "ÄúµÄä¯ÀÀÆ÷°²È«ÉèÖÃ²»ÔÊĞí±à¼­Æ÷×Ô¶¯Ö´ĞĞÕ³Ìù²Ù×÷,ÇëÊ¹ÓÃ¼üÅÌ¿ì½İ¼ü(Ctrl+V)À´Íê³É";
 				break;
 		}
 	}
@@ -296,7 +295,7 @@ function doodleBox(event, id) {
 	if(parent.$('uchome-ttHtmlEditor') != null) {
 		parent.showWindow(id, 'home.php?mod=magic&mid=doodle&showid=blog_doodle&target=uchome-ttHtmlEditor&from=editor');
 	} else {
-		alert("æ‰¾ä¸åˆ°å¡—é´‰æ¿åˆå§‹åŒ–æ•¸æ“š");
+		alert("ÕÒ²»µ½Í¿Ñ»°å³õÊ¼»¯Êı¾İ");
 	}
 }
 function backColor(e){
@@ -458,7 +457,7 @@ function fSetBorderMouseDown(obj) {
 }
 function fDisplayElement(element,displayValue) {
 	if(gIEVer<=5.01 && gIsIE){
-		alert('åªæ”¯æŒIE 5.01ä»¥ä¸Šç‰ˆæœ¬');
+		alert('Ö»Ö§³ÖIE 5.01ÒÔÉÏ°æ±¾');
 		return;
 	}
 	fHideMenu();
@@ -494,7 +493,7 @@ function fSetModeTip(obj){
 		dv.style.padding = "2px";
 		dv.style.border = "1px #000000 solid";
 		dv.style.backgroundColor = "#FFFFCC";
-		dv.innerHTML = "ç·¨è¼¯æºç¢¼";
+		dv.innerHTML = "±à¼­Ô´Âë";
 		document.body.appendChild(dv);
 	}else{
 		dvModeTip.style.display = "";
@@ -550,7 +549,10 @@ function pageBreak(e, show) {
 		}
 		var insertText = title ? '[title='+title+']': '';
 		setCaret();
-		format("insertHTML", '###NextPage'+insertText+'###');
+		format("insertHTML", '<br /><strong>##########NextPage'+insertText+'##########</strong><br /><br />');
+		if(parent.showInnerNav && typeof parent.showInnerNav == 'function') {
+			parent.showInnerNav();
+		}
 		fHide($('createPage'));
 	} else {
 		if(gIsIE){
@@ -580,10 +582,12 @@ function changeEditType(flag, ev){
 		var switchMode = $("switchMode");
 		var sourceEditor = $("sourceEditor");
 		var dvHtmlLnk = $("dvHtmlLnk");
+		var dvToolbar = $('dvToolbar');
 		if(flag){
 			dvhtml.style.display = "";
 			dvtext.style.display = "none";
-			dvHtmlLnk.style.display = "none";
+			dvToolbar.className = 'toobar';
+
 			if(switchMode.checked){
 				sourceEditor.value = dvtext.value;
 				$('uchome-editstatus').value = 'code';
@@ -599,7 +603,7 @@ function changeEditType(flag, ev){
 			function sub1(){
 				dvhtml.style.display = "none";
 				dvtext.style.display = "";
-				dvHtmlLnk.style.display = "";
+				dvToolbar.className = 'toobarmini';
 				if(switchMode.checked){
 					dvtext.value = sourceEditor.value.unescapeHTML();
 				}else{
@@ -612,7 +616,7 @@ function changeEditType(flag, ev){
 			}
 			ev = ev || event;
 			if(ev){
-				if(window.confirm("è½‰æ›ç‚ºç´”æ–‡æœ¬æ™‚å°‡æœƒéºå¤±æŸäº›æ ¼å¼ã€‚\næ‚¨ç¢ºå®šè¦ç¹¼çºŒå—ï¼Ÿ")){
+				if(window.confirm("×ª»»Îª´¿ÎÄ±¾Ê±½«»áÒÅÊ§Ä³Ğ©¸ñÊ½¡£\nÄúÈ·¶¨Òª¼ÌĞøÂğ£¿")){
 					$('uchome-editstatus').value = 'text';
 					sub1();
 				}else{
@@ -622,6 +626,16 @@ function changeEditType(flag, ev){
 		}
 	}catch(exp){
 
+	}
+}
+
+function changeEditFull(flag, ev) {
+	if(parent.changeEditFull) {
+		parent.changeEditFull(flag);
+		ev = ev || event;
+		var ele = ev.target || ev.srcElement;
+		ele.innerHTML = flag ? '·µ»Ø' : 'È«ÆÁ';
+		ele.onclick = function() {changeEditFull(!flag, ev)};
 	}
 }
 String.prototype.stripTags = function(){

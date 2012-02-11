@@ -48,6 +48,13 @@ timezone_set();
 
 $uchidden = getgpc('uchidden');
 
+if(in_array($method, array('app_reg', 'ext_info'))) {
+	$PHP_SELF = $_SERVER['PHP_SELF'] ? $_SERVER['PHP_SELF'] : $_SERVER['SCRIPT_NAME'];
+	$bbserver = 'http://'.preg_replace("/\:\d+/", '', $_SERVER['HTTP_HOST']).($_SERVER['SERVER_PORT'] && $_SERVER['SERVER_PORT'] != 80 ? ':'.$_SERVER['SERVER_PORT'] : '');
+	$default_ucapi = $bbserver.'/ucenter';
+	$default_appurl = $bbserver.substr($PHP_SELF, 0, strrpos($PHP_SELF, '/') - 8);
+}
+
 if($method == 'show_license') {
 
 	transfer_ucinfo($_POST);
@@ -99,10 +106,6 @@ if($method == 'show_license') {
 		$submit = false;
 	}
 
-	$PHP_SELF = $_SERVER['PHP_SELF'] ? $_SERVER['PHP_SELF'] : $_SERVER['SCRIPT_NAME'];
-	$bbserver = 'http://'.preg_replace("/\:\d+/", '', $_SERVER['HTTP_HOST']).($_SERVER['SERVER_PORT'] && $_SERVER['SERVER_PORT'] != 80 ? ':'.$_SERVER['SERVER_PORT'] : '');
-	$default_ucapi = $bbserver.'/ucenter';
-	$default_appurl = $bbserver.substr($PHP_SELF, 0, strpos($PHP_SELF, 'install/') - 1);
  	$ucapi = defined('UC_API') && UC_API ? UC_API : $default_ucapi;
 
 	if($submit) {
@@ -294,12 +297,12 @@ if($method == 'show_license') {
 			mysql_close($link);
 		}
 
-		if(strpos($tablepre, '.') !== false) {
+		if(strpos($tablepre, '.') !== false || intval($tablepre{0})) {
 			show_msg('tablepre_invalid', $tablepre, 0);
 		}
 
 		if($username && $email && $password) {
-			if(strlen($username) > 15 || preg_match("/^$|^c:\\con\\con$|ã€€|[,\"\s\t\<\>&]|^Guest/is", $username)) {
+			if(strlen($username) > 15 || preg_match("/^$|^c:\\con\\con$|¡¡|[,\"\s\t\<\>&]|^Guest/is", $username)) {
 				show_msg('admin_username_invalid', $username, 0);
 			} elseif(!strstr($email, '@') || $email != stripslashes($email) || $email != htmlspecialchars($email)) {
 				show_msg('admin_email_invalid', $email, 0);
@@ -385,6 +388,9 @@ if($method == 'show_license') {
 
 		install_data($username, $uid);
 
+		$testdata = $portalstatus = 1;
+		$groupstatus = $homestatus = 0;
+
 		if($testdata) {
 			install_testdata($username, $uid);
 		}
@@ -451,9 +457,9 @@ if($method == 'show_license') {
 	} else {
 		show_header();
 		echo '</div><div class="main" style="margin-top: -123px;"><ul style="line-height: 200%; margin-left: 30px;">';
-		echo '<li><a href="../">'.lang('install_succeed').'</a><br>';
-		echo '<script>setTimeout(function(){window.location=\'../\'}, 2000);</script>'.lang('auto_redirect').'</li>';
+		echo '<div id="platformIntro"></div>';
 		echo '</ul></div>';
+		echo '<script type="text/javascript" src="http://cp.discuz.qq.com/cloud/platformIntroJS?siteurl='.urlencode($default_appurl).'&version='.DISCUZ_VERSION.'" charset="utf-8"></script>';
 		show_footer();
 	}
 

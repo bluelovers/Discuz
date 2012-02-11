@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: index.php 23108 2011-06-20 03:20:28Z zhangguosheng $
+ *      $Id: index.php 23508 2011-07-21 06:34:40Z cnteacher $
  */
 
 define('IN_API', true);
@@ -26,16 +26,18 @@ class discuz_remote {
 		require_once('../../source/class/class_core.php');
 
 		$cachelist = array();
-		$this->core = & discuz_core::instance();
+		$this->core = C::app();
 
 		$this->core->cachelist = $cachelist;
-		$this->core->init_cron = false;
+
+
 		$this->core->init_setting = true;
+
+		$this->core->init_cron = false;
 		$this->core->init_user = false;
 		$this->core->init_session = false;
 		$this->core->init_misc = false;
 		$this->core->init_mobile = false;
-		$this->core->init_memory = false;
 
 		$this->core->init();
 
@@ -65,7 +67,6 @@ class discuz_remote {
 			unset($_GET['sign']);
 
 			if (empty($sign) || $sign != $this->sign($_GET)) {
-				remote_service::error(2, 'sign is wrong');
 			}
 		}
 

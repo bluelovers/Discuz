@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_importdata.php 20638 2011-03-01 03:26:36Z congyushuai $
+ *      $Id: function_importdata.php 27396 2012-01-30 05:38:16Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -15,34 +15,45 @@ function import_smilies() {
 	$smileyarray = getimportdata('Discuz! Smilies');
 
 	$renamed = 0;
-	if(DB::result_first("SELECT COUNT(*) FROM ".DB::table('forum_imagetype')." WHERE type='smiley' AND name='$smileyarray[name]'")) {
+	if(C::t('forum_imagetype')->count_by_name('smiley', $smileyarray['name'])) {
 		$smileyarray['name'] .= '_'.random(4);
 		$renamed = 1;
 	}
-	DB::query("INSERT INTO ".DB::table('forum_imagetype')." (name, type, directory)
-		VALUES ('$smileyarray[name]', 'smiley', '$smileyarray[directory]')");
-	$typeid = DB::insert_id();
+	$data = array(
+	    'name' => $smileyarray['name'],
+	    'type' => 'smiley',
+	    'directory' => $smileyarray['directory'],
+	);
+	$typeid = C::t('forum_imagetype')->insert($data, true);
+
 
 	foreach($smileyarray['smilies'] as $key => $smiley) {
-		DB::query("INSERT INTO ".DB::table('common_smiley')." (type, typeid, displayorder, code, url)
-			VALUES ('smiley', '$typeid', '$smiley[displayorder]', '', '$smiley[url]')");
+		C::t('common_smiley')->insert(array('type'=>'smiley', 'typeid'=>$typeid, 'displayorder'=>$smiley['displayorder'], 'code'=>'', 'url'=>$smiley['url']));
 	}
-	DB::query("UPDATE ".DB::table('common_smiley')." SET code=CONCAT('{:', typeid, '_', id, ':}') WHERE typeid='$typeid'");
+	C::t('common_smiley')->update_code_by_typeid($typeid);
 
 	updatecache(array('smileytypes', 'smilies', 'smileycodes', 'smilies_js'));
 	return $renamed;
 }
 
-function import_styles($ignoreversion = 1, $dir = '', $restoreid = 0, $updatecache = 1) {
+function import_styles($ignoreversion = 1, $dir = '', $restoreid = 0, $updatecache = 1, $validate = 1) {
 	global $_G, $importtxt, $stylearray;
 	if(!isset($dir)) {
 		$stylearrays = array(getimportdata('Discuz! Style'));
 	} else {
+		require_once libfile('function/cloudaddons');
 		if(!$restoreid) {
 			$dir = str_replace(array('/', '\\'), '', $dir);
 			$templatedir = DISCUZ_ROOT.'./template/'.$dir;
+			if($validate) {
+				cloudaddons_validator($dir.'.template');
+			}
 		} else {
 			$templatedir = DISCUZ_ROOT.$dir;
+			$dir = basename($dir);
+			if($validate) {
+				cloudaddons_validator($dir.'.template');
+			}
 		}
 		$searchdir = dir($templatedir);
 		$stylearrays = array();
@@ -57,7 +68,7 @@ function import_styles($ignoreversion = 1, $dir = '', $restoreid = 0, $updatecac
 
 	foreach($stylearrays as $stylearray) {
 		if(empty($ignoreversion) && strip_tags($stylearray['version']) != strip_tags($_G['setting']['version'])) {
-			cpmsg('styles_import_version_invalid', '', 'error', array('cur_version' => $stylearray['version'], 'set_version' => $_G['setting']['version']));
+			cpmsg('styles_import_version_invalid', 'action=styles', 'error', array('cur_version' => $stylearray['version'], 'set_version' => $_G['setting']['version']));
 		}
 
 		if(!$restoreid) {
@@ -67,36 +78,39 @@ function import_styles($ignoreversion = 1, $dir = '', $restoreid = 0, $updatecac
 				if(!is_dir($templatedir)) {
 					if(!@mkdir($templatedir, 0777)) {
 						$basedir = dirname($stylearray['directory']);
-						cpmsg('styles_import_directory_invalid', '', 'error', array('basedir' => $basedir, 'directory' => $stylearray['directory']));
+						cpmsg('styles_import_directory_invalid', 'action=styles', 'error', array('basedir' => $basedir, 'directory' => $stylearray['directory']));
 					}
 				}
 
-				if(!($templateid = DB::result_first("SELECT templateid FROM ".DB::table('common_template')." WHERE name='$stylearray[tplname]'"))) {
-					DB::query("INSERT INTO ".DB::table('common_template')." (name, directory, copyright)
-						VALUES ('$stylearray[tplname]', '$stylearray[directory]', '$stylearray[copyright]')");
-					$templateid = DB::insert_id();
+				if(!($templateid = C::t('common_template')->get_templateid($stylearray['tplname']))) {
+					$templateid = C::t('common_template')->insert(array(
+						'name' => $stylearray['tplname'],
+						'directory' => $stylearray['directory'],
+						'copyright' => $stylearray['copyright']
+					), true);
 				}
 			} else {
 				$templateid = 1;
 			}
 
-			if(DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_style')." WHERE name='$stylearray[name]'")) {
+			if(C::t('common_style')->check_stylename($stylearray['name'])) {
 				$stylearray['name'] .= '_'.random(4);
 				$renamed = 1;
 			}
-			DB::query("INSERT INTO ".DB::table('common_style')." (name, templateid)
-				VALUES ('$stylearray[name]', '$templateid')");
-			$styleidnew = DB::insert_id();
+			$styleidnew = C::t('common_style')->insert(array('name' => $stylearray['name'], 'templateid' => $templateid), true);
 		} else {
 			$styleidnew = $restoreid;
-			DB::query("DELETE FROM ".DB::table('common_stylevar')." WHERE styleid='$styleidnew'");
+			C::t('common_stylevar')->delete_by_styleid($styleidnew);
 		}
 
 		foreach($stylearray['style'] as $variable => $substitute) {
 			$substitute = @htmlspecialchars($substitute);
-			DB::query("INSERT INTO ".DB::table('common_stylevar')." (styleid, variable, substitute)
-				VALUES ('$styleidnew', '$variable', '$substitute')");
+			C::t('common_stylevar')->insert(array('styleid' => $styleidnew, 'variable' => $variable, 'substitute' => $substitute));
 		}
+	}
+
+	if($dir) {
+		cloudaddons_installlog($dir.'.template');
 	}
 
 	if($updatecache) {
@@ -108,7 +122,7 @@ function import_styles($ignoreversion = 1, $dir = '', $restoreid = 0, $updatecac
 
 function import_block($xmlurl, $clientid, $xmlkey = '', $signtype = '', $ignoreversion = 1, $update = 0) {
 	global $_G, $importtxt;
-	$_G['gp_importtype'] = $_G['gp_importtxt'] = '';
+	$_GET['importtype'] = $_GET['importtxt'] = '';
 	$xmlurl = strip_tags($xmlurl);
 	$clientid = strip_tags($clientid);
 	$xmlkey = strip_tags($xmlkey);
@@ -150,11 +164,10 @@ function import_block($xmlurl, $clientid, $xmlkey = '', $signtype = '', $ignorev
 		'signtype' => !empty($signtype) ? 'MD5' : '',
 		'data' => serialize($blockarrays)
 	);
-	$data = daddslashes($data);
 	if(!$update) {
-		DB::insert('common_block_xml', $data);
+		C::t('common_block_xml')->insert($data);
 	} else {
-		DB::update('common_block_xml', $data, "`id`='$update'");
+		C::t('common_block_xml')->update($update, $data);
 	}
 }
 

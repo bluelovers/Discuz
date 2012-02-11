@@ -4,45 +4,54 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_template.php 22292 2011-04-28 06:33:40Z monkey $
+ *      $Id: lang_template.php 27449 2012-02-01 05:32:35Z zhangguosheng $
  *
  *      This file is automatically generate
  */
 
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
+
 $lang = array (
-  'getpassword' => 'æ‰¾å›å¯†ç¢¼',
-  'login_guest' => 'æ²’æœ‰å¸³è™Ÿï¼Ÿ{$_G[setting][reglinkname]}',
-  'new_password' => 'æ–°å¯†ç¢¼',
-  'new_password_confirm' => 'ç¢ºèªå¯†ç¢¼',
-  'submit' => 'æäº¤',
-  'close' => 'é—œé–‰',
-  'faq' => 'å¹«åŠ©',
-  'login' => 'ç™»éŒ„',
-  'login_clearcookies' => 'æ¸…é™¤ç—•è·¡',
-  'login_guestmessage' => 'ä½ éœ€è¦å…ˆç™»éŒ„æ‰èƒ½ç¹¼çºŒæœ¬æ“ä½œ',
-  'login_member' => 'ç”¨æˆ¶ç™»éŒ„',
-  'login_method' => 'å¿«æ·ç™»éŒ„',
-  'login_permanent' => 'è‡ªå‹•ç™»éŒ„',
-  'profile_renew' => 'è«‹è£œå……ä¸‹é¢çš„ç™»éŒ„ä¿¡æ¯',
-  'register_from' => 'æ¨è–¦äºº',
-  'account' => 'å¸³è™Ÿ',
-  'password' => 'å¯†ç¢¼',
-  'activation' => 'æ¿€æ´»',
-  'agree' => 'åŒæ„',
-  'disagree' => 'ä¸åŒæ„',
-  'index_activation' => 'ä½ çš„å¸³è™Ÿéœ€è¦æ¿€æ´»',
-  'invite_code' => 'é‚€è«‹ç¢¼',
-  'login_inactive' => 'æ”¾æ£„æ¿€æ´»ï¼Œç¾åœ¨<a href="member.php?mod={$_G[setting][regname]}">{$_G[setting][reglinkname]}</a>',
-  'login_now' => 'å·²æœ‰å¸³è™Ÿï¼Ÿç¾åœ¨ç™»éŒ„',
-  'password_confirm' => 'ç¢ºèªå¯†ç¢¼',
-  'register_buyinvitecode' => 'é‚„æ²’æœ‰é‚€è«‹ç¢¼ï¼Ÿé»æ“Šæ­¤è™•ç²å–',
-  'register_email_tips' => 'è«‹è¼¸å…¥æ­£ç¢ºçš„éƒµç®±åœ°å€',
-  'register_message' => 'è¨»å†ŠåŸå› ',
-  'register_message1' => 'ä½ å¡«å¯«çš„è¨»å†ŠåŸå› æœƒè¢«ç•¶ä½œç”³è«‹è¨»å†Šçš„é‡è¦åƒè€ƒä¾æ“šï¼Œè«‹èªçœŸå¡«å¯«ã€‚',
-  'register_password_tips' => 'è«‹å¡«å¯«å¯†ç¢¼',
-  'register_repassword_tips' => 'è«‹å†æ¬¡è¼¸å…¥å¯†ç¢¼',
-  'register_username_tips' => 'ç”¨æˆ¶åç”± 3 åˆ° 15 å€‹å­—ç¬¦çµ„æˆ',
-  'rulemessage' => 'ç¶²ç«™æœå‹™æ¢æ¬¾',
+  'password_weak' => 'ÃÜÂëÌ«Èõ£¬ÖÁÉÙÓ¦°üº¬ ',
+  'strongpw_1' => 'Êı×Ö',
+  'strongpw_2' => 'Ğ¡Ğ´×ÖÄ¸',
+  'strongpw_3' => '´óĞ´×ÖÄ¸',
+  'strongpw_4' => 'ÌØÊâ×Ö·û',
+  'getpassword' => 'ÕÒ»ØÃÜÂë',
+  'login_guest' => 'Ã»ÓĞÕÊºÅ£¿<a href="member.php?mod={$_G[setting][regname]}">{$_G[setting][reglinkname]}</a>',
+  'new_password' => 'ĞÂÃÜÂë',
+  'new_password_confirm' => 'È·ÈÏÃÜÂë',
+  'submit' => 'Ìá½»',
+  'close' => '¹Ø±Õ',
+  'faq' => '°ïÖú',
+  'login' => 'µÇÂ¼',
+  'login_clearcookies' => 'Çå³ıºÛ¼£',
+  'login_guestmessage' => 'ÄúĞèÒªÏÈµÇÂ¼²ÅÄÜ¼ÌĞø±¾²Ù×÷',
+  'login_member' => 'ÓÃ»§µÇÂ¼',
+  'login_method' => '¿ì½İµÇÂ¼',
+  'login_permanent' => '×Ô¶¯µÇÂ¼',
+  'profile_renew' => 'Çë²¹³äÏÂÃæµÄµÇÂ¼ĞÅÏ¢',
+  'register_from' => 'ÍÆ¼öÈË',
+  'account' => 'ÕÊºÅ',
+  'password' => 'ÃÜÂë',
+  'activation' => '¼¤»î',
+  'agree' => 'Í¬Òâ',
+  'disagree' => '²»Í¬Òâ',
+  'index_activation' => 'ÄúµÄÕÊºÅĞèÒª¼¤»î',
+  'invite_code' => 'ÑûÇëÂë',
+  'login_inactive' => '·ÅÆú¼¤»î£¬ÏÖÔÚ<a href="member.php?mod={$_G[setting][regname]}">{$_G[setting][reglinkname]}</a>',
+  'login_now' => 'ÒÑÓĞÕÊºÅ£¿ÏÖÔÚµÇÂ¼',
+  'password_confirm' => 'È·ÈÏÃÜÂë',
+  'register_buyinvitecode' => '»¹Ã»ÓĞÑûÇëÂë£¿µã»÷´Ë´¦»ñÈ¡',
+  'register_email_tips' => 'ÇëÊäÈëÕıÈ·µÄÓÊÏäµØÖ·',
+  'register_message' => '×¢²áÔ­Òò',
+  'register_message1' => 'ÄúÌîĞ´µÄ×¢²áÔ­Òò»á±»µ±×÷ÉêÇë×¢²áµÄÖØÒª²Î¿¼ÒÀ¾İ£¬ÇëÈÏÕæÌîĞ´¡£',
+  'register_password_tips' => 'ÇëÌîĞ´ÃÜÂë',
+  'register_repassword_tips' => 'ÇëÔÙ´ÎÊäÈëÃÜÂë',
+  'register_username_tips' => 'ÓÃ»§ÃûÓÉ 3 µ½ 15 ¸ö×Ö·û×é³É',
+  'rulemessage' => 'ÍøÕ¾·şÎñÌõ¿î',
 );
 
 ?>

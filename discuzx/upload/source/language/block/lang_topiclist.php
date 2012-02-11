@@ -4,27 +4,31 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_topiclist.php 11146 2010-05-25 02:52:53Z xupeng $
+ *      $Id: lang_topiclist.php 27449 2012-02-01 05:32:35Z zhangguosheng $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 $lang = array
 (
-	'topiclist_topicids' => 'æŒ‡å®šå°ˆé¡Œ',
-	'topiclist_topicids_comment' => 'å¡«å…¥æŒ‡å®šå°ˆé¡Œçš„ID(topicid)ï¼Œå¤šå€‹å°ˆé¡Œä¹‹é–“ç”¨é€—è™Ÿ(,)åˆ†éš”',
-	'topiclist_uids' => 'å‰µå»ºè€…UID',
-	'topiclist_uids_comment' => 'å¡«å…¥æŒ‡å®šå°ˆé¡Œå‰µå»ºè€…çš„ID(uid)ï¼Œå¤šå€‹ç”¨æˆ¶ä¹‹é–“ç”¨é€—è™Ÿ(,)åˆ†éš”',
-	'topiclist_startrow' => 'èµ·å§‹æ•¸æ“šè¡Œæ•¸',
-	'topiclist_startrow_comment' => 'å¦‚éœ€è¨­å®šèµ·å§‹çš„æ•¸æ“šè¡Œæ•¸ï¼Œè«‹è¼¸å…¥å…·é«”æ•¸å€¼ï¼Œ0 ç‚ºå¾žç¬¬ä¸€è¡Œé–‹å§‹ï¼Œä»¥æ­¤é¡žæŽ¨',
-	'topiclist_titlelength' => 'æ¨™é¡Œé•·åº¦',
-	'topiclist_titlelength_comment' => 'æŒ‡å®šå°ˆé¡Œæ¨™é¡Œæœ€å¤§é•·åº¦',
-	'topiclist_summarylength' => 'ä»‹ç´¹é•·åº¦',
-	'topiclist_summarylength_comment' => 'æŒ‡å®šå°ˆé¡Œä»‹ç´¹æœ€å¤§é•·åº¦',
-	'topiclist_picrequired' => 'éŽæ¿¾ç„¡å°é¢å°ˆé¡Œ',
-	'topiclist_picrequired_comment' => 'æ˜¯å¦éŽæ¿¾æ²’æœ‰å°é¢åœ–ç‰‡çš„å°ˆé¡Œ',
-	'topiclist_orderby' => 'å°ˆé¡ŒæŽ’åºæ–¹å¼',
-	'topiclist_orderby_comment' => 'è¨­ç½®ä»¥å“ªä¸€å­—æ®µæˆ–æ–¹å¼å°å°ˆé¡Œé€²è¡ŒæŽ’åº',
-	'topiclist_orderby_dateline' => 'æŒ‰ç™¼ä½ˆæ™‚é–“å€’åº',
-	'topiclist_orderby_viewnum' => 'æŒ‰æŸ¥çœ‹æ•¸å€’åº',
+	'topiclist_topicids' => 'Ö¸¶¨×¨Ìâ',
+	'topiclist_topicids_comment' => 'ÌîÈëÖ¸¶¨×¨ÌâµÄID(topicid)£¬¶à¸ö×¨ÌâÖ®¼äÓÃ¶ººÅ(,)·Ö¸ô',
+	'topiclist_uids' => '´´½¨ÕßUID',
+	'topiclist_uids_comment' => 'ÌîÈëÖ¸¶¨×¨Ìâ´´½¨ÕßµÄID(uid)£¬¶à¸öÓÃ»§Ö®¼äÓÃ¶ººÅ(,)·Ö¸ô',
+	'topiclist_startrow' => 'ÆðÊ¼Êý¾ÝÐÐÊý',
+	'topiclist_startrow_comment' => 'ÈçÐèÉè¶¨ÆðÊ¼µÄÊý¾ÝÐÐÊý£¬ÇëÊäÈë¾ßÌåÊýÖµ£¬0 Îª´ÓµÚÒ»ÐÐ¿ªÊ¼£¬ÒÔ´ËÀàÍÆ',
+	'topiclist_titlelength' => '±êÌâ³¤¶È',
+	'topiclist_titlelength_comment' => 'Ö¸¶¨×¨Ìâ±êÌâ×î´ó³¤¶È',
+	'topiclist_summarylength' => '½éÉÜ³¤¶È',
+	'topiclist_summarylength_comment' => 'Ö¸¶¨×¨Ìâ½éÉÜ×î´ó³¤¶È',
+	'topiclist_picrequired' => '¹ýÂËÎÞ·âÃæ×¨Ìâ',
+	'topiclist_picrequired_comment' => 'ÊÇ·ñ¹ýÂËÃ»ÓÐ·âÃæÍ¼Æ¬µÄ×¨Ìâ',
+	'topiclist_orderby' => '×¨ÌâÅÅÐò·½Ê½',
+	'topiclist_orderby_comment' => 'ÉèÖÃÒÔÄÄÒ»×Ö¶Î»ò·½Ê½¶Ô×¨Ìâ½øÐÐÅÅÐò',
+	'topiclist_orderby_dateline' => '°´·¢²¼Ê±¼äµ¹Ðò',
+	'topiclist_orderby_viewnum' => '°´²é¿´Êýµ¹Ðò',
 );
 
 ?>

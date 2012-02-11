@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_setting.php 23009 2011-06-14 02:23:53Z monkey $
+ *      $Id: cache_setting.php 27152 2012-01-09 02:45:53Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -14,8 +14,7 @@ if(!defined('IN_DISCUZ')) {
 function build_cache_setting() {
 	global $_G;
 
-	$table = 'common_setting';
-	$skipkeys = array('posttableids', 'siteuniqueid', 'mastermobile', 'closedreason',
+	$skipkeys = array('posttableids', 'siteuniqueid', 'mastermobile', 'masterqq', 'masteremail', 'closedreason',
 		'creditsnotify', 'backupdir', 'custombackup', 'jswizard', 'maxonlines', 'modreasons', 'newsletter',
 		'postno', 'postnocustom', 'customauthorinfo', 'domainwhitelist', 'ipregctrl',
 		'ipverifywhite', 'fastsmiley', 'defaultdoing', 'profilegroup',
@@ -23,16 +22,16 @@ function build_cache_setting() {
 	$serialized = array('reginput', 'memory', 'search', 'creditspolicy', 'ftp', 'secqaa', 'ec_credit', 'qihoo', 'spacedata',
 		'infosidestatus', 'uc', 'indexhot', 'relatedtag', 'sitemessage', 'uchome', 'heatthread', 'recommendthread',
 		'disallowfloat', 'allowviewuserthread', 'advtype', 'click', 'card', 'rewritestatus', 'rewriterule', 'privacy', 'focus',
-		'forumkeys', 'article_tags', 'verify', 'seotitle', 'seodescription', 'seokeywords', 'domain', 'ranklist',
-		'seccodedata', 'inviteconfig', 'advexpiration', 'allowpostcomment', /*(IN_MOBILE)*/ 'mobile', 'connect'
+		'forumkeys', 'article_tags', 'verify', 'seotitle', 'seodescription', 'seokeywords', 'domain', 'ranklist', 'my_search_data',
+		'seccodedata', 'inviteconfig', 'advexpiration', 'allowpostcomment', /*(IN_MOBILE)*/ 'mobile', 'connect', 'upgrade', 'patch', 'strongpw',
+		'posttable_info', 'threadtable_info'
 		);
 
 	$data = array();
-	$query = DB::query("SELECT * FROM ".DB::table($table)." WHERE skey NOT IN(".dimplode($skipkeys).')');
 
-	while($setting = DB::fetch($query)) {
+	foreach(C::t('common_setting')->fetch_all_not_key($skipkeys) as $setting) {
 		if($setting['skey'] == 'extcredits') {
-			if(is_array($setting['svalue'] = unserialize($setting['svalue']))) {
+			if(is_array($setting['svalue'] = dunserialize($setting['svalue']))) {
 				foreach($setting['svalue'] as $key => $value) {
 					if($value['available']) {
 						unset($setting['svalue'][$key]['available']);
@@ -60,7 +59,7 @@ function build_cache_setting() {
 		} elseif($setting['skey'] == 'onlinehold') {
 			$setting['svalue'] = $setting['svalue'] * 60;
 		} elseif(in_array($setting['skey'], $serialized)) {
-			$setting['svalue'] = @unserialize($setting['svalue']);
+			$setting['svalue'] = @dunserialize($setting['svalue'], $setting['skey']);
 			if($setting['skey'] == 'search') {
 				foreach($setting['svalue'] as $key => $val) {
 					foreach($val as $k => $v) {
@@ -74,9 +73,9 @@ function build_cache_setting() {
 		}
 		$_G['setting'][$setting['skey']] = $data[$setting['skey']] = $setting['svalue'];
 	}
-	DB::free_result($query);
 
-	$data['newusergroupid'] = DB::result_first("SELECT groupid FROM ".DB::table('common_usergroup')." WHERE creditshigher<=".intval($data['initcredits'])." AND ".intval($data['initcredits'])."<creditslower LIMIT 1");
+	$usergroup = C::t('common_usergroup')->fetch_by_credits($data['initcredits'], '');
+	$data['newusergroupid'] = $usergroup['groupid'];
 
 	if($data['srchhotkeywords']) {
 		$data['srchhotkeywords'] = explode("\n", $data['srchhotkeywords']);
@@ -105,10 +104,18 @@ function build_cache_setting() {
 	}
 	if($data['verify']) {
 		foreach($data['verify'] as $key => $value) {
-			if($value['available'] && !empty($value['icon'])) {
-				$icourl = parse_url($value['icon']);
-				if(!$icourl['host'] && !file_exists($value['icon'])) {
-					$data['verify'][$key]['icon'] = $data['attachurl'].'common/'.$value['icon'];
+			if($value['available']) {
+				if(!empty($value['unverifyicon'])) {
+					$icourl = parse_url($value['unverifyicon']);
+					if(!$icourl['host'] && !file_exists($value['unverifyicon'])) {
+						$data['verify'][$key]['unverifyicon'] = $data['attachurl'].'common/'.$value['unverifyicon'];
+					}
+				}
+				if(!empty($value['icon'])) {
+					$icourl = parse_url($value['icon']);
+					if(!$icourl['host'] && !file_exists($value['icon'])) {
+						$data['verify'][$key]['icon'] = $data['attachurl'].'common/'.$value['icon'];
+					}
 				}
 			}
 		}
@@ -164,7 +171,7 @@ function build_cache_setting() {
 	if($data['allowviewuserthread']['allow']) {
 		$data['allowviewuserthread'] = is_array($data['allowviewuserthread']['fids']) && $data['allowviewuserthread']['fids'] && !in_array('', $data['allowviewuserthread']['fids']) ? dimplode($data['allowviewuserthread']['fids']) : '';
 	} else {
-		$data['allowviewuserthread'] = false;
+		$data['allowviewuserthread'] = -1;
 	}
 
 	include_once DISCUZ_ROOT.'./source/discuz_version.php';
@@ -175,7 +182,7 @@ function build_cache_setting() {
 		$data['sitemessage'][$type] = !empty($data['sitemessage'][$type]) ? explode("\n", $data['sitemessage'][$type]) : array();
 	}
 
-	$data['cachethreadon'] = DB::result_first("SELECT COUNT(*) FROM ".DB::table('forum_forum')." WHERE status='1' AND threadcaches>0") ? 1 : 0;
+	$data['cachethreadon'] = C::t('forum_forum')->fetch_threadcacheon_num() ? 1 : 0;
 	$data['disallowfloat'] = is_array($data['disallowfloat']) ? implode('|', $data['disallowfloat']) : '';
 
 	if(!$data['imagelib']) unset($data['imageimpath']);
@@ -202,8 +209,7 @@ function build_cache_setting() {
 	$data['domain']['defaultindex'] = isset($data['defaultindex']) && $data['defaultindex'] != '#' ? $data['defaultindex'] : '';
 	$data['domain']['holddomain'] = isset($data['holddomain']) ? $data['holddomain'] : '';
 	$data['domain']['list'] = array();
-	$query = DB::query("SELECT * FROM ".DB::table('common_domain')." WHERE idtype IN('subarea', 'forum', 'topic', 'channel')");
-	while($value = DB::fetch($query)) {
+	foreach(C::t('common_domain')->fetch_all_by_idtype(array('subarea', 'forum', 'topic', 'channel')) as $value) {
 		$data['domain']['list'][$value['domain'].'.'.$value['domainroot']] = array('id' => $value['id'], 'idtype' => $value['idtype']);
 	}
 	writetocache('domain', getcachevars(array('domain' => $data['domain'])));
@@ -223,8 +229,8 @@ function build_cache_setting() {
 		$data['seccodedata']['height'] = 24;
 	}
 
-	$data['watermarktype'] = !empty($data['watermarktype']) ? unserialize($data['watermarktype']) : array();
-	$data['watermarktext'] = !empty($data['watermarktext']) ? unserialize($data['watermarktext']) : array();
+	$data['watermarktype'] = !empty($data['watermarktype']) ? dunserialize($data['watermarktype']) : array();
+	$data['watermarktext'] = !empty($data['watermarktext']) ? dunserialize($data['watermarktext']) : array();
 	foreach($data['watermarktype'] as $k => $v) {
 		if($data['watermarktype'][$k] == 'text' && $data['watermarktext']['text'][$k]) {
 			if($data['watermarktext']['text'][$k] && strtoupper(CHARSET) != 'UTF-8') {
@@ -249,10 +255,7 @@ function build_cache_setting() {
 	}
 
 	$data['styles'] = array();
-	$query = DB::query("SELECT s.styleid, s.name, s.extstyle, t.directory FROM ".DB::table('common_style')." s
-				LEFT JOIN ".DB::table('common_template')." t ON s.templateid=t.templateid
-				WHERE s.available='1'");
-	while($style = DB::fetch($query)) {
+	foreach(C::t('common_style')->fetch_all_data(false, 1) as $style) {
 		$data['styles'][$style['styleid']] = dhtmlspecialchars($style['name']);
 	}
 
@@ -285,13 +288,12 @@ function build_cache_setting() {
 	require_once DISCUZ_ROOT.'./config/config_ucenter.php';
 	$data['ucenterurl'] = UC_API;
 
-	$query = DB::query("SELECT identifier, name FROM ".DB::table('common_magic')." WHERE available='1'");
-	while($magic = DB::fetch($query)) {
+	foreach(C::t('common_magic')->fetch_all_data(1) as $magic) {
 		$data['magics'][$magic['identifier']] = $magic['name'];
 	}
 
-	$data['tradeopen'] = DB::result_first("SELECT count(*) FROM ".DB::table('common_usergroup_field')." WHERE allowposttrade='1'") ? 1 : 0;
-	$data['medalstatus'] = intval(DB::result_first("SELECT count(*) FROM ".DB::table('forum_medal')." WHERE available='1'"));
+	$data['tradeopen'] = C::t('common_usergroup_field')->count_by_field('allowposttrade', 1) ? 1 : 0;
+	$data['medalstatus'] = intval(C::t('forum_medal')->count_by_available());
 
 	$focus = array();
 	if($data['focus']['data']) {
@@ -380,7 +382,7 @@ function build_cache_setting() {
 	}
 
 	$defaultcurhost = empty($_G['setting']['domain']['app']['default']) ? '{CURHOST}' : $_G['setting']['domain']['app']['default'];
-	$output = array('str'=>array(), 'preg' => array()); //strç‚ºäºŒç´šåŸŸåçš„æŸ¥æ‰¾å’Œæ›¿æ›ï¼Œpregç‚ºrewriteå’Œé»˜èªåŸŸåçš„æŸ¥æ‰¾å’Œæ›¿æ›
+	$output = array('str'=>array(), 'preg' => array()); //strÎª¶þ¼¶ÓòÃûµÄ²éÕÒºÍÌæ»»£¬pregÎªrewriteºÍÄ¬ÈÏÓòÃûµÄ²éÕÒºÍÌæ»»
 	$_G['domain'] = array();
 	if(is_array($_G['setting']['domain']['app'])) {
 		$apps = $_G['setting']['domain']['app'];
@@ -417,17 +419,31 @@ function build_cache_setting() {
 			$output['preg']['search'][] = "/<a href=\"(\w+\.php)/";
 			$output['preg']['replace'][] = '<a href="'.$defaultcurhost."$1";
 		}
+		foreach($data['footernavs'] as $id => $nav) {
+			$data['footernavs'][$id]['code'] = preg_replace($output['preg']['search'], $output['preg']['replace'], $nav['code']);
+		}
+		foreach($data['spacenavs'] as $id => $nav) {
+			$data['spacenavs'][$id]['code'] = preg_replace($output['preg']['search'], $output['preg']['replace'], $nav['code']);
+		}
+		foreach($data['mynavs'] as $id => $nav) {
+			$data['mynavs'][$id]['code'] = preg_replace($output['preg']['search'], $output['preg']['replace'], $nav['code']);
+		}
+		foreach($data['topnavs'] as $id => $nav) {
+			$data['topnavs'][$id]['code'] = preg_replace($output['preg']['search'], $output['preg']['replace'], $nav['code']);
+		}
+		foreach($data['plugins']['jsmenu'] as $key => $nav) {
+			$data['plugins']['jsmenu'][$key]['url'] = preg_replace($output['preg']['search'], $output['preg']['replace'], $nav['url']);
+		}
 	}
 	$data['output'] = $output;
 
-	save_syscache('setting', $data);
+	savecache('setting', $data);
 	$_G['setting'] = $data;
 }
 
 function get_cachedata_setting_creditspolicy() {
 	$data = array();
-	$query = DB::query("SELECT * FROM ".DB::table('common_credit_rule')." WHERE action IN ('promotion_visit', 'promotion_register')");
-	while($creditrule = DB::fetch($query)) {
+	foreach(C::t('common_credit_rule')->fetch_all_by_action(array('promotion_visit', 'promotion_register')) as $creditrule) {
 		$ruleexist = false;
 		for($i = 1; $i <= 8; $i++) {
 			if($creditrule['extcredits'.$i]) {
@@ -441,17 +457,14 @@ function get_cachedata_setting_creditspolicy() {
 
 function get_cachedata_setting_plugin($method = '') {
 	global $_G;
-	$data  = array();
-
-	$data['plugins'] = $data['pluginlinks'] = $data['hookscript'] = $data['hookscriptmobile'] = $data['threadplugins'] = $data['specialicon'] = $adminmenu = array();
-	$data['plugins']['hookscript_common'] = $data['plugins']['hookscript_discuzcode'] = $data['plugins']['hookscript_deletethread'] = $data['plugins']['hookscript_deletepost'] = false;
-	$data['plugins']['hookscriptmobile_common'] = $data['plugins']['hookscriptmobile_discuzcode'] = $data['plugins']['hookscriptmobile_deletethread'] = $data['plugins']['hookscriptmobile_deletepost'] = false;
-	$query = DB::query("SELECT pluginid, available, name, identifier, directory, datatables, modules, version FROM ".DB::table('common_plugin'));
-	$data['plugins']['available'] = array();
-	while($plugin = DB::fetch($query)) {
+	$hookfuncs = array('common', 'discuzcode', 'deletemember', 'deletethread', 'deletepost', 'avatar', 'savebanlog', 'cacheuserstats', 'undeletethreads', 'recyclebinpostundelete', 'threadpubsave');
+	$data = $adminmenu = array();
+	$data['plugins'] = $data['pluginlinks'] = $data['hookscript'] = $data['hookscriptmobile'] = $data['threadplugins'] = $data['specialicon'] = array();
+	$data['plugins']['func'] = $data['plugins']['available'] = array();
+	foreach(C::t('common_plugin')->fetch_all_data() as $plugin) {
 		$available = !$method && $plugin['available'] || $method && ($plugin['available'] || $method == $plugin['identifier']);
-		$addadminmenu = $plugin['available'] && DB::result_first("SELECT count(*) FROM ".DB::table('common_pluginvar')." WHERE pluginid='$plugin[pluginid]'") ? TRUE : FALSE;
-		$plugin['modules'] = unserialize($plugin['modules']);
+		$addadminmenu = $plugin['available'] && C::t('common_pluginvar')->count_by_pluginid($plugin['pluginid']) ? TRUE : FALSE;
+		$plugin['modules'] = dunserialize($plugin['modules']);
 		if($available) {
 			$data['plugins']['available'][] = $plugin['identifier'];
 			$data['plugins']['version'][$plugin['identifier']] = $plugin['version'];
@@ -474,8 +487,8 @@ function get_cachedata_setting_plugin($method = '') {
 						case 27:
 							if($module['type'] == 27) $navtype = 4;
 							$module['url'] = $module['url'] ? $module['url'] : 'plugin.php?id='.$plugin['identifier'].':'.$module['name'];
-							if(!DB::result_first("SELECT count(*) FROM ".DB::table('common_nav')." WHERE navtype='$navtype' AND type='3' AND identifier='$plugin[identifier]'")) {
-								DB::insert('common_nav', array(
+							if(!(C::t('common_nav')->count_by_navtype_type_identifier($navtype, 3, $plugin['identifier']))) {
+								C::t('common_nav')->insert(array(
 								'name' => $module['menu'],
 								'title' => $module['navtitle'],
 								'url' => $module['url'],
@@ -494,7 +507,7 @@ function get_cachedata_setting_plugin($method = '') {
 							$module['url'] = $module['url'] ? $module['url'] : 'plugin.php?id='.$plugin['identifier'].':'.$module['name'];
 							list($module['menu'], $module['title']) = explode('/', $module['menu']);
 							$module['menu'] = $module['type'] == 1 ? ($module['menu'].($module['title'] ? '<span>'.$module['title'].'</span>' : '')) : $module['menu'];
-							$data['plugins'][$k][] = array('displayorder' => $module['displayorder'], 'adminid' => $module['adminid'], 'url' => "<a id=\"mn_plink_$module[name]\" href=\"$module[url]\">$module[menu]</a>");
+							$data['plugins'][$k][] = array('displayorder' => $module['displayorder'], 'adminid' => $module['adminid'], 'url' => "<a href=\"$module[url]\" id=\"mn_plink_$module[name]\">$module[menu]</a>");
 							break;
 						case 14:
 							$k = 'faq';
@@ -539,24 +552,15 @@ function get_cachedata_setting_plugin($method = '') {
 							foreach($classnames as $hscript => $classname) {
 								$hookmethods = get_class_methods($classname);
 								foreach($hookmethods as $funcname) {
-									if($hscript == 'global' && $funcname == 'common') {
-										$data['plugins'][$k.'_common'] = true;
-									}
-									if($hscript == 'global' && $funcname == 'discuzcode') {
-										$data['plugins'][$k.'_discuzcode'] = true;
-									}
-									if($hscript == 'global' && $funcname == 'deletethread') {
-										$data['plugins'][$k.'_deletethread'] = true;
-									}
-									if($hscript == 'global' && $funcname == 'deletepost') {
-										$data['plugins'][$k.'_deletepost'] = true;
+									if($hscript == 'global' && in_array($funcname, $hookfuncs)) {
+										$data['plugins']['func'][$k][$funcname] = true;
 									}
 									$v = explode('_', $funcname);
 									$curscript = $v[0];
 									if(!$curscript || $classname == $funcname) {
 										continue;
 									}
-									if($hscript == 'home') {
+									if($hscript == 'home' && in_array($curscript, array('space', 'spacecp'))) {
 										$curscript .= '_'.$v[1];
 									}
 									if(!@in_array($script, $data[$k][$hscript][$curscript]['module'])) {
@@ -598,7 +602,7 @@ function get_cachedata_setting_plugin($method = '') {
 	}
 	if(!$method) {
 		$_G['setting']['plugins']['available'] = $data['plugins']['available'];
-		save_syscache('adminmenu', $adminmenu);
+		savecache('adminmenu', $adminmenu);
 	}
 
 	$data['pluginhooks'] = array();
@@ -646,9 +650,6 @@ function get_cachedata_setting_plugin($method = '') {
 			} else {
 				usort($data['plugins'][$pluginkey], 'pluginmodulecmp');
 			}
-			foreach($data['plugins'][$pluginkey] as $key => $module) {
-				unset($data['plugins'][$pluginkey][$key]['displayorder']);
-			}
 		}
 	}
 
@@ -659,9 +660,8 @@ function get_cachedata_setting_plugin($method = '') {
 function get_cachedata_mainnav() {
 	global $_G;
 
-	$data['navs'] = $data['subnavs'] = $data['menunavs'] = $data['navmns'] = $data['navmn'] = $data['navdms'] = array();
-	$query = DB::query("SELECT * FROM ".DB::table('common_nav')." WHERE navtype='0' AND (available='1' OR type='0') AND parentid='0' ORDER BY displayorder");
-	while($nav = DB::fetch($query)) {
+	$data['navs'] = $data['subnavs'] = $data['menunavs'] = $data['navmns'] = $data['navmn'] = $data['navdms'] = $navids = array();
+	foreach(C::t('common_nav')->fetch_all_mainnav() as $nav) {
 		$id = $nav['type'] == 0 ? $nav['identifier'] : 100 + $nav['id'];
 		if($nav['identifier'] == 1 && $nav['type'] == 0 && !$_G['setting']['portalstatus']) {
 			$nav['available'] = 0;
@@ -688,9 +688,8 @@ function get_cachedata_mainnav() {
 		$data['navs'][$id]['filename'] = $nav['url'];
 		$data['navs'][$id]['available'] = $nav['available'];
 		$nav['name'] = $nav['name'].($nav['title'] ? '<span>'.$nav['title'].'</span>' : '');
-		$subquery = DB::query("SELECT * FROM ".DB::table('common_nav')." WHERE navtype='0' AND parentid='$nav[id]' AND available='1' ORDER BY displayorder");
 		$subnavs = '';
-		while($subnav = DB::fetch($subquery)) {
+		foreach(C::t('common_nav')->fetch_all_subnav($nav['id']) as $subnav) {
 			$item = "<a href=\"$subnav[url]\" hidefocus=\"true\" ".($subnav['title'] ? "title=\"$subnav[title]\" " : '').($subnav['target'] == 1 ? "target=\"_blank\" " : '').parsehighlight($subnav['highlight']).">$subnav[name]</a>";
 			$liparam = !$nav['subtype'] || !$nav['subcols'] ? '' : ' style="width:'.sprintf('%1.1f', (1 / $nav['subcols']) * 100).'%"';
 			$subnavs .= '<li'.$liparam.'>'.$item.'</li>';
@@ -704,6 +703,10 @@ function get_cachedata_mainnav() {
 			}
 		}
 		$navid = 'mn_'.$navid;
+		if(in_array($navid, $navids)) {
+			$navid .= '_'.$nav['identifier'];
+		}
+		$navids[] = $navid;
 		$onmouseover = '';
 		if($subnavs) {
 			if($nav['subtype']) {
@@ -743,7 +746,7 @@ function get_cachedata_mainnav() {
 		}
 		if($nav['type'] == 0) {
 			$domainkey = substr($purl['path'], 0, -strlen(strrchr($purl['path'], '.')));
-			if(!empty($_G['setting']['domain']['app'][$domainkey])) {
+			if(!empty($_G['setting']['domain']['app'][$domainkey]) && !in_array(strtolower($nav['title']), array('follow', 'guide', 'collection'))) {
 				$nav['url'] = 'http://'.$_G['setting']['domain']['app'][$domainkey];
 			}
 		}
@@ -762,8 +765,7 @@ function get_cachedata_footernav() {
 	global $_G;
 
 	$data['footernavs'] = array();
-	$query = DB::query("SELECT * FROM ".DB::table('common_nav')." WHERE navtype='1' ORDER BY displayorder");
-	while($nav = DB::fetch($query)) {
+	foreach(C::t('common_nav')->fetch_all_by_navtype(1) as $nav) {
 		$nav['extra'] = '';
 		if(!$nav['type']) {
 			if($nav['identifier'] == 'report') {
@@ -788,8 +790,7 @@ function get_cachedata_footernav() {
 function get_cachedata_spacenavs() {
 	global $_G;
 	$data['spacenavs'] = array();
-	$query = DB::query("SELECT * FROM ".DB::table('common_nav')." WHERE navtype='2' ORDER BY displayorder");
-	while($nav = DB::fetch($query)) {
+	foreach(C::t('common_nav')->fetch_all_by_navtype(2) as $nav) {
 		if($nav['icon']) {
 			$navicon = str_replace('{STATICURL}', STATICURL, $nav['icon']);
 			if(!preg_match("/^".preg_quote(STATICURL, '/')."/i", $navicon) && !(($valueparse = parse_url($navicon)) && isset($valueparse['host']))) {
@@ -867,8 +868,7 @@ function get_cachedata_mynavs() {
 	global $_G;
 
 	$data['mynavs'] = array();
-	$query = DB::query("SELECT * FROM ".DB::table('common_nav')." WHERE navtype='3' ORDER BY displayorder");
-	while($nav = DB::fetch($query)) {
+	foreach(C::t('common_nav')->fetch_all_by_navtype(3) as $nav) {
 		if($nav['icon']) {
 			$navicon = str_replace('{STATICURL}', STATICURL, $nav['icon']);
 			if(!preg_match("/^".preg_quote(STATICURL, '/')."/i", $navicon) && !(($valueparse = parse_url($navicon)) && isset($valueparse['host']))) {
@@ -888,8 +888,7 @@ function get_cachedata_topnav() {
 	global $_G;
 
 	$data['topnavs'] = array();
-	$query = DB::query("SELECT * FROM ".DB::table('common_nav')." WHERE navtype='4' ORDER BY displayorder");
-	while($nav = DB::fetch($query)) {
+	foreach(C::t('common_nav')->fetch_all_by_navtype(4) as $nav) {
 		$nav['extra'] = '';
 		if(!$nav['type']) {
 			if($nav['identifier'] == 'sethomepage') {
@@ -911,19 +910,28 @@ function writetojscache() {
 	$dir = DISCUZ_ROOT.'static/js/';
 	$dh = opendir($dir);
 	$remove = array(
+	array(
 		'/(^|\r|\n)\/\*.+?\*\/(\r|\n)/is',
+		"/([^\\\:]{1})\/\/.+?(\r|\n)/",
 		'/\/\/note.+?(\r|\n)/i',
 		'/\/\/debug.+?(\r|\n)/i',
 		'/(^|\r|\n)(\s|\t)+/',
 		'/(\r|\n)/',
-	);
+	), array(
+		'',
+		'\1',
+		'',
+		'',
+		'',
+		'',
+	));
 	while(($entry = readdir($dh)) !== false) {
 		if(fileext($entry) == 'js') {
 			$jsfile = $dir.$entry;
 			$fp = fopen($jsfile, 'r');
 			$jsdata = @fread($fp, filesize($jsfile));
 			fclose($fp);
-			$jsdata = preg_replace($remove, '', $jsdata);
+			$jsdata = preg_replace($remove[0], $remove[1], $jsdata);
 			if(@$fp = fopen(DISCUZ_ROOT.'./data/cache/'.$entry, 'w')) {
 				fwrite($fp, $jsdata);
 				fclose($fp);

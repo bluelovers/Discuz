@@ -23,15 +23,18 @@
 	<!--{/if}-->
 </div>
 <!--{if $magiclist}-->
-	<ul class="mtm ml mlm mgcl cl">
+	<ul class="mtm mgcl cl">
 	<!--{loop $magiclist $key $magic}-->
 		<li>
-			<div class="z mg_img">
-				<img src="{STATICURL}/image/magic/$magic[pic]" alt="$magic[name]" title="$magic[description]" />
+			<div id="magic_$magic[identifier]_menu" class="tip tip_4" style="display:none">
+				<div class="tip_horn"></div>
+				<div class="tip_c" style="text-align:left">$magic[description]</div>
+			</div>
+			<div id="magic_$magic[identifier]" class="mg_img" onmouseover="showMenu({'ctrlid':this.id, 'menuid':'magic_$magic[identifier]_menu', 'pos':'12!'});">
+				<img src="{STATICURL}/image/magic/$magic[pic]" alt="$magic[name]" />
 			</div>
 			<p><strong>$magic[name]</strong></p>
-			<p class="xg1" title="$magic[description]">$magic[description]</p>
-			<p>{lang magics_price}
+			<p>
 				<!--{if {$_G['setting']['extcredits'][$magic[credit]][unit]}}-->
 					{$_G['setting']['extcredits'][$magic[credit]][title]} <strong class="xi1 xw1 xs2">$magic[price]</strong> {$_G['setting']['extcredits'][$magic[credit]][unit]}/{lang magics_unit}
 				<!--{else}-->

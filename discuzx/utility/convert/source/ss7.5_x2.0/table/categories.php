@@ -54,7 +54,7 @@ foreach ($arr as $rs) {
 }
 
 if($nextid) {
-	showmessage("ç¹¼çºŒè½‰æ›æ•¸æ“šè¡¨ ".$table_source." catid> $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
+	showmessage("¼ÌÐø×ª»»Êý¾Ý±í ".$table_source." catid> $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
 }
 
 ?>

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_mobile.php 22434 2011-05-09 01:59:51Z congyushuai $
+ *      $Id: misc_mobile.php 25221 2011-10-31 09:24:20Z liulanbo $
  */
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
@@ -26,12 +26,8 @@ if($_GET['view'] == true) {
 	include libfile('function/forumlist');
 	loadcache('userstats');
 
-	$query = DB::query("SELECT f.fid, f.fup, f.type, f.name, f.threads, f.posts, f.todayposts, f.lastpost, f.inheritedmod, f.domain,
-			f.forumcolumns, f.simple, ff.description, ff.moderators, ff.icon, ff.viewperm, ff.redirect, ff.extra
-			FROM ".DB::table('forum_forum')." f
-			LEFT JOIN ".DB::table('forum_forumfield')." ff USING(fid)
-			WHERE f.status='1' ORDER BY f.type, f.displayorder");
-	while($forum = DB::fetch($query)) {
+	$query = C::t('forum_forum')->fetch_all_forum(1);
+	foreach($query as $forum) {
 		if($forum['type'] != 'group') {
 			$threads += $forum['threads'];
 			$posts += $forum['posts'];

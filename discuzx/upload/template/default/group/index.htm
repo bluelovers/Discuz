@@ -26,7 +26,7 @@
 					<h2>{lang recommend_group}</h2>
 				</div>
 				<div class="bm_c cl">
-					<!--{loop unserialize($_G['setting']['group_recommend']) $val}-->
+					<!--{loop dunserialize($_G['setting']['group_recommend']) $val}-->
 					<dl class="xld">
 						<dd class="m"><a href="forum.php?mod=group&fid=$val[fid]"><img src="$val[icon]" alt="$val[name]" width="48" height="48" /></a></dd>
 						<dt><a href="forum.php?mod=group&fid=$val[fid]">$val[name]</a></dt>
@@ -44,7 +44,6 @@
 				</div>
 				<div class="bm_c">
 					<!--{loop $first $groupid $group}-->
-						<!--{if $group['secondlist']}-->
 							<dl class="mbm pbm bbda">
 								<dt class="pbn">
 									<span class="y xi2"><!--{loop $group['secondlist'] $fid}--><a href="group.php?sgid=$fid">$second[$fid][name]</a> <!--{/loop}--><a href="group.php?gid=$groupid">{lang more} &rsaquo;</a></span>
@@ -56,7 +55,6 @@
 									<!--{/loop}-->
 								</dd>
 							</dl>
-						<!--{/if}-->
 					<!--{/loop}-->
 				</div>
 			</div>

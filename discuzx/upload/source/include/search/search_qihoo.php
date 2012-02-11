@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: search_qihoo.php 6752 2010-03-25 08:47:54Z cnteacher $
+ *      $Id: search_qihoo.php 24701 2011-10-08 09:03:57Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -34,7 +34,7 @@ if($orderby == 'lastpost') {
 
 $stype = empty($stype) ? '' : ($stype == 2 ? 'author' : 'title');
 
-$url = 'http://search.qihoo.com/usearch.html?site='.rawurlencode(site()).
+$url = 'http://search.qihoo.com/usearch.html?site='.rawurlencode($_SERVER['HTTP_HOST']).
 	'&kw='.rawurlencode($srchtxt).
 	'&ics='.CHARSET.
 	'&ocs='.CHARSET.

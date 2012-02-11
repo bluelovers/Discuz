@@ -1,4 +1,4 @@
-/* åˆ¤æ–·ï¼šç•¶æ‰“é–‹ DIY é¢æ¿æ™‚åŠ è¼‰ */
+/* ÅĞ¶Ï£ºµ±´ò¿ª DIY Ãæ°åÊ±¼ÓÔØ */
 body { padding-top: 170px; }
 #controlpanel { color: #000;position: fixed; top: 0; left: 0; z-index: 200; width: 100%; border-bottom: 1px solid #999; background: #F5F5F5 url({STATICURL}image/diy/cp-bg.png) repeat-x 0 0; }
 	* html #controlpanel { position: absolute; top: expression(offsetParent.scrollTop); }
@@ -20,7 +20,7 @@ body { padding-top: 170px; }
 				#savecachemsg { float: right; padding-right: 5px; text-align: right; }
 		#controlnav { padding-left: 50px; height: 46px; background: transparent url({STATICURL}image/diy/t-diy.png) no-repeat 0 100%; line-height: 35px; }
 			#controlnav li { float: left; margin-top: 7px; margin-right: 5px; font-size: 14px; font-weight: 700; }
-				#controlnav li a { float: left; padding: 0 15px; }
+				#controlnav li a { float: left; padding: 0 15px; color: #333 !important; }
 			#controlnav li.current { background: url({STATICURL}image/diy/cp-nav-active.png) no-repeat 0 0; }
 				#controlnav li.current a { background: url({STATICURL}image/diy/cp-nav-active.png) no-repeat 100% -50px; }
 				#controlnav li.current span { margin-right: -8px; }
@@ -29,6 +29,7 @@ body { padding-top: 170px; }
 	#controlcontent { margin: 0 10px; padding: 10px; height: 110px; he\ight: 90px; border: solid #CCBDCC; border-width: 0 1px; background: #FFF; overflow: hidden; }
 	#controlcontent li { float: left; margin-right: 4px; }
 		#controlcontent li a, #controlcontent li label { float: left; width: 90px; height: 90px; text-align: center; cursor: pointer; }
+			#controlcontent li a { color: #333 !important; }
 			#controlcontent li a:hover, #controlcontent li label.hover { background: url({STATICURL}image/diy/cp-item-selected.png) no-repeat 0 0; text-decoration: none; }
 			#controlcontent li img, #controlcontent li label span { display: block; margin: 7px auto 0; width: 80px; height: 60px; text-align: center; }
 				#controlcontent li span { background: url({STATICURL}image/diy/cp-module-type.png) no-repeat 0 0; }
@@ -57,10 +58,10 @@ body { padding-top: 170px; }
 			#cpfooter td.c { height: 5px; border-bottom: 1px solid #CCBDCC; }
 			#cpfooter td.r { width: 6px; background: url({STATICURL}image/diy/cp-nav-corner-br.png) no-repeat 0 0; }
 
-/* DIY éƒ¨åˆ† */
+/* DIY ²¿·Ö */
 dl.diy dt { margin-top: -10px; margin-bottom: 10px; padding-bottom: 5px; border-bottom: 1px solid #CCC; line-height: 26px; }
-	dl.diy dt a { color: #06C; text-decoration: underline; }
-		dl.diy dt a.activity { color: #222; font-weight: 700; text-decoration: none; }
+	dl.diy dt a { color: #06C !important; text-decoration: underline; }
+		dl.diy dt a.activity { color: #333 !important; font-weight: 700; text-decoration: none; }
 	dl.diy dl { clear: both; padding: 0 10px; }
 		dl.diy dl dt { float: left; margin: 0; padding: 0; width: 5em; border: none; }
 		#positiontable td { width: 12px; height: 12px; border: 2px solid #FFF; background: #EEE; line-height: 0; overflow: hidden; cursor: pointer; }
@@ -77,7 +78,7 @@ dl.diy dt { margin-top: -10px; margin-bottom: 10px; padding-bottom: 5px; border-
 			#diyimg_next .prev { background: url({IMGDIR}/arw_l.gif) no-repeat 50% 50%; }
 			#diyimg_next .nxt { margin: 0; background: url({IMGDIR}/arw_r.gif) no-repeat 50% 50%; }
 
-/* åŸCSS */
+/* Ô­CSS */
 #outerbox { width: 970px; margin: auto; }
 .float_left { margin: 0 0 0 34px;}
 .float_center { margin: auto; }
@@ -144,7 +145,7 @@ dl.diy dt { margin-top: -10px; margin-bottom: 10px; padding-bottom: 5px; border-
 .td_right { float: left; display: block; line-height:22px; }
 .rb { border: 2px solid red; }
 #contentframe li a, #contentblockclass li label { cursor: move; }
-/***åŸCSS***/
+/***Ô­CSS***/
 #diy-tg { display: none !important; }
 /**space**/
 #controlcontent .selector li a { margin: 5px 10px 0 0; padding-left: 30px; width: 60px; height: 30px; line-height: 30px; background: url({STATICURL}image/diy/cp-item-mini.png) no-repeat 0 0; text-align: left; cursor: pointer; }
@@ -155,14 +156,14 @@ dl.diy dt { margin-top: -10px; margin-bottom: 10px; padding-bottom: 5px; border-
 	.borderul .bordera, .borderul label { display: none; }
 	.borderul label.y { display: inline; }
 
-/* å½ˆçª— by Pony */
+/* µ¯´° by Pony */
 .diywin .px { vertical-align: middle; }
 .diywin td { padding: 2px 0; }
 .diywin .tfm caption, .diywin .tfm th, .diywin .tfm td { padding: 5px 2px; }
-/* å€‹äººå°èˆªå°æ¨£å¼ */
+/* ¸öÈËµ¼º½Ğ¡ÑùÊ½ */
 .mininv { width: 450px; height: 30px; border: 1px dotted #09F; }
 
-/* å€‹äººç©ºé–“å’Œç¶²ç«™DIYå…±ç”¨çš„éƒ¨åˆ†æ¨£å¼ */
+/* ¸öÈË¿Õ¼äºÍÍøÕ¾DIY¹²ÓÃµÄ²¿·ÖÑùÊ½ */
 .hide { display: none; }
 .frame,.tab,.block { position: relative; zoom:1; min-height: 20px; }
 .edit { position: absolute; top: 0; right: 0; z-index: 199; padding: 0 5px; background: red; line-height: 26px; color: #FFF; cursor: pointer; }

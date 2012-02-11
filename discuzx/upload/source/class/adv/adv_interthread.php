@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: adv_interthread.php 7169 2010-03-30 06:34:18Z monkey $
+ *      $Id: adv_interthread.php 24553 2011-09-26 03:21:13Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -13,7 +13,7 @@ if(!defined('IN_DISCUZ')) {
 
 class adv_interthread {
 
-	var $version = '1.0';
+	var $version = '1.1';
 	var $name = 'interthread_name';
 	var $description = 'interthread_desc';
 	var $copyright = '<a href="http://www.comsenz.com" target="_blank">Comsenz Inc.</a>';
@@ -33,6 +33,12 @@ class adv_interthread {
 				'type' => 'mselect',
 				'value' => array(),
 			),
+			'pnumber' => array(
+				'title' => 'interthread_pnumber',
+				'type' => 'mselect',
+				'value' => array(),
+				'default' => array(0),
+			),
 		);
 		loadcache(array('forums', 'grouptype'));
 		$settings['fids']['value'][] = $settings['groups']['value'][] = array(0, '&nbsp;');
@@ -47,6 +53,9 @@ class adv_interthread {
 					$settings['groups']['value'][] = array($sgid, str_repeat('&nbsp;', 8).$_G['cache']['grouptype']['second'][$sgid]['name']);
 				}
 			}
+		}
+		for($i = 1;$i <= $_G['ppp'];$i++) {
+			$settings['pnumber']['value'][$i] = array($i, '> #'.$i);
 		}
 
 		return $settings;
@@ -68,7 +77,9 @@ class adv_interthread {
 	function evalcode() {
 		return array(
 			'check' => '
-			if($_G[\'basescript\'] == \'forum\' && $parameter[\'fids\'] && !in_array($_G[\'fid\'], $parameter[\'fids\'])
+			$parameter[\'pnumber\'] = $parameter[\'pnumber\'] ? $parameter[\'pnumber\'] : array(1);
+			if(!in_array($params[2] + 1, (array)$parameter[\'pnumber\'])
+			|| $_G[\'basescript\'] == \'forum\' && $parameter[\'fids\'] && !in_array($_G[\'fid\'], $parameter[\'fids\'])
 			|| $_G[\'basescript\'] == \'group\' && $parameter[\'groups\'] && !in_array($_G[\'grouptypeid\'], $parameter[\'groups\'])
 			) {
 				$checked = false;

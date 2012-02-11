@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_misc.php 26292 2011-12-08 03:07:00Z zhengqingpeng $
+ *      $Id: function_misc.php 27020 2011-12-30 06:22:50Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -254,13 +254,14 @@ function procthread($thread, $timeformat = 'd') {
 	$postsnum = $thread['special'] ? $thread['replies'] : $thread['replies'] + 1;
 	$pagelinks = '';
 	if($postsnum  > $_G['ppp']) {
+		$domain = 'http://'.($_G['setting']['domain']['app']['forum'] ? $_G['setting']['domain']['app']['forum'] : ($_G['setting']['domain']['app']['default'] ? $_G['setting']['domain']['app']['default'] : '')).'/';
 		$posts = $postsnum;
 		$topicpages = ceil($posts / $_G['ppp']);
 		for($i = 1; $i <= $topicpages; $i++) {
 			if(!in_array('forum_viewthread', $_G['setting']['rewritestatus'])) {
-				$pagelinks .= '<a href="forum.php?mod=viewthread&tid='.$thread['tid'].'&page='.$i.($_G['gp_from'] ? '&from='.$_G['gp_from'] : '').'" target="_blank">'.$i.'</a> ';
+				$pagelinks .= '<a href="forum.php?mod=viewthread&tid='.$thread['tid'].'&page='.$i.($_GET['from'] ? '&from='.$_GET['from'] : '').'" target="_blank">'.$i.'</a> ';
 			} else {
-				$pagelinks .= '<a href="'.rewriteoutput('forum_viewthread', 1, '', $thread['tid'], $i, '', '').'" target="_blank">'.$i.'</a> ';
+				$pagelinks .= '<a href="'.rewriteoutput('forum_viewthread', 1, $domain, $thread['tid'], $i, '', '').'" target="_blank">'.$i.'</a> ';
 			}
 			if($i == 6) {
 				$i = $topicpages + 1;
@@ -270,7 +271,7 @@ function procthread($thread, $timeformat = 'd') {
 			if(!in_array('forum_viewthread', $_G['setting']['rewritestatus'])) {
 				$pagelinks .= ' .. <a href="forum.php?mod=viewthread&tid='.$thread['tid'].'&page='.$topicpages.'" target="_blank">'.$topicpages.'</a> ';
 			} else {
-				$pagelinks .= ' .. <a href="'.rewriteoutput('forum_viewthread', 1, '', $thread['tid'], $topicpages, '', '').'" target="_blank">'.$topicpages.'</a> ';
+				$pagelinks .= ' .. <a href="'.rewriteoutput('forum_viewthread', 1, $domain, $thread['tid'], $topicpages, '', '').'" target="_blank">'.$topicpages.'</a> ';
 			}
 		}
 		$thread['multipage'] = '... '.$pagelinks;
@@ -295,33 +296,15 @@ function procthread($thread, $timeformat = 'd') {
 	return $thread;
 }
 
-function updateviews($table, $idcol, $viewscol, $logfile) {
-	$viewlog = $viewarray = array();
-	$newlog = DISCUZ_ROOT.$logfile.random(6);
-	if(@rename(DISCUZ_ROOT.$logfile, $newlog)) {
-		$viewlog = file($newlog);
-		unlink($newlog);
-		if(is_array($viewlog) && !empty($viewlog)) {
-			$viewlog = array_count_values($viewlog);
-			foreach($viewlog as $id => $views) {
-				$viewarray[$views] .= ($id > 0) ? ','.intval($id) : '';
-			}
-			foreach($viewarray as $views => $ids) {
-				DB::query("UPDATE LOW_PRIORITY ".DB::table($table)." SET $viewscol=$viewscol+'$views' WHERE $idcol IN (0$ids)", 'UNBUFFERED');
-			}
-		}
-	}
-}
-
 function modlog($thread, $action) {
 	global $_G;
-	$reason = $_G['gp_reason'];
-	writelog('modslog', dhtmlspecialchars("$_G[timestamp]\t$_G[username]\t$_G[adminid]\t$_G[clientip]\t".$_G['forum']['fid']."\t".$_G['forum']['name']."\t$thread[tid]\t$thread[subject]\t$action\t$reason"));
+	$reason = $_GET['reason'];
+	writelog('modslog', dhtmlspecialchars("$_G[timestamp]\t$_G[username]\t$_G[adminid]\t$_G[clientip]\t".$_G['forum']['fid']."\t".$_G['forum']['name']."\t$thread[tid]\t$thread[subject]\t$action\t$reason\t".$_G['toforum']['fid']."\t".$_G['toforum']['name']));
 }
 
 function checkreasonpm() {
 	global $_G;
-	$reason = trim(strip_tags($_G['gp_reason']));
+	$reason = trim(strip_tags($_GET['reason']));
 	if(($_G['group']['reasonpm'] == 1 || $_G['group']['reasonpm'] == 3) && !$reason) {
 		showmessage('admin_reason_invalid');
 	}
@@ -370,6 +353,10 @@ function acpmsg($message, $url = '', $type = '', $extra = '') {
 
 function savebanlog($username, $origgroupid, $newgroupid, $expiration, $reason) {
 	global $_G;
+	if($_G['setting']['plugins']['func'][HOOKTYPE]['savebanlog']) {
+		$param = func_get_args();
+		hookscript('savebanlog', 'global', 'funcs', array('param' => $param), 'savebanlog');
+	}
 	writelog('banlog', dhtmlspecialchars("$_G[timestamp]\t{$_G[member][username]}\t$_G[groupid]\t$_G[clientip]\t$username\t$origgroupid\t$newgroupid\t$expiration\t$reason"));
 }
 
@@ -394,8 +381,10 @@ function implodearray($array, $skip = array()) {
 			if(empty($skip) || !in_array($key, $skip, true)) {
 				if(is_array($value)) {
 					$return .= "$key={".implodearray($value, $skip)."}; ";
-				} else {
+				} elseif(!empty($value)) {
 					$return .= "$key=$value; ";
+				} else {
+					$return .= '';
 				}
 			}
 		}
@@ -405,21 +394,21 @@ function implodearray($array, $skip = array()) {
 
 function undeletethreads($tids) {
 	global $_G;
+	if($_G['setting']['plugins']['func'][HOOKTYPE]['undeletethreads']) {
+		$param = func_get_args();
+		hookscript('undeletethreads', 'global', 'funcs', array('param' => $param), 'undeletethreads');
+	}
 	$threadsundel = 0;
 	if($tids && is_array($tids)) {
-		foreach($tids as $t) {
-			my_thread_log('restore', array('tid' => $t));
-		}
+		$arrtids = $tids;
 		$tids = '\''.implode('\',\'', $tids).'\'';
 
 		$tuidarray = $ruidarray = $fidarray = $posttabletids = array();
-		$query = DB::query('SELECT tid, posttableid FROM '.DB::table('forum_thread')." WHERE tid IN ($tids)");
-		while($thread = DB::fetch($query)) {
+		foreach(C::t('forum_thread')->fetch_all_by_tid($arrtids) as $thread) {
 			$posttabletids[$thread['posttableid'] ? $thread['posttableid'] : 0][] = $thread['tid'];
 		}
 		foreach($posttabletids as $posttableid => $ptids) {
-			$query = DB::query('SELECT fid, first, authorid FROM '.DB::table(getposttable($posttableid))." WHERE tid IN (".dimplode($ptids).")");
-			while($post = DB::fetch($query)) {
+			foreach(C::t('forum_post')->fetch_all_by_tid($posttableid, $ptids, false) as $post) {
 				if($post['first']) {
 					$tuidarray[$post['fid']][] = $post['authorid'];
 				} else {
@@ -429,7 +418,7 @@ function undeletethreads($tids) {
 					$fidarray[] = $post['fid'];
 				}
 			}
-			updatepost(array('invisible' => '0'), "tid IN (".dimplode($ptids).")", true, $posttableid);
+			C::t('forum_post')->update_by_tid($posttableid, $ptids, array('invisible' => '0'), true);
 		}
 		if($tuidarray) {
 			foreach($tuidarray as $fid => $tuids) {
@@ -442,8 +431,7 @@ function undeletethreads($tids) {
 			}
 		}
 
-		DB::query("UPDATE ".DB::table('forum_thread')." SET displayorder='0', moderated='1' WHERE tid IN ($tids)");
-		$threadsundel = DB::affected_rows();
+		$threadsundel = C::t('forum_thread')->update($arrtids, array('displayorder'=>0, 'moderated'=>1));
 
 		updatemodlog($tids, 'UDL');
 		updatemodworks('UDL', $threadsundel);
@@ -466,40 +454,35 @@ function recyclebinpostdelete($deletepids, $posttableid = false) {
 
 function recyclebinpostundelete($undeletepids, $posttableid = false) {
 	global $_G;
+	if($_G['setting']['plugins']['func'][HOOKTYPE]['recyclebinpostundelete']) {
+		$param = func_get_args();
+		hookscript('recyclebinpostundelete', 'global', 'funcs', array('param' => $param), 'recyclebinpostundelete');
+	}
 	$postsundel = 0;
 	if(empty($undeletepids)) {
 		return $postsundel;
 	}
 
-	foreach($undeletepids as $pid) {
-		my_post_log('restore', array('pid' => $pid));
-	}
-
-	$undeletepids = dimplode($undeletepids);
 
 	loadcache('posttableids');
 	$posttableids = !empty($_G['cache']['posttableids']) ? ($posttableid !== false && in_array($posttableid, $_G['cache']['posttableids']) ? array($posttableid) : $_G['cache']['posttableids']): array('0');
 
 	$postarray = $ruidarray = $fidarray = $tidarray = array();
 	foreach($posttableids as $ptid) {
-		$query = DB::query('SELECT fid, tid, first, authorid FROM '.DB::table(getposttable($ptid))." WHERE pid IN ($undeletepids)");
-		while($post = DB::fetch($query)) {
-			$postarray[] = $post;
+		foreach(C::t('forum_post')->fetch_all($ptid, $undeletepids, false) as $post) {
+			if(!$post['first']) {
+				$ruidarray[$post['fid']][] = $post['authorid'];
+			}
+			$fidarray[$post['fid']] = $post['fid'];
+			$tidarray[$post['tid']] = $post['tid'];
+
 		}
 	}
-	if(empty($postarray)) {
+	if(empty($fidarray)) {
 		return $postsundel;
 	}
 
-	foreach($postarray as $key => $post) {
-		if(!$post['first']) {
-			$ruidarray[$post['fid']][] = $post['authorid'];
-		}
-		$fidarray[$post['fid']] = $post['fid'];
-		$tidarray[$post['tid']] = $post['tid'];
-	}
-
-	$postsundel = updatepost(array('invisible' => '0'), "pid IN ($undeletepids)", true, $posttableid);
+	$postsundel = C::t('forum_post')->update($posttableid, $undeletepids, array('invisible' => '0'), true);
 
 	include_once libfile('function/post');
 	if($ruidarray) {

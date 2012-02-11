@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_friend.php 20975 2011-03-09 08:52:58Z monkey $
+ *      $Id: space_friend.php 27089 2012-01-05 02:37:03Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -20,6 +20,8 @@ $page = empty($_GET['page'])?0:intval($_GET['page']);
 if($page<1) $page = 1;
 $start = ($page-1)*$perpage;
 
+$_G['disabledwidthauto'] = 0;
+
 if(empty($_GET['view']) || $_GET['view'] == 'all') $_GET['view'] = 'me';
 
 ckstart($start, $perpage);
@@ -29,33 +31,36 @@ if($_GET['view'] == 'online') {
 	$actives = array('me'=>' class="a"');
 
 	space_merge($space, 'field_home');
+	$onlinedata = array();
 	$wheresql = '';
 	if($_GET['type']=='near') {
 		$theurl = "home.php?mod=space&uid=$space[uid]&do=friend&view=online&type=near";
-		$ip = explode('.', $_G['clientip']);
-		$wheresql = " WHERE ip1='$ip[0]' AND ip2='$ip[1]' AND ip3='$ip[2]'";
+		if(($count = C::app()->session->count_by_ip($_G['clientip']))) {
+			$onlinedata = C::app()->session->fetch_all_by_ip($_G['clientip'], $start, $perpage);
+		}
 	} elseif($_GET['type']=='friend') {
 		$theurl = "home.php?mod=space&uid=$space[uid]&do=friend&view=online&type=friend";
-		$space['feedfriend'] = !empty($space['feedfriend']) ? $space['feedfriend'] : -1;
-		$wheresql = " WHERE uid IN ($space[feedfriend])";
+		$count = !empty($space['feedfriend']) ? $space['feedfriend'] : 0;
+		if($count) {
+			$onlinedata = C::app()->session->fetch_all_by_uid(explode(',', $space['feedfriend']), $start, $perpage);
+		}
 	} elseif($_GET['type']=='member') {
 		$theurl = "home.php?mod=space&uid=$space[uid]&do=friend&view=online&type=member";
 		$wheresql = " WHERE uid>0";
+		if(($count = C::app()->session->count(1))) {
+			$onlinedata = C::app()->session->fetch_member(1, 2, $start, $perpage);
+		}
 	} else {
 		$_GET['type']=='all';
 		$theurl = "home.php?mod=space&uid=$space[uid]&do=friend&view=online&type=all";
-		$wheresql = ' WHERE 1';
+		if(($count = C::app()->session->count_invisible(0))) {
+			$onlinedata = C::app()->session->fetch_member(0, 2, $start, $perpage);
+		}
 	}
 
-	$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('common_session')." $wheresql"), 0);
 	if($count) {
-		$query = DB::query("SELECT * FROM ".DB::table("common_session")." $wheresql AND invisible='0' ORDER BY lastactivity DESC LIMIT $start,$perpage");
-		while($value = DB::fetch($query)) {
 
-			if($value['magichidden']) {
-				$count = $count - 1;
-				continue;
-			}
+		foreach($onlinedata as $value) {
 			if($_GET['type']=='near') {
 				if($value['uid'] == $space['uid']) {
 					$count = $count-1;
@@ -72,12 +77,11 @@ if($_GET['view'] == 'online') {
 			require_once libfile('function/friend');
 			friend_check($space['uid'], $fuids);
 
-			$query = DB::query("SELECT cm.*, cmfh.* FROM ".DB::table("common_member").' cm
-				LEFT JOIN '.DB::table("common_member_field_home")." cmfh ON cmfh.uid=cm.uid
-				WHERE cm.uid IN(".dimplode($fuids).")");
-			while($value = DB::fetch($query)) {
-				$value['isfriend'] = $value['uid']==$space['uid'] || $_G["home_friend_".$space['uid'].'_'.$value['uid']] ? 1 : 0;
-				$list[$value['uid']] = array_merge($list[$value['uid']], $value);
+			$fieldhome = C::t('common_member_field_home')->fetch_all($fuids);
+			foreach(C::t('common_member')->fetch_all($fuids) as $uid => $value) {
+				$value = array_merge($value, $fieldhome[$uid]);
+				$value['isfriend'] = $uid==$space['uid'] || $_G["home_friend_".$space['uid'].'_'.$uid] ? 1 : 0;
+				$list[$uid] = array_merge($list[$uid], $value);
 			}
 		}
 	}
@@ -89,22 +93,21 @@ if($_GET['view'] == 'online') {
 	$actives = array('me'=>' class="a"');
 
 	if($_GET['view'] == 'visitor') {
-		$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('home_visitor')." main WHERE main.uid='$space[uid]'"), 0);
-		$query = DB::query("SELECT main.vuid AS uid, main.vusername AS username, main.dateline
-			FROM ".DB::table('home_visitor')." main
-			WHERE main.uid='$space[uid]'
-			ORDER BY main.dateline DESC
-			LIMIT $start,$perpage");
+		$count = C::t('home_visitor')->count_by_uid($space['uid']);
 	} else {
-		$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('home_visitor')." main WHERE main.vuid='$space[uid]'"), 0);
-		$query = DB::query("SELECT main.uid AS uid, main.dateline
-			FROM ".DB::table('home_visitor')." main
-			WHERE main.vuid='$space[uid]'
-			ORDER BY main.dateline DESC
-			LIMIT $start,$perpage");
+		$count = C::t('home_visitor')->count_by_vuid($space['uid']);
 	}
 	if($count) {
-		while ($value = DB::fetch($query)) {
+		if($_GET['view'] == 'visitor') {
+			$visitors = C::t('home_visitor')->fetch_all_by_uid($space['uid'], $start, $perpage);
+		} else {
+			$visitors = C::t('home_visitor')->fetch_all_by_vuid($space['uid'], $start, $perpage);
+		}
+		foreach($visitors as $value) {
+			if($_GET['view'] == 'visitor') {
+				$value['uid'] = $value['vuid'];
+				$value['username'] = $value['vusername'];
+			}
 			$fuids[] = $value['uid'];
 			$list[$value['uid']] = $value;
 		}
@@ -116,15 +119,12 @@ if($_GET['view'] == 'online') {
 	$theurl = "home.php?mod=space&uid=$space[uid]&do=friend&view=$_GET[view]";
 	$actives = array('me'=>' class="a"');
 
-	$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('home_blacklist')." main WHERE main.uid='$space[uid]'"), 0);
+	$count = C::t('home_blacklist')->count_by_uid_buid($space['uid']);
 	if($count) {
-		$query = DB::query("SELECT s.username, s.groupid, main.dateline, main.buid AS uid
-			FROM ".DB::table('home_blacklist')." main
-			LEFT JOIN ".DB::table('common_member')." s ON s.uid=main.buid
-			WHERE main.uid='$space[uid]'
-			ORDER BY main.dateline DESC
-			LIMIT $start,$perpage");
-		while ($value = DB::fetch($query)) {
+		$backlist = C::t('home_blacklist')->fetch_all_by_uid($space['uid'], $start,$perpage);
+		$members = C::t('common_member')->fetch_all(array_keys($backlist));
+		foreach($backlist as $buid => $value) {
+			$value = array_merge($value, $members[$buid]);
 			$value['isfriend'] = 0;
 			$fuids[] = $value['uid'];
 			$list[$value['uid']] = $value;
@@ -139,55 +139,64 @@ if($_GET['view'] == 'online') {
 
 	$_GET['view'] = 'me';
 
-	$wheresql = '';
+	$querydata = array();
 	if($space['self']) {
 		require_once libfile('function/friend');
 		$groups = friend_group_list();
 		$group = !isset($_GET['group'])?'-1':intval($_GET['group']);
 		if($group > -1) {
-			$wheresql = "AND main.gid='$group'";
+			$querydata['gid'] = $group;
 			$theurl .= "&group=$group";
 		}
 	}
 	if($_GET['searchkey']) {
-		$wheresql = "AND main.fusername LIKE '%$_GET[searchkey]%'";
+		require_once libfile('function/search');
+		$querydata['searchkey'] = $_GET['searchkey'];
 		$theurl .= "&searchkey=$_GET[searchkey]";
 	}
 
-	$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('home_friend')." main WHERE main.uid='$space[uid]' $wheresql"), 0);
-	$friendnum = DB::result_first("SELECT friends FROM ".DB::table('common_member_count')." WHERE uid = '$_G[uid]' LIMIT 1");
+	$count = C::t('home_friend')->fetch_all_search($space['uid'], $querydata['gid'], $querydata['searchkey'], true);
+	$membercount = C::t('common_member_count')->fetch($_G['uid']);
+	$friendnum = $membercount['friends'];
+	unset($membercount);
 	if($count) {
 
-		$query = DB::query("SELECT main.fuid AS uid, main.gid, main.num, main.note FROM ".DB::table('home_friend')." main
-			WHERE main.uid='$space[uid]' $wheresql
-			ORDER BY main.num DESC, main.dateline DESC
-			LIMIT $start,$perpage");
-		while ($value = DB::fetch($query)) {
+		$query = C::t('home_friend')->fetch_all_search($space['uid'], $querydata['gid'], $querydata['searchkey'], false, $start, $perpage);
+		foreach($query as $value) {
+			$value['uid'] = $value['fuid'];
 			$_G["home_friend_".$space['uid'].'_'.$value['uid']] = $value['isfriend'] = 1;
 			$fuids[$value['uid']] = $value['uid'];
 			$list[$value['uid']] = $value;
 		}
 	} elseif(!$friendnum) {
-		if($specialuser_count = DB::result_first("SELECT COUNT(*) FROM ".DB::table('home_specialuser')." WHERE status = 1 AND uid != '$_G[uid]'")) {
-			$query = DB::query("SELECT * FROM ".DB::table('home_specialuser')." WHERE status = 1 AND uid != '$_G[uid]' LIMIT 6");
-			while($value = DB::fetch($query)) {
-				$fuids[$value['uid']] = $value['uid'];
-				$specialuser_list[$value['uid']] = $value;
+		if(($specialuser_count = C::t('home_specialuser')->count_by_status(1))) {
+			foreach(C::t('home_specialuser')->fetch_all_by_status(1, 7) as $value) {
+				if($_G['uid'] !== $value['uid']) {
+					$fuids[$value['uid']] = $value['uid'];
+					$specialuser_list[$value['uid']] = $value;
+				}
+				if(count($fuids) >= 6) {
+					break;
+				}
 			}
-		}
-		if($online_count = DB::result_first("SELECT COUNT(*) FROM ".DB::table("common_session")." WHERE invisible='0' AND uid <> '$_G[uid]' AND uid <> '0'")) {
-			$query = DB::query("SELECT * FROM ".DB::table("common_session")." WHERE invisible='0' AND uid <> '$_G[uid]' AND uid <> '0' ORDER BY lastactivity DESC LIMIT 6");
-			while($value = DB::fetch($query)) {
-				$fuids[$value['uid']] = $value['uid'];
-				$oluids[$value['uid']] = $value['uid'];
-				$online_list[$value['uid']] = $value;
-			}
+			$specialuser_list = getfollowflag($specialuser_list);
 
-			$query = DB::query("SELECT cm.*, cmfh.* FROM ".DB::table("common_member").' cm
-				LEFT JOIN '.DB::table("common_member_field_home")." cmfh ON cmfh.uid=cm.uid
-				WHERE cm.uid IN(".dimplode($oluids).")");
-			while($value = DB::fetch($query)) {
-				$online_list[$value['uid']] = array_merge($online_list[$value['uid']], $value);
+		}
+		if(($online_count = C::app()->session->count(1)) > 1) {
+			$oluids = $online_list = array();
+			foreach(C::app()->session->fetch_member(1, 2, 7) as $value) {
+				if($value['uid'] != $_G['uid'] && count($oluids) <= 6) {
+					$fuids[$value['uid']] = $value['uid'];
+					$oluids[$value['uid']] = $value['uid'];
+					$online_list[$value['uid']] = $value;
+				}
+			}
+			$online_list = getfollowflag($online_list);
+
+			$fieldhome = C::t('common_member_field_home')->fetch_all($oluids, false, 0);
+			foreach(C::t('common_member')->fetch_all($oluids, false, 0) as $uid => $value) {
+				$value = array_merge($value, $fieldhome[$uid]);
+				$online_list[$uid] = array_merge($online_list[$uid], $value);
 			}
 
 		}
@@ -212,9 +221,8 @@ if($_GET['view'] == 'online') {
 }
 
 if($fuids) {
-	$query = DB::query("SELECT * FROM ".DB::table('common_session')." WHERE uid IN (".dimplode($fuids).")");
-	while ($value = DB::fetch($query)) {
-		if(!$value['magichidden'] && !$value['invisible']) {
+	foreach(C::app()->session->fetch_all_by_uid($fuids) as $value) {
+		if(!$value['invisible']) {
 			$ols[$value['uid']] = $value['lastactivity'];
 		} elseif($list[$value['uid']] && !in_array($_GET['view'], array('me', 'trace', 'blacklist'))) {
 			unset($list[$value['uid']]);
@@ -226,15 +234,18 @@ if($fuids) {
 		friend_check($fuids);
 	}
 	if($list) {
-		$query = DB::query("SELECT cm.*, cmfh.* FROM ".DB::table("common_member").' cm LEFT JOIN '.DB::table("common_member_field_home")." cmfh ON cmfh.uid=cm.uid WHERE cm.uid IN(".dimplode($fuids).")");
-		while($value = DB::fetch($query)) {
-			$value['isfriend'] = $value['uid']==$space['uid'] || $_G["home_friend_".$space['uid'].'_'.$value['uid']] ? 1 : 0;
-			if(empty($list[$value['uid']])) $list[$value['uid']] = array();
-			$list[$value['uid']] = array_merge($list[$value['uid']], $value);
+		$fieldhome = C::t('common_member_field_home')->fetch_all($fuids, false, 0);
+		foreach(C::t('common_member')->fetch_all($fuids, false, 0) as $uid => $value) {
+			$value = array_merge($value, $fieldhome[$uid]);
+			$value['isfriend'] = $uid==$space['uid'] || $_G["home_friend_".$space['uid'].'_'.$uid] ? 1 : 0;
+			if(empty($list[$uid])) $list[$uid] = array();
+			$list[$uid] = array_merge($list[$uid], $value);
 		}
 	}
 }
-
+if($list) {
+	$list = getfollowflag($list);
+}
 $navtitle = lang('core', 'title_friend_list');
 
 $navtitle = lang('space', 'sb_friend', array('who' => $space['username']));
@@ -244,4 +255,14 @@ $metadescription = lang('space', 'sb_share', array('who' => $space['username']))
 $a_actives = array($_GET['view'].$_GET['type'] => ' class="a"');
 include_once template("diy:home/space_friend");
 
+function getfollowflag($data) {
+	global $_G;
+	if($data) {
+		$follows = C::t('home_follow')->fetch_all_by_uid_followuid($_G['uid'], array_keys($data));
+		foreach($data as $uid => $value) {
+			$data[$uid]['follow'] = isset($follows[$uid]) ? 1 : 0;
+		}
+	}
+	return $data;
+}
 ?>

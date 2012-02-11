@@ -4,14 +4,14 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_initsys.php 26464 2011-12-13 08:34:25Z monkey $
+ *      $Id: misc_initsys.php 27433 2012-01-31 08:16:01Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
-if($_G['adminid'] != 1 && $_G['setting']) {
+if(!($_G['adminid'] == 1 && $_GET['formhash'] == formhash()) && $_G['setting']) {
 	exit('Access Denied');
 }
 
@@ -22,16 +22,11 @@ require_once libfile('function/block');
 blockclass_cache();
 
 if($_G['config']['output']['tplrefresh']) {
-	$tpl = dir(DISCUZ_ROOT.'./data/template');
-	while($entry = $tpl->read()) {
-		if(preg_match("/\.tpl\.php$/", $entry)) {
-			@unlink(DISCUZ_ROOT.'./data/template/'.$entry);
-		}
-	}
-	$tpl->close();
+	cleartemplatecache();
 }
 
-$plugins = array('qqconnect', 'cloudstat', 'soso_smilies', 'cloudsearch');
+$plugins = array('qqconnect', 'cloudstat', 'soso_smilies', 'cloudsearch', 'qqgroup', 'security', 'xf_storage', 'mobile');
+$opens = array('mobile');
 
 require_once libfile('function/plugin');
 require_once libfile('function/admincp');
@@ -43,10 +38,10 @@ foreach($plugins as $pluginid) {
 	}
 	$importtxt = @implode('', file($importfile));
 	$pluginarray = getimportdata('Discuz! Plugin', $importtxt);
-	$plugin = DB::fetch_first("SELECT identifier, modules FROM ".DB::table('common_plugin')." WHERE identifier='$pluginid' LIMIT 1");
+	$plugin = C::t('common_plugin')->fetch_by_identifier($pluginid);
 	if($plugin) {
 		$modules = unserialize($plugin['modules']);
-		if($modules['system'] == 2) {
+		if($modules['system'] > 0) {
 			if($pluginarray['plugin']['version'] != $plugin['version']) {
 				pluginupgrade($pluginarray, '');
 				if($pluginarray['upgradefile']) {
@@ -56,15 +51,20 @@ foreach($plugins as $pluginid) {
 					}
 				}
 			}
+			if($modules['system'] != 2) {
+				$modules['system'] = 2;
+				$modules = serialize($modules);
+				C::t('common_plugin')->update($plugin['pluginid'], array('modules' => $modules));
+			}
 			continue;
 		}
-		DB::delete('common_plugin', "identifier='$pluginid'");
+		C::t('common_plugin')->delete_by_identifier($pluginid);
 	}
 
 	$pluginarray['plugin']['modules'] = unserialize(dstripslashes($pluginarray['plugin']['modules']));
 	$pluginarray['plugin']['modules']['system'] = 2;
-	$pluginarray['plugin']['modules'] = addslashes(serialize($pluginarray['plugin']['modules']));
-	plugininstall($pluginarray);
+	$pluginarray['plugin']['modules'] = serialize($pluginarray['plugin']['modules']);
+	plugininstall($pluginarray, '', in_array($pluginid, $opens));
 
 	if($pluginarray['installfile']) {
 		$plugindir = DISCUZ_ROOT.'./source/plugin/'.$pluginarray['plugin']['directory'];

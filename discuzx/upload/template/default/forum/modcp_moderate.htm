@@ -16,8 +16,8 @@
 		$('modlayercount').innerHTML = count;
 	}
 	function toggle_post(id) {
-		var obj = $('list_note_' + id); 
-		obj.style.display='block'; 
+		var obj = $('list_note_' + id);
+		obj.style.display='block';
 		obj.style.height = obj.style.height == '55px' ? 'auto' : '55px' ;
 	}
 	 function modthreads(operation) {
@@ -54,7 +54,7 @@
 
 	<!--{if $op == 'threads' || $op == 'replies'}-->
 		<div class="exfm">
-			<form method="post" autocomplete="off" action="{$cpscript}?mod=modcp&action=$_G[gp_action]&op=$op">
+			<form method="post" autocomplete="off" action="{$cpscript}?mod=modcp&action=$_GET[action]&op=$op">
 				<input type="hidden" name="formhash" value="{FORMHASH}">
 				<!--{if $modforums['fids']}-->
 					<table cellspacing="0" cellpadding="0">
@@ -102,7 +102,7 @@
 		<!--{if $updatestat}--><div class="ptm pbm">{lang mod_notice_moderate}</div><!--{/if}-->
 
 		<!--{if $postlist}-->
-			<form method="post" autocomplete="off" name="moderate" id="moderate" action="{$cpscript}?mod=modcp&action=$_G[gp_action]&op=$op" class="s_clear">
+			<form method="post" autocomplete="off" name="moderate" id="moderate" action="{$cpscript}?mod=modcp&action=$_GET[action]&op=$op" class="s_clear">
 				<input type="hidden" name="formhash" value="{FORMHASH}" />
 				<input type="hidden" name="fid" value="$_G[fid]" />
 				<input type="hidden" name="modact" value="" />
@@ -114,16 +114,16 @@
 					<div class="um {echo swapclass('alt');}" id="pid_$post[id]">
 						<p class="pbn">
 							<span class="y">
-								<a href="forum.php?mod=modcp&action=$_G[gp_action]&op=$op&posttableid=$posttableid&moderate[]={$post[id]}&modact=validate&filter=$filter&dosubmit=1" onclick="showWindow('mods', this.href)" class="xi2">{lang pass}</a><span class="pipe">|</span>
-								<a href="forum.php?mod=modcp&action=$_G[gp_action]&op=$op&posttableid=$posttableid&moderate[]={$post[id]}&modact=delete&filter=$filter&dosubmit=1" onclick="showWindow('mods', this.href)" class="xi2">{lang delete}</a><span class="pipe">|</span>
-								<a href="forum.php?mod=modcp&action=$_G[gp_action]&op=$op&posttableid=$posttableid&moderate[]={$post[id]}&modact=ignore&filter=$filter&dosubmit=1" onclick="showWindow('mods', this.href)" class="xi2">{lang ignore}</a><span class="pipe">|</span>
+								<a href="forum.php?mod=modcp&action=$_GET[action]&op=$op&posttableid=$posttableid&moderate[]={$post[id]}&modact=validate&filter=$filter&dosubmit=1" onclick="showWindow('mods', this.href)" class="xi2">{lang pass}</a><span class="pipe">|</span>
+								<a href="forum.php?mod=modcp&action=$_GET[action]&op=$op&posttableid=$posttableid&moderate[]={$post[id]}&modact=delete&filter=$filter&dosubmit=1" onclick="showWindow('mods', this.href)" class="xi2">{lang delete}</a><span class="pipe">|</span>
+								<a href="forum.php?mod=modcp&action=$_GET[action]&op=$op&posttableid=$posttableid&moderate[]={$post[id]}&modact=ignore&filter=$filter&dosubmit=1" onclick="showWindow('mods', this.href)" class="xi2">{lang ignore}</a><span class="pipe">|</span>
 								<a href="javascript:;" onclick="toggle_post($post[id]);" class="xi2">{lang open}</a>
 							</span>
 							<input type="checkbox" name="moderate[]" id="pidcheck_{$post[id]}" class="pc" value="$post[id]" onclick="recountobj()"/>
-							<a href="forum.php?mod=forumdisplay&fid={$post[fid]}" target="_blank" class="xi2 xw1">{$modforums[list][$post[fid]]}</a> &rsaquo; <span class="xw1">$post[tsubject]</span><!--{if $post[subject]}-->&rsaquo; <span class="xw1">$post[subject]</span><!--{/if}-->
+							<a href="forum.php?mod=forumdisplay&fid={$post[fid]}" target="_blank" class="xi2 xw1">{$modforums[list][$post[fid]]}</a> &rsaquo; <span class="xw1">$post[tsubject]</span><!--{if $post[subject] && !$post[first]}-->&rsaquo; <span class="xw1">$post[subject]</span><!--{/if}-->
 						</p>
 						<p class="pbn">
-							<span class="xi2">$post[author]</span> 
+							<span class="xi2">$post[author]</span>
 							<span class="xg1">{lang poston} $post[dateline]</span>
 							<div id="list_note_{$post[id]}" style="overflow: auto; overflow-x: hidden; height:55px; word-break: break-all;">
 								$post[message] $post[attach] $post[sortinfo]
@@ -133,7 +133,7 @@
 				<!--{/loop}-->
 				<!--{if !empty($multipage)}--><div class="pgs cl mtm">$multipage</div><!--{/if}-->
 				<div class="um bw0 cl">
-					<label for="chkall"><input type="checkbox" class="pc" name="chkall" id="chkall" onclick="modcheckall()" />{lang checkall}</label> 
+					<label for="chkall"><input type="checkbox" class="pc" name="chkall" id="chkall" onclick="modcheckall()" />{lang checkall}</label>
 					<button onclick="modthreads('validate'); return false;" class="pn"><strong>{lang validate}</strong></button>
 					<button onclick="modthreads('delete'); return false;" class="pn"><strong>{lang delete}</strong></button>
 					<button onclick="modthreads('ignore'); return false;" class="pn"><strong>{lang ignore}</strong></button>
@@ -146,7 +146,7 @@
 	<!--{/if}-->
 
 	<!--{if $op == 'members'}-->
-		<form method="post" autocomplete="off" action="{$cpscript}?mod=modcp&action=$_G[gp_action]&op=$op">
+		<form method="post" autocomplete="off" action="{$cpscript}?mod=modcp&action=$_GET[action]&op=$op">
 			<input type="hidden" name="formhash" value="{FORMHASH}">
 			<div class="filterform exfm">
 				<table cellspacing="0" cellpadding="0">
@@ -169,7 +169,7 @@
 			</div>
 		</form>
 		<!--{if $memberlist}-->
-			<form method="post" autocomplete="off" name="moderate" id="moderate" action="{$cpscript}?mod=modcp&action=$_G[gp_action]&op=$op">
+			<form method="post" autocomplete="off" name="moderate" id="moderate" action="{$cpscript}?mod=modcp&action=$_GET[action]&op=$op">
 				<input type="hidden" name="infloat" value="" />
 				<input type="hidden" name="modact" value="" />
 				<input type="hidden" name="dosubmit" value="yes" />
@@ -192,9 +192,9 @@
 								<p>{lang mod_moderate_member_register_ip}: $member[regip]</p>
 								<p>Email: $member[email]</p>
 								<p class="mtn">
-									<a href="forum.php?mod=modcp&action=$_G[gp_action]&op=$op&moderate[]={$member[uid]}&modact=validate&filter=$filter&dosubmit=1" onclick="showWindow('mods', this.href)">{lang pass}</a><span class="pipe">|</span>
-									<a href="forum.php?mod=modcp&action=$_G[gp_action]&op=$op&moderate[]={$member[uid]}&modact=delete&filter=$filter&dosubmit=1" onclick="showWindow('mods', this.href)">{lang delete}</a><span class="pipe">|</span>
-									<a href="forum.php?mod=modcp&action=$_G[gp_action]&op=$op&moderate[]={$member[uid]}&modact=ignore&filter=$filter&dosubmit=1" onclick="showWindow('mods', this.href)">{lang invalidate}</a>
+									<a href="forum.php?mod=modcp&action=$_GET[action]&op=$op&moderate[]={$member[uid]}&modact=validate&filter=$filter&dosubmit=1" onclick="showWindow('mods', this.href)">{lang pass}</a><span class="pipe">|</span>
+									<a href="forum.php?mod=modcp&action=$_GET[action]&op=$op&moderate[]={$member[uid]}&modact=delete&filter=$filter&dosubmit=1" onclick="showWindow('mods', this.href)">{lang delete}</a><span class="pipe">|</span>
+									<a href="forum.php?mod=modcp&action=$_GET[action]&op=$op&moderate[]={$member[uid]}&modact=ignore&filter=$filter&dosubmit=1" onclick="showWindow('mods', this.href)">{lang invalidate}</a>
 								</p>
 							</td>
 							<td valign="top">$member['message']</td>
@@ -209,7 +209,7 @@
 				</table>
 				<!--{if !empty($multipage)}--><div class="pgs cl mtm">$multipage</div><!--{/if}-->
 				<div class="um bw0 cl">
-					<label for="chkall"><input type="checkbox" class="pc" name="chkall" id="chkall" onclick="modcheckall()"/>{lang checkall}</label> 
+					<label for="chkall"><input type="checkbox" class="pc" name="chkall" id="chkall" onclick="modcheckall()"/>{lang checkall}</label>
 					<button onclick="modthreads('validate'); return false;" class="pn"><strong>{lang validate}</strong></button>
 					<button onclick="modthreads('delete'); return false;" class="pn"><strong>{lang delete}</strong></button>
 					<button onclick="modthreads('ignore'); return false;" class="pn"><strong>{lang invalidate}</strong></button>

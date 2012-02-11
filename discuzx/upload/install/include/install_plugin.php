@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: install_plugin.php 24733 2011-10-10 01:52:31Z zhouguoqiang $
+ *      $Id: install_plugin.php 26169 2011-12-05 04:15:45Z yexinhao $
  */
 
 define('IN_COMSENZ', TRUE);
@@ -14,16 +14,16 @@ chdir('../../');
 
 require_once './source/class/class_core.php';
 
-$discuz = & discuz_core::instance();
+$discuz = C::app();
 $discuz->init_cron = false;
 $discuz->init_session = false;
 $discuz->init();
 
-if($_G['gp_key'] !== md5($_G['setting']['authkey'].$_SERVER['REMOTE_ADDR'])) {
+if($_GET['key'] !== md5($_G['setting']['authkey'].$_SERVER['REMOTE_ADDR'])) {
 	exit;
 }
 
-$plugins = array('qqconnect', 'cloudstat', 'soso_smilies', 'cloudsearch');
+$plugins = array('qqconnect', 'cloudstat', 'soso_smilies', 'cloudsearch', 'qqgroup', 'security', 'xf_storage');
 
 require_once libfile('function/plugin');
 require_once libfile('function/admincp');

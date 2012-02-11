@@ -7,9 +7,9 @@
 		<!--{if empty($personalnv['nvhidden'])}-->
 			<!--{if empty($personalnv['banitems']['index'])}-->
 				<!--{if $_G['adminid'] == 1 && $_G['setting']['allowquickviewprofile'] == 1}-->
-					<li><a href="home.php?mod=space&uid=$space[uid]&view=admin"><!--{if !empty($personalnv['items']['index'])}-->$personalnv['items']['index']<!--{else}-->{lang main_page}<!--{/if}--></a></li>
+					<li><a href="home.php?mod=space&uid=$space[uid]&do=index&view=admin"><!--{if !empty($personalnv['items']['index'])}-->$personalnv['items']['index']<!--{else}-->{lang main_page}<!--{/if}--></a></li>
 				<!--{else}-->
-					<li><a href="home.php?mod=space&uid=$space[uid]"><!--{if !empty($personalnv['items']['index'])}-->$personalnv['items']['index']<!--{else}-->{lang main_page}<!--{/if}--></a></li>
+					<li><a href="home.php?mod=space&uid=$space[uid]&do=index"><!--{if !empty($personalnv['items']['index'])}-->$personalnv['items']['index']<!--{else}-->{lang main_page}<!--{/if}--></a></li>
 				<!--{/if}-->
 			<!--{/if}-->
 			<!--{if empty($personalnv['banitems']['feed'])}-->
@@ -23,6 +23,9 @@
 			<!--{/if}-->
 			<!--{if empty($personalnv['banitems']['album'])}-->
 			<li><a href="home.php?mod=space&uid=$space[uid]&do=album&view=me&from=space"><!--{if !empty($personalnv['items']['album'])}-->$personalnv['items']['album']<!--{else}-->{lang album}<!--{/if}--></a></li>
+			<!--{/if}-->
+			<!--{if empty($personalnv['banitems']['follow'])}-->
+			<li><a href="home.php?mod=space&uid=$space[uid]&do=follow"><!--{if !empty($personalnv['items']['follow'])}-->$personalnv['items']['follow']<!--{else}-->¹ã²¥<!--{/if}--></a></li>
 			<!--{/if}-->
 			<!--{if $_G['setting']['allowviewuserthread'] !== false && (empty($personalnv['banitems']['topic']))}-->
 			<li><a href="home.php?mod=space&uid=$space[uid]&do=thread&view=me&from=space"><!--{if !empty($personalnv['items']['topic'])}-->$personalnv['items']['topic']<!--{else}-->{lang topic}<!--{/if}--></a></li>

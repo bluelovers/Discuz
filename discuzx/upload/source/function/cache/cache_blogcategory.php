@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_blogcategory.php 16696 2010-09-13 05:02:24Z monkey $
+ *      $Id: cache_blogcategory.php 24543 2011-09-23 08:30:17Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -13,9 +13,9 @@ if(!defined('IN_DISCUZ')) {
 
 function build_cache_blogcategory() {
 	$data = array();
-	$query = DB::query("SELECT * FROM ".DB::table('home_blog_category')." ORDER BY displayorder");
+	$query = C::t('home_blog_category')->fetch_all_by_displayorder();
 
-	while($value = DB::fetch($query)) {
+	foreach ($query as $value) {
 		$value['catname'] = dhtmlspecialchars($value['catname']);
 		$data[$value['catid']] = $value;
 	}
@@ -31,7 +31,7 @@ function build_cache_blogcategory() {
 		}
 	}
 
-	save_syscache('blogcategory', $data);
+	savecache('blogcategory', $data);
 }
 
 ?>

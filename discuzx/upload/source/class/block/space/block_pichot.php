@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: block_pichot.php 6757 2010-03-25 09:01:29Z cnteacher $
+ *      $Id: block_pichot.php 25525 2011-11-14 04:39:11Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -48,7 +48,7 @@ class block_pichot extends block_pic {
 
 	function cookparameter($parameter) {
 		$parameter['orderby'] = 'hot';
-		return $parameter;
+		return parent::cookparameter($parameter);
 	}
 }
 

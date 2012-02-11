@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: javascript.php 15112 2010-08-19 04:31:10Z xupeng $
+ *      $Id: javascript.php 25246 2011-11-02 03:34:53Z zhangguosheng $
  */
 
 header('Expires: '.gmdate('D, d M Y H:i:s', time() + 60).' GMT');
@@ -18,7 +18,7 @@ loadcore();
 include_once libfile('function/block');
 
 loadcache('blockclass');
-$bid = intval($_G['gp_bid']);
+$bid = intval($_GET['bid']);
 block_get_batch($bid);
 $data = block_fetch_content($bid, true);
 

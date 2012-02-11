@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_forums.php 23399 2011-07-13 10:12:39Z liulanbo $
+ *      $Id: admincp_forums.php 27342 2012-01-17 02:42:25Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -41,14 +41,11 @@ var rowtypedata = [
 		showtableheader('');
 		showsubtitle(array('', 'display_order', 'forums_admin_name', '', 'forums_moderators', '<a href="javascript:;" onclick="if(getmultiids()) location.href=\''.ADMINSCRIPT.'?action=forums&operation=edit&multi=\' + getmultiids();return false;">'.$lang['multiedit'].'</a>'));
 
-		$forumcount = DB::result_first("SELECT COUNT(*) FROM ".DB::table('forum_forum')." WHERE `status`<>3");
+		$forumcount = C::t('forum_forum')->fetch_forum_num();
 
-		$query = DB::query("SELECT f.fid, f.type, f.status, f.name, f.fup, f.displayorder, f.inheritedmod, ff.moderators, ff.password, ff.redirect
-			FROM ".DB::table('forum_forum')." f LEFT JOIN ".DB::table('forum_forumfield')." ff USING(fid) WHERE f.status<>'3'
-			ORDER BY f.type<>'group', f.displayorder");
-
+		$query = C::t('forum_forum')->fetch_all_forum_for_sub_order();
 		$groups = $forums = $subs = $fids = $showed = array();
-		while($forum = DB::fetch($query)) {
+		foreach($query as $forum) {
 			if($forum['type'] == 'group') {
 				$groups[$forum['fid']] = $forum;
 			} elseif($forum['type'] == 'sub') {
@@ -81,10 +78,7 @@ var rowtypedata = [
 		if(count($fids) != count($showed)) {
 			foreach($fids as $fid) {
 				if(!in_array($fid, $showed)) {
-					DB::update('forum_forum', array(
-						'fup' => '0',
-						'type' => 'forum',
-					), "fid='$fid'");
+					C::t('forum_forum')->update($fid, array('fup' => '0', 'type' => 'forum'));
 				}
 			}
 		}
@@ -97,27 +91,24 @@ var rowtypedata = [
 
 	} else {
 		$usergroups = array();
-		$query = DB::query("SELECT groupid, type, creditshigher, creditslower FROM ".DB::table('common_usergroup')."");
-		while($group = DB::fetch($query)) {
+		$query = C::t('common_usergroup')->range();
+		foreach($query as $group) {
 			$usergroups[$group['groupid']] = $group;
 		}
 
-		if(is_array($_G['gp_order'])) {
-			foreach($_G['gp_order'] as $fid => $value) {
-				DB::update('forum_forum', array(
-					'name' => $_G['gp_name'][$fid],
-					'displayorder' => $_G['gp_order'][$fid],
-				), "fid='$fid'");
+		if(is_array($_GET['order'])) {
+			foreach($_GET['order'] as $fid => $value) {
+				C::t('forum_forum')->update($fid, array('name' => $_GET['name'][$fid], 'displayorder' => $_GET['order'][$fid]));
 			}
 		}
 
-		if(is_array($_G['gp_newcat'])) {
-			foreach($_G['gp_newcat'] as $key => $forumname) {
+		if(is_array($_GET['newcat'])) {
+			foreach($_GET['newcat'] as $key => $forumname) {
 				if(empty($forumname)) {
 					continue;
 				}
-				$fid = DB::insert('forum_forum', array('type' => 'group', 'name' => $forumname, 'status' => 1, 'displayorder' => $_G['gp_newcatorder'][$key]), 1);
-				DB::insert('forum_forumfield', array('fid' => $fid));
+				$fid = C::t('forum_forum')->insert(array('type' => 'group', 'name' => $forumname, 'status' => 1, 'displayorder' => $_GET['newcatorder'][$key]), 1);
+				C::t('forum_forumfield')->insert(array('fid' => $fid));
 			}
 		}
 
@@ -128,15 +119,15 @@ var rowtypedata = [
 		$table_forumfield_columns = array('fid', 'attachextensions', 'threadtypes', 'viewperm', 'postperm', 'replyperm',
 			'getattachperm', 'postattachperm', 'postimageperm');
 
-		if(is_array($_G['gp_newforum'])) {
+		if(is_array($_GET['newforum'])) {
 
-			foreach($_G['gp_newforum'] as $fup => $forums) {
+			foreach($_GET['newforum'] as $fup => $forums) {
 
-				$fupforum = get_forum_by_fid($fup);
+				$fupforum = C::t('forum_forum')->get_forum_by_fid($fup);
 				if(empty($fupforum)) continue;
 
 				if($fupforum['fup']) {
-					$groupforum = get_forum_by_fid($fupforum['fup']);
+					$groupforum = C::t('forum_forum')->get_forum_by_fid($fupforum['fup']);
 				} else {
 					$groupforum = $fupforum;
 				}
@@ -146,12 +137,12 @@ var rowtypedata = [
 					if(empty($forumname)) continue;
 
 					$forum = $forumfields = array();
-					$inheritedid = !empty($_G['gp_inherited'][$fup]) ? $fup : (!empty($_G['gp_newinherited'][$fup][$key]) ? $_G['gp_newinherited'][$fup][$key] : '');
+					$inheritedid = !empty($_GET['inherited'][$fup]) ? $fup : (!empty($_GET['newinherited'][$fup][$key]) ? $_GET['newinherited'][$fup][$key] : '');
 
 					if(!empty($inheritedid)) {
 
-						$forum = get_forum_by_fid($inheritedid);
-						$forumfield =  get_forum_by_fid($inheritedid, null, 'forumfield');
+						$forum = C::t('forum_forum')->get_forum_by_fid($inheritedid);
+						$forumfield =  C::t('forum_forum')->get_forum_by_fid($inheritedid, null, 'forumfield');
 
 						foreach($table_forum_columns as $field) {
 							$forumfields[$field] = $forum[$field];
@@ -174,7 +165,7 @@ var rowtypedata = [
 					$forumfields['styleid'] = $groupforum['styleid'];
 					$forumfields['name'] = $forumname;
 					$forumfields['status'] = 1;
-					$forumfields['displayorder'] = $_G['gp_neworder'][$fup][$key];
+					$forumfields['displayorder'] = $_GET['neworder'][$fup][$key];
 
 					$data = array();
 					foreach($table_forum_columns as $field) {
@@ -183,7 +174,7 @@ var rowtypedata = [
 						}
 					}
 
-					$forumfields['fid'] = $fid = DB::insert('forum_forum', $data, 1);
+					$forumfields['fid'] = $fid = C::t('forum_forum')->insert($data, 1);
 
 					$data = array();
 					$forumfields['threadtypes'] = copy_threadclasses($forumfields['threadtypes'], $fid);
@@ -193,12 +184,11 @@ var rowtypedata = [
 						}
 					}
 
-					DB::insert('forum_forumfield', $data);
+					C::t('forum_forumfield')->insert($data);
 
-					$query = DB::query("SELECT uid, inherited FROM ".DB::table('forum_moderator')." WHERE fid='$fup'");
-					while($mod = DB::fetch($query)) {
+					foreach(C::t('forum_moderator')->fetch_all_by_fid($fup, false) as $mod) {
 						if($mod['inherited'] || $fupforum['inheritedmod']) {
-							DB::insert('forum_moderator', array('uid' => $mod['uid'], 'fid' => $fid, 'inherited' => 1), 0, 1);
+							C::t('forum_moderator')->insert(array('uid' => $mod['uid'], 'fid' => $fid, 'inherited' => 1), false, true);
 						}
 					}
 				}
@@ -215,7 +205,7 @@ var rowtypedata = [
 
 	if(!submitcheck('modsubmit')) {
 
-		$forum = DB::fetch_first("SELECT * FROM ".DB::table('forum_forum')." WHERE fid='$fid'");
+		$forum = C::t('forum_forum')->fetch($fid);
 		shownav('forum', 'forums_moderators_edit');
 		showsubmenu(cplang('forums_moderators_edit').' - '.$forum['name']);
 		showtips('forums_moderators_tips');
@@ -223,13 +213,9 @@ var rowtypedata = [
 		showtableheader('', 'fixpadding');
 		showsubtitle(array('', 'display_order', 'username', 'usergroups', 'forums_moderators_inherited'));
 
-		$query = DB::query("SELECT a.admingid, u.radminid, u.grouptitle FROM ".DB::table('common_admingroup')." a
-			INNER JOIN ".DB::table('common_usergroup')." u ON u.groupid=a.admingid
-			WHERE u.radminid>'0'
-			ORDER BY u.type, a.admingid");
-		$modgroups = array();
+		$modgroups = C::t('common_admingroup')->fetch_all_merge_usergroup(array_keys(C::t('common_usergroup')->fetch_all_by_radminid(0)));
 		$groupselect = '<select name="newgroup">';
-		while($modgroup = DB::fetch($query)) {
+		foreach($modgroups as $modgroup) {
 			if($modgroup['radminid'] == 3) {
 				$groupselect .= '<option value="'.$modgroup['admingid'].'">'.$modgroup['grouptitle'].'</option>';
 			}
@@ -237,13 +223,18 @@ var rowtypedata = [
 		}
 		$groupselect .= '</select>';
 
-		$query = DB::query("SELECT m.username, m.groupid, mo.* FROM ".DB::table('common_member')." m, ".DB::table('forum_moderator')." mo WHERE mo.fid='$fid' AND m.uid=mo.uid ORDER BY mo.inherited, mo.displayorder");
-		while($mod = DB::fetch($query)) {
+		$moderators = C::t('forum_moderator')->fetch_all_by_fid($fid);
+		$uids = array_keys($moderators);
+		if($uids) {
+			$users = C::t('common_member')->fetch_all($uids);
+		}
+
+		foreach($moderators as $mod) {
 			showtablerow('', array('class="td25"', 'class="td28"'), array(
 				'<input type="checkbox" class="checkbox" name="delete[]" value="'.$mod[uid].'"'.($mod['inherited'] ? ' disabled' : '').' />',
 				'<input type="text" class="txt" name="displayordernew['.$mod[uid].']" value="'.$mod[displayorder].'" size="2" />',
-				"<a href=\"".ADMINSCRIPT."?mod=forum&action=members&operation=group&uid=$mod[uid]\" target=\"_blank\">$mod[username]</a>",
-				$modgroups[$mod['groupid']],
+				"<a href=\"".ADMINSCRIPT."?mod=forum&action=members&operation=group&uid=$mod[uid]\" target=\"_blank\">{$users[$mod['uid']]['username']}</a>",
+				$modgroups[$users[$mod['uid']]['groupid']],
 				cplang($mod['inherited'] ? 'yes' : 'no'),
 			));
 		}
@@ -269,118 +260,120 @@ var rowtypedata = [
 		showformfooter();
 
 	} else {
-		$forum = DB::fetch_first("SELECT * FROM ".DB::table('forum_forum')." WHERE fid='$fid'");
-		$inheritedmodnew = $_G['gp_inheritedmodnew'];
+		$forum = C::t('forum_forum')->fetch($fid);
+		$inheritedmodnew = $_GET['inheritedmodnew'];
 		if($forum['type'] == 'group') {
 			$inheritedmodnew = 1;
 		} elseif($forum['type'] == 'sub') {
 			$inheritedmodnew = 0;
 		}
 
-		if(!empty($_G['gp_delete']) || $_G['gp_newmoderator'] || (bool)$forum['inheritedmod'] != (bool)$inheritedmodnew) {
+		if(!empty($_GET['delete']) || $_GET['newmoderator'] || (bool)$forum['inheritedmod'] != (bool)$inheritedmodnew) {
 
 			$fidarray = $newmodarray = $origmodarray = array();
 
 			if($forum['type'] == 'group') {
-				$query = DB::query("SELECT fid FROM ".DB::table('forum_forum')." WHERE type='forum' AND fup='$fid'");
-				while($sub = DB::fetch($query)) {
+				$query = C::t('forum_forum')->fetch_all_fids(1, 'forum', $fid);
+				foreach($query as $sub) {
 					$fidarray[] = $sub['fid'];
 				}
-				$query = DB::query("SELECT fid FROM ".DB::table('forum_forum')." WHERE type='sub' AND fup IN ('".implode('\',\'', $fidarray)."')");
-				while($sub = DB::fetch($query)) {
+				$query = C::t('forum_forum')->fetch_all_fids(1, 'sub', $fidarray);
+				foreach($query as $sub) {
 					$fidarray[] = $sub['fid'];
 				}
 			} elseif($forum['type'] == 'forum') {
-				$query = DB::query("SELECT fid FROM ".DB::table('forum_forum')." WHERE type='sub' AND fup='$fid'");
-				while($sub = DB::fetch($query)) {
+				$query = C::t('forum_forum')->fetch_all_fids(1, 'sub', $fid);
+				foreach($query as $sub) {
 					$fidarray[] = $sub['fid'];
 				}
 			}
 
-			if(is_array($_G['gp_delete'])) {
-				foreach($_G['gp_delete'] as $uid) {
-					DB::query("DELETE FROM ".DB::table('forum_moderator')." WHERE uid='$uid' AND ((fid='$fid' AND inherited='0') OR (fid IN (".dimplode($fidarray).") AND inherited='1'))");
+			if(is_array($_GET['delete'])) {
+				foreach($_GET['delete'] as $uid) {
+					C::t('forum_moderator')->delete_by_uid_fid_inherited($uid, $fid, $fidarray);
 				}
 
 				$excludeuids = 0;
-				$deleteuids = '\''.implode('\',\'', $_G['gp_delete']).'\'';
-				$query = DB::query("SELECT uid FROM ".DB::table('forum_moderator')." WHERE uid IN ($deleteuids)");
-				while($mod = DB::fetch($query)) {
+				$deleteuids = '\''.implode('\',\'', $_GET['delete']).'\'';
+				foreach(C::t('forum_moderator')->fetch_all_by_uid($_GET['delete']) as $mod) {
 					$excludeuids .= ','.$mod['uid'];
 				}
 
 				$usergroups = array();
-				$query = DB::query("SELECT groupid, type, radminid, creditshigher, creditslower FROM ".DB::table('common_usergroup')."");
-				while($group = DB::fetch($query)) {
+				$query = C::t('common_usergroup')->range();
+				foreach($query as $group) {
 					$usergroups[$group['groupid']] = $group;
 				}
 
-				$query = DB::query("SELECT uid, groupid, credits FROM ".DB::table('common_member')." WHERE uid IN ($deleteuids) AND uid NOT IN ($excludeuids) AND adminid NOT IN (1,2)");
-				while($member = DB::fetch($query)) {
-					if($usergroups[$member['groupid']]['type'] == 'special' && $usergroups[$member['groupid']]['radminid'] != 3) {
-						$adminidnew = -1;
-						$groupidnew = $member['groupid'];
-					} else {
-						$adminidnew = 0;
-						foreach($usergroups as $group) {
-							if($group['type'] == 'member' && $member['credits'] >= $group['creditshigher'] && $member['credits'] < $group['creditslower']) {
-								$groupidnew = $group['groupid'];
-								break;
+				$members = C::t('common_member')->fetch_all($_GET['delete'], false, 0);
+				foreach($members as $uid => $member) {
+					if(!in_array($uid, $excludeuids) && !in_array($member['adminid'], array(1,2))) {
+						if($usergroups[$member['groupid']]['type'] == 'special' && $usergroups[$member['groupid']]['radminid'] != 3) {
+							$adminidnew = -1;
+							$groupidnew = $member['groupid'];
+						} else {
+							$adminidnew = 0;
+							foreach($usergroups as $group) {
+								if($group['type'] == 'member' && $member['credits'] >= $group['creditshigher'] && $member['credits'] < $group['creditslower']) {
+									$groupidnew = $group['groupid'];
+									break;
+								}
 							}
 						}
+						C::t('common_member')->update($member['uid'], array('adminid'=>$adminidnew, 'groupid'=>$groupidnew));
 					}
-					DB::update('common_member', array(
-						'adminid' => $adminidnew,
-						'groupid' => $groupidnew,
-					), "uid='$member[uid]'");
 				}
 			}
 
-			if($_G['gp_newmoderator']) {
-				$member = DB::fetch_first("SELECT uid FROM ".DB::table('common_member')." WHERE username='$_G[gp_newmoderator]'");
+			if($_GET['newmoderator']) {
+				$member = C::t('common_member')->fetch_by_username($_GET['newmoderator']);
 				if(!$member) {
 					cpmsg_error('members_edit_nonexistence');
 				} else {
 					$newmodarray[] = $member['uid'];
-					DB::update('common_member', array(
-						'groupid' => $_G['gp_newgroup'],
-					), "uid='$member[uid]' AND adminid NOT IN (1,2,3,4,5,6,7,8,-1)");
-					DB::update('common_member', array(
-						'adminid' => '3',
-					), "uid='$member[uid]' AND adminid NOT IN (1,2)");
-					DB::insert('forum_moderator', array(
+					$membersetarr = array();
+					if(!in_array($member['adminid'],array(1,2,3,4,5,6,7,8,-1))) {
+						$membersetarr['groupid'] = $_GET['newgroup'];
+					}
+					if(!in_array($member['adminid'],array(1,2))) {
+						$membersetarr['adminid'] = '3';
+					}
+					if(!empty($membersetarr)) {
+						C::t('common_member')->update($member['uid'], $membersetarr);
+					}
+
+					C::t('forum_moderator')->insert(array(
 						'uid' => $member['uid'],
 						'fid' => $fid,
-						'displayorder' => $_G['gp_newdisplayorder'],
+						'displayorder' => $_GET['newdisplayorder'],
 						'inherited' => '0',
 					), false, true);
 				}
 			}
 
 			if((bool)$forum['inheritedmod'] != (bool)$inheritedmodnew) {
-				$query = DB::query("SELECT uid FROM ".DB::table('forum_moderator')." WHERE fid='$fid' AND inherited='0'");
-				while($mod = DB::fetch($query)) {
+				foreach(C::t('forum_moderator')->fetch_all_by_fid_inherited($fid) as $mod) {
 					$origmodarray[] = $mod['uid'];
 					if(!$forum['inheritedmod'] && $inheritedmodnew) {
 						$newmodarray[] = $mod['uid'];
 					}
 				}
 				if($forum['inheritedmod'] && !$inheritedmodnew) {
-					DB::query("DELETE FROM ".DB::table('forum_moderator')." WHERE uid IN ('".implode('\',\'', $origmodarray)."') AND fid IN ('".implode('\',\'', $fidarray)."') AND inherited='1'");
+					C::t('forum_moderator')->delete_by_uid_fid($origmodarray, $fidarray);
 				}
 			}
 
 			foreach($newmodarray as $uid) {
-				DB::insert('forum_moderator', array(
+				C::t('forum_moderator')->insert(array(
 					'uid' => $uid,
 					'fid' => $fid,
-					'displayorder' => $_G['gp_newdisplayorder'],
+					'displayorder' => $_GET['newdisplayorder'],
 					'inherited' => '0',
 				), false, true);
 
 				if($inheritedmodnew) {
 					foreach($fidarray as $ifid) {
-						DB::insert('forum_moderator', array(
+						C::t('forum_moderator')->insert(array(
 							'uid' => $uid,
 							'fid' => $ifid,
 							'inherited' => '1',
@@ -394,38 +387,33 @@ var rowtypedata = [
 			} elseif($forum['type'] == 'sub') {
 				$inheritedmodnew = 0;
 			}
-			DB::update('forum_forum', array(
-				'inheritedmod' => $inheritedmodnew,
-			), "fid='$fid'");
+			C::t('forum_forum')->update($fid, array('inheritedmod' => $inheritedmodnew));
 		}
 
-		if(is_array($_G['gp_displayordernew'])) {
-			foreach($_G['gp_displayordernew'] as $uid => $order) {
-				DB::update('forum_moderator', array(
+		if(is_array($_GET['displayordernew'])) {
+			foreach($_GET['displayordernew'] as $uid => $order) {
+				C::t('forum_moderator')->update_by_fid_uid($fid, $uid, array(
 					'displayorder' => $order,
-				), "fid='$fid' AND uid='$uid'");
+				));
 			}
 		}
 
 		$fidarray[] = $fid;
 		foreach($fidarray as $fid) {
-			$moderators = $tab = '';
-			$query = DB::query("SELECT m.username FROM ".DB::table('common_member')." m, ".DB::table('forum_moderator')." mo WHERE mo.fid='$fid' AND mo.inherited='0' AND m.uid=mo.uid ORDER BY mo.displayorder");
-			while($mod = DB::fetch($query)) {
-				$moderators .= $tab.addslashes($mod['username']);
-				$tab = "\t";
-			}
-			DB::update('forum_forumfield', array(
-				'moderators' => $moderators,
-			), "fid='$fid'");
+			$moderators = '';
+			$modmemberarray = C::t('forum_moderator')->fetch_all_no_inherited_by_fid($fid);
+			$members = C::t('common_member')->fetch_all_username_by_uid(array_keys($modmemberarray));
+			$moderators = implode("\t", $members);
+
+			C::t('forum_forumfield')->update($fid, array('moderators' => $moderators));
 		}
 		cpmsg('forums_moderators_update_succeed', "mod=forum&action=forums&operation=moderators&fid=$fid", 'succeed');
 
 	}
 
 } elseif($operation == 'merge') {
-	$source = $_G['gp_source'];
-	$target = $_G['gp_target'];
+	$source = $_GET['source'];
+	$target = $_GET['target'];
 	if(!submitcheck('mergesubmit') || $source == $target) {
 
 		require_once libfile('function/forumlist');
@@ -442,47 +430,40 @@ var rowtypedata = [
 		showformfooter();
 
 	} else {
-
-		if(DB::result_first("SELECT COUNT(*) FROM ".DB::table('forum_forum')." WHERE fid IN ('$source', '$target') AND type<>'group'") != 2) {
+		if(C::t('forum_forum')->check_forum_exists(array($source,$target)) != 2) {
 			cpmsg_error('forums_nonexistence');
 		}
-
-		if(DB::result_first("SELECT COUNT(*) FROM ".DB::table('forum_forum')." WHERE fup='$source'")) {
+		if(C::t('forum_forum')->fetch_forum_num('', $source)) {
 			cpmsg_error('forums_merge_source_sub_notnull');
 		}
 
-		DB::update('forum_thread', array(
-			'fid' => $target,
-		), "fid='$source'");
-		updatepost(array('fid' => $target), "fid='$source'");
+		C::t('forum_thread')->update_by_fid($source, array('fid' => $target));
+		loadcache('posttableids');
+		$posttableids = $_G['cache']['posttableids'] ? $_G['cache']['posttableids'] : array('0');
+		foreach($posttableids as $id) {
+			C::t('forum_post')->update_fid_by_fid($id, $source, $target);
+		}
 
-		$sourceforum = DB::fetch_first("SELECT f.threads, f.posts, ff.threadtypes FROM ".DB::table('forum_forum')." f LEFT JOIN ".DB::table('forum_forumfield')." ff USING(fid) WHERE f.fid='$source'");
-		$targetforum = DB::fetch_first("SELECT f.threads, f.posts, ff.threadtypes FROM ".DB::table('forum_forum')." f LEFT JOIN ".DB::table('forum_forumfield')." ff USING(fid) WHERE f.fid='$target'");
-		$sourcethreadtypes = (array)unserialize($sourceforum['threadtypes']);
-		$targethreadtypes = (array)unserialize($targetforum['threadtypes']);
+		$sourceforum = C::t('forum_forum')->fetch_info_by_fid($source);
+		$targetforum = C::t('forum_forum')->fetch_info_by_fid($target);
+		$sourcethreadtypes = (array)dunserialize($sourceforum['threadtypes']);
+		$targethreadtypes = (array)dunserialize($targetforum['threadtypes']);
 		$targethreadtypes['types'] = array_merge((array)$targethreadtypes['types'], (array)$sourcethreadtypes['types']);
 		$targethreadtypes['icons'] = array_merge((array)$targethreadtypes['icons'], (array)$sourcethreadtypes['icons']);
+		C::t('forum_forum')->update($target, array('threads' => $targetforum['threads'] + $sourceforum['threads'], 'posts' => $targetforum['posts'] + $sourceforum['posts']));
+		C::t('forum_forumfield')->update($target, array('threadtypes' => serialize($targethreadtypes)));
+		C::t('forum_threadclass')->update_by_fid($source, array('fid' => $target));
+		C::t('forum_forum')->delete_by_fid($source);
+		C::t('forum_moderator')->delete_by_fid($source);
 
-		DB::update('forum_forum', array(
-			'threads' => $targetforum['threads'] + $sourceforum['threads'],
-			'posts' => $targetforum['posts'] + $sourceforum['posts'],
-		), "fid='$target'");
-		DB::update('forum_forumfield', array(
-			'threadtypes' => addslashes(serialize($targethreadtypes))
-		), "fid='$target'");
-		DB::update('forum_threadclass', array('fid' => $target), "fid='$source'");
-		DB::query("DELETE FROM ".DB::table('forum_forum')." WHERE fid='$source'");
-		DB::query("DELETE FROM ".DB::table('forum_forumfield')." WHERE fid='$source'");
-		DB::query("DELETE FROM ".DB::table('forum_moderator')." WHERE fid='$source'");
+		$log_handler = Cloud::loadClass('Cloud_Service_SearchHelper');
+		$log_handler->myThreadLog('mergeforum', array('fid' => $source, 'otherid' => $target));
 
-		my_thread_log('mergeforum', array('fid' => $source, 'otherid' => $target));
-
-		$query = DB::query("SELECT * FROM ".DB::table('forum_access')." WHERE fid='$source'");
-		while($access = DB::fetch($query)) {
-			DB::insert('forum_access', array('uid' => $access['uid'], 'fid' => $target, 'allowview' => $access['allowview'], 'allowpost' => $access['allowpost'], 'allowreply' => $access['allowreply'], 'allowgetattach' => $access['allowgetattach']), 0, 0, 1);
+		$query = C::t('forum_access')->fetch_all_by_fid_uid($source);
+		foreach($query as $access) {
+			C::t('forum_access')->insert(array('uid' => $access['uid'], 'fid' => $target, 'allowview' => $access['allowview'], 'allowpost' => $access['allowpost'], 'allowreply' => $access['allowreply'], 'allowgetattach' => $access['allowgetattach']));
 		}
-		DB::query("DELETE FROM ".DB::table('forum_access')." WHERE fid='$source'");
-
+		C::t('forum_access')->delete_by_fid($source);
 		updatecache('forums');
 
 		cpmsg('forums_merge_succeed', 'action=forums', 'succeed');
@@ -498,20 +479,19 @@ var rowtypedata = [
 	list($pluginsetting, $pluginvalue) = get_pluginsetting('forums');
 
 	$multiset = 0;
-	if(empty($_G['gp_multi'])) {
+	if(empty($_GET['multi'])) {
 		$fids = $fid;
 	} else {
 		$multiset = 1;
-		if(is_array($_G['gp_multi'])) {
-			$fids = dimplode($_G['gp_multi']);
+		if(is_array($_GET['multi'])) {
+			$fids = $_GET['multi'];
 		} else {
-			$_G['gp_multi'] = explode(',', $_G['gp_multi']);
-			array_walk($_G['gp_multi'], 'intval');
-			$fids = dimplode($_G['gp_multi']);
+			$_GET['multi'] = explode(',', $_GET['multi']);
+			$fids = &$_GET['multi'];
 		}
 	}
-	if(count($_G['gp_multi']) == 1) {
-		$fids = $_G['gp_multi'][0];
+	if(count($_GET['multi']) == 1) {
+		$fids = $_GET['multi'][0];
 		$multiset = 0;
 	}
 	if(empty($fids)) {
@@ -520,14 +500,11 @@ var rowtypedata = [
 	$mforum = array();
 	$perms = array('viewperm', 'postperm', 'replyperm', 'getattachperm', 'postattachperm', 'postimageperm');
 
-	$query = DB::query("SELECT *, f.fid AS fid FROM ".DB::table('forum_forum')." f
-		LEFT JOIN ".DB::table('forum_forumfield')." ff USING (fid)
-		WHERE f.fid IN ($fids)");
-
-	if(!DB::num_rows($query)) {
+	$query = C::t('forum_forum')->fetch_all_info_by_fids($fids);
+	if(empty($query)) {
 		cpmsg('forums_nonexistence', '', 'error');
 	} else {
-		while($forum = DB::fetch($query)) {
+		foreach($query as $forum) {
 			if(isset($pluginvalue[$forum['fid']])) {
 				$forum['plugin'] = $pluginvalue[$forum['fid']];
 			}
@@ -539,24 +516,22 @@ var rowtypedata = [
 	$allowthreadtypes = !in_array('threadtypes', $dactionarray);
 
 
-	$query = DB::query("SELECT svalue FROM ".DB::table('common_setting')." WHERE skey='forumkeys'");
-	$forumkeys = @unserialize(DB::result($query, 0));
+	$forumkeys = C::t('common_setting')->fetch('forumkeys', true);
 
 	$rules = array();
-	$query = DB::query("SELECT * FROM ".DB::table('common_credit_rule')." WHERE action IN('reply', 'post', 'digest', 'postattach', 'getattach')");
-	while($value = DB::fetch($query)) {
+	foreach(C::t('common_credit_rule')->fetch_all_by_action(array('reply', 'post', 'digest', 'postattach', 'getattach')) as $value) {
 		$rules[$value['rid']] = $value;
 	}
 
 	if(!submitcheck('detailsubmit')) {
-		$anchor = in_array($_G['gp_anchor'], array('basic', 'extend', 'posts', 'credits', 'threadtypes', 'threadsorts', 'perm', 'plugin')) ? $_G['gp_anchor'] : 'basic';
+		$anchor = in_array($_GET['anchor'], array('basic', 'extend', 'posts', 'attachtype', 'credits', 'threadtypes', 'threadsorts', 'perm', 'plugin')) ? $_GET['anchor'] : 'basic';
 		shownav('forum', 'forums_edit');
 
 		loadcache('forums');
 		$forumselect = '';
 		$sgid = 0;
 		foreach($_G['cache']['forums'] as $forums) {
-			$checked = $fid == $forums['fid'] || in_array($forums['fid'], $_G['gp_multi']);
+			$checked = $fid == $forums['fid'] || in_array($forums['fid'], $_GET['multi']);
 			if($forums['type'] == 'group') {
 				$sgid = $forums['fid'];
 				$forumselect .= '</div><em class="cl">'.
@@ -588,6 +563,7 @@ var rowtypedata = [
 				!$multiset ? array(array('menu' => 'usergroups_edit_other', 'submenu' => array(
 					array('forums_edit_threadtypes', 'threadtypes', $anchor == 'threadtypes'),
 					array('forums_edit_threadsorts', 'threadsorts', $anchor == 'threadsorts'),
+					!$multiset ? array('forums_edit_attachtype', 'attachtype', $anchor == 'attachtype') : array(),
 					!$pluginsetting ? array() : array('forums_edit_plugin', 'plugin', $anchor == 'plugin'),
 				))) : array(),
 				$multiset && $pluginsetting ? array('forums_edit_plugin', 'plugin', $anchor == 'plugin') : array(),
@@ -596,15 +572,14 @@ var rowtypedata = [
 		showformfooter();
 
 		$groups = array();
-		$query = DB::query("SELECT type, groupid, grouptitle, radminid FROM ".DB::table('common_usergroup')." ORDER BY (creditshigher<>'0' || creditslower<>'0'), creditslower, groupid");
-		while($group = DB::fetch($query)) {
+		$query = C::t('common_usergroup')->range_orderby_credit();
+		foreach($query as $group) {
 			$group['type'] = $group['type'] == 'special' && $group['radminid'] ? 'specialadmin' : $group['type'];
 			$groups[$group['type']][] = $group;
 		}
 
 		$styleselect = "<select name=\"styleidnew\"><option value=\"0\">$lang[use_default]</option>";
-		$query = DB::query("SELECT styleid, name FROM ".DB::table('common_style'));
-		while($style = DB::fetch($query)) {
+		foreach(C::t('common_style')->fetch_all_data(false, false) as $style) {
 			$styleselect .= "<option value=\"$style[styleid]\" ".
 				($style['styleid'] == $mforum[0]['styleid'] ? 'selected="selected"' : NULL).
 				">$style[name]</option>\n";
@@ -612,7 +587,15 @@ var rowtypedata = [
 		$styleselect .= '</select>';
 
 		if(!$multiset) {
-			showtips('forums_edit_tips');
+			$attachtypes = '';
+			foreach(C::t('forum_attachtype')->fetch_all_by_fid($fid) as $type) {
+				$type['maxsize'] = round($type['maxsize'] / 1024);
+				$attachtypes .= showtablerow('', array('class="td25"', 'class="td24"'), array(
+					"<input class=\"checkbox\" type=\"checkbox\" name=\"delete[]\" value=\"$type[id]\" />",
+					"<input type=\"text\" class=\"txt\" size=\"10\" name=\"extension[$type[id]]\" value=\"$type[extension]\" />",
+					"<input type=\"text\" class=\"txt\" size=\"15\" name=\"maxsize[$type[id]]\" value=\"$type[maxsize]\" />"
+				), TRUE);
+			}
 		} else {
 			showtips('setting_multi_tips');
 		}
@@ -620,7 +603,7 @@ var rowtypedata = [
 		showhiddenfields(array('type' => $mforum[0]['type']));
 
 		if(count($mforum) == 1 && $mforum[0]['type'] == 'group') {
-			$mforum[0]['extra'] = unserialize($mforum[0]['extra']);
+			$mforum[0]['extra'] = dunserialize($mforum[0]['extra']);
 			showtableheader();
 			showsetting('forums_edit_basic_cat_name', 'namenew', $mforum[0]['name'], 'text');
 			showsetting('forums_edit_basic_cat_name_color', 'extranew[namecolor]', $mforum[0]['extra']['namecolor'], 'color');
@@ -659,8 +642,8 @@ var rowtypedata = [
 				$mfids[] = $fid;
 				if(!$multiset) {
 					$fupselect = "<select name=\"fupnew\">\n";
-					$query = DB::query("SELECT fid, type, name, fup FROM ".DB::table('forum_forum')." WHERE fid<>'$fid' AND type<>'sub' AND status<>'3' ORDER BY displayorder");
-					while($fup = DB::fetch($query)) {
+					$query = C::t('forum_forum')->fetch_all_info_by_ignore_fid($fid);
+					foreach($query as $fup) {
 						$fups[] = $fup;
 					}
 					if(is_array($fups)) {
@@ -686,14 +669,14 @@ var rowtypedata = [
 					$fupselect .= '</select>';
 
 					if($forum['threadtypes']) {
-						$forum['threadtypes'] = unserialize($forum['threadtypes']);
+						$forum['threadtypes'] = dunserialize($forum['threadtypes']);
 						$forum['threadtypes']['status'] = 1;
 					} else {
 						$forum['threadtypes'] = array('status' => 0, 'required' => 0, 'listable' => 0, 'prefix' => 0, 'options' => array());
 					}
 
 					if($forum['threadsorts']) {
-						$forum['threadsorts'] = unserialize($forum['threadsorts']);
+						$forum['threadsorts'] = dunserialize($forum['threadsorts']);
 						$forum['threadsorts']['status'] = 1;
 					} else {
 						$forum['threadsorts'] = array('status' => 0, 'required' => 0, 'listable' => 0, 'prefix' => 0, 'options' => array());
@@ -701,9 +684,9 @@ var rowtypedata = [
 
 					$typeselect = $sortselect = '';
 
-					$query = DB::query("SELECT * FROM ".DB::table('forum_threadtype')." ORDER BY displayorder");
+					$query = C::t('forum_threadtype')->fetch_all_for_order();
 					$typeselect = getthreadclasses_html($fid);
-					while($type = DB::fetch($query)) {
+					foreach($query as $type) {
 						$typeselected = array();
 						$enablechecked = '';
 
@@ -729,7 +712,7 @@ var rowtypedata = [
 							), TRUE) : '';
 						}
 					}
-					$forum['creditspolicy'] = $forum['creditspolicy'] ? unserialize($forum['creditspolicy']) : array();
+					$forum['creditspolicy'] = $forum['creditspolicy'] ? dunserialize($forum['creditspolicy']) : array();
 				}
 
 				if($forum['autoclose']) {
@@ -738,7 +721,7 @@ var rowtypedata = [
 				}
 
 				if($forum['threadplugin']) {
-					$forum['threadplugin'] = unserialize($forum['threadplugin']);
+					$forum['threadplugin'] = dunserialize($forum['threadplugin']);
 				}
 
 				$simplebin = sprintf('%08b', $forum['simple']);
@@ -747,17 +730,21 @@ var rowtypedata = [
 				$forum['subforumsindex'] = bindec(substr($simplebin, 3, 2));
 				$forum['subforumsindex'] = $forum['subforumsindex'] == 0 ? -1 : ($forum['subforumsindex'] == 2 ? 0 : 1);
 				$forum['simple'] = $forum['simple'] & 1;
-				$forum['modrecommend'] = $forum['modrecommend'] ? unserialize($forum['modrecommend']) : '';
-				$forum['formulaperm'] = unserialize($forum['formulaperm']);
+				$forum['modrecommend'] = $forum['modrecommend'] ? dunserialize($forum['modrecommend']) : '';
+				$forum['formulaperm'] = dunserialize($forum['formulaperm']);
 				$forum['medal'] = $forum['formulaperm']['medal'];
-				$forum['formulapermmessage'] = stripslashes($forum['formulaperm']['message']);
+				$forum['formulapermmessage'] = $forum['formulaperm']['message'];
 				$forum['formulapermusers'] = $forum['formulaperm']['users'];
 				$forum['formulaperm'] = $forum['formulaperm'][0];
-				$forum['extra'] = unserialize($forum['extra']);
+				$forum['extra'] = dunserialize($forum['extra']);
 				$forum['threadsorts']['default'] = $forum['threadsorts']['defaultshow'] ? 1 : 0;
 
 				$_G['multisetting'] = $multiset ? 1 : 0;
+				showmultititle();
 				showtagheader('div', 'basic', $anchor == 'basic');
+				if(!$multiset) {
+					showtips('forums_edit_tips');
+				}
 				showtableheader('forums_edit_basic', 'nobottom');
 				showsetting('forums_edit_basic_name', 'namenew', $forum['name'], 'text');
 				showsetting('forums_edit_base_name_color', 'extranew[namecolor]', $forum['extra']['namecolor'], 'color');
@@ -789,7 +776,6 @@ var rowtypedata = [
 					showsetting('forums_edit_basic_up', '', '', $fupselect);
 				}
 				showsetting('forums_edit_basic_redirect', 'redirectnew', $forum['redirect'], 'text');
-				showmultititle();
 				showsetting('forums_edit_basic_description', 'descriptionnew', str_replace('&amp;', '&', html2bbcode($forum['description'])), 'textarea');
 				showsetting('forums_edit_basic_rules', 'rulesnew', str_replace('&amp;', '&', html2bbcode($forum['rules'])), 'textarea');
 				showsetting('forums_edit_basic_keys', 'keysnew', $forumkeys[$fid], 'text');
@@ -811,6 +797,9 @@ var rowtypedata = [
 				showtagfooter('div');
 
 				showtagheader('div', 'extend', $anchor == 'extend');
+				if(!$multiset) {
+					showtips('forums_edit_tips');
+				}
 				showtableheader('forums_edit_extend', 'nobottom');
 				showsetting('forums_edit_extend_style', '', '', $styleselect);
 				if($forum['type'] != 'sub') {
@@ -834,7 +823,6 @@ var rowtypedata = [
 					array(1, cplang('forums_edit_extend_widthauto_1')),
 				), 1), $forum['widthauto'], 'mradio');
 				showsetting('forums_edit_extend_picstyle', 'picstylenew', $forum['picstyle'], 'radio');
-				showmultititle();
 				showsetting('forums_edit_extend_allowside', 'allowsidenew', $forum['allowside'], 'radio');
 				showsetting('forums_edit_extend_recommend_top', 'allowglobalsticknew', $forum['allowglobalstick'], 'radio');
 				showsetting('forums_edit_extend_defaultorderfield', array('defaultorderfieldnew', array(
@@ -850,7 +838,7 @@ var rowtypedata = [
 				showsetting('forums_edit_extend_threadcache', 'threadcachesnew', $forum['threadcaches'], 'text');
 				showsetting('forums_edit_extend_relatedgroup', 'relatedgroupnew', $forum['relatedgroup'], 'text');
 				showsetting('forums_edit_extend_edit_rules', 'alloweditrulesnew', $forum['alloweditrules'], 'radio');
-				showmultititle();
+				showsetting('forums_edit_extend_disablecollect', 'disablecollectnew', $forum['disablecollect'], 'radio');
 				showsetting('forums_edit_extend_recommend', 'modrecommendnew[open]', $forum['modrecommend']['open'], 'radio', '', 1);
 				showsetting('forums_edit_extend_recommend_sort', array('modrecommendnew[sort]', array(
 					array(1, cplang('forums_edit_extend_recommend_sort_auto')),
@@ -875,6 +863,9 @@ var rowtypedata = [
 				showtagfooter('div');
 
 				showtagheader('div', 'posts', $anchor == 'posts');
+				if(!$multiset) {
+					showtips('forums_edit_tips');
+				}
 				showtableheader('forums_edit_posts', 'nobottom');
 				showsetting('forums_edit_posts_modposts', array('modnewpostsnew', array(
 					array(0, cplang('none')),
@@ -882,9 +873,7 @@ var rowtypedata = [
 					array(2, cplang('forums_edit_posts_modposts_posts'))
 				)), $forum['modnewposts'], 'mradio');
 				showsetting('forums_edit_posts_alloweditpost', 'alloweditpostnew', $forum['alloweditpost'], 'radio');
-				showsetting('forums_edit_posts_allowappend', 'allowappendnew', $forum['allowappend'], 'radio');
 				showsetting('forums_edit_posts_recyclebin', 'recyclebinnew', $forum['recyclebin'], 'radio');
-				showmultititle();
 				showsetting('forums_edit_posts_html', 'allowhtmlnew', $forum['allowhtml'], 'radio');
 				showsetting('forums_edit_posts_bbcode', 'allowbbcodenew', $forum['allowbbcode'], 'radio');
 				showsetting('forums_edit_posts_imgcode', 'allowimgcodenew', $forum['allowimgcode'], 'radio');
@@ -892,7 +881,6 @@ var rowtypedata = [
 				showsetting('forums_edit_posts_smilies', 'allowsmiliesnew', $forum['allowsmilies'], 'radio');
 				showsetting('forums_edit_posts_jammer', 'jammernew', $forum['jammer'], 'radio');
 				showsetting('forums_edit_posts_anonymous', 'allowanonymousnew', $forum['allowanonymous'], 'radio');
-				showmultititle();
 				showsetting('forums_edit_posts_disablethumb', 'disablethumbnew', $forum['disablethumb'], 'radio');
 				showsetting('forums_edit_posts_disablewatermark', 'disablewatermarknew', $forum['disablewatermark'], 'radio');
 
@@ -911,7 +899,6 @@ var rowtypedata = [
 					showsetting('forums_edit_posts_threadplugin', array('threadpluginnew', $threadpluginarray), $forum['threadplugin'], 'mcheckbox');
 				}
 				showsetting('forums_edit_posts_allowspecialonly', 'allowspecialonlynew', $forum['allowspecialonly'], 'radio');
-				showmultititle();
 				showsetting('forums_edit_posts_autoclose', array('autoclosenew', array(
 					array(0, cplang('forums_edit_posts_autoclose_none'), array('autoclose_time' => 'none')),
 					array(1, cplang('forums_edit_posts_autoclose_dateline'), array('autoclose_time' => '')),
@@ -928,7 +915,19 @@ var rowtypedata = [
 				showtagfooter('div');
 
 				if(!$multiset) {
+					showtagheader('div', 'attachtype', $anchor == 'attachtype');
+					showtips('forums_edit_attachtype_tips');
+					showtableheader();
+					showtablerow('class="partition"', array('class="td25"', 'class="td24"'), array(cplang('del'), cplang('misc_attachtype_ext'), cplang('misc_attachtype_maxsize')));
+					echo $attachtypes;
+					echo '<tr><td></td><td colspan="2"><div><a href="###" onclick="addrow(this, 1)" class="addtr">'.$lang['misc_attachtype_add'].'</a></div></tr>';
+					showtablefooter();
+					showtagfooter('div');
+
 					showtagheader('div', 'credits', $anchor == 'credits');
+					if(!$multiset) {
+						showtips('forums_edit_tips');
+					}
 					showtableheader('forums_edit_credits_policy', 'fixpadding');
 					echo '<tr class="header"><th>'.cplang('credits_id').'</th><th>'.cplang('setting_credits_policy_cycletype').'</th><th>'.cplang('setting_credits_policy_rewardnum').'</th><th class="td25">'.cplang('custom').'</th>';
 					foreach($_G['setting']['extcredits'] as $i => $extcredit) {
@@ -996,15 +995,22 @@ EOF;
 				[1,'<input type="text" size="2" name="newdisplayorder[]" value="0" />'],
 				[1,'<input type="text" name="newname[]" />'],
 				[1,'<input type="text" name="newicon[]" />'],
-				[1,'<input type="checkbox" class="checkbox" name="newenable[]" checked="checked" />'],
+				[1,'<input type="hidden" name="newenable[]" value="1"><input type="checkbox" class="checkbox" checked="checked" disabled/>'],
 				[1,'<input type="checkbox" class="checkbox" name="newmoderators[]" value="1" />'],
 				[1,'']
 			],
+			[
+				[1,'', 'td25'],
+				[1,'<input name="newextension[]" type="text" class="txt" size="10">', 'td24'],
+				[1,'<input name="newmaxsize[]" type="text" class="txt" size="15">']
+			]
 		];
 	</script>
 EOT;
 					showtagheader('div', 'threadtypes', $anchor == 'threadtypes');
-
+					if(!$multiset) {
+						showtips('forums_edit_tips');
+					}
 					showtableheader('forums_edit_threadtypes_config', 'nobottom');
 					showsetting('forums_edit_threadtypes_status', array('threadtypesnew[status]', array(
 						array(1, cplang('yes'), array('threadtypes_config' => '', 'threadtypes_manage' => '')),
@@ -1037,7 +1043,9 @@ EOT;
 					showtagfooter('div');
 
 					showtagheader('div', 'threadsorts', $anchor == 'threadsorts');
-
+					if(!$multiset) {
+						showtips('forums_edit_tips');
+					}
 					showtableheader('forums_edit_threadsorts', 'nobottom');
 					showsetting('forums_edit_threadsorts_status', array('threadsortsnew[status]', array(
 						array(1, cplang('yes'), array('threadsorts_config' => '', 'threadsorts_manage' => '')),
@@ -1060,9 +1068,12 @@ EOT;
 				}
 
 				showtagheader('div', 'perm', $anchor == 'perm');
+				if(!$multiset) {
+					showtips('forums_edit_tips');
+				}
 				showtableheader('forums_edit_perm_forum', 'nobottom');
 				showsetting('forums_edit_perm_passwd', 'passwordnew', $forum['password'], 'text');
-				showsetting('forums_edit_perm_users', 'formulapermusersnew', dstripslashes($forum['formulapermusers']), 'textarea');
+				showsetting('forums_edit_perm_users', 'formulapermusersnew', $forum['formulapermusers'], 'textarea');
 				$colums = array();
 				loadcache('medals');
 				foreach($_G['cache']['medals'] as $medalid => $medal) {
@@ -1166,8 +1177,7 @@ EOT;
 		}
 
 		$profilefields = '';
-		$query = DB::query("SELECT * FROM ".DB::table('common_member_profile_setting')." WHERE available='1' AND unchangeable='1'");
-		while($profilefield = DB::fetch($query)) {
+		foreach(C::t('common_member_profile_setting')->fetch_all_by_available_unchangeable(1, 1) as $profilefield) {
 			echo 'result = result.replace(/'.$profilefield['fieldid'].'/g, \'<u>'.str_replace("'", "\'", $profilefield['title']).'</u>\');';
 			$profilefields .= '<a href="###" onclick="insertunit(\' '.$profilefield['fieldid'].' \')">&nbsp;'.$profilefield['title'].'&nbsp;</a>&nbsp;';
 		}
@@ -1271,86 +1281,83 @@ EOT;
 	} else {
 
 		if(!$multiset) {
-			$_G['gp_multinew'] = array(0 => array('single' => 1));
+			$_GET['multinew'] = array(0 => array('single' => 1));
 		}
 		$pluginvars = array();
 		require_once libfile('function/delete');
-		foreach($_G['gp_multinew'] as $k => $row) {
+		foreach($_GET['multinew'] as $k => $row) {
 		if(empty($row['single'])) {
 			foreach($row as $key => $value) {
-				$_G['gp_'.$key] = $value;
+				$_GET[''.$key] = $value;
 			}
-			$fid = $_G['gp_multi'][$k];
+			$fid = $_GET['multi'][$k];
 		}
 		$forum = $mforum[$k];
 
-		if(strlen($_G['gp_namenew']) > 50) {
+		if(strlen($_GET['namenew']) > 50) {
 			cpmsg('forums_name_toolong', '', 'error');
 		}
 
 		if(!$multiset) {
-			if(!checkformulaperm($_G['gp_formulapermnew'])) {
+			if(!checkformulaperm($_GET['formulapermnew'])) {
 				cpmsg('forums_formulaperm_error', '', 'error');
 			}
 
-			$formulapermary[0] = $_G['gp_formulapermnew'];
+			$formulapermary[0] = $_GET['formulapermnew'];
 			$formulapermary[1] = preg_replace(
 				array("/(digestposts|posts|threads|oltime|extcredits[1-8])/", "/(regdate|regday|regip|lastip|buyercredit|sellercredit|field\d+)/"),
 				array("getuserprofile('\\1')", "\$memberformula['\\1']"),
-				$_G['gp_formulapermnew']);
-			$formulapermary['message'] = $_G['gp_formulapermmessagenew'];
+				$_GET['formulapermnew']);
+			$formulapermary['message'] = $_GET['formulapermmessagenew'];
 		} else {
-			$formulapermary = unserialize($forum['formulaperm']);
+			$formulapermary = dunserialize($forum['formulaperm']);
 		}
-		$formulapermary['medal'] = $_G['gp_medalnew'];
-		$formulapermary['users'] = $_G['gp_formulapermusersnew'];
-		$_G['gp_formulapermnew'] = addslashes(serialize($formulapermary));
+		$formulapermary['medal'] = $_GET['medalnew'];
+		$formulapermary['users'] = $_GET['formulapermusersnew'];
+		$_GET['formulapermnew'] = serialize($formulapermary);
 
 		$domain = '';
-		if(!empty($_G['gp_domainnew']) && !empty($_G['setting']['domain']['root']['forum'])) {
-			$domain = strtolower(trim($_G['gp_domainnew']));
+		if(!empty($_GET['domainnew']) && !empty($_G['setting']['domain']['root']['forum'])) {
+			$domain = strtolower(trim($_GET['domainnew']));
 		}
 		require_once libfile('function/discuzcode');
-		if($_G['gp_type'] == 'group') {
-			if($_G['gp_namenew']) {
-				$newstyleid = intval($_G['gp_styleidnew']);
-				$forumcolumnsnew = $_G['gp_forumcolumnsnew'] > 1 ? intval($_G['gp_forumcolumnsnew']) : 0;
-				$catforumcolumnsnew = $_G['gp_catforumcolumnsnew'] > 1 ? intval($_G['gp_catforumcolumnsnew']) : 0;
-				$descriptionnew = addslashes(preg_replace('/on(mousewheel|mouseover|click|load|onload|submit|focus|blur)="[^"]*"/i', '', discuzcode(dstripslashes($_G['gp_descriptionnew']), 1, 0, 0, 0, 1, 1, 0, 0, 1)));
+		if($_GET['type'] == 'group') {
+			if($_GET['namenew']) {
+				$newstyleid = intval($_GET['styleidnew']);
+				$forumcolumnsnew = $_GET['forumcolumnsnew'] > 1 ? intval($_GET['forumcolumnsnew']) : 0;
+				$catforumcolumnsnew = $_GET['catforumcolumnsnew'] > 1 ? intval($_GET['catforumcolumnsnew']) : 0;
+				$descriptionnew = addslashes(preg_replace('/on(mousewheel|mouseover|click|load|onload|submit|focus|blur)="[^"]*"/i', '', discuzcode($_GET['descriptionnew'], 1, 0, 0, 0, 1, 1, 0, 0, 1)));
 				if(!empty($_G['setting']['domain']['root']['forum'])) {
 					deletedomain($fid, 'subarea');
 					if(!empty($domain)) {
 						domaincheck($domain, $_G['setting']['domain']['root']['forum'], 1, 0);
-						DB::insert('common_domain', array('domain' => $domain, 'domainroot' => $_G['setting']['domain']['root']['forum'], 'id' => $fid, 'idtype' => 'subarea'));
+						C::t('common_domain')->insert(array('domain' => $domain, 'domainroot' => $_G['setting']['domain']['root']['forum'], 'id' => $fid, 'idtype' => 'subarea'));
 					}
 				}
-				DB::update('forum_forum', array(
-					'name' => $_G['gp_namenew'],
+				C::t('forum_forum')->update($fid, array(
+					'name' => $_GET['namenew'],
 					'forumcolumns' => $forumcolumnsnew,
 					'catforumcolumns' => $catforumcolumnsnew,
 					'domain' => $domain,
-					'status' => intval($_G['gp_statusnew']),
+					'status' => intval($_GET['statusnew']),
 					'styleid' => $newstyleid,
-				), "fid='$fid'");
+				));
 
-				$extranew = is_array($_G['gp_extranew']) ? $_G['gp_extranew'] : array();
+				$extranew = is_array($_GET['extranew']) ? $_GET['extranew'] : array();
 				$extranew = serialize($extranew);
-				DB::update('forum_forumfield', array(
+				C::t('forum_forumfield')->update($fid, array(
 					'extra' => $extranew,
 					'description' => $descriptionnew,
-					'seotitle' => $_G['gp_seotitlenew'],
-					'keywords' => $_G['gp_keywordsnew'],
-					'seodescription' => $_G['gp_seodescriptionnew'],
-				), "fid='$fid'");
-
+					'seotitle' => $_GET['seotitlenew'],
+					'keywords' => $_GET['keywordsnew'],
+					'seodescription' => $_GET['seodescriptionnew'],
+				));
 				loadcache('forums');
 				$subfids = array();
 				get_subfids($fid);
 
 				if($newstyleid != $mforum[0]['styleid'] && !empty($subfids)) {
-					DB::update('forum_forum', array(
-						'styleid' => $newstyleid,
-					), "fid IN (".dimplode($subfids).")");
+					C::t('forum_forum')->update($subfids, array('styleid' => $newstyleid));
 				}
 
 				updatecache('forums');
@@ -1362,108 +1369,141 @@ EOT;
 
 		} else {
 			$extensionarray = array();
-			foreach(explode(',', $_G['gp_attachextensionsnew']) as $extension) {
+			foreach(explode(',', $_GET['attachextensionsnew']) as $extension) {
 				if($extension = trim($extension)) {
 					$extensionarray[] = $extension;
 				}
 			}
-			$_G['gp_attachextensionsnew'] = implode(', ', $extensionarray);
+			$_GET['attachextensionsnew'] = strtolower(implode(', ', $extensionarray));
 
 			foreach($perms as $perm) {
-				$_G['gp_'.$perm.'new'] = is_array($_G['gp_'.$perm]) && !empty($_G['gp_'.$perm]) ? "\t".implode("\t", $_G['gp_'.$perm])."\t" : '';
+				$_GET[''.$perm.'new'] = is_array($_GET[''.$perm]) && !empty($_GET[''.$perm]) ? "\t".implode("\t", $_GET[''.$perm])."\t" : '';
+			}
+
+			if(!$multiset) {
+				if($_GET['delete']) {
+					C::t('forum_attachtype')->delete_by_id_fid($_GET['delete'], $fid);
+				}
+
+				if(is_array($_GET['extension'])) {
+					foreach($_GET['extension'] as $id => $val) {
+						C::t('forum_attachtype')->update($id, array(
+							'extension' => $_GET['extension'][$id],
+							'maxsize' => $_GET['maxsize'][$id] * 1024,
+						));
+					}
+				}
+
+				if(is_array($_GET['newextension'])) {
+					foreach($_GET['newextension'] as $key => $value) {
+						if($newextension1 = trim($value)) {
+							if(C::t('forum_attachtype')->count_by_extension_fid($newextension1, $fid)) {
+								cpmsg('attachtypes_duplicate', '', 'error');
+							}
+							C::t('forum_attachtype')->insert(array(
+								'extension' => $newextension1,
+								'maxsize' => $_GET['newmaxsize'][$key] * 1024,
+								'fid' => $fid
+							));
+						}
+					}
+				}
 			}
 
 			$fupadd = '';
 			$forumdata = $forumfielddata = array();
-			if($_G['gp_fupnew'] != $forum['fup'] && !$multiset) {
-				$query = DB::query("SELECT fid FROM ".DB::table('forum_forum')." WHERE fup='$fid'");
-				if(DB::num_rows($query)) {
+			if($_GET['fupnew'] != $forum['fup'] && !$multiset) {
+				if(C::t('forum_forum')->fetch_forum_num('', $fid)) {
 					cpmsg('forums_edit_sub_notnull', '', 'error');
 				}
 
-				$fup = DB::fetch_first("SELECT fid, type, inheritedmod FROM ".DB::table('forum_forum')." WHERE fid='{$_G['gp_fupnew']}'");
+				$fup = C::t('forum_forum')->fetch($_GET['fupnew']);
 
 				$fupadd = ", type='".($fup['type'] == 'forum' ? 'sub' : 'forum')."', fup='$fup[fid]'";
 				$forumdata['type'] = $fup['type'] == 'forum' ? 'sub' : 'forum';
 				$forumdata['fup'] = $fup['fid'];
-				DB::query("DELETE FROM ".DB::table('forum_moderator')." WHERE fid='$fid' AND inherited='1'");
-				$query = DB::query("SELECT * FROM ".DB::table('forum_moderator')." WHERE fid='{$_G['gp_fupnew']}' ".($fup['inheritedmod'] ? '' : "AND inherited='1'"));
-				while($mod = DB::fetch($query)) {
-					DB::query("REPLACE INTO ".DB::table('forum_moderator')." (uid, fid, displayorder, inherited)
-						VALUES ('$mod[uid]', '$fid', '0', '1')");
+				C::t('forum_moderator')->delete_by_fid_inherited($fid, 1);
+				if($fup['inheritedmod']) {
+					$query = C::t('forum_moderator')->fetch_all_by_fid($_GET['fupnew'], FALSE);
+				} else {
+					$query = C::t('forum_moderator')->fetch_all_by_fid_inherited($_GET['fupnew'], 1);
+				}
+				foreach($query as $mod) {
+					C::t('forum_moderator')->insert(array(
+						'uid' => $mod['uid'],
+						'fid' => $fid,
+						'displayorder' => 0,
+						'inherited' => 1
+					), false, true);
 				}
 
-				$moderators = $tab = '';
-				$query = DB::query("SELECT m.username FROM ".DB::table('common_member')." m, ".DB::table('forum_moderator')." mo WHERE mo.fid='$fid' AND mo.inherited='0' AND m.uid=mo.uid ORDER BY mo.displayorder");
-				while($mod = DB::fetch($query)) {
-					$moderators .= $tab.addslashes($mod['username']);
-					$tab = "\t";
-				}
-				DB::update('forum_forumfield', array(
-					'moderators' => $moderators,
-				), "fid='$fid'");
+				$moderators = '';
+				$modmemberarray = C::t('forum_moderator')->fetch_all_no_inherited_by_fid($fid);
+				$members = C::t('common_member')->fetch_all_username_by_uid(array_keys($modmemberarray));
+				$moderators = implode("\t", $members);
+
+				C::t('forum_forumfield')->update($fid, array('moderators' => $moderators));
 			}
 
-			$allowpostspecialtrade = intval($_G['gp_allowpostspecialnew'][2]);
-			$_G['gp_allowpostspecialnew'] = bindec(intval($_G['gp_allowpostspecialnew'][6]).intval($_G['gp_allowpostspecialnew'][5]).intval($_G['gp_allowpostspecialnew'][4]).intval($_G['gp_allowpostspecialnew'][3]).intval($_G['gp_allowpostspecialnew'][2]).intval($_G['gp_allowpostspecialnew'][1]));
-			$allowspecialonlynew = $_G['gp_allowpostspecialnew'] || $_G['setting']['threadplugins'] && $_G['gp_threadpluginnew'] ? $_G['gp_allowspecialonlynew'] : 0;
-			$forumcolumnsnew = $_G['gp_forumcolumnsnew'] > 1 ? intval($_G['gp_forumcolumnsnew']) : 0;
-			$threadcachesnew = max(0, min(100, intval($_G['gp_threadcachesnew'])));
-			$subforumsindexnew = $_G['gp_subforumsindexnew'] == -1 ? 0 : ($_G['gp_subforumsindexnew'] == 0 ? 2 : 1);
-			$_G['gp_simplenew'] = isset($_G['gp_simplenew']) ? $_G['gp_simplenew'] : 0;
-			$simplenew = bindec(sprintf('%02d', decbin($_G['gp_defaultorderfieldnew'])).$_G['gp_defaultordernew'].sprintf('%02d', decbin($subforumsindexnew)).'00'.$_G['gp_simplenew']);
-			$allowglobalsticknew = $_G['gp_allowglobalsticknew'] ? 1 : 0;
+			$allowpostspecialtrade = intval($_GET['allowpostspecialnew'][2]);
+			$_GET['allowpostspecialnew'] = bindec(intval($_GET['allowpostspecialnew'][6]).intval($_GET['allowpostspecialnew'][5]).intval($_GET['allowpostspecialnew'][4]).intval($_GET['allowpostspecialnew'][3]).intval($_GET['allowpostspecialnew'][2]).intval($_GET['allowpostspecialnew'][1]));
+			$allowspecialonlynew = $_GET['allowpostspecialnew'] || $_G['setting']['threadplugins'] && $_GET['threadpluginnew'] ? $_GET['allowspecialonlynew'] : 0;
+			$forumcolumnsnew = $_GET['forumcolumnsnew'] > 1 ? intval($_GET['forumcolumnsnew']) : 0;
+			$threadcachesnew = max(0, min(100, intval($_GET['threadcachesnew'])));
+			$subforumsindexnew = $_GET['subforumsindexnew'] == -1 ? 0 : ($_GET['subforumsindexnew'] == 0 ? 2 : 1);
+			$_GET['simplenew'] = isset($_GET['simplenew']) ? $_GET['simplenew'] : 0;
+			$simplenew = bindec(sprintf('%02d', decbin($_GET['defaultorderfieldnew'])).$_GET['defaultordernew'].sprintf('%02d', decbin($subforumsindexnew)).'00'.$_GET['simplenew']);
+			$allowglobalsticknew = $_GET['allowglobalsticknew'] ? 1 : 0;
 
 			if(!empty($_G['setting']['domain']['root']['forum'])) {
 				deletedomain($fid, 'forum');
 				if(!empty($domain)) {
 					domaincheck($domain, $_G['setting']['domain']['root']['forum'], 1, 0);
-					DB::insert('common_domain', array('domain' => $domain, 'domainroot' => addslashes($_G['setting']['domain']['root']['forum']), 'id' => $fid, 'idtype' => 'forum'));
+					C::t('common_domain')->insert(array('domain' => $domain, 'domainroot' => $_G['setting']['domain']['root']['forum'], 'id' => $fid, 'idtype' => 'forum'));
 				}
 			}
 			$forumdata = array_merge($forumdata, array(
-				'status' => $_G['gp_statusnew'],
-				'name' => $_G['gp_namenew'],
-				'styleid' => $_G['gp_styleidnew'],
-				'alloweditpost' => $_G['gp_alloweditpostnew'],
-				'allowappend' => $_G['gp_allowappendnew'],
-				'allowpostspecial' => $_G['gp_allowpostspecialnew'],
+				'status' => $_GET['statusnew'],
+				'name' => $_GET['namenew'],
+				'styleid' => $_GET['styleidnew'],
+				'alloweditpost' => $_GET['alloweditpostnew'],
+				'allowpostspecial' => $_GET['allowpostspecialnew'],
 				'allowspecialonly' => $allowspecialonlynew,
-				'allowhtml' => $_G['gp_allowhtmlnew'],
-				'allowbbcode' => $_G['gp_allowbbcodenew'],
-				'allowimgcode' => $_G['gp_allowimgcodenew'],
-				'allowmediacode' => $_G['gp_allowmediacodenew'],
-				'allowsmilies' => $_G['gp_allowsmiliesnew'],
-				'alloweditrules' => $_G['gp_alloweditrulesnew'],
-				'allowside' => $_G['gp_allowsidenew'],
-				'modnewposts' => $_G['gp_modnewpostsnew'],
-				'recyclebin' => $_G['gp_recyclebinnew'],
-				'jammer' => $_G['gp_jammernew'],
-				'allowanonymous' => $_G['gp_allowanonymousnew'],
+				'allowhtml' => $_GET['allowhtmlnew'],
+				'allowbbcode' => $_GET['allowbbcodenew'],
+				'allowimgcode' => $_GET['allowimgcodenew'],
+				'allowmediacode' => $_GET['allowmediacodenew'],
+				'allowsmilies' => $_GET['allowsmiliesnew'],
+				'alloweditrules' => $_GET['alloweditrulesnew'],
+				'allowside' => $_GET['allowsidenew'],
+				'disablecollect' => $_GET['disablecollectnew'],
+				'modnewposts' => $_GET['modnewpostsnew'],
+				'recyclebin' => $_GET['recyclebinnew'],
+				'jammer' => $_GET['jammernew'],
+				'allowanonymous' => $_GET['allowanonymousnew'],
 				'forumcolumns' => $forumcolumnsnew,
 				'catforumcolumns' => $catforumcolumnsnew,
 				'threadcaches' => $threadcachesnew,
 				'simple' => $simplenew,
 				'allowglobalstick' => $allowglobalsticknew,
-				'disablethumb' => $_G['gp_disablethumbnew'],
-				'disablewatermark' => $_G['gp_disablewatermarknew'],
-				'autoclose' => intval($_G['gp_autoclosenew'] * $_G['gp_autoclosetimenew']),
-				'allowfeed' => $_G['gp_allowfeednew'],
+				'disablethumb' => $_GET['disablethumbnew'],
+				'disablewatermark' => $_GET['disablewatermarknew'],
+				'autoclose' => intval($_GET['autoclosenew'] * $_GET['autoclosetimenew']),
+				'allowfeed' => $_GET['allowfeednew'],
 				'domain' => $domain,
 			));
-			DB::update('forum_forum', $forumdata, "fid='$fid'");
+			C::t('forum_forum')->update($fid, $forumdata);
 
-			$query = DB::query("SELECT fid FROM ".DB::table('forum_forumfield')." WHERE fid='$fid'");
-			if(!(DB::num_rows($query))) {
-				DB::insert('forum_forumfield', array('fid' => $fid));
+			if(!(C::t('forum_forumfield')->fetch($fid))) {
+				C::t('forum_forumfield')->insert(array('fid' => $fid));
 			}
 
 			if(!$multiset) {
 				$creditspolicynew = array();
-				$creditspolicy = $forum['creditspolicy'] ? unserialize($forum['creditspolicy']) : array();
-				foreach($_G['gp_creditnew'] as $rid => $rule) {
+				$creditspolicy = $forum['creditspolicy'] ? dunserialize($forum['creditspolicy']) : array();
+				foreach($_GET['creditnew'] as $rid => $rule) {
 					$creditspolicynew[$rules[$rid]['action']] = isset($creditspolicy[$rules[$rid]['action']]) ? $creditspolicy[$rules[$rid]['action']] : $rules[$rid];
-					$usedefault = $_G['gp_usecustom'][$rid] ? false : true;
+					$usedefault = $_GET['usecustom'][$rid] ? false : true;
 
 					if(!$usedefault) {
 						foreach($rule as $i => $v) {
@@ -1488,33 +1528,34 @@ EOT;
 						$rules[$rid]['fids'] = implode(',', $cpfidsnew);
 						unset($creditspolicynew[$rules[$rid]['action']]);
 					}
-					DB::update('common_credit_rule', array('fids' => $rules[$rid]['fids']), array('rid' => $rid));
+					C::t('common_credit_rule')->update($rid, array('fids' => $rules[$rid]['fids']));
 				}
 				$forumfielddata = array();
-				$forumfielddata['creditspolicy'] = addslashes(serialize($creditspolicynew));
+				$forumfielddata['creditspolicy'] = serialize($creditspolicynew);
 
-				$threadtypesnew = $_G['gp_threadtypesnew'];
+				$threadtypesnew = $_GET['threadtypesnew'];
 				$threadtypesnew['types'] = $threadtypes['special'] = $threadtypes['show'] = array();
 				$threadsortsnew['types'] = $threadsorts['special'] = $threadsorts['show'] = array();
 
 				if($allowthreadtypes) {
-					if(is_array($_G['gp_newname']) && $_G['gp_newname']) {
-						$newname = array_unique($_G['gp_newname']);
+					if(is_array($_GET['newname']) && $_GET['newname']) {
+						$newname = array_unique($_GET['newname']);
 						if($newname) {
 							foreach($newname as $key => $val) {
 								$newname[$key] = $val = strip_tags(trim(str_replace(array("'", "\""), array(), $val)), "<font><span><b><strong>");
-								if($_G['gp_newenable'][$key] && $val) {
-									$newtypeid = DB::result_first("SELECT typeid FROM ".DB::table('forum_threadclass')." WHERE fid='$fid' AND name='$val'");
+								if($_GET['newenable'][$key] && $val) {
+									$newtypearr = C::t('forum_threadclass')->fetch_by_fid_name($fid, $val);
+									$newtypeid = $newtypearr['typeid'];
 									if(!$newtypeid) {
-										$threadtypes_newdisplayorder = intval($_G['gp_newdisplayorder'][$key]);
-										$threadtypes_newicon = trim($_G['gp_newicon'][$key]);
-										$newtypeid = DB::insert('forum_threadclass', array('fid' => $fid, 'name' => $val, 'displayorder' => $threadtypes_newdisplayorder, 'icon' => $threadtypes_newicon, 'moderators' => intval($_G['gp_newmoderators'][$key])), 1);
+										$threadtypes_newdisplayorder = intval($_GET['newdisplayorder'][$key]);
+										$threadtypes_newicon = trim($_GET['newicon'][$key]);
+										$newtypeid = C::t('forum_threadclass')->insert(array('fid' => $fid, 'name' => $val, 'displayorder' => $threadtypes_newdisplayorder, 'icon' => $threadtypes_newicon, 'moderators' => intval($_GET['newmoderators'][$key])), true);
 									}
 									$threadtypesnew['options']['name'][$newtypeid] = $val;
 									$threadtypesnew['options']['icon'][$newtypeid] = $threadtypes_newicon;
 									$threadtypesnew['options']['displayorder'][$newtypeid] = $threadtypes_newdisplayorder;
 									$threadtypesnew['options']['enable'][$newtypeid] = 1;
-									$threadtypesnew['options']['moderators'][$newtypeid] = $_G['gp_newmoderators'][$key];
+									$threadtypesnew['options']['moderators'][$newtypeid] = $_GET['newmoderators'][$key];
 								}
 							}
 						}
@@ -1525,43 +1566,40 @@ EOT;
 					if($threadtypesnew['status']) {
 						if(is_array($threadtypesnew['options']) && $threadtypesnew['options']) {
 							if(!empty($threadtypesnew['options']['enable'])) {
-								$typeids = dimplode(array_keys($threadtypesnew['options']['enable']));
+								$typeids = array_keys($threadtypesnew['options']['enable']);
 							} else {
-								$typeids = '0';
+								$typeids = array(0);
 							}
-							$query = DB::query("SELECT * FROM ".DB::table('forum_threadclass')." WHERE typeid IN ($typeids) ORDER BY displayorder");
-							while($type = DB::fetch($query)) {
+							foreach(C::t('forum_threadclass')->fetch_all_by_typeid($typeids) as $type) {
 								if($threadtypesnew['options']['name'][$type['typeid']] != $type['name'] ||
 									$threadtypesnew['options']['displayorder'][$type['typeid']] != $type['displayorder'] ||
 									$threadtypesnew['options']['icon'][$type['typeid']] != $type['icon'] ||
 									$threadtypesnew['options']['moderators'][$type['typeid']] != $type['moderators']) {
 									$threadtypesnew['options']['name'][$type['typeid']] = strip_tags(trim(str_replace(array("'", "\""), array(), $threadtypesnew['options']['name'][$type['typeid']])), "<font><span><b><strong>");
-									DB::update('forum_threadclass', array(
+									C::t('forum_threadclass')->update_by_typeid($type['typeid'], array(
 										'name' => $threadtypesnew['options']['name'][$type['typeid']],
 										'displayorder' => $threadtypesnew['options']['displayorder'][$type['typeid']],
 										'icon' => $threadtypesnew['options']['icon'][$type['typeid']],
 										'moderators' => $threadtypesnew['options']['moderators'][$type['typeid']],
-									), "typeid='{$type['typeid']}'");
+									));
 								}
 							}
 							if(!empty($threadtypesnew['options']['delete'])) {
-								$threadtypes_deleteids = dimplode($threadtypesnew['options']['delete']);
-								DB::query("DELETE FROM ".DB::table('forum_threadclass')." WHERE `typeid` IN ($threadtypes_deleteids)");
+								C::t('forum_threadclass')->delete_by_typeid($threadtypesnew['options']['delete']);
 							}
 						}
 					} else {
 						$threadtypesnew = '';
 					}
 					if($threadtypesnew && $typeids) {
-						$query = DB::query("SELECT * FROM ".DB::table('forum_threadclass')." WHERE typeid IN ($typeids) ORDER BY displayorder");
-						while($type = DB::fetch($query)) {
+						foreach(C::t('forum_threadclass')->fetch_all_by_typeid($typeids) as $type) {
 							if($threadtypesnew['options']['enable'][$type['typeid']]) {
 								$threadtypesnew['types'][$type['typeid']] = $threadtypesnew['options']['name'][$type['typeid']];
 							}
 							$threadtypesnew['icons'][$type['typeid']] = trim($threadtypesnew['options']['icon'][$type['typeid']]);
 							$threadtypesnew['moderators'][$type['typeid']] = $threadtypesnew['options']['moderators'][$type['typeid']];
 						}
-						$threadtypesnew = $threadtypesnew['types'] ? addslashes(serialize(array
+						$threadtypesnew = $threadtypesnew['types'] ? serialize(array
 							(
 							'required' => (bool)$threadtypesnew['required'],
 							'listable' => (bool)$threadtypesnew['listable'],
@@ -1569,21 +1607,21 @@ EOT;
 							'types' => $threadtypesnew['types'],
 							'icons' => $threadtypesnew['icons'],
 							'moderators' => $threadtypesnew['moderators'],
-							))) : '';
+							)) : '';
 					}
-					$forumfielddata['threadtypes'] = $threadtypesnew;
+					$forumfielddata['threadtypes'] = is_array($threadtypesnew) ? serialize($threadtypesnew) : $threadtypesnew;
 
-					$threadsortsnew = $_G['gp_threadsortsnew'];
+					$threadsortsnew = $_GET['threadsortsnew'];
 					if($threadsortsnew['status']) {
 						if(is_array($threadsortsnew['options']) && $threadsortsnew['options']) {
 							if(!empty($threadsortsnew['options']['enable'])) {
-								$sortids = dimplode(array_keys($threadsortsnew['options']['enable']));
+								$sortids = array_keys($threadsortsnew['options']['enable']);
 							} else {
-								$sortids = '0';
+								$sortids = array();
 							}
 
-							$query = DB::query("SELECT * FROM ".DB::table('forum_threadtype')." WHERE typeid IN ($sortids) ORDER BY displayorder");
-							while($sort = DB::fetch($query)) {
+							$query = C::t('forum_threadtype')->fetch_all_for_order($sortids);
+							foreach($query as $sort) {
 								if($threadsortsnew['options']['enable'][$sort['typeid']]) {
 									$threadsortsnew['types'][$sort['typeid']] = $sort['name'];
 								}
@@ -1597,7 +1635,7 @@ EOT;
 							cpmsg('forums_edit_threadsort_nonexistence', '', 'error');
 						}
 
-						$threadsortsnew = $threadsortsnew['types'] ? addslashes(serialize(array
+						$threadsortsnew = $threadsortsnew['types'] ? serialize(array
 							(
 							'required' => (bool)$threadsortsnew['required'],
 							'prefix' => (bool)$threadsortsnew['prefix'],
@@ -1607,7 +1645,7 @@ EOT;
 							'description' => $threadsortsnew['description'],
 							'defaultshow' => $threadsortsnew['default'] ? $threadsortsnew['defaultshow'] : '',
 							'templatelist' => $threadsortsnew['templatelist'],
-							))) : '';
+							)) : '';
 					} else {
 						$threadsortsnew = '';
 					}
@@ -1617,8 +1655,8 @@ EOT;
 				}
 			}
 
-			$threadpluginnew = addslashes(serialize($_G['gp_threadpluginnew']));
-			$modrecommendnew = $_G['gp_modrecommendnew'];
+			$threadpluginnew = serialize($_GET['threadpluginnew']);
+			$modrecommendnew = $_GET['modrecommendnew'];
 			$modrecommendnew['num'] = $modrecommendnew['num'] ? intval($modrecommendnew['num']) : 10;
 			$modrecommendnew['cachelife'] = intval($modrecommendnew['cachelife']);
 			$modrecommendnew['maxlength'] = $modrecommendnew['maxlength'] ? intval($modrecommendnew['maxlength']) : 0;
@@ -1626,23 +1664,22 @@ EOT;
 			$modrecommendnew['imagenum'] = $modrecommendnew['imagenum'] ? intval($modrecommendnew['imagenum']) : 0;
 			$modrecommendnew['imagewidth'] = $modrecommendnew['imagewidth'] ? intval($modrecommendnew['imagewidth']) : 300;
 			$modrecommendnew['imageheight'] = $modrecommendnew['imageheight'] ? intval($modrecommendnew['imageheight']): 250;
-			$modrecommendnew = $modrecommendnew && is_array($modrecommendnew) ? addslashes(serialize($modrecommendnew)) : '';
-			$descriptionnew = addslashes(preg_replace('/on(mousewheel|mouseover|click|load|onload|submit|focus|blur)="[^"]*"/i', '', discuzcode(dstripslashes($_G['gp_descriptionnew']), 1, 0, 0, 0, 1, 1, 0, 0, 1)));
-			$rulesnew = addslashes(preg_replace('/on(mousewheel|mouseover|click|load|onload|submit|focus|blur)="[^"]*"/i', '', discuzcode(dstripslashes($_G['gp_rulesnew']), 1, 0, 0, 0, 1, 1, 0, 0, 1)));
-			$extranew = is_array($_G['gp_extranew']) ? $_G['gp_extranew'] : array();
-			$forum['extra'] = unserialize($forum['extra']);
+			$descriptionnew = addslashes(preg_replace('/on(mousewheel|mouseover|click|load|onload|submit|focus|blur)="[^"]*"/i', '', discuzcode($_GET['descriptionnew'], 1, 0, 0, 0, 1, 1, 0, 0, 1)));
+			$rulesnew = addslashes(preg_replace('/on(mousewheel|mouseover|click|load|onload|submit|focus|blur)="[^"]*"/i', '', discuzcode($_GET['rulesnew'], 1, 0, 0, 0, 1, 1, 0, 0, 1)));
+			$extranew = is_array($_GET['extranew']) ? $_GET['extranew'] : array();
+			$forum['extra'] = dunserialize($forum['extra']);
 			$forum['extra']['namecolor'] = $extranew['namecolor'];
 
 			if(!$multiset) {
 				if($_FILES['bannernew']) {
 					$bannernew = upload_icon_banner($forum, $_FILES['bannernew'], 'banner');
 				} else {
-					$bannernew = $_G['gp_bannernew'];
+					$bannernew = $_GET['bannernew'];
 				}
 				if($bannernew) {
 					$forumfielddata['banner'] = $bannernew;
 				}
-				if($_G['gp_deletebanner'] && $forum['banner']) {
+				if($_GET['deletebanner'] && $forum['banner']) {
 					$valueparse = parse_url($forum['banner']);
 					if(!isset($valueparse['host'])) {
 						@unlink($_G['setting']['attachurl'].'common/'.$forum['banner']);
@@ -1653,7 +1690,7 @@ EOT;
 				if($_FILES['iconnew']) {
 					$iconnew = upload_icon_banner($forum, $_FILES['iconnew'], 'icon');
 				} else {
-					$iconnew = $_G['gp_iconnew'];
+					$iconnew = $_GET['iconnew'];
 				}
 				if($iconnew) {
 					$forumfielddata['icon'] = $iconnew;
@@ -1670,7 +1707,7 @@ EOT;
 				} else {
 					$forum['extra']['iconwidth'] = '';
 				}
-				if($_G['gp_deleteicon']) {
+				if($_GET['deleteicon']) {
 					$valueparse = parse_url($forum['icon']);
 					if(!isset($valueparse['host'])) {
 						@unlink($_G['setting']['attachurl'].'common/'.$forum['icon']);
@@ -1684,38 +1721,38 @@ EOT;
 
 			$forumfielddata = array_merge($forumfielddata, array(
 				'description' => $descriptionnew,
-				'password' => $_G['gp_passwordnew'],
-				'redirect' => $_G['gp_redirectnew'],
+				'password' => $_GET['passwordnew'],
+				'redirect' => $_GET['redirectnew'],
 				'rules' => $rulesnew,
-				'attachextensions' => $_G['gp_attachextensionsnew'],
-				'modrecommend' => $modrecommendnew,
-				'seotitle' => $_G['gp_seotitlenew'],
-				'keywords' => $_G['gp_keywordsnew'],
-				'seodescription' => $_G['gp_seodescriptionnew'],
+				'attachextensions' => $_GET['attachextensionsnew'],
+				'modrecommend' => $modrecommendnew && is_array($modrecommendnew) ? serialize($modrecommendnew) : '',
+				'seotitle' => $_GET['seotitlenew'],
+				'keywords' => $_GET['keywordsnew'],
+				'seodescription' => $_GET['seodescriptionnew'],
 				'threadplugin' => $threadpluginnew,
 				'extra' => $extranew,
-				'commentitem' => $_G['gp_commentitemnew'],
-				'formulaperm' => $_G['gp_formulapermnew'],
-				'picstyle' => $_G['gp_picstylenew'],
-				'widthauto' => $_G['gp_widthautonew'],
+				'commentitem' => $_GET['commentitemnew'],
+				'formulaperm' => $_GET['formulapermnew'],
+				'picstyle' => $_GET['picstylenew'],
+				'widthauto' => $_GET['widthautonew'],
 			));
 			if(!$multiset) {
 				$forumfielddata = array_merge($forumfielddata, array(
-					'viewperm' => $_G['gp_viewpermnew'],
-					'postperm' => $_G['gp_postpermnew'],
-					'replyperm' => $_G['gp_replypermnew'],
-					'getattachperm' => $_G['gp_getattachpermnew'],
-					'postattachperm' => $_G['gp_postattachpermnew'],
-					'postimageperm' => $_G['gp_postimagepermnew'],
-					'relatedgroup' => $_G['gp_relatedgroupnew'],
-					'spviewperm' => implode("\t", $_G['gp_spviewpermnew']),
+					'viewperm' => $_GET['viewpermnew'],
+					'postperm' => $_GET['postpermnew'],
+					'replyperm' => $_GET['replypermnew'],
+					'getattachperm' => $_GET['getattachpermnew'],
+					'postattachperm' => $_GET['postattachpermnew'],
+					'postimageperm' => $_GET['postimagepermnew'],
+					'relatedgroup' => $_GET['relatedgroupnew'],
+					'spviewperm' => implode("\t", $_GET['spviewpermnew']),
 				));
 			}
 			if($forumfielddata) {
-				DB::update('forum_forumfield', $forumfielddata, "fid='$fid'");
+				C::t('forum_forumfield')->update($fid, $forumfielddata);
 			}
 			if($pluginsetting) {
-				foreach($_G['gp_pluginnew'] as $pluginvarid => $value) {
+				foreach($_GET['pluginnew'] as $pluginvarid => $value) {
 					$pluginvars[$pluginvarid][$fid] = $value;
 				}
 			}
@@ -1725,15 +1762,15 @@ EOT;
 				recommendupdate($fid, $modrecommendnew, '1');
 			}
 
-			if($forumkeys[$fid] != $_G['gp_keysnew'] && preg_match('/^\w*$/', $_G['gp_keysnew']) && !preg_match('/^\d+$/', $_G['gp_keysnew'])) {
-				$forumkeys[$fid] = $_G['gp_keysnew'];
-				DB::query("REPLACE INTO ".DB::table('common_setting')." (skey, svalue) VALUES ('forumkeys', '".(addslashes(serialize($forumkeys)))."')");
+			if($forumkeys[$fid] != $_GET['keysnew'] && preg_match('/^\w*$/', $_GET['keysnew']) && !preg_match('/^\d+$/', $_GET['keysnew'])) {
+				$forumkeys[$fid] = $_GET['keysnew'];
+				C::t('common_setting')->update('forumkeys', $forumkeys);
 			}
 
 		}
 		if(empty($row['single'])) {
 			foreach($row as $key => $value) {
-				unset($_G['gp_'.$key]);
+				unset($_GET[''.$key]);
 			}
 		}
 		}
@@ -1743,25 +1780,24 @@ EOT;
 		}
 
 		updatecache(array('forums', 'setting', 'creditrule'));
-		cpmsg('forums_edit_succeed', "mod=forum&action=forums&operation=edit&".($multiset ? 'multi='.implode(',', $_G['gp_multi']) : "fid=$fid").($_G['gp_anchor'] ? "&anchor={$_G['gp_anchor']}" : ''), 'succeed');
+		cpmsg('forums_edit_succeed', "mod=forum&action=forums&operation=edit&".($multiset ? 'multi='.implode(',', $_GET['multi']) : "fid=$fid").($_GET['anchor'] ? "&anchor={$_GET['anchor']}" : ''), 'succeed');
 
 	}
 
 } elseif($operation == 'delete') {
-	$ajax = $_G['gp_ajax'];
-	$confirmed = $_G['gp_confirmed'];
-	$finished = $_G['gp_finished'];
-	$total = intval($_G['gp_total']);
-	$pp = intval($_G['gp_pp']);
-	$currow = intval($_G['gp_currow']);
+	$ajax = $_GET['ajax'];
+	$confirmed = $_GET['confirmed'];
+	$finished = $_GET['finished'];
+	$total = intval($_GET['total']);
+	$pp = intval($_GET['pp']);
+	$currow = intval($_GET['currow']);
 
-	if($_G['gp_ajax']) {
+	if($_GET['ajax']) {
 		ob_end_clean();
 		require_once libfile('function/post');
 		$tids = array();
 
-		$query = DB::query("SELECT tid FROM ".DB::table('forum_thread')." WHERE fid='$fid' LIMIT $pp");
-		while($thread = DB::fetch($query)) {
+		foreach(C::t('forum_thread')->fetch_all_by_fid($fid, $pp) as $thread) {
 			$tids[] = $thread['tid'];
 		}
 		require_once libfile('function/delete');
@@ -1769,11 +1805,12 @@ EOT;
 		deletedomain($fid, 'forum');
 		deletedomain($fid, 'subarea');
 		if($currow + $pp > $total) {
-			my_thread_log('delforum', array('fid' => $fid));
-			DB::query("DELETE FROM ".DB::table('forum_forum')." WHERE fid='$fid'");
-			DB::query("DELETE FROM ".DB::table('forum_forumfield')." WHERE fid='$fid'");
-			DB::query("DELETE FROM ".DB::table('forum_moderator')." WHERE fid='$fid'");
-			DB::query("DELETE FROM ".DB::table('forum_access')." WHERE fid='$fid'");
+
+			$log_handler = Cloud::loadClass('Cloud_Service_SearchHelper');
+			$log_handler->myThreadLog('delforum', array('fid' => $fid));
+			C::t('forum_forum')->delete_by_fid($fid);
+			C::t('forum_moderator')->delete_by_fid($fid);
+			C::t('forum_access')->delete_by_fid($fid);
 			echo 'TRUE';
 			exit;
 		}
@@ -1783,24 +1820,23 @@ EOT;
 
 	} else {
 
-		if($_G['gp_finished']) {
+		if($_GET['finished']) {
 			updatecache('forums');
 			cpmsg('forums_delete_succeed', 'action=forums', 'succeed');
 
 		}
 
-		if(DB::result_first("SELECT COUNT(*) FROM ".DB::table('forum_forum')." WHERE fup='$fid'")) {
+		if(C::t('forum_forum')->fetch_forum_num('', $fid)) {
 			cpmsg('forums_delete_sub_notnull', '', 'error');
 		}
 
-		if(!$_G['gp_confirmed']) {
+		if(!$_GET['confirmed']) {
 
 			cpmsg('forums_delete_confirm', "mod=forum&action=forums&operation=delete&fid=$fid", 'form');
 
 		} else {
 
-			$threads = DB::result_first("SELECT COUNT(*) FROM ".DB::table('forum_thread')." WHERE fid='$fid'");
-
+			$threads = C::t('forum_thread')->count_by_fid($fid);
 			cpmsg('forums_delete_alarm', "mod=forum&action=forums&operation=delete&fid=$fid&confirmed=1", 'loadingform', '', '<div id="percent">0%</div>', FALSE);
 
 			echo "
@@ -1841,7 +1877,7 @@ EOT;
 
 	loadcache('forums');
 
-	$source = intval($_G['gp_source']);
+	$source = intval($_GET['source']);
 	$sourceforum = $_G['cache']['forums'][$source];
 
 	if(empty($sourceforum) || $sourceforum['type'] == 'group') {
@@ -1853,8 +1889,8 @@ EOT;
 		'forumfields'	=> array('description', 'password', 'redirect', 'moderators', 'rules', 'threadtypes', 'threadsorts', 'threadplugin', 'jointype', 'gviewperm', 'membernum', 'dateline', 'lastupdate', 'founderuid', 'foundername', 'banner', 'groupnum', 'activity'),
 	);
 	$fields = array(
-		'forums' 	=> fetch_table_struct('forum_forum'),
-		'forumfields'	=> fetch_table_struct('forum_forumfield'),
+		'forums' 	=> C::t('forum_forum')->fetch_table_struct('forum_forum'),
+		'forumfields'	=> C::t('forum_forum')->fetch_table_struct('forum_forumfield'),
 	);
 
 	if(!submitcheck('copysubmit')) {
@@ -1886,8 +1922,8 @@ EOT;
 	} else {
 
 		$fids = $comma = '';
-		if(is_array($_G['gp_target']) && count($_G['gp_target'])) {
-			foreach($_G['gp_target'] as $fid) {
+		if(is_array($_GET['target']) && count($_GET['target'])) {
+			foreach($_GET['target'] as $fid) {
 				if(($fid = intval($fid)) && $fid != $source ) {
 					$fids .= $comma.$fid;
 					$comma = ',';
@@ -1899,8 +1935,8 @@ EOT;
 		}
 
 		$forumoptions = array();
-		if(is_array($_G['gp_options']) && !empty($_G['gp_options'])) {
-			foreach($_G['gp_options'] as $option) {
+		if(is_array($_GET['options']) && !empty($_GET['options'])) {
+			foreach($_GET['options'] as $option) {
 				if($option = trim($option)) {
 					if(in_array($option, $fields['forums'])) {
 						$forumoptions['forum_forum'][] = $option;
@@ -1916,12 +1952,16 @@ EOT;
 		}
 		foreach(array('forum_forum', 'forum_forumfield') as $table) {
 			if(is_array($forumoptions[$table]) && !empty($forumoptions[$table])) {
-				$sourceforum = DB::fetch_first("SELECT ".implode($forumoptions[$table],',')." FROM ".DB::table($table)." WHERE fid='$source'");
+				$sourceforum = C::t($table)->fetch($source);
+				foreach($sourceforum as $key) {
+					if(!in_array($key, $forumoptions[$table])) {
+						unset($sourceforum[$key]);
+					}
+				}
 				if(!$sourceforum) {
 					cpmsg('forums_copy_source_invalid', '', 'error');
 				}
-				$sourceforum = array_map('addslashes', $sourceforum);
-				DB::update($table, $sourceforum, "fid IN ($fids)");
+				C::t($table)->update($fids, $sourceforum);
 			}
 		}
 
@@ -1966,7 +2006,7 @@ function showforum(&$forum, $type = '', $last = '', $toggle = false) {
 			'</td><td class="td23">'.showforum_moderators($forum).'</td>
 			<td width="160"><input class="checkbox" value="'.$forum['fid'].'" type="checkbox"'.($type != 'group' ? ' chkvalue="g'.$_G['fg'].'" onclick="multiupdate(this, '.$forum['fid'].')"' : ' name="gc'.$_G['fg'].'" onclick="checkAll(\'value\', this.form, \'g'.$_G['fg'].'\', \'gc'.$_G['fg'].'\', 1)"').' />'.'
 			<a href="'.ADMINSCRIPT.'?action=forums&operation=edit&fid='.$forum['fid'].'" title="'.cplang('forums_edit_comment').'" class="act">'.cplang('edit').'</a>'.
-			($type != 'group' ? '<a href="'.ADMINSCRIPT.'?action=forums&operation=copy&source='.$forum['fid'].'" title="'.cplang('usergroups_copy_comment').'" class="act">'.cplang('forums_copy').'</a>' : '').
+			($type != 'group' ? '<a href="'.ADMINSCRIPT.'?action=forums&operation=copy&source='.$forum['fid'].'" title="'.cplang('forums_copy_comment').'" class="act">'.cplang('forums_copy').'</a>' : '').
 			'<a href="'.ADMINSCRIPT.'?action=forums&operation=delete&fid='.$forum['fid'].'" title="'.cplang('forums_delete_comment').'" class="act">'.cplang('delete').'</a></td></tr>';
 		if($type == 'group') $return .= '<tbody id="group_'.$forum['fid'].'"'.($toggle ? ' style="display:none;"' : '').'>';
 	} else {
@@ -2016,21 +2056,11 @@ function showforum_moderators($forum) {
 	return $r;
 }
 
-function fetch_table_struct($tablename, $result = 'FIELD') {
-	$datas = array();
-	$query = DB::query("DESCRIBE ".DB::table($tablename));
-	while($data = DB::fetch($query)) {
-		$datas[$data['Field']] = $result == 'FIELD' ? $data['Field'] : $data;
-	}
-	return $datas;
-}
-
 function getthreadclasses_html($fid) {
-	$threadtypes = DB::result_first("SELECT threadtypes FROM ".DB::table('forum_forumfield')." WHERE fid='$fid'");
-	$threadtypes = unserialize($threadtypes);
+	$threadtypes = C::t('forum_forumfield')->fetch($fid);
+	$threadtypes = dunserialize($threadtypes['threadtypes']);
 
-	$query = DB::query("SELECT * FROM ".DB::table('forum_threadclass')." WHERE fid='$fid' ORDER BY displayorder");
-	while($type = DB::fetch($query)) {
+	foreach(C::t('forum_threadclass')->fetch_all_by_fid($fid) as $type) {
 		$enablechecked = $moderatorschecked = '';
 		$typeselected = array();
 		if(isset($threadtypes['types'][$type['typeid']])) {
@@ -2051,25 +2081,6 @@ function getthreadclasses_html($fid) {
 	return $typeselect;
 }
 
-function get_forum_by_fid($fid, $field = '', $table = 'forum') {
-	static $forumlist = array('forum' => array(), 'forumfield' => array());
-	$table = $table != 'forum' ? 'forumfield' : 'forum';
-	$return = array();
-	if(!array_key_exists($fid, $forumlist[$table])) {
-		$forumlist[$table][$fid] = DB::fetch_first("SELECT * FROM ".DB::table('forum_'.$table)." WHERE fid='$fid'");
-		if(!is_array($forumlist[$table][$fid])) {
-			$forumlist[$table][$fid] = array();
-		}
-	}
-
-	if(!empty($field)) {
-		$return = isset($forumlist[$table][$fid][$field]) ? $forumlist[$table][$fid][$field] : null;
-	} else {
-		$return = $forumlist[$table][$fid];
-	}
-	return $return;
-}
-
 function get_subfids($fid) {
 	global $subfids, $_G;
 	$subfids[] = $fid;
@@ -2083,12 +2094,12 @@ function get_subfids($fid) {
 function copy_threadclasses($threadtypes, $fid) {
 	global $_G;
 	if($threadtypes) {
-		$threadtypes = unserialize($threadtypes);
+		$threadtypes = dunserialize($threadtypes);
 		$i = 0;
 		$data = array();
 		foreach($threadtypes['types'] as $key => $val) {
-			$data = array('fid' => $fid, 'name' => addslashes($val), 'displayorder' => $i++, 'icon' => addslashes($threadtypes['icons'][$key]), 'moderators' => $threadtypes['moderators'][$key]);
-			$newtypeid = DB::insert('forum_threadclass', $data, 1);
+			$data = array('fid' => $fid, 'name' => $val, 'displayorder' => $i++, 'icon' => $threadtypes['icons'][$key], 'moderators' => $threadtypes['moderators'][$key]);
+			$newtypeid = C::t('forum_threadclass')->insert($data, true);
 			$newtypes[$newtypeid] = $val;
 			$newicons[$newtypeid] = $threadtypes['icons'][$key];
 			$newmoderators[$newtypeid] = $threadtypes['moderators'][$key];

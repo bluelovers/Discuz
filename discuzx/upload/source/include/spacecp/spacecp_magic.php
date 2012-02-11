@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_magic.php 20078 2011-02-12 07:23:38Z monkey $
+ *      $Id: spacecp_magic.php 26763 2011-12-22 09:28:20Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -25,14 +25,13 @@ if($op == 'cancelflicker') {
 	$mid = 'flicker';
 	$_GET['idtype'] = 'cid';
 	$_GET['id'] = intval($_GET['id']);
-	$query = DB::query('SELECT * FROM '.DB::table('home_comment')." WHERE cid = '$_GET[id]' AND authorid = '$_G[uid]'");
-	$value = DB::fetch($query);
+	$value = C::t('home_comment')->fetch($_GET['id'], $_G['uid']);
 	if(!$value || !$value['magicflicker']) {
 		showmessage('no_flicker_yet');
 	}
 
 	if(submitcheck('cancelsubmit')) {
-		DB::update('home_comment', array('magicflicker'=>0), array('cid'=>$_GET['id'], 'authorid'=>$_G['uid']));
+		C::t('home_comment')->update('', array('magicflicker'=>0), $_G['uid']);
 		showmessage('do_success', dreferer(), array(), array('showdialog' => 1, 'closetime' => true));
 	}
 
@@ -45,23 +44,21 @@ if($op == 'cancelflicker') {
 	if(empty($tablename)) {
 		showmessage('no_color_yet');
 	}
-	$query = DB::query('SELECT * FROM '.DB::table($tablename)." WHERE $_GET[idtype] = '$_GET[id]' AND uid = '$_G[uid]'");
-	$value = DB::fetch($query);
-	if(!$value || !$value['magiccolor']) {
+	$value = C::t($tablename)->fetch($_GET['id']);
+	if(!$value || $value['uid'] != $_G['uid'] || !$value['magiccolor']) {
 		showmessage('no_color_yet');
 	}
 
 	if(submitcheck('cancelsubmit')) {
 		DB::update($tablename, array('magiccolor'=>0), array($_GET['idtype']=>$_GET[id]));
-		$query = DB::query('SELECT * FROM '.DB::table('home_feed')." WHERE id = '$_GET[id]' AND idtype = '$_GET[idtype]'");
-		$feed = DB::fetch($query);
+		$feed = C::t('home_feed')->fetch($_GET['id'], $_GET['idtype']);
 		if($feed) {
-			$feed['body_data'] = unserialize($feed['body_data']);
+			$feed['body_data'] = dunserialize($feed['body_data']);
 			if($feed['body_data']['magic_color']) {
 				unset($feed['body_data']['magic_color']);
 			}
 			$feed['body_data'] = serialize($feed['body_data']);
-			DB::update('home_feed', array('body_data'=>$feed['body_data']), array('feedid'=>$feed['feedid']));
+			C::t('home_feed')->update('', array('body_data'=>$feed['body_data']), '', '', $feed['feedid']);
 		}
 		showmessage('do_success', dreferer(), 0);
 	}
@@ -70,8 +67,9 @@ if($op == 'cancelflicker') {
 
 	$uid = intval($_GET['uid']);
 	$mid = 'gift';
-	$info = DB::result_first('SELECT magicgift FROM '.DB::table('common_member_field_home')." WHERE uid = '$uid'");
-	$info = $info ? unserialize($info) : array();
+	$memberfieldhome = C::t('common_member_field_home')->fetch($uid);
+	$info = $memberfieldhome['magicgift'] ? dunserialize($memberfieldhome['magicgift']) : array();
+	unset($memberfieldhome);
 	if(!empty($info['left'])) {
 		$info['receiver'] = is_array($info['receiver']) ? $info['receiver'] : array();
 		if(in_array($_G['uid'], $info['receiver'])) {
@@ -80,11 +78,7 @@ if($op == 'cancelflicker') {
 		$percredit = min($info['left'], $info['percredit']);
 		$info['receiver'][] = $_G['uid'];
 		$info['left'] = $info['left'] - $percredit;
-		if($info['left'] > 0) {
-			DB::update('common_member_field_home', array('magicgift'=>addslashes(serialize($info))), array('uid'=>$uid));
-		} else {
-			DB::update('common_member_field_home', array('magicgift'=>''), array('uid'=>$uid));
-		}
+		C::t('common_member_field_home')->update($uid, array('magicgift' => ($info['left'] > 0 ? serialize($info) : '')));
 		$credittype = '';
 		if(preg_match('/^extcredits[1-8]$/', $info['credittype'])) {
 			$extcredits = str_replace('extcredits', '', $info['credittype']);
@@ -98,11 +92,12 @@ if($op == 'cancelflicker') {
 } elseif($op == 'retiregift') {
 
 	$mid = 'gift';
-	$info = DB::result_first('SELECT magicgift FROM '.DB::table('common_member_field_home')." WHERE uid = '$_G[uid]'");
-	$info = $info ? unserialize($info) : array();
+	$memberfieldhome = C::t('common_member_field_home')->fetch($_G['uid']);
+	$info = $memberfieldhome['magicgift'] ? dunserialize($memberfieldhome['magicgift']) : array();
+	unset($memberfieldhome);
 	$leftcredit = intval($info['left']);
 	if($leftcredit<=0) {
-		DB::update('common_member_field_home', array('magicgift'=>''), array('uid'=>$_G['uid']));
+		C::t('common_member_field_home')->update($_G['uid'], array('magicgift' => ''));
 		showmessage('red_bag_no_credits');
 	}
 
@@ -110,7 +105,7 @@ if($op == 'cancelflicker') {
 	$credittype = $_G['setting']['extcredits'][$extcredits]['title'];
 
 	if(submitcheck('cancelsubmit')) {
-		DB::update('common_member_field_home', array('magicgift'=>''), array('uid'=>$_G['uid']));
+		C::t('common_member_field_home')->update($_G['uid'], array('magicgift' => ''));
 		if(preg_match('/^extcredits[1-8]$/', $info['credittype'])) {
 			updatemembercount($_G['uid'], array($extcredits => $leftcredit), 1, 'RGC', $info['magicid']);
 		}

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_class.php 18487 2010-11-24 09:07:11Z zhengqingpeng $
+ *      $Id: spacecp_class.php 25246 2011-11-02 03:34:53Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -16,8 +16,10 @@ $op = empty($_GET['op'])?'':$_GET['op'];
 
 $class = array();
 if($classid) {
-	$query = DB::query("SELECT * FROM ".DB::table('home_class')." WHERE classid='$classid' AND uid='$_G[uid]'");
-	$class = DB::fetch($query);
+	$class = C::t('home_class')->fetch($classid);
+	if($class['uid'] != $_G['uid']) {
+		$class = null;
+	}
 }
 if(empty($class)) showmessage('did_not_specify_the_type_of_operation');
 
@@ -25,19 +27,19 @@ if ($op == 'edit') {
 
 	if(submitcheck('editsubmit')) {
 
-		$_POST['classname'] = getstr($_POST['classname'], 40, 1, 1);
+		$_POST['classname'] = getstr($_POST['classname'], 40);
 		$_POST['classname'] = censor($_POST['classname']);
 		if(strlen($_POST['classname']) < 1) {
 			showmessage('enter_the_correct_class_name');
 		}
-		DB::update('home_class', array('classname'=>$_POST['classname']), array('classid'=>$classid));
+		C::t('home_class')->update($classid, array('classname'=>$_POST['classname']));
 		showmessage('do_success', dreferer(),array('classid'=>$classid, 'classname' => $_POST['classname']), array('showdialog' => 1, 'showmsg' => true, 'closetime' => true));
 	}
 
 } elseif ($op == 'delete') {
 	if(submitcheck('deletesubmit')) {
-		DB::update('home_blog', array('classid'=>0), array('classid'=>$classid));
-		DB::query("DELETE FROM ".DB::table('home_class')." WHERE classid='$classid'");
+		C::t('home_blog')->update_classid_by_classid($classid, 0);
+		C::t('home_class')->delete($classid);
 
 		showmessage('do_success', dreferer());
 	}

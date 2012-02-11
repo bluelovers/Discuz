@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_forumlist.php 22254 2011-04-27 01:12:11Z congyushuai $
+ *      $Id: function_forumlist.php 25297 2011-11-07 00:57:59Z cnteacher $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -103,8 +103,12 @@ function forumselect($groupselectable = FALSE, $arrayformat = 0, $selectedfid = 
 				$forumlist .= '<option value="'.($evalue ? 'fid_' : '').$forum['fid'].'"'.$selected.'>'.$forum['name'].'</option>';
 			}
 			$visible[$forum['fid']] = true;
-		} elseif(!$arrayformat && $forum['type'] == 'sub' && isset($visible[$forum['fup']]) && (!$forum['viewperm'] || ($forum['viewperm'] && forumperm($forum['viewperm'])) || strstr($forum['users'], "\t$_G[uid]\t")) && (!$special || substr($forum['allowpostspecial'], -$special, 1))) {
-			$forumlist .= '<option value="'.($evalue ? 'fid_' : '').$forum['fid'].'"'.$selected.'>&nbsp; &nbsp; &nbsp; '.$forum['name'].'</option>';
+		} elseif($forum['type'] == 'sub' && isset($visible[$forum['fup']]) && (!$forum['viewperm'] || ($forum['viewperm'] && forumperm($forum['viewperm'])) || strstr($forum['users'], "\t$_G[uid]\t")) && (!$special || substr($forum['allowpostspecial'], -$special, 1))) {
+			if($arrayformat) {
+				$forumlist[$forumcache[$forum['fup']]['fup']]['child'][$forum['fup']][$forum['fid']] = $forum['name'];
+			} else {
+				$forumlist .= '<option value="'.($evalue ? 'fid_' : '').$forum['fid'].'"'.$selected.'>&nbsp; &nbsp; &nbsp; '.$forum['name'].'</option>';
+			}
 		}
 	}
 	if(!$arrayformat) {
@@ -182,33 +186,44 @@ function recommendupdate($fid, &$modrecommend, $force = '', $position = 0) {
 	$imgh = $modrecommend['imageheight'] = $modrecommend['imageheight'] ? intval($modrecommend['imageheight']) : 150;
 
 	if($modrecommend['sort'] && (TIMESTAMP - $modrecommend['updatetime'] > $modrecommend['cachelife'] || $force)) {
-		$query = DB::query("SELECT tid, moderatorid, aid FROM ".DB::table('forum_forumrecommend')." WHERE fid='$fid'");
-		while($row = DB::fetch($query)) {
+		foreach(C::t('forum_forumrecommend')->fetch_all_by_fid($fid) as $row) {
 			if($modrecommend['sort'] == 2 && $row['moderatorid']) {
 				$modedtids[] = $row['tid'];
 			}
 		}
-		DB::query("DELETE FROM ".DB::table('forum_forumrecommend')." WHERE fid='$fid'".($modrecommend['sort'] == 2 ? " AND moderatorid='0'" : ''));
+		C::t('forum_forumrecommend')->delete_by_fid($fid, $modrecommend['sort'] == 2 ? 0 : false);
 		$orderby = 'dateline';
-		$conditions = $modrecommend['dateline'] ? 'AND dateline>'.(TIMESTAMP - $modrecommend['dateline'] * 3600) : '';
+
+		$dateline = $modrecommend['dateline'] ? (TIMESTAMP - $modrecommend['dateline'] * 3600) : null;
+		$recommends = null;
 		switch($modrecommend['orderby']) {
 			case '':
 			case '1':$orderby = 'lastpost';break;
 			case '2':$orderby = 'views';break;
 			case '3':$orderby = 'replies';break;
 			case '4':$orderby = 'digest';break;
-			case '5':$orderby = 'recommends';$conditions .= " AND recommends>'0'";break;
+			case '5':$orderby = 'recommends';$recommends = 0;break;
 			case '6':$orderby = 'heats';break;
 		}
 
-		$add = $comma = $i = '';
+		$i = 0;
 		$addthread = $addimg = $recommendlist = $recommendimagelist = $tids = array();
-		$query = DB::query("SELECT fid, tid, author, authorid, subject, highlight FROM ".DB::table('forum_thread')." WHERE fid='$fid' AND displayorder>='0' $conditions ORDER BY $orderby DESC LIMIT 0, $num");
-		while($thread = DB::fetch($query)) {
+		foreach(C::t('forum_thread')->fetch_all_by_fid_displayorder($fid, 0, $dateline, $recommends, 0, $num, $orderby) as $thread) {
 			$recommendlist[$thread['tid']] = $thread;
 			$tids[] = $thread['tid'];
 			if(!$modedtids || !in_array($thread['tid'], $modedtids)) {
-				$addthread[$thread['tid']] = "'$thread[fid]', '$thread[tid]', '1', '$i', '".addslashes($thread['subject'])."', '".addslashes($thread['author'])."', '$thread[authorid]', '0', '0', '$thread[highlight]'";
+				$addthread[$thread['tid']] = array(
+					'fid' => $thread['fid'],
+					'tid' => $thread['tid'],
+					'position' => 1,
+					'displayorder' => $i,
+					'subject' => $thread['subject'],
+					'author' => $thread['author'],
+					'authorid' => $thread['authorid'],
+					'moderatorid' => 0,
+					'expiration' => 0,
+					'highlight' => $thread['highlight']
+				);
 				$i++;
 			}
 		}
@@ -218,43 +233,54 @@ function recommendupdate($fid, &$modrecommend, $force = '', $position = 0) {
 				$attachtables[getattachtablebytid($tid)][] = $tid;
 			}
 			foreach($attachtables as $attachtable => $tids) {
-				$query = DB::query('SELECT p.fid, p.tid, a.aid
-							FROM '.DB::table(getposttable())." p
-							INNER JOIN ".DB::table($attachtable)." a
-							ON a.pid=p.pid AND a.isimage IN ('1', '-1') AND a.width>='$imgw'"."
-							WHERE p.tid IN (".dimplode($tids).") AND p.first='1'");
-				while($attachment = DB::fetch($query)) {
+				$attachmentpost = array();
+				$postlist = C::t('forum_post')->fetch_all_by_tid(0, $tids, false, '', 0, 0, 1);
+				if($postlist) {
+					$pids = array();
+					foreach($postlist as $post) {
+						$pids[] = $post['pid'];
+					}
+					$attachmentlist = C::t('forum_attachment_n')->fetch_all_by_pid_width('tid:'.$tids[0], $pids, $imgw);
+					if($attachmentlist) {
+						foreach($attachmentlist as $k => $attachment) {
+							$attachmentpost[$k]['fid'] = $postlist[$attachment['pid']]['fid'];
+							$attachmentpost[$k]['tid'] = $postlist[$attachment['pid']]['tid'];
+							$attachmentpost[$k]['aid'] = $attachment['aid'];
+						}
+					}
+					unset($postlist, $attachmentlist, $pids);
+				}
+				foreach($attachmentpost as $attachment) {
 					if(isset($recommendimagelist[$attachment['tid']])) {
 						continue;
 					}
 					$key = md5($attachment['aid'].'|'.$imgw.'|'.$imgh);
 					$recommendlist[$attachment['tid']]['filename'] = $attachment['aid']."\t".$imgw."\t".$imgh."\t".$key;
 					$recommendimagelist[$attachment['tid']] = $recommendlist[$attachment['tid']];
-					$addimg[$attachment['tid']] = ",'', '".addslashes($recommendlist[$attachment['tid']]['filename'])."', '1'";
+					$recommendimagelist[$attachment['tid']]['subject'] = addslashes($recommendimagelist[$attachment['tid']]['subject']);
+					$addthread[$thread['tid']]['aid'] = '';
+					$addthread[$thread['tid']]['filename'] = $recommendlist[$attachment['tid']]['filename'];
+					$addthread[$thread['tid']]['typeid'] = 1;
 					if(count($recommendimagelist) == $imagenum) {
 						break;
 					}
 				}
 			}
 		}
-		foreach($addthread as $tid => $row) {
-			$add .= $comma.'('.$row.(!isset($addimg[$tid]) ? ",'0','','0'" : $addimg[$tid]).')';
-			$comma = ', ';
-		}
 		unset($recommendimagelist);
 
-		if($add) {
-			DB::query("REPLACE INTO ".DB::table('forum_forumrecommend')." (fid, tid, position, displayorder, subject, author, authorid, moderatorid, expiration, highlight, aid, filename, typeid) VALUES $add");
+		if($addthread) {
+			foreach($addthread as $row) {
+				C::t('forum_forumrecommend')->insert($row, false, true);
+			}
 			$modrecommend['updatetime'] = TIMESTAMP;
-			$modrecommendnew = addslashes(serialize($modrecommend));
-			DB::query("UPDATE ".DB::table('forum_forumfield')." SET modrecommend='$modrecommendnew' WHERE fid='$fid'");
+			$modrecommendnew = serialize($modrecommend);
+			C::t('forum_forumfield')->update($fid, array('modrecommend' => $modrecommendnew));
 		}
 	}
 
-	$recommendlists = $recommendlist =  array();
-	$position = $position ? "AND position IN ('0','$position')" : '';
-	$query = DB::query("SELECT * FROM ".DB::table('forum_forumrecommend')." WHERE fid='$fid' $position ORDER BY displayorder");
-	while($recommend = DB::fetch($query)) {
+	$recommendlists = $recommendlist = array();
+	foreach(C::t('forum_forumrecommend')->fetch_all_by_fid($fid, $position) as $recommend) {
 		if(($recommend['expiration'] && $recommend['expiration'] > TIMESTAMP) || !$recommend['expiration']) {
 			if($recommend['filename'] && strexists($recommend['filename'], "\t")) {
 				$imgd = explode("\t", $recommend['filename']);
@@ -342,12 +368,12 @@ function forumleftside() {
 	$leftside = array('favorites' => array(), 'forums' => array());
 	$leftside['forums'] = forumselect(FALSE, 1);
 	if($_G['uid']) {
-		$query = DB::query("SELECT favid, id, title FROM ".DB::table('home_favorite')." WHERE uid='$_G[uid]' AND idtype='fid' ORDER BY dateline DESC");
-		while($result = DB::fetch($query)) {
-			if($_G['fid'] == $result['id']) {
-				$_G['forum_fidinfav'] = $result['favid'];
+		$leftside['favorites'] = C::t('home_favorite')->fetch_all_by_uid_idtype($_G['uid'], 'fid');
+		foreach($leftside['favorites'] as $id => $forum) {
+			if($_G['fid'] == $id) {
+				$_G['forum_fidinfav'] = $forum['favid'];
 			}
-			$leftside['favorites'][$result['id']] = array($result['title'], $result['favid']);
+			$leftside['favorites'][$id] = array($forum['title'], $forum['favid']);
 		}
 	}
 	$_G['leftsidewidth_mwidth'] = $_G['setting']['leftsidewidth'] + 15;

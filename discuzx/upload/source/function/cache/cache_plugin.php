@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_plugin.php 21704 2011-04-11 01:26:46Z monkey $
+ *      $Id: cache_plugin.php 25289 2011-11-03 10:06:19Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -13,11 +13,8 @@ if(!defined('IN_DISCUZ')) {
 
 function build_cache_plugin() {
 	global $importtxt;
-	$data = array();
-	$query = DB::query("SELECT * FROM ".DB::table('common_plugin')." WHERE available='1'");
-
-	$pluginsetting = array();
-	while($plugin = DB::fetch($query)) {
+	$data = $pluginsetting = array();
+	foreach(C::t('common_plugin')->fetch_all_data(1) as $plugin) {
 		$dir = substr($plugin['directory'], 0, -1);
 		$plugin['modules'] = unserialize($plugin['modules']);
 		if($plugin['modules']['extra']['langexists']) {
@@ -25,14 +22,13 @@ function build_cache_plugin() {
 			require_once libfile('function/admincp');
 			$file = DISCUZ_ROOT.'./source/plugin/'.$dir.'/discuz_plugin_'.$dir.($plugin['modules']['extra']['installtype'] ? '_'.$plugin['modules']['extra']['installtype'] : '').'.xml';
 			$importtxt = @implode('', file($file));
-			$pluginarray = getimportdata('Discuz! Plugin', 1, 1);
+			$pluginarray = getimportdata('Discuz! Plugin', 0, 1);
 			if($pluginarray) {
 				updatepluginlanguage($pluginarray);
 			}
 		}
 
-		$queryvars = DB::query("SELECT * FROM ".DB::table('common_pluginvar')." WHERE pluginid='$plugin[pluginid]'");
-		while($var = DB::fetch($queryvars)) {
+		foreach(C::t('common_pluginvar')->fetch_all_by_pluginid($plugin['pluginid']) as $var) {
 			$data[$plugin['identifier']][$var['variable']] = $var['value'];
 			if(in_array(substr($var['type'], 0, 6), array('group_', 'forum_'))) {
 				$stype = substr($var['type'], 0, 5).'s';
@@ -59,7 +55,7 @@ function build_cache_plugin() {
 
 	writetocache('pluginsetting', getcachevars(array('pluginsetting' => $pluginsetting)));
 
-	save_syscache('plugin', $data);
+	savecache('plugin', $data);
 }
 
 ?>

@@ -1,19 +1,21 @@
 /*
-	[Discuz!] (C)2001-2009 Comsenz Inc.
+	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: editor.js 25628 2011-11-16 08:41:21Z chenmengshu $
+	$Id: editor.js 27506 2012-02-03 02:19:03Z monkey $
 */
 
 var editorcurrentheight = 400, editorminheight = 400, savedataInterval = 30, editbox = null, editwin = null, editdoc = null, editcss = null, savedatat = null, savedatac = 0, autosave = 1, framemObj = null, cursor = -1, stack = [], initialized = false, postSubmited = false, editorcontroltop = false, editorcontrolwidth = false, editorcontrolheight = false, editorisfull = 0, fulloldheight = 0, savesimplodemode = null;
+EXTRAFUNC['keydown'] = [];
+EXTRAFUNC['keyup'] = [];
+EXTRAFUNC['mouseup'] = [];
+EXTRAFUNC['showEditorMenu'] = [];
+var EXTRASELECTION = '', EXTRASEL = null;
 
 function newEditor(mode, initialtext) {
 	wysiwyg = parseInt(mode);
 	if(!(BROWSER.ie || BROWSER.firefox || (BROWSER.opera >= 9))) {
 		allowswitcheditor = wysiwyg = 0;
-	}
-	if(!BROWSER.ie) {
-		$(editorid + '_paste').parentNode.style.display = 'none';
 	}
 	if(!allowswitcheditor) {
 		$(editorid + '_switcher').style.display = 'none';
@@ -60,11 +62,11 @@ function initEditor() {
 		if(buttons[i].id.indexOf(editorid + '_') != -1) {
 			buttons[i].href = 'javascript:;';
 			if(buttons[i].id.substr(buttons[i].id.indexOf('_') + 1) == 'fullswitcher') {
-				buttons[i].innerHTML = !editorisfull ? 'å…¨å±' : 'è¿”å›';
-				buttons[i].onmouseover = function(e) {setEditorTip(editorisfull ? 'æ¢å¾©ç·¨è¼¯å™¨å¤§å°' : 'å…¨å±æ–¹å¼ç·¨è¼¯');};
+				buttons[i].innerHTML = !editorisfull ? 'È«ÆÁ' : '·µ»Ø';
+				buttons[i].onmouseover = function(e) {setEditorTip(editorisfull ? '»Ö¸´±à¼­Æ÷´óĞ¡' : 'È«ÆÁ·½Ê½±à¼­');};
 				buttons[i].onclick = function(e) {editorfull();doane();}
 			} else if(buttons[i].id.substr(buttons[i].id.indexOf('_') + 1) == 'simple') {
-				buttons[i].innerHTML = !simplodemode ? 'å¸¸ç”¨' : 'é«˜ç´š';
+				buttons[i].innerHTML = !simplodemode ? '³£ÓÃ' : '¸ß¼¶';
 				buttons[i].onclick = function(e) {editorsimple();doane();}
 			} else {
 				_attachEvent(buttons[i], 'mouseover', function(e) {setEditorTip(BROWSER.ie ? window.event.srcElement.title : e.target.title);});
@@ -80,7 +82,6 @@ function initEditor() {
 		}
 	}
 	setUnselectable($(editorid + '_controls'));
-	textobj.onkeydown = function(e) {ctlent(e ? e : event)};
 	if(editorcontroltop === false && (BROWSER.ie && BROWSER.ie > 6 || !BROWSER.ie)) {
 		seteditorcontrolpos();
 		var obj = wysiwyg ? editwin.document.body.parentNode : $(editorid + '_textarea');
@@ -94,7 +95,7 @@ function initEditor() {
 	}
 	if($(editorid + '_fullswitcher') && BROWSER.ie && BROWSER.ie < 7) {
 		$(editorid + '_fullswitcher').onclick = function () {
-			showDialog('ä½ çš„ç€è¦½å™¨ä¸æ”¯æŒæ­¤åŠŸèƒ½ï¼Œè«‹å‡ç´šç€è¦½å™¨ç‰ˆæœ¬', 'notice', 'å‹æƒ…æç¤º');
+			showDialog('ÄúµÄä¯ÀÀÆ÷²»Ö§³Ö´Ë¹¦ÄÜ£¬ÇëÉı¼¶ä¯ÀÀÆ÷°æ±¾', 'notice', 'ÓÑÇéÌáÊ¾');
 		};
 		$(editorid + '_fullswitcher').className = 'xg1';
 	}
@@ -104,11 +105,41 @@ function initEditor() {
 		savedataTime();
 		savedatat = setInterval("savedataTime()", 10000);
 	}
+	initcstbar();
+	checkFocus();
+}
+
+function initcstbar() {
+	if(!$(editorid + '_cst')) {
+		return;
+	}
+	$(editorid + '_cst').style.position = 'static';
+	$(editorid + '_cst').style.width = '44px';
+	$(editorid + '_cst').style.display = '';
+	$(editorid + '_cst').style.overflow = 'hidden';
+	$(editorid + '_cst').onmouseover = function () {
+		$(editorid + '_cst').hs = $(editorid + '_cst').style.height;
+		$(editorid + '_cst').style.height = 'auto';
+		if($(editorid + '_cst').offsetHeight < 50) {
+			return;
+		}
+		pos = fetchOffset($(editorid + '_cst'), 1);
+		$(editorid + '_cst').style.position = 'absolute';
+		$(editorid + '_cst').style.left = pos.left + 'px';
+		$(editorid + '_cst').style.top = pos.top + 'px';
+		$(editorid + '_cst').style.overflow = 'visible';
+		$(editorid + '_cst').className = 'b2r cst';
+	};
+	$(editorid + '_cst').onmouseout = function () {
+		$(editorid + '_cst').style.height = $(editorid + '_cst').hs;
+		$(editorid + '_cst').style.overflow = 'hidden';
+		$(editorid + '_cst').className = 'b2r cst nbb';
+	};
 }
 
 function savedataTime() {
 	if(!autosave) {
-		$(editorid + '_svdsecond').innerHTML = '<a title="é»æ“Šé–‹å•Ÿè‡ªå‹•ä¿å­˜" href="javascript:;" onclick="setAutosave()">é–‹å•Ÿè‡ªå‹•ä¿å­˜</a> ';
+		$(editorid + '_svdsecond').innerHTML = '<a title="µã»÷¿ªÆô×Ô¶¯±£´æ" href="javascript:;" onclick="setAutosave()">¿ªÆô×Ô¶¯±£´æ</a> ';
 		return;
 	}
 	if(!savedatac) {
@@ -119,15 +150,15 @@ function savedataTime() {
 		var m = d.getMinutes();
 		h = h < 10 ? '0' + h : h;
 		m = m < 10 ? '0' + m : m;
-		setEditorTip('æ•¸æ“šå·²æ–¼ ' + h + ':' + m + ' ä¿å­˜');
+		setEditorTip('Êı¾İÒÑÓÚ ' + h + ':' + m + ' ±£´æ');
 	}
-	$(editorid + '_svdsecond').innerHTML = '<a title="é»æ“Šé—œé–‰è‡ªå‹•ä¿å­˜" href="javascript:;" onclick="setAutosave()">' + savedatac + ' ç§’å¾Œä¿å­˜</a> ';
+	$(editorid + '_svdsecond').innerHTML = '<a title="µã»÷¹Ø±Õ×Ô¶¯±£´æ" href="javascript:;" onclick="setAutosave()">' + savedatac + ' Ãëºó±£´æ</a> ';
 	savedatac -= 10;
 }
 
 function setAutosave() {
 	autosave = !autosave;
-	setEditorTip(autosave ? 'æ•¸æ“šè‡ªå‹•ä¿å­˜å·²é–‹å•Ÿ' : 'æ•¸æ“šè‡ªå‹•ä¿å­˜å·²é—œé–‰');
+	setEditorTip(autosave ? 'Êı¾İ×Ô¶¯±£´æÒÑ¿ªÆô' : 'Êı¾İ×Ô¶¯±£´æÒÑ¹Ø±Õ');
 	setcookie('editorautosave_' + editorid, autosave ? 1 : -1, 2592000);
 	savedataTime();
 }
@@ -228,9 +259,6 @@ function editorfull(op) {
 		bbar.style.top = (document.documentElement.clientHeight - bbar.offsetHeight) + 'px';
 		return;
 	}
-	if(iswysiwyg) {
-		switchEditor(0);
-	}
 	if(!editorisfull) {
 		savesimplodemode = 0;
 		if(simplodemode) {
@@ -259,7 +287,8 @@ function editorfull(op) {
 		bbar.style.top = (document.documentElement.clientHeight - bbar.offsetHeight) + 'px';
 		bbar.style.left = '0px';
 		bbar.style.width = '100%';
-		control.style.zIndex = area.style.zIndex = bbar.style.zIndex = '200';
+		control.style.zIndex = '500';
+		area.style.zIndex = bbar.style.zIndex = '200';
 		if($(editorid + '_resize')) {
 			$(editorid + '_resize').style.display = 'none';
 		}
@@ -285,31 +314,27 @@ function editorfull(op) {
 		editorisfull = 0;
 		editorcontrolpos();
 	}
-	if(iswysiwyg) {
-		switchEditor(1);
-	}
-	$(editorid + '_fullswitcher').innerHTML = editorisfull ? 'è¿”å›' : 'å…¨å±';
+	$(editorid + '_fullswitcher').innerHTML = editorisfull ? '·µ»Ø' : 'È«ÆÁ';
+	initcstbar();
 }
 
 function editorsimple() {
 	if($(editorid + '_body').className == 'edt') {
 		v = 'none';
-		$(editorid + '_simple').innerHTML = 'é«˜ç´š';
+		$(editorid + '_simple').innerHTML = '¸ß¼¶';
 		$(editorid + '_body').className = 'edt simpleedt';
-		$(editorid + '_adv_s0').className = 'b2r';
 		$(editorid + '_adv_s1').className = 'b2r';
-		$(editorid + '_adv_s2').className = 'b2r';
+		$(editorid + '_adv_s2').className = 'b2r nbl';
 		if(allowswitcheditor) {
 			$(editorid + '_switcher').style.display = 'none';
 		}
 		simplodemode = 1;
 	} else {
 		v = '';
-		$(editorid + '_simple').innerHTML = 'å¸¸ç”¨';
+		$(editorid + '_simple').innerHTML = '³£ÓÃ';
 		$(editorid + '_body').className = 'edt';
-		$(editorid + '_adv_s0').className = 'b1r';
 		$(editorid + '_adv_s1').className = 'b1r';
-		$(editorid + '_adv_s2').className = 'b2r nbr';
+		$(editorid + '_adv_s2').className = 'b2r nbr nbl';
 		if(allowswitcheditor) {
 			$(editorid + '_switcher').style.display = '';
 		}
@@ -321,6 +346,7 @@ function editorsimple() {
 			$(editorid + '_adv_' + i).style.display = v;
 		}
 	}
+	initcstbar();
 }
 
 function pasteWord(str) {
@@ -350,7 +376,7 @@ function pasteWord(str) {
 			}
 			return '<' + $2 + style + $4;
 		});
-		htstrml = str.replace(/<(\w[^>]*) lang=([^ |>]*)([^>]*)/gi, "<$1$3");
+		str = str.replace(/<(\w[^>]*) lang=([^ |>]*)([^>]*)/gi, "<$1$3");
 		str = str.replace(/<\\?\?xml[^>]*>/gi, "");
 		str = str.replace(/<\/?\w+:[^>]*>/gi, "");
 		str = str.replace(/&nbsp;/, " ");
@@ -363,6 +389,7 @@ function pasteWord(str) {
 	}
 }
 
+var ctlent_enable = {8:1,9:1,13:1};
 function ctlent(event) {
 	if(postSubmited == false && (event.ctrlKey && event.keyCode == 13) || (event.altKey && event.keyCode == 83) && editorsubmit) {
 		if(in_array(editorsubmit.name, ['topicsubmit', 'replysubmit', 'editsubmit']) && !validate(editorform)) {
@@ -374,10 +401,15 @@ function ctlent(event) {
 		editorform.submit();
 		return;
 	}
-	if(event.keyCode == 9) {
+	if(ctlent_enable[13] && event.keyCode == 13 && wysiwyg && $(editorid + '_insertorderedlist').className != 'hover' && $(editorid + '_insertunorderedlist').className != 'hover') {
+		insertText('<br>*', 5, 0);
+		keyBackspace();
 		doane(event);
 	}
-	if(event.keyCode == 8 && wysiwyg) {
+	if(ctlent_enable[9] && event.keyCode == 9) {
+		doane(event);
+	}
+	if(ctlent_enable[8] && event.keyCode == 8 && wysiwyg) {
 		var sel = getSel();
 		if(sel) {
 			insertText('', sel.length - 1, 0);
@@ -386,29 +418,63 @@ function ctlent(event) {
 	}
 }
 
+function keyBackspace() {
+	if(!wysiwyg) {
+		return;
+	}
+	if(BROWSER.ie) {
+		sel = editdoc.selection.createRange();
+		sel.moveStart('character', -1);
+		sel.moveEnd('character', 0);
+		sel.select();
+		editdoc.selection.clear();
+	} else {
+		editdoc.execCommand('delete', false, true);
+	}
+}
+
+function keyMenu(code, func) {
+	var km = 'kM' + Math.random();
+	var hs = '<span id="' + km + '">' + code + '</span>';
+	if(BROWSER.ie) {
+		var range = document.selection.createRange();
+		range.pasteHTML(hs);
+		range.moveToElementText(editdoc.getElementById(km));
+		range.moveStart("character");
+		range.select();
+	} else {
+		var selection = editwin.getSelection();
+		var range = selection.getRangeAt(0);
+		var fragment = range.createContextualFragment(hs);
+		range.insertNode(fragment);
+		var tmp = editdoc.getElementById(km).firstChild;
+		range.setStart(tmp, 1);
+		range.setEnd(tmp, 1);
+		selection.removeAllRanges();
+		selection.addRange(range);
+	}
+	keyMenuObj = editdoc.getElementById(km);
+	var b = fetchOffset(editbox);
+	var o = fetchOffset(keyMenuObj);
+	var scrollTop = Math.max(document.documentElement.scrollTop, document.body.scrollTop);
+	func(b.left + o.left, b.top + o.top - scrollTop);
+}
+
 function checkFocus() {
-	var obj = wysiwyg ? (!BROWSER.chrome ? editwin.document.body : editwin) : textobj;
-	if(!obj.hasfocus) {
-		if(!BROWSER.safari || BROWSER.chrome) {
-			obj.focus();
-		}
+	if(wysiwyg) {
 		try {
-			if(BROWSER.safari && !obj.safarifocus) {
-				var sel = editwin.getSelection();
-				var node = editdoc.body.lastChild;
-				var range = editdoc.createRange();
-				range.selectNodeContents(node);
-				sel.removeAllRanges();
-				sel.addRange(range);
-				obj.safarifocus = true;
-			}
-		} catch(e) {}
+			editwin.focus();
+		} catch(e) {
+			editwin.document.body.focus();
+		}
+	} else {
+		textobj.focus();
 	}
 }
 
 function checklength(theform) {
 	var message = wysiwyg ? html2bbcode(getEditorContents()) : (!theform.parseurloff.checked ? parseurl(theform.message.value) : theform.message.value);
-	showDialog('ç•¶å‰é•·åº¦: ' + mb_strlen(message) + ' å­—ç¯€ï¼Œ' + (postmaxchars != 0 ? 'ç³»çµ±é™åˆ¶: ' + postminchars + ' åˆ° ' + postmaxchars + ' å­—ç¯€ã€‚' : ''), 'notice', 'å­—æ•¸æª¢æŸ¥');
+	showDialog('µ±Ç°³¤¶È: ' + mb_strlen(message) + ' ×Ö½Ú£¬' + (postmaxchars != 0 ? 'ÏµÍ³ÏŞÖÆ: ' + postminchars + ' µ½ ' + postmaxchars + ' ×Ö½Ú¡£' : ''), 'notice', '×ÖÊı¼ì²é');
 }
 
 function setUnselectable(obj) {
@@ -432,7 +498,7 @@ function writeEditorContents(text) {
 		if(initialized && !(BROWSER.firefox && BROWSER.firefox >= '3' || BROWSER.opera)) {
 			editdoc.body.innerHTML = text;
 		} else {
-			text = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">' +
+			text = '<!DOCTYPE html PUBLIC "-/' + '/W3C/' + '/DTD XHTML 1.0 Transitional/' + '/EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">' +
 				'<html><head id="editorheader"><meta http-equiv="Content-Type" content="text/html; charset=' + charset + '" />' +
 				(BROWSER.ie && BROWSER.ie > 7 ? '<meta http-equiv="X-UA-Compatible" content="IE=7" />' : '' ) +
 				'<link rel="stylesheet" type="text/css" href="data/cache/style_' + STYLEID + '_wysiwyg.css?' + VERHASH + '" />' +
@@ -503,23 +569,57 @@ function setEditorStyle() {
 			} catch(e) {}
 		}
 	}
+	if($('at_menu')) {
+		$('at_menu').style.display = 'none';
+	}
 }
 
 function setEditorEvents() {
-	if(wysiwyg) {
-		if(BROWSER.firefox || BROWSER.opera) {
-			editdoc.addEventListener('mouseup', function(e) {setContext();}, true);
-			editdoc.addEventListener('keyup', function(e) {setContext();}, true);
-			editwin.addEventListener('keydown', function(e) {ctlent(e);}, true);
-		} else if(editdoc.attachEvent) {
-			editdoc.body.attachEvent('onmouseup', setContext);
-			editdoc.body.attachEvent('onkeyup', setContext);
-			editdoc.body.attachEvent('onkeydown', ctlent);
-		}
+	if(BROWSER.firefox || BROWSER.opera) {
+		editdoc.addEventListener('mouseup', function(e) {mouseUp(e)}, true);
+		editdoc.addEventListener('keyup', function(e) {keyUp(e)}, true);
+		editwin.addEventListener('keydown', function(e) {keyDown(e)}, true);
+	} else if(editdoc.attachEvent) {
+		try{
+			editdoc.body.attachEvent('onmouseup', mouseUp);
+			editdoc.body.attachEvent('onkeyup', keyUp);
+			editdoc.body.attachEvent('onkeydown', keyDown);
+		} catch(e) {}
 	}
-	editwin.onfocus = function(e) {this.hasfocus = true;};
-	editwin.onblur = function(e) {this.hasfocus = false;};
-	editwin.onclick = function(e) {this.safarifocus = true;}
+}
+
+function mouseUp(event) {
+	if(wysiwyg) {
+		setContext();
+	}
+	for(i in EXTRAFUNC['mouseup']) {
+		EXTRAEVENT = event;
+		try {
+			eval(EXTRAFUNC['mouseup'][i] + '()');
+		} catch(e) {}
+	}
+}
+
+function keyUp(event) {
+	if(wysiwyg) {
+		setContext();
+	}
+	for(i in EXTRAFUNC['keyup']) {
+		EXTRAEVENT = event;
+		try {
+			eval(EXTRAFUNC['keyup'][i] + '()');
+		} catch(e) {}
+	}
+}
+
+function keyDown(event) {
+	ctlent(event);
+	for(i in EXTRAFUNC['keydown']) {
+		EXTRAEVENT = event;
+		try {
+			eval(EXTRAFUNC['keydown'][i] + '()');
+		} catch(e) {}
+	}
 }
 
 function wrapTags(tagname, useoption, selection) {
@@ -550,12 +650,6 @@ function applyFormat(cmd, dialog, argument) {
 		return;
 	}
 	switch(cmd) {
-		case 'paste':
-			if(BROWSER.ie) {
-				var str = clipboardData.getData("TEXT");
-				insertText(str, str.length, 0);
-			}
-			break;
 		case 'bold':
 		case 'italic':
 		case 'underline':
@@ -602,6 +696,8 @@ function getCaret() {
 		checkFocus();
 		var sel = document.selection.createRange();
 		editbox.sel = sel;
+		editdoc._selectionStart = editdoc.selectionStart;
+		editdoc._selectionEnd = editdoc.selectionEnd;
 	}
 }
 
@@ -655,7 +751,7 @@ function discuzcode(cmd, arg) {
 
 	checkFocus();
 
-	if(in_array(cmd, ['sml', 'url', 'quote', 'code', 'free', 'hide', 'aud', 'vid', 'fls', 'attach', 'image', 'pasteword']) || cmd == 'tbl' || in_array(cmd, ['fontname', 'fontsize', 'forecolor', 'backcolor']) && !arg) {
+	if(in_array(cmd, ['sml', 'url', 'quote', 'code', 'free', 'hide', 'aud', 'vid', 'fls', 'attach', 'image', 'pasteword']) || typeof EXTRAFUNC['showEditorMenu'][cmd] != 'undefined' || cmd == 'tbl' || in_array(cmd, ['fontname', 'fontsize', 'forecolor', 'backcolor']) && !arg) {
 		showEditorMenu(cmd);
 		return;
 	} else if(cmd.substr(0, 3) == 'cst') {
@@ -712,7 +808,7 @@ function discuzcode(cmd, arg) {
 		} else {
 			insertText(opentag + closetag, opentag.length, closetag.length);
 
-			while(listvalue = prompt('è¼¸å…¥ä¸€å€‹åˆ—è¡¨é …ç›®.\r\nç•™ç©ºæˆ–è€…é»æ“Šå–æ¶ˆå®Œæˆæ­¤åˆ—è¡¨.', '')) {
+			while(listvalue = prompt('ÊäÈëÒ»¸öÁĞ±íÏîÄ¿.\r\nÁô¿Õ»òÕßµã»÷È¡ÏûÍê³É´ËÁĞ±í.', '')) {
 				if(BROWSER.opera > 8) {
 					listvalue = '\n' + '[*]' + listvalue;
 					insertText(listvalue, strlen(listvalue) + 1, 0);
@@ -746,18 +842,18 @@ function discuzcode(cmd, arg) {
 		}
 	} else if(cmd == 'rst') {
 		loadData();
-		setEditorTip('æ•¸æ“šå·²æ¢å¾©');
+		setEditorTip('Êı¾İÒÑ»Ö¸´');
 	} else if(cmd == 'svd') {
 		saveData();
-		setEditorTip('æ•¸æ“šå·²ä¿å­˜');
+		setEditorTip('Êı¾İÒÑ±£´æ');
 	} else if(cmd == 'chck') {
 		checklength(editorform);
 	} else if(cmd == 'tpr') {
-		if(confirm('æ‚¨ç¢ºèªè¦æ¸…é™¤æ‰€æœ‰å…§å®¹å—ï¼Ÿ')) {
+		if(confirm('ÄúÈ·ÈÏÒªÇå³ıËùÓĞÄÚÈİÂğ£¿')) {
 			clearContent();
 		}
 	} else if(cmd == 'downremoteimg') {
-		showDialog('<div id="remotedowninfo"><p class="mbn">æ­£åœ¨ä¸‹è¼‰é ç¨‹é™„ä»¶ï¼Œè«‹ç¨ç­‰â€¦â€¦</p><p><img src="' + STATICURL + 'image/common/uploading.gif" alt="" /></p></div>', 'notice', '', null, 1);
+		showDialog('<div id="remotedowninfo"><p class="mbn">ÕıÔÚÏÂÔØÔ¶³Ì¸½¼ş£¬ÇëÉÔµÈ¡­¡­</p><p><img src="' + STATICURL + 'image/common/uploading.gif" alt="" /></p></div>', 'notice', '', null, 1);
 		var message = wysiwyg ? html2bbcode(getEditorContents()) : (!editorform.parseurloff.checked ? parseurl(editorform.message.value) : editorform.message.value);
 		var oldValidate = editorform.onsubmit;
 		var oldAction = editorform.action;
@@ -823,7 +919,7 @@ function setContext(cmd) {
 	} else if(fs == null) {
 		fs = '';
 	}
-	fs = fs && cmd != 'clear' ? fs : 'å­—é«”';
+	fs = fs && cmd != 'clear' ? fs : '×ÖÌå';
 	if(fs != $(editorid + '_font').fontstate) {
 		thingy = fs.indexOf(',') > 0 ? fs.substr(0, fs.indexOf(',')) : fs;
 		$(editorid + '_font').innerHTML = thingy;
@@ -849,7 +945,6 @@ function setContext(cmd) {
 		$(editorid + '_size').sizestate = ss;
 	}
 }
-
 
 function buttonContext(obj, state) {
 	if(state == 'mouseover') {
@@ -884,7 +979,7 @@ function formatFontsize(csssize) {
 		case '24pt': return 6;
 		case '48px':
 		case '36pt': return 7;
-		default: return 'å¤§å°';
+		default: return '´óĞ¡';
 	}
 }
 
@@ -929,8 +1024,8 @@ function showEditorMenu(tag, params) {
 	} else {
 		switch(tag) {
 			case 'url':
-				str = 'è«‹è¼¸å…¥éˆæ¥åœ°å€:<br /><input type="text" id="' + ctrlid + '_param_1" style="width: 98%" value="" class="px" />'+
-					(selection ? '' : '<br />è«‹è¼¸å…¥éˆæ¥æ–‡å­—:<br /><input type="text" id="' + ctrlid + '_param_2" style="width: 98%" value="" class="px" />');
+				str = 'ÇëÊäÈëÁ´½ÓµØÖ·:<br /><input type="text" id="' + ctrlid + '_param_1" style="width: 98%" value="" class="px" />'+
+					(selection ? '' : '<br />ÇëÊäÈëÁ´½ÓÎÄ×Ö:<br /><input type="text" id="' + ctrlid + '_param_2" style="width: 98%" value="" class="px" />');
 				break;
 			case 'forecolor':
 				showColorBox(ctrlid, 1);
@@ -953,39 +1048,49 @@ function showEditorMenu(tag, params) {
 				if(selection) {
 					return insertText((opentag + selection + closetag), strlen(opentag), strlen(closetag), true, sel);
 				}
-				var lang = {'quote' : 'è«‹è¼¸å…¥è¦æ’å…¥çš„å¼•ç”¨', 'code' : 'è«‹è¼¸å…¥è¦æ’å…¥çš„ä»£ç¢¼', 'hide' : 'è«‹è¼¸å…¥è¦éš±è—çš„ä¿¡æ¯å…§å®¹', 'free' : 'å¦‚æœæ‚¨è¨­ç½®äº†å¸–å­å”®åƒ¹ï¼Œè«‹è¼¸å…¥è³¼è²·å‰å…è²»å¯è¦‹çš„ä¿¡æ¯å…§å®¹'};
+				var lang = {'quote' : 'ÇëÊäÈëÒª²åÈëµÄÒıÓÃ', 'code' : 'ÇëÊäÈëÒª²åÈëµÄ´úÂë', 'hide' : 'ÇëÊäÈëÒªÒş²ØµÄĞÅÏ¢ÄÚÈİ', 'free' : 'Èç¹ûÄúÉèÖÃÁËÌû×ÓÊÛ¼Û£¬ÇëÊäÈë¹ºÂòÇ°Ãâ·Ñ¿É¼ûµÄĞÅÏ¢ÄÚÈİ'};
 				str += lang[tag] + ':<br /><textarea id="' + ctrlid + '_param_1" style="width: 98%" cols="50" rows="5" class="txtarea"></textarea>' +
-					(tag == 'hide' ? '<br /><label><input type="radio" name="' + ctrlid + '_radio" id="' + ctrlid + '_radio_1" class="pc" checked="checked" />åªæœ‰ç•¶ç€è¦½è€…å›å¾©æœ¬å¸–æ™‚æ‰é¡¯ç¤º</label><br /><label><input type="radio" name="' + ctrlid + '_radio" id="' + ctrlid + '_radio_2" class="pc" />åªæœ‰ç•¶ç€è¦½è€…ç©åˆ†é«˜æ–¼</label> <input type="text" size="3" id="' + ctrlid + '_param_2" class="px pxs" /> æ™‚æ‰é¡¯ç¤º' : '');
+					(tag == 'hide' ? '<br /><label><input type="radio" name="' + ctrlid + '_radio" id="' + ctrlid + '_radio_1" class="pc" checked="checked" />Ö»ÓĞµ±ä¯ÀÀÕß»Ø¸´±¾ÌûÊ±²ÅÏÔÊ¾</label><br /><label><input type="radio" name="' + ctrlid + '_radio" id="' + ctrlid + '_radio_2" class="pc" />Ö»ÓĞµ±ä¯ÀÀÕß»ı·Ö¸ßÓÚ</label> <input type="text" size="3" id="' + ctrlid + '_param_2" class="px pxs" /> Ê±²ÅÏÔÊ¾<br /><br /><label>ÓĞĞ§ÌìÊı:</label> <input type="text" size="3" id="' + ctrlid + '_param_3" class="px pxs" /> <br />¾àÀë·¢ÌûÈÕÆÚ´óÓÚÕâ¸öÌìÊıÊ±±êÇ©×Ô¶¯Ê§Ğ§' : '');
 				break;
 			case 'tbl':
-				str = '<p class="pbn">è¡¨æ ¼è¡Œæ•¸: <input type="text" id="' + ctrlid + '_param_1" size="2" value="2" class="px" /> &nbsp; è¡¨æ ¼åˆ—æ•¸: <input type="text" id="' + ctrlid + '_param_2" size="2" value="2" class="px" /></p><p class="pbn">è¡¨æ ¼å¯¬åº¦: <input type="text" id="' + ctrlid + '_param_3" size="2" value="" class="px" /> &nbsp; èƒŒæ™¯é¡è‰²: <input type="text" id="' + ctrlid + '_param_4" size="2" class="px" onclick="showColorBox(this.id, 2)" /></p><p class="xg2 pbn" style="cursor:pointer" onclick="showDialog($(\'tbltips_msg\').innerHTML, \'notice\', \'å°æç¤º\', null, 0)"><img id="tbltips" title="å°æç¤º" class="vm" src="' + IMGDIR + '/info_small.gif"> å¿«é€Ÿæ›¸å¯«è¡¨æ ¼æç¤º</p>';
-				str += '<div id="tbltips_msg" style="display: none">ã€Œ[tr=é¡è‰²]ã€ å®šç¾©è¡ŒèƒŒæ™¯<br />ã€Œ[td=å¯¬åº¦]ã€ å®šç¾©åˆ—å¯¬<br />ã€Œ[td=åˆ—è·¨åº¦,è¡Œè·¨åº¦,å¯¬åº¦]ã€ å®šç¾©è¡Œåˆ—è·¨åº¦<br /><br />å¿«é€Ÿæ›¸å¯«è¡¨æ ¼ç¯„ä¾‹ï¼š<div class=\'xs0\' style=\'margin:0 5px\'>[table]<br />Name:|Discuz!<br />Version:|X1<br />[/table]</div>ç”¨ã€Œ|ã€åˆ†éš”æ¯ä¸€åˆ—ï¼Œè¡¨æ ¼ä¸­å¦‚æœ‰ã€Œ|ã€ç”¨ã€Œ\\|ã€ä»£æ›¿ï¼Œæ›è¡Œç”¨ã€Œ\\nã€ä»£æ›¿ã€‚</div>';
+				str = '<p class="pbn">±í¸ñĞĞÊı: <input type="text" id="' + ctrlid + '_param_1" size="2" value="2" class="px" /> &nbsp; ±í¸ñÁĞÊı: <input type="text" id="' + ctrlid + '_param_2" size="2" value="2" class="px" /></p><p class="pbn">±í¸ñ¿í¶È: <input type="text" id="' + ctrlid + '_param_3" size="2" value="" class="px" /> &nbsp; ±³¾°ÑÕÉ«: <input type="text" id="' + ctrlid + '_param_4" size="2" class="px" onclick="showColorBox(this.id, 2)" /></p><p class="xg2 pbn" style="cursor:pointer" onclick="showDialog($(\'tbltips_msg\').innerHTML, \'notice\', \'Ğ¡ÌáÊ¾\', null, 0)"><img id="tbltips" title="Ğ¡ÌáÊ¾" class="vm" src="' + IMGDIR + '/info_small.gif"> ¿ìËÙÊéĞ´±í¸ñÌáÊ¾</p>';
+				str += '<div id="tbltips_msg" style="display: none">¡°[tr=ÑÕÉ«]¡± ¶¨ÒåĞĞ±³¾°<br />¡°[td=¿í¶È]¡± ¶¨ÒåÁĞ¿í<br />¡°[td=ÁĞ¿ç¶È,ĞĞ¿ç¶È,¿í¶È]¡± ¶¨ÒåĞĞÁĞ¿ç¶È<br /><br />¿ìËÙÊéĞ´±í¸ñ·¶Àı£º<div class=\'xs0\' style=\'margin:0 5px\'>[table]<br />Name:|Discuz!<br />Version:|X1<br />[/table]</div>ÓÃ¡°|¡±·Ö¸ôÃ¿Ò»ÁĞ£¬±í¸ñÖĞÈçÓĞ¡°|¡±ÓÃ¡°\\|¡±´úÌæ£¬»»ĞĞÓÃ¡°\\n¡±´úÌæ¡£</div>';
 				break;
 			case 'aud':
-				str = '<p class="pbn">è«‹è¼¸å…¥éŸ³æ¨‚æ–‡ä»¶åœ°å€:</p><p class="pbn"><input type="text" id="' + ctrlid + '_param_1" class="px" value="" style="width: 220px;" /></p><p class="xg2 pbn">æ”¯æŒ wma mp3 ra rm ç­‰éŸ³æ¨‚æ ¼å¼<br />ç¤ºä¾‹: http://server/audio.wma</p>';
+				str = '<p class="pbn">ÇëÊäÈëÒôÀÖÎÄ¼şµØÖ·:</p><p class="pbn"><input type="text" id="' + ctrlid + '_param_1" class="px" value="" style="width: 220px;" /></p><p class="xg2 pbn">Ö§³Ö wma mp3 ra rm µÈÒôÀÖ¸ñÊ½<br />Ê¾Àı: http://server/audio.wma</p>';
 				break;
 			case 'vid':
-				str = '<p class="pbn">è«‹è¼¸å…¥è¦–é »åœ°å€:</p><p class="pbn"><input type="text" value="" id="' + ctrlid + '_param_1" style="width: 220px;" class="px" /></p><p class="pbn">å¯¬: <input id="' + ctrlid + '_param_2" size="5" value="500" class="px" /> &nbsp; é«˜: <input id="' + ctrlid + '_param_3" size="5" value="375" class="px" /></p><p class="xg2 pbn">æ”¯æŒå„ªé…·ã€åœŸè±†ã€56ã€é…·6ç­‰è¦–é »ç«™çš„è¦–é »ç¶²å€<br />æ”¯æŒ wmv avi rmvb mov swf flv ç­‰è¦–é »æ ¼å¼<br />ç¤ºä¾‹: http://server/movie.wmv</p>';
+				str = '<p class="pbn">ÇëÊäÈëÊÓÆµµØÖ·:</p><p class="pbn"><input type="text" value="" id="' + ctrlid + '_param_1" style="width: 220px;" class="px" /></p><p class="pbn">¿í: <input id="' + ctrlid + '_param_2" size="5" value="500" class="px" /> &nbsp; ¸ß: <input id="' + ctrlid + '_param_3" size="5" value="375" class="px" /></p><p class="xg2 pbn">Ö§³ÖÓÅ¿á¡¢ÍÁ¶¹¡¢56¡¢¿á6µÈÊÓÆµÕ¾µÄÊÓÆµÍøÖ·<br />Ö§³Ö wmv avi rmvb mov swf flv µÈÊÓÆµ¸ñÊ½<br />Ê¾Àı: http://server/movie.wmv</p>';
 				break;
 			case 'fls':
-				str = '<p class="pbn">è«‹è¼¸å…¥ Flash æ–‡ä»¶åœ°å€:</p><p class="pbn"><input type="text" id="' + ctrlid + '_param_1" class="px" value="" style="width: 220px;" /></p><p class="pbn">å¯¬: <input id="' + ctrlid + '_param_2" size="5" value="" class="px" /> &nbsp; é«˜: <input id="' + ctrlid + '_param_3" size="5" value="" class="px" /></p><p class="xg2 pbn">æ”¯æŒ swf flv ç­‰ Flash ç¶²å€<br />ç¤ºä¾‹: http://server/flash.swf</p>';
+				str = '<p class="pbn">ÇëÊäÈë Flash ÎÄ¼şµØÖ·:</p><p class="pbn"><input type="text" id="' + ctrlid + '_param_1" class="px" value="" style="width: 220px;" /></p><p class="pbn">¿í: <input id="' + ctrlid + '_param_2" size="5" value="" class="px" /> &nbsp; ¸ß: <input id="' + ctrlid + '_param_3" size="5" value="" class="px" /></p><p class="xg2 pbn">Ö§³Ö swf flv µÈ Flash ÍøÖ·<br />Ê¾Àı: http://server/flash.swf</p>';
 				break;
 			case 'pasteword':
-				stitle = 'å¾ Word ç²˜è²¼å…§å®¹';
-				str = '<p class="px" style="height:300px"><iframe id="' + ctrlid + '_param_1" frameborder="0" style="width:100%;height:100%" onload="this.contentWindow.document.body.style.width=\'550px\';this.contentWindow.document.body.contentEditable=true;this.contentWindow.document.body.focus();this.onload=null"></iframe></p><p class="xg2 pbn">è«‹é€šéå¿«æ·éµ(Ctrl+V)æŠŠ Word æ–‡ä»¶ä¸­çš„å…§å®¹ç²˜è²¼åˆ°ä¸Šæ–¹</p>';
+				stitle = '´Ó Word Õ³ÌùÄÚÈİ';
+				str = '<p class="px" style="height:300px"><iframe id="' + ctrlid + '_param_1" frameborder="0" style="width:100%;height:100%" onload="this.contentWindow.document.body.style.width=\'550px\';this.contentWindow.document.body.contentEditable=true;this.contentWindow.document.body.focus();this.onload=null"></iframe></p><p class="xg2 pbn">ÇëÍ¨¹ı¿ì½İ¼ü(Ctrl+V)°Ñ Word ÎÄ¼şÖĞµÄÄÚÈİÕ³Ìùµ½ÉÏ·½</p>';
 				menuwidth = 600;
 				menupos = '00';
 				menutype = 'win';
 				break;
 			default:
-				var haveSel = selection == null || selection == false || in_array(trim(selection), ['', 'null', 'undefined', 'false']) ? 0 : 1;
-				if(params == 1 && haveSel) {
-					return insertText((opentag + selection + closetag), strlen(opentag), strlen(closetag), true, sel);
+				for(i in EXTRAFUNC['showEditorMenu']) {
+					EXTRASELECTION = selection;
+					EXTRASEL = sel;
+					try {
+						eval('str = ' + EXTRAFUNC['showEditorMenu'][i] + '(\'' + tag + '\', 0)');
+					} catch(e) {}
 				}
-				var promptlang = custombbcodes[tag]['prompt'].split("\t");
-				for(var i = 1; i <= params; i++) {
-					if(i != params || !haveSel) {
-						str += (promptlang[i - 1] ? promptlang[i - 1] : 'è«‹è¼¸å…¥ç¬¬ ' + i + ' å€‹åƒæ•¸:') + '<br /><input type="text" id="' + ctrlid + '_param_' + i + '" style="width: 98%" value="" class="px" />' + (i < params ? '<br />' : '');
+				if(!str) {
+					str = '';
+					var haveSel = selection == null || selection == false || in_array(trim(selection), ['', 'null', 'undefined', 'false']) ? 0 : 1;
+					if(params == 1 && haveSel) {
+						return insertText((opentag + selection + closetag), strlen(opentag), strlen(closetag), true, sel);
+					}
+					var promptlang = custombbcodes[tag]['prompt'].split("\t");
+					for(var i = 1; i <= params; i++) {
+						if(i != params || !haveSel) {
+							str += (promptlang[i - 1] ? promptlang[i - 1] : 'ÇëÊäÈëµÚ ' + i + ' ¸ö²ÎÊı:') + '<br /><input type="text" id="' + ctrlid + '_param_' + i + '" style="width: 98%" value="" class="px" />' + (i < params ? '<br />' : '');
+						}
 					}
 				}
 				break;
@@ -999,11 +1104,11 @@ function showEditorMenu(tag, params) {
 		if(menupos == '00') {
 			menu.className = 'fwinmask';
 			s = '<table width="100%" cellpadding="0" cellspacing="0" class="fwin"><tr><td class="t_l"></td><td class="t_c"></td><td class="t_r"></td></tr><tr><td class="m_l">&nbsp;&nbsp;</td><td class="m_c">'
-				+ '<h3 class="flb"><em>' + stitle + '</em><span><a onclick="hideMenu(\'\', \'win\');return false;" class="flbc" href="javascript:;">é—œé–‰</a></span></h3><div class="c">' + str + '</div>'
-				+ '<p class="o pns"><button type="submit" id="' + ctrlid + '_submit" class="pn pnc"><strong>æäº¤</strong></button></p>'
+				+ '<h3 class="flb"><em>' + stitle + '</em><span><a onclick="hideMenu(\'\', \'win\');return false;" class="flbc" href="javascript:;">¹Ø±Õ</a></span></h3><div class="c">' + str + '</div>'
+				+ '<p class="o pns"><button type="submit" id="' + ctrlid + '_submit" class="pn pnc"><strong>Ìá½»</strong></button></p>'
 				+ '</td><td class="m_r"></td></tr><tr><td class="b_l"></td><td class="b_c"></td><td class="b_r"></td></tr></table>';
 		} else {
-			s = '<div class="p_opt cl"><span class="y" style="margin:-10px -10px 0 0"><a onclick="hideMenu();return false;" class="flbc" href="javascript:;">é—œé–‰</a></span><div>' + str + '</div><div class="pns mtn"><button type="submit" id="' + ctrlid + '_submit" class="pn pnc"><strong>æäº¤</strong></button></div></div>';
+			s = '<div class="p_opt cl"><span class="y" style="margin:-10px -10px 0 0"><a onclick="hideMenu();return false;" class="flbc" href="javascript:;">¹Ø±Õ</a></span><div>' + str + '</div><div class="pns mtn"><button type="submit" id="' + ctrlid + '_submit" class="pn pnc"><strong>Ìá½»</strong></button></div></div>';
 		}
 		menu.innerHTML = s;
 		$(editorid + '_editortoolbar').appendChild(menu);
@@ -1063,9 +1168,21 @@ function showEditorMenu(tag, params) {
 				}
 			case 'hide':
 			case 'free':
-				if(tag == 'hide' && $(ctrlid + '_radio_2').checked) {
+				if(tag == 'hide') {
 					var mincredits = parseInt($(ctrlid + '_param_2').value);
-					opentag = mincredits > 0 ? '[hide=' + mincredits + ']' : '[hide]';
+					var expire = parseInt($(ctrlid + '_param_3').value);
+					if(expire > 0 || (mincredits > 0 && $(ctrlid + '_radio_2').checked)) {
+						opentag = '[hide=';
+						if(expire > 0) {
+							opentag += 'd'+expire;
+						}
+						if(mincredits > 0 && $(ctrlid + '_radio_2').checked) {
+							opentag += (expire > 0 ? ',' : '')+mincredits;
+						}
+						opentag += ']';
+					} else {
+						opentag = '[hide]';
+					}
 				}
 				str = $(ctrlid + '_param_1') && $(ctrlid + '_param_1').value ? $(ctrlid + '_param_1').value : (selection ? selection : '');
 				if(wysiwyg) {
@@ -1082,10 +1199,10 @@ function showEditorMenu(tag, params) {
 				var bgcolor = $(ctrlid + '_param_4').value;
 				rows = /^[-\+]?\d+$/.test(rows) && rows > 0 && rows <= 30 ? rows : 2;
 				columns = /^[-\+]?\d+$/.test(columns) && columns > 0 && columns <= 30 ? columns : 2;
-				width = width.substr(width.length - 1, width.length) == '%' ? (width.substr(0, width.length - 1) <= 98 ? width : '98%') : (width <= 560 ? width : '98%');
+				width = width.substr(width.length - 1, width.length) == '%' ? (width.substr(0, width.length - 1) <= 98 ? width : '98%') : (width <= 560 ? width + 'px' : '98%');
 				bgcolor = /[\(\)%,#\w]+/.test(bgcolor) ? bgcolor : '';
 				if(wysiwyg) {
-					str = '<table cellspacing="0" cellpadding="0" width="' + (width ? width : '50%') + '" class="t_table"' + (bgcolor ? ' bgcolor="' + bgcolor + '"' : '') + '>';
+					str = '<table cellspacing="0" cellpadding="0" style="width:' + (width ? width : '50%') + '" class="t_table"' + (bgcolor ? ' bgcolor="' + bgcolor + '"' : '') + '>';
 					for (var row = 0; row < rows; row++) {
 						str += '<tr>\n';
 						for (col = 0; col < columns; col++) {
@@ -1146,6 +1263,7 @@ function showEditorMenu(tag, params) {
 					style += width || height ? '=' + width + ',' + height : '';
 					insertText('[img' + style + ']' + src + '[/img]', 0, 0, false, sel);
 				}
+				hideMenu('', 'win');
 				$(ctrlid + '_param_1').value = '';
 				break;
 			case 'pasteword':
@@ -1153,20 +1271,29 @@ function showEditorMenu(tag, params) {
 				hideMenu('', 'win');
 				break;
 			default:
-				var first = $(ctrlid + '_param_1').value;
-				if($(ctrlid + '_param_2')) var second = $(ctrlid + '_param_2').value;
-				if($(ctrlid + '_param_3')) var third = $(ctrlid + '_param_3').value;
-				if((params == 1 && first) || (params == 2 && first && (haveSel || second)) || (params == 3 && first && second && (haveSel || third))) {
-					if(params == 1) {
-						str = first;
-					} else if(params == 2) {
-						str = haveSel ? selection : second;
-						opentag = '[' + tag + '=' + first + ']';
-					} else {
-						str = haveSel ? selection : third;
-						opentag = '[' + tag + '=' + first + ',' + second + ']';
+				for(i in EXTRAFUNC['showEditorMenu']) {
+					EXTRASELECTION= selection;
+					try {
+						eval('str = ' + EXTRAFUNC['showEditorMenu'][i] + '(\'' + tag + '\', 1)');
+					} catch(e) {}
+				}
+				if(!str) {
+					str = '';
+					var first = $(ctrlid + '_param_1').value;
+					if($(ctrlid + '_param_2')) var second = $(ctrlid + '_param_2').value;
+					if($(ctrlid + '_param_3')) var third = $(ctrlid + '_param_3').value;
+					if((params == 1 && first) || (params == 2 && first && (haveSel || second)) || (params == 3 && first && second && (haveSel || third))) {
+						if(params == 1) {
+							str = first;
+						} else if(params == 2) {
+							str = haveSel ? selection : second;
+							opentag = '[' + tag + '=' + first + ']';
+						} else {
+							str = haveSel ? selection : third;
+							opentag = '[' + tag + '=' + first + ',' + second + ']';
+						}
+						insertText((opentag + str + closetag), strlen(opentag), strlen(closetag), true, sel);
 					}
-					insertText((opentag + str + closetag), strlen(opentag), strlen(closetag), true, sel);
 				}
 				break;
 		}
@@ -1180,9 +1307,8 @@ function autoTypeset() {
 		sel = wysiwyg ? editdoc.selection.createRange() : document.selection.createRange();
 	}
 	var selection = sel ? (wysiwyg ? sel.htmlText.replace(/<\/?p>/ig, '<br />') : sel.text) : getSel();
-	selection = wysiwyg ? selection.replace(/<br[^\>]*>/ig, "\n") : selection.replace(/\r?\n/g, "\n");
 	selection = trim(selection);
-	selection = wysiwyg ? selection.replace(/\n\n+/g, '</p><p style="line-height: 30px; text-indent: 2em;">') : selection.replace(/\n/g, '[/p][p=30, 2, left]');
+	selection = wysiwyg ? selection.replace(/<br( \/)?>(<br( \/)?>)+/ig, '</p>\n<p style="line-height: 30px; text-indent: 2em;">') : selection.replace(/\n\n+/g, '[/p]\n[p=30, 2, left]');
 	opentag = wysiwyg ? '<p style="line-height: 30px; text-indent: 2em;">' : '[p=30, 2, left]';
 	var s = opentag + selection + (wysiwyg ? '</p>' : '[/p]');
 	insertText(s, strlen(opentag), 4, false, sel);
@@ -1256,6 +1382,12 @@ function insertText(text, movestart, moveend, select, sel) {
 		}
 	} else {
 		if(!isUndefined(editdoc.selectionStart)) {
+			if(editdoc._selectionStart) {
+				editdoc.selectionStart = editdoc._selectionStart;
+				editdoc.selectionEnd = editdoc._selectionEnd;
+				editdoc._selectionStart = 0;
+				editdoc._selectionEnd = 0;
+			}
 			var opn = editdoc.selectionStart + 0;
 			editdoc.value = editdoc.value.substr(0, editdoc.selectionStart) + text + editdoc.value.substr(editdoc.selectionEnd);
 

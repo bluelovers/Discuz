@@ -4,16 +4,20 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_misc.php 13309 2010-07-30 07:03:44Z liulanbo $
+ *      $Id: lang_misc.php 27449 2012-02-01 05:32:35Z zhangguosheng $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 $lang = array
 (
-	'group_normal_member' => 'è¨­ç‚ºæ™®é€šæˆå“¡',
-	'group_goaway' => 'è¸¢å‡ºç¾¤çµ„',
-	'group_demise_message_title' => "æŠŠ{$_G[setting][navs][3][navname]}{forum}æˆåŠŸè½‰è®“çµ¦ä½ äº†ã€‚",
-	'group_demise_message_body' => "æˆ‘çš„{$_G[setting][navs][3][navname]}{forum}æˆåŠŸè½‰è®“çµ¦ä½ äº†ï¼Œ[url={siteurl}forum.php?mod=group&fid={fid}]é»žé€™è£¡æŸ¥çœ‹{$_G[setting][navs][3][navname]}[/url]",
-	'group_join' => 'åŠ å…¥{groupname}ç¾¤çµ„',
+	'group_normal_member' => 'ÉèÎªÆÕÍ¨³ÉÔ±',
+	'group_goaway' => 'Ìß³öÈº×é',
+	'group_demise_message_title' => "°Ñ{$_G[setting][navs][3][navname]}{forum}³É¹¦×ªÈÃ¸øÄúÁË¡£",
+	'group_demise_message_body' => "ÎÒµÄ{$_G[setting][navs][3][navname]}{forum}³É¹¦×ªÈÃ¸øÄúÁË£¬[url={siteurl}forum.php?mod=group&fid={fid}]µãÕâÀï²é¿´{$_G[setting][navs][3][navname]}[/url]",
+	'group_join' => '¼ÓÈë{groupname}Èº×é',
 );
 
 ?>

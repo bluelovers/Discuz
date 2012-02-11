@@ -1,8 +1,8 @@
 /*
-	[Discuz!] (C)2001-2009 Comsenz Inc.
+	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: forum_post.js 22843 2011-05-25 09:39:50Z monkey $
+	$Id: forum_post.js 27410 2012-01-30 09:53:20Z zhengqingpeng $
 */
 
 var postSubmited = false;
@@ -15,19 +15,19 @@ var UPLOADWINRECALL = null;
 var imgexts = typeof imgexts == 'undefined' ? 'jpg, jpeg, gif, png, bmp' : imgexts;
 var ATTACHORIMAGE = '0';
 var STATUSMSG = {
-	'-1' : 'å…§éƒ¨æœå‹™å™¨éŒ¯èª¤',
-	'0' : 'ä¸Šå‚³æˆåŠŸ',
-	'1' : 'ä¸æ”¯æŒæ­¤é¡æ“´å±•å',
-	'2' : 'æœå‹™å™¨é™åˆ¶ç„¡æ³•ä¸Šå‚³é‚£éº¼å¤§çš„é™„ä»¶',
-	'3' : 'ç”¨æˆ¶çµ„é™åˆ¶ç„¡æ³•ä¸Šå‚³é‚£éº¼å¤§çš„é™„ä»¶',
-	'4' : 'ä¸æ”¯æŒæ­¤é¡æ“´å±•å',
-	'5' : 'æ–‡ä»¶é¡å‹é™åˆ¶ç„¡æ³•ä¸Šå‚³é‚£éº¼å¤§çš„é™„ä»¶',
-	'6' : 'ä»Šæ—¥ä½ å·²ç„¡æ³•ä¸Šå‚³æ›´å¤šçš„é™„ä»¶',
-	'7' : 'è«‹é¸æ“‡åœ–ç‰‡æ–‡ä»¶(' + imgexts + ')',
-	'8' : 'é™„ä»¶æ–‡ä»¶ç„¡æ³•ä¿å­˜',
-	'9' : 'æ²’æœ‰åˆæ³•çš„æ–‡ä»¶è¢«ä¸Šå‚³',
-	'10' : 'éæ³•æ“ä½œ',
-	'11' : 'ä»Šæ—¥ä½ å·²ç„¡æ³•ä¸Šå‚³é‚£éº¼å¤§çš„é™„ä»¶'
+	'-1' : 'ÄÚ²¿·şÎñÆ÷´íÎó',
+	'0' : 'ÉÏ´«³É¹¦',
+	'1' : '²»Ö§³Ö´ËÀàÀ©Õ¹Ãû',
+	'2' : '·şÎñÆ÷ÏŞÖÆÎŞ·¨ÉÏ´«ÄÇÃ´´óµÄ¸½¼ş',
+	'3' : 'ÓÃ»§×éÏŞÖÆÎŞ·¨ÉÏ´«ÄÇÃ´´óµÄ¸½¼ş',
+	'4' : '²»Ö§³Ö´ËÀàÀ©Õ¹Ãû',
+	'5' : 'ÎÄ¼şÀàĞÍÏŞÖÆÎŞ·¨ÉÏ´«ÄÇÃ´´óµÄ¸½¼ş',
+	'6' : '½ñÈÕÄúÒÑÎŞ·¨ÉÏ´«¸ü¶àµÄ¸½¼ş',
+	'7' : 'ÇëÑ¡ÔñÍ¼Æ¬ÎÄ¼ş(' + imgexts + ')',
+	'8' : '¸½¼şÎÄ¼şÎŞ·¨±£´æ',
+	'9' : 'Ã»ÓĞºÏ·¨µÄÎÄ¼ş±»ÉÏ´«',
+	'10' : '·Ç·¨²Ù×÷',
+	'11' : '½ñÈÕÄúÒÑÎŞ·¨ÉÏ´«ÄÇÃ´´óµÄ¸½¼ş'
 };
 
 EXTRAFUNC['validator'] = [];
@@ -55,8 +55,11 @@ function ctlent(event) {
 }
 
 function checklength(theform) {
-	var message = wysiwyg ? html2bbcode(getEditorContents()) : (!theform.parseurloff.checked ? parseurl(theform.message.value) : theform.message.value);
-	showDialog('ç•¶å‰é•·åº¦: ' + mb_strlen(message) + ' å­—ç¯€ï¼Œ' + (postmaxchars != 0 ? 'ç³»çµ±é™åˆ¶: ' + postminchars + ' åˆ° ' + postmaxchars + ' å­—ç¯€ã€‚' : ''), 'notice', 'å­—æ•¸æª¢æŸ¥');
+	var message = wysiwyg ? html2bbcode(getEditorContents()) : theform.message.value;
+	if(!theform.parseurloff.checked) {
+		message = parseurl(message);
+	}
+	showDialog('µ±Ç°³¤¶È: ' + mb_strlen(message) + ' ×Ö½Ú£¬' + (postmaxchars != 0 ? 'ÏµÍ³ÏŞÖÆ: ' + postminchars + ' µ½ ' + postmaxchars + ' ×Ö½Ú¡£' : ''), 'notice', '×ÖÊı¼ì²é');
 }
 
 if(!tradepost) {
@@ -64,25 +67,26 @@ if(!tradepost) {
 }
 
 function validate(theform) {
-	var message = wysiwyg ? html2bbcode(getEditorContents()) : (!theform.parseurloff.checked ? parseurl(theform.message.value) : theform.message.value);
+	var message = wysiwyg ? html2bbcode(getEditorContents()) : theform.message.value;
+	if(!theform.parseurloff.checked) {
+		message = parseurl(message);
+	}
 	if(($('postsubmit').name != 'replysubmit' && !($('postsubmit').name == 'editsubmit' && !isfirstpost) && theform.subject.value == "") || !sortid && !special && trim(message) == "") {
-		showError('æŠ±æ­‰ï¼Œæ‚¨å°šæœªè¼¸å…¥æ¨™é¡Œæˆ–å…§å®¹');
+		showError('±§Ç¸£¬ÄúÉĞÎ´ÊäÈë±êÌâ»òÄÚÈİ');
 		return false;
 	} else if(mb_strlen(theform.subject.value) > 80) {
-		showError('æ‚¨çš„æ¨™é¡Œè¶…é 80 å€‹å­—ç¬¦çš„é™åˆ¶');
+		showError('ÄúµÄ±êÌâ³¬¹ı 80 ¸ö×Ö·ûµÄÏŞÖÆ');
 		return false;
 	}
 	if(ispicstyleforum == 1 && ATTACHORIMAGE == 0 && isfirstpost) {
-		showError('å¸–åœ–ç‰ˆå¡Šè‡³å°‘æ‡‰ä¸Šå‚³ä¸€å¼µåœ–ç‰‡ä½œç‚ºå°é¢');
-		return false;
 	}
 	if(in_array($('postsubmit').name, ['topicsubmit', 'editsubmit'])) {
 		if(theform.typeid && (theform.typeid.options && theform.typeid.options[theform.typeid.selectedIndex].value == 0) && typerequired) {
-			showError('è«‹é¸æ“‡ä¸»é¡Œå°æ‡‰çš„åˆ†é¡');
+			showError('ÇëÑ¡ÔñÖ÷Ìâ¶ÔÓ¦µÄ·ÖÀà');
 			return false;
 		}
 		if(theform.sortid && (theform.sortid.options && theform.sortid.options[theform.sortid.selectedIndex].value == 0) && sortrequired) {
-			showError('è«‹é¸æ“‡ä¸»é¡Œå°æ‡‰çš„åˆ†é¡ä¿¡æ¯');
+			showError('ÇëÑ¡ÔñÖ÷Ìâ¶ÔÓ¦µÄ·ÖÀàĞÅÏ¢');
 			return false;
 		}
 	}
@@ -96,17 +100,22 @@ function validate(theform) {
 	}
 
 	if(!disablepostctrl && !sortid && !special && ((postminchars != 0 && mb_strlen(message) < postminchars) || (postmaxchars != 0 && mb_strlen(message) > postmaxchars))) {
-		showError('æ‚¨çš„å¸–å­é•·åº¦ä¸ç¬¦åˆè¦æ±‚ã€‚\n\nç•¶å‰é•·åº¦: ' + mb_strlen(message) + ' å­—ç¯€\nç³»çµ±é™åˆ¶: ' + postminchars + ' åˆ° ' + postmaxchars + ' å­—ç¯€');
+		showError('ÄúµÄÌû×Ó³¤¶È²»·ûºÏÒªÇó¡£\n\nµ±Ç°³¤¶È: ' + mb_strlen(message) + ' ×Ö½Ú\nÏµÍ³ÏŞÖÆ: ' + postminchars + ' µ½ ' + postmaxchars + ' ×Ö½Ú');
 		return false;
 	}
 	if(UPLOADSTATUS == 0) {
-		if(!confirm('æ‚¨æœ‰ç­‰å¾…ä¸Šå‚³çš„é™„ä»¶ï¼Œç¢ºèªä¸ä¸Šå‚³é€™äº›é™„ä»¶å—ï¼Ÿ')) {
+		if(!confirm('ÄúÓĞµÈ´ıÉÏ´«µÄ¸½¼ş£¬È·ÈÏ²»ÉÏ´«ÕâĞ©¸½¼şÂğ£¿')) {
 			return false;
 		}
 	} else if(UPLOADSTATUS == 1) {
-		showDialog('æ‚¨æœ‰æ­£åœ¨ä¸Šå‚³çš„é™„ä»¶ï¼Œè«‹ç¨å€™ï¼Œä¸Šå‚³å®Œæˆå¾Œå¸–å­å°‡æœƒè‡ªå‹•ç™¼è¡¨...', 'notice');
+		showDialog('ÄúÓĞÕıÔÚÉÏ´«µÄ¸½¼ş£¬ÇëÉÔºò£¬ÉÏ´«Íê³ÉºóÌû×Ó½«»á×Ô¶¯·¢±í...', 'notice');
 		AUTOPOST = 1;
 		return false;
+	}
+	if(isfirstpost && $('adddynamic') != null && $('adddynamic').checked && isNaN(parseInt($('postsave').value)) && ($('readperm') != null && $('readperm').value || $('price') != null && $('price').value)) {
+		if(confirm('ÓÉÓÚÄúÉèÖÃÁËÔÄ¶ÁÈ¨ÏŞ»ò³öÊÛÌû£¬ÄúÈ·ÈÏ»¹×ª²¥¸øÄúµÄÌıÖÚ¿´Âğ£¿') == false) {
+			return false;
+		}
 	}
 	if($(editorid + '_attachlist')) {
 		$('postbox').appendChild($(editorid + '_attachlist'));
@@ -129,7 +138,7 @@ function validate(theform) {
 					setTimeout(function () { validate(theform); }, 100);
 					chk = 0;
 				} else if(chkv.indexOf('check_right') == -1) {
-					showError('é©—è­‰å•ç­”éŒ¯èª¤ï¼Œè«‹é‡æ–°å¡«å¯«');
+					showError('ÑéÖ¤ÎÊ´ğ´íÎó£¬ÇëÖØĞÂÌîĞ´');
 					chk = 0;
 				}
 			}
@@ -139,7 +148,7 @@ function validate(theform) {
 					setTimeout(function () { validate(theform); }, 100);
 					chk = 0;
 				} else if(chkv.indexOf('check_right') === -1) {
-					showError('é©—è­‰ç¢¼éŒ¯èª¤ï¼Œè«‹é‡æ–°å¡«å¯«');
+					showError('ÑéÖ¤Âë´íÎó£¬ÇëÖØĞÂÌîĞ´');
 					chk = 0;
 				}
 			}
@@ -196,11 +205,11 @@ function uploadNextAttach() {
 	var att = CURRENTATTACH.split('|');
 	var sizelimit = '';
 	if(arr[4] == 'ban') {
-		sizelimit = '(é™„ä»¶é¡å‹è¢«ç¦æ­¢)';
+		sizelimit = '(¸½¼şÀàĞÍ±»½ûÖ¹)';
 	} else if(arr[4] == 'perday') {
-		sizelimit = '(ä¸èƒ½è¶…é ' + arr[5] + ' å­—ç¯€)';
+		sizelimit = '(²»ÄÜ³¬¹ı ' + arr[5] + ' ×Ö½Ú)';
 	} else if(arr[4] > 0) {
-		sizelimit = '(ä¸èƒ½è¶…é ' + arr[4] + ' å­—ç¯€)';
+		sizelimit = '(²»ÄÜ³¬¹ı ' + arr[4] + ' ×Ö½Ú)';
 	}
 	uploadAttach(parseInt(att[0]), arr[0] == 'DISCUZUPLOAD' ? parseInt(arr[1]) : -1, att[1], sizelimit);
 }
@@ -239,7 +248,7 @@ function uploadAttach(curId, statusid, prefix, sizelimit) {
 				updateAttachList();
 			}
 			if(UPLOADFAILED > 0) {
-				showDialog('é™„ä»¶ä¸Šå‚³å®Œæˆï¼æˆåŠŸ ' + UPLOADCOMPLETE + ' å€‹ï¼Œå¤±æ•— ' + UPLOADFAILED + ' å€‹:' + FAILEDATTACHS);
+				showDialog('¸½¼şÉÏ´«Íê³É£¡³É¹¦ ' + UPLOADCOMPLETE + ' ¸ö£¬Ê§°Ü ' + UPLOADFAILED + ' ¸ö:' + FAILEDATTACHS);
 				FAILEDATTACHS = '';
 			}
 			UPLOADSTATUS = 2;
@@ -254,7 +263,7 @@ function uploadAttach(curId, statusid, prefix, sizelimit) {
 				hideMenu();
 				validate($('postform'));
 			} else if(UPLOADFAILED == 0 && (prefix == 'img' || prefix == '')) {
-				showDialog('é™„ä»¶ä¸Šå‚³å®Œæˆï¼', 'right', null, null, 0, null, null, null, null, 3);
+				showDialog('¸½¼şÉÏ´«Íê³É£¡', 'right', null, null, 0, null, null, null, null, 3);
 			}
 			UPLOADFAILED = UPLOADCOMPLETE = 0;
 			CURRENTATTACH = '0';
@@ -265,7 +274,7 @@ function uploadAttach(curId, statusid, prefix, sizelimit) {
 		$(prefix + 'uploadbtn').style.display = 'none';
 		$(prefix + 'uploading').style.display = '';
 	}
-	$(prefix + 'cpdel_' + nextId).innerHTML = '<img src="' + IMGDIR + '/loading.gif" alt="ä¸Šå‚³ä¸­..." />';
+	$(prefix + 'cpdel_' + nextId).innerHTML = '<img src="' + IMGDIR + '/loading.gif" alt="ÉÏ´«ÖĞ..." />';
 	UPLOADSTATUS = 1;
 	$(prefix + 'attachform_' + nextId).submit();
 }
@@ -279,7 +288,7 @@ function addAttach(prefix) {
 	for(i in tags) {
 		if(tags[i].name == 'Filedata') {
 			tags[i].id = prefix + 'attachnew_' + id;
-			tags[i].onchange = function() {insertAttach(prefix, id)};
+			tags[i].onchange = function() {insertAttach(prefix, id);};
 			tags[i].unselectable = 'on';
 		} else if(tags[i].name == 'attachid') {
 			tags[i].value = id;
@@ -313,7 +322,6 @@ function addAttach(prefix) {
 }
 
 function insertAttach(prefix, id) {
-	var localimgpreview = '';
 	var path = $(prefix + 'attachnew_' + id).value;
 	var extpos = path.lastIndexOf('.');
 	var ext = extpos == -1 ? '' : path.substr(extpos + 1, path.length).toLowerCase();
@@ -326,16 +334,16 @@ function insertAttach(prefix, id) {
 	}
 	if(extensions != '' && (re.exec(extensions) == null || ext == '')) {
 		reAddAttach(prefix, id);
-		showError('å°ä¸èµ·ï¼Œä¸æ”¯æŒä¸Šå‚³æ­¤é¡æ“´å±•åçš„é™„ä»¶ã€‚');
+		showError('¶Ô²»Æğ£¬²»Ö§³ÖÉÏ´«´ËÀàÀ©Õ¹ÃûµÄ¸½¼ş¡£');
 		return;
 	}
 	if(prefix == 'img' && imgexts.indexOf(ext) == -1) {
 		reAddAttach(prefix, id);
-		showError('è«‹é¸æ“‡åœ–ç‰‡æ–‡ä»¶(' + imgexts + ')');
+		showError('ÇëÑ¡ÔñÍ¼Æ¬ÎÄ¼ş(' + imgexts + ')');
 		return;
 	}
 
-	$(prefix + 'cpdel_' + id).innerHTML = '<a href="javascript:;" class="d" onclick="reAddAttach(\'' + prefix + '\', ' + id + ')">åˆªé™¤</a>';
+	$(prefix + 'cpdel_' + id).innerHTML = '<a href="javascript:;" class="d" onclick="reAddAttach(\'' + prefix + '\', ' + id + ')">É¾³ı</a>';
 	$(prefix + 'localfile_' + id).innerHTML = '<span>' + filename + '</span>';
 	$(prefix + 'attachnew_' + id).style.display = 'none';
 	$(prefix + 'deschidden_' + id).style.display = '';
@@ -397,7 +405,7 @@ function appendAttachDel(ids) {
 		aids += '&aids[]=' + id;
 	}
 	var x = new Ajax();
-	x.get('forum.php?mod=ajax&action=deleteattach&inajax=yes&tid=' + (typeof tid == 'undefined' ? 0 : tid) + '&pid=' + (typeof pid == 'undefined' ? 0 : pid) + aids, function() {});
+	x.get('forum.php?mod=ajax&action=deleteattach&inajax=yes&tid=' + (typeof tid == 'undefined' ? 0 : tid) + '&pid=' + (typeof pid == 'undefined' ? 0 : pid) + aids + ($('modthreadkey') ? '&modthreadkey=' + $('modthreadkey').value : ''), function() {});
 	if($('delattachop')) {
 		$('delattachop').value = 1;
 	}
@@ -408,7 +416,7 @@ function updateAttach(aid) {
 	obj = $('attach' + aid);
 	if(!objupdate.innerHTML) {
 		obj.style.display = 'none';
-		objupdate.innerHTML = '<input type="file" name="attachupdate[paid' + aid + ']"><a href="javascript:;" onclick="updateAttach(' + aid + ')">å–æ¶ˆ</a>';
+		objupdate.innerHTML = '<input type="file" name="attachupdate[paid' + aid + ']"><a href="javascript:;" onclick="updateAttach(' + aid + ')">È¡Ïû</a>';
 	} else {
 		obj.style.display = '';
 		objupdate.innerHTML = '';
@@ -421,7 +429,7 @@ function updateattachnum(type) {
 	var num = ATTACHNUM[type + 'used'] + ATTACHNUM[type + 'unused'];
 	if(num) {
 		if($(editorid + '_' + type)) {
-			$(editorid + '_' + type).title = 'åŒ…å« ' + num + (type == 'image' ? ' å€‹åœ–ç‰‡é™„ä»¶' : ' å€‹é™„ä»¶');
+			$(editorid + '_' + type).title = '°üº¬ ' + num + (type == 'image' ? ' ¸öÍ¼Æ¬¸½¼ş' : ' ¸ö¸½¼ş');
 		}
 		if($(editorid + '_' + type + 'n')) {
 			$(editorid + '_' + type + 'n').style.display = '';
@@ -429,7 +437,7 @@ function updateattachnum(type) {
 		ATTACHORIMAGE = 1;
 	} else {
 		if($(editorid + '_' + type)) {
-			$(editorid + '_' + type).title = type == 'image' ? 'åœ–ç‰‡' : 'é™„ä»¶';
+			$(editorid + '_' + type).title = type == 'image' ? 'Í¼Æ¬' : '¸½¼ş';
 		}
 		if($(editorid + '_' + type + 'n')) {
 			$(editorid + '_' + type + 'n').style.display = 'none';
@@ -459,11 +467,11 @@ function updateImageList(action, aids) {
 
 function updateDownImageList(msg) {
 	if(msg == '') {
-		showError('æŠ±æ­‰ï¼Œæš«ç„¡é ç¨‹é™„ä»¶');
+		showError('±§Ç¸£¬ÔİÎŞÔ¶³Ì¸½¼ş');
 	} else {
 		ajaxget('forum.php?mod=ajax&action=imagelist&pid=' + pid + '&posttime=' + $('posttime').value + (!fid ? '' : '&fid=' + fid), 'imgattachlist', null, null, null, function(){if(wysiwyg) {editdoc.body.innerHTML = msg;switchEditor(0);switchEditor(1)} else {textobj.value = msg;}});
 		switchImagebutton('imgattachlist');$('imgattach_notice').style.display = '';
-		showDialog('é ç¨‹é™„ä»¶ä¸‹è¼‰å®Œæˆ!', 'right', null, null, 0, null, null, null, null, 3);
+		showDialog('Ô¶³Ì¸½¼şÏÂÔØÍê³É!', 'right', null, null, 0, null, null, null, null, 3);
 	}
 }
 
@@ -506,11 +514,11 @@ function uploadWindowload() {
 	} else {
 		var sizelimit = '';
 		if(arr[7] == 'ban') {
-			sizelimit = '(é™„ä»¶é¡å‹è¢«ç¦æ­¢)';
+			sizelimit = '(¸½¼şÀàĞÍ±»½ûÖ¹)';
 		} else if(arr[7] == 'perday') {
-			sizelimit = '(ä¸èƒ½è¶…é ' + arr[8] + ' å­—ç¯€)';
+			sizelimit = '(²»ÄÜ³¬¹ı ' + arr[8] + ' ×Ö½Ú)';
 		} else if(arr[7] > 0) {
-			sizelimit = '(ä¸èƒ½è¶…é ' + arr[7] + ' å­—ç¯€)';
+			sizelimit = '(²»ÄÜ³¬¹ı ' + arr[7] + ' ×Ö½Ú)';
 		}
 		showError(STATUSMSG[arr[2]] + sizelimit);
 	}
@@ -599,7 +607,7 @@ function addpolloption() {
 		$('polloption_new').outerHTML = '<p>' + $('polloption_hidden').innerHTML + '</p>' + $('polloption_new').outerHTML;
 		curoptions++;
 	} else {
-		$('polloption_new').outerHTML = '<span>å·²é”åˆ°æœ€å¤§æŠ•ç¥¨æ•¸'+maxoptions+'</span>';
+		$('polloption_new').outerHTML = '<span>ÒÑ´ïµ½×î´óÍ¶Æ±Êı'+maxoptions+'</span>';
 	}
 }
 
@@ -617,7 +625,7 @@ function insertsave(pid) {
 
 function userdataoption(op) {
 	if(!op) {
-		saveUserdata('forum', '');
+		saveUserdata('forum_'+discuz_uid, '');
 		display('rstnotice');
 	} else {
 		loadData();
@@ -649,14 +657,22 @@ function attachoption(type, op) {
 			if(type == 'attach') {
 				updateAttachList(1, aids);
 			} else {
+				list = $('imgattachlist').getElementsByTagName('TD');
+				re = /^image\_td\_(\d+)$/;
+				for(i = 0;i < list.length;i++) {
+					var matches = re.exec(list[i].id);
+					if(matches != null) {
+						aids += '|' + matches[1];
+					}
+				}
 				updateImageList(1, aids);
 			}
 		}
 		display('attachnotice_' + type);
 	} else if(op == 2) {
 		showDialog('<div id="unusedwin" class="c altw" style="overflow:auto;height:100px;">' + $('unusedlist_' + type).innerHTML + '</div>' +
-			'<p class="o pns"><span class="z xg1"><label for="unusedwinchkall"><input id="unusedwinchkall" type="checkbox" onclick="attachoption(\'' + type + '\', 3)" checked="checked" />å…¨é¸</label></span>' +
-			'<button onclick="attachoption(\'' + type + '\', 1);hideMenu(\'fwin_dialog\', \'dialog\')" class="pn pnc"><strong>ç¢ºå®š</strong></button></p>', 'info', 'æœªä½¿ç”¨çš„' + (type == 'attach' ? 'é™„ä»¶' : 'åœ–ç‰‡'));
+			'<p class="o pns"><span class="z xg1"><label for="unusedwinchkall"><input id="unusedwinchkall" type="checkbox" onclick="attachoption(\'' + type + '\', 3)" checked="checked" />È«Ñ¡</label></span>' +
+			'<button onclick="attachoption(\'' + type + '\', 1);hideMenu(\'fwin_dialog\', \'dialog\')" class="pn pnc"><strong>Ê¹ÓÃ</strong></button></p>', 'info', 'Î´Ê¹ÓÃµÄ' + (type == 'attach' ? '¸½¼ş' : 'Í¼Æ¬'));
 	} else if(op == 3) {
 		list = $('unusedwin').getElementsByTagName('INPUT');
 		for(i = 0;i < list.length;i++) {
@@ -688,7 +704,7 @@ function insertAllAttachTag() {
 			var attach = attachListObj[i];
 			var ids = attach.id.split('_');
 			if(ids[0] == 'attach') {
-				if($('attachname'+ids[1])) {
+				if($('attachname'+ids[1]) && attach.style.display != 'none') {
 					if(parseInt($('attachname'+ids[1]).getAttribute('isimage'))) {
 						insertAttachimgTag(ids[1]);
 					} else {
@@ -755,6 +771,8 @@ function extraCheck(op) {
 		$('extra_rushreplyset_chk').className = $('rushreply').checked ? 'a' : '';
 	} else if(op == 4 && $('tags')) {
 		$('extra_tag_chk').className = $('tags').value !== '' ? 'a' : '';
+	} else if(op == 5 && $('cronpublish')) {
+		$('extra_pubdate_chk').className = $('cronpublish').checked ? 'a' : '';
 	}
 }
 
@@ -772,10 +790,10 @@ function getreplycredit() {
 	var reply_credits_sum = Math.ceil(parseInt(credit_once * times));
 
 	if(real_reply_credit > userextcredit) {
-		$('replycredit').innerHTML = '<b class="xi1">å›å¸–çå‹µç©åˆ†ç¸½é¡éå¤§('+real_reply_credit+')</b>';
+		$('replycredit').innerHTML = '<b class="xi1">»ØÌû½±Àø»ı·Ö×Ü¶î¹ı´ó('+real_reply_credit+')</b>';
 	} else {
 		if(have_replycredit > 0 && real_reply_credit < 0) {
-			$('replycredit').innerHTML = "<font class='xi1'>è¿”é‚„"+Math.abs(real_reply_credit)+"</font>";
+			$('replycredit').innerHTML = "<font class='xi1'>·µ»¹"+Math.abs(real_reply_credit)+"</font>";
 		} else {
 			$('replycredit').innerHTML = replycredit_result_lang + (real_reply_credit > 0 ? real_reply_credit : 0 );
 		}
@@ -790,7 +808,7 @@ function extraCheckall() {
 }
 
 function deleteThread() {
-	if(confirm('ç¢ºå®šè¦åˆªé™¤è©²å¸–å­å—ï¼Ÿ') != 0){
+	if(confirm('È·¶¨ÒªÉ¾³ı¸ÃÌû×ÓÂğ£¿') != 0){
 		$('delete').value = '1';
 		$('postform').submit();
 	}

@@ -4,39 +4,39 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: config_global_default.php 23921 2011-08-16 09:18:28Z cnteacher $
+ *      $Id: config_global_default.php 26118 2011-12-02 04:17:58Z monkey $
  */
 
 $_config = array();
 
 // ----------------------------  CONFIG DB  ----------------------------- //
-// ----------------------------  æ•¸æ“šåº«ç›¸é—œè¨­ç½®---------------------------- //
+// ----------------------------  Êý¾Ý¿âÏà¹ØÉèÖÃ---------------------------- //
 
 /**
- * æ•¸æ“šåº«ä¸»æœå‹™å™¨è¨­ç½®, æ”¯æŒå¤šçµ„æœå‹™å™¨è¨­ç½®, ç•¶è¨­ç½®å¤šçµ„æœå‹™å™¨æ™‚, å‰‡æœƒæ ¹æ“šåˆ†ä½ˆå¼ç­–ç•¥ä½¿ç”¨æŸå€‹æœå‹™å™¨
+ * Êý¾Ý¿âÖ÷·þÎñÆ÷ÉèÖÃ, Ö§³Ö¶à×é·þÎñÆ÷ÉèÖÃ, µ±ÉèÖÃ¶à×é·þÎñÆ÷Ê±, Ôò»á¸ù¾Ý·Ö²¼Ê½²ßÂÔÊ¹ÓÃÄ³¸ö·þÎñÆ÷
  * @example
- * $_config['db']['1']['dbhost'] = 'localhost'; // æœå‹™å™¨åœ°å€
- * $_config['db']['1']['dbuser'] = 'root'; // ç”¨æˆ¶
- * $_config['db']['1']['dbpw'] = 'root';// å¯†ç¢¼
- * $_config['db']['1']['dbcharset'] = 'gbk';// å­—ç¬¦é›†
- * $_config['db']['1']['pconnect'] = '0';// æ˜¯å¦æŒçºŒé€£æŽ¥
- * $_config['db']['1']['dbname'] = 'x1';// æ•¸æ“šåº«
- * $_config['db']['1']['tablepre'] = 'pre_';// è¡¨åå‰ç¶´
+ * $_config['db']['1']['dbhost'] = 'localhost'; // ·þÎñÆ÷µØÖ·
+ * $_config['db']['1']['dbuser'] = 'root'; // ÓÃ»§
+ * $_config['db']['1']['dbpw'] = 'root';// ÃÜÂë
+ * $_config['db']['1']['dbcharset'] = 'gbk';// ×Ö·û¼¯
+ * $_config['db']['1']['pconnect'] = '0';// ÊÇ·ñ³ÖÐøÁ¬½Ó
+ * $_config['db']['1']['dbname'] = 'x1';// Êý¾Ý¿â
+ * $_config['db']['1']['tablepre'] = 'pre_';// ±íÃûÇ°×º
  *
  * $_config['db']['2']['dbhost'] = 'localhost';
  * ...
  *
  */
-$_config['db'][1]['dbhost']  		= 'localhost';		
-$_config['db'][1]['dbuser']  		= 'root';		
-$_config['db'][1]['dbpw'] 	 	= 'root';		
-$_config['db'][1]['dbcharset'] 		= 'utf8';		
-$_config['db'][1]['pconnect'] 		= 0;			
-$_config['db'][1]['dbname']  		= 'ultrax';		
-$_config['db'][1]['tablepre'] 		= 'pre_';		
+$_config['db'][1]['dbhost']  		= 'localhost';
+$_config['db'][1]['dbuser']  		= 'root';
+$_config['db'][1]['dbpw'] 	 	= 'root';
+$_config['db'][1]['dbcharset'] 		= 'gbk';
+$_config['db'][1]['pconnect'] 		= 0;
+$_config['db'][1]['dbname']  		= 'ultrax';
+$_config['db'][1]['tablepre'] 		= 'pre_';
 
 /**
- * æ•¸æ“šåº«å¾žæœå‹™å™¨è¨­ç½®( slave, åªè®€ ), æ”¯æŒå¤šçµ„æœå‹™å™¨è¨­ç½®, ç•¶è¨­ç½®å¤šçµ„æœå‹™å™¨æ™‚, ç³»çµ±æ¯æ¬¡éš¨æ©Ÿä½¿ç”¨
+ * Êý¾Ý¿â´Ó·þÎñÆ÷ÉèÖÃ( slave, Ö»¶Á ), Ö§³Ö¶à×é·þÎñÆ÷ÉèÖÃ, µ±ÉèÖÃ¶à×é·þÎñÆ÷Ê±, ÏµÍ³Ã¿´ÎËæ»úÊ¹ÓÃ
  * @example
  * $_config['db']['slave']['1']['dbhost'] = 'localhost';
  * $_config['db']['slave']['1']['dbuser'] = 'root';
@@ -48,120 +48,123 @@ $_config['db'][1]['tablepre'] 		= 'pre_';
  *
  * $_config['db']['slave']['2']['dbhost'] = 'localhost';
  * ...
- * 
+ *
  */
 $_config['db']['slave'] = array();
 
 /**
- * æ•¸æ“šåº« åˆ†ä½ˆéƒ¨ç½²ç­–ç•¥è¨­ç½®
+ * Êý¾Ý¿â ·Ö²¼²¿Êð²ßÂÔÉèÖÃ
  *
- * @example å°‡ common_member éƒ¨ç½²åˆ°ç¬¬äºŒæœå‹™å™¨, common_session éƒ¨ç½²åœ¨ç¬¬ä¸‰æœå‹™å™¨, å‰‡è¨­ç½®ç‚º
+ * @example ½« common_member ²¿Êðµ½µÚ¶þ·þÎñÆ÷, common_session ²¿ÊðÔÚµÚÈý·þÎñÆ÷, ÔòÉèÖÃÎª
  * $_config['db']['map']['common_member'] = 2;
  * $_config['db']['map']['common_session'] = 3;
  *
- * å°æ–¼æ²’æœ‰æ˜Žç¢ºè²æ˜Žæœå‹™å™¨çš„è¡¨, å‰‡ä¸€å¾‹é»˜èªéƒ¨ç½²åœ¨ç¬¬ä¸€æœå‹™å™¨ä¸Š
+ * ¶ÔÓÚÃ»ÓÐÃ÷È·ÉùÃ÷·þÎñÆ÷µÄ±í, ÔòÒ»ÂÉÄ¬ÈÏ²¿ÊðÔÚµÚÒ»·þÎñÆ÷ÉÏ
  *
  */
 $_config['db']['map'] = array();
 
 /**
- * æ•¸æ“šåº« å…¬å…±è¨­ç½®, æ­¤é¡žè¨­ç½®é€šå¸¸å°é‡å°æ¯å€‹éƒ¨ç½²çš„æœå‹™å™¨
+ * Êý¾Ý¿â ¹«¹²ÉèÖÃ, ´ËÀàÉèÖÃÍ¨³£¶ÔÕë¶ÔÃ¿¸ö²¿ÊðµÄ·þÎñÆ÷
  */
 $_config['db']['common'] = array();
 
 /**
- *  ç¦ç”¨å¾žæ•¸æ“šåº«çš„æ•¸æ“šè¡¨, è¡¨åå­—ä¹‹é–“ä½¿ç”¨é€—è™Ÿåˆ†å‰²
+ *  ½ûÓÃ´ÓÊý¾Ý¿âµÄÊý¾Ý±í, ±íÃû×ÖÖ®¼äÊ¹ÓÃ¶ººÅ·Ö¸î
  *
- * @example common_session, common_member é€™å…©å€‹è¡¨åƒ…å¾žä¸»æœå‹™å™¨è®€å¯«, ä¸ä½¿ç”¨å¾žæœå‹™å™¨
+ * @example common_session, common_member ÕâÁ½¸ö±í½ö´ÓÖ÷·þÎñÆ÷¶ÁÐ´, ²»Ê¹ÓÃ´Ó·þÎñÆ÷
  * $_config['db']['common']['slave_except_table'] = 'common_session, common_member';
  *
  */
 $_config['db']['common']['slave_except_table'] = '';
 
 /**
- * å…§å­˜æœå‹™å™¨å„ªåŒ–è¨­ç½®
- * ä»¥ä¸‹è¨­ç½®éœ€è¦PHPæ“´å±•çµ„ä»¶æ”¯æŒï¼Œå…¶ä¸­ memcache å„ªå…ˆæ–¼å…¶ä»–è¨­ç½®ï¼Œ
- * ç•¶ memcache ç„¡æ³•å•Ÿç”¨æ™‚ï¼Œæœƒè‡ªå‹•é–‹å•Ÿå¦å¤–çš„å…©ç¨®å„ªåŒ–æ¨¡å¼
+ * ÄÚ´æ·þÎñÆ÷ÓÅ»¯ÉèÖÃ
+ * ÒÔÏÂÉèÖÃÐèÒªPHPÀ©Õ¹×é¼þÖ§³Ö£¬ÆäÖÐ memcache ÓÅÏÈÓÚÆäËûÉèÖÃ£¬
+ * µ± memcache ÎÞ·¨ÆôÓÃÊ±£¬»á×Ô¶¯¿ªÆôÁíÍâµÄÁ½ÖÖÓÅ»¯Ä£Ê½
  */
 
-//å…§å­˜è®Šé‡å‰ç¶´, å¯æ›´æ”¹,é¿å…åŒæœå‹™å™¨ä¸­çš„ç¨‹åºå¼•ç”¨éŒ¯äº‚
+//ÄÚ´æ±äÁ¿Ç°×º, ¿É¸ü¸Ä,±ÜÃâÍ¬·þÎñÆ÷ÖÐµÄ³ÌÐòÒýÓÃ´íÂÒ
 $_config['memory']['prefix'] = 'discuz_';
 
-$_config['memory']['eaccelerator'] = 1;					// å•Ÿå‹•å° eaccelerator çš„æ”¯æŒ
-$_config['memory']['apc'] = 1;							// å•Ÿå‹•å° apc çš„æ”¯æŒ
-$_config['memory']['xcache'] = 1;						// å•Ÿå‹•å° xcache çš„æ”¯æŒ
-$_config['memory']['memcache']['server'] = '';			// memcache æœå‹™å™¨åœ°å€
-$_config['memory']['memcache']['port'] = 11211;			// memcache æœå‹™å™¨ç«¯å£
-$_config['memory']['memcache']['pconnect'] = 1;			// memcache æ˜¯å¦é•·ä¹…é€£æŽ¥
-$_config['memory']['memcache']['timeout'] = 1;			// memcache æœå‹™å™¨é€£æŽ¥è¶…æ™‚
+$_config['memory']['eaccelerator'] = 1;					// Æô¶¯¶Ô eaccelerator µÄÖ§³Ö
+$_config['memory']['apc'] = 1;							// Æô¶¯¶Ô apc µÄÖ§³Ö
+$_config['memory']['xcache'] = 1;						// Æô¶¯¶Ô xcache µÄÖ§³Ö
+$_config['memory']['memcache']['server'] = '';			// memcache ·þÎñÆ÷µØÖ·
+$_config['memory']['memcache']['port'] = 11211;			// memcache ·þÎñÆ÷¶Ë¿Ú
+$_config['memory']['memcache']['pconnect'] = 1;			// memcache ÊÇ·ñ³¤¾ÃÁ¬½Ó
+$_config['memory']['memcache']['timeout'] = 1;			// memcache ·þÎñÆ÷Á¬½Ó³¬Ê±
 
-// æœå‹™å™¨ç›¸é—œè¨­ç½®
-$_config['server']['id']		= 1;			// æœå‹™å™¨ç·¨è™Ÿï¼Œå¤šwebserverçš„æ™‚å€™ï¼Œç”¨æ–¼æ¨™è­˜ç•¶å‰æœå‹™å™¨çš„ID
+// ·þÎñÆ÷Ïà¹ØÉèÖÃ
+$_config['server']['id']		= 1;			// ·þÎñÆ÷±àºÅ£¬¶àwebserverµÄÊ±ºò£¬ÓÃÓÚ±êÊ¶µ±Ç°·þÎñÆ÷µÄID
 
-// é™„ä»¶ä¸‹è¼‰ç›¸é—œ
-// 
-// æœ¬åœ°æ–‡ä»¶è®€å–æ¨¡å¼; æ¨¡å¼2ç‚ºæœ€ç¯€çœå…§å­˜æ–¹å¼ï¼Œä½†ä¸æ”¯æŒå¤šç·šç¨‹ä¸‹è¼‰
+// ¸½¼þÏÂÔØÏà¹Ø
+//
+// ±¾µØÎÄ¼þ¶ÁÈ¡Ä£Ê½; Ä£Ê½2Îª×î½ÚÊ¡ÄÚ´æ·½Ê½£¬µ«²»Ö§³Ö¶àÏß³ÌÏÂÔØ
 // 1=fread 2=readfile 3=fpassthru 4=fpassthru+multiple
-$_config['download']['readmod'] = 2;				
+$_config['download']['readmod'] = 2;
 
-// æ˜¯å¦å•Ÿç”¨ X-Sendfile åŠŸèƒ½ï¼ˆéœ€è¦æœå‹™å™¨æ”¯æŒï¼‰0=close 1=nginx 2=lighttpd 3=apache
+// ÊÇ·ñÆôÓÃ X-Sendfile ¹¦ÄÜ£¨ÐèÒª·þÎñÆ÷Ö§³Ö£©0=close 1=nginx 2=lighttpd 3=apache
 $_config['download']['xsendfile']['type'] = 0;
 
-// å•Ÿç”¨ nginx X-sendfile æ™‚ï¼Œè«–å£‡é™„ä»¶ç›®éŒ„çš„è™›æ“¬æ˜ å°„è·¯å¾‘ï¼Œè«‹ä½¿ç”¨ / çµå°¾
-$_config['download']['xsendfile']['dir'] = '/down/';		
+// ÆôÓÃ nginx X-sendfile Ê±£¬ÂÛÌ³¸½¼þÄ¿Â¼µÄÐéÄâÓ³ÉäÂ·¾¶£¬ÇëÊ¹ÓÃ / ½áÎ²
+$_config['download']['xsendfile']['dir'] = '/down/';
 
 //  CONFIG CACHE
-$_config['cache']['type'] 			= 'sql';	// ç·©å­˜é¡žåž‹ file=æ–‡ä»¶ç·©å­˜, sql=æ•¸æ“šåº«ç·©å­˜
+$_config['cache']['type'] 			= 'sql';	// »º´æÀàÐÍ file=ÎÄ¼þ»º´æ, sql=Êý¾Ý¿â»º´æ
 
-// é é¢è¼¸å‡ºè¨­ç½®
-$_config['output']['charset'] 			= 'utf-8';	// é é¢å­—ç¬¦é›†
-$_config['output']['forceheader']		= 1;		// å¼·åˆ¶è¼¸å‡ºé é¢å­—ç¬¦é›†ï¼Œç”¨æ–¼é¿å…æŸäº›ç’°å¢ƒäº‚ç¢¼
-$_config['output']['gzip'] 			= 0;		// æ˜¯å¦æŽ¡ç”¨ Gzip å£“ç¸®è¼¸å‡º
-$_config['output']['tplrefresh'] 		= 1;		// æ¨¡æ¿è‡ªå‹•åˆ·æ–°é–‹é—œ 0=é—œé–‰, 1=æ‰“é–‹
-$_config['output']['language'] 			= 'zh_tw';	// é é¢èªžè¨€ zh_cn/zh_tw
-$_config['output']['staticurl'] 		= 'static/';	// ç«™é»žéœæ…‹æ–‡ä»¶è·¯å¾‘ï¼Œã€Œ/ã€çµå°¾
-$_config['output']['ajaxvalidate']		= 0;		// æ˜¯å¦åš´æ ¼é©—è­‰ Ajax é é¢çš„çœŸå¯¦æ€§ 0=é—œé–‰ï¼Œ1=æ‰“é–‹
-$_config['output']['iecompatible']		= 0;		// é é¢ IE å…¼å®¹æ¨¡å¼
+// Ò³ÃæÊä³öÉèÖÃ
+$_config['output']['charset'] 			= 'gbk';	// Ò³Ãæ×Ö·û¼¯
+$_config['output']['forceheader']		= 1;		// Ç¿ÖÆÊä³öÒ³Ãæ×Ö·û¼¯£¬ÓÃÓÚ±ÜÃâÄ³Ð©»·¾³ÂÒÂë
+$_config['output']['gzip'] 			= 0;		// ÊÇ·ñ²ÉÓÃ Gzip Ñ¹ËõÊä³ö
+$_config['output']['tplrefresh'] 		= 1;		// Ä£°å×Ô¶¯Ë¢ÐÂ¿ª¹Ø 0=¹Ø±Õ, 1=´ò¿ª
+$_config['output']['language'] 			= 'zh_cn';	// Ò³ÃæÓïÑÔ zh_cn/zh_tw
+$_config['output']['staticurl'] 		= 'static/';	// Õ¾µã¾²Ì¬ÎÄ¼þÂ·¾¶£¬¡°/¡±½áÎ²
+$_config['output']['ajaxvalidate']		= 0;		// ÊÇ·ñÑÏ¸ñÑéÖ¤ Ajax Ò³ÃæµÄÕæÊµÐÔ 0=¹Ø±Õ£¬1=´ò¿ª
+$_config['output']['iecompatible']		= 0;		// Ò³Ãæ IE ¼æÈÝÄ£Ê½
 
-// COOKIE è¨­ç½®
-$_config['cookie']['cookiepre'] 		= 'uchome_'; 	// COOKIEå‰ç¶´
-$_config['cookie']['cookiedomain'] 		= ''; 		// COOKIEä½œç”¨åŸŸ
-$_config['cookie']['cookiepath'] 		= '/'; 		// COOKIEä½œç”¨è·¯å¾‘
+// COOKIE ÉèÖÃ
+$_config['cookie']['cookiepre'] 		= 'uchome_'; 	// COOKIEÇ°×º
+$_config['cookie']['cookiedomain'] 		= ''; 		// COOKIE×÷ÓÃÓò
+$_config['cookie']['cookiepath'] 		= '/'; 		// COOKIE×÷ÓÃÂ·¾¶
 
-// ç«™é»žå®‰å…¨è¨­ç½®
-$_config['security']['authkey']			= 'asdfasfas';	// ç«™é»žåŠ å¯†å¯†é‘°
-$_config['security']['urlxssdefend']		= true;		// è‡ªèº« URL XSS é˜²ç¦¦
-$_config['security']['attackevasive']		= 0;		// CC æ”»æ“Šé˜²ç¦¦ 1|2|4|8
+// Õ¾µã°²È«ÉèÖÃ
+$_config['security']['authkey']			= 'asdfasfas';	// Õ¾µã¼ÓÃÜÃÜÔ¿
+$_config['security']['urlxssdefend']		= true;		// ×ÔÉí URL XSS ·ÀÓù
+$_config['security']['attackevasive']		= 0;		// CC ¹¥»÷·ÀÓù 1|2|4|8
 
-$_config['security']['querysafe']['status']	= 1;		// æ˜¯å¦é–‹å•ŸSQLå®‰å…¨æª¢æ¸¬ï¼Œå¯è‡ªå‹•é é˜²SQLæ³¨å…¥æ”»æ“Š
+$_config['security']['querysafe']['status']	= 1;		// ÊÇ·ñ¿ªÆôSQL°²È«¼ì²â£¬¿É×Ô¶¯Ô¤·ÀSQL×¢Èë¹¥»÷
 $_config['security']['querysafe']['dfunction']	= array('load_file','hex','substring','if','ord','char');
 $_config['security']['querysafe']['daction']	= array('intooutfile','intodumpfile','unionselect','(select', 'unionall', 'uniondistinct');
 $_config['security']['querysafe']['dnote']	= array('/*','*/','#','--','"');
 $_config['security']['querysafe']['dlikehex']	= 1;
 $_config['security']['querysafe']['afullnote']	= 0;
 
-$_config['admincp']['founder']			= '1';		// ç«™é»žå‰µå§‹äººï¼šæ“æœ‰ç«™é»žç®¡ç†å¾Œå°çš„æœ€é«˜æ¬Šé™ï¼Œæ¯å€‹ç«™é»žå¯ä»¥è¨­ç½® 1åæˆ–å¤šåå‰µå§‹äºº
-								// å¯ä»¥ä½¿ç”¨uidï¼Œä¹Ÿå¯ä»¥ä½¿ç”¨ç”¨æˆ¶åï¼›å¤šå€‹å‰µå§‹äººä¹‹é–“è«‹ä½¿ç”¨é€—è™Ÿã€Œ,ã€åˆ†é–‹;
-$_config['admincp']['forcesecques']		= 0;		// ç®¡ç†äººå“¡å¿…é ˆè¨­ç½®å®‰å…¨æå•æ‰èƒ½é€²å…¥ç³»çµ±è¨­ç½® 0=å¦, 1=æ˜¯[å®‰å…¨]
-$_config['admincp']['checkip']			= 1;		// å¾Œå°ç®¡ç†æ“ä½œæ˜¯å¦é©—è­‰ç®¡ç†å“¡çš„ IP, 1=æ˜¯[å®‰å…¨], 0=å¦ã€‚åƒ…åœ¨ç®¡ç†å“¡ç„¡æ³•ç™»é™¸å¾Œå°æ™‚è¨­ç½® 0ã€‚
-$_config['admincp']['runquery']			= 1;		// æ˜¯å¦å…è¨±å¾Œå°é‹è¡Œ SQL èªžå¥ 1=æ˜¯ 0=å¦[å®‰å…¨]
-$_config['admincp']['dbimport']			= 1;		// æ˜¯å¦å…è¨±å¾Œå°æ¢å¾©è«–å£‡æ•¸æ“š  1=æ˜¯ 0=å¦[å®‰å…¨]
+$_config['admincp']['founder']			= '1';		// Õ¾µã´´Ê¼ÈË£ºÓµÓÐÕ¾µã¹ÜÀíºóÌ¨µÄ×î¸ßÈ¨ÏÞ£¬Ã¿¸öÕ¾µã¿ÉÒÔÉèÖÃ 1Ãû»ò¶àÃû´´Ê¼ÈË
+								// ¿ÉÒÔÊ¹ÓÃuid£¬Ò²¿ÉÒÔÊ¹ÓÃÓÃ»§Ãû£»¶à¸ö´´Ê¼ÈËÖ®¼äÇëÊ¹ÓÃ¶ººÅ¡°,¡±·Ö¿ª;
+$_config['admincp']['forcesecques']		= 0;		// ¹ÜÀíÈËÔ±±ØÐëÉèÖÃ°²È«ÌáÎÊ²ÅÄÜ½øÈëÏµÍ³ÉèÖÃ 0=·ñ, 1=ÊÇ[°²È«]
+$_config['admincp']['checkip']			= 1;		// ºóÌ¨¹ÜÀí²Ù×÷ÊÇ·ñÑéÖ¤¹ÜÀíÔ±µÄ IP, 1=ÊÇ[°²È«], 0=·ñ¡£½öÔÚ¹ÜÀíÔ±ÎÞ·¨µÇÂ½ºóÌ¨Ê±ÉèÖÃ 0¡£
+$_config['admincp']['runquery']			= 1;		// ÊÇ·ñÔÊÐíºóÌ¨ÔËÐÐ SQL Óï¾ä 1=ÊÇ 0=·ñ[°²È«]
+$_config['admincp']['dbimport']			= 1;		// ÊÇ·ñÔÊÐíºóÌ¨»Ö¸´ÂÛÌ³Êý¾Ý  1=ÊÇ 0=·ñ[°²È«]
 
 /**
- * ç³»çµ±é ç¨‹èª¿ç”¨åŠŸèƒ½æ¨¡å¡Š
+ * ÏµÍ³Ô¶³Ìµ÷ÓÃ¹¦ÄÜÄ£¿é
  */
 
-// é ç¨‹èª¿ç”¨: ç¸½é–‹é—œ 0=é—œ  1=é–‹
+// Ô¶³Ìµ÷ÓÃ: ×Ü¿ª¹Ø 0=¹Ø  1=¿ª
 $_config['remote']['on'] = 0;
 
-// é ç¨‹èª¿ç”¨: ç¨‹åºç›®éŒ„å. å‡ºæ–¼å®‰å…¨è€ƒæ…®,æ‚¨å¯ä»¥æ›´æ”¹é€™å€‹ç›®éŒ„å, ä¿®æ”¹å®Œç•¢, è«‹æ‰‹å·¥ä¿®æ”¹ç¨‹åºçš„å¯¦éš›ç›®éŒ„
+// Ô¶³Ìµ÷ÓÃ: ³ÌÐòÄ¿Â¼Ãû. ³öÓÚ°²È«¿¼ÂÇ,Äú¿ÉÒÔ¸ü¸ÄÕâ¸öÄ¿Â¼Ãû, ÐÞ¸ÄÍê±Ï, ÇëÊÖ¹¤ÐÞ¸Ä³ÌÐòµÄÊµ¼ÊÄ¿Â¼
 $_config['remote']['dir'] = 'remote';
 
-// é ç¨‹èª¿ç”¨: é€šä¿¡å¯†é‘°. ç”¨æ–¼å®¢æˆ¶ç«¯å’Œæœ¬æœå‹™ç«¯çš„é€šä¿¡åŠ å¯†. é•·åº¦ä¸å°‘æ–¼ 32 ä½
-//          é»˜èªå€¼æ˜¯ $_config['security']['authkey']	çš„ md5, æ‚¨ä¹Ÿå¯ä»¥æ‰‹å·¥æŒ‡å®š
+// Ô¶³Ìµ÷ÓÃ: Í¨ÐÅÃÜÔ¿. ÓÃÓÚ¿Í»§¶ËºÍ±¾·þÎñ¶ËµÄÍ¨ÐÅ¼ÓÃÜ. ³¤¶È²»ÉÙÓÚ 32 Î»
+//          Ä¬ÈÏÖµÊÇ $_config['security']['authkey']	µÄ md5, ÄúÒ²¿ÉÒÔÊÖ¹¤Ö¸¶¨
 $_config['remote']['appkey'] = md5($_config['security']['authkey']);
 
-// é ç¨‹èª¿ç”¨: é–‹å•Ÿå¤–éƒ¨ cron ä»»å‹™. ç³»çµ±å…§éƒ¨ä¸å†åŸ·è¡Œcron, cronä»»å‹™ç”±å¤–éƒ¨ç¨‹åºæ¿€æ´»
+// Ô¶³Ìµ÷ÓÃ: ¿ªÆôÍâ²¿ cron ÈÎÎñ. ÏµÍ³ÄÚ²¿²»ÔÙÖ´ÐÐcron, cronÈÎÎñÓÉÍâ²¿³ÌÐò¼¤»î
 $_config['remote']['cron'] = 0;
+
+// $_GET|$_POSTµÄ¼æÈÝ´¦Àí£¬0Îª¹Ø±Õ£¬1Îª¿ªÆô£»¿ªÆôºó¼´¿ÉÊ¹ÓÃ$_G['gp_xx'](xxÎª±äÁ¿Ãû£¬$_GETºÍ$_POST¼¯ºÏµÄËùÓÐ±äÁ¿Ãû)£¬ÖµÎªÒÑ¾­addslashes()´¦Àí¹ý
+$_config['input']['compatible'] = 1;
 
 ?>

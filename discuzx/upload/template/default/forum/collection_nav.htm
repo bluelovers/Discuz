@@ -1,0 +1,7 @@
+<ul>
+	<li class="y o"><a href="forum.php?mod=collection&amp;action=edit">{lang collection_create}</a></li>
+	<li{if !$op} class="a"{/if}><a href="forum.php?mod=collection">{lang collection_recommended}</a></li>
+	<li{if $op == 'all'} class="a"{/if}><a href="forum.php?mod=collection&amp;op=all">{lang collection_all}</a></li>
+	<li{if $op == 'my'} class="a"{/if}><a href="forum.php?mod=collection&amp;op=my">{lang collection_my}</a></li>
+	<!--{hook/collection_nav_extra}-->
+</ul>

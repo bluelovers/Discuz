@@ -4,22 +4,26 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_stick.php 7906 2010-04-15 01:45:11Z monkey $
+ *      $Id: lang_stick.php 27449 2012-02-01 05:32:35Z zhangguosheng $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 $lang = array
 (
-	'stick_name' => 'ç½®é ‚å¡',
-	'stick_desc' => 'å¯ä»¥å°‡ä¸»é¡Œç½®é ‚',
-	'stick_expiration' => 'ç½®é ‚æœ‰æ•ˆæœŸ',
-	'stick_expiration_comment' => 'è¨­ç½®ä¸»é¡Œå¯ä»¥è¢«ç½®é ‚å¤šé•·æ™‚é–“ï¼Œé»˜èª 24 å°æ™‚',
-	'stick_forum' => 'å…è¨±ä½¿ç”¨æœ¬é“å…·çš„ç‰ˆå¡Š',
-	'stick_info' => 'ç½®é ‚æŒ‡å®šçš„ä¸»é¡Œ {expiration} å°æ™‚ï¼Œè«‹è¼¸å…¥ä¸»é¡Œçš„ ID',
-	'stick_info_nonexistence' => 'è«‹æŒ‡å®šè¦ç½®é ‚çš„ä¸»é¡Œ',
-	'stick_succeed' => 'ä½ æ“ä½œçš„ä¸»é¡Œå·²ç½®é ‚',
-	'stick_info_noperm' => 'å°ä¸èµ·ï¼Œä¸»é¡Œæ‰€åœ¨ç‰ˆå¡Šä¸å…è¨±ä½¿ç”¨æœ¬é“å…·',
+	'stick_name' => 'ÖÃ¶¥¿¨',
+	'stick_desc' => '¿ÉÒÔ½«Ö÷ÌâÖÃ¶¥',
+	'stick_expiration' => 'ÖÃ¶¥ÓĞĞ§ÆÚ',
+	'stick_expiration_comment' => 'ÉèÖÃÖ÷Ìâ¿ÉÒÔ±»ÖÃ¶¥¶à³¤Ê±¼ä£¬Ä¬ÈÏ 24 Ğ¡Ê±',
+	'stick_forum' => 'ÔÊĞíÊ¹ÓÃ±¾µÀ¾ßµÄ°æ¿é',
+	'stick_info' => 'ÖÃ¶¥Ö¸¶¨µÄÖ÷Ìâ {expiration} Ğ¡Ê±£¬ÇëÊäÈëÖ÷ÌâµÄ ID',
+	'stick_info_nonexistence' => 'ÇëÖ¸¶¨ÒªÖÃ¶¥µÄÖ÷Ìâ',
+	'stick_succeed' => 'Äú²Ù×÷µÄÖ÷ÌâÒÑÖÃ¶¥',
+	'stick_info_noperm' => '¶Ô²»Æğ£¬Ö÷ÌâËùÔÚ°æ¿é²»ÔÊĞíÊ¹ÓÃ±¾µÀ¾ß',
 
-	'stick_notification' => 'ä½ çš„ä¸»é¡Œ {subject} è¢« {actor} ä½¿ç”¨äº†{magicname}ï¼Œ<a href="forum.php?mod=viewthread&tid={tid}">å¿«å»çœ‹çœ‹å§ï¼</a>',
+	'stick_notification' => 'ÄúµÄÖ÷Ìâ {subject} ±» {actor} Ê¹ÓÃÁË{magicname}£¬<a href="forum.php?mod=viewthread&tid={tid}">¿ìÈ¥¿´¿´°É£¡</a>',
 );
 
 ?>

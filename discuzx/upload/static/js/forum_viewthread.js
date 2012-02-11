@@ -1,8 +1,8 @@
 /*
-	[Discuz!] (C)2001-2009 Comsenz Inc.
+	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: forum_viewthread.js 22866 2011-05-27 06:23:56Z zhangguosheng $
+	$Id: forum_viewthread.js 27501 2012-02-02 10:05:43Z monkey $
 */
 
 var replyreload = '', attachimgST = new Array(), zoomgroup = new Array(), zoomgroupinit = new Array();
@@ -56,17 +56,24 @@ function attachimgshow(pid, onlyinpost) {
 	}
 }
 
-function attachimglstshow(pid, islazy) {
+function attachimglstshow(pid, islazy, fid, showexif) {
 	var aimgs = aimgcount[pid];
+	var s = '';
+	if(fid) {
+		s = ' onmouseover="showMenu({\'ctrlid\':this.id, \'pos\': \'12!\'});"';
+	}
 	if(typeof aimgcount == 'object' && $('imagelistthumb_' + pid)) {
 		for(pid in aimgcount) {
 			var imagelist = '';
 			for(i = 0;i < aimgcount[pid].length;i++) {
-				if(!$('aimg_' + aimgcount[pid][i]) || $('aimg_' + aimgcount[pid][i]).getAttribute('inpost')) {
+				if(!$('aimg_' + aimgcount[pid][i]) || $('aimg_' + aimgcount[pid][i]).getAttribute('inpost') || parseInt(aimgcount[pid][i]) != aimgcount[pid][i]) {
 					continue;
 				}
+				if(fid) {
+					imagelist += '<div id="pattimg_' + aimgcount[pid][i] + '_menu" class="tip tip_4" style="display: none;"><div class="tip_horn"></div><div class="tip_c"><a href="forum.php?mod=ajax&action=setthreadcover&aid=' + aimgcount[pid][i] + '&fid=' + fid + '" class="xi2" onclick="showWindow(\'setcover' + aimgcount[pid][i] + '\', this.href)">ÉèÎª·âÃæ</a></div></div>';
+				}
 				imagelist += '<div class="pattimg">' +
-					'<a class="pattimg_zoom" href="javascript:;" onclick="zoom($(\'aimg_' + aimgcount[pid][i] + '\'), attachimggetsrc(\'aimg_' + aimgcount[pid][i] + '\'))" title="é»æ“Šæ”¾å¤§">é»æ“Šæ”¾å¤§</a>' +
+					'<a id="pattimg_' + aimgcount[pid][i] + '" class="pattimg_zoom" href="javascript:;"' + s + ' onclick="zoom($(\'aimg_' + aimgcount[pid][i] + '\'), attachimggetsrc(\'aimg_' + aimgcount[pid][i] + '\'), 0, 0, ' + (parseInt(showexif) ? 1 : 0) + ')" title="µã»÷·Å´ó">µã»÷·Å´ó</a>' +
 					'<img ' + (islazy ? 'file' : 'src') + '="forum.php?mod=image&aid=' + aimgcount[pid][i] + '&size=100x100&key=' + imagelistkey + '&atid=' + tid + '" width="100" height="100" /></div>';
 			}
 			if($('imagelistthumb_' + pid)) {
@@ -162,7 +169,7 @@ function parsetag(pid) {
 }
 
 function setanswer(pid, from){
-	if(confirm('æ‚¨ç¢ºèªè¦æŠŠè©²å›å¾©é¸ç‚ºã€Œæœ€ä½³ç­”æ¡ˆã€å—ï¼Ÿ')){
+	if(confirm('ÄúÈ·ÈÏÒª°Ñ¸Ã»Ø¸´Ñ¡Îª¡°×î¼Ñ´ğ°¸¡±Âğ£¿')){
 		if(BROWSER.ie) {
 			doane(event);
 		}
@@ -235,7 +242,7 @@ function succeedhandle_fastpost(locationhref, message, param) {
 		$('fastpostreturn').className = '';
 	} else {
 		if(!message) {
-			message = 'æœ¬ç‰ˆå›å¸–éœ€è¦å¯©æ ¸ï¼Œæ‚¨çš„å¸–å­å°‡åœ¨é€šéå¯©æ ¸å¾Œé¡¯ç¤º';
+			message = '±¾°æ»ØÌûĞèÒªÉóºË£¬ÄúµÄÌû×Ó½«ÔÚÍ¨¹ıÉóºËºóÏÔÊ¾';
 		}
 		$('post_new').style.display = $('fastpostmessage').value = $('fastpostreturn').className = '';
 		$('fastpostreturn').innerHTML = message;
@@ -281,6 +288,10 @@ function recommendupdate(n) {
 
 function favoriteupdate() {
 	var obj = $('favoritenumber');
+	obj.innerHTML = parseInt(obj.innerHTML) + 1;
+}
+function relayupdate() {
+	var obj = $('relaynumber');
 	obj.innerHTML = parseInt(obj.innerHTML) + 1;
 }
 
@@ -368,16 +379,16 @@ function toggleRatelogCollapse(tarId, ctrlObj) {
 	if($(tarId).className == 'rate') {
 		$(tarId).className = 'rate rate_collapse';
 		setcookie('ratecollapse', 1, 2592000);
-		ctrlObj.innerHTML = 'å±•é–‹';
+		ctrlObj.innerHTML = 'Õ¹¿ª';
 	} else {
 		$(tarId).className = 'rate';
 		setcookie('ratecollapse', 0, -2592000);
-		ctrlObj.innerHTML = 'æ”¶èµ·';
+		ctrlObj.innerHTML = 'ÊÕÆğ';
 	}
 }
 
 function copyThreadUrl(obj) {
-	setCopy($('thread_subject').innerHTML.replace(/&amp;/g, '&') + '\n' + obj.href + '\n', 'å¸–å­åœ°å€å·²ç¶“è¤‡è£½åˆ°å‰ªè²¼æ¿');
+	setCopy($('thread_subject').innerHTML.replace(/&amp;/g, '&') + '\n' + obj.href + '\n', 'Ìû×ÓµØÖ·ÒÑ¾­¸´ÖÆµ½¼ôÌù°å');
 	return false;
 }
 
@@ -387,11 +398,11 @@ function replyNotice() {
 	var status = replynotice.getAttribute("status");
 	if(status == 1) {
 		replynotice.href = newurl + 'receive';
-		replynotice.innerHTML = 'æ¥æ”¶å›å¾©é€šçŸ¥';
+		replynotice.innerHTML = '½ÓÊÕ»Ø¸´Í¨Öª';
 		replynotice.setAttribute("status", 0);
 	} else {
 		replynotice.href = newurl + 'ignore';
-		replynotice.innerHTML = 'å–æ¶ˆå›å¾©é€šçŸ¥';
+		replynotice.innerHTML = 'È¡Ïû»Ø¸´Í¨Öª';
 		replynotice.setAttribute("status", 1);
 	}
 }
@@ -404,13 +415,13 @@ function connect_share(connect_share_url, connect_uin) {
 		if(connect_uin) {
 			setTimeout(function () {
 				if(!connect_share_loaded) {
-					showDialog('åˆ†äº«æœå‹™é€£æ¥å¤±æ•—ï¼Œè«‹ç¨å¾Œå†è©¦ã€‚', 'notice');
+					showDialog('·ÖÏí·şÎñÁ¬½ÓÊ§°Ü£¬ÇëÉÔºóÔÙÊÔ¡£', 'notice');
 					$('append_parent').removeChild($('connect_load_js'));
 				}
 			}, 5000);
 			connect_load(connect_share_url);
 		} else {
-			showDialog($('connect_share_unbind').innerHTML, 'info', 'è«‹å…ˆç¶å®šQQè³¬è™Ÿ');
+			showDialog($('connect_share_unbind').innerHTML, 'info', 'ÇëÏÈ°ó¶¨QQÕËºÅ');
 		}
 		return false;
 	}
@@ -433,7 +444,7 @@ function connect_show_dialog(title, html, type) {
 function connect_get_thread() {
 	connect_thread_info.subject = $('connect_thread_title').value;
 	if ($('postmessage_' + connect_thread_info.post_id)) {
-		connect_thread_info.html_content = preg_replace(["'"], ['%27'], encodeURIComponent(preg_replace(['æœ¬å¸–æœ€å¾Œç”± .*? æ–¼ .*? ç·¨è¼¯','&nbsp;','<em onclick="copycode\\(\\$\\(\'code0\'\\)\\);">è¤‡è£½ä»£ç¢¼</em>'], ['',' ', ''], $('postmessage_' + connect_thread_info.post_id).innerHTML)));
+		connect_thread_info.html_content = preg_replace(["'"], ['%27'], encodeURIComponent(preg_replace(['±¾Ìû×îºóÓÉ .*? ÓÚ .*? ±à¼­','&nbsp;','<em onclick="copycode\\(\\$\\(\'code0\'\\)\\);">¸´ÖÆ´úÂë</em>'], ['',' ', ''], $('postmessage_' + connect_thread_info.post_id).innerHTML)));
 	}
 	return connect_thread_info;
 }
@@ -460,6 +471,7 @@ function lazyload(className) {
 						lazyload.imgs.push(imgs[j]);
 					} else {
 						imgs[j].setAttribute('src', imgs[j].getAttribute('file'));
+						imgs[j].setAttribute('lazyloaded', 'true');
 					}
 				}
 			}
@@ -473,7 +485,14 @@ function lazyload(className) {
 		for (var i=0; i<lazyload.imgs.length; i++) {
 			var img = lazyload.imgs[i];
 			var offsetTop = this.getOffset(img);
-			if (offsetTop > document.documentElement.clientHeight && (offsetTop  - scrollTop < document.documentElement.clientHeight)) {
+			if (!img.getAttribute('lazyloaded') && offsetTop > document.documentElement.clientHeight && (offsetTop  - scrollTop < document.documentElement.clientHeight)) {
+				var dom = document.createElement('div');
+				var width = img.getAttribute('width') ? img.getAttribute('width') : 100;
+				var height = img.getAttribute('height') ? img.getAttribute('height') : 100;
+				dom.innerHTML = '<div style="width: '+width+'px; height: '+height+'px;background: url('+IMGDIR + '/loading.gif) no-repeat center center;"></div>';
+				img.parentNode.insertBefore(dom.childNodes[0], img);
+				img.onload = function () {if(!this.getAttribute('_load')) {this.setAttribute('_load', 1);this.style.width = this.style.height = '';this.parentNode.removeChild(this.previousSibling);}};
+				img.style.width = img.style.height = '1px';
 				img.setAttribute('src', img.getAttribute('file') ? img.getAttribute('file') : img.getAttribute('src'));
 				img.setAttribute('lazyloaded', true);
 			} else {
@@ -485,4 +504,8 @@ function lazyload(className) {
 	};
 	this.initImages();
 	_attachEvent(window, 'scroll', function(){obj.showImage();});
+}
+function update_collection(){
+	sum = 1;
+    $('collectionnumber').innerText = parseInt($('collectionnumber').innerText)+sum;
 }

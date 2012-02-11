@@ -12,7 +12,7 @@ $sfile = DISCUZ_ROOT.'./source/'.$source.'/setting.ini';
 if(!submitcheck('submit')) {
 	show_form_header();
 	show_table_header();
-	show_table_row(array(array('colspan="3"', 'ç·¨è¼¯é…ç½®æ–‡ä»¶ source/'.$source.'/setting.ini')), 'title');
+	show_table_row(array(array('colspan="3"', '±à¼­ÅäÖÃÎÄ¼ş source/'.$source.'/setting.ini')), 'title');
 
 	foreach ($setting as $key => $value) {
 		if(is_array($value) && !empty($value)) {
@@ -21,7 +21,7 @@ if(!submitcheck('submit')) {
 			foreach ($value as $k => $v) {
 				show_table_row(	array(
 				lang($k),
-				array('class="bg2" width="70%"', '<input type="text" size="40" name="newsetting['.$key.']['.$k.']" value="'.htmlspecialchars($v).'"'.$disabled.'>'.($disabled ? ' åªè®€' : ''))
+				array('class="bg2" width="70%"', '<input type="text" size="40" name="newsetting['.$key.']['.$k.']" value="'.htmlspecialchars($v).'"'.$disabled.'>'.($disabled ? ' Ö»¶Á' : ''))
 				), 'bg2'
 				);
 			}
@@ -56,10 +56,10 @@ if(!submitcheck('submit')) {
 		if($fp = @fopen($sfile, 'w')) {
 			fwrite($fp, implode("\n", $lines));
 			fclose($fp);
-			showmessage('è¨­ç½®å·²ç¶“æ›´æ–°å®Œç•¢ä¸¦æˆåŠŸä¿å­˜', 'index.php', '', 1000);
+			showmessage('ÉèÖÃÒÑ¾­¸üĞÂÍê±Ï²¢³É¹¦±£´æ', 'index.php', '', 1000);
 		} else {
-			showmessage('è©²è¨­ç½®æ–‡ä»¶ç‚ºåªè®€æ–‡ä»¶ï¼Œç„¡æ³•ä¿å­˜ï¼Œè«‹è¿”å›');
+			showmessage('¸ÃÉèÖÃÎÄ¼şÎªÖ»¶ÁÎÄ¼ş£¬ÎŞ·¨±£´æ£¬Çë·µ»Ø');
 		}
 	}
-	showmessage('æ‚¨æ²’æœ‰æ”¹è®Šä»»ä½•è¨­ç½®', 'index.php', '', 1000);
+	showmessage('ÄúÃ»ÓĞ¸Ä±äÈÎºÎÉèÖÃ', 'index.php', '', 1000);
 }

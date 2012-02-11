@@ -4,9 +4,9 @@ var postmaxchars = parseInt('$_G['setting']['maxpostsize']');
 var disablepostctrl = parseInt('{$_G['group']['disablepostctrl']}');
 </script>
 
-<div id="f_pst" class="pl{if empty($_G[gp_from])} bm bmw{/if}">
-<form method="post" autocomplete="off" id="fastpostform" action="forum.php?mod=post&action=reply&fid=$_G[fid]&tid=$_G[tid]&extra=$_G[gp_extra]&replysubmit=yes{if $_G['gp_ordertype'] != 1}&infloat=yes&handlekey=fastpost{/if}{if $_G[gp_from]}&from=$_G[gp_from]{/if}"{if $_G['gp_ordertype'] != 1} onSubmit="return fastpostvalidate(this)"{/if}>
-	<!--{if empty($_G[gp_from])}-->
+<div id="f_pst" class="pl{if empty($_GET[from])} bm bmw{/if}">
+<form method="post" autocomplete="off" id="fastpostform" action="forum.php?mod=post&action=reply&fid=$_G[fid]&tid=$_G[tid]&extra=$_GET[extra]&replysubmit=yes{if $_GET['ordertype'] != 1}&infloat=yes&handlekey=fastpost{/if}{if $_GET[from]}&from=$_GET[from]{/if}"{if $_GET['ordertype'] != 1} onSubmit="return fastpostvalidate(this)"{/if}>
+	<!--{if empty($_GET[from])}-->
 	<table cellspacing="0" cellpadding="0">
 		<tr>
 			<td class="pls">
@@ -34,23 +34,34 @@ var disablepostctrl = parseInt('{$_G['group']['disablepostctrl']}');
 	<!--{/if}-->
 
 	<div class="cl">
-		<!--{if empty($_G[gp_from]) && $_G[setting][fastsmilies]}--><div id="fastsmiliesdiv" class="y"><div id="fastsmiliesdiv_data"><div id="fastsmilies"></div></div></div><!--{/if}-->
-		<div{if empty($_G[gp_from]) && $_G[setting][fastsmilies]} class="hasfsl"{/if} id="fastposteditor">
+		<!--{if empty($_GET[from]) && $_G[setting][fastsmilies]}--><div id="fastsmiliesdiv" class="y"><div id="fastsmiliesdiv_data"><div id="fastsmilies"></div></div></div><!--{/if}-->
+		<div{if empty($_GET[from]) && $_G[setting][fastsmilies]} class="hasfsl"{/if} id="fastposteditor">
 			<div class="tedt{if !($_G[forum_thread][special] == 5 && empty($firststand))} mtn{/if}">
 				<div class="bar">
 					<span class="y">
 						<!--{hook/viewthread_fastpost_func_extra}-->
-						<a href="forum.php?mod=post&action=reply&fid=$_G[fid]&tid=$_G[tid]{if $_G[gp_from]}&from=$_G[gp_from]{/if}" onclick="return switchAdvanceMode(this.href)">{lang post_advancemode}</a>
+						<a href="forum.php?mod=post&action=reply&fid=$_G[fid]&tid=$_G[tid]{if $_GET[from]}&from=$_GET[from]{/if}" onclick="return switchAdvanceMode(this.href)">{lang post_advancemode}</a>
 					</span>
-					<!--{eval $seditor = array('fastpost', array('bold', 'color', 'img', 'link', 'quote', 'code', 'smilies'), !$_G['uid'] ? 1 : 0, $allowpostattach ? '<span class="pipe z">|</span><span onclick="fastUload()" class="cur1 z">{lang e_attach_title}</span>' : '');}-->
+					<!--{eval $seditor = array('fastpost', array('at', 'bold', 'color', 'img', 'link', 'quote', 'code', 'smilies'), !$allowfastpost ? 1 : 0, $allowpostattach && $allowfastpost ? '<span class="pipe z">|</span><span id="spanButtonPlaceholder">上传</span>' : '');}-->
 					<!--{hook/viewthread_fastpost_ctrl_extra}-->
 					<!--{subtemplate common/seditor}-->
 				</div>
 				<div class="area">
-					<!--{if $allowpostreply}-->
-						<textarea rows="6" cols="80" name="message" id="fastpostmessage" onKeyDown="seditor_ctlent(event, {if $_G['gp_ordertype'] != 1}'fastpostvalidate($(\'fastpostform\'))'{else}'$(\'fastpostform\').submit()'{/if});" tabindex="4" class="pt"></textarea>
-					<!--{elseif !$_G['uid']}-->
-						<div class="pt hm">{lang login_to_reply} <a href="member.php?mod=logging&action=login" onclick="showWindow('login', this.href)" class="xi2">{lang login}</a> | <a href="member.php?mod={$_G[setting][regname]}" class="xi2">$_G['setting']['reglinkname']</a> <!--{hook/global_login_text}--></div>
+					<!--{if $allowfastpost}-->
+						<textarea rows="6" cols="80" name="message" id="fastpostmessage" onKeyDown="seditor_ctlent(event, {if $_GET['ordertype'] != 1}'fastpostvalidate($(\'fastpostform\'))'{else}'$(\'fastpostform\').submit()'{/if});" tabindex="4" class="pt"></textarea>
+					<!--{else}-->
+						<div class="pt hm">
+							<!--{if !$_G['uid']}-->
+								<!--{if !$_G['connectguest']}-->
+									{lang login_to_reply} <a href="member.php?mod=logging&action=login" onclick="showWindow('login', this.href)" class="xi2">{lang login}</a> | <a href="member.php?mod={$_G[setting][regname]}" class="xi2">$_G['setting']['reglinkname']</a>
+								<!--{else}-->
+									您需要<a href="member.php?mod=connect" class="xi2" target="_blank">完善资料</a>或<a href="member.php?mod=connect&ac=bind" class="xi2" target="_blank">绑定帐号</a>后才可以回帖
+								<!--{/if}-->
+							<!--{else}-->
+								您现在无权回帖，<a href="javascript:;" onclick="$('fastpostform').submit()" class="xi2">点击查看原因</a>
+							<!--{/if}-->
+							<!--{hook/global_login_text}-->
+						</div>
 					<!--{/if}-->
 				</div>
 			</div>
@@ -67,8 +78,114 @@ var disablepostctrl = parseInt('{$_G['group']['disablepostctrl']}');
 		var ATTACHNUM = {'imageused':0,'imageunused':0,'attachused':0,'attachunused':0}, ATTACHUNUSEDAID = new Array(), IMGUNUSEDAID = new Array();
 		</script>
 
+<style type="text/css">
+
+.progressWrapper {
+	width: 100%;
+	overflow: hidden;
+}
+
+.progressContainer {
+	margin: 5px;
+	padding: 4px;
+	border: solid 1px #E8E8E8;
+	background-color: #F7F7F7;
+	overflow: hidden;
+}
+/* Message */
+.message {
+	margin: 1em 0;
+	padding: 10px 20px;
+	border: solid 1px #FFDD99;
+	background-color: #FFFFCC;
+	overflow: hidden;
+}
+/* Error */
+.red {
+	border: solid 1px #B50000;
+	background-color: #FFEBEB;
+}
+
+/* Current */
+.green {
+	border: solid 1px #DDF0DD;
+	background-color: #EBFFEB;
+}
+
+/* Complete */
+.blue {
+	border: solid 1px #CEE2F2;
+	background-color: #F0F5FF;
+}
+
+.progressName {
+	font-size: 8pt;
+	font-weight: 700;
+	color: #555;
+	width: 323px;
+	height: 14px;
+	text-align: left;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.progressBarInProgress,
+.progressBarComplete,
+.progressBarError {
+	font-size: 0;
+	width: 0%;
+	height: 2px;
+	background-color: blue;
+	margin-top: 2px;
+}
+
+.progressBarComplete {
+	width: 100%;
+	background-color: green;
+	visibility: hidden;
+}
+
+.progressBarError {
+	width: 100%;
+	background-color: red;
+	visibility: hidden;
+}
+
+.progressBarStatus {
+	margin-top: 2px;
+	width: 337px;
+	font-size: 7pt;
+	font-family: Arial;
+	text-align: left;
+	white-space: nowrap;
+}
+
+a.progressCancel {
+	font-size: 0;
+	display: block;
+	height: 14px;
+	width: 14px;
+	background-image: url({IMGDIR}/cancelbutton.gif);
+	background-repeat: no-repeat;
+	background-position: -14px 0px;
+	float: right;
+}
+
+a.progressCancel:hover {
+	background-position: 0px 0px;
+}
+.swfupload {
+	vertical-align: top;
+}
+
+</style>
+<script type="text/javascript" src="{$_G[setting][jspath]}swfupload.js?{VERHASH}"></script>
+<script type="text/javascript" src="{$_G[setting][jspath]}swfupload.queue.js?{VERHASH}"></script>
+<script type="text/javascript" src="{$_G[setting][jspath]}handlers.js?{VERHASH}"></script>
+<script type="text/javascript" src="{$_G[setting][jspath]}fileprogress.js?{VERHASH}"></script>
+
 		<input type="hidden" name="posttime" id="posttime" value="{TIMESTAMP}" />
-		<div class="upfl{if empty($_G[gp_from]) && $_G[setting][fastsmilies]} hasfsl{/if}">
+		<div class="upfl{if empty($_GET[from]) && $_G[setting][fastsmilies]} hasfsl{/if}">
 			<table cellpadding="0" cellspacing="0" border="0" id="attach_tblheader" style="display: none;">
 				<tr>
 					<td>{lang e_attach_insert}</td>
@@ -83,7 +200,69 @@ var disablepostctrl = parseInt('{$_G['group']['disablepostctrl']}');
 					<td class="attc"></td>
 				</tr>
 			</table>
-			<div id="attachlist"></div>
+			<div class="fieldset flash" id="attachlist"></div>
+			<script type="text/javascript">
+					var upload = new SWFUpload({
+						// Backend Settings
+						upload_url: "{$_G[siteroot]}misc.php?mod=swfupload&action=swfupload&operation=upload&fid=$fid",
+						post_params: {"uid" : "$_G[uid]", "hash":"$swfconfig[hash]"},
+
+						// File Upload Settings
+						file_size_limit : "$swfconfig[max]",	// 100MB
+						file_types : "$swfconfig[attachexts][ext]",
+						file_types_description : "$swfconfig[attachexts][depict]",
+						file_upload_limit : $swfconfig['limit'],
+						file_queue_limit : 0,
+
+						// Event Handler Settings (all my handlers are in the Handler.js file)
+						swfupload_preload_handler : preLoad,
+						swfupload_load_failed_handler : loadFailed,
+						file_dialog_start_handler : fileDialogStart,
+						file_queued_handler : fileQueued,
+						file_queue_error_handler : fileQueueError,
+						file_dialog_complete_handler : fileDialogComplete,
+						upload_start_handler : uploadStart,
+						upload_progress_handler : uploadProgress,
+						upload_error_handler : uploadError,
+						upload_success_handler : uploadSuccess,
+						upload_complete_handler : uploadComplete,
+
+						// Button Settings
+						button_image_url : IMGDIR+"/uploadbutton_small.png",
+						button_placeholder_id : "spanButtonPlaceholder",
+						button_width: 90,
+						button_height: 25,
+						button_cursor:SWFUpload.CURSOR.HAND,
+						button_text_left_padding: 0,
+						button_text_style: '.button { vertical-align: middle; overflow: hidden; }',
+						//button_text: '<span class="button">上传</span>',
+						button_text: '',
+						button_window_mode: "transparent",
+
+						// Flash Settings
+						flash_url : IMGDIR+"/swfupload.swf",
+						flash9_url : IMGDIR+"/swfupload_fp9.swf",
+
+						custom_settings : {
+							progressTarget : "attachlist",
+							uploadSource: 'forum',
+							uploadType: 'attach',
+							<!--{if $swfconfig['maxsizeperday']}-->
+							maxSizePerDay: $swfconfig['maxsizeperday'],
+							<!--{/if}-->
+							<!--{if $swfconfig['maxattachnum']}-->
+							maxAttachNum: $swfconfig['maxattachnum'],
+							<!--{/if}-->
+							uploadFrom: 'fastpost'
+						},
+
+						// Debug Settings
+						debug: false
+					});
+
+				</script>
+
+
 		</div>
 	<!--{/if}-->
 
@@ -91,12 +270,14 @@ var disablepostctrl = parseInt('{$_G['group']['disablepostctrl']}');
 	<input type="hidden" name="subject" value="" />
 	<p class="ptm pnpost">
 		<button {if $allowpostreply}type="submit" {elseif !$_G['uid']}type="button" onclick="showWindow('login', 'member.php?mod=logging&action=login&guestmessage=yes')" {/if}name="replysubmit" id="fastpostsubmit" class="pn pnc vm" value="replysubmit" tabindex="5"><strong>{lang post_newreply}</strong></button>
-		<!--{if $_G['gp_ordertype'] != 1 && empty($_G[gp_from])}-->
+		<!--{hook/viewthread_fastpost_btn_extra}-->
+		<label><input type="checkbox" name="adddynamic" value="1" />回帖并转播</label>
+		<!--{if $_GET['ordertype'] != 1 && empty($_GET[from])}-->
 		<label for="fastpostrefresh"><input id="fastpostrefresh" type="checkbox" class="pc" />{lang post_fastreply_gotolast}</label>
 		<script type="text/javascript">if(getcookie('fastpostrefresh') == 1) {$('fastpostrefresh').checked=true;}</script>
 		<!--{/if}-->
 	</p>
-	<!--{if empty($_G[gp_from])}-->
+	<!--{if empty($_GET[from])}-->
 			</td>
 		</tr>
 	</table>

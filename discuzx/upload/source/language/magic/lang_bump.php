@@ -4,20 +4,24 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_bump.php 7877 2010-04-14 08:36:20Z monkey $
+ *      $Id: lang_bump.php 27449 2012-02-01 05:32:35Z zhangguosheng $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 $lang = array
 (
-	'bump_name' => 'æå‡å¡',
-	'bump_forum' => 'å…è¨±ä½¿ç”¨æœ¬é“å…·çš„ç‰ˆå¡Š',
-	'bump_desc' => 'å¯ä»¥æå‡æŸå€‹ä¸»é¡Œ',
-	'bump_info' => 'æå‡æŒ‡å®šçš„ä¸»é¡Œï¼Œè«‹è¼¸å…¥ä¸»é¡Œçš„ ID',
-	'bump_info_nonexistence' => 'è«‹æŒ‡å®šè¦æå‡çš„ä¸»é¡Œ',
-	'bump_succeed' => 'ä½ æ“ä½œçš„ä¸»é¡Œå·²æå‡',
-	'bump_info_noperm' => 'å°ä¸èµ·ï¼Œä¸»é¡Œæ‰€åœ¨ç‰ˆå¡Šä¸å…è¨±ä½¿ç”¨æœ¬é“å…·',
+	'bump_name' => 'ÌáÉı¿¨',
+	'bump_forum' => 'ÔÊĞíÊ¹ÓÃ±¾µÀ¾ßµÄ°æ¿é',
+	'bump_desc' => '¿ÉÒÔÌáÉıÄ³¸öÖ÷Ìâ',
+	'bump_info' => 'ÌáÉıÖ¸¶¨µÄÖ÷Ìâ£¬ÇëÊäÈëÖ÷ÌâµÄ ID',
+	'bump_info_nonexistence' => 'ÇëÖ¸¶¨ÒªÌáÉıµÄÖ÷Ìâ',
+	'bump_succeed' => 'Äú²Ù×÷µÄÖ÷ÌâÒÑÌáÉı',
+	'bump_info_noperm' => '¶Ô²»Æğ£¬Ö÷ÌâËùÔÚ°æ¿é²»ÔÊĞíÊ¹ÓÃ±¾µÀ¾ß',
 
-	'bump_notification' => 'ä½ çš„ä¸»é¡Œ {subject} è¢« {actor} ä½¿ç”¨äº†{magicname}ï¼Œ<a href="forum.php?mod=viewthread&tid={tid}">å¿«å»çœ‹çœ‹å§ï¼</a>',
+	'bump_notification' => 'ÄúµÄÖ÷Ìâ {subject} ±» {actor} Ê¹ÓÃÁË{magicname}£¬<a href="forum.php?mod=viewthread&tid={tid}">¿ìÈ¥¿´¿´°É£¡</a>',
 );
 
 ?>

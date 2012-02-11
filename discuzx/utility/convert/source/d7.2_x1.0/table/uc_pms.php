@@ -41,7 +41,7 @@ if(empty($nexttable)) {
 
 
 if($nextid) {
-	showmessage("ç¹¼çºŒè½‰æ›æ•¸æ“šè¡¨ ".$table_source." pmid > $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
+	showmessage("¼ÌÐø×ª»»Êý¾Ý±í ".$table_source." pmid > $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
 }
 
 ?>

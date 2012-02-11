@@ -4,33 +4,37 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_polllist.php 11146 2010-05-25 02:52:53Z xupeng $
+ *      $Id: lang_polllist.php 27449 2012-02-01 05:32:35Z zhangguosheng $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 $lang = array
 (
-	'polllist_name' => 'æŠ•ç¥¨åˆ—è¡¨',
-	'polllist_desc' => 'æŠ•ç¥¨åˆ—è¡¨èª¿ç”¨',
-	'polllist_uids' => 'ç”¨æˆ¶UID',
-	'polllist_uids_comment' => 'å¡«å…¥æŒ‡å®šç”¨æˆ¶çš„ID(uid)ï¼Œå¤šå€‹ç”¨æˆ¶ä¹‹é–“ç”¨é€—è™Ÿ(,)åˆ†éš”',
-	'polllist_startrow' => 'èµ·å§‹æ•¸æ“šè¡Œæ•¸',
-	'polllist_startrow_comment' => 'å¦‚éœ€è¨­å®šèµ·å§‹çš„æ•¸æ“šè¡Œæ•¸ï¼Œè«‹è¼¸å…¥å…·é«”æ•¸å€¼ï¼Œ0 ç‚ºå¾žç¬¬ä¸€è¡Œé–‹å§‹ï¼Œä»¥æ­¤é¡žæŽ¨',
-	'polllist_titlelength' => 'æ¨™é¡Œé•·åº¦',
-	'polllist_summarylength' => 'ç°¡ä»‹é•·åº¦',
-	'polllist_orderby' => 'æŠ•ç¥¨æŽ’åºæ–¹å¼',
-	'polllist_orderby_comment' => 'è¨­ç½®ä»¥å“ªä¸€å­—æ®µæˆ–æ–¹å¼å°æŠ•ç¥¨é€²è¡ŒæŽ’åº',
-	'polllist_orderby_dateline' => 'æŒ‰ç™¼ä½ˆæ™‚é–“å€’åº',
-	'polllist_orderby_hot' => 'æŒ‰ç†±åº¦å€’åº',
-	'polllist_orderby_lastvote' => 'æŒ‰æœ€å¾ŒæŠ•ç¥¨æ™‚é–“å€’åº',
-	'polllist_orderby_viewnum' => 'æŒ‰æŸ¥çœ‹æ•¸å€’åº',
-	'polllist_orderby_replynum' => 'æŒ‰å›žè¤‡æ•¸å€’åº',
-	'polllist_orderby_votenum' => 'æŒ‰æŠ•ç¥¨æ•¸å€’åº',
-	'polllist_credit' => 'æ‡¸è³žæŠ•ç¥¨',
-	'polllist_credit_nolimit' => 'ä¸é™å®š',
-	'polllist_credit_yes' => 'åªå–æ‡¸è³žæŠ•ç¥¨',
-	'polllist_expirefilter' => 'éŽæœŸæŠ•ç¥¨',
-	'polllist_expirefilter_off' => 'ä¸å±è”½',
-	'polllist_expirefilter_on' => 'å±è”½',
+	'polllist_name' => 'Í¶Æ±ÁÐ±í',
+	'polllist_desc' => 'Í¶Æ±ÁÐ±íµ÷ÓÃ',
+	'polllist_uids' => 'ÓÃ»§UID',
+	'polllist_uids_comment' => 'ÌîÈëÖ¸¶¨ÓÃ»§µÄID(uid)£¬¶à¸öÓÃ»§Ö®¼äÓÃ¶ººÅ(,)·Ö¸ô',
+	'polllist_startrow' => 'ÆðÊ¼Êý¾ÝÐÐÊý',
+	'polllist_startrow_comment' => 'ÈçÐèÉè¶¨ÆðÊ¼µÄÊý¾ÝÐÐÊý£¬ÇëÊäÈë¾ßÌåÊýÖµ£¬0 Îª´ÓµÚÒ»ÐÐ¿ªÊ¼£¬ÒÔ´ËÀàÍÆ',
+	'polllist_titlelength' => '±êÌâ³¤¶È',
+	'polllist_summarylength' => '¼ò½é³¤¶È',
+	'polllist_orderby' => 'Í¶Æ±ÅÅÐò·½Ê½',
+	'polllist_orderby_comment' => 'ÉèÖÃÒÔÄÄÒ»×Ö¶Î»ò·½Ê½¶ÔÍ¶Æ±½øÐÐÅÅÐò',
+	'polllist_orderby_dateline' => '°´·¢²¼Ê±¼äµ¹Ðò',
+	'polllist_orderby_hot' => '°´ÈÈ¶Èµ¹Ðò',
+	'polllist_orderby_lastvote' => '°´×îºóÍ¶Æ±Ê±¼äµ¹Ðò',
+	'polllist_orderby_viewnum' => '°´²é¿´Êýµ¹Ðò',
+	'polllist_orderby_replynum' => '°´»Ø¸´Êýµ¹Ðò',
+	'polllist_orderby_votenum' => '°´Í¶Æ±Êýµ¹Ðò',
+	'polllist_credit' => 'ÐüÉÍÍ¶Æ±',
+	'polllist_credit_nolimit' => '²»ÏÞ¶¨',
+	'polllist_credit_yes' => 'Ö»È¡ÐüÉÍÍ¶Æ±',
+	'polllist_expirefilter' => '¹ýÆÚÍ¶Æ±',
+	'polllist_expirefilter_off' => '²»ÆÁ±Î',
+	'polllist_expirefilter_on' => 'ÆÁ±Î',
 
 );
 

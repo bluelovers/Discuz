@@ -4,18 +4,22 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_friend.php 20567 2011-02-28 02:30:15Z congyushuai $
+ *      $Id: lang_friend.php 27449 2012-02-01 05:32:35Z zhangguosheng $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 $lang = array
 (
-	'friend_name' => 'Ф╥╩Е┼═Е╔╫Е▐▀Д╩╩Е▀≥',
-	'friend_desc' => 'Ф⌠│Ф°┴ 5 Е─▀Е╔╫Е▐▀Г█╡Е╬≈Г⌡╦Ф┤┴Г └Г█▌Е▀╣',
-	'friend_view' => '<strong>Х╚▀Ф▄┴Г┘╖Д╩╔Д╦▀Г └Х╙╙Ф≤▌Д╬├Е▐┐Х┬┤Ф°╛Д╩╩Е▀≥О╪ </strong>
+	'friend_name' => 'лМ╪с╨цсяхннЯ',
+	'friend_desc' => 'с╣сп 5 ╦Ж╨цся╩Я╣цоЮс╕╣д╫╠юЬ',
+	'friend_view' => '<strong>гК╟╢ууртоб╣дк╣цВю╢╡нсК╠╬хннЯё╨</strong>
 		<ul>
-		<li>1. <a href="home.php?mod=spacecp&ac=friend&op=find" target="_blank">Ф√╟Г╙≈Е▐ёФ┴⌠И√▀Е╟▀Ф┴╬Е╔╫Е▐▀И═│И²╒</a></li>
-		<li>2. Е°╗Ф√╟Ф┴⌠И√▀Г └И═│И²╒Д╦╜О╪▄Е▐╞Д╩╔Е╟┤ГЁ╩Г╣╠Х┤╙Е▀∙Г╣╕Ф┌╗Ф┴╬Е┬╟Г └Ф▌╗Х√╕Г■╗Ф┬╤Е┼═Г┌╨Е╔╫Е▐▀О╪▄Д╧÷Е▐╞Д╩╔Х┤╙Е╥╠Х╗╜Г╫╝Ф╒²Д╩╤Е╟▀Ф┴╬Д╦╕Ф╥╩Е┼═Г┌╨Е╔╫Е▐▀</li>
-		<li>3. Ф▌╔Д╦▀Д╬├О╪▄Ф┌╗И┌└И°─Х╕│Г╜┴Е╬┘Е╟█Ф√╧Ф┴╧Е┤├Ф┌╗Г └Е╔╫Е▐▀Г■ЁХ╚▀</li>
+		<li>1. <a href="home.php?mod=spacecp&ac=friend&op=find" target="_blank">пб╢╟©з╢Р©╙я╟ур╨цсярЁцФ</a></li>
+		<li>2. тзпб╢Р©╙╣дрЁцФжпё╛©ирт╫╚о╣мЁвт╤╞╦ЬдЗур╣╫╣дмф╪Жсц╩╖╪сн╙╨цсяё╛р╡©иртвт╪╨иХжцлУ╪Чя╟ур╡╒лМ╪сн╙╨цся</li>
+		<li>3. ╫собю╢ё╛дЗ╩╧пХр╙╣х╢Щ╤т╥╫еЗв╪дЗ╣д╨цсяиЙгК</li>
 		</ul>',
 );
 

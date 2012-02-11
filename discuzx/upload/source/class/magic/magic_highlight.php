@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: magic_highlight.php 19561 2011-01-10 02:28:57Z liulanbo $
+ *      $Id: magic_highlight.php 26749 2011-12-22 07:38:37Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -57,48 +57,48 @@ class magic_highlight {
 
 	function usesubmit() {
 		global $_G;
-		$idtype = !empty($_G['gp_idtype']) ? $_G['gp_idtype'] : '';
+		$idtype = !empty($_GET['idtype']) ? $_GET['idtype'] : '';
 		if(!in_array($idtype, $this->idtypearray)) {
 			showmessage(lang('magic/highlight', 'highlight_info_notype'), dreferer(), array(), array('showdialog' => 1, 'locationtime' => true));
 		}
-		if(empty($_G['gp_id'])) {
+		if(empty($_GET['id'])) {
 			showmessage(lang('magic/highlight', 'highlight_info_nonexistence_'.$idtype));
 		}
 
 		if($idtype == 'tid') {
-			$info = getpostinfo($_G['gp_id'], $idtype, array('fid', 'authorid', 'subject'));
+			$info = getpostinfo($_GET['id'], $idtype, array('fid', 'authorid', 'subject'));
 			$this->_check($info['fid']);
-			magicthreadmod($_G['gp_id']);
-			DB::query("UPDATE ".DB::table('forum_thread')." SET highlight='$_G[gp_highlight_color]', moderated='1' WHERE tid='$_G[gp_id]'");
+			magicthreadmod($_GET['id']);
+			C::t('forum_thread')->update($_GET['id'], array('highlight' => $_GET['highlight_color'], 'moderated' => 1));
 			$this->parameters['expiration'] = $this->parameters['expiration'] ? intval($this->parameters['expiration']) : 24;
 			$expiration = TIMESTAMP + $this->parameters['expiration'] * 3600;
-			updatemagicthreadlog($_G['gp_id'], $this->magic['magicid'], $expiration > 0 ? 'EHL' : 'HLT', $expiration);
+			updatemagicthreadlog($_GET['id'], $this->magic['magicid'], $expiration > 0 ? 'EHL' : 'HLT', $expiration);
 			if($info['authorid'] != $_G['uid']) {
-				notification_add($info['authorid'], 'magic', lang('magic/stick', 'highlight_notification'), array('tid' => $_G['gp_id'], 'subject' => $info['subject'], 'magicname' => $this->magic['name']));
+				notification_add($info['authorid'], 'magic', lang('magic/stick', 'highlight_notification'), array('tid' => $_GET['id'], 'subject' => $info['subject'], 'magicname' => $this->magic['name']));
 			}
 		} elseif($idtype == 'blogid') {
-			$info = getpostinfo($_G['gp_id'], $idtype, array('uid', 'subject'));
-			DB::query("UPDATE ".DB::table('home_blogfield')." SET magiccolor='$_G[gp_highlight_color]' WHERE blogid='$_G[gp_id]'");
+			$info = getpostinfo($_GET['id'], $idtype, array('uid', 'subject'));
+			C::t('home_blogfield')->update($_GET['id'], array('magiccolor' => $_GET['highlight_color']));
 			if($info['uid'] != $_G['uid']) {
-				notification_add($info['uid'], 'magic', lang('magic/stick', 'highlight_notification_blogid'), array('blogid' => $_G['gp_id'], 'subject' => $info['subject'], 'magicname' => $this->magic['name']));
+				notification_add($info['uid'], 'magic', lang('magic/stick', 'highlight_notification_blogid'), array('blogid' => $_GET['id'], 'subject' => $info['subject'], 'magicname' => $this->magic['name']));
 			}
 		}
 
 		usemagic($this->magic['magicid'], $this->magic['num']);
-		updatemagiclog($this->magic['magicid'], '2', '1', '0', 0, $idtype, $_G['gp_id']);
+		updatemagiclog($this->magic['magicid'], '2', '1', '0', 0, $idtype, $_GET['id']);
 
-		showmessage(lang('magic/highlight', 'highlight_succeed_'.$idtype), dreferer(), array(), array('showdialog' => 1, 'locationtime' => true));
+		showmessage(lang('magic/highlight', 'highlight_succeed_'.$idtype), dreferer(), array(), array('alert' => 'right', 'showdialog' => 1, 'locationtime' => true));
 	}
 
 	function show() {
 		global $_G;
-		$id = !empty($_G['gp_id']) ? htmlspecialchars($_G['gp_id']) : '';
-		$idtype = !empty($_G['gp_idtype']) ? $_G['gp_idtype'] : '';
+		$id = !empty($_GET['id']) ? htmlspecialchars($_GET['id']) : '';
+		$idtype = !empty($_GET['idtype']) ? $_GET['idtype'] : '';
 		if(!in_array($idtype, $this->idtypearray)) {
 			showmessage(lang('magic/highlight', 'highlight_info_notype'), dreferer(), array(), array('showdialog' => 1, 'locationtime' => true));
 		}
 		if($id) {
-			$info = getpostinfo($_G['gp_id'], $idtype);
+			$info = getpostinfo($_GET['id'], $idtype);
 			if($idtype == 'tid') {
 				$this->_check($info['fid']);
 				$this->parameters['expiration'] = $this->parameters['expiration'] && $idtype == 'tid' ? intval($this->parameters['expiration']) : 24;
@@ -140,9 +140,9 @@ EOF;
 
 	function buy() {
 		global $_G;
-		$idtype = !empty($_G['gp_idtype']) ? $_G['gp_idtype'] : '';
-		if(!empty($_G['gp_id'])) {
-			$info = getpostinfo($_G['gp_id'], $idtype);
+		$idtype = !empty($_GET['idtype']) ? $_GET['idtype'] : '';
+		if(!empty($_GET['id'])) {
+			$info = getpostinfo($_GET['id'], $idtype);
 			if($idtype == 'tid') {
 				$this->_check($info['fid']);
 			}

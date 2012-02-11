@@ -4,15 +4,19 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_attachsize.php 7828 2010-04-14 02:11:48Z monkey $
+ *      $Id: lang_attachsize.php 27449 2012-02-01 05:32:35Z zhangguosheng $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 $lang = array
 (
-	'attachsize_name' => 'é™„ä»¶å¢žå®¹å¡',
-	'attachsize_desc' => 'å¢žåŠ é™„ä»¶å®¹é‡ä¸Šé™',
-	'attachsize_info' => 'é¡å¤–å¢žåŠ  {num} M é™„ä»¶å®¹é‡ä¸Šé™',
-	'attachsize_addsize' => 'å¢žåŠ å®¹é‡',
+	'attachsize_name' => '¸½¼þÔöÈÝ¿¨',
+	'attachsize_desc' => 'Ôö¼Ó¸½¼þÈÝÁ¿ÉÏÏÞ',
+	'attachsize_info' => '¶îÍâÔö¼Ó {num} M ¸½¼þÈÝÁ¿ÉÏÏÞ',
+	'attachsize_addsize' => 'Ôö¼ÓÈÝÁ¿',
 );
 
 ?>

@@ -60,9 +60,18 @@
 					<!--{template home/space_click}-->
 				</div>
 				<!--{/if}-->
+
+				<!--{if !empty($_G['setting']['pluginhooks']['space_blog_share_method'])}-->
+					<div class="tshare cl">
+						<strong>{lang viewthread_share_to}:</strong>
+						<!--{hook/space_blog_share_method}-->
+					</div>
+				<!--{/if}-->
+
 				<div class="o cl">
 					<a href="home.php?mod=spacecp&ac=favorite&type=blog&id=$blog[blogid]&spaceuid=$blog[uid]&handlekey=favoritebloghk_{$blog[blogid]}" id="a_favorite" onclick="showWindow(this.id, this.href, 'get', 0);" class="oshr ofav">{lang favorite}</a>
 					<a href="home.php?mod=spacecp&ac=share&type=blog&id=$blog[blogid]&handlekey=sharebloghk_{$blog[blogid]}" id="a_share" onclick="showWindow(this.id, this.href, 'get', 0);" class="oshr">{lang share}</a>
+					<a href="misc.php?mod=invite&action=blog&id=$blog[blogid]" id="a_invite" onclick="showWindow('invite', this.href, 'get', 0);" class="oshr oivt">{lang invite}</a>
 					<!--{if ($_G[uid] == $blog[uid]) && $_G[setting][magicstatus] && ($_G[setting][magics][call] || $_G[setting][magics][updateline] || $_G[setting][magics][downdateline] || $_G[setting][magics][hot] || $_G[setting][magics][highlight])}-->
 						<a href="javascript:;" id="usemagic" onmouseover="showMenu(this.id);">{lang use_magic_tools}</a>
 						<span class="pipe">|</span>
@@ -97,7 +106,7 @@
 					<!--{/if}-->
 
 					<!--{if !$blog['friend'] && !$blog['pushedaid'] && (getstatus($_G['member']['allowadmincp'], 2) || $_G['group']['allowmanagearticle'])}-->
-					<a href="portal.php?mod=portalcp&ac=index&op=push&idtype=blogid&id=$blog[blogid]" onclick="showWindow('push', this.href, 'get', 0)">{lang article_push}</a><span class="pipe">|</span>
+					<a href="portal.php?mod=portalcp&ac=article&from_idtype=blogid&from_id=$blog[blogid]">{lang article_push}</a><span class="pipe">|</span>
 					<!--{/if}-->
 
 					<!--{if $_G['group']['allowdiy'] || getstatus($_G['member']['allowadmincp'], 4) || getstatus($_G['member']['allowadmincp'], 5) || getstatus($_G['member']['allowadmincp'], 6)}-->

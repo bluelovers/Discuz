@@ -1,20 +1,19 @@
 <!--{template common/header}-->
 <div id="pt" class="bm cl">
-	<!--{subtemplate common/simplesearchform}-->
 	<div class="z">
 		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
 		<a href="$_G[setting][navs][1][filename]">{lang portal}</a> <em>&rsaquo;</em>
 		<a href="portal.php?mod=portalcp">{lang portal_manage}</a> <em>&rsaquo;</em>
-		$_G['setting']['plugins']['portalcp'][$_G['gp_id']]['name']
+		$_G['setting']['plugins']['portalcp'][$_GET['id']]['name']
 	</div>
 </div>
 
 <div id="ct" class="ct2_a wp cl">
 	<div class="mn">
-		<h1 class="mt">$_G['setting']['plugins']['portalcp'][$_G['gp_id']]['name']</h1>
+		<h1 class="mt">$_G['setting']['plugins']['portalcp'][$_GET['id']]['name']</h1>
 		<div class="bm bw0">
 			<div id="block_selection">
-				<!--{eval include(template($_G['gp_id']));}-->
+				<!--{eval include(template($_GET['id']));}-->
 			</div>
 		</div>
 	</div>

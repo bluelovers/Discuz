@@ -4,99 +4,103 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_feed.php 19827 2011-01-19 07:07:40Z monkey $
+ *      $Id: lang_feed.php 27449 2012-02-01 05:32:35Z zhangguosheng $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 $lang = array
 (
 
-	'feed_blog_password' => '{actor} ç™¼è¡¨äº†æ–°åŠ å¯†æ—¥èªŒ {subject}',
-	'feed_blog_title' => '{actor} ç™¼è¡¨äº†æ–°æ—¥èªŒ',
+	'feed_blog_password' => '{actor} ·¢±íÁËĞÂ¼ÓÃÜÈÕÖ¾ {subject}',
+	'feed_blog_title' => '{actor} ·¢±íÁËĞÂÈÕÖ¾',
 	'feed_blog_body' => '<b>{subject}</b><br />{summary}',
-	'feed_album_title' => '{actor} æ›´æ–°äº†ç›¸å†Š',
-	'feed_album_body' => '<b>{album}</b><br />å…± {picnum} å¼µåœ–ç‰‡',
-	'feed_pic_title' => '{actor} ä¸Šå‚³äº†æ–°åœ–ç‰‡',
+	'feed_album_title' => '{actor} ¸üĞÂÁËÏà²á',
+	'feed_album_body' => '<b>{album}</b><br />¹² {picnum} ÕÅÍ¼Æ¬',
+	'feed_pic_title' => '{actor} ÉÏ´«ÁËĞÂÍ¼Æ¬',
 	'feed_pic_body' => '{title}',
 
 
 
-	'feed_poll' => '{actor} ç™¼èµ·äº†æ–°æŠ•ç¥¨',
+	'feed_poll' => '{actor} ·¢ÆğÁËĞÂÍ¶Æ±',
 
-	'feed_comment_space' => '{actor} åœ¨ {touser} çš„ç•™è¨€æ¿ç•™äº†è¨€',
-	'feed_comment_image' => '{actor} è©•è«–äº† {touser} çš„åœ–ç‰‡',
-	'feed_comment_blog' => '{actor} è©•è«–äº† {touser} çš„æ—¥èªŒ {blog}',
-	'feed_comment_poll' => '{actor} è©•è«–äº† {touser} çš„æŠ•ç¥¨ {poll}',
-	'feed_comment_event' => '{actor} åœ¨ {touser} çµ„ç¹”çš„æ´»å‹• {event} ä¸­ç•™è¨€äº†',
-	'feed_comment_share' => '{actor} å° {touser} åˆ†äº«çš„ {share} ç™¼è¡¨äº†è©•è«–',
+	'feed_comment_space' => '{actor} ÔÚ {touser} µÄÁôÑÔ°åÁôÁËÑÔ',
+	'feed_comment_image' => '{actor} ÆÀÂÛÁË {touser} µÄÍ¼Æ¬',
+	'feed_comment_blog' => '{actor} ÆÀÂÛÁË {touser} µÄÈÕÖ¾ {blog}',
+	'feed_comment_poll' => '{actor} ÆÀÂÛÁË {touser} µÄÍ¶Æ± {poll}',
+	'feed_comment_event' => '{actor} ÔÚ {touser} ×éÖ¯µÄ»î¶¯ {event} ÖĞÁôÑÔÁË',
+	'feed_comment_share' => '{actor} ¶Ô {touser} ·ÖÏíµÄ {share} ·¢±íÁËÆÀÂÛ',
 
-	'feed_showcredit' => '{actor} è´ˆé€çµ¦ {fusername} ç«¶åƒ¹ç©åˆ† {credit} å€‹ï¼Œå¹«åŠ©å¥½å‹æå‡åœ¨<a href="misc.php?mod=ranklist&type=member" target="_blank">ç«¶åƒ¹æ’è¡Œæ¦œ</a>ä¸­çš„åæ¬¡',
-	'feed_showcredit_self' => '{actor} å¢åŠ ç«¶åƒ¹ç©åˆ† {credit} å€‹ï¼Œæå‡è‡ªå·±åœ¨<a href="misc.php?mod=ranklist&type=member" target="_blank">ç«¶åƒ¹æ’è¡Œæ¦œ</a>ä¸­çš„åæ¬¡',
-	'feed_doing_title' => '{actor}ï¼š{message}',
-	'feed_friend_title' => '{actor} å’Œ {touser} æˆç‚ºäº†å¥½å‹',
-
-
-
-	'feed_click_blog' => '{actor} é€äº†ä¸€å€‹ã€Œ{click}ã€çµ¦ {touser} çš„æ—¥èªŒ {subject}',
-	'feed_click_thread' => '{actor} é€äº†ä¸€å€‹ã€Œ{click}ã€çµ¦ {touser} çš„è©±é¡Œ {subject}',
-	'feed_click_pic' => '{actor} é€äº†ä¸€å€‹ã€Œ{click}ã€çµ¦ {touser} çš„åœ–ç‰‡',
-	'feed_click_article' => '{actor} é€äº†ä¸€å€‹ã€Œ{click}ã€çµ¦ {touser} çš„æ–‡ç«  {subject}',
+	'feed_showcredit' => '{actor} ÔùËÍ¸ø {fusername} ¾º¼Û»ı·Ö {credit} ¸ö£¬°ïÖúºÃÓÑÌáÉıÔÚ<a href="misc.php?mod=ranklist&type=member" target="_blank">¾º¼ÛÅÅĞĞ°ñ</a>ÖĞµÄÃû´Î',
+	'feed_showcredit_self' => '{actor} Ôö¼Ó¾º¼Û»ı·Ö {credit} ¸ö£¬ÌáÉı×Ô¼ºÔÚ<a href="misc.php?mod=ranklist&type=member" target="_blank">¾º¼ÛÅÅĞĞ°ñ</a>ÖĞµÄÃû´Î',
+	'feed_doing_title' => '{actor}£º{message}',
+	'feed_friend_title' => '{actor} ºÍ {touser} ³ÉÎªÁËºÃÓÑ',
 
 
-	'feed_task' => '{actor} å®Œæˆäº†æœ‰çä»»å‹™ {task}',
-	'feed_task_credit' => '{actor} å®Œæˆäº†æœ‰çä»»å‹™ {task}ï¼Œé ˜å–äº† {credit} å€‹çå‹µç©åˆ†',
 
-	'feed_profile_update_base' => '{actor} æ›´æ–°äº†è‡ªå·±çš„åŸºæœ¬è³‡æ–™',
-	'feed_profile_update_contact' => '{actor} æ›´æ–°äº†è‡ªå·±çš„è¯ç¹«æ–¹å¼',
-	'feed_profile_update_edu' => '{actor} æ›´æ–°äº†è‡ªå·±çš„æ•™è‚²æƒ…æ³',
-	'feed_profile_update_work' => '{actor} æ›´æ–°äº†è‡ªå·±çš„å·¥ä½œä¿¡æ¯',
-	'feed_profile_update_info' => '{actor} æ›´æ–°äº†è‡ªå·±çš„å€‹äººä¿¡æ¯',
-	'feed_profile_update_bbs' => '{actor} æ›´æ–°äº†è‡ªå·±çš„è«–å£‡ä¿¡æ¯',
-	'feed_profile_update_verify' => '{actor} æ›´æ–°äº†è‡ªå·±çš„èªè­‰ä¿¡æ¯',
-
-	'feed_add_attachsize' => '{actor} ç”¨ {credit} å€‹ç©åˆ†å…Œæ›äº† {size} é™„ä»¶ç©ºé–“ï¼Œå¯ä»¥ä¸Šå‚³æ›´å¤šçš„åœ–ç‰‡å•¦(<a href="home.php?mod=spacecp&ac=credit&op=addsize">æˆ‘ä¹Ÿä¾†å…Œæ›</a>)',
-
-	'feed_invite' => '{actor} ç™¼èµ·é‚€è«‹ï¼Œå’Œ {username} æˆç‚ºäº†å¥½å‹',
-
-	'magicuse_thunder_announce_title' => '<strong>{username} ç™¼å‡ºäº†ã€Œé›·é³´ä¹‹è²ã€</strong>',
-	'magicuse_thunder_announce_body' => 'å¤§å®¶å¥½ï¼Œæˆ‘ä¸Šç·šå•¦<br /><a href="home.php?mod=space&uid={uid}" target="_blank">æ­¡è¿ä¾†æˆ‘å®¶ä¸²å€‹é–€</a>',
+	'feed_click_blog' => '{actor} ËÍÁËÒ»¸ö¡°{click}¡±¸ø {touser} µÄÈÕÖ¾ {subject}',
+	'feed_click_thread' => '{actor} ËÍÁËÒ»¸ö¡°{click}¡±¸ø {touser} µÄ»°Ìâ {subject}',
+	'feed_click_pic' => '{actor} ËÍÁËÒ»¸ö¡°{click}¡±¸ø {touser} µÄÍ¼Æ¬',
+	'feed_click_article' => '{actor} ËÍÁËÒ»¸ö¡°{click}¡±¸ø {touser} µÄÎÄÕÂ {subject}',
 
 
-	'feed_thread_title' =>			'{actor} ç™¼è¡¨äº†æ–°è©±é¡Œ',
+	'feed_task' => '{actor} Íê³ÉÁËÓĞ½±ÈÎÎñ {task}',
+	'feed_task_credit' => '{actor} Íê³ÉÁËÓĞ½±ÈÎÎñ {task}£¬ÁìÈ¡ÁË {credit} ¸ö½±Àø»ı·Ö',
+
+	'feed_profile_update_base' => '{actor} ¸üĞÂÁË×Ô¼ºµÄ»ù±¾×ÊÁÏ',
+	'feed_profile_update_contact' => '{actor} ¸üĞÂÁË×Ô¼ºµÄÁªÏµ·½Ê½',
+	'feed_profile_update_edu' => '{actor} ¸üĞÂÁË×Ô¼ºµÄ½ÌÓıÇé¿ö',
+	'feed_profile_update_work' => '{actor} ¸üĞÂÁË×Ô¼ºµÄ¹¤×÷ĞÅÏ¢',
+	'feed_profile_update_info' => '{actor} ¸üĞÂÁË×Ô¼ºµÄ¸öÈËĞÅÏ¢',
+	'feed_profile_update_bbs' => '{actor} ¸üĞÂÁË×Ô¼ºµÄÂÛÌ³ĞÅÏ¢',
+	'feed_profile_update_verify' => '{actor} ¸üĞÂÁË×Ô¼ºµÄÈÏÖ¤ĞÅÏ¢',
+
+	'feed_add_attachsize' => '{actor} ÓÃ {credit} ¸ö»ı·Ö¶Ò»»ÁË {size} ¸½¼ş¿Õ¼ä£¬¿ÉÒÔÉÏ´«¸ü¶àµÄÍ¼Æ¬À²(<a href="home.php?mod=spacecp&ac=credit&op=addsize">ÎÒÒ²À´¶Ò»»</a>)',
+
+	'feed_invite' => '{actor} ·¢ÆğÑûÇë£¬ºÍ {username} ³ÉÎªÁËºÃÓÑ',
+
+	'magicuse_thunder_announce_title' => '<strong>{username} ·¢³öÁË¡°À×ÃùÖ®Éù¡±</strong>',
+	'magicuse_thunder_announce_body' => '´ó¼ÒºÃ£¬ÎÒÉÏÏßÀ²<br /><a href="home.php?mod=space&uid={uid}" target="_blank">»¶Ó­À´ÎÒ¼Ò´®¸öÃÅ</a>',
+
+
+	'feed_thread_title' =>			'{actor} ·¢±íÁËĞÂ»°Ìâ',
 	'feed_thread_message' =>		'<b>{subject}</b><br />{message}',
 
-	'feed_reply_title' =>			'{actor} å›å¾©äº† {author} çš„è©±é¡Œ {subject}',
-	'feed_reply_title_anonymous' =>		'{actor} å›å¾©äº†è©±é¡Œ {subject}',
+	'feed_reply_title' =>			'{actor} »Ø¸´ÁË {author} µÄ»°Ìâ {subject}',
+	'feed_reply_title_anonymous' =>		'{actor} »Ø¸´ÁË»°Ìâ {subject}',
 	'feed_reply_message' =>			'',
 
-	'feed_thread_poll_title' =>		'{actor} ç™¼èµ·äº†æ–°æŠ•ç¥¨',
+	'feed_thread_poll_title' =>		'{actor} ·¢ÆğÁËĞÂÍ¶Æ±',
 	'feed_thread_poll_message' =>		'<b>{subject}</b><br />{message}',
 
-	'feed_thread_votepoll_title' =>		'{actor} åƒèˆ‡äº†é—œæ–¼ {subject} çš„æŠ•ç¥¨',
+	'feed_thread_votepoll_title' =>		'{actor} ²ÎÓëÁË¹ØÓÚ {subject} µÄÍ¶Æ±',
 	'feed_thread_votepoll_message' =>	'',
 
-	'feed_thread_goods_title' =>		'{actor} å‡ºå”®äº†ä¸€å€‹æ–°å•†å“',
-	'feed_thread_goods_message_1' =>	'<b>{itemname}</b><br />å”®åƒ¹ {itemprice} å…ƒ é™„åŠ  {itemcredit}{creditunit}',
-	'feed_thread_goods_message_2' =>	'<b>{itemname}</b><br />å”®åƒ¹ {itemprice} å…ƒ',
-	'feed_thread_goods_message_3' =>	'<b>{itemname}</b><br />å”®åƒ¹ {itemcredit}{creditunit}',
+	'feed_thread_goods_title' =>		'{actor} ³öÊÛÁËÒ»¸öĞÂÉÌÆ·',
+	'feed_thread_goods_message_1' =>	'<b>{itemname}</b><br />ÊÛ¼Û {itemprice} Ôª ¸½¼Ó {itemcredit}{creditunit}',
+	'feed_thread_goods_message_2' =>	'<b>{itemname}</b><br />ÊÛ¼Û {itemprice} Ôª',
+	'feed_thread_goods_message_3' =>	'<b>{itemname}</b><br />ÊÛ¼Û {itemcredit}{creditunit}',
 
-	'feed_thread_reward_title' =>		'{actor} ç™¼èµ·äº†æ–°æ‡¸è³',
-	'feed_thread_reward_message' =>		'<b>{subject}</b><br />æ‡¸è³ {rewardprice}{extcredits}',
+	'feed_thread_reward_title' =>		'{actor} ·¢ÆğÁËĞÂĞüÉÍ',
+	'feed_thread_reward_message' =>		'<b>{subject}</b><br />ĞüÉÍ {rewardprice}{extcredits}',
 
-	'feed_reply_reward_title' =>		'{actor} å›å¾©äº†é—œæ–¼ {subject} çš„æ‡¸è³',
+	'feed_reply_reward_title' =>		'{actor} »Ø¸´ÁË¹ØÓÚ {subject} µÄĞüÉÍ',
 	'feed_reply_reward_message' =>		'',
 
-	'feed_thread_activity_title' =>		'{actor} ç™¼èµ·äº†æ–°æ´»å‹•',
-	'feed_thread_activity_message' =>	'<b>{subject}</b><br />é–‹å§‹æ™‚é–“ï¼š{starttimefrom}<br />æ´»å‹•åœ°é»ï¼š{activityplace}<br />{message}',
+	'feed_thread_activity_title' =>		'{actor} ·¢ÆğÁËĞÂ»î¶¯',
+	'feed_thread_activity_message' =>	'<b>{subject}</b><br />¿ªÊ¼Ê±¼ä£º{starttimefrom}<br />»î¶¯µØµã£º{activityplace}<br />{message}',
 
-	'feed_reply_activity_title' =>		'{actor} å ±ååƒåŠ äº† {subject} çš„æ´»å‹•',
+	'feed_reply_activity_title' =>		'{actor} ±¨Ãû²Î¼ÓÁË {subject} µÄ»î¶¯',
 	'feed_reply_activity_message' =>	'',
 
-	'feed_thread_debate_title' =>		'{actor} ç™¼èµ·äº†æ–°è¾¯è«–',
-	'feed_thread_debate_message' =>		'<b>{subject}</b><br />æ­£æ–¹ï¼š{affirmpoint}<br />åæ–¹ï¼š{negapoint}<br />{message}',
+	'feed_thread_debate_title' =>		'{actor} ·¢ÆğÁËĞÂ±çÂÛ',
+	'feed_thread_debate_message' =>		'<b>{subject}</b><br />Õı·½£º{affirmpoint}<br />·´·½£º{negapoint}<br />{message}',
 
-	'feed_thread_debatevote_title_1' =>	'{actor} ä»¥æ­£æ–¹èº«ä»½åƒèˆ‡äº†é—œæ–¼ {subject} çš„è¾¯è«–',
-	'feed_thread_debatevote_title_2' =>	'{actor} ä»¥åæ–¹èº«ä»½åƒèˆ‡äº†é—œæ–¼ {subject} çš„è¾¯è«–',
-	'feed_thread_debatevote_title_3' =>	'{actor} ä»¥ä¸­ç«‹èº«ä»½åƒèˆ‡äº†é—œæ–¼ {subject} çš„è¾¯è«–',
+	'feed_thread_debatevote_title_1' =>	'{actor} ÒÔÕı·½Éí·İ²ÎÓëÁË¹ØÓÚ {subject} µÄ±çÂÛ',
+	'feed_thread_debatevote_title_2' =>	'{actor} ÒÔ·´·½Éí·İ²ÎÓëÁË¹ØÓÚ {subject} µÄ±çÂÛ',
+	'feed_thread_debatevote_title_3' =>	'{actor} ÒÔÖĞÁ¢Éí·İ²ÎÓëÁË¹ØÓÚ {subject} µÄ±çÂÛ',
 	'feed_thread_debatevote_message_1' =>	'',
 	'feed_thread_debatevote_message_2' =>	'',
 	'feed_thread_debatevote_message_3' =>	'',

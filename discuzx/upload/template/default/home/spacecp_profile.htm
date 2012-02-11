@@ -54,7 +54,7 @@
 							<p class="d">{lang memcp_profile_passwd_comment}</p>
 						</td>
 					</tr>
-					<tr id="contact"{if $_G[gp_from] == 'contact'} style="background-color: {$_G['style']['specialbg']};"{/if}>
+					<tr id="contact"{if $_GET[from] == 'contact'} style="background-color: {$_G['style']['specialbg']};"{/if}>
 						<th>{lang email}</th>
 						<td>
 							<input type="text" name="emailnew" id="emailnew" value="$space[email]" class="px" />
@@ -112,10 +112,10 @@
 				<p class="tbms mtm {if !$showbtn}tbms_r{/if}"><!--{if $showbtn}-->{lang spacecp_profile_message1}<!--{else}-->{lang spacecp_profile_message2}<!--{/if}--></p>
 				<!--{/if}-->
 			<iframe id="frame_profile" name="frame_profile" style="display: none"></iframe>
-			<form action="{if $operation != 'plugin'}home.php?mod=spacecp&ac=profile&op=$operation{else}home.php?mod=spacecp&ac=plugin&op=profile&id=$_G[gp_id]{/if}" method="post" enctype="multipart/form-data" autocomplete="off"{if $operation != 'plugin'} target="frame_profile"{/if} onsubmit="clearErrorInfo();">
+			<form action="{if $operation != 'plugin'}home.php?mod=spacecp&ac=profile&op=$operation{else}home.php?mod=spacecp&ac=plugin&op=profile&id=$_GET[id]{/if}" method="post" enctype="multipart/form-data" autocomplete="off"{if $operation != 'plugin'} target="frame_profile"{/if} onsubmit="clearErrorInfo();">
 				<input type="hidden" value="{FORMHASH}" name="formhash" />
-				<!--{if $_G[gp_vid]}-->
-				<input type="hidden" value="$_G[gp_vid]" name="vid" />
+				<!--{if $_GET[vid]}-->
+				<input type="hidden" value="$_GET[vid]" name="vid" />
 				<!--{/if}-->
 				<table cellspacing="0" cellpadding="0" class="tfm" id="profilelist">
 					<tr>
@@ -131,7 +131,7 @@
 							$htmls[$key]
 						</td>
 						<td class="p">
-							<!--{if $value[showinthread] || $vid}-->
+							<!--{if $vid}-->
 							<input type="hidden" name="privacy[$key]" value="3" />
 							<!--{else}-->
 							<select name="privacy[$key]">
@@ -208,7 +208,7 @@
 				<!--{/if}-->
 
 				<!--{if $operation == 'plugin'}-->
-					<!--{eval include(template($_G['gp_id']));}-->
+					<!--{eval include(template($_GET['id']));}-->
 				<!--{/if}-->
 				<!--{hook/spacecp_profile_extra}-->
 				<!--{if $showbtn}-->

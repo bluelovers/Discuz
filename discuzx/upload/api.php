@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: api.php 10110 2010-05-07 01:05:11Z monkey $
+ *      $Id: api.php 23508 2011-07-21 06:34:40Z cnteacher $
  */
 
 define('IN_API', true);
@@ -23,7 +23,7 @@ function loadcore() {
 	global $_G;
 	require_once './source/class/class_core.php';
 
-	$discuz = & discuz_core::instance();
+	$discuz = C::app();
 	$discuz->init_cron = false;
 	$discuz->init_session = false;
 	$discuz->init();

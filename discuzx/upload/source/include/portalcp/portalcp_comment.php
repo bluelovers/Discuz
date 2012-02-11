@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portalcp_comment.php 19018 2010-12-13 10:06:27Z zhangguosheng $
+ *      $Id: portalcp_comment.php 26963 2011-12-28 08:27:31Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -13,11 +13,26 @@ if(!defined('IN_DISCUZ')) {
 
 $cid = intval($_GET['cid']);
 $comment = array();
-if($cid) {
-	$query = DB::query("SELECT * FROM ".DB::table('portal_comment')." WHERE cid='$cid'");
-	$comment = DB::fetch($query);
+if($cid && $_GET['op'] != 'requote') {
+	$comment = C::t('portal_comment')->fetch($cid);
 }
 if($_GET['op'] == 'requote') {
+
+	$aid = $_GET['aid'];
+	$article = C::t('portal_article_title')->fetch($aid);
+
+	if($article['idtype'] == 'tid') {
+		$comment = C::t('forum_post')->fetch('tid:'.$article['id'], $cid);
+		$comment['uid'] = $comment['authorid'];
+		$comment['username'] = $comment['author'];
+	} elseif($article['idtype'] == 'blogid') {
+		$comment = C::t('home_comment')->fetch($cid);
+		$comment['uid'] = $comment['authorid'];
+		$comment['username'] = $comment['author'];
+	} else {
+		$comment = C::t('portal_comment')->fetch($cid);
+	}
+	unset($aid, $article);
 
 	if(!empty($comment['message'])) {
 
@@ -34,12 +49,12 @@ if($_GET['op'] == 'requote') {
 		showmessage('comment_edit_noexist');
 	}
 
-	if((!$_G['group']['allowmanagearticle'] && $_G['uid'] != $comment['uid'] && $_G['adminid'] != 1 && $_G['gp_modarticlecommentkey'] != modauthkey($comment['cid'])) || $_G['groupid'] == '7') {
+	if((!$_G['group']['allowmanagearticle'] && $_G['uid'] != $comment['uid'] && $_G['adminid'] != 1 && $_GET['modarticlecommentkey'] != modauthkey($comment['cid'])) || $_G['groupid'] == '7') {
 		showmessage('group_nopermission', NULL, array('grouptitle' => $_G['group']['grouptitle']), array('login' => 1));
 	}
 
 	if(submitcheck('editsubmit')) {
-		$message = getstr($_POST['message'], 0, 1, 1, 2);
+		$message = getstr($_POST['message'], 0, 0, 0, 2);
 		if(strlen($message) < 2) showmessage('content_is_too_short');
 		$message = censor($message);
 		if(censormod($message)) {
@@ -48,7 +63,7 @@ if($_GET['op'] == 'requote') {
 			$comment_status = 0;
 		}
 
-		DB::update('portal_comment', array('message' => $message, 'status' => $comment_status), array('cid' => $comment['cid']));
+		C::t('portal_comment')->update($comment['cid'], array('message' => $message, 'status' => $comment_status));
 
 		showmessage('do_success', dreferer());
 	}
@@ -68,10 +83,10 @@ if($_GET['op'] == 'requote') {
 	}
 
 	if(submitcheck('deletesubmit')) {
-		DB::query("DELETE FROM ".DB::table('portal_comment')." WHERE cid='$cid'");
+		C::t('portal_comment')->delete($cid);
 		$idtype = in_array($comment['idtype'], array('aid' ,'topicid')) ? $comment['idtype'] : 'aid';
 		$tablename = $idtype == 'aid' ? 'portal_article_count' : 'portal_topic';
-		DB::query("UPDATE ".DB::table($tablename)." SET commentnum=commentnum+'-1' WHERE $idtype='$comment[id]'");
+		C::t($tablename)->increase($comment[id], array('commentnum' => -1));
 		showmessage('do_success', dreferer());
 	}
 

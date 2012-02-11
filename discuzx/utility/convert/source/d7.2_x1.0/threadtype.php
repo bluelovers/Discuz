@@ -43,7 +43,7 @@ while($row = $db_source->fetch_array($query)) {
 }
 
 if($nextid) {
-	showmessage("绻肩簩杞夋彌涓婚鍒嗛鏁告摎琛紝fid=$nextid", "index.php?a=$action&source=$source&prg=$curprg&start=".($start+$limit));
+	showmessage("继续转换主题分类数据表，fid=$nextid", "index.php?a=$action&source=$source&prg=$curprg&start=".($start+$limit));
 }
 
 ?>

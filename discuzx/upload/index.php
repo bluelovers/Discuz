@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: index.php 22874 2011-05-28 04:14:35Z zhengqingpeng $
+ *      $Id: index.php 27051 2011-12-31 04:46:31Z zhangguosheng $
  */
 
 if(!empty($_SERVER['QUERY_STRING']) && is_numeric($_SERVER['QUERY_STRING'])) {
@@ -66,16 +66,14 @@ if(!empty($_SERVER['QUERY_STRING']) && is_numeric($_SERVER['QUERY_STRING'])) {
 				$_ENV['prefixdomain'] = addslashes($_ENV['hostarr'][0]);
 				$_ENV['domainroot'] = addslashes($_ENV['domainroot']);
 				require_once './source/class/class_core.php';
-				$discuz = & discuz_core::instance();
-				$discuz->init_setting = true;
-				$discuz->init_user = false;
-				$discuz->init_session = false;
-				$discuz->init_cron = false;
-				$discuz->init_misc = false;
-				$discuz->init_memory = false;
-				$discuz->init();
+				C::app()->init_setting = true;
+				C::app()->init_user = false;
+				C::app()->init_session = false;
+				C::app()->init_cron = false;
+				C::app()->init_misc = false;
+				C::app()->init();
 				$jump = true;
-				$domain = DB::fetch_first("SELECT * FROM ".DB::table('common_domain')." WHERE domain='$_ENV[prefixdomain]' AND domainroot='$_ENV[domainroot]' LIMIT 1");
+				$domain = C::t('common_domain')->fetch_by_domain_domainroot($_ENV['prefixdomain'], $_ENV['domainroot']);
 				$apphost = $_ENV['domain']['app'][$domain['idtype']] ? $_ENV['domain']['app'][$domain['idtype']] : $_ENV['domain']['app']['default'];
 				$apphost = $apphost ? 'http://'.$apphost.'/' : '';
 				switch($domain['idtype']) {
@@ -117,9 +115,9 @@ if(!empty($_SERVER['QUERY_STRING']) && is_numeric($_SERVER['QUERY_STRING'])) {
 }
 if(!empty($url)) {
 	$delimiter = strrpos($url, '?') ? '&' : '?';
-	if($_GET['fromuid']) {
+	if(isset($_GET['fromuid']) && $_GET['fromuid']) {
 		$url .= $delimiter.'fromuid='.$_GET['fromuid'];
-	} elseif($_GET['fromuser']) {
+	} elseif(isset($_GET['fromuser']) && $_GET['fromuser']) {
 		$url .= $delimiter.'fromuser='.$_GET['fromuser'];
 	}
 	header("HTTP/1.1 301 Moved Permanently");

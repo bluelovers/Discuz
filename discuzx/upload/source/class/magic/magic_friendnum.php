@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: magic_money.php 7830 2010-04-14 02:22:32Z monkey $
+ *      $Id: magic_friendnum.php 26749 2011-12-22 07:38:37Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -49,10 +49,10 @@ class magic_friendnum {
 		global $_G;
 
 		$addnum = !empty($this->parameters['addnum']) ? intval($this->parameters['addnum']) : 10;
-		DB::query('UPDATE '.DB::table('common_member_field_home')." SET addfriend = addfriend + $addnum WHERE uid = '$_G[uid]'");
+		C::t('common_member_field_home')->increase($_G['uid'], array('addfriend' => $addnum));
 		usemagic($this->magic['magicid'], $this->magic['num']);
 		updatemagiclog($magic['magicid'], '2', '1', '0', '0', 'uid', $_G['uid']);
-		showmessage('magics_friendadd_message', '', array('num'=>intval($this->parameters['addnum'])), array('showdialog' => 1));
+		showmessage('magics_friendadd_message', '', array('num'=>intval($this->parameters['addnum'])), array('alert' => 'right', 'showdialog' => 1));
 	}
 
 	function show() {

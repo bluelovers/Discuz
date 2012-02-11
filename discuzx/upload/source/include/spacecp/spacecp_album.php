@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_album.php 22185 2011-04-25 09:18:47Z zhengqingpeng $
+ *      $Id: spacecp_album.php 26402 2011-12-12 09:14:45Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -20,8 +20,7 @@ if($_GET['op'] == 'edit') {
 		showmessage('photos_do_not_support_the_default_settings', "home.php?mod=spacecp&ac=album&uid=$_G[uid]&op=editpic&quickforward=1");
 	}
 
-	$query = DB::query("SELECT * FROM ".DB::table('home_album')." WHERE albumid='$albumid'");
-	if(!$album = DB::fetch($query)) {
+	if(!$album = C::t('home_album')->fetch($albumid)) {
 		showmessage('album_does_not_exist');
 	}
 
@@ -30,7 +29,7 @@ if($_GET['op'] == 'edit') {
 	}
 
 	if(submitcheck('editsubmit')) {
-		$_POST['albumname'] = getstr($_POST['albumname'], 50, 1, 1);
+		$_POST['albumname'] = getstr($_POST['albumname'], 50);
 		$_POST['albumname'] = censor($_POST['albumname']);
 		if(empty($_POST['albumname'])) {
 			showmessage('album_name_errors');
@@ -42,10 +41,7 @@ if($_GET['op'] == 'edit') {
 			$uids = array();
 			$names = empty($_POST['target_names'])?array():explode(',', preg_replace("/(\s+)/s", ',', $_POST['target_names']));
 			if($names) {
-				$query = DB::query("SELECT uid FROM ".DB::table('common_member')." WHERE username IN (".dimplode($names).")");
-				while ($value = DB::fetch($query)) {
-					$uids[] = $value['uid'];
-				}
+				$uids = C::t('common_member')->fetch_all_uid_by_username($names);
 			}
 			if(empty($uids)) {
 				$_POST['friend'] = 3;
@@ -66,14 +62,14 @@ if($_GET['op'] == 'edit') {
 		$_POST['catid'] = intval($_POST['catid']);
 		if($_POST['catid'] != $album['catid']) {
 			if($album['catid']) {
-				DB::query("UPDATE ".DB::table('home_album_category')." SET num=num-1 WHERE catid='$album[catid]' AND num>0");
+				C::t('home_album_category')->update_num_by_catid('-1', $album['catid'], true);
 			}
 			if($_POST['catid']) {
-				DB::query("UPDATE ".DB::table('home_album_category')." SET num=num+1 WHERE catid='$_POST[catid]'");
+				C::t('home_album_category')->update_num_by_catid('1', $_POST['catid']);
 			}
 		}
 
-		DB::update('home_album', array('albumname'=>$_POST['albumname'], 'catid'=>$_POST['catid'], 'friend'=>$_POST['friend'], 'password'=>$_POST['password'], 'target_ids'=>$_POST['target_ids'], 'depict'=>dhtmlspecialchars($_POST['depict'])), array('albumid'=>$albumid));
+		C::t('home_album')->update($albumid, array('albumname'=>$_POST['albumname'], 'catid'=>$_POST['catid'], 'friend'=>$_POST['friend'], 'password'=>$_POST['password'], 'target_ids'=>$_POST['target_ids'], 'depict'=>dhtmlspecialchars($_POST['depict'])));
 		showmessage('spacecp_edit_ok', "home.php?mod=spacecp&ac=album&op=edit&albumid=$albumid");
 	}
 
@@ -88,9 +84,8 @@ if($_GET['op'] == 'edit') {
 		$selectgroupstyle = '';
 		if($album['target_ids']) {
 			$names = array();
-			$query = DB::query("SELECT username FROM ".DB::table('common_member')." WHERE uid IN ($album[target_ids])");
-			while ($value = DB::fetch($query)) {
-				$names[] = $value['username'];
+			foreach(C::t('common_member')->fetch_all($album['target_ids']) as $uid => $value) {
+				$names[$uid] = $value['username'];
 			}
 			$album['target_names'] = implode(' ', $names);
 		}
@@ -131,8 +126,7 @@ if($_GET['op'] == 'edit') {
 
 } elseif($_GET['op'] == 'delete') {
 
-	$query = DB::query("SELECT * FROM ".DB::table('home_album')." WHERE albumid='$albumid'");
-	if(!$album = DB::fetch($query)) {
+	if(!$album = C::t('home_album')->fetch($albumid)) {
 		showmessage('album_does_not_exist');
 	}
 
@@ -152,14 +146,14 @@ if($_GET['op'] == 'edit') {
 			deletealbums(array($albumid));
 		} else {
 			if($_POST['moveto'] > 0 && $_POST['moveto'] != $albumid && !empty($albums[$_POST['moveto']])) {
-				DB::update('home_pic', array('albumid'=>$_POST['moveto']), array('albumid'=>$albumid));
+				C::t('home_pic')->update_for_albumid($albumid, array('albumid'=>$_POST['moveto']));
 				album_update_pic($_POST['moveto']);
 			} else {
-				DB::update('home_pic', array('albumid'=>0), array('albumid'=>$albumid));
+				C::t('home_pic')->update_for_albumid($albumid, array('albumid'=>0));
 			}
-			DB::query("DELETE FROM ".DB::table('home_album')." WHERE albumid='$albumid'");
+			C::t('home_album')->delete($albumid);
 		}
-		showmessage('do_success', "home.php?mod=space&uid=$_G[gp_uid]&do=album&view=me");
+		showmessage('do_success', "home.php?mod=space&uid=$_GET[uid]&do=album&view=me");
 	}
 } elseif($_GET['op'] == 'editpic') {
 
@@ -168,8 +162,7 @@ if($_GET['op'] == 'edit') {
 	require_once libfile('class/bbcode');
 
 	if($albumid > 0) {
-		$query = DB::query("SELECT * FROM ".DB::table('home_album')." WHERE albumid='$albumid'");
-		if(!$album = DB::fetch($query)) {
+		if(!$album = C::t('home_album')->fetch($albumid)) {
 			showmessage('album_does_not_exist', 'home.php?mod=space&uid='.$_G['uid'].'&do=album&view=me', array(), array('return' => true));
 		}
 
@@ -182,10 +175,10 @@ if($_GET['op'] == 'edit') {
 	if(submitcheck('editpicsubmit')) {
 		$return = true;
 		foreach ($_POST['title'] as $picid => $value) {
-			if($value == $_G['gp_oldtitle'][$picid]) {
+			if($value == $_GET['oldtitle'][$picid]) {
 				continue;
 			}
-			$title = getstr($value, 150, 1, 1);
+			$title = getstr($value, 150);
 			$title = censor($title);
 			if(censormod($title)) {
 				$pic_status = 1;
@@ -195,7 +188,7 @@ if($_GET['op'] == 'edit') {
 			}
 			$wherearr = array('picid'=>$picid);
 			if(!$managealbum) $wherearr['uid']  = $_G['uid'];
-			DB::update('home_pic', array('title'=>$title, 'status' => $pic_status), $wherearr);
+			C::t('home_pic')->update($picid, array('title'=>$title, 'status' => $pic_status));
 		}
 		if($_GET['subop'] == 'delete') {
 			if($_POST['ids']) {
@@ -207,23 +200,25 @@ if($_GET['op'] == 'edit') {
 
 		} elseif($_GET['subop'] == 'move') {
 			if($_POST['ids']) {
-				$plussql = $managealbum?'':"AND uid='$_G[uid]'";
+				$sqluid = $managealbum ? '' : $_G['uid'];
 				$_POST['newalbumid'] = intval($_POST['newalbumid']);
 				if($_POST['newalbumid']) {
-					$query = DB::query("SELECT albumid FROM ".DB::table('home_album')." WHERE albumid='$_POST[newalbumid]' $plussql");
-					if(!$album = DB::fetch($query)) {
+					if(!$album = C::t('home_album')->fetch($_POST['newalbumid'], $sqluid)) {
 						$_POST['newalbumid'] = 0;
 					}
 				}
-				DB::query("UPDATE ".DB::table('home_pic')." SET albumid='$_POST[newalbumid]' WHERE picid IN (".dimplode($_POST['ids']).") $plussql");
-				$updatecount = DB::affected_rows();
+				if($managealbum) {
+					$updatecount = C::t('home_pic')->update($_POST['ids'], array('albumid' => $_POST['newalbumid']));
+				}else {
+					$updatecount = C::t('home_pic')->update_for_uid($_G['uid'], $_POST['ids'], array('albumid' => $_POST['newalbumid']));
+				}
 				if($updatecount) {
 					if($albumid>0) {
-						DB::query("UPDATE ".DB::table('home_album')." SET picnum=picnum-$updatecount WHERE albumid='$albumid' $plussql");
+						C::t('home_album')->update_num_by_albumid($albumid, -$updatecount, 'picnum', $sqluid);
 						$return = album_update_pic($albumid);
 					}
 					if($_POST['newalbumid']) {
-						DB::query("UPDATE ".DB::table('home_album')." SET picnum=picnum+$updatecount WHERE albumid='$_POST[newalbumid]' $plussql");
+						C::t('home_album')->update_num_by_albumid($_POST['newalbumid'], $updatecount, 'picnum', $sqluid);
 						$return = album_update_pic($_POST['newalbumid']);
 					}
 				}
@@ -245,14 +240,11 @@ if($_GET['op'] == 'edit') {
 	$start = ($page-1)*$perpage;
 	ckstart($start, $perpage);
 
-	$picsql = $picid?"picid='$picid' AND ":'';
 
 	if($albumid > 0) {
-		$wheresql = "albumid='$albumid'";
 		$count = $picid?1:$album['picnum'];
 	} else {
-		$wheresql = "albumid='0' AND uid='$_G[uid]'";
-		$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('home_pic')." WHERE $picsql $wheresql"), 0);
+		$count = C::t('home_pic')->fetch_all_by_albumid($albumid, 0, 0, $picid, 0, 0, $_G['uid'], true);
 	}
 
 	$list = array();
@@ -262,8 +254,8 @@ if($_GET['op'] == 'edit') {
 			$start = ($page-1)*$perpage;
 		}
 		$bbcode = & bbcode::instance();
-		$query = DB::query("SELECT * FROM ".DB::table('home_pic')." WHERE $picsql $wheresql ORDER BY dateline DESC LIMIT $start,$perpage");
-		while ($value = DB::fetch($query)) {
+		$query = C::t('home_pic')->fetch_all_by_albumid($albumid, $start, $perpage, $picid, 0, 1, ($albumid > 0 ? 0 : $_G['uid']));
+		foreach($query as $value) {
 			if($picid) {
 				$value['checked'] = ' checked';
 			}
@@ -286,33 +278,31 @@ if($_GET['op'] == 'edit') {
 } elseif($_GET['op'] == 'edittitle') {
 
 	$picid = empty($_GET['picid'])?0:intval($_GET['picid']);
-	$uidsql = checkperm('managealbum')?'':"AND uid='$_G[uid]'";
-	$query = DB::query("SELECT * FROM ".DB::table('home_pic')." WHERE picid='$picid' $uidsql");
-	$pic = DB::fetch($query);
+	$pic = C::t('home_pic')->fetch($picid);
+	if(!checkperm('managealbum') && $pic['uid'] != $_G['uid']) {
+		$pic = array();
+	}
 
 } elseif($_GET['op'] == 'edithot') {
 	if(!checkperm('managealbum')) {
 		showmessage('no_privilege_edithot_album');
 	}
 
-	$query = DB::query("SELECT * FROM ".DB::table('home_pic')." WHERE picid='$picid'");
-	if(!$pic = DB::fetch($query)) {
+	if(!$pic = C::t('home_pic')->fetch($picid)) {
 		showmessage('image_does_not_exist');
 	}
 
 	if(submitcheck('hotsubmit')) {
 		$_POST['hot'] = intval($_POST['hot']);
-		DB::update('home_pic', array('hot'=>$_POST['hot']), array('picid'=>$picid));
+		C::t('home_pic')->update($picid, array('hot'=>$_POST['hot']));
 		if($_POST['hot'] > 0) {
 			require_once libfile('function/feed');
 			feed_publish($picid, 'picid');
 		} else {
-			DB::update('home_feed', array('hot'=>$_POST['hot']), array('id'=>$picid, 'idtype'=>'picid'));
+			C::t('home_feed')->update($picid, array('hot'=>$_POST['hot']), 'picid');
 		}
-
 		showmessage('do_success', dreferer());
 	}
-
 }
 
 include_once template("home/spacecp_album");

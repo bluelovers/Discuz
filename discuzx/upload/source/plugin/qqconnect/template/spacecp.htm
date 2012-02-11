@@ -1,22 +1,22 @@
-<!--{if $_G['gp_pluginop'] == 'share'}-->
+<!--{if $_GET['pluginop'] == 'share'}-->
 
 <!--{template common/header}-->
 
-	<!--{if $_G['gp_sh_type'] == 1 || $_G['gp_sh_type'] == 3}-->
+	<!--{if $_GET['sh_type'] == 1 || $_GET['sh_type'] == 3}-->
 	<h3 class="flb">
-		<!--{if $_G['gp_sh_type'] == 1}-->
-		<em id="return_$_G[gp_handlekey]">{lang qqconnect:connect_spacecp_qzone_to}</em>
-		<!--{elseif $_G['gp_sh_type'] == 3}-->
-		<em id="return_$_G[gp_handlekey]">{lang qqconnect:connect_spacecp_pengyou_to}</em>
+		<!--{if $_GET['sh_type'] == 1}-->
+		<em id="return_$_GET[handlekey]">{lang qqconnect:connect_spacecp_qzone_to}</em>
+		<!--{elseif $_GET['sh_type'] == 3}-->
+		<em id="return_$_GET[handlekey]">{lang qqconnect:connect_spacecp_pengyou_to}</em>
 		<!--{/if}-->
 		<!--{if $_G[inajax]}-->
-		<span><a href="javascript:void(0);" onclick="hideWindow('$_G[gp_handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span>
+		<span><a href="javascript:void(0);" onclick="hideWindow('$_GET[handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span>
 		<!--{/if}-->
 	</h3>
-	<form name="connect_share_form" id="connect_share_form" method="post" action="$_G[gp_share_url]" onsubmit="connect_share_submit();return false;">
+	<form name="connect_share_form" id="connect_share_form" method="post" action="$_GET[share_url]" onsubmit="connect_share_submit();return false;">
 		<input type="hidden" name="formhash" value="{FORMHASH}" />
 		<!--{if $_G[inajax]}-->
-		<input type="hidden" name="handlekey" value="$_G[gp_handlekey]" />
+		<input type="hidden" name="handlekey" value="$_GET[handlekey]" />
 		<!--{/if}-->
 
 		<div class="c" style="padding: 5px 15px;">
@@ -39,21 +39,22 @@
 			<div id="connect_reason_tip" style="padding-left:15px;display:none;"></div>
 		</div>
 
-		<!--{if $_G['gp_share_images']}-->
+		<!--{if $_GET['share_images']}-->
 		<div class="c" style="padding: 5px 15px;">
 			<p class="cl">
 				{lang qqconnect:connect_spacecp_qzone_picture}:
 			</p>
 			<div id="share_picture_list">
-				<!--{loop $_G['gp_share_images'] $image}-->
-				<div id="box_{$image[aid]}" class="share_picture_box select">
+				<!--{loop $_GET['share_images'] $image}-->
+				<div id="box_{$image[aid]}" class="share_picture_box">
 					<div class="badge" id="{$image[aid]}" onclick="connect_share_picture_select(this.id);"></div>
 					<a href="javascript:void(0);"><img class="share_picute_img" src="{$image[thumb]}" id="connect_share_picture_{$image[aid]}" rel="{$image[big]}" /></a>
 				</div>
 				<!--{/loop}-->
 			</div>
 		</div>
-		<input type="hidden" name="attach_image" id="attach_image" value="{$_G['gp_attach_image']}" />
+		<input type="hidden" name="attach_image" id="attach_image" value="" />
+		<input type="hidden" name="attach_image_id" id="attach_image_id" value="" />
 		<!--{/if}-->
 
 		<div class="ec cl" style="padding: 5px 15px; text-align: right; clear: both;"></div>
@@ -61,7 +62,7 @@
 		<p class="o pns">
 			<button type="submit" name="connect_share_button" id="connect_share_button" class="pn pnc" value="true"><strong>{lang qqconnect:connect_spacecp_qzone_to_friend}</strong></button>
 		</p>
-		<input type="hidden" name="dialog_id" id="dialog_id" value="$_G[gp_handlekey]" />
+		<input type="hidden" name="dialog_id" id="dialog_id" value="$_GET[handlekey]" />
 		<input type="hidden" name="thread_id" id="thread_id" value="" />
 		<input type="hidden" name="thread_url" id="thread_url" value="" />
 		<input type="hidden" name="post_id" id="post_id" value="" />
@@ -70,19 +71,24 @@
 		<input type="hidden" name="forum_id" id="forum_id" value="" />
 		<input type="hidden" name="author_id" id="author_id" value="" />
 		<input type="hidden" name="author" id="author" value="" />
-		<input type="hidden" name="sh_type" id="sh_type" value="$_G['gp_sh_type']" />
+		<input type="hidden" name="sh_type" id="sh_type" value="$_GET['sh_type']" />
 	</form>
 	<script type="text/javascript" reload="1">
-		var connect_share_url = '$_G[gp_share_url]';
+		var connect_share_url = '$_GET[share_url]';
 		var threadInfo = connect_get_thread();
 		var connect_thread_url = threadInfo.thread_url;
 		var connect_reason_default = '{lang qqconnect:connect_spacecp_qzone_reason_default}';
-		<!--{if $_G['gp_share_images']}-->
+		<!--{if $_GET['share_images']}-->
 		if (!document.getElementsByClassName) {
 			var img_list = getElementsByClassName('badge');
 		} else {
 			var img_list = document.getElementsByClassName('badge');
 		}
+		var sel_img_id = img_list[0].id;
+		var sel_img_url = $('connect_share_picture_' + img_list[0].id).getAttribute('rel');
+		addClass($("box_" + sel_img_id), 'select');
+		$('attach_image').value = sel_img_url;
+		$('attach_image_id').value = sel_img_id;
 		<!--{/if}-->
 
 		function connect_share_init() {
@@ -133,16 +139,21 @@
 		}
 
 		function connect_share_picture_select(sel_id) {
-			for (var i = 0; i < img_list.length; i++) {
-				if (img_list[i].id == sel_id) {
-					if (hasClass($('box_' + sel_id), 'select')) {
-						removeClass($('box_' + sel_id), 'select');
-					} else {
-						addClass($('box_' + sel_id), 'select');
-					}
-				}
-			}
-		}
+            for (var i = 0; i < img_list.length; i++) {
+                $('box_' + img_list[i].id).className = "share_picture_box";
+                if (img_list[i].id == sel_id) {
+                    if ($('attach_image_id').value == sel_id) {
+                        $('attach_image').value = '';
+                        removeClass($('box_' + sel_id), 'select');
+                        $('attach_image_id').value = '';
+                    } else {
+                        $('attach_image').value = $('connect_share_picture_' + img_list[i].id).getAttribute('rel');
+                        $('attach_image_id').value = sel_id;
+                        addClass($('box_' + sel_id), 'select');
+                    }
+                }
+            }
+        }
 
 		function getElementsByClassName(searchClass, node, tag) {
 			var classElements = new Array();
@@ -228,7 +239,7 @@
 			if (reason == connect_reason_default) {
 				$('reason').value = '';
 			}
-			<!--{if $_G['gp_share_images']}-->
+			<!--{if $_GET['share_images']}-->
 			var selected_images = new Array();
 			for (var i = 0; i < img_list.length; i++) {
 				if (hasClass($('box_' + img_list[i].id), 'select')) {
@@ -244,7 +255,7 @@
 			$('author_id').value = threadInfo.author_id;
 			$('author').value = threadInfo.author;
 
-			ajaxpost('connect_share_form', 'return_$_G[gp_handlekey]', null, null, null, null);
+			ajaxpost('connect_share_form', 'return_$_GET[handlekey]', null, null, null, null);
 			return false;
 		}
 
@@ -254,15 +265,15 @@
 	<!--{else}-->
 
 	<h3 class="flb">
-		<em id="return_$_G[gp_handlekey]">{lang qqconnect:connect_spacecp_weibo_to}</em>
+		<em id="return_$_GET[handlekey]">{lang qqconnect:connect_spacecp_weibo_to}</em>
 		<!--{if $_G[inajax]}-->
-		<span><a href="javascript:void(0);" onclick="hideWindow('$_G[gp_handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span>
+		<span><a href="javascript:void(0);" onclick="hideWindow('$_GET[handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span>
 		<!--{/if}-->
 	</h3>
-	<form name="connect_share_form" id="connect_share_form" method="post" action="$_G[gp_share_url]" onsubmit="connect_share_submit();return false;">
+	<form name="connect_share_form" id="connect_share_form" method="post" action="$_GET[share_url]" onsubmit="connect_share_submit();return false;">
 		<input type="hidden" name="formhash" value="{FORMHASH}" />
 		<!--{if $_G[inajax]}-->
-		<input type="hidden" name="handlekey" value="$_G[gp_handlekey]" />
+		<input type="hidden" name="handlekey" value="$_GET[handlekey]" />
 		<!--{/if}-->
 
 		<div class="c" style="padding: 5px 15px;">
@@ -276,13 +287,13 @@
 			<div id="connect_reason_tip" style="padding-left:15px;color:red;display:none;"></div>
 		</div>
 
-		<!--{if $_G['gp_share_images']}-->
+		<!--{if $_GET['share_images']}-->
 		<div class="ec cl" id="share_picture_title">
 			{lang qqconnect:connect_spacecp_qzone_select_picture}:
 		</div>
 		<div class="c" style="padding: 0 15px;display: block;" id="share_picture_content">
 			<div id="share_picture_list">
-				<!--{loop $_G['gp_share_images'] $image}-->
+				<!--{loop $_GET['share_images'] $image}-->
 				<div id="box_{$image[aid]}" class="share_picture_box">
 					<div class="badge" id="{$image[aid]}" onclick="connect_share_picture_select(this.id);"></div>
 					<a href="javascript:void(0);"><img class="share_picute_img" src="{$image[thumb]}" id="connect_share_picture_{$image[aid]}" rel="{$image[big]}" /></a>
@@ -299,7 +310,7 @@
 		<p class="o pns">
 			<button type="submit" name="connect_share_button" id="connect_share_button" class="pn pnc" value="true"><strong>{lang qqconnect:connect_spacecp_weibo_share}</strong></button>
 		</p>
-		<input type="hidden" name="dialog_id" id="dialog_id" value="$_G[gp_handlekey]" />
+		<input type="hidden" name="dialog_id" id="dialog_id" value="$_GET[handlekey]" />
 		<input type="hidden" name="thread_id" id="thread_id" value="" />
 		<input type="hidden" name="post_id" id="post_id" value="" />
 		<input type="hidden" name="share_subject" id="share_subject" value="" />
@@ -311,11 +322,11 @@
 		<input type="hidden" name="sh_type" id="sh_type" value="2" />
 	</form>
 	<script type="text/javascript" reload="1">
-		var connect_share_url = '$_G[gp_share_url]';
+		var connect_share_url = '$_GET[share_url]';
 		var threadInfo = connect_get_thread();
 		var connect_thread_url = threadInfo.thread_url;
 
-		<!--{if $_G['gp_share_images']}-->
+		<!--{if $_GET['share_images']}-->
 		if (!document.getElementsByClassName) {
 			var img_list = getElementsByClassName('badge');
 		} else {
@@ -355,7 +366,7 @@
 				connect_check_reason();
 			}
 
-			<!--{if $_G['gp_share_images']}-->
+			<!--{if $_GET['share_images']}-->
 			var sel_img_id = img_list[0].id;
 			var sel_img_url = $('connect_share_picture_' + img_list[0].id).getAttribute('rel');
 			addClass($("box_" + sel_img_id), 'select');
@@ -493,7 +504,7 @@
 			$('author_id').value = threadInfo.author_id;
 			$('author').value = threadInfo.author;
 
-			ajaxpost('connect_share_form', 'return_$_G[gp_handlekey]', null, null, null, null);
+			ajaxpost('connect_share_form', 'return_$_GET[handlekey]', null, null, null, null);
 			return false;
 		}
 
@@ -503,7 +514,7 @@
 
 <!--{template common/footer}-->
 
-<!--{elseif $_G['gp_pluginop'] == 'new'}-->
+<!--{elseif $_GET['pluginop'] == 'new'}-->
 <!--{template common/header}-->
 <script type="text/javascript" reload="1">
 

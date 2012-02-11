@@ -4,13 +4,13 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: block_doing.php 10887 2010-05-18 02:11:40Z xupeng $
+ *      $Id: block_doing.php 25525 2011-11-14 04:39:11Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
-class block_doing {
+class block_doing extends discuz_block {
 	var $setting = array();
 	function block_doing() {
 		$this->setting = array(
@@ -51,6 +51,7 @@ class block_doing {
 
 	function fields() {
 		return array(
+				'id' => array('name' => lang('blockclass', 'blockclass_field_id'), 'formtype' => 'text', 'datatype' => 'int'),
 				'url' => array('name' => lang('blockclass', 'blockclass_doing_field_url'), 'formtype' => 'text', 'datatype' => 'string'),
 				'title' => array('name' => lang('blockclass', 'blockclass_doing_field_title'), 'formtype' => 'title', 'datatype' => 'title'),
 				'uid' => array('name' => lang('blockclass', 'blockclass_doing_field_uid'), 'formtype' => 'text', 'datatype' => 'pic'),
@@ -70,10 +71,6 @@ class block_doing {
 		return $settings;
 	}
 
-	function cookparameter($parameter) {
-		return $parameter;
-	}
-
 	function getdata($style, $parameter) {
 		global $_G;
 
@@ -82,22 +79,13 @@ class block_doing {
 		$startrow	= isset($parameter['startrow']) ? intval($parameter['startrow']) : 0;
 		$items		= isset($parameter['items']) ? intval($parameter['items']) : 10;
 		$titlelength = intval($parameter['titlelength']);
-		$orderby	= isset($parameter['orderby']) && in_array($parameter['orderby'],array('dateline', 'replynum')) ? $parameter['orderby'] : 'dateline';
 
 		$bannedids = !empty($parameter['bannedids']) ? explode(',', $parameter['bannedids']) : array();
 
 		$datalist = $list = array();
-		$wheres = array();
-		if($uids) {
-			$wheres[] = 'uid IN ('.dimplode($uids).')';
-		}
-		if($bannedids) {
-			$wheres[] = 'doid NOT IN ('.dimplode($bannedids).')';
-		}
-		$wheres[] = " status = '0'";
-		$wheresql = $wheres ? implode(' AND ', $wheres) : '1';
-		$query = DB::query("SELECT * FROM ".DB::table('home_doing')." WHERE $wheresql ORDER BY $orderby DESC LIMIT $startrow,$items");
-		while($data = DB::fetch($query)) {
+
+		$query = C::t('home_doing')->fetch_all_by_uid_doid($uids, $bannedids, $parameter['orderby'], $startrow, $items, true, true);
+		foreach($query as $data) {
 			$datalist = array(
 				'id' => $data['doid'],
 				'idtype' => 'doid',

@@ -1,8 +1,8 @@
 /*
-	[Discuz!] (C)2001-2009 Comsenz Inc.
+	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: home.js 22765 2011-05-20 03:06:12Z zhengqingpeng $
+	$Id: home.js 27410 2012-01-30 09:53:20Z zhengqingpeng $
 */
 
 var note_step = 0;
@@ -51,7 +51,7 @@ function blogAddOption(sid, aid) {
 		obj.value="new:" + newOption;
 		return true;
 	} else {
-		alert('åˆ†é¡åä¸èƒ½ç‚ºç©ºï¼');
+		alert('·ÖÀàÃû²»ÄÜÎª¿Õ£¡');
 		return false;
 	}
 }
@@ -93,7 +93,7 @@ function resizeImg(id,size) {
 					zoomDiv.style.position = 'relative';
 					zoomDiv.style.cursor = 'pointer';
 
-					this.title = 'é»æ“Šåœ–ç‰‡ï¼Œåœ¨æ–°çª—å£é¡¯ç¤ºåŸå§‹å°ºå¯¸';
+					this.title = 'µã»÷Í¼Æ¬£¬ÔÚĞÂ´°¿ÚÏÔÊ¾Ô­Ê¼³ß´ç';
 
 					var zoom = document.createElement('img');
 					zoom.src = 'image/zoom.gif';
@@ -131,14 +131,14 @@ function ischeck(id, prefix) {
 	for(var i = 0; i < form.elements.length; i++) {
 		var e = form.elements[i];
 		if(e.name.match(prefix) && e.checked) {
-			if(confirm("æ‚¨ç¢ºå®šè¦åŸ·è¡Œæœ¬æ“ä½œå—ï¼Ÿ")) {
+			if(confirm("ÄúÈ·¶¨ÒªÖ´ĞĞ±¾²Ù×÷Âğ£¿")) {
 				return true;
 			} else {
 				return false;
 			}
 		}
 	}
-	alert('è«‹é¸æ“‡è¦æ“ä½œçš„å°è±¡');
+	alert('ÇëÑ¡ÔñÒª²Ù×÷µÄ¶ÔÏó');
 	return false;
 }
 
@@ -183,7 +183,7 @@ function insertWebImg(obj) {
 		insertImage(obj.value);
 		obj.value = 'http://';
 	} else {
-		alert('åœ–ç‰‡åœ°å€ä¸æ­£ç¢º');
+		alert('Í¼Æ¬µØÖ·²»ÕıÈ·');
 	}
 }
 
@@ -286,7 +286,7 @@ function showFlash(host, flashvar, obj, shareid) {
 	var flashHtml = videoFlash;
 	var videoMp3 = true;
 	if('' == flashvar) {
-		alert('éŸ³æ¨‚åœ°å€éŒ¯èª¤ï¼Œä¸èƒ½ç‚ºç©º');
+		alert('ÒôÀÖµØÖ·´íÎó£¬²»ÄÜÎª¿Õ');
 		return false;
 	}
 	if('music' == host) {
@@ -327,7 +327,7 @@ function showFlash(host, flashvar, obj, shareid) {
 		obj.style.display = 'none';
 		var hideObj = document.createElement('div');
 		hideObj.id = 'flash_hide_' + shareid;
-		var nodetxt = document.createTextNode("æ”¶èµ·");
+		var nodetxt = document.createTextNode("ÊÕÆğ");
 		hideObj.appendChild(nodetxt);
 		obj.parentNode.insertBefore(hideObj, obj);
 		hideObj.style.cursor = 'pointer';
@@ -350,7 +350,7 @@ function userapp_open() {
 	x.get('home.php?mod=spacecp&ac=common&op=getuserapp&inajax=1', function(s){
 		$('my_userapp').innerHTML = s;
 		$('a_app_more').className = 'fold';
-		$('a_app_more').innerHTML = 'æ”¶èµ·';
+		$('a_app_more').innerHTML = 'ÊÕÆğ';
 		$('a_app_more').onclick = function() {
 			userapp_close();
 		};
@@ -362,7 +362,7 @@ function userapp_close() {
 	x.get('home.php?mod=spacecp&ac=common&op=getuserapp&subop=off&inajax=1', function(s){
 		$('my_userapp').innerHTML = s;
 		$('a_app_more').className = 'unfold';
-		$('a_app_more').innerHTML = 'å±•é–‹';
+		$('a_app_more').innerHTML = 'Õ¹¿ª';
 		$('a_app_more').onclick = function() {
 			userapp_open();
 		};
@@ -598,6 +598,7 @@ function wall_add(id) {
 function share_add(sid) {
 	var obj = $('share_ul');
 	var newli = document.createElement("li");
+	newli.id = 'share_' + sid + '_li';
 	var x = new Ajax();
 	x.get('home.php?mod=misc&ac=ajax&op=share&inajax=1&sid='+sid, function(s){
 		newli.innerHTML = s;
@@ -641,6 +642,10 @@ function comment_edit(cid) {
 	var x = new Ajax();
 	x.get('home.php?mod=misc&ac=ajax&op=comment&inajax=1&cid='+ cid, function(s){
 		obj.innerHTML = s;
+		var elems = selector('dd[class~=magicflicker]');
+		for(var i=0; i<elems.length; i++){
+			magicColor(elems[i]);
+		}
 	});
 }
 function comment_delete(cid) {
@@ -752,7 +757,7 @@ function poke_send(id, result) {
 }
 function myfriend_post(uid) {
 	if($('friend_'+uid)) {
-		$('friend_'+uid).innerHTML = '<p>ä½ å€‘ç¾åœ¨æ˜¯å¥½å‹äº†ï¼Œæ¥ä¸‹ä¾†ï¼Œæ‚¨é‚„å¯ä»¥ï¼š<a href="home.php?mod=space&do=wall&uid='+uid+'" class="xi2" target="_blank">çµ¦TAç•™è¨€</a> ï¼Œæˆ–è€… <a href="home.php?mod=spacecp&ac=poke&op=send&uid='+uid+'&handlekey=propokehk_'+uid+'" id="a_poke_'+uid+'" class="xi2" onclick="showWindow(this.id, this.href, \'get\', 0, {\'ctrlid\':this.id,\'pos\':\'13\'});">æ‰“å€‹æ‹›å‘¼</a></p>';
+		$('friend_'+uid).innerHTML = '<p>ÄúÃÇÏÖÔÚÊÇºÃÓÑÁË£¬½ÓÏÂÀ´£¬Äú»¹¿ÉÒÔ£º<a href="home.php?mod=space&do=wall&uid='+uid+'" class="xi2" target="_blank">¸øTAÁôÑÔ</a> £¬»òÕß <a href="home.php?mod=spacecp&ac=poke&op=send&uid='+uid+'&handlekey=propokehk_'+uid+'" id="a_poke_'+uid+'" class="xi2" onclick="showWindow(this.id, this.href, \'get\', 0, {\'ctrlid\':this.id,\'pos\':\'13\'});">´ò¸öÕĞºô</a></p>';
 	}
 	showCreditPrompt();
 }
@@ -768,13 +773,6 @@ function mtag_join(tagid, result) {
 	}
 }
 
-function picView(albumid) {
-	if(albumid == 'none') {
-		$('albumpic_body').innerHTML = '';
-	} else {
-		ajaxget('home.php?mod=misc&ac=ajax&op=album&id='+albumid+'&ajaxdiv=albumpic_body', 'albumpic_body');
-	}
-}
 function resend_mail(mid) {
 	if(mid) {
 		var obj = $('sendmail_'+ mid +'_li');
@@ -797,7 +795,7 @@ function docomment_get(doid, key) {
 	$(showid).className = 'cmt brm';
 	ajaxget('home.php?mod=spacecp&ac=doing&op=getcomment&handlekey=msg_'+doid+'&doid='+doid+'&key='+key, showid);
 	if($(opid)) {
-		$(opid).innerHTML = 'æ”¶èµ·';
+		$(opid).innerHTML = 'ÊÕÆğ';
 		$(opid).onclick = function() {
 			docomment_colse(doid, key);
 		}
@@ -812,7 +810,7 @@ function docomment_colse(doid, key) {
 	$(showid).style.display = 'none';
 	$(showid).style.className = '';
 
-	$(opid).innerHTML = 'å›å¾©';
+	$(opid).innerHTML = '»Ø¸´';
 	$(opid).onclick = function() {
 		docomment_get(doid, key);
 	}
@@ -841,7 +839,7 @@ function docomment_form_close(doid, id, key) {
 	if(!liObj.length) {
 		$(key+'_'+doid).style.display = 'none';
 		if($(opid)) {
-			$(opid).innerHTML = 'å›å¾©';
+			$(opid).innerHTML = '»Ø¸´';
 			$(opid).onclick = function () {
 				docomment_get(doid, key);
 			}
@@ -856,7 +854,7 @@ function feedcomment_get(feedid) {
 	$(showid).style.display = '';
 	ajaxget('home.php?mod=spacecp&ac=feed&op=getcomment&feedid='+feedid+'&handlekey=feedhk_'+feedid, showid);
 	if($(opid) != null) {
-		$(opid).innerHTML = 'æ”¶èµ·';
+		$(opid).innerHTML = 'ÊÕÆğ';
 		$(opid).onclick = function() {
 			feedcomment_close(feedid);
 		}
@@ -885,7 +883,7 @@ function feedcomment_close(feedid) {
 	$(showid).style.display = 'none';
 	$(showid).style.className = '';
 
-	$(opid).innerHTML = 'è©•è«–';
+	$(opid).innerHTML = 'ÆÀÂÛ';
 	$(opid).onclick = function() {
 		feedcomment_get(feedid);
 	}
@@ -904,7 +902,7 @@ function feed_more_show(feedid) {
 	$(showid).style.display = '';
 	$(showid).className = 'sub_doing';
 
-	$(opid).innerHTML = '&laquo; æ”¶èµ·åˆ—è¡¨';
+	$(opid).innerHTML = '&laquo; ÊÕÆğÁĞ±í';
 	$(opid).onclick = function() {
 		feed_more_close(feedid);
 	}
@@ -916,7 +914,7 @@ function feed_more_close(feedid) {
 
 	$(showid).style.display = 'none';
 
-	$(opid).innerHTML = '&raquo; æ›´å¤šå‹•æ…‹';
+	$(opid).innerHTML = '&raquo; ¸ü¶à¶¯Ì¬';
 	$(opid).onclick = function() {
 		feed_more_show(feedid);
 	}
@@ -957,7 +955,7 @@ function showbirthday(){
 	var el = $('birthday');
 	var birthday = el.value;
 	el.length=0;
-	el.options.add(new Option('æ—¥', ''));
+	el.options.add(new Option('ÈÕ', ''));
 	for(var i=0;i<28;i++){
 		el.options.add(new Option(i+1, i+1));
 	}
@@ -1158,4 +1156,8 @@ function checkSynSignature() {
 		$('syn_signature').className = 'syn_signature_check';
 		$('to_signhtml').value = '1';
 	}
+}
+
+function searchpostbyusername(keyword, srchuname) {
+	window.location.href = 'search.php?mod=forum&srchtxt=' + keyword + '&srchuname=' + srchuname + '&searchsubmit=yes';
 }

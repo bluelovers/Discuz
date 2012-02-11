@@ -4,13 +4,17 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_gift.php 20567 2011-02-28 02:30:15Z congyushuai $
+ *      $Id: lang_gift.php 27449 2012-02-01 05:32:35Z zhangguosheng $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 $lang = array
 (
-	'gift_name' => 'ç´…åŒ…é¡žä»»å‹™',
-	'gift_desc' => 'ç”³è«‹æ­¤ä»»å‹™å³å¯é ˜å–ç´…åŒ…',
+	'gift_name' => 'ºì°üÀàÈÎÎñ',
+	'gift_desc' => 'ÉêÇë´ËÈÎÎñ¼´¿ÉÁìÈ¡ºì°ü',
 );
 
 ?>

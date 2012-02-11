@@ -34,7 +34,7 @@ while ($blog = $db_source->fetch_array($query)) {
 }
 
 if($nextid) {
-	showmessage("ç¹¼çºŒè½‰æ›æ•¸æ“šè¡¨ ".$table_source." blogid> $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
+	showmessage("¼ÌÐø×ª»»Êý¾Ý±í ".$table_source." blogid> $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
 }
 
 ?>

@@ -1,8 +1,8 @@
 /*
-	[Discuz!] (C)2001-2009 Comsenz Inc.
+	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: portal_upload.js 18682 2010-12-01 03:35:10Z zhangguosheng $
+	$Id: portal_upload.js 23838 2011-08-11 06:51:58Z monkey $
 */
 
 var nowid = 0;
@@ -44,11 +44,11 @@ function insertAttach(id) {
 	var ext = path.lastIndexOf('.') == -1 ? '' : path.substr(path.lastIndexOf('.') + 1, path.length).toLowerCase();
 	var re = new RegExp("(^|\\s|,)" + ext + "($|\\s|,)", "ig");
 	if(extensions != '' && (re.exec(extensions) == null || ext == '')) {
-		alert('å°ä¸èµ·ï¼Œä¸æ”¯æŒä¸Šå‚³æ­¤é¡æ–‡ä»¶');
+		alert('¶Ô²»Æğ£¬²»Ö§³ÖÉÏ´«´ËÀàÎÄ¼ş');
 		return;
 	}
 	var localfile = $('attach_' + id).value.substr($('attach_' + id).value.replace(/\\/g, '/').lastIndexOf('/') + 1);
-	$('localfile_' + id).innerHTML = localfile + ' ä¸Šå‚³ä¸­...';
+	$('localfile_' + id).innerHTML = localfile + ' ÉÏ´«ÖĞ...';
 	$('attach_' + id).style.display = 'none';
 	$('upload_' + id).action += '&attach_target_id=' + id;
 	$('upload_' + id).submit();

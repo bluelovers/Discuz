@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: block_blank.php 7141 2010-03-29 12:25:15Z xupeng $
+ *      $Id: block_blank.php 27543 2012-02-03 08:56:21Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {

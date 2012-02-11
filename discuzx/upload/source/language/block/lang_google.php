@@ -4,25 +4,29 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_google.php 14918 2010-08-17 05:35:02Z chenchunshao $
+ *      $Id: lang_google.php 27449 2012-02-01 05:32:35Z zhangguosheng $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 $lang = array
 (
-	'google_name' => 'Google æœç´¢',
-	'google_desc' => 'Google æœç´¢æ¡†',
-	'google_lang' => 'æœç´¢ç¶²é çš„èªžè¨€',
-	'google_lang_comment' => 'è¨­ç½®é©åˆè‡ªå·±è«–å£‡çš„ç¶²é èªžè¨€å¯ä»¥æœ‰æ•ˆçš„æé«˜æœç´¢çµæžœçš„è³ªé‡',
-	'google_lang_any' => 'ä»»ä½•èªžè¨€',
-	'google_lang_en' => 'è‹±æ–‡',
-	'google_lang_zh-CN' => 'ç°¡é«”ä¸­æ–‡',
-	'google_lang_zh-TW' => 'ç¹é«”ä¸­æ–‡',
-	'google_default' => 'é»˜èªæœç´¢é¸æ“‡',
-	'google_default_comment' => 'æœç´¢æ¡†é»˜èªé¸æ“‡çš„é …ç›®',
-	'google_default_0' => 'ç¶²é æœç´¢',
-	'google_default_1' => 'ç«™å…§æœç´¢',
-	'google_client' => 'æœç´¢è¯ç›Ÿ ID',
-	'google_client_comment' => 'å¦‚æžœä½ åŠ å…¥äº† Google æœç´¢è¯ç›Ÿï¼Œå¯ä»¥åœ¨é€™è£¡å¡«å¯« ID',
+	'google_name' => 'Google ËÑË÷',
+	'google_desc' => 'Google ËÑË÷¿ò',
+	'google_lang' => 'ËÑË÷ÍøÒ³µÄÓïÑÔ',
+	'google_lang_comment' => 'ÉèÖÃÊÊºÏ×Ô¼ºÂÛÌ³µÄÍøÒ³ÓïÑÔ¿ÉÒÔÓÐÐ§µÄÌá¸ßËÑË÷½á¹ûµÄÖÊÁ¿',
+	'google_lang_any' => 'ÈÎºÎÓïÑÔ',
+	'google_lang_en' => 'Ó¢ÎÄ',
+	'google_lang_zh-CN' => '¼òÌåÖÐÎÄ',
+	'google_lang_zh-TW' => '·±ÌåÖÐÎÄ',
+	'google_default' => 'Ä¬ÈÏËÑË÷Ñ¡Ôñ',
+	'google_default_comment' => 'ËÑË÷¿òÄ¬ÈÏÑ¡ÔñµÄÏîÄ¿',
+	'google_default_0' => 'ÍøÒ³ËÑË÷',
+	'google_default_1' => 'Õ¾ÄÚËÑË÷',
+	'google_client' => 'ËÑË÷ÁªÃË ID',
+	'google_client_comment' => 'Èç¹ûÄú¼ÓÈëÁË Google ËÑË÷ÁªÃË£¬¿ÉÒÔÔÚÕâÀïÌîÐ´ ID',
 );
 
 ?>

@@ -4,14 +4,18 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_hot.php 7828 2010-04-14 02:11:48Z monkey $
+ *      $Id: lang_hot.php 27449 2012-02-01 05:32:35Z zhangguosheng $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 $lang = array
 (
-	'hot_name' => 'ç†±é»žç‡ˆ',
-	'hot_desc' => 'æŠŠè‡ªå·±çš„æ—¥èªŒç†±åº¦å¢žåŠ ç«™é»žæŽ¨è–¦çš„ç†±é»žå€¼',
-	'hot_info' => 'æŠŠè‡ªå·±çš„æ—¥èªŒç†±åº¦å¢žåŠ  {num} å€‹ç†±é»žå€¼',
+	'hot_name' => 'ÈÈµãµÆ',
+	'hot_desc' => '°Ñ×Ô¼ºµÄÈÕÖ¾ÈÈ¶ÈÔö¼ÓÕ¾µãÍÆ¼öµÄÈÈµãÖµ',
+	'hot_info' => '°Ñ×Ô¼ºµÄÈÕÖ¾ÈÈ¶ÈÔö¼Ó {num} ¸öÈÈµãÖµ',
 );
 
 ?>

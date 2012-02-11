@@ -4,15 +4,19 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_forumtree.php 6752 2010-03-25 08:47:54Z cnteacher $
+ *      $Id: lang_forumtree.php 27449 2012-02-01 05:32:35Z zhangguosheng $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 $lang = array
 (
-	'forumtree_name' => 'ç‰ˆå¡Šæ¨¹å½¢åˆ—è¡¨',
-	'forumtree_desc' => 'æ¨¹å½¢é¡¯ç¤ºç‰ˆå¡Šåˆ—è¡¨',
-	'forumtree_fids' => 'é¡¯ç¤ºçš„ç‰ˆå¡Š',
-	'forumtree_fids_comment' => 'è¨­ç½®å…è¨±é¡¯ç¤ºçš„ç‰ˆå¡Šï¼Œç•™ç©ºç‚ºé¡¯ç¤ºæ‰€æœ‰ç‰ˆå¡Š',
+	'forumtree_name' => '°æ¿éÊ÷ÐÎÁÐ±í',
+	'forumtree_desc' => 'Ê÷ÐÎÏÔÊ¾°æ¿éÁÐ±í',
+	'forumtree_fids' => 'ÏÔÊ¾µÄ°æ¿é',
+	'forumtree_fids_comment' => 'ÉèÖÃÔÊÐíÏÔÊ¾µÄ°æ¿é£¬Áô¿ÕÎªÏÔÊ¾ËùÓÐ°æ¿é',
 );
 
 ?>

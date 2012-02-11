@@ -7,7 +7,7 @@
 		<li><a href="{$cpscript}?mod=modcp&action=recyclebinpost{$forcefid}" hidefocus="true">{lang mod_option_subject_recyclebinpost}</a></li>
 	</ul>
 	<script type="text/javascript" src="{$_G[setting][jspath]}calendar.js?{VERHASH}"></script>
-	<form method="post" autocomplete="off" action="{$cpscript}?mod=modcp&action=$_G[gp_action]&op=$op">
+	<form method="post" autocomplete="off" action="{$cpscript}?mod=modcp&action=$_GET[action]&op=$op">
 		<input type="hidden" name="do" value="search">
 		<input type="hidden" name="formhash" value="{FORMHASH}">
 		<div class="exfm">
@@ -86,7 +86,7 @@
 		<h2 class="mtm mbm">{lang modcp_forum}: <a href="forum.php?mod=forumdisplay&fid=$_G[fid]" target="_blank" class="xi2">$_G['forum'][name]</a>, {lang modcp_posts_search}</h2>
 		<!--{if $postlist}-->
 		<div id="threadlist" class="tl">
-			<form method="post" autocomplete="off" name="moderate" id="moderate" action="{$cpscript}?mod=modcp&action=$_G[gp_action]&op=$op">
+			<form method="post" autocomplete="off" name="moderate" id="moderate" action="{$cpscript}?mod=modcp&action=$_GET[action]&op=$op">
 			<input type="hidden" name="formhash" value="{FORMHASH}" />
 			<input type="hidden" name="fid" value="$_G[fid]" />
 			<input type="hidden" name="do" value="delete" />

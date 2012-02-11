@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_trade.php 17820 2010-11-03 00:50:04Z monkey $
+ *      $Id: function_trade.php 24961 2011-10-19 06:48:00Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -80,13 +80,13 @@ function trade_create($trade) {
 	}
 
 	if(empty($pid)) {
-		$posttable = getposttablebytid($tid);
-		$pid = DB::result_first("SELECT pid FROM ".DB::table($posttable)." WHERE tid='$tid' AND first='1' LIMIT 1");
+		$pid = C::t('forum_post')->fetch_threadpost_by_tid_invisible($tid);
+		$pid = $pid['pid'];
 	}
 	if(!$item_price && $item_credit) {
 		$seller == '';
 	}
-	DB::insert('forum_trade', array(
+	C::t('forum_trade')->insert(array(
 		'tid' => $tid,
 		'pid' => $pid,
 		'typeid' => $typeid,

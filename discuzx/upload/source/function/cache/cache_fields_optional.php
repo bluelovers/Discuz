@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_fields_optional.php 16693 2010-09-13 04:31:03Z monkey $
+ *      $Id: cache_fields_optional.php 24935 2011-10-17 07:41:48Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -13,9 +13,8 @@ if(!defined('IN_DISCUZ')) {
 
 function build_cache_fields_optional() {
 	$data = array();
-	$query = DB::query("SELECT * FROM ".DB::table('common_member_profile_setting')." WHERE available='1' AND required='0' ORDER BY displayorder");
 
-	while($field = DB::fetch($query)) {
+	foreach(C::t('common_member_profile_setting')->fetch_all_by_available_required(1, 0) as $field) {
 		$choices = array();
 		if($field['selective']) {
 			foreach(explode("\n", $field['choices']) as $item) {
@@ -29,7 +28,7 @@ function build_cache_fields_optional() {
 		$data['field_'.$field['fieldid']] = $field;
 	}
 
-	save_syscache('fields_optional', $data);
+	savecache('fields_optional', $data);
 }
 
 ?>

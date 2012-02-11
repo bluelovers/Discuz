@@ -1,8 +1,8 @@
 /*
-	[Discuz!] (C)2001-2009 Comsenz Inc.
+	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: forum.js 22522 2011-05-11 03:12:47Z monkey $
+	$Id: forum.js 27057 2011-12-31 07:22:37Z monkey $
 */
 
 function saveData(ignoreempty) {
@@ -64,16 +64,7 @@ function saveData(ignoreempty) {
 		return;
 	}
 
-	saveUserdata('forum', data);
-}
-
-function switchFullMode() {
-	var obj = $('postform') && (($('fwin_newthread') && $('fwin_newthread').style.display == '') || ($('fwin_reply') && $('fwin_reply').style.display == '')) ? $('postform') : $('fastpostform');
-	if(obj && obj.message.value != '') {
-		saveData();
-	}
-	ajaxget('forum.php?mod=ajax&action=editor&cedit=yes' + (!fid ? '' : '&fid=' + fid), 'fastposteditor');
-	return false;
+	saveUserdata('forum_'+discuz_uid, data);
 }
 
 function fastUload() {
@@ -165,7 +156,7 @@ function announcement() {
 }
 
 function removeindexheats() {
-	return confirm('æ‚¨ç¢ºèªè¦æŠŠæ­¤ä¸»é¡Œå¾ç†±é»ä¸»é¡Œä¸­ç§»é™¤éº¼ï¼Ÿ');
+	return confirm('ÄúÈ·ÈÏÒª°Ñ´ËÖ÷Ìâ´ÓÈÈµãÖ÷ÌâÖĞÒÆ³ıÃ´£¿');
 }
 
 function showTypes(id, mod) {
@@ -175,7 +166,7 @@ function showTypes(id, mod) {
 	mod = isUndefined(mod) ? 1 : mod;
 	var baseh = o.getElementsByTagName('li')[0].offsetHeight * 2;
 	var tmph = o.offsetHeight;
-	var lang = ['å±•é–‹', 'æ”¶èµ·'];
+	var lang = ['Õ¹¿ª', 'ÊÕÆğ'];
 	var cls = ['unfold', 'fold'];
 	if(tmph > baseh) {
 		var octrl = document.createElement('li');
@@ -216,14 +207,14 @@ function fastpostvalidate(theform, noajaxpost) {
 		}
 	}
 	if(theform.message.value == '' && theform.subject.value == '') {
-		s = 'æŠ±æ­‰ï¼Œæ‚¨å°šæœªè¼¸å…¥æ¨™é¡Œæˆ–å…§å®¹';
+		s = '±§Ç¸£¬ÄúÉĞÎ´ÊäÈë±êÌâ»òÄÚÈİ';
 		theform.message.focus();
 	} else if(mb_strlen(theform.subject.value) > 80) {
-		s = 'æ‚¨çš„æ¨™é¡Œè¶…é 80 å€‹å­—ç¬¦çš„é™åˆ¶';
+		s = 'ÄúµÄ±êÌâ³¬¹ı 80 ¸ö×Ö·ûµÄÏŞÖÆ';
 		theform.subject.focus();
 	}
 	if(!disablepostctrl && ((postminchars != 0 && mb_strlen(theform.message.value) < postminchars) || (postmaxchars != 0 && mb_strlen(theform.message.value) > postmaxchars))) {
-		s = 'æ‚¨çš„å¸–å­é•·åº¦ä¸ç¬¦åˆè¦æ±‚ã€‚\n\nç•¶å‰é•·åº¦: ' + mb_strlen(theform.message.value) + ' ' + 'å­—ç¯€\nç³»çµ±é™åˆ¶: ' + postminchars + ' åˆ° ' + postmaxchars + ' å­—ç¯€';
+		s = 'ÄúµÄÌû×Ó³¤¶È²»·ûºÏÒªÇó¡£\n\nµ±Ç°³¤¶È: ' + mb_strlen(theform.message.value) + ' ' + '×Ö½Ú\nÏµÍ³ÏŞÖÆ: ' + postminchars + ' µ½ ' + postmaxchars + ' ×Ö½Ú';
 	}
 	if(s) {
 		showError(s);
@@ -232,6 +223,7 @@ function fastpostvalidate(theform, noajaxpost) {
 		return false;
 	}
 	$('fastpostsubmit').disabled = true;
+	theform.message.value = theform.message.value.replace(/([^>=\]"'\/]|^)((((https?|ftp):\/\/)|www\.)([\w\-]+\.)*[\w\-\u4e00-\u9fa5]+\.([\.a-zA-Z0-9]+|\u4E2D\u56FD|\u7F51\u7EDC|\u516C\u53F8)((\?|\/|:)+[\w\.\/=\?%\-&~`@':+!]*)+\.(jpg|gif|png|bmp))/ig, '$1[img]$2[/img]');
 	theform.message.value = parseurl(theform.message.value);
 	if(!noajaxpost) {
 		ajaxpost('fastpostform', 'fastpostreturn', 'fastpostreturn', 'onerror', $('fastpostsubmit'));
@@ -255,13 +247,13 @@ function errorhandle_fastnewpost() {
 }
 
 function atarget(obj) {
-	obj.target = getcookie('atarget') ? '_blank' : '';
+	obj.target = getcookie('atarget') > 0 ? '_blank' : '';
 }
 
 function setatarget(v) {
 	$('atarget').className = 'y atarget_' + v;
-	$('atarget').onclick = function() {setatarget(v ? 0 : 1);};
-	setcookie('atarget', v, (v ? 2592000 : -1));
+	$('atarget').onclick = function() {setatarget(v == 1 ? -1 : 1);};
+	setcookie('atarget', v, 2592000);
 }
 
 function loadData(quiet, formobj) {
@@ -277,17 +269,17 @@ function loadData(quiet, formobj) {
 	};
 
 	var data = '';
-	data = loadUserdata('forum');
+	data = loadUserdata('forum_'+discuz_uid);
 	var formobj = !formobj ? $('postform') : formobj;
 
 	if(in_array((data = trim(data)), ['', 'null', 'false', null, false])) {
 		if(!quiet) {
-			showDialog('æ²’æœ‰å¯ä»¥æ¢å¾©çš„æ•¸æ“šï¼', 'info');
+			showDialog('Ã»ÓĞ¿ÉÒÔ»Ö¸´µÄÊı¾İ£¡', 'info');
 		}
 		return;
 	}
 
-	if(!quiet && !confirm('æ­¤æ“ä½œå°‡è¦†è“‹ç•¶å‰å¸–å­å…§å®¹ï¼Œç¢ºå®šè¦æ¢è¤‡æ•¸æ“šå—ï¼Ÿ')) {
+	if(!quiet && !confirm('´Ë²Ù×÷½«¸²¸Çµ±Ç°Ìû×ÓÄÚÈİ£¬È·¶¨Òª»Ö¸´Êı¾İÂğ£¿')) {
 		return;
 	}
 
@@ -372,17 +364,13 @@ function checkForumnew(fid, lasttime) {
 	var x = new Ajax();
 	x.get('forum.php?mod=ajax&action=forumchecknew&fid=' + fid + '&time=' + lasttime + '&inajax=yes', function(s){
 		if(s > 0) {
-			if($('separatorline')) {
-				var table = $('separatorline').parentNode;
-			} else {
-				var table = $('forum_' + fid);
-			}
+			var table = $('separatorline').parentNode;
 			if(!isUndefined(checkForumnew_handle)) {
 				clearTimeout(checkForumnew_handle);
 			}
 			removetbodyrow(table, 'forumnewshow');
 			var colspan = table.getElementsByTagName('tbody')[0].rows[0].children.length;
-			var checknew = {'tid':'', 'thread':{'common':{'className':'', 'val':'<a href="javascript:void(0);" onclick="ajaxget(\'forum.php?mod=ajax&action=forumchecknew&fid=' + fid+ '&time='+lasttime+'&uncheck=1&inajax=yes\', \'forumnew\');">æœ‰æ–°å›å¾©çš„ä¸»é¡Œï¼Œé»æ“ŠæŸ¥çœ‹', 'colspan': colspan }}};
+			var checknew = {'tid':'', 'thread':{'common':{'className':'', 'val':'<a href="javascript:void(0);" onclick="ajaxget(\'forum.php?mod=ajax&action=forumchecknew&fid=' + fid+ '&time='+lasttime+'&uncheck=1&inajax=yes\', \'forumnew\');">ÓĞĞÂ»Ø¸´µÄÖ÷Ìâ£¬µã»÷²é¿´', 'colspan': colspan }}};
 			addtbodyrow(table, ['tbody'], ['forumnewshow'], 'separatorline', checknew);
 		} else {
 			if(checkForumcount < 50) {

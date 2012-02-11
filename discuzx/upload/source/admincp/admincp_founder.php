@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_founder.php 22528 2011-05-11 05:43:55Z monkey $
+ *      $Id: admincp_founder.php 26660 2011-12-19 05:50:07Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -26,9 +26,7 @@ if($operation == 'perm') {
 		$id = intval(getgpc('id'));
 
 		if(!$id) {
-			$query = DB::query("SELECT * FROM ".DB::table('common_admincp_group')." ORDER BY cpgroupid");
-			$groups = array();
-			while($group = DB::fetch($query)) {
+			foreach(C::t('common_admincp_group')->range() as $group) {
 				$groups[$group['cpgroupid']] = $group['cpgroupname'];
 			}
 			if(!submitcheck('submit')) {
@@ -52,24 +50,25 @@ if($operation == 'perm') {
 				showtablefooter();
 				showformfooter();
 			} else {
-				if(!empty($_G['gp_newcpgroupname'])) {
-					if(DB::result_first("SELECT count(*) FROM ".DB::table('common_admincp_group')." WHERE cpgroupname='$_G[gp_newcpgroupname]'")) {
-						cpmsg('founder_perm_group_name_duplicate', '', 'error', array('name' => $_G['gp_newcpgroupname']));
+				if(!empty($_GET['newcpgroupname'])) {
+					if(C::t('common_admincp_group')->fetch_by_cpgroupname($_GET['newcpgroupname'])) {
+						cpmsg('founder_perm_group_name_duplicate', '', 'error', array('name' => $_GET['newcpgroupname']));
 					}
-					DB::insert('common_admincp_group', array('cpgroupname' => strip_tags($_G['gp_newcpgroupname'])));
+					C::t('common_admincp_group')->insert(array('cpgroupname' => strip_tags($_GET['newcpgroupname'])));
 				}
-				if(!empty($_G['gp_delete'])) {
-					DB::delete('common_admincp_perm', 'cpgroupid IN ('.dimplode($_G['gp_delete']).')');
-					DB::update('common_admincp_member', array('cpgroupid' => 0), 'cpgroupid IN ('.dimplode($_G['gp_delete']).')');
-					DB::delete('common_admincp_group', 'cpgroupid IN ('.dimplode($_G['gp_delete']).')');
+				if(!empty($_GET['delete'])) {
+					C::t('common_admincp_perm')->delete_by_cpgroupid_perm($cpgroupid);
+					C::t('common_admincp_member')->update($_GET['delete'], array('cpgroupid' => 0));
+					C::t('common_admincp_group')->delete($_GET['delete']);
 				}
-				if(!empty($_G['gp_name'])) {
-					foreach($_G['gp_name'] as $id => $name) {
+				if(!empty($_GET['name'])) {
+					foreach($_GET['name'] as $id => $name) {
 						if($groups[$id] != $name) {
-							if(($cpgroupid = DB::result_first("SELECT cpgroupid FROM ".DB::table('common_admincp_group')." WHERE cpgroupname='$name'")) && $_G['gp_name'][$cpgroupid] == $groups[$cpgroupid]) {
+							$cpgroupid = ($cpgroup = C::t('common_admincp_group')->fetch_by_cpgroupname($name)) ? $cpgroup['cpgroupid'] : 0;
+							if($cpgroupid && $_GET['name'][$cpgroupid] == $groups[$cpgroupid]) {
 								cpmsg('founder_perm_group_name_duplicate', '', 'error', array('name' => $name));
 							}
-							DB::update('common_admincp_group', array('cpgroupname' => $name), "cpgroupid='$id'");
+							C::t('common_admincp_group')->update($id, array('cpgroupname' => $name));
 						}
 					}
 				}
@@ -79,17 +78,16 @@ if($operation == 'perm') {
 			if(!submitcheck('submit')) {
 
 				showpermstyle();
-				$query = DB::query("SELECT * FROM ".DB::table('common_admincp_perm')." WHERE cpgroupid='$id'");
 				$perms = array();
-				while($perm = DB::fetch($query)) {
+				foreach(C::t('common_admincp_perm')->fetch_all_by_cpgroupid($id) as $perm) {
 					$perms[] = $perm['perm'];
 				}
-				$cpgroupname = DB::result_first("SELECT cpgroupname FROM ".DB::table('common_admincp_group')." WHERE cpgroupid='$id'");
+
+				$cpgroupname = ($cpgroup = C::t('common_admincp_group')->fetch($id)) ? $cpgroup['cpgroupname'] : '';
 				$data = getactionarray();
-				$query = DB::query("SELECT * FROM ".DB::table('common_admincp_group')." ORDER BY cpgroupid");
 				$grouplist = '';
-				while($ggroup = DB::fetch($query)) {
-					$grouplist .= '<a href="###" onclick="location.href=\''.ADMINSCRIPT.'?action=founder&operation=perm&do=group&switch=yes&id='.$ggroup['cpgroupid'].'&scrolltop=\'+document.documentElement.scrollTop"'.($_G['gp_id'] == $ggroup['cpgroupid'] ? ' class="current"' : '').'>'.$ggroup['cpgroupname'].'</a>';
+				foreach(C::t('common_admincp_group')->range() as $ggroup) {
+					$grouplist .= '<a href="###" onclick="location.href=\''.ADMINSCRIPT.'?action=founder&operation=perm&do=group&switch=yes&id='.$ggroup['cpgroupid'].'&scrolltop=\'+document.documentElement.scrollTop"'.($_GET['id'] == $ggroup['cpgroupid'] ? ' class="current"' : '').'>'.$ggroup['cpgroupname'].'</a>';
 				}
 				$grouplist = '<span id="cpgselect" class="right popupmenu_dropmenu" onmouseover="showMenu({\'ctrlid\':this.id,\'pos\':\'34\'});$(\'cpgselect_menu\').style.top=(parseInt($(\'cpgselect_menu\').style.top)-document.documentElement.scrollTop)+\'px\'">'.cplang('founder_group_switch').'<em>&nbsp;&nbsp;</em></span>'.
 					'<div id="cpgselect_menu" class="popupmenu_popup" style="display:none">'.$grouplist.'</div>';
@@ -124,15 +122,15 @@ if($operation == 'perm') {
 				showsubmit('submit');
 				showtablefooter();
 				showformfooter();
-				if(!empty($_G['gp_switch'])) {
+				if(!empty($_GET['switch'])) {
 					echo '<script type="text/javascript">showMenu({\'ctrlid\':\'cpgselect\',\'pos\':\'34\'});</script>';
 				}
 
 			} else {
-				DB::delete('common_admincp_perm', "cpgroupid='$id'");
-				if($_G['gp_permnew']) {
-					foreach($_G['gp_permnew'] as $perm) {
-						DB::insert('common_admincp_perm', array('cpgroupid' => $id, 'perm' => $perm));
+				C::t('common_admincp_perm')->delete_by_cpgroupid_perm($id);
+				if($_GET['permnew']) {
+					foreach($_GET['permnew'] as $perm) {
+						C::t('common_admincp_perm')->insert(array('cpgroupid' => $id, 'perm' => $perm));
 					}
 				}
 
@@ -153,20 +151,18 @@ if($operation == 'perm') {
 					$fuser[] = $founder;
 				}
 			}
-			$query = DB::query("SELECT uid, username FROM ".DB::table('common_member')." WHERE ".($fuid ? "uid IN (".dimplode($fuid).")" : '0')." OR ".($fuser ? "username IN (".dimplode($fuser).")" : '0'));
 			$founders = array();
-			while($founder = DB::fetch($query)) {
-				$founders[$founder['uid']] = $founder['username'];
+			if($fuid) {
+				$founders = $founders + C::t('common_member')->fetch_all($fuid, false, 0);
+			}
+			if($fuser) {
+				$founders = $founders + C::t('common_member')->fetch_all_by_username($fuser);
 			}
 		} else {
 			$founderexists = false;
-			$query = DB::query("SELECT uid, username FROM ".DB::table('common_member')." WHERE adminid='1'");
-			$founders = array();
-			while($founder = DB::fetch($query)) {
-				$founders[$founder['uid']] = $founder['username'];
-			}
+			$founders = C::t('common_member')->fetch_all_by_adminid(1);
 		}
-		$id = empty($_G['gp_id']) ? 0 : $_G['gp_id'];
+		$id = empty($_GET['id']) ? 0 : $_GET['id'];
 
 		if(!$id) {
 			if(!submitcheck('submit')) {
@@ -175,27 +171,25 @@ if($operation == 'perm') {
 					array('nav_founder_perm_group', 'founder&operation=perm&do=group', 0),
 					array('nav_founder_perm_notifyusers', 'founder&operation=perm&do=notifyusers', 0),
 				));
-				$query = DB::query("SELECT * FROM ".DB::table('common_admincp_group')." ORDER BY cpgroupid");
 				$groupselect = '<select name="newcpgroupid"><option value="0">'.cplang('founder_master').'</option>';
 				$groups = array();
-				while($group = DB::fetch($query)) {
+				foreach(C::t('common_admincp_group')->range() as $group) {
 					$groupselect .= '<option value="'.$group['cpgroupid'].'">'.$group['cpgroupname'].'</option>';
 					$groups[$group['cpgroupid']] = $group['cpgroupname'];
 				}
 				$groupselect .= '</select>';
-				$query = DB::query("SELECT * FROM ".DB::table('common_admincp_member'));
 				$members = $adminmembers = array();
-				while($adminmember = DB::fetch($query)) {
+				$adminmembers = C::t('common_admincp_member')->range();
+				foreach ($adminmembers as $adminmember) {
 					$adminmembers[$adminmember['uid']] = $adminmember;
 				}
 				foreach($founders as $uid => $founder) {
-					$members[$uid] = array('uid' => $uid, 'username' => $founder, 'cpgroupname' => cplang('founder_admin'));
+					$members[$uid] = array('uid' => $uid, 'username' => $founder['username'], 'cpgroupname' => cplang('founder_admin'));
 				}
 				if($adminmembers) {
-					$query = DB::query("SELECT uid, username FROM ".DB::table('common_member')." WHERE uid IN (".dimplode(array_keys($adminmembers)).")");
-					while($member = DB::fetch($query)) {
+					foreach(C::t('common_member')->fetch_all(array_keys($adminmembers), false, 0) as $member) {
 						if(isset($members[$member['uid']])) {
-							DB::delete('common_admincp_member', array('uid' => $member['uid']));
+							C::t('common_admincp_member')->delete($member['uid']);
 							continue;
 						}
 						$member['cpgroupname'] = !empty($adminmembers[$member['uid']]['cpgroupid']) ? $groups[$adminmembers[$member['uid']]['cpgroupid']] : cplang('founder_master');
@@ -227,41 +221,40 @@ if($operation == 'perm') {
 				showtablefooter();
 				showformfooter();
 			} else {
-				if(!empty($_G['gp_newcpusername'])) {
-					$newcpuid = DB::result_first("SELECT uid FROM ".DB::table("common_member")." WHERE username='$_G[gp_newcpusername]'");
+				if(!empty($_GET['newcpusername'])) {
+					$newcpuid = C::t('common_member')->fetch_uid_by_username($_GET['newcpusername']);
 					if(!$newcpuid) {
-						cpmsg('founder_perm_member_noexists', '', 'error', array('name' => $_G['gp_newcpusername']));
+						cpmsg('founder_perm_member_noexists', '', 'error', array('name' => $_GET['newcpusername']));
 					}
-					if(DB::result_first("SELECT count(*) FROM ".DB::table('common_admincp_member')." WHERE uid='$newcpuid'") || array_key_exists($newcpuid, $founders)) {
-						cpmsg('founder_perm_member_duplicate', '', 'error', array('name' => $_G['gp_newcpusername']));
+					if(C::t('common_admincp_member')->count_by_uid($newcpuid) || array_key_exists($newcpuid, $founders)) {
+						cpmsg('founder_perm_member_duplicate', '', 'error', array('name' => $_GET['newcpusername']));
 					}
-					DB::insert('common_admincp_member', array('uid' => $newcpuid, 'cpgroupid' => $_G['gp_newcpgroupid']));
+					C::t('common_admincp_member')->insert(array('uid' => $newcpuid, 'cpgroupid' => $_GET['newcpgroupid']));
 				}
-				if(!empty($_G['gp_delete'])) {
-					DB::delete('common_admincp_member', 'uid IN ('.dimplode($_G['gp_delete']).')');
+				if(!empty($_GET['delete'])) {
+					C::t('common_admincp_member')->delete($_GET['delete']);
 				}
 				updatecache('founder');
 				cpmsg('founder_perm_member_update_succeed', 'action=founder&operation=perm&do=member', 'succeed');
 			}
 		} else {
 			if(!submitcheck('submit')) {
-				$member = DB::fetch_first("SELECT * FROM ".DB::table('common_admincp_member')." WHERE uid='$id'");
+				$member = C::t('common_admincp_member')->fetch($id);
 				if(!$member) {
 					cpmsg('founder_perm_member_noexists', '', 'error');
 				}
-				$username = DB::result_first("SELECT username FROM ".DB::table("common_member")." WHERE uid='$id'");
-				$cpgroupid = empty($_G['gp_cpgroupid']) ? $member['cpgroupid'] : $_G['gp_cpgroupid'];
-				$member['customperm'] = empty($_G['gp_cpgroupid']) || $_G['gp_cpgroupid'] == $member['cpgroupid'] ? unserialize($member['customperm']) : array();
-				$query = DB::query("SELECT * FROM ".DB::table('common_admincp_perm')." WHERE cpgroupid='$cpgroupid'");
+				$user = getuserbyuid($id);
+				$username = $user['username'];
+				$cpgroupid = empty($_GET['cpgroupid']) ? $member['cpgroupid'] : $_GET['cpgroupid'];
+				$member['customperm'] = empty($_GET['cpgroupid']) || $_GET['cpgroupid'] == $member['cpgroupid'] ? dunserialize($member['customperm']) : array();
 				$perms = array();
-				while($perm = DB::fetch($query)) {
+				foreach(C::t('common_admincp_perm')->fetch_all_by_cpgroupid($cpgroupid) as $perm) {
 					$perms[] = $perm['perm'];
 				}
 				$data = getactionarray();
 
-				$query = DB::query("SELECT * FROM ".DB::table('common_admincp_group')." ORDER BY cpgroupid");
 				$groupselect = '<select name="cpgroupidnew" onchange="location.href=\''.ADMINSCRIPT.'?action=founder&operation=perm&do=member&id='.$id.'&cpgroupid=\' + this.value">';
-				while($group = DB::fetch($query)) {
+				foreach(C::t('common_admincp_group')->range() as $group) {
 					$groupselect .= '<option value="'.$group['cpgroupid'].'"'.($group['cpgroupid'] == $cpgroupid ? ' selected="selected"' : '').'>'.$group['cpgroupname'].'</option>';
 				}
 				$groupselect .= '</select>';
@@ -304,22 +297,18 @@ if($operation == 'perm') {
 				showtablefooter();
 				showformfooter();
 			} else {
-				$gp_permnew = !empty($_G['gp_permnew']) ? $_G['gp_permnew'] : array();
-				$cpgroupidnew = $_G['gp_cpgroupidnew'];
-				$query = DB::query("SELECT * FROM ".DB::table('common_admincp_perm')." WHERE cpgroupid='$cpgroupidnew'");
-				$perms = array();
-				while($perm = DB::fetch($query)) {
-					$perms[] = $perm['perm'];
-				}
-				$customperm = addslashes(serialize(array_diff($perms, $gp_permnew)));
-				DB::update('common_admincp_member', array('cpgroupid' => $cpgroupidnew, 'customperm' => $customperm), "uid='$id'");
+				$_permnew = !empty($_GET['permnew']) ? $_GET['permnew'] : array();
+				$cpgroupidnew = $_GET['cpgroupidnew'];
+				$perms = C::t('common_admincp_perm')->fetch_all_by_cpgroupid($cpgroupidnew);
+				$customperm = serialize(array_diff($perms, $_permnew));
+				C::t('common_admincp_member')->update($id, array('cpgroupid' => $cpgroupidnew, 'customperm' => $customperm));
 				cpmsg('founder_perm_member_update_succeed', 'action=founder&operation=perm&do=member', 'succeed');
 			}
 		}
 
-	} elseif($do == 'gperm' && !empty($_G['gp_gset'])) {
+	} elseif($do == 'gperm' && !empty($_GET['gset'])) {
 
-		$gset = $_G['gp_gset'];
+		$gset = $_GET['gset'];
 		list($topkey, $k) = explode('_', $gset);
 		$data = getactionarray();
 		$gset = $data['actions'][$topkey][$k];
@@ -327,19 +316,16 @@ if($operation == 'perm') {
 			cpmsg('undefined_action', '', 'error');
 		}
 		if(!submitcheck('submit')) {
-			$query = DB::query("SELECT cpg.*,cpp.perm FROM ".DB::table('common_admincp_group')." cpg LEFT JOIN ".DB::table('common_admincp_perm')." cpp ON cpg.cpgroupid=cpp.cpgroupid AND cpp.perm='$gset[1]' ORDER BY cpg.cpgroupid");
-			$groups = array();
-			while($group = DB::fetch($query)) {
-				$groups[$group['cpgroupid']] = $group;
-			}
+			$allperms = C::t('common_admincp_perm')->fetch_all_by_perm($gset[1]);
+			$groups = C::t('common_admincp_group')->range();
 			showsubmenu('menu_founder_permgrouplist', array(array()), '', array('perm' => cplang($gset[0])));
 
-			showformheader('founder&operation=perm&do=gperm&gset='.$_G['gp_gset']);
+			showformheader('founder&operation=perm&do=gperm&gset='.$_GET['gset']);
 			showtableheader();
 			showsubtitle(array('', 'founder_usergname'));
 			foreach($groups as $id => $group) {
 				showtablerow('style="height:20px"', array('class="td25"', ''), array(
-					"<input class=\"checkbox\" type=\"checkbox\" name=\"permnew[]\" ".($group['perm'] ? 'checked="checked"' : '')." value=\"$id\">",
+					"<input class=\"checkbox\" type=\"checkbox\" name=\"permnew[]\" ".($allperms[$group['cpgroupid']]['perm'] ? 'checked="checked"' : '')." value=\"$id\">",
 					$group['cpgroupname']
 					));
 			}
@@ -347,19 +333,18 @@ if($operation == 'perm') {
 			showtablefooter();
 			showformfooter();
 		} else {
-			$query = DB::query("SELECT * FROM ".DB::table('common_admincp_group'));
-			while($group = DB::fetch($query)) {
-				if(in_array($group['cpgroupid'], $_G['gp_permnew'])) {
-					DB::insert('common_admincp_perm', array('cpgroupid' => $group['cpgroupid'], 'perm' => $gset[1]), false, true);
+			foreach(C::t('common_admincp_group')->range() as $group) {
+				if(in_array($group['cpgroupid'], $_GET['permnew'])) {
+					C::t('common_admincp_perm')->insert(array('cpgroupid' => $group['cpgroupid'], 'perm' => $gset[1]), false, true);
 				} else {
-					DB::delete('common_admincp_perm', "cpgroupid='$group[cpgroupid]' AND perm='$gset[1]'");
+					C::t('common_admincp_perm')->delete_by_cpgroupid_perm($group['cpgroupid'], $gset[1]);
 				}
 			}
 			cpmsg('founder_perm_gperm_update_succeed', 'action=founder&operation=perm', 'succeed');
 		}
 
 	} elseif($do == 'notifyusers') {
-		$notifyusers = unserialize($_G['setting']['notifyusers']);
+		$notifyusers = dunserialize($_G['setting']['notifyusers']);
 		$notifytypes = explode(',', $_G['setting']['adminnotifytypes']);
 		if(!submitcheck('submit')) {
 			showpermstyle();
@@ -401,26 +386,26 @@ if($operation == 'perm') {
 			showformfooter();
 		} else {
 			$newnotifyusers = array();
-			if($_G['gp_name']) {
-				foreach($_G['gp_name'] as $uid => $username) {
-					if($_G['gp_delete'] && in_array($uid, $_G['gp_delete'])) {
+			if($_GET['name']) {
+				foreach($_GET['name'] as $uid => $username) {
+					if($_GET['delete'] && in_array($uid, $_GET['delete'])) {
 						continue;
 					}
 					$types = '';
 					foreach($notifytypes as $typename) {
-						$types .= intval($_G['gp_notifytypes_'.$uid][$typename]);
+						$types .= intval($_GET['notifytypes_'.$uid][$typename]);
 					}
 					$newnotifyusers[$uid] = array('username' => $username, 'types' => $types);
 				}
 			}
-			if($_G['gp_newusername']) {
-				$newusername = addslashes($_G['gp_newusername']);
-				$newuid = DB::result_first("SELECT uid FROM ".DB::table('common_member')." WHERE username='$newusername'");
+			if($_GET['newusername']) {
+				$newusername = addslashes($_GET['newusername']);
+				$newuid = C::t('common_member')->fetch_uid_by_username($newusername);
 				if($newuid) {
 					$newnotifyusers[$newuid] = array('username' => $newusername, 'types' => '');
 				}
 			}
-			DB::query("REPLACE INTO ".DB::table('common_setting')." (skey, svalue) VALUES ('notifyusers', '".addslashes(serialize($newnotifyusers))."')");
+			C::t('common_setting')->update('notifyusers', $newnotifyusers);
 			updatecache('setting');
 			cpmsg('founder_perm_notifyusers_succeed', 'action=founder&operation=perm&do=notifyusers', 'succeed');
 		}
@@ -431,6 +416,8 @@ function getactionarray() {
 	$isfounder = false;
 	require './source/admincp/admincp_menu.php';
 	require './source/admincp/admincp_perm.php';
+	require './source/admincp/menu/menu_cloud.php';
+	unset($menu['cloud'][0]);
 	unset($topmenu['index'], $menu['index']);
 	$actioncat = $actionarray = array();
 	$actioncat[] = 'setting';

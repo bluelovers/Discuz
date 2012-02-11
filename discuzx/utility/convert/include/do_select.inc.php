@@ -42,17 +42,17 @@ if(submitcheck('submit')) {
 			}
 		}
 		save_process('main', $process);
-		showmessage("æ‚¨é¸æ“‡äº† ï¼ˆ".count($prgs)."ï¼‰ å€‹è½‰æ›ç¨‹åºï¼Œä¸‹é¢é–‹å§‹è½‰æ›", "index.php?a=convert&s=$source");
+		showmessage("ÄúÑ¡ÔñÁË £¨".count($prgs)."£© ¸ö×ª»»³ÌĞò£¬ÏÂÃæ¿ªÊ¼×ª»»", "index.php?a=convert&s=$source");
 	}
 }
 
-showtips("<li>é€šå¸¸æƒ…æ³ä¸‹ï¼Œæ‚¨éœ€è¦åŸ·è¡Œä¸‹é¢æ‰€æœ‰æ•¸æ“šè¡¨çš„è½‰æ›ï¼Œé™¤éæ‚¨åœ¨åŸ·è¡Œéç¨‹ä¸­å‡ºç¾äº†æ„å¤–çš„ä¸­æ–·æˆ–è€…æœ‰ç‰¹æ®Šéœ€æ±‚ï¼Œæ‰é€²è¡Œå¿…è¦çš„é¸æ“‡</li>");
+showtips("<li>Í¨³£Çé¿öÏÂ£¬ÄúĞèÒªÖ´ĞĞÏÂÃæËùÓĞÊı¾İ±íµÄ×ª»»£¬³ı·ÇÄúÔÚÖ´ĞĞ¹ı³ÌÖĞ³öÏÖÁËÒâÍâµÄÖĞ¶Ï»òÕßÓĞÌØÊâĞèÇó£¬²Å½øĞĞ±ØÒªµÄÑ¡Ôñ</li>");
 show_form_header();
 show_table_header();
-show_table_row(array('<span style="float: left">é…ç½®è½‰æ›éç¨‹</span><label style="float: right"><input type="checkbox" class="checkbox" onclick="checkAll(\'prefix\', this.form, \'prgs\')" id="chkall" name="chkall" checked> å…¨é¸</label>'), 'title');
+show_table_row(array('<span style="float: left">ÅäÖÃ×ª»»¹ı³Ì</span><label style="float: right"><input type="checkbox" class="checkbox" onclick="checkAll(\'prefix\', this.form, \'prgs\')" id="chkall" name="chkall" checked> È«Ñ¡</label>'), 'title');
 
 if($setting['start']) {
-	show_table_row(array('è½‰æ›ä¹‹å‰é‹è¡Œçš„ç¨‹åº'), 'bg1');
+	show_table_row(array('×ª»»Ö®Ç°ÔËĞĞµÄ³ÌĞò'), 'bg1');
 	echo "<tr class=bg2><td colspan=2>\n<ul id=\"ulist\">";
 	foreach ($setting['start'] as $key => $value) {
 		echo "<li><label><input type=\"checkbox\" class=\"checkbox\" name=\"prgs[]\" value=\"c_prg_$key.php\" checked>&nbsp;$key($value)</label></li>";
@@ -79,7 +79,7 @@ $cdir->close();
 
 if($tablelist) {
 	sort($tablelist);
-	show_table_row(array('<span style="float: left">æ•¸æ“šè¡¨è½‰æ›ç¨‹åº</span>'), 'bg1');
+	show_table_row(array('<span style="float: left">Êı¾İ±í×ª»»³ÌĞò</span>'), 'bg1');
 	echo "<tr class=bg2><td colspan=2>\n<ul id=\"ulist\">";
 	foreach ($tablelist as $entry) {
 		echo "<li><label><input type=\"checkbox\" class=\"checkbox\" name=\"prgs[]\" value=\"$entry\" checked>&nbsp;".basename($entry, '.php')."</label></li>";
@@ -88,7 +88,7 @@ if($tablelist) {
 }
 
 if($setting['steps']) {
-	show_table_row(array('å…¶ä»–è¼”åŠ©è½‰æ›ç¨‹åº'), 'bg1');
+	show_table_row(array('ÆäËû¸¨Öú×ª»»³ÌĞò'), 'bg1');
 	echo "<tr class=bg2><td colspan=2>\n<ul id=\"ulist\">";
 	foreach ($setting['steps'] as $key => $value) {
 		echo "<li><label><input type=\"checkbox\" class=\"checkbox\" name=\"prgs[]\" value=\"s_prg_$key.php\" checked>&nbsp;$key($value)</label></li>";
@@ -96,7 +96,7 @@ if($setting['steps']) {
 	echo "</ul>\n</td></tr>";
 }
 show_table_footer();
-show_form_footer('submit', 'é–‹å§‹è½‰æ›');
+show_form_footer('submit', '¿ªÊ¼×ª»»');
 showfooter();
 
 exit();

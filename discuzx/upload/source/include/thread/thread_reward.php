@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: thread_reward.php 16706 2010-09-13 06:37:44Z wangjinbo $
+ *      $Id: thread_reward.php 24359 2011-09-14 07:54:47Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -25,7 +25,7 @@ if($_G['forum_thread']['price'] < 0 && $page == 1) {
 }
 
 if($bapid) {
-	$bestpost = DB::fetch_first("SELECT p.* FROM ".DB::table($posttable)." p WHERE p.pid='$bapid'");
+	$bestpost = C::t('forum_post')->fetch($posttableid, $bapid);
 	$bestpost['message'] = messagecutstr($bestpost['message'], 400);
 	$bestpost['avatar'] = avatar($bestpost['authorid'], 'small');
 }

@@ -4,22 +4,26 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_anonymouspost.php 18824 2010-12-07 02:39:28Z liulanbo $
+ *      $Id: lang_anonymouspost.php 27449 2012-02-01 05:32:35Z zhangguosheng $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 $lang = array
 (
-	'anonymouspost_name' => 'åŒ¿åå¡',
-	'anonymouspost_desc' => 'åœ¨æŒ‡å®šçš„åœ°æ–¹ï¼Œè®“è‡ªå·±çš„åå­—é¡¯ç¤ºç‚ºåŒ¿åã€‚',
-	'anonymouspost_num' => 'æ“æœ‰å€‹æ•¸: {magicnum}',
-	'anonymouspost_forum' => 'å…è¨±ä½¿ç”¨æœ¬é“å…·çš„ç‰ˆå¡Š',
-	'anonymouspost_info' => 'å°‡è‡ªå·±çš„å¸–å­è¨­ç½®ç‚ºåŒ¿åèº«ä»½ï¼Œè«‹è¼¸å…¥å¸–å­çš„ ID',
-	'anonymouspost_info_nonexistence' => 'è«‹æŒ‡å®šè¦åŒ¿åçš„å¸–å­',
-	'anonymouspost_succeed' => 'æˆåŠŸè¨­ç½®ç‚ºåŒ¿å',
-	'anonymouspost_use_error' => 'åƒæ•¸éŒ¯èª¤ï¼Œä¸èƒ½åœ¨æ­¤è™•ä½¿ç”¨æœ¬é“å…·ã€‚',
-	'anonymouspost_info_noperm' => 'å°ä¸èµ·ï¼Œä¸»é¡Œæ‰€åœ¨ç‰ˆå¡Šä¸å…è¨±ä½¿ç”¨æœ¬é“å…·',
-	'anonymouspost_info_user_noperm' => 'å°ä¸èµ·ï¼Œä½ ä¸èƒ½å°æ­¤äººä½¿ç”¨æœ¬é“å…·',
-	'anonymouspost_once_limit' => 'å·²ç¶“æ˜¯åŒ¿åç‹€æ…‹äº†ï¼Œä¸èƒ½é‡è¤‡ä½¿ç”¨æœ¬é“å…·ã€‚',
+	'anonymouspost_name' => 'ÄäÃû¿¨',
+	'anonymouspost_desc' => 'ÔÚÖ¸¶¨µÄµØ·½£¬ÈÃ×Ô¼ºµÄÃû×ÖÏÔÊ¾ÎªÄäÃû¡£',
+	'anonymouspost_num' => 'ÓµÓÐ¸öÊý: {magicnum}',
+	'anonymouspost_forum' => 'ÔÊÐíÊ¹ÓÃ±¾µÀ¾ßµÄ°æ¿é',
+	'anonymouspost_info' => '½«×Ô¼ºµÄÌû×ÓÉèÖÃÎªÄäÃûÉí·Ý£¬ÇëÊäÈëÌû×ÓµÄ ID',
+	'anonymouspost_info_nonexistence' => 'ÇëÖ¸¶¨ÒªÄäÃûµÄÌû×Ó',
+	'anonymouspost_succeed' => '³É¹¦ÉèÖÃÎªÄäÃû',
+	'anonymouspost_use_error' => '²ÎÊý´íÎó£¬²»ÄÜÔÚ´Ë´¦Ê¹ÓÃ±¾µÀ¾ß¡£',
+	'anonymouspost_info_noperm' => '¶Ô²»Æð£¬Ö÷ÌâËùÔÚ°æ¿é²»ÔÊÐíÊ¹ÓÃ±¾µÀ¾ß',
+	'anonymouspost_info_user_noperm' => '¶Ô²»Æð£¬Äú²»ÄÜ¶Ô´ËÈËÊ¹ÓÃ±¾µÀ¾ß',
+	'anonymouspost_once_limit' => 'ÒÑ¾­ÊÇÄäÃû×´Ì¬ÁË£¬²»ÄÜÖØ¸´Ê¹ÓÃ±¾µÀ¾ß¡£',
 );
 
 ?>

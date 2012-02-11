@@ -3,7 +3,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: userapp.php 23754 2011-08-09 06:29:33Z zhengqingpeng $
+ *      $Id: userapp.php 25756 2011-11-22 02:47:45Z zhangguosheng $
  */
 
 define('APPTYPEID', 5);
@@ -12,14 +12,14 @@ define('CURSCRIPT', 'userapp');
 require_once './source/class/class_core.php';
 require_once './source/function/function_home.php';
 
-$discuz = & discuz_core::instance();
+$discuz = C::app();
 
 $modarray = array('index', 'app', 'manage');
 $cachelist = array('userapp','usergroups', 'myapp');
 
 $mod = !in_array($discuz->var['mod'], $modarray) ? 'manage' : $discuz->var['mod'];
 
-$appid = empty($_G['gp_id']) ? '': intval($_G['gp_id']);
+$appid = empty($_GET['id']) ? '': intval($_GET['id']);
 if($appid) {
 	$mod = 'app';
 }
@@ -43,7 +43,7 @@ if(empty($_G['setting']['my_app_status'])) {
 if($mod == 'app' && !checkperm('allowmyop')) {
 	showmessage('no_privilege_myop', '', array(), array('return' => true));
 }
-$space = $_G['uid']? getspace($_G['uid']) : array();
+$space = $_G['uid']? getuserbyuid($_G['uid']) : array();
 
 define('CURMODULE', 'userapp');
 runhooks();

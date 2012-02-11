@@ -19,15 +19,15 @@ $process = load_process('main');
 list($rday, $rhour, $rmin, $rsec) = remaintime(time() - $process['timestart']);
 $stime = gmdate('Y-m-d H:i:s', $process['timestart'] + 3600* 8);
 $etime = gmdate('Y-m-d H:i:s',time() + 3600* 8);
-$timetodo = "æ‚¨å·²ç¶“é †åˆ©çš„å®Œæˆäº†æ•¸æ“šè½‰æ›!";
-$timetodo .= "<br><br>æœ¬æ¬¡å‡ç´šé–‹å§‹æ™‚é–“: <strong>$stime</strong><br>æœ¬æ¬¡å‡ç´šçµæŸæ™‚é–“: <strong>$etime</strong>";
-$timetodo .= "<br>å‡ç´šç´¯è¨ˆåŸ·è¡Œæ™‚é–“: <strong>$rday</strong>å¤© <strong>$rhour</strong>å°æ™‚ <strong>$rmin</strong>åˆ† <strong>$rsec</strong>ç§’";
-$timetodo .= "<br><br>é€šå¸¸æƒ…æ³ä¸‹ï¼Œæ‚¨å¯èƒ½é‚„éœ€è¦æŒ‰ç…§ä»¥ä¸‹æç¤ºç¹¼çºŒé€²è¡Œå‡ç´šï¼Œå¾è€Œä½¿æ‚¨çš„æ–°ç¨‹åºæ­£å¸¸é‹è¡Œ";
+$timetodo = "ÄúÒÑ¾­Ë³ÀûµÄÍê³ÉÁËÊı¾İ×ª»»!";
+$timetodo .= "<br><br>±¾´ÎÉı¼¶¿ªÊ¼Ê±¼ä: <strong>$stime</strong><br>±¾´ÎÉı¼¶½áÊøÊ±¼ä: <strong>$etime</strong>";
+$timetodo .= "<br>Éı¼¶ÀÛ¼ÆÖ´ĞĞÊ±¼ä: <strong>$rday</strong>Ìì <strong>$rhour</strong>Ğ¡Ê± <strong>$rmin</strong>·Ö <strong>$rsec</strong>Ãë";
+$timetodo .= "<br><br>Í¨³£Çé¿öÏÂ£¬Äú¿ÉÄÜ»¹ĞèÒª°´ÕÕÒÔÏÂÌáÊ¾¼ÌĞø½øĞĞÉı¼¶£¬´Ó¶øÊ¹ÄúµÄĞÂ³ÌĞòÕı³£ÔËĞĞ";
 
 showtips($timetodo);
 
 show_table_header();
-show_table_row(array('æœ€å¾Œçš„èªªæ˜(readme)'), 'title');
+show_table_row(array('×îºóµÄËµÃ÷(readme)'), 'title');
 show_table_row(array($txt));
 show_table_footer();
 

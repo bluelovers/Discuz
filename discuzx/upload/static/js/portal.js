@@ -1,8 +1,8 @@
 /*
-	[Discuz!] (C)2001-2009 Comsenz Inc.
+	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: portal.js 21566 2011-03-31 09:00:16Z zhangguosheng $
+	$Id: portal.js 27410 2012-01-30 09:53:20Z zhengqingpeng $
 */
 
 function block_get_setting(classname, script, bid) {
@@ -68,7 +68,7 @@ function block_pushitem(bid, itemid) {
 }
 
 function block_delete_item(bid, itemid, itemtype, itemfrom, from) {
-	var msg = itemtype==1 ? 'æ‚¨ç¢ºå®šè¦åˆªé™¤è©²æ•¸æ“šå—ï¼Ÿ' : 'æ‚¨ç¢ºå®šè¦å±è”½è©²æ•¸æ“šå—ï¼Ÿ';
+	var msg = itemtype==1 ? 'ÄúÈ·¶¨ÒªÉ¾³ı¸ÃÊı¾İÂğ£¿' : 'ÄúÈ·¶¨ÒªÆÁ±Î¸ÃÊı¾İÂğ£¿';
 	if(confirm(msg)) {
 		var url = 'portal.php?mod=portalcp&ac=block&op=remove&bid='+bid+'&itemid='+itemid;
 		if(itemfrom=='ajax') {
@@ -84,9 +84,9 @@ function block_delete_item(bid, itemid, itemtype, itemfrom, from) {
 	doane();
 }
 
-function portal_comment_requote(cid) {
+function portal_comment_requote(cid, aid) {
 	var x = new Ajax();
-	x.get('portal.php?mod=portalcp&ac=comment&op=requote&cid='+cid+'&inajax=1', function(s){
+	x.get('portal.php?mod=portalcp&ac=comment&op=requote&cid='+cid+'&aid='+aid+'&inajax=1', function(s){
 		$('message').focus();
 		ajaxinnerhtml($('message'), s);
 	});
@@ -142,7 +142,7 @@ function recommenditem_check() {
 		document.forms['recommendform'].action = document.forms['recommendform'].action+'&bid='+sel.value;
 		return true;
 	} else {
-		alert("è«‹é¸æ“‡ä¸€å€‹æ¨¡å¡Šï¼");
+		alert("ÇëÑ¡ÔñÒ»¸öÄ£¿é£¡");
 		return false;
 	}
 }
@@ -154,8 +154,8 @@ function recommenditem_byblock(bid, id, idtype) {
 		ajaxinnerhtml(olditemeditarea, editarea.innerHTML);
 		if(!$('recommendback')) {
 			var back = document.createElement('div');
-			back.innerHTML = '<em id="recommendback" onclick="recommenditem_back()" class="cur1">&nbsp;&nbsp;&laquo;è¿”å›</em>';
-			var return_mods = $('return_mods') || $('return_');
+			back.innerHTML = '<em id="recommendback" onclick="recommenditem_back()" class="cur1">&nbsp;&nbsp;&laquo;·µ»Ø</em>';
+			var return_mods = $('return_mods') || $('return_recommend') || $('return_');
 			if(return_mods) {
 				return_mods.parentNode.appendChild(back.childNodes[0]);
 			}
@@ -168,6 +168,18 @@ function recommenditem_byblock(bid, id, idtype) {
 		} else {
 			ajaxinnerhtml(editarea, '<tr><td>&nbsp;</td><td>&nbsp;</td></tr>');
 		}
+	}
+}
+
+function delete_recommenditem(dataid, bid) {
+	if(dataid && bid) {
+		var x = new Ajax();
+		x.get('portal.php?mod=portalcp&ac=block&op=delrecommend&bid='+bid+'&dataid='+dataid+'&inajax=1', function(s){
+			$('recommenditem_'+dataid).parentNode.removeChild($('recommenditem_'+dataid));
+			if(!$('recommenditem_ul').getElementsByTagName('li').length) {
+				$('hasinblocks').parentNode.removeChild($('hasinblocks'));
+			}
+		});
 	}
 }
 
@@ -210,10 +222,10 @@ function blockSetCacheTime(timer) {
 function toggleSettingShow() {
 	if(!$('tbody_setting').style.display) {
 		$('tbody_setting').style.display = 'none';
-		$('a_setting_show').innerHTML = 'å±•é–‹è¨­ç½®é …';
+		$('a_setting_show').innerHTML = 'Õ¹¿ªÉèÖÃÏî';
 	} else {
 		$('tbody_setting').style.display = '';
-		$('a_setting_show').innerHTML = 'æ”¶èµ·è¨­ç½®é …';
+		$('a_setting_show').innerHTML = 'ÊÕÆğÉèÖÃÏî';
 	}
 	doane();
 }
@@ -221,16 +233,16 @@ function switchSetting() {
 	var checked = $('isblank').checked;
 	if(checked) {
 		$('tbody_setting').style.display = 'none';
-		$('a_setting_show').innerHTML = 'å±•é–‹è¨­ç½®é …';
+		$('a_setting_show').innerHTML = 'Õ¹¿ªÉèÖÃÏî';
 	} else {
 		$('tbody_setting').style.display = '';
-		$('a_setting_show').innerHTML = 'æ”¶èµ·è¨­ç½®é …';
+		$('a_setting_show').innerHTML = 'ÊÕÆğÉèÖÃÏî';
 	}
 }
 
 function checkblockname(form) {
 	if(!(trim(form.name.value) > '')) {
-		showDialog('æ¨¡å¡Šæ¨™è­˜ä¸èƒ½ç‚ºç©º', 'error', null, function(){form.name.focus();});
+		showDialog('Ä£¿é±êÊ¶²»ÄÜÎª¿Õ', 'error', null, function(){form.name.focus();});
 		return false;
 	}
 	if(form.summary && form.summary.value) {
@@ -238,7 +250,7 @@ function checkblockname(form) {
 		if(tag) {
 			showBlockSummary();
 			form.summary.focus();
-			showDialog('è‡ªå®šç¾©å…§å®¹éŒ¯èª¤ï¼ŒHTMLä»£ç¢¼ï¼š'+tag+' æ¨™ç±¤ä¸åŒ¹é…', 'error', null, function(){form.summary.select();});
+			showDialog('×Ô¶¨ÒåÄÚÈİ´íÎó£¬HTML´úÂë£º'+tag+' ±êÇ©²»Æ¥Åä', 'error', null, function(){form.summary.select();});
 			return false;
 		}
 	}
@@ -274,7 +286,7 @@ function blockCheckTag(summary, returnValue) {
 				if(returnValue) {
 					return tag;
 				} else {
-					showDialog('HTMLä»£ç¢¼ï¼š'+tag+' æ¨™ç±¤ä¸åŒ¹é…', 'error', null, fn, true, fn);
+					showDialog('HTML´úÂë£º'+tag+' ±êÇ©²»Æ¥Åä', 'error', null, fn, true, fn);
 					return false;
 				}
 			}
@@ -299,7 +311,7 @@ function hideBlockSummary() {
 
 function blockconver(ele,bid) {
 	if(ele && bid) {
-		if(confirm('ä½ ç¢ºå®šè¦è½‰æ›æ¨¡å¡Šçš„é¡å‹å¾ '+ele.options[0].innerHTML+' åˆ° '+ele.options[ele.selectedIndex].innerHTML)) {
+		if(confirm('ÄúÈ·¶¨Òª×ª»»Ä£¿éµÄÀàĞÍ´Ó '+ele.options[0].innerHTML+' µ½ '+ele.options[ele.selectedIndex].innerHTML)) {
 			ajaxget('portal.php?mod=portalcp&ac=block&op=convert&bid='+bid+'&toblockclass='+ele.value,'blockshow');
 		} else {
 			ele.selectedIndex = 0;
@@ -311,4 +323,38 @@ function blockFavorite(bid){
 	if(bid) {
 		ajaxget('portal.php?mod=portalcp&ac=block&op=favorite&bid='+bid,'bfav_'+bid);
 	}
+}
+
+function strLenCalc(obj, checklen, maxlen) {
+	var v = obj.value, charlen = 0, maxlen = !maxlen ? 200 : maxlen, curlen = 0, len = strlen(v);
+	for(var i = 0; i < v.length; i++) {
+		if(v.charCodeAt(i) < 0 || v.charCodeAt(i) > 255) {
+			curlen += charset == 'utf-8' ? 2 : 1;
+		} else {
+			curlen += 1;
+		}
+	}
+	checklen = $(checklen);
+	if(checklen.style.display == 'none') checklen.style.display = '';
+	if(curlen <= maxlen) {
+		checklen.innerHTML = 'ÒÑÊäÈë <b>'+(curlen)+'</b> ¸ö×Ö·û';
+		return true;
+	} else {
+		checklen.innerHTML = '³¬³ö <b style="color:red">'+(curlen - maxlen)+'</b> ¸ö×Ö·û';
+		return false;
+	}
+}
+
+function check_itemdata_lentgh(form) {
+	if(form.title && (!strLenCalc(form.title, "titlechk", form.title.getAttribute('_maxlength')) || !form.title.value)) {
+		form.title.focus();
+		showDialog('±êÌâ³¤¶È²»ÕıÈ·', 'error', null, function(){form.title.select();});
+		return false;
+	}
+	if(form.summary && !strLenCalc(form.summary, "summarychk", form.summary.getAttribute('_maxlength'))) {
+		form.summary.focus();
+		showDialog('¼ò½é³¤¶È²»ÕıÈ·', 'error', null, function(){form.summary.select();});
+		return false;
+	}
+	return true;
 }

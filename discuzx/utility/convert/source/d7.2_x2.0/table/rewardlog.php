@@ -71,7 +71,7 @@ while ($row = $db_source->fetch_array($query)) {
 
 if($nextid) {
 	$next = $start + $limit;
-	showmessage("ç¹¼çºŒè½‰æ›æ•¸æ“šè¡¨ ".$table_source." $start è‡³ ".($start+$limit)." è¡Œ", "index.php?a=$action&source=$source&prg=$curprg&start=$next");
+	showmessage("¼ÌÐø×ª»»Êý¾Ý±í ".$table_source." $start ÖÁ ".($start+$limit)." ÐÐ", "index.php?a=$action&source=$source&prg=$curprg&start=$next");
 }
 
 ?>

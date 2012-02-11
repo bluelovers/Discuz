@@ -1,77 +1,102 @@
-ä¸­æ–‡ç‰ˆæˆæ¬Šå”è­° é©ç”¨æ–¼ä¸­æ–‡ç”¨æˆ¶
+ÖĞÎÄ°æÊÚÈ¨Ğ­Òé ÊÊÓÃÓÚÖĞÎÄÓÃ»§
 
-ç‰ˆæ¬Šæ‰€æœ‰ (c) 2001-2011ï¼ŒåŒ—äº¬åº·ç››æ–°å‰µç§‘æŠ€æœ‰é™è²¬ä»»å…¬å¸
-ä¿ç•™æ‰€æœ‰æ¬Šåˆ©ã€‚
+°æÈ¨ËùÓĞ (c) 2001-2012£¬±±¾©¿µÊ¢ĞÂ´´¿Æ¼¼ÓĞÏŞÔğÈÎ¹«Ë¾
+±£ÁôËùÓĞÈ¨Àû¡£
 
-æ„Ÿè¬æ‚¨é¸æ“‡ Discuz! è«–å£‡ç”¢å“ã€‚å¸Œæœ›æˆ‘å€‘çš„åŠªåŠ›èƒ½ç‚ºæ‚¨æä¾›ä¸€å€‹é«˜æ•ˆå¿«é€Ÿå’Œå¼·å¤§çš„ç¤¾å€è«–å£‡è§£æ±ºæ–¹æ¡ˆã€‚
+¸ĞĞ»ÄúÑ¡Ôñ¿µÊ¢²úÆ·¡£Ï£ÍûÎÒÃÇµÄÅ¬Á¦ÄÜÎªÄúÌá¹©Ò»¸ö¸ßĞ§¿ìËÙ¡¢Ç¿´óµÄÕ¾µã½â¾ö·½°¸£¬ºÍÇ¿´óµÄÉçÇøÂÛÌ³½â¾ö·½°¸¡£¿µÊ¢¹«Ë¾ÍøÖ·Îª http://www.comsenz.com£¬²úÆ·¹Ù·½ÌÖÂÛÇøÍøÖ·Îª http://www.discuz.net¡£
 
-Discuz! è‹±æ–‡å…¨ç¨±ç‚º Crossday Discuz! Boardï¼Œä¸­æ–‡å…¨ç¨±ç‚º Crossday Discuz! Board è«–å£‡ç³»çµ±è»Ÿä»¶ï¼Œä»¥ä¸‹ç°¡ç¨± Discuz! ã€‚
+ÓÃ»§ĞëÖª£º±¾Ğ­ÒéÊÇÄúÓë¿µÊ¢¹«Ë¾Ö®¼ä¹ØÓÚÄúÊ¹ÓÃ¿µÊ¢¹«Ë¾Ìá¹©µÄ¸÷ÖÖÈí¼ş²úÆ·¼°·şÎñµÄ·¨ÂÉĞ­Òé¡£ÎŞÂÛÄúÊÇ¸öÈË»ò×éÖ¯¡¢Ó¯ÀûÓë·ñ¡¢ÓÃÍ¾ÈçºÎ£¨°üÀ¨ÒÔÑ§Ï°ºÍÑĞ¾¿ÎªÄ¿µÄ£©£¬¾ùĞè×ĞÏ¸ÔÄ¶Á±¾Ğ­Òé£¬°üÀ¨Ãâ³ı»òÕßÏŞÖÆ¿µÊ¢ÔğÈÎµÄÃâÔğÌõ¿î¼°¶ÔÄúµÄÈ¨ÀûÏŞÖÆ¡£ÇëÄúÉóÔÄ²¢½ÓÊÜ»ò²»½ÓÊÜ±¾·şÎñÌõ¿î¡£ÈçÄú²»Í¬Òâ±¾·şÎñÌõ¿î¼°/»ò¿µÊ¢ËæÊ±¶ÔÆäµÄĞŞ¸Ä£¬ÄúÓ¦²»Ê¹ÓÃ»òÖ÷¶¯È¡Ïû¿µÊ¢¹«Ë¾Ìá¹©µÄ¿µÊ¢²úÆ·¡£·ñÔò£¬ÄúµÄÈÎºÎ¶Ô¿µÊ¢²úÆ·ÖĞµÄÏà¹Ø·şÎñµÄ×¢²á¡¢µÇÂ½¡¢ÏÂÔØ¡¢²é¿´µÈÊ¹ÓÃĞĞÎª½«±»ÊÓÎªÄú¶Ô±¾·şÎñÌõ¿îÈ«²¿µÄÍêÈ«½ÓÊÜ£¬°üÀ¨½ÓÊÜ¿µÊ¢¶Ô·şÎñÌõ¿îËæÊ±Ëù×öµÄÈÎºÎĞŞ¸Ä¡£
+±¾·şÎñÌõ¿îÒ»µ©·¢Éú±ä¸ü, ¿µÊ¢½«ÔÚÍøÒ³ÉÏ¹«²¼ĞŞ¸ÄÄÚÈİ¡£ĞŞ¸ÄºóµÄ·şÎñÌõ¿îÒ»µ©ÔÚÍøÕ¾¹ÜÀíºóÌ¨ÉÏ¹«²¼¼´ÓĞĞ§´úÌæÔ­À´µÄ·şÎñÌõ¿î¡£Äú¿ÉËæÊ±µÇÂ½¿µÊ¢¹Ù·½ÂÛÌ³²éÔÄ×îĞÂ°æ·şÎñÌõ¿î¡£Èç¹ûÄúÑ¡Ôñ½ÓÊÜ±¾Ìõ¿î£¬¼´±íÊ¾ÄúÍ¬Òâ½ÓÊÜĞ­Òé¸÷ÏîÌõ¼şµÄÔ¼Êø¡£Èç¹ûÄú²»Í¬Òâ±¾·şÎñÌõ¿î£¬Ôò²»ÄÜ»ñµÃÊ¹ÓÃ±¾·şÎñµÄÈ¨Àû¡£ÄúÈôÓĞÎ¥·´±¾Ìõ¿î¹æ¶¨£¬¿µÊ¢¹«Ë¾ÓĞÈ¨ËæÊ±ÖĞÖ¹»òÖÕÖ¹Äú¶Ô¿µÊ¢²úÆ·µÄÊ¹ÓÃ×Ê¸ñ²¢±£Áô×·¾¿Ïà¹Ø·¨ÂÉÔğÈÎµÄÈ¨Àû¡£
+ÔÚÀí½â¡¢Í¬Òâ¡¢²¢×ñÊØ±¾Ğ­ÒéµÄÈ«²¿Ìõ¿îºó£¬·½¿É¿ªÊ¼Ê¹ÓÃ¿µÊ¢²úÆ·¡£Äú¿ÉÄÜÓë¿µÊ¢¹«Ë¾Ö±½ÓÇ©¶©ÁíÒ»ÊéÃæĞ­Òé£¬ÒÔ²¹³ä»òÕßÈ¡´ú±¾Ğ­ÒéµÄÈ«²¿»òÕßÈÎºÎ²¿·Ö¡£
 
-åŒ—äº¬åº·ç››æ–°å‰µç§‘æŠ€æœ‰é™è²¬ä»»å…¬å¸ç‚º Discuz! ç”¢å“çš„é–‹ç™¼å•†ï¼Œä¾æ³•ç¨ç«‹æ“æœ‰ Discuz! ç”¢å“è‘—ä½œæ¬Šï¼ˆä¸­åœ‹åœ‹å®¶ç‰ˆæ¬Šå±€è‘—ä½œæ¬Šç™»è¨˜è™Ÿ 2008SR11708ï¼‰ã€‚åº·ç››å‰µæƒ³(åŒ—äº¬)ç§‘æŠ€æœ‰é™å…¬å¸ç¶²å€ç‚º http://www.comsenz.comï¼ŒDiscuz! å®˜æ–¹ç¶²ç«™ç¶²å€ç‚º http://www.discuz.comï¼Œ Discuz! å®˜æ–¹è¨è«–å€ç¶²å€ç‚º http://www.discuz.netã€‚
+¿µÊ¢ÓµÓĞ±¾Èí¼şµÄÈ«²¿ÖªÊ¶²úÈ¨¡£±¾Èí¼şÖ»¹©Ğí¿ÉĞ­Òé£¬²¢·Ç³öÊÛ¡£¿µÊ¢Ö»ÔÊĞíÄúÔÚ×ñÊØ±¾Ğ­Òé¸÷ÏîÌõ¿îµÄÇé¿öÏÂ¸´ÖÆ¡¢ÏÂÔØ¡¢°²×°¡¢Ê¹ÓÃ»òÕßÒÔÆäËû·½Ê½ÊÜÒæÓÚ±¾Èí¼şµÄ¹¦ÄÜ»òÕßÖªÊ¶²úÈ¨¡£
 
-Discuz! è‘—ä½œæ¬Šå·²åœ¨ä¸­è¯äººæ°‘å…±å’Œåœ‹åœ‹å®¶ç‰ˆæ¬Šå±€è¨»å†Šï¼Œè‘—ä½œæ¬Šå—åˆ°æ³•å¾‹å’Œåœ‹éš›å…¬ç´„ä¿è­·ã€‚ä½¿ç”¨è€…ï¼šç„¡è«–å€‹äººæˆ–çµ„ç¹”ã€ç›ˆåˆ©èˆ‡å¦ã€ç”¨é€”å¦‚ä½•ï¼ˆåŒ…æ‹¬ä»¥å­¸ç¿’å’Œç ”ç©¶ç‚ºç›®çš„ï¼‰ï¼Œå‡éœ€ä»”ç´°é–±è®€æœ¬å”è­°ï¼Œåœ¨ç†è§£ã€åŒæ„ã€ä¸¦éµå®ˆæœ¬å”è­°çš„å…¨éƒ¨æ¢æ¬¾å¾Œï¼Œæ–¹å¯é–‹å§‹ä½¿ç”¨ Discuz! è»Ÿä»¶ã€‚
+I. Ğ­ÒéĞí¿ÉµÄÈ¨Àû
 
-æœ¬æˆæ¬Šå”è­°é©ç”¨ä¸”åƒ…é©ç”¨æ–¼ Discuz! X1.5 åŠä»¥ä¸Šç‰ˆæœ¬ï¼Œåº·ç››å‰µæƒ³(åŒ—äº¬)ç§‘æŠ€æœ‰é™å…¬å¸æ“æœ‰å°æœ¬æˆæ¬Šå”è­°çš„æœ€çµ‚è§£é‡‹æ¬Šã€‚
+   1. Äú¿ÉÒÔÔÚÍêÈ«×ñÊØ±¾Ğí¿ÉĞ­ÒéµÄ»ù´¡ÉÏ£¬½«±¾Èí¼şÓ¦ÓÃÓÚ·ÇÉÌÒµÓÃÍ¾£¬¶ø²»±ØÖ§¸¶Èí¼ş°æÈ¨Ğí¿É·ÑÓÃ¡£
+   2. Äú¿ÉÒÔÔÚĞ­Òé¹æ¶¨µÄÔ¼ÊøºÍÏŞÖÆ·¶Î§ÄÚĞŞ¸Ä¿µÊ¢²úÆ·Ô´´úÂë(Èç¹û±»Ìá¹©µÄ»°)»ò½çÃæ·ç¸ñÒÔÊÊÓ¦ÄúµÄÍøÕ¾ÒªÇó¡£
+   3. ÄúÓµÓĞÊ¹ÓÃ±¾Èí¼ş¹¹½¨µÄÍøÕ¾ÖĞÈ«²¿»áÔ±×ÊÁÏ¡¢ÎÄÕÂ¼°Ïà¹ØĞÅÏ¢µÄËùÓĞÈ¨£¬²¢¶ÀÁ¢³Ğµ£ÓëÊ¹ÓÃ±¾Èí¼ş¹¹½¨µÄÍøÕ¾ÄÚÈİµÄÉóºË¡¢×¢ÒâÒåÎñ£¬È·±£Æä²»ÇÖ·¸ÈÎºÎÈËµÄºÏ·¨È¨Òæ£¬¶ÀÁ¢³Ğµ£ÒòÊ¹ÓÃ¿µÊ¢Èí¼şºÍ·şÎñ´øÀ´µÄÈ«²¿ÔğÈÎ£¬ÈôÔì³É¿µÊ¢¹«Ë¾»òÓÃ»§ËğÊ§µÄ£¬ÄúÓ¦ÓèÒÔÈ«²¿Åâ³¥¡£
+   4. ÈôÄúĞè½«¿µÊ¢Èí¼ş»ò·şÎñÓÃ»§ÉÌÒµÓÃÍ¾£¬±ØĞëÁíĞĞ»ñµÃ¿µÊ¢µÄÊéÃæĞí¿É£¬ÄúÔÚ»ñµÃÉÌÒµÊÚÈ¨Ö®ºó£¬Äú¿ÉÒÔ½«±¾Èí¼şÓ¦ÓÃÓÚÉÌÒµÓÃÍ¾£¬Í¬Ê±ÒÀ¾İËù¹ºÂòµÄÊÚÈ¨ÀàĞÍÖĞÈ·¶¨µÄ¼¼ÊõÖ§³ÖÆÚÏŞ¡¢¼¼ÊõÖ§³Ö·½Ê½ºÍ¼¼ÊõÖ§³ÖÄÚÈİ£¬×Ô¹ºÂòÊ±¿ÌÆğ£¬ÔÚ¼¼ÊõÖ§³ÖÆÚÏŞÄÚÓµÓĞÍ¨¹ıÖ¸¶¨µÄ·½Ê½»ñµÃÖ¸¶¨·¶Î§ÄÚµÄ¼¼ÊõÖ§³Ö·şÎñ¡£ÉÌÒµÊÚÈ¨ÓÃ»§ÏíÓĞ·´Ó³ºÍÌá³öÒâ¼ûµÄÈ¨Á¦£¬Ïà¹ØÒâ¼û½«±»×÷ÎªÊ×Òª¿¼ÂÇ£¬µ«Ã»ÓĞÒ»¶¨±»²ÉÄÉµÄ³ĞÅµ»ò±£Ö¤¡£
+   5. Äú¿ÉÒÔ´Ó¿µÊ¢Ìá¹©µÄÓ¦ÓÃÖĞĞÄ·şÎñÖĞÏÂÔØÊÊºÏÄúÍøÕ¾µÄÓ¦ÓÃ³ÌĞò£¬µ«Ó¦ÏòÓ¦ÓÃ³ÌĞò¿ª·¢Õß/ËùÓĞÕßÖ§¸¶ÏàÓ¦µÄ·ÑÓÃ¡£
 
-I å”è­°è¨±å¯çš„æ¬Šåˆ©
-    1. æ‚¨å¯ä»¥åœ¨å®Œå…¨éµå®ˆæœ¬æœ€çµ‚ç”¨æˆ¶æˆæ¬Šå”è­°çš„åŸºç¤ä¸Šï¼Œå°‡æœ¬è»Ÿä»¶æ‡‰ç”¨æ–¼éå•†æ¥­ç”¨é€”ï¼Œè€Œä¸å¿…æ”¯ä»˜è»Ÿä»¶ç‰ˆæ¬Šæˆæ¬Šè²»ç”¨ã€‚
-    2. æ‚¨å¯ä»¥åœ¨å”è­°è¦å®šçš„ç´„æŸå’Œé™åˆ¶ç¯„åœå…§ä¿®æ”¹ Discuz! æºä»£ç¢¼(å¦‚æœè¢«æä¾›çš„è©±)æˆ–ç•Œé¢é¢¨æ ¼ä»¥é©æ‡‰æ‚¨çš„ç¶²ç«™è¦æ±‚ã€‚
-    3. æ‚¨æ“æœ‰ä½¿ç”¨æœ¬è»Ÿä»¶æ§‹å»ºçš„è«–å£‡ä¸­å…¨éƒ¨æœƒå“¡è³‡æ–™ã€æ–‡ç« åŠç›¸é—œä¿¡æ¯çš„æ‰€æœ‰æ¬Šï¼Œä¸¦ç¨ç«‹æ‰¿æ“”èˆ‡æ–‡ç« å…§å®¹çš„ç›¸é—œæ³•å¾‹ç¾©å‹™ã€‚
-    4. ç²å¾—å•†æ¥­æˆæ¬Šä¹‹å¾Œï¼Œæ‚¨å¯ä»¥å°‡æœ¬è»Ÿä»¶æ‡‰ç”¨æ–¼å•†æ¥­ç”¨é€”ï¼ŒåŒæ™‚ä¾æ“šæ‰€è³¼è²·çš„æˆæ¬Šé¡å‹ä¸­ç¢ºå®šçš„æŠ€è¡“æ”¯æŒæœŸé™ã€æŠ€è¡“æ”¯æŒæ–¹å¼å’ŒæŠ€è¡“æ”¯æŒå…§å®¹ï¼Œè‡ªè³¼è²·æ™‚åˆ»èµ·ï¼Œåœ¨æŠ€è¡“æ”¯æŒæœŸé™å…§æ“æœ‰é€šéæŒ‡å®šçš„æ–¹å¼ç²å¾—æŒ‡å®šç¯„åœå…§çš„æŠ€è¡“æ”¯æŒæœå‹™ã€‚å•†æ¥­æˆæ¬Šç”¨æˆ¶äº«æœ‰åæ˜ å’Œæå‡ºæ„è¦‹çš„æ¬ŠåŠ›ï¼Œç›¸é—œæ„è¦‹å°‡è¢«ä½œç‚ºé¦–è¦è€ƒæ…®ï¼Œä½†æ²’æœ‰ä¸€å®šè¢«æ¡ç´çš„æ‰¿è«¾æˆ–ä¿è­‰ã€‚
+II. Ğ­Òé¹æ¶¨µÄÔ¼ÊøºÍÏŞÖÆ
 
-II å”è­°è¦å®šçš„ç´„æŸå’Œé™åˆ¶
-    1. æœªç²å•†æ¥­æˆæ¬Šä¹‹å‰ï¼Œä¸å¾—å°‡æœ¬è»Ÿä»¶ç”¨æ–¼å•†æ¥­ç”¨é€”ï¼ˆåŒ…æ‹¬ä½†ä¸é™æ–¼ä¼æ¥­ç¶²ç«™ã€ç¶“ç‡Ÿæ€§ç¶²ç«™ã€ä»¥ç‡Ÿåˆ©ç‚ºç›®æˆ–å¯¦ç¾ç›ˆåˆ©çš„ç¶²ç«™ï¼‰ã€‚è³¼è²·å•†æ¥­æˆæ¬Šè«‹ç™»é™¸http://www.discuz.com åƒè€ƒç›¸é—œèªªæ˜ï¼Œä¹Ÿå¯ä»¥è‡´é›»8610-51657885ç­è§£è©³æƒ…ã€‚
-    2. ä¸å¾—å°æœ¬è»Ÿä»¶æˆ–èˆ‡ä¹‹é—œè¯çš„å•†æ¥­æˆæ¬Šé€²è¡Œå‡ºç§Ÿã€å‡ºå”®ã€æŠµæŠ¼æˆ–ç™¼æ”¾å­è¨±å¯è­‰ã€‚
-    3. ç„¡è«–å¦‚ä½•ï¼Œå³ç„¡è«–ç”¨é€”å¦‚ä½•ã€æ˜¯å¦ç¶“éä¿®æ”¹æˆ–ç¾åŒ–ã€ä¿®æ”¹ç¨‹åº¦å¦‚ä½•ï¼Œåªè¦ä½¿ç”¨ Discuz! çš„æ•´é«”æˆ–ä»»ä½•éƒ¨åˆ†ï¼Œæœªç¶“æ›¸é¢è¨±å¯ï¼Œè«–å£‡é é¢é è…³è™•çš„ Discuz! åç¨±å’Œåº·ç››å‰µæƒ³(åŒ—äº¬)ç§‘æŠ€æœ‰é™å…¬å¸ä¸‹å±¬ç¶²ç«™ï¼ˆhttp://www.comsenz.comã€http://www.discuz.com æˆ– http://www.discuz.netï¼‰ çš„éˆæ¥éƒ½å¿…é ˆä¿ç•™ï¼Œè€Œä¸èƒ½æ¸…é™¤æˆ–ä¿®æ”¹ã€‚
-    4. ç¦æ­¢åœ¨ Discuz! çš„æ•´é«”æˆ–ä»»ä½•éƒ¨åˆ†åŸºç¤ä¸Šä»¥ç™¼å±•ä»»ä½•æ´¾ç”Ÿç‰ˆæœ¬ã€ä¿®æ”¹ç‰ˆæœ¬æˆ–ç¬¬ä¸‰æ–¹ç‰ˆæœ¬ç”¨æ–¼é‡æ–°åˆ†ç™¼ã€‚
-    5. å¦‚æœæ‚¨æœªèƒ½éµå®ˆæœ¬å”è­°çš„æ¢æ¬¾ï¼Œæ‚¨çš„æˆæ¬Šå°‡è¢«çµ‚æ­¢ï¼Œæ‰€è¢«è¨±å¯çš„æ¬Šåˆ©å°‡è¢«æ”¶å›ï¼Œä¸¦æ‰¿æ“”ç›¸æ‡‰æ³•å¾‹è²¬ä»»ã€‚
+   1. Î´»ñ¿µÊ¢¹«Ë¾ÊéÃæÉÌÒµÊÚÈ¨Ö®Ç°£¬²»µÃ½«±¾Èí¼şÓÃÓÚÉÌÒµÓÃÍ¾£¨°üÀ¨µ«²»ÏŞÓÚÆóÒµÍøÕ¾¡¢¾­ÓªĞÔÍøÕ¾¡¢ÒÔÓªÀûÎªÄ¿»òÊµÏÖÓ¯ÀûµÄÍøÕ¾£©¡£¹ºÂòÉÌÒµÊÚÈ¨ÇëµÇÂ½http://www.discuz.com²Î¿¼Ïà¹ØËµÃ÷£¬Ò²¿ÉÒÔÖÂµç8610-51282255ÁË½âÏêÇé¡£
+   2. ²»µÃ¶Ô±¾Èí¼ş»òÓëÖ®¹ØÁªµÄÉÌÒµÊÚÈ¨½øĞĞ³ö×â¡¢³öÊÛ¡¢µÖÑº»ò·¢·Å×ÓĞí¿ÉÖ¤¡£
+   3. ÎŞÂÛÈçºÎ£¬¼´ÎŞÂÛÓÃÍ¾ÈçºÎ¡¢ÊÇ·ñ¾­¹ıĞŞ¸Ä»òÃÀ»¯¡¢ĞŞ¸Ä³Ì¶ÈÈçºÎ£¬Ö»ÒªÊ¹ÓÃ¿µÊ¢²úÆ·µÄÕûÌå»òÈÎºÎ²¿·Ö£¬Î´¾­ÊéÃæĞí¿É£¬Ò³ÃæÒ³½Å´¦µÄ¿µÊ¢²úÆ·Ãû³ÆºÍ¿µÊ¢¹«Ë¾ÏÂÊôÍøÕ¾£¨http://www.comsenz.com¡¢»ò http://www.discuz.net£© µÄÁ´½Ó¶¼±ØĞë±£Áô£¬¶ø²»ÄÜÇå³ı»òĞŞ¸Ä¡£
+   4. ½ûÖ¹ÔÚ¿µÊ¢²úÆ·µÄÕûÌå»òÈÎºÎ²¿·Ö»ù´¡ÉÏÒÔ·¢Õ¹ÈÎºÎÅÉÉú°æ±¾¡¢ĞŞ¸Ä°æ±¾»òµÚÈı·½°æ±¾ÓÃÓÚÖØĞÂ·Ö·¢¡£
+   5. Äú´ÓÓ¦ÓÃÖĞĞÄÏÂÔØµÄÓ¦ÓÃ³ÌĞò£¬Î´¾­Ó¦ÓÃ³ÌĞò¿ª·¢Õß/ËùÓĞÕßµÄÊéÃæĞí¿É£¬²»µÃ¶ÔÆä½øĞĞ·´Ïò¹¤³Ì¡¢·´Ïò»ã±à¡¢·´Ïò±àÒëµÈ£¬²»µÃÉÃ×Ô¸´ÖÆ¡¢ĞŞ¸Ä¡¢Á´½Ó¡¢×ªÔØ¡¢»ã±à¡¢·¢±í¡¢³ö°æ¡¢·¢Õ¹ÓëÖ®ÓĞ¹ØµÄÑÜÉú²úÆ·¡¢×÷Æ·µÈ¡£
+   6. Èç¹ûÄúÎ´ÄÜ×ñÊØ±¾Ğ­ÒéµÄÌõ¿î£¬ÄúµÄÊÚÈ¨½«±»ÖÕÖ¹£¬ËùĞí¿ÉµÄÈ¨Àû½«±»ÊÕ»Ø£¬Í¬Ê±ÄúÓ¦³Ğµ£ÏàÓ¦·¨ÂÉÔğÈÎ¡£
 
-III æœ‰é™æ“”ä¿å’Œå…è²¬è²æ˜
-    1. æœ¬è»Ÿä»¶åŠæ‰€é™„å¸¶çš„æ–‡ä»¶æ˜¯ä½œç‚ºä¸æä¾›ä»»ä½•æ˜ç¢ºçš„æˆ–éš±å«çš„è³ å„Ÿæˆ–æ“”ä¿çš„å½¢å¼æä¾›çš„ã€‚
-    2. ç”¨æˆ¶å‡ºæ–¼è‡ªé¡˜è€Œä½¿ç”¨æœ¬è»Ÿä»¶ï¼Œæ‚¨å¿…é ˆç­è§£ä½¿ç”¨æœ¬è»Ÿä»¶çš„é¢¨éšªï¼Œåœ¨å°šæœªè³¼è²·ç”¢å“æŠ€è¡“æœå‹™ä¹‹å‰ï¼Œæˆ‘å€‘ä¸æ‰¿è«¾æä¾›ä»»ä½•å½¢å¼çš„æŠ€è¡“æ”¯æŒã€ä½¿ç”¨æ“”ä¿ï¼Œä¹Ÿä¸æ‰¿æ“”ä»»ä½•å› ä½¿ç”¨æœ¬è»Ÿä»¶è€Œç”¢ç”Ÿå•é¡Œçš„ç›¸é—œè²¬ä»»ã€‚
-    3. åº·ç››å‰µæƒ³(åŒ—äº¬)ç§‘æŠ€æœ‰é™å…¬å¸ä¸å°ä½¿ç”¨æœ¬è»Ÿä»¶æ§‹å»ºçš„è«–å£‡ä¸­çš„æ–‡ç« æˆ–ä¿¡æ¯æ‰¿æ“”è²¬ä»»ã€‚
+III. ÓĞÏŞµ£±£ºÍÃâÔğÉùÃ÷
 
-æœ‰é—œ Discuz! æœ€çµ‚ç”¨æˆ¶æˆæ¬Šå”è­°ã€å•†æ¥­æˆæ¬Šèˆ‡æŠ€è¡“æœå‹™çš„è©³ç´°å…§å®¹ï¼Œå‡ç”± Discuz! å®˜æ–¹ç¶²ç«™ç¨å®¶æä¾›ã€‚åº·ç››å‰µæƒ³(åŒ—äº¬)ç§‘æŠ€æœ‰é™å…¬å¸æ“æœ‰åœ¨ä¸äº‹å…ˆé€šçŸ¥çš„æƒ…æ³ä¸‹ï¼Œä¿®æ”¹æˆæ¬Šå”è­°å’Œæœå‹™åƒ¹ç›®è¡¨çš„æ¬ŠåŠ›ï¼Œä¿®æ”¹å¾Œçš„å”è­°æˆ–åƒ¹ç›®è¡¨å°è‡ªæ”¹è®Šä¹‹æ—¥èµ·çš„æ–°æˆæ¬Šç”¨æˆ¶ç”Ÿæ•ˆã€‚
+   1. ±¾Èí¼ş¼°Ëù¸½´øµÄÎÄ¼şÊÇ×÷Îª²»Ìá¹©ÈÎºÎÃ÷È·µÄ»òÒşº¬µÄÅâ³¥»òµ£±£µÄĞÎÊ½Ìá¹©µÄ¡£
+   2. ÓÃ»§³öÓÚ×ÔÔ¸¶øÊ¹ÓÃ±¾Èí¼ş£¬Äú±ØĞëÁË½âÊ¹ÓÃ±¾Èí¼şµÄ·çÏÕ£¬ÔÚÉĞÎ´¹ºÂò²úÆ·¼¼Êõ·şÎñÖ®Ç°£¬ÎÒÃÇ²»³ĞÅµÌá¹©ÈÎºÎĞÎÊ½µÄ¼¼ÊõÖ§³Ö¡¢Ê¹ÓÃµ£±££¬Ò²²»³Ğµ£ÈÎºÎÒòÊ¹ÓÃ±¾Èí¼ş¶ø²úÉúÎÊÌâµÄÏà¹ØÔğÈÎ¡£
+   3. ¿µÊ¢¹«Ë¾²»¶ÔÊ¹ÓÃ±¾Èí¼ş¹¹½¨µÄÍøÕ¾ÖĞ»òÕßÂÛÌ³ÖĞµÄÎÄÕÂ»òĞÅÏ¢³Ğµ£ÔğÈÎ£¬È«²¿ÔğÈÎÓÉÄú×ÔĞĞ³Ğµ£¡£
+   4. ¿µÊ¢¹«Ë¾ÎŞ·¨È«Ãæ¼à¿ØÓÉµÚÈı·½ÉÏ´«ÖÁÓ¦ÓÃÖĞĞÄµÄÓ¦ÓÃ³ÌĞò£¬Òò´Ë²»±£Ö¤Ó¦ÓÃ³ÌĞòµÄºÏ·¨ĞÔ¡¢°²È«ĞÔ¡¢ÍêÕûĞÔ¡¢ÕæÊµĞÔ»òÆ·ÖÊµÈ£»Äú´ÓÓ¦ÓÃÖĞĞÄÏÂÔØÓ¦ÓÃ³ÌĞòÊ±£¬Í¬Òâ×ÔĞĞÅĞ¶Ï²¢³Ğµ£ËùÓĞ·çÏÕ£¬¶ø²»ÒÀÀµÓÚ¿µÊ¢¹«Ë¾¡£µ«ÔÚÈÎºÎÇé¿öÏÂ£¬¿µÊ¢¹«Ë¾ÓĞÈ¨ÒÀ·¨Í£Ö¹Ó¦ÓÃÖĞĞÄ·şÎñ²¢²ÉÈ¡ÏàÓ¦ĞĞ¶¯£¬°üÀ¨µ«²»ÏŞÓÚ¶ÔÓÚÏà¹ØÓ¦ÓÃ³ÌĞò½øĞĞĞ¶ÔØ£¬ÔİÍ£·şÎñµÄÈ«²¿»ò²¿·Ö£¬±£´æÓĞ¹Ø¼ÇÂ¼£¬²¢ÏòÓĞ¹Ø»ú¹Ø±¨¸æ¡£ÓÉ´Ë¶ÔÄú¼°µÚÈıÈË¿ÉÄÜÔì³ÉµÄËğÊ§£¬¿µÊ¢¹«Ë¾²»³Ğµ£ÈÎºÎÖ±½Ó¡¢¼ä½Ó»òÕßÁ¬´øµÄÔğÈÎ¡£
+   5. ¿µÊ¢¹«Ë¾¶Ô¿µÊ¢Ìá¹©µÄÈí¼şºÍ·şÎñÖ®¼°Ê±ĞÔ¡¢°²È«ĞÔ¡¢×¼È·ĞÔ²»×÷µ£±££¬ÓÉÓÚ²»¿É¿¹Á¦ÒòËØ¡¢¿µÊ¢¹«Ë¾ÎŞ·¨¿ØÖÆµÄÒòËØ£¨°üÀ¨ºÚ¿Í¹¥»÷¡¢Í£¶ÏµçµÈ£©µÈÔì³ÉÈí¼şÊ¹ÓÃºÍ·şÎñÖĞÖ¹»òÖÕÖ¹£¬¶ø¸øÄúÔì³ÉËğÊ§µÄ£¬ÄúÍ¬Òâ·ÅÆú×·¾¿¿µÊ¢¹«Ë¾ÔğÈÎµÄÈ«²¿È¨Àû¡£   6.¿µÊ¢¹«Ë¾ÌØ±ğÌáÇëÄú×¢Òâ£¬¿µÊ¢¹«Ë¾ÎªÁË±£ÕÏ¹«Ë¾ÒµÎñ·¢Õ¹ºÍµ÷ÕûµÄ×ÔÖ÷È¨£¬¿µÊ¢¹«Ë¾ÓµÓĞËæÊ±¾­»òÎ´¾­ÊÂÏÈÍ¨Öª¶øĞŞ¸Ä·şÎñÄÚÈİ¡¢ÖĞÖ¹»òÖÕÖ¹²¿·Ö»òÈ«²¿Èí¼şÊ¹ÓÃºÍ·şÎñµÄÈ¨Àû£¬ĞŞ¸Ä»á¹«²¼ÓÚ¿µÊ¢¹«Ë¾ÍøÕ¾Ïà¹ØÒ³ÃæÉÏ£¬Ò»¾­¹«²¼ÊÓÎªÍ¨Öª¡£ ¿µÊ¢¹«Ë¾ĞĞÊ¹ĞŞ¸Ä»òÖĞÖ¹¡¢ÖÕÖ¹²¿·Ö»òÈ«²¿Èí¼şÊ¹ÓÃºÍ·şÎñµÄÈ¨Àû¶øÔì³ÉËğÊ§µÄ£¬¿µÊ¢¹«Ë¾²»Ğè¶ÔÄú»òÈÎºÎµÚÈı·½¸ºÔğ¡£
 
-é›»å­æ–‡æœ¬å½¢å¼çš„æˆæ¬Šå”è­°å¦‚åŒé›™æ–¹æ›¸é¢ç°½ç½²çš„å”è­°ä¸€æ¨£ï¼Œå…·æœ‰å®Œå…¨çš„å’Œç­‰åŒçš„æ³•å¾‹æ•ˆåŠ›ã€‚æ‚¨ä¸€æ—¦é–‹å§‹å®‰è£ Discuz!ï¼Œå³è¢«è¦–ç‚ºå®Œå…¨ç†è§£ä¸¦æ¥å—æœ¬å”è­°çš„å„é …æ¢æ¬¾ï¼Œåœ¨äº«æœ‰ä¸Šè¿°æ¢æ¬¾æˆäºˆçš„æ¬ŠåŠ›çš„åŒæ™‚ï¼Œå—åˆ°ç›¸é—œçš„ç´„æŸå’Œé™åˆ¶ã€‚å”è­°è¨±å¯ç¯„åœä»¥å¤–çš„è¡Œç‚ºï¼Œå°‡ç›´æ¥é•åæœ¬æˆæ¬Šå”è­°ä¸¦æ§‹æˆä¾µæ¬Šï¼Œæˆ‘å€‘æœ‰æ¬Šéš¨æ™‚çµ‚æ­¢æˆæ¬Šï¼Œè²¬ä»¤åœæ­¢æå®³ï¼Œä¸¦ä¿ç•™è¿½ç©¶ç›¸é—œè²¬ä»»çš„æ¬ŠåŠ›ã€‚
+ÓĞ¹Ø¿µÊ¢²úÆ·×îÖÕÓÃ»§ÊÚÈ¨Ğ­Òé¡¢ÉÌÒµÊÚÈ¨Óë¼¼Êõ·şÎñµÄÏêÏ¸ÄÚÈİ£¬¾ùÓÉ¿µÊ¢¹«Ë¾¶À¼ÒÌá¹©¡£¿µÊ¢¹«Ë¾ÓµÓĞÔÚ²»ÊÂÏÈÍ¨ÖªµÄÇé¿öÏÂ£¬ĞŞ¸ÄÊÚÈ¨Ğ­ÒéºÍ·şÎñ¼ÛÄ¿±íµÄÈ¨Àû£¬ĞŞ¸ÄºóµÄĞ­Òé»ò¼ÛÄ¿±í¶Ô×Ô¸Ä±äÖ®ÈÕÆğµÄĞÂÊÚÈ¨ÓÃ»§ÉúĞ§¡£
+
+Ò»µ©Äú¿ªÊ¼°²×°¿µÊ¢²úÆ·£¬¼´±»ÊÓÎªÍêÈ«Àí½â²¢½ÓÊÜ±¾Ğ­ÒéµÄ¸÷ÏîÌõ¿î£¬ÔÚÏíÓĞÉÏÊöÌõ¿îÊÚÓèµÄÈ¨ÀûµÄÍ¬Ê±£¬ÊÜµ½Ïà¹ØµÄÔ¼ÊøºÍÏŞÖÆ¡£Ğ­ÒéĞí¿É·¶Î§ÒÔÍâµÄĞĞÎª£¬½«Ö±½ÓÎ¥·´±¾ÊÚÈ¨Ğ­Òé²¢¹¹³ÉÇÖÈ¨£¬ÎÒÃÇÓĞÈ¨ËæÊ±ÖÕÖ¹ÊÚÈ¨£¬ÔğÁîÍ£Ö¹Ëğº¦£¬²¢±£Áô×·¾¿Ïà¹ØÔğÈÎµÄÈ¨Á¦¡£
+
+±¾Ğí¿ÉĞ­ÒéÌõ¿îµÄ½âÊÍ£¬Ğ§Á¦¼°¾À·×µÄ½â¾ö£¬ÊÊÓÃÓÚÖĞ»ªÈËÃñ¹²ºÍ¹ú´óÂ½·¨ÂÉ¡£
+
+ÈôÄúºÍ¿µÊ¢Ö®¼ä·¢ÉúÈÎºÎ¾À·×»òÕùÒé£¬Ê×ÏÈÓ¦ÓÑºÃĞ­ÉÌ½â¾ö£¬Ğ­ÉÌ²»³ÉµÄ£¬ÄúÔÚ´ËÍêÈ«Í¬Òâ½«¾À·×»òÕùÒéÌá½»¿µÊ¢ËùÔÚµØ±±¾©ÊĞº£µíÇøÈËÃñ·¨Ôº¹ÜÏ½¡£¿µÊ¢¹«Ë¾ÓµÓĞ¶ÔÒÔÉÏ¸÷ÏîÌõ¿îÄÚÈİµÄ½âÊÍÈ¨¼°ĞŞ¸ÄÈ¨¡££¨ÕıÎÄÍê£©
+
+¿µÊ¢¹«Ë¾
 
 -----------------------------------------------------------------------------
 
 English Version of EULA, for non-Chinese-Speaking Users Only
 
-Copyright (c) 2001-2011, Comsenz Inc.
+Copyright (c) 2001-2012, Comsenz Inc.
 All Rights Reserved.
 
-IMPORTANT: THIS SOFTWARE END USER LICENSE AGREEMENT("EULA") IS A LEGAL AGREEMENT BETWEEN YOU AND Comsenz Inc.. READ IT CAREFULLY BEFORE COMPLETING THE INSTALLATION PROCESS AND USING THE SOFTWARE. IT PROVIDES A LICENSE TO USE THE SOFTWARE AND CONTAINS WARRANTY INFORMATION AND LIABILITY DISCLAIMERS. BY INSTALLING AND USING THE SOFTWARE, YOU ARE CONFIRMING YOUR ACCEPTANCE OF THE SOFTWARE AND AGREEING TO BECOME BOUND BY THE TERMS OF THIS AGREEMENT. IF YOU DO NOT AGREE TO BE BOUND BY THESE TERMS, PLEASE DO NOT INSTALL OR USE THE SOFTWARE. YOU MUST ASSUME THE ENTIRE RISK OF USING THIS PROGRAM. ANY LIABILITY OF Comsenz Inc. WILL BE LIMITED EXCLUSIVELY TO PRODUCT REPLACEMENT OR REFUND OF PURCHASE PRICE BEFORE FIRST INSTALLATION.
+This software license agreement (hereinafter the ¡°Agreement¡±) is a legal agreement between the user (hereinafter ¡°You¡± or the ¡°User¡±) and Beijing Comsenz Technology Limited (¡°Comsenz¡±) for the software products (hereinafter the ¡°Software¡±) and related services (hereinafter the ¡°Service¡±) that accompanies this Agreement, as may be updated or replaced by feature enhancements, software updates or maintenance releases and any services that may be provided by Comsenz under this Agreement. You are not allowed to download, install or use the Software or to use Services unless you accept all the terms and conditions of this Agreement. Your download, installation and use of the Software shall be regarded as your acceptance of the Agreement and your agreement to be bound by all the terms and conditions of this Agreement.
+This Agreement, between the User and Comsenz, is an agreement regarding the User's downloading, installation, use and copying of the Software, and the use of Services provided by Comsenz. This Agreement stipulates the rights and duties of You and Comsenz regarding the licensed use and related services. "The User" or "You" refers to a person (who is 18 years of age or older, any parent or guardian of a person under the age of 18 may accept this Agreement on behalf of a user) or entity who obtains the Software authorization license and/or the Software products by means of the Software license and the account registration as provided by Comsenz.
 
-THIS EULA SHALL APPLY ONLY TO THE CROSSDAY DISCUZ! BOARD SOFTWARE VERSION 7.x.x HEREWITH REGARDLESS OF WHETHER OTHER SOFTWARE IS REFERRED TO OR DESCRIBED HEREIN. Comsenz Inc. RETAINS OWNERSHIP OF THE SOFTWARE AND ANY COPIES OF IT, REGARDLESS OF THE FORM IN WHICH THE COPIES MAY EXIST.
+This Agreement may be updated by Comsenz at any time and without prior notice to the User. After the updated Agreement is issued, it shall replace the original Agreement effectively. Users can read the updated Agreement by logging in the Software or checking on the Website at any time. After Comsenz has updated the clauses of Agreement, the User should stop using software and services provided by Comsenz if he/she does not agree with the clauses amended, otherwise it will be deemed that the user has accepted the Agreement as amended.
 
-1. Definitions
-    a. "Crossday Discuz! Board"("Discuz!" for short) is a bulletin board system which is developed by Comsenz Inc..
-    b. "the Software" means "Crossday Discuz! Board".
-    c. "Comsenz Inc." is the enterprise being responsible for Discuz! product.
+Except those explicitly stated in the Agreement, the Agreement does not stipulate the terms of service for other services offered by Comsenz which the User visits when using the ¡°Software¡±. Those services are usually regulated by other separate terms of service and the User should be familiar with and confirm his/her acceptance of those terms of service when using the relevant services. If there are conflicts between separate terms of service and this Agreement, the separate terms of service will govern. By using those services, the User shall be regarded as having accepted the relevant terms of service.
 
-2. License Grants
-    a. You may use the Software for free for non-commercial use under the License Restrictions.
-    b. You may modify the source code(if being provieded) or interface of the Software to fit your website under the License Restrictions.
-    c. You have property of all membersã€ information and articles in the Bulletin Board powered by the Software; meanwhile , you need assume all relevant legal duty by yourself.
-    d. You may use the Software for commercial use after purchasing the commercial license. Moreover, according to the license you purchased you may get specified term, manner and content of technical support from Comsenz Inc. Commercial users are prior to submiting ideas and opinions to Comsenz Inc., but without any guarantee of acceptance.
+1. Grant of License
+Subject to the terms and conditions of this Agreement, Comsenz grants to you a limited, non-exclusive, worldwide license to install, download and use a single instance of the Software on a single website server through a single installation for non-commercial purposes for free.
 
-3. License Restrictions
-    a. You may not use the Software for commercial use or profit use, unless you have been licensed to. To purchase the license , please visit http://www.discuz.com or dial 8610-5165 7885 for more information.
-    b. You may not rent, lease, sublicense, sell, assign, pledge the Software and its services.
-    c. You may not remove or modify the copyright information and relevant links, such as http://www.comsenz.com, http://www.discuz.com and http://www.discuz.net, in the footer of board pages without the prior written consent of Comsenz Inc., no matter how heavily you modified the Software.
-    d. You may not modify the Software to create derivative works for redistribution based upon the Software.
-    e. In the event that you fail to comply with this EULA, your license will be terminated.
+You can modify the source code (if being provided) or interface of the Software if your modification is strictly under the Agreement and to beautify your website.
 
-4. LIMITED WARRANTY AND DISCLAIMER
-    a. THE SOFTWARE AND THE ACCOMPANYING FILES ARE SOLD "AS IS" AND WITHOUT WARRANTIES AS TO PERFORMANCE OF MERCHANTABILITY OR ANY OTHER WARRANTIED WHETHER EXPRESSED OR IMPLIED.
-    b. Comsenz Inc. is not liable for the content of any message posted on the forums powered by the Software.
-    c. You must assume the entire risk of using the Software. ANY LIABILITY OF Comsenz Inc. WILL BE LIMITED EXCLUSIVELY TO PRODUCT REPLACEMENT, REFUND OF PURCHASE PRICE BEFORE YOUR FIRST INSTALLATION.
+When using the Software, the User shall comply with the relevant national laws and policies, protect the national interests, safeguard the national security and comply with this Agreement. The User, but not Comsenz, shall be fully responsible for all liabilities resulting from the illegal use of the Software or breach of the Agreement. If the User's misbehavior causes loss to Comsenz, Comsenz is entitled to demand the User to provide compensation, cease provision of the service immediately and keep relevant records. Moreover, if the User violates laws or the Agreement and correlative clauses of services stipulated in other services of Comsenz by using the Software, Comsenz has the right to take these measures including, but not limited to, interruption of use license, stopping of services, restriction of use, legal investigation, etc. considering the nature of the User¡¯s behaviors and without a prior notice to the User.
 
-5. Official Websites
-    a. URL of Comsenz Inc. is http://www.comsenz.com.
-    b. URL of Discuz! Home is http://www.discuz.com
-    c. URL of Discuz! Community is http://www.discuz.net.
+You have the entire property of all the members¡¯ data, information and articles in your website which is powered by the Software; that is to say, you must assume solely all the relevant liabilities concerns to the contents in your website.
 
-Comsenz Inc. reserves the right to modify this EULA. Discuz! Home provides offical information on license and price, Comsenz Inc. may modify them without notice. Modified license and price list will apply to new licensed users.
+You may use the Software for commercial means after purchase of the commercial license. Moreover, according to the license you purchase you will get technical support from Comsenz in specified term and manner. Commercial users are prior to submitting ideas and opinions to Comsenz, but without any guarantee of acceptance.
+
+You can download application(s) for your website from Comsenz¡¯s Application Center after you have paid appropriate fee to the developer/owner of the application(s).
+2. License Restrictions
+You cannot use the Software for commercial or profit purposes (include but are not limited to company websites, operating websites or other for-profit websites) unless you have been licensed to. To purchase the license, please visit http://www.comsenz.com or dial 8610-5165 7885 for more information.
+
+You may not rent, sublicense, assign, lease, loan, resell, distribute, publish or network the Software or related materials or create derivative works based upon the Software or any part thereof.
+
+You may not use the Software to engage in or allow others to engage in any illegal activity. You may not use the Software to engage in any activity that will violate the rights of third parties, including, without limitation, copyrights, trademarks, publicity rights, privacy rights, other proprietary rights, or rights against defamation of third parties.
+
+You cannot remove or modify the copyright information and relevant links under any circumstances, such as http://www.comsenz.com, and http://www.discuz.net, in the foot of web pages without the prior written consent of Comsenz.
+
+You cannot reverse engineer, decompile or disassemble, copy, modify, link, reproduce, publish or develop derivative products of the applications that you download from Comsenz¡¯s Application Center without the prior written permission from the application developer/owner.
+
+3. Disclaimer of Warranties and Limitations of Liabilities
+The software and the accompanying files are provided ¡°as-is¡±, and to the maximum extent permitted by applicable law, Comsenz disclaims all other warranties, express or implied, by statute or otherwise, regarding the software and any related materials, including their fitness for a particular purpose, their quality, their merchantability, or any related services or content is secure, or is free from bugs, viruses, errors, or other program limitations nor does it warrant access to the internet or to any other services through the software.
+
+To the maximum extent permitted by applicable law, Comsenz will not be liable for any indirect, special, incidental, or consequential damages(including damages for loss of business, loss of profits, or the like), whatever based on breach of contract, tort(including negligence), product liability or otherwise, even Comsenz has been advised of the possibility of such damages. Comsenz¡¯ total liability to you for actual damages for any cause whatsoever will be limited to the purchase price amount paid by you for the software.
+
+Comsenz is not liable for the content of any message in the websites powered by the Software.
+
+Comsenz does not guarantee the legality, safety, integrity, authenticity and quality of the applications which uploaded into Comsenz¡¯s Application Center by any third party. You agree to judge on yourself and take fully responsibilities to the action of download from Comsenz¡¯s Application Center. But in any case, Comsenz may stop the Store¡¯s service and take appropriate actions, including but not limited to uninstall the associated applications, suspend the Store¡¯s service in whole or in part, keep the relevant records to the relevant authorities, and Comsenz will not undertake any direct, indirect or consequential liability to the actions thereof.
+4. Termination
+The License is effective until terminated. You may terminate the License at any time by uninstalling the Software and destroying all copies of the Software in any media. This Agreement may be terminated by Comsenz immediately and without notice if you fail to comply with any term or condition of the License or this Agreement. Upon such termination, you must immediately cease using the Software, and assume relevant liabilities.
+
+Comsenz reserves the right to change or add to the terms of this Agreement at any time (including but are not limited to Internet-based Solutions, pricing, technical support options, and other product-related policies), and to change, discontinue or impose conditions on any feature or aspect of the Software, or any Internet-based Solutions provided to you or made available to you in the official websites. Such changes will be effective upon notification by any means reasonable to give you actual or constructive notice including by posting such terms on the discuz.net website, or another website designated by Comsenz. Your continued use of the Software will indicate your agreement to any such change.
+
+5. Controlling Law
+The Agreement is governed by and construed in accordance with the laws of P.R China. You hereby consent to the exclusive jurisdiction and venue in the Haidian District court of the City of Beijing.
+
+Beijing Comsenz Technology Limited

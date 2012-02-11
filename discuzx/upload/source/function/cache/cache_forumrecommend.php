@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_forumrecommend.php 20322 2011-02-21 09:00:53Z liulanbo $
+ *      $Id: cache_forumrecommend.php 24152 2011-08-26 10:04:08Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -13,12 +13,12 @@ if(!defined('IN_DISCUZ')) {
 
 function build_cache_forumrecommend() {
 	$data = array();
-	$query = DB::query("SELECT fid FROM ".DB::table('forum_forum')." WHERE type<>'group' AND status<>3");
-
-	while($row = DB::fetch($query)) {
+	$fids = C::t('forum_forum')->fetch_all_fids();
+	foreach($fids as $row) {
 		require_once libfile('function/group');
-		$squery = DB::query("SELECT f.fid, f.name, f.threads, f.lastpost, ff.icon, ff.membernum, ff.description FROM ".DB::table('forum_forum')." f LEFT JOIN ".DB::table('forum_forumfield')." ff ON ff.fid=f.fid WHERE recommend='$row[fid]'");
-		while($group = DB::fetch($squery)) {
+		$recommendlist = C::t('forum_forum')->fetch_all_recommend_by_fid($row['fid']);
+		foreach($recommendlist as $info) {
+			$group = array('fid' => $info['fid'], 'name' => $info['name'], 'threads' => $info['threads'], 'lastpost' => $info['lastpost'], 'icon' => $info['icon'], 'membernum' => $info['membernum'], 'description' => $info['description']);
 			$group['icon'] = get_groupimg($group['icon'], 'icon');
 			$lastpost = array(0, 0, '', '');
 			$group['lastpost'] = is_string($group['lastpost']) ? explode("\t", $group['lastpost']) : $group['lastpost'];
@@ -37,7 +37,7 @@ function build_cache_forumrecommend() {
 		}
 	}
 
-	save_syscache('forumrecommend', $data);
+	savecache('forumrecommend', $data);
 }
 
 ?>

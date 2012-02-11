@@ -4,35 +4,35 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_postcomment.php 15149 2010-10-19 15:02:46Z liulanbo $
+ *      $Id: admincp_postcomment.php 25832 2011-11-24 01:11:51Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
 }
 
-$detail = !empty($_GET['authorid']) ? true : $_G['gp_detail'];
-$author = $_G['gp_author'];
-$authorid = $_G['gp_authorid'];
-$uid = $_G['gp_uid'];
-$message = $_G['gp_message'];
-$ip = $_G['gp_ip'];
-$users = $_G['gp_users'];
-$starttime = $_G['gp_starttime'];
-$endtime = $_G['gp_endtime'];
-$searchtid = $_G['gp_searchtid'];
-$searchpid = $_G['gp_searchpid'];
-$searchsubmit = $_G['gp_searchsubmit'];
-$cids = $_G['gp_cids'];
-$page = max(1, $_G['gp_page']);
+$detail = !empty($_GET['authorid']) ? true : $_GET['detail'];
+$author = $_GET['author'];
+$authorid = $_GET['authorid'];
+$uid = $_GET['uid'];
+$message = $_GET['message'];
+$ip = $_GET['ip'];
+$users = $_GET['users'];
+$starttime = $_GET['starttime'];
+$endtime = $_GET['endtime'];
+$searchtid = $_GET['searchtid'];
+$searchpid = $_GET['searchpid'];
+$searchsubmit = $_GET['searchsubmit'];
+$cids = $_GET['cids'];
+$page = max(1, $_GET['page']);
 
 cpheader();
 
-$aid = $_G['gp_aid'];
-$subject = $_G['gp_subject'];
+$aid = $_GET['aid'];
+$subject = $_GET['subject'];
 
 if(!submitcheck('postcommentsubmit')) {
-	if(empty($_G['gp_search'])) {
+	if(empty($_GET['search'])) {
 		$newlist = 1;
 		$detail = 1;
 		$starttime = dgmdate(TIMESTAMP - 86400 * 7, 'Y-n-j');
@@ -64,11 +64,11 @@ function page(number) {
 </script>
 EOT;
 	showtagheader('div', 'searchposts', !$searchsubmit && empty($newlist));
-	showformheader("postcomment".(!empty($_G['gp_search']) ? '&search=true' : ''), '', 'postcommentforum');
-	showhiddenfields(array('page' => $page, 'pp' => $_G['gp_pp'] ? $_G['gp_pp'] : $_G['gp_perpage']));
+	showformheader("postcomment".(!empty($_GET['search']) ? '&search=true' : ''), '', 'postcommentforum');
+	showhiddenfields(array('page' => $page, 'pp' => $_GET['pp'] ? $_GET['pp'] : $_GET['perpage']));
 	showtableheader();
 	showsetting('postcomment_search_detail', 'detail', $detail, 'radio');
-	showsetting('comment_search_perpage', '', $_G['gp_perpage'], "<select name='perpage'><option value='20'>$lang[perpage_20]</option><option value='50'>$lang[perpage_50]</option><option value='100'>$lang[perpage_100]</option></select>");
+	showsetting('comment_search_perpage', '', $_GET['perpage'], "<select name='perpage'><option value='20'>$lang[perpage_20]</option><option value='50'>$lang[perpage_50]</option><option value='100'>$lang[perpage_100]</option></select>");
 	showsetting('postcomment_content', 'message', $message, 'text');
 	showsetting('postcomment_search_tid', 'searchtid', $searchtid, 'text');
 	showsetting('postcomment_search_pid', 'searchpid', $searchpid, 'text');
@@ -83,8 +83,13 @@ EOT;
 
 } else {
 	$cids = authcode($cids, 'DECODE');
-	$cidsadd = $cids ? explode(',', $cids) : $_G['gp_delete'];
-	$cidsadd && DB::query("DELETE FROM ".DB::table('forum_postcomment')." WHERE id IN (".dimplode($cidsadd).")");
+	$cidsadd = $cids ? explode(',', $cids) : $_GET['delete'];
+	$pids = array();
+	foreach(C::t('forum_postcomment')->fetch_all($cidsadd) as $postcomment) {
+		$pids[$postcomment['pid']] = $postcomment['pid'];
+	}
+	C::t('forum_postcache')->delete($pids);
+	$cidsadd && C::t('forum_postcomment')->delete($cidsadd);
 	$cpmsg = cplang('postcomment_delete');
 
 ?>
@@ -99,74 +104,39 @@ if(submitcheck('searchsubmit') || $newlist) {
 	$author = trim($author);
 
 	if($author != '') {
-		$authorids = array();
-		$query = DB::query("SELECT uid FROM ".DB::table('common_member')." WHERE username IN ('".str_replace(',', '\',\'', str_replace(' ', '', $author))."')");
-		while($arr = DB::fetch($query)) {
-			$authorids[] = intval($arr['uid']);
-		}
+		$authorids = C::t('common_member')->fetch_all_uid_by_username(array_map('trim', explode(',', $author)));
 		$authorid = ($authorid ? $authorid.',' : '').implode(',',$authorids);
 	}
-	if($searchtid) {
-		$sql .= ' AND c.tid IN ('.dimplode(explode(',', $searchtid)).')';
-	}
-	if($searchpid) {
-		$sql .= ' AND c.pid IN ('.dimplode(explode(',', $searchpid)).')';
-	}
 	$authorid = trim($authorid,', ');
-	if($authorid != '') {
-		$sql .= " AND c.authorid IN ('".str_replace(',', '\',\'', str_replace(' ', '', $authorid))."')";
-	}
 
 	if($starttime != '0') {
 		$starttime = strtotime($starttime);
-		$sql .= " AND c.dateline>'$starttime'";
 	}
 
 	if($_G['adminid'] == 1 && $endtime != dgmdate(TIMESTAMP, 'Y-n-j')) {
 		if($endtime != '0') {
 			$endtime = strtotime($endtime);
-			$sql .= " AND c.dateline<'$endtime'";
 		}
 	} else {
 		$endtime = TIMESTAMP;
 	}
 
-	if($ip != '') {
-		$sql .= " AND c.useip LIKE '".str_replace('*', '%', $ip)."'";
-	}
 
 	if(($_G['adminid'] == 2 && $endtime - $starttime > 86400 * 16) || ($_G['adminid'] == 3 && $endtime - $starttime > 86400 * 8)) {
 		$error = 'comment_mod_range_illegal';
 	}
 
-	if($message != '') {
-		$sqlmessage = '';
-		$or = '';
-		$message = explode(',', str_replace(' ', '', $message));
-
-		for($i = 0; $i < count($message); $i++) {
-			if(preg_match("/\{(\d+)\}/", $message[$i])) {
-				$message[$i] = preg_replace("/\\\{(\d+)\\\}/", ".{0,\\1}", preg_quote($message[$i], '/'));
-				$message .= " $or c.comment REGEXP '".$message[$i]."'";
-			} else {
-				$sqlmessage .= " $or c.comment LIKE '%".$message[$i]."%'";
-			}
-			$or = 'OR';
-		}
-		$sql .= " AND ($sqlmessage)";
-	}
 
 	if(!$error) {
 		if($detail) {
-			$commentcount = DB::result_first("SELECT count(*) FROM ".DB::table('forum_postcomment')." c WHERE authorid>'-1' $sql");
+			$commentcount = C::t('forum_postcomment')->count_by_search($searchtid, $searchpid, ($authorid ? explode(',', str_replace(' ', '', $authorid)) : null), $starttime, $endtime, $ip, $message);
 			if($commentcount) {
-				$_G['gp_perpage'] = intval($_G['gp_perpage']) < 1 ? 20 : intval($_G['gp_perpage']);
-				$perpage = $_G['gp_pp'] ? $_G['gp_pp'] : $_G['gp_perpage'];
-				$query = DB::query("SELECT c.* FROM ".DB::table('forum_postcomment')." c WHERE authorid>'-1' $sql ORDER BY c.dateline DESC LIMIT ".(($page - 1) * $perpage).",{$perpage}");
+				$_GET['perpage'] = intval($_GET['perpage']) < 1 ? 20 : intval($_GET['perpage']);
+				$perpage = $_GET['pp'] ? $_GET['pp'] : $_GET['perpage'];
 
 				$comments = '';
 
-				while($comment = DB::fetch($query)) {
+				foreach(C::t('forum_postcomment')->fetch_all_by_search($searchtid, $searchpid, ($authorid ? explode(',', str_replace(' ', '', $authorid)) : null), $starttime, $endtime, $ip, $message, (($page - 1) * $perpage), $perpage) as $comment) {
 					$comment['dateline'] = dgmdate($comment['dateline']);
 					$comments .= showtablerow('', '', array(
 						"<input class=\"checkbox\" type=\"checkbox\" name=\"delete[]\" value=\"$comment[id]\" />",
@@ -186,8 +156,7 @@ if(submitcheck('searchsubmit') || $newlist) {
 			}
 		} else {
 			$commentcount = 0;
-			$query = DB::query("SELECT id FROM ".DB::table('forum_postcomment')." c WHERE authorid>'-1' $sql");
-			while($row = DB::fetch($query)) {
+			foreach(C::t('forum_postcomment')->fetch_all_by_search($searchtid, $searchpid, ($authorid ? explode(',', str_replace(' ', '', $authorid)) : null), $starttime, $endtime, $ip, $message) as $row) {
 				$cids .= ','.$row['id'];
 				$commentcount++;
 			}

@@ -1,4 +1,16 @@
 <?php
+
+/**
+ *      [Discuz!] (C)2001-2099 Comsenz Inc.
+ *      This is NOT a freeware, use is subject to license terms
+ *
+ *      $Id: misc_ranklist_index.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
+
 loadcache('ranklist_index');
 $cache_time = $ranklist_setting['cache_time'];
 if($cache_time <= 0 ) $cache_time = 1;
@@ -104,7 +116,7 @@ if($ranklist_setting['member']['available']) {
 }
 
 if($_G['ranklist_cacheupdated']) {
-	save_syscache('ranklist_index', $_G['cache']['ranklist_index']);
+	savecache('ranklist_index', $_G['cache']['ranklist_index']);
 }
 
 unset($pictures['lastupdated'], $threads_hot['lastupdated'], $blogs_hot['lastupdated']);

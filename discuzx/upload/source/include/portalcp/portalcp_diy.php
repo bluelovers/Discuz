@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portalcp_diy.php 21270 2011-03-22 01:57:51Z zhangguosheng $
+ *      $Id: portalcp_diy.php 27332 2012-01-16 09:24:24Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -17,14 +17,13 @@ $op = in_array($_GET['op'], array('style', 'diy', 'image', 'export', 'import', '
 if (submitcheck('uploadsubmit')) {
 	$topicid = intval($_POST['topicid']);
 	if($topicid) {
-		$topic = DB::fetch_first("SELECT * FROM ".DB::table('portal_topic')." WHERE topicid='$topicid'");
+		$topic = C::t('portal_topic')->fetch($topicid);
 		if(empty($topic)) {
 			topic_upload_error('diy_topic_noexist');
 		}
 	}
 	topic_checkperm($topic);
 
-	require_once libfile('class/upload');
 	$upload = new discuz_upload();
 
 	$upload->init($_FILES['attach'], 'portal');
@@ -68,7 +67,7 @@ if (submitcheck('uploadsubmit')) {
 			'dateline' => $_G['timestamp'],
 			'topicid' => $topicid
 		);
-		$setarr['picid'] = DB::insert("portal_topic_pic", $setarr, true);
+		$setarr['picid'] = C::t('portal_topic_pic')->insert($setarr, true);
 
 		topic_upload_show($topicid);
 	}
@@ -77,7 +76,12 @@ if (submitcheck('uploadsubmit')) {
 
 	require_once libfile('function/portalcp');
 
+	$tpldirectory = getstr($_POST['tpldirectory'], 80);
 	$template = getstr($_POST['template'], 50);
+	if(dsign($tpldirectory.$template) !== $_POST['diysign']) {
+		showmessage('diy_sign_invalid');
+	}
+	$tpldirectory = ($tpldirectory) ? $tpldirectory : $_G['cache']['style_default']['tpldir'];
 	$savemod = getstr($_POST['savemod'], 1);
 	$recover = getstr($_POST['recover'], 1);
 	$optype = getstr($_POST['optype'],10);
@@ -92,13 +96,8 @@ if (submitcheck('uploadsubmit')) {
 		$targettplname = $template.'_'.$clonefile;
 	}
 
-	if($optype == 'canceldiy') {
-		@unlink(DISCUZ_ROOT.'./data/diy/'.$targettplname.'_diy_preview.htm');
-		if($targettplname == $template) @unlink(DISCUZ_ROOT.'./data/diy/'.$targettplname.'_'.$clonefile.'_diy_preview.htm');
-		showmessage('do_success');
-	}
 	$istopic = $iscategory = $isarticle = false;
-	if ($template == 'portal/portal_topic_content') {
+	if($template == 'portal/portal_topic_content') {
 		$template = gettopictplname($clonefile);
 		$istopic = true;
 	} elseif ($template == 'portal/list') {
@@ -114,13 +113,23 @@ if (submitcheck('uploadsubmit')) {
 		$isarticle = true;
 	}
 
-	$checktpl = checkprimaltpl($template);
+	if(($istopic || $iscategory || $isarticle) && strpos($template, ':') !== false) {
+		list($tpldirectory, $template) = explode(':', $template);
+	}
+
+	$checktpl = checkprimaltpl($tpldirectory.':'.$template);
 	if($checktpl !== true) {
 		showmessage($checktpl);
 	}
 
+	if($optype == 'canceldiy') {
+		@unlink(DISCUZ_ROOT.'./data/diy/'.$tpldirectory.'/'.$targettplname.'_diy_preview.htm');
+		if($targettplname == $template) @unlink(DISCUZ_ROOT.'./data/diy/'.$tpldirectory.'/'.$targettplname.'_'.$clonefile.'_diy_preview.htm');
+		showmessage('do_success');
+	}
+
 	if ($recover == '1') {
-		$file = './data/diy/'.$targettplname.'.htm';
+		$file = './data/diy/'.$tpldirectory.'/'.$targettplname.'.htm';
 		if (is_file($file.'.bak')) {
 			copy ($file.'.bak', $file);
 		} else {
@@ -129,7 +138,6 @@ if (submitcheck('uploadsubmit')) {
 	} else {
 		$templatedata = array();
 		checksecurity($_POST['spacecss']);
-		$_POST['spacecss'] = dstripslashes($_POST['spacecss']);
 		$templatedata['spacecss'] = preg_replace("/(\<|\>)/is", '', $_POST['spacecss']);
 		$style = empty($_POST['style'])?'':preg_replace("/[^0-9a-z]/i", '', $_POST['style']);
 		if($style) {
@@ -141,23 +149,24 @@ if (submitcheck('uploadsubmit')) {
 			}
 		}
 
-		$layoutdata = getstr($_POST['layoutdata'],0,1,0,0,1);
+		$layoutdata = getstr($_POST['layoutdata'],0,0,0,0,1);
 		require_once libfile('class/xml');
 		$templatedata['layoutdata'] = xml2array($layoutdata);
 		if (empty($templatedata['layoutdata'])) showmessage('diy_data_format_invalid');
 
-		$r = save_diy_data($template, $targettplname, $templatedata, true, $optype);
+		$r = save_diy_data($tpldirectory, $template, $targettplname, $templatedata, true, $optype);
 
 		include_once libfile('function/cache');
 		updatecache('diytemplatename');
 
 		if ($r && $optype != 'savecache') {
 			if (!$iscategory && !$istopic && empty($savemod) && !empty($clonefile)) {
-				$delfile = DISCUZ_ROOT.'./data/diy/'.$template.'_'.$clonefile.'.htm';
+				$delfile = DISCUZ_ROOT.'./data/diy/'.$tpldirectory.'/'.$template.'_'.$clonefile.'.htm';
 				if (file_exists($delfile)) {
 					unlink($delfile);
-					DB::delete('common_template_block', array('targettplname'=>"{$template}_{$clonefile}"));
-					DB::delete('common_diy_data', array('targettplname'=>"{$template}_{$clonefile}"));
+					@unlink($delfile.'.bak');
+					C::t('common_template_block')->delete_by_targettplname("{$template}_{$clonefile}", $tpldirectory);
+					C::t('common_diy_data')->delete("{$template}_{$clonefile}", $tpldirectory);
 					include_once libfile('function/cache');
 					updatecache('diytemplatename');
 				}
@@ -186,7 +195,7 @@ if($op == 'blockclass') {
 } elseif ($op == 'diy' || $op == 'image') {
 
 	$topicid = intval($_GET['topicid']);
-	$topic = DB::fetch_first('SELECT * FROM '.DB::table('portal_topic')." WHERE topicid = '$topicid'");
+	$topic = C::t('portal_topic')->fetch($topicid);
 	topic_checkperm($topic);
 
 	$perpage = 6;
@@ -195,22 +204,21 @@ if($op == 'blockclass') {
 
 	$list = array();
 	if ($topicid) {
-		$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('portal_topic_pic')." WHERE topicid='$topicid'"),0);
+		$count = C::t('portal_topic_pic')->count_by_topicid($topicid);
 		if (!empty($count)) {
-			$query = DB::query("SELECT * FROM ".DB::table('portal_topic_pic')." WHERE topicid='$topicid' ORDER BY picid DESC LIMIT $start, $perpage");
-			while ($value = DB::fetch($query)) {
+			foreach(C::t('portal_topic_pic')->fetch_all_by_topicid($topicid, $start, $perpage) as $value) {
 				$value['pic'] = pic_get($value['filepath'], 'portal', $value['thumb'], $value['remote']);
 				$list[] = $value;
 			}
 		}
+		$multi= multi($count, $perpage, $page, "portal.php?mod=portalcp&ac=diy&op=image&topicid=$topicid");
 	}
 
-	$multi= multi($count, $perpage, $page, "portal.php?mod=portalcp&ac=diy&op=image&topicid=$topicid");
 
 } elseif ($op == 'delete') {
 
 	$topicid = intval($_GET['topicid']);
-	$topic = DB::fetch_first('SELECT * FROM '.DB::table('portal_topic')." WHERE topicid = '$topicid'");
+	$topic = C::t('portal_topic')->fetch($topicid);
 	topic_checkperm($topic);
 
 	$picid = intval($_GET['picid']);
@@ -218,6 +226,7 @@ if($op == 'blockclass') {
 } elseif ($op == 'export') {
 	if (submitcheck('exportsubmit')) {
 		$tpl = $_POST['tpl'];
+		$tpldirectory = $_POST['tpldirectory'];
 		$frame = $_POST['frame'];
 		$type = $_POST['type'];
 		if (!empty($tpl)) {
@@ -225,13 +234,13 @@ if($op == 'blockclass') {
 
 			list($tpl,$id) = explode(':', $tpl);
 			$tplname = $id ? $tpl.'_'.$id : $tpl;
-			$diydata = DB::fetch_first('SELECT * FROM '.DB::table('common_diy_data')." WHERE targettplname='$tplname'");
-			if (empty($diydata) && $id) $diydata = DB::fetch_first('SELECT * FROM '.DB::table('common_diy_data')." WHERE targettplname='$tpl'");
+			$diydata = C::t('common_diy_data')->fetch($tplname, $tpldirectory);
+			if(empty($diydata) && $id) $diydata = C::t('common_diy_data')->fetch($tpl, $tpldirectory);
 			if ($diydata) {
 
 				$filename = $diydata['targettplname'];
 
-				$diycontent = unserialize($diydata['diycontent']);
+				$diycontent = dunserialize($diydata['diycontent']);
 
 				if (empty($diycontent)) showmessage('diy_no_export_data');
 				if ($frame) {
@@ -295,7 +304,6 @@ if($op == 'blockclass') {
 		if($_POST['importfilename']) {
 			$filename = DISCUZ_ROOT.'./template/default/portal/diyxml/'.$_POST['importfilename'].'.xml';
 		} else {
-			require_once libfile('class/upload');
 			$upload = new discuz_upload();
 
 			$upload->init($_FILES['importfile'], 'temp');
@@ -331,7 +339,7 @@ if($op == 'blockclass') {
 		}
 	}
 	$xmlarr = array();
-	if ($_G['gp_type'] == 1) {
+	if ($_GET['type'] == 1) {
 		$xmlfilepath = DISCUZ_ROOT.'./template/default/portal/diyxml/';
 		if(($dh = @opendir($xmlfilepath))) {
 			while(($file = @readdir($dh)) !== false) {
@@ -371,11 +379,11 @@ function tpl_checkperm($tpl) {
 	list($file,$id) = explode(':', $tpl);
 	if ($file == 'portal/portal_topic_content') {
 		$topicid = max(0,intval($id));
-		$topic = DB::fetch_first("SELECT * FROM ".DB::table('portal_topic')." WHERE topicid='$topicid'");
+		$topic = C::t('portal_topic')->fetch($topicid);
 		topic_checkperm($topic);
 	} elseif($file == 'portal/list'){
 		$catid = max(0,intval($id));
-		$category = DB::fetch_first("SELECT * FROM ".DB::table('portal_category')." WHERE catid='$catid'");
+		$category = $_G['cache']['portalcategory'][$catid];
 		category_checkperm($category);
 	} else {
 		if(!$_G['group']['allowdiy']) {
@@ -410,14 +418,15 @@ function topic_checkperm($topic) {
 
 function gettopictplname($topicid) {
 	$topicid = max(0,intval($topicid));
-	$topic = DB::fetch_first("SELECT * FROM ".DB::table('portal_topic')." WHERE topicid='$topicid'");
-	return !empty($topic) && !empty($topic['primaltplname']) ? $topic['primaltplname'] : 'portal/portal_topic_content';
+	$topic = C::t('portal_topic')->fetch($topicid);
+	return !empty($topic) && !empty($topic['primaltplname']) ? $topic['primaltplname'] : getglobal('cache/style_default/tpldir').':portal/portal_topic_content';
 }
 
 function getportalcategorytplname($catid) {
+	global $_G;
 	$catid = max(0,intval($catid));
-	$category = DB::fetch_first("SELECT * FROM ".DB::table('portal_category')." WHERE catid='$catid'");
-	return !empty($category) && !empty($category['primaltplname']) ? $category['primaltplname'] : 'portal/list';
+	$category = $_G['cache']['portalcategory'][$catid];
+	return !empty($category) && !empty($category['primaltplname']) ? $category['primaltplname'] : getglobal('cache/style_default/tpldir').':portal/list';
 }
 
 function getdiyxmlname($filename, $path) {

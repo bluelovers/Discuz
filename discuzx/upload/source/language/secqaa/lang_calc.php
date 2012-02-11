@@ -4,13 +4,17 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_calc.php 10395 2010-05-11 04:48:31Z monkey $
+ *      $Id: lang_calc.php 27449 2012-02-01 05:32:35Z zhangguosheng $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 $lang = array
 (
-	'calc_name' => '100 ä»¥å…§åŠ æ¸›æ³•',
-	'calc_desc' => 'éš¨æ©Ÿé¡¯ç¤º 100 ä»¥å…§åŠ æ¸›æ³•çš„é©—è­‰å•ç­”',
+	'calc_name' => '100 ÒÔÄÚ¼Ó¼õ·¨',
+	'calc_desc' => 'Ëæ»úÏÔÊ¾ 100 ÒÔÄÚ¼Ó¼õ·¨µÄÑéÖ¤ÎÊ´ð',
 );
 
 ?>

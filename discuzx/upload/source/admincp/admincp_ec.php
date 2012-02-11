@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_ec.php 22488 2011-05-10 05:20:15Z monkey $
+ *      $Id: admincp_ec.php 25246 2011-11-02 03:34:53Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -13,15 +13,12 @@ if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 if(!defined('APPTYPEID')) {
 	define('APPTYPEID', 2);
 }
-$checktype = $_G['gp_checktype'];
+$checktype = $_GET['checktype'];
 cpheader();
 
 if($operation == 'alipay') {
-	$settings = array();
-	$query = DB::query("SELECT skey, svalue FROM ".DB::table('common_setting')." WHERE skey IN ('ec_account', 'ec_contract')");
-	while($setting = DB::fetch($query)) {
-		$settings[$setting['skey']] = $setting['svalue'];
-	}
+
+	$settings = C::t('common_setting')->fetch_all(array('ec_account', 'ec_contract'));
 
 	if(!empty($checktype)) {
 		require_once DISCUZ_ROOT.'./api/trade/api_alipay.php';
@@ -102,7 +99,7 @@ if($operation == 'alipay') {
 		showformfooter();
 
 	} else {
-		$settingsnew = $_G['gp_settingsnew'];
+		$settingsnew = $_GET['settingsnew'];
 		$settingsnew['ec_contract'] = 0;
 		if(!empty($settingsnew['ec_securitycode']) && !empty($settingsnew['ec_partner'])) {
 			$settingsnew['ec_contract'] = 1;
@@ -112,11 +109,11 @@ if($operation == 'alipay') {
 		}
 		$settingsnew['ec_account'] = trim($settingsnew['ec_account']);
 		$settingsnew['ec_securitycode'] = trim($settingsnew['ec_securitycode']);
-		DB::query("REPLACE INTO ".DB::table('common_setting')." SET svalue='$settingsnew[ec_account]', skey='ec_account'");
+		C::t('common_setting')->update('ec_account', $settingsnew['ec_account']);
 		$ec_securitycodemasknew = $settingsnew['ec_securitycode'] ? $settingsnew['ec_securitycode']{0}.'********'.substr($settingsnew['ec_securitycode'], -4) : '';
 		$settingsnew['ec_securitycode'] = $ec_securitycodemasknew == $ec_securitycodemask ? $ec_securitycode : $settingsnew['ec_securitycode'];
 		$ec_contract = addslashes(authcode($settingsnew['ec_contract']."\t".$settingsnew['ec_securitycode']."\t".$settingsnew['ec_partner']."\t".$settingsnew['ec_creditdirectpay'], 'ENCODE', $_G['config']['security']['authkey']));
-		DB::query("REPLACE INTO ".DB::table('common_setting')." SET svalue='$ec_contract', skey='ec_contract'");
+		C::t('common_setting')->update('ec_contract', $ec_contract);
 		updatecache('setting');
 
 		cpmsg('alipay_succeed', 'action=ec&operation=alipay', 'succeed');
@@ -125,12 +122,7 @@ if($operation == 'alipay') {
 
 } elseif($operation == 'tenpay') {
 
-	$settings = array();
-	$query = DB::query("SELECT skey, svalue FROM ".DB::table('common_setting')." WHERE skey IN ('ec_tenpay_direct', 'ec_tenpay_account', 'ec_tenpay_bargainor', 'ec_tenpay_key', 'ec_tenpay_opentrans_chnid', 'ec_tenpay_opentrans_key')");
-	while($setting = DB::fetch($query)) {
-		$settings[$setting['skey']] = $setting['svalue'];
-	}
-
+	$settings = C::t('common_setting')->fetch_all(array('ec_tenpay_direct', 'ec_tenpay_account', 'ec_tenpay_bargainor', 'ec_tenpay_key', 'ec_tenpay_opentrans_chnid', 'ec_tenpay_opentrans_key'));
 	if(!empty($checktype)) {
 		require_once DISCUZ_ROOT.'./api/trade/api_tenpay.php';
 		if($checktype == 'credit') {
@@ -215,7 +207,7 @@ if($operation == 'alipay') {
 		showformfooter();
 
 	} else {
-		$settingsnew = $_G['gp_settingsnew'];
+		$settingsnew = $_GET['settingsnew'];
 		$settingsnew['ec_tenpay_bargainor'] = trim($settingsnew['ec_tenpay_bargainor']);
 		$settingsnew['ec_tenpay_key'] = trim($settingsnew['ec_tenpay_key']);
 		$tenpay_securitycodemask = $settings['ec_tenpay_key'] ? $settings['ec_tenpay_key']{0}.'********'.substr($settings['ec_tenpay_key'], -4) : '';
@@ -230,20 +222,12 @@ if($operation == 'alipay') {
 		if($settingsnew['ec_tenpay_direct'] && (empty($settingsnew['ec_tenpay_key']) || !preg_match('/^[a-zA-Z0-9]{32}$/', $settingsnew['ec_tenpay_key']))) {
 			cpmsg('tenpay_key_invalid', 'action=ec&operation=tenpay', 'error');
 		}
-		DB::insert('common_setting', array(
-			'skey' => 'ec_tenpay_direct',
-			'svalue' => $settingsnew['ec_tenpay_direct'],
-		), false, true);
-		DB::query("UPDATE ".DB::table('common_setting')." SET svalue='$settingsnew[ec_tenpay_bargainor]' WHERE skey='ec_tenpay_bargainor'");
-		DB::query("UPDATE ".DB::table('common_setting')." SET svalue='$settingsnew[ec_tenpay_key]' WHERE skey='ec_tenpay_key'");
-		DB::insert('common_setting', array(
-			'skey' => 'ec_tenpay_opentrans_chnid',
-			'svalue' => $settingsnew['ec_tenpay_opentrans_chnid'],
-		), false, true);
-		DB::insert('common_setting', array(
-			'skey' => 'ec_tenpay_opentrans_key',
-			'svalue' => $settingsnew['ec_tenpay_opentrans_key'],
-		), false, true);
+		$data = array('ec_tenpay_direct' => $settingsnew['ec_tenpay_direct'],
+			'ec_tenpay_bargainor' => $settingsnew['ec_tenpay_bargainor'],
+			'ec_tenpay_key' => $settingsnew['ec_tenpay_key'],
+			'ec_tenpay_opentrans_chnid' => $settingsnew['ec_tenpay_opentrans_chnid'],
+			'ec_tenpay_opentrans_key' => $settingsnew['ec_tenpay_opentrans_key']);
+		C::t('common_setting')->update_batch($data);
 		updatecache('setting');
 
 		cpmsg('tenpay_succeed', 'action=ec&operation=tenpay', 'succeed');
@@ -299,31 +283,17 @@ if($operation == 'alipay') {
 
 			$start_limit = ($page - 1) * $_G['tpp'];
 
-			$sql = '';
-			$sql .= $_G['gp_orderstatus'] != ''	? " AND o.status='{$_G['gp_orderstatus']}'" : '';
-			$sql .= $_G['gp_orderid'] != ''		? " AND o.orderid='{$_G['gp_orderid']}'" : '';
-			$sql .= $_G['gp_users'] != ''		? " AND m.username IN ('".str_replace(',', '\',\'', str_replace(' ', '', $_G['gp_users']))."')" : '';
-			$sql .= $_G['gp_buyer'] != ''		? " AND o.buyer='{$_G['gp_buyer']}'" : '';
-			$sql .= $_G['gp_admin'] != ''		? " AND o.admin='{$_G['gp_admin']}'" : '';
-			$sql .= $_G['gp_sstarttime'] != ''	? " AND o.submitdate>='".strtotime($_G['gp_sstarttime'])."'" : '';
-			$sql .= $_G['gp_sendtime'] != ''		? " AND o.submitdate<'".strtotime($_G['gp_sendtime'])."'" : '';
-			$sql .= $_G['gp_cstarttime'] != ''	? " AND o.confirmdate>='".strtotime($_G['gp_cstarttime'])."'" : '';
-			$sql .= $_G['gp_cendtime'] != ''		? " AND o.confirmdate<'".strtotime($_G['gp_cendtime'])."'" : '';
 
-			$ordercount = DB::result_first("SELECT COUNT(*) FROM ".DB::table('forum_order')." o, ".DB::table('common_member')." m WHERE m.uid=o.uid $sql");
-			$multipage = multi($ordercount, $_G['tpp'], $page, ADMINSCRIPT."?action=ec&operation=orders&searchsubmit=yes&orderstatus={$_G['gp_orderstatus']}&orderid={$_G['gp_orderid']}&users={$_G['gp_users']}&buyer={$_G['gp_buyer']}&admin={$_G['gp_admin']}&sstarttime={$_G['gp_sstarttime']}&sendtime={$_G['gp_sendtime']}&cstarttime={$_G['gp_cstarttime']}&cendtime={$_G['gp_cendtime']}");
+			$ordercount = C::t('forum_order')->count_by_search(null, $_GET['orderstatus'], $_GET['orderid'], null, ($_GET['users'] ? explode(',', str_replace(' ', '', $_GET['users'])) : null), $_GET['buyer'], $_GET['admin'], strtotime($_GET['sstarttime']), strtotime($_GET['sendtime']), strtotime($_GET['cstarttime']), strtotime($_GET['cendtime']));
+			$multipage = multi($ordercount, $_G['tpp'], $page, ADMINSCRIPT."?action=ec&operation=orders&searchsubmit=yes&orderstatus={$_GET['orderstatus']}&orderid={$_GET['orderid']}&users={$_GET['users']}&buyer={$_GET['buyer']}&admin={$_GET['admin']}&sstarttime={$_GET['sstarttime']}&sendtime={$_GET['sendtime']}&cstarttime={$_GET['cstarttime']}&cendtime={$_GET['cendtime']}");
 
 			showtagheader('div', 'orderlist', TRUE);
 			showformheader('ec&operation=orders');
 			showtableheader('result');
 			showsubtitle(array('', 'ec_orders_id', 'ec_orders_status', 'ec_orders_buyer', 'ec_orders_amount', 'ec_orders_price', 'ec_orders_submitdate', 'ec_orders_confirmdate'));
 
-			$query = DB::query("SELECT o.*, m.username
-				FROM ".DB::table('forum_order')." o, ".DB::table('common_member')." m
-				WHERE m.uid=o.uid $sql ORDER BY o.submitdate DESC
-				LIMIT $start_limit, $_G[tpp]");
 
-			while($order = DB::fetch($query)) {
+			foreach(C::t('forum_order')->fetch_all_by_search(null, $_GET['orderstatus'], $_GET['orderid'], null, ($_GET['users'] ? explode(',', str_replace(' ', '', $_GET['users'])) : null), $_GET['buyer'], $_GET['admin'], strtotime($_GET['sstarttime']), strtotime($_GET['sendtime']), strtotime($_GET['cstarttime']), strtotime($_GET['cendtime']), $start_limit, $_G['tpp']) as $order) {
 				switch($order['status']) {
 					case 1: $order['orderstatus'] = $lang['ec_orders_search_status_pending']; break;
 					case 2: $order['orderstatus'] = '<b>'.$lang['ec_orders_search_status_auto_finished'].'</b>'; break;
@@ -356,12 +326,11 @@ if($operation == 'alipay') {
 	} else {
 
 		$numvalidate = 0;
-		if($_G['gp_validate']) {
+		if($_GET['validate']) {
 			$orderids = $comma = '';
 			$confirmdate = dgmdate(TIMESTAMP);
 
-			$query = DB::query("SELECT * FROM ".DB::table('forum_order')." WHERE orderid IN ('".implode('\',\'', $_G['gp_validate'])."') AND status='1'");
-			while($order = DB::fetch($query)) {
+			foreach(C::t('forum_order')->fetch_all($_GET['validate'], '1') as $order) {
 				updatemembercount($order['uid'], array($_G['setting']['creditstrans'] => $order['amount']));
 				$orderids .= "$comma'$order[orderid]'";
 				$comma = ',';
@@ -373,12 +342,12 @@ if($operation == 'alipay') {
 					'value' => $_G['setting']['extcredits'][$_G['setting']['creditstrans']]['title'].' '.$order['amount'].' '.$_G['setting']['extcredits'][$_G['setting']['creditstrans']]['unit']
 				), 1);
 			}
-			if($numvalidate = DB::num_rows($query)) {
-				DB::query("UPDATE ".DB::table('forum_order')." SET status='3', admin='$_G[username]', confirmdate='$_G[timestamp]' WHERE orderid IN ($orderids)");
+			if($orderids) {
+				C::t('forum_order')->update(explode(',', $orderids), array('status' => '3', 'admin' => $_G['username'], 'confirmdate' => $_G['timestamp']));
 			}
 		}
 
-		cpmsg('orders_validate_succeed', "action=ec&operation=orders&searchsubmit=yes&orderstatus={$_G['gp_orderstatus']}&orderid={$_G['gp_orderid']}&users={$_G['gp_users']}&buyer={$_G['gp_buyer']}&admin={$_G['gp_admin']}&sstarttime={$_G['gp_sstarttime']}&sendtime={$_G['gp_sendtime']}&cstarttime={$_G['gp_cstarttime']}&cendtime={$_G['gp_cendtime']}", 'succeed');
+		cpmsg('orders_validate_succeed', "action=ec&operation=orders&searchsubmit=yes&orderstatus={$_GET['orderstatus']}&orderid={$_GET['orderid']}&users={$_GET['users']}&buyer={$_GET['buyer']}&admin={$_GET['admin']}&sstarttime={$_GET['sstarttime']}&sendtime={$_GET['sendtime']}&cstarttime={$_GET['cstarttime']}&cendtime={$_GET['cendtime']}", 'succeed');
 
 	}
 
@@ -404,8 +373,8 @@ if($operation == 'alipay') {
 
 	if(!submitcheck('creditsubmit')) {
 
-		$ec_credit = DB::result_first("SELECT svalue FROM ".DB::table('common_setting')." WHERE skey='ec_credit'");
-		$ec_credit = $ec_credit ? unserialize($ec_credit) : array(
+		$ec_credit = C::t('common_setting')->fetch('ec_credit', true);
+		$ec_credit = $ec_credit ? $ec_credit : array(
 			'maxcreditspermonth' => '6',
 			'rank' => $defaultrank
 		);
@@ -443,7 +412,7 @@ if($operation == 'alipay') {
 		showformfooter();
 
 	} else {
-		$ec_creditnew = $_G['gp_ec_creditnew'];
+		$ec_creditnew = $_GET['ec_creditnew'];
 		$ec_creditnew['maxcreditspermonth'] = intval($ec_creditnew['maxcreditspermonth']);
 
 		if(is_array($ec_creditnew['rank'])) {
@@ -460,7 +429,7 @@ if($operation == 'alipay') {
 			$ec_creditnew['rank'] = $defaultrank;
 		}
 
-		DB::query("UPDATE ".DB::table('common_setting')." SET svalue='".serialize($ec_creditnew)."' WHERE skey='ec_credit'");
+		C::t('common_setting')->update('ec_credit', $ec_creditnew);
 		updatecache('setting');
 
 		cpmsg('ec_credit_succeed', 'action=ec&operation=credit', 'succeed');
@@ -469,10 +438,6 @@ if($operation == 'alipay') {
 } elseif($operation == 'inviteorders') {
 	if(!submitcheck('ordersubmit')) {
 		$start_limit = ($page - 1) * $_G['tpp'];
-		$sql = '';
-		$sql .= $_G['gp_orderstatus'] != ''	? " AND status='{$_G['gp_orderstatus']}'" : '';
-		$sql .= $_G['gp_orderid'] != ''		? " AND orderid='{$_G['gp_orderid']}'" : '';
-		$sql .= $_G['gp_email'] != ''		? " AND email='{$_G['gp_email']}'" : '';
 		$orderurl = array(
 			'alipay' => 'https://www.alipay.com/trade/query_trade_detail.htm?trade_no=',
 			'tenpay' => 'https://www.tenpay.com/med/tradeDetail.shtml?trans_id=',
@@ -488,8 +453,8 @@ if($operation == 'alipay') {
 			array('nav_ec_inviteorders', 'ec&operation=inviteorders', 1)
 		));
 
-		$ordercount = DB::result_first("SELECT COUNT(*) FROM ".DB::table('forum_order')." WHERE uid='0' $sql");
-		$multipage = multi($ordercount, $_G['tpp'], $page, ADMINSCRIPT."?action=ec&operation=inviteorders&orderstatus={$_G['gp_orderstatus']}&orderid={$_G['gp_orderid']}&email={$_G['gp_email']}");
+		$ordercount = C::t('forum_order')->count_by_search(0, $_GET['orderstatus'], $_GET['orderid'], $_GET['email']);
+		$multipage = multi($ordercount, $_G['tpp'], $page, ADMINSCRIPT."?action=ec&operation=inviteorders&orderstatus={$_GET['orderstatus']}&orderid={$_GET['orderid']}&email={$_GET['email']}");
 
 		showtagheader('div', 'orderlist', TRUE);
 		showformheader('ec&operation=inviteorders');
@@ -499,19 +464,15 @@ if($operation == 'alipay') {
 			array('', $lang['ec_orders_search_status_all']),
 			array(1, $lang['ec_orders_search_status_pending']),
 			array(2, $lang['ec_orders_search_status_auto_finished'])
-		)), intval($_G['gp_orderstatus']), 'select');
-		showsetting('ec_orders_search_id', 'orderid', $_G['gp_orderid'], 'text');
-		showsetting('ec_orders_search_email', 'email', $_G['gp_email'], 'text');
+		)), intval($_GET['orderstatus']), 'select');
+		showsetting('ec_orders_search_id', 'orderid', $_GET['orderid'], 'text');
+		showsetting('ec_orders_search_email', 'email', $_GET['email'], 'text');
 		showsubmit('searchsubmit', 'submit');
 		showtablefooter();
 		showtableheader('result');
 		showsubtitle(array('', 'ec_orders_id', 'ec_inviteorders_status', 'ec_inviteorders_buyer', 'ec_orders_amount', 'ec_orders_price', 'ec_orders_submitdate', 'ec_orders_confirmdate'));
 
-		$query = DB::query("SELECT *
-			FROM ".DB::table('forum_order')." WHERE uid='0' $sql ORDER BY submitdate DESC
-			LIMIT $start_limit, $_G[tpp]");
-
-		while($order = DB::fetch($query)) {
+		foreach(C::t('forum_order')->fetch_all_by_search(0, $_GET['orderstatus'], $_GET['orderid'], $_GET['email'], null, null, null, null, null, null, null, $start_limit, $_G['tpp']) as $order) {
 			switch($order['status']) {
 				case 1: $order['orderstatus'] = $lang['ec_orders_search_status_pending']; break;
 				case 2: $order['orderstatus'] = '<b>'.$lang['ec_orders_search_status_auto_finished'].'</b>'; break;
@@ -540,13 +501,12 @@ if($operation == 'alipay') {
 		showformfooter();
 		showtagfooter('div');
 	} else {
-		if($_G['gp_validate']) {
-			$query = DB::query("SELECT * FROM ".DB::table('forum_order')." WHERE orderid IN (".dimplode($_G['gp_validate']).") AND status='1'");
-			if($numvalidate = DB::num_rows($query)) {
-				DB::query("UPDATE ".DB::table('forum_order')." SET status='3', admin='$_G[username]', confirmdate='$_G[timestamp]' WHERE orderid IN (".dimplode($_G['gp_validate']).")");
+		if($_GET['validate']) {
+			if(C::t('forum_order')->fetch_all($_GET['validate'], '1')) {
+				C::t('forum_order')->update($_GET['validate'], array('status' => '3', 'admin' => $_G['username'], 'confirmdate' => $_G['timestamp']));
 			}
 		}
-		cpmsg('orders_validate_succeed', "action=ec&operation=inviteorders&orderstatus={$_G['gp_orderstatus']}&orderid={$_G['gp_orderid']}&email={$_G['gp_email']}", 'succeed');
+		cpmsg('orders_validate_succeed', "action=ec&operation=inviteorders&orderstatus={$_GET['orderstatus']}&orderid={$_GET['orderid']}&email={$_GET['email']}", 'succeed');
 	}
 }
 

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: uc.php 25684 2011-11-17 08:45:40Z monkey $
+ *      $Id: uc.php 25756 2011-11-22 02:47:45Z zhangguosheng $
  */
 
 error_reporting(0);
@@ -31,19 +31,14 @@ define('API_RETURN_SUCCEED', '1');
 define('API_RETURN_FAILED', '-1');
 define('API_RETURN_FORBIDDEN', '1');
 
-@define('IN_DISCUZ', true);
-@define('IN_API', true);
-@define('CURSCRIPT', 'api');
+define('IN_API', true);
+define('CURSCRIPT', 'api');
 
 
 if(!defined('IN_UC')) {
-	define('DISCUZ_ROOT', dirname(dirname(__FILE__)).'/');
-	require_once DISCUZ_ROOT.'./config/config_global.php';
-	require_once DISCUZ_ROOT.'./config/config_ucenter.php';
-	require_once DISCUZ_ROOT.'./source/function/function_core.php';
-	require_once DISCUZ_ROOT.'./source/class/class_core.php';
+	require_once '../source/class/class_core.php';
 
-	$discuz = & discuz_core::instance();
+	$discuz = C::app();
 	$discuz->init();
 
 	require DISCUZ_ROOT.'./config/config_ucenter.php';
@@ -103,10 +98,7 @@ class uc_note {
 		}
 		$uids = str_replace("'", '', stripslashes($get['ids']));
 		$ids = array();
-		$query = DB::query("SELECT * FROM ".DB::table('common_member')." WHERE uid IN ($uids)");
-		while($row = DB::fetch($query)) {
-			$ids[] = $row['uid'];
-		}
+		$ids = array_keys(C::t('common_member')->fetch_all($uids));
 		require_once DISCUZ_ROOT.'./source/function/function_delete.php';
 		$ids && deletemember($ids);
 
@@ -193,8 +185,7 @@ class uc_note {
 
 		$cookietime = 31536000;
 		$uid = intval($get['uid']);
-		$query = DB::query("SELECT uid, username, password FROM ".DB::table('common_member')." WHERE uid='$uid'");
-		if($member = DB::fetch($query)) {
+		if(($member = getuserbyuid($uid, 1))) {
 			dsetcookie('auth', authcode("$member[password]\t$member[uid]", 'ENCODE'), $cookietime);
 		}
 	}
@@ -220,7 +211,15 @@ class uc_note {
 
 		$username = $get['username'];
 		$newpw = md5(time().rand(100000, 999999));
-		DB::query("UPDATE ".DB::table('common_member')." SET password='$newpw' WHERE username='$username'");
+		$uid = 0;
+		if(($uid = C::t('common_member')->fetch_uid_by_username($username))) {
+			$ext = '';
+		} elseif(($uid = C::t('common_member_archive')->fetch_uid_by_username($username))) {
+			$ext = '_archive';
+		}
+		if($uid) {
+			C::t('common_member'.$ext)->update($uid, array('password' => $newpw));
+		}
 
 		return API_RETURN_SUCCEED;
 	}
@@ -327,12 +326,12 @@ class uc_note {
 		$credit = $get['credit'];
 		$amount = $get['amount'];
 		$uid = $get['uid'];
-		if(!DB::result_first("SELECT count(*) FROM ".DB::table('common_member')." WHERE uid='$uid'")) {
+		if(!getuserbyuid($uid)) {
 			return API_RETURN_SUCCEED;
 		}
 
 		updatemembercount($uid, array($credit => $amount));
-		DB::insert('common_credit_log', array('uid' => $uid, 'operation' => 'ECU', 'relatedid' => $uid, 'dateline' => time(), 'extcredits'.$credit => $amount));
+		C::t('common_credit_log')->insert(array('uid' => $uid, 'operation' => 'ECU', 'relatedid' => $uid, 'dateline' => time(), 'extcredits'.$credit => $amount));
 
 		return API_RETURN_SUCCEED;
 	}

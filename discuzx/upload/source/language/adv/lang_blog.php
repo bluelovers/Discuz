@@ -4,13 +4,17 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_blog.php 6752 2010-03-25 08:47:54Z cnteacher $
+ *      $Id: lang_blog.php 27449 2012-02-01 05:32:35Z zhangguosheng $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 $lang = array
 (
-	'blog_name' => 'ç©ºé–“ æ—¥èªŒå»£å‘Š',
-	'blog_desc' => 'å±•ç¾æ–¹å¼: æ—¥èªŒå»£å‘Šé¡¯ç¤ºæ–¼æ—¥èªŒå³æ–¹ã€‚',
+	'blog_name' => '¿Õ¼ä ÈÕÖ¾¹ã¸æ',
+	'blog_desc' => 'Õ¹ÏÖ·½Ê½: ÈÕÖ¾¹ã¸æÏÔÊ¾ÓÚÈÕÖ¾ÓÒ·½¡£',
 );
 
 ?>

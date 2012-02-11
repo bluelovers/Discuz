@@ -1,5 +1,5 @@
 /*
-	[Discuz!] (C)2001-2009 Comsenz Inc.
+	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
 	$Id: common_diy.js 24718 2011-10-09 09:40:35Z zhangguosheng $
@@ -249,13 +249,14 @@ var Util = {
 	},
 	hide:function (ele){
 		if (typeof ele == 'string') {ele = $(ele);}
-		if (ele){ele.style.display = 'none';}
+		if (ele){ele.style.display = 'none';ele.style.visibility = 'hidden';}
 	},
 	show:function (ele){
 		if (typeof ele == 'string') {ele = $(ele);}
 		if (ele) {
 			this.removeClass(ele, 'hide');
 			ele.style.display = '';
+			ele.style.visibility = 'visible';
 		}
 	},
 	cancelSelect : function () {
@@ -714,7 +715,7 @@ var Util = {
 				var dom = document.createElement('div');
 				dom.className = 'edit hide';
 				dom.id = id+'_edit';
-				dom.innerHTML = '<span id="'+id+'_edit_menu">ç·¨è¼¯</span>';
+				dom.innerHTML = '<span id="'+id+'_edit_menu">±à¼­</span>';
 				ele.appendChild(dom);
 				$(id+'_edit_menu').onclick = function (e){Drag.prototype.toggleMenu.call(_method, e, this);};
 			}
@@ -840,12 +841,25 @@ var Util = {
 				}
 			}
 		},
+		showBlockName : function (ele) {
+			var title = $C('block-name', ele, 'div');
+			if(title.length) {
+				Util.show(title[0]);
+			}
+		},
+		hideBlockName : function (ele) {
+			var title = $C('block-name', ele, 'div');
+			if(title.length) {
+				Util.hide(title[0]);
+			}
+		},
 		showEdit : function (e) {
 			e = Util.event(e);
 			var targetObject = Util.getTarget(e,'className',this.moveableObject);
 			if (targetObject) {
 				Util.show(targetObject.id + '_edit');
 				targetObject.style.backgroundColor="#fffacd";
+				this.showBlockName(targetObject);
 			} else {
 				var targetFrame = Util.getTarget(e,'className',this.frameClass);
 				if (typeof targetFrame == 'object') {
@@ -865,6 +879,7 @@ var Util = {
 			if (typeof targetObject == 'object') {
 				Util.hide(targetObject.id + '_edit');
 				targetObject.style.backgroundColor = '';
+				this.hideBlockName(targetObject);
 			}
 		},
 		toggleMenu : function (e, obj) {
@@ -1209,7 +1224,7 @@ var Util = {
 		setClose : function () {
 			if (!this.isChange) {
 				window.onbeforeunload = function() {
-					return 'æ‚¨çš„æ•¸æ“šå·²ç¶“ä¿®æ”¹,é€€å‡ºå°‡ç„¡æ³•ä¿å­˜æ‚¨çš„ä¿®æ”¹ã€‚';
+					return 'ÄúµÄÊı¾İÒÑ¾­ĞŞ¸Ä,ÍË³ö½«ÎŞ·¨±£´æÄúµÄĞŞ¸Ä¡£';
 				};
 			}
 			this.isChange = true;
@@ -1857,7 +1872,7 @@ var Util = {
 		},
 		uploadSubmit : function (){
 			if (document.uploadpic.attach.value.length<3) {
-				alert('è«‹é¸æ“‡æ‚¨è¦ä¸Šå‚³çš„åœ–ç‰‡');
+				alert('ÇëÑ¡ÔñÄúÒªÉÏ´«µÄÍ¼Æ¬');
 				return false;
 			}
 			if (document.uploadpic.albumid != null) document.uploadpic.albumid.value = $('selectalbum').value;
@@ -1869,7 +1884,7 @@ var Util = {
 		cancel : function () {
 			var flag = false;
 			if (this.isChange) {
-				flag = confirm(this.cancelConfirm ? this.cancelConfirm : 'é€€å‡ºå°‡ä¸æœƒä¿å­˜æ‚¨å‰›æ‰çš„è¨­ç½®ã€‚æ˜¯å¦ç¢ºèªé€€å‡ºï¼Ÿ');
+				flag = confirm(this.cancelConfirm ? this.cancelConfirm : 'ÍË³ö½«²»»á±£´æÄú¸Õ²ÅµÄÉèÖÃ¡£ÊÇ·ñÈ·ÈÏÍË³ö£¿');
 			}
 			if (!this.isChange || flag) {
 				location.href = location.href.replace(/[\?|\&]diy\=yes/g,'');

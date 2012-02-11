@@ -4,45 +4,49 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_articlelist.php 19786 2011-01-18 10:05:49Z zhangguosheng $
+ *      $Id: lang_articlelist.php 27449 2012-02-01 05:32:35Z zhangguosheng $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 $lang = array
 (
-	'articlelist_aids' => 'æŒ‡å®šæ–‡ç« ',
-	'articlelist_aids_comment' => 'å¡«å…¥æŒ‡å®šæ–‡ç« çš„ID(aid)ï¼Œå¤šç¯‡æ–‡ç« ä¹‹é–“ç”¨é€—è™Ÿ(,)åˆ†éš”',
-	'articlelist_uids' => 'ä½œè€…UID',
-	'articlelist_uids_comment' => 'å¡«å…¥æŒ‡å®šç”¨æˆ¶çš„ID(uid)ï¼Œå¤šå€‹ç”¨æˆ¶ä¹‹é–“ç”¨é€—è™Ÿ(,)åˆ†éš”',
-	'articlelist_startrow' => 'èµ·å§‹æ•¸æ“šè¡Œæ•¸',
-	'articlelist_startrow_comment' => 'å¦‚éœ€è¨­å®šèµ·å§‹çš„æ•¸æ“šè¡Œæ•¸ï¼Œè«‹è¼¸å…¥å…·é«”æ•¸å€¼ï¼Œ0 ç‚ºå¾žç¬¬ä¸€è¡Œé–‹å§‹ï¼Œä»¥æ­¤é¡žæŽ¨',
-	'articlelist_tag' => 'èšåˆæ¨™ç±¤',
-	'articlelist_tag_comment' => 'æŒ‡å®šè¦èšåˆçš„æ¨™ç±¤',
-	'articlelist_titlelength' => 'æ¨™é¡Œé•·åº¦',
-	'articlelist_titlelength_comment' => 'è¨­ç½®æ¨™é¡Œæœ€å¤§é•·åº¦',
-	'articlelist_summarylength' => 'ç°¡ä»‹é•·åº¦',
-	'articlelist_summarylength_comment' => 'è¨­ç½®ç°¡ä»‹æœ€å¤§é•·åº¦',
-	'articlelist_starttime' => 'ç™¼ä½ˆæ™‚é–“-èµ·å§‹',
-	'articlelist_starttime_comment' => 'æ–‡ç« çš„ç™¼ä½ˆæ™‚é–“åœ¨æŒ‡å®šæ™‚é–“ä¹‹å¾Œ',
-	'articlelist_endtime' => 'ç™¼ä½ˆæ™‚é–“-çµæŸ',
-	'articlelist_endtime_comment' => 'æ–‡ç« çš„ç™¼ä½ˆæ™‚é–“åœ¨æŒ‡å®šæ™‚é–“ä¹‹å‰',
-	'articlelist_catid' => 'æ–‡ç« æ¬„ç›®',
-	'articlelist_catid_comment' => 'é¸æ“‡æ–‡ç« æ‰€å±¬æ¬„ç›®',
-	'articlelist_picrequired' => 'éŽæ¿¾ç„¡å°é¢æ–‡ç« ',
-	'articlelist_picrequired_comment' => 'æ˜¯å¦éŽæ¿¾æœªè¨­ç½®å°é¢åœ–ç‰‡çš„æ–‡ç« ',
-	'articlelist_orderby' => 'æ–‡ç« æŽ’åºæ–¹å¼',
-	'articlelist_orderby_comment' => 'è¨­ç½®ä»¥å“ªä¸€å­—æ®µæˆ–æ–¹å¼å°æ–‡ç« é€²è¡ŒæŽ’åº',
-	'articlelist_orderby_dateline' => 'æŒ‰ç™¼ä½ˆæ™‚é–“å€’åº',
-	'articlelist_orderby_viewnum' => 'æŒ‰æŸ¥çœ‹æ•¸å€’åº',
-	'articlelist_orderby_commentnum' => 'æŒ‰è©•è«–æ•¸å€’åº',
-	'articlelist_orderby_click' => 'æŒ‰è¡¨æ…‹ {clickname} æ•¸å€’åº',
-	'articlelist_publishdateline' => 'æ–‡ç« ç™¼ä½ˆæ™‚é–“',
-	'articlelist_publishdateline_nolimit' => 'ä¸é™åˆ¶',
-	'articlelist_publishdateline_hour' => '1å°æ™‚å…§',
-	'articlelist_publishdateline_day' => '24å°æ™‚å…§',
-	'articlelist_publishdateline_week' => '7å¤©å…§',
-	'articlelist_publishdateline_month' => '1å€‹æœˆå…§',
-	'articlelist_keyword' => 'æ¨™é¡Œé—œéµå­—',
-	'articlelist_keyword_comment' => 'è¨­ç½®æ¨™é¡ŒåŒ…å«çš„é—œéµå­—ã€‚æ³¨æ„: ç•™ç©ºç‚ºä¸é€²è¡Œä»»ä½•éŽæ¿¾ï¼› é—œéµå­—ä¸­å¯ä½¿ç”¨é€šé…ç¬¦ *ï¼› åŒ¹é…å¤šå€‹é—œéµå­—å…¨éƒ¨ï¼Œå¯ç”¨ç©ºæ ¼æˆ– AND é€£æŽ¥ã€‚å¦‚ win32 AND unixï¼› åŒ¹é…å¤šå€‹é—œéµå­—å…¶ä¸­éƒ¨åˆ†ï¼Œå¯ç”¨ | æˆ– OR é€£æŽ¥ã€‚å¦‚ win32 OR unix',
+	'articlelist_aids' => 'Ö¸¶¨ÎÄÕÂ',
+	'articlelist_aids_comment' => 'ÌîÈëÖ¸¶¨ÎÄÕÂµÄID(aid)£¬¶àÆªÎÄÕÂÖ®¼äÓÃ¶ººÅ(,)·Ö¸ô',
+	'articlelist_uids' => '×÷ÕßUID',
+	'articlelist_uids_comment' => 'ÌîÈëÖ¸¶¨ÓÃ»§µÄID(uid)£¬¶à¸öÓÃ»§Ö®¼äÓÃ¶ººÅ(,)·Ö¸ô',
+	'articlelist_startrow' => 'ÆðÊ¼Êý¾ÝÐÐÊý',
+	'articlelist_startrow_comment' => 'ÈçÐèÉè¶¨ÆðÊ¼µÄÊý¾ÝÐÐÊý£¬ÇëÊäÈë¾ßÌåÊýÖµ£¬0 Îª´ÓµÚÒ»ÐÐ¿ªÊ¼£¬ÒÔ´ËÀàÍÆ',
+	'articlelist_tag' => '¾ÛºÏ±êÇ©',
+	'articlelist_tag_comment' => 'Ö¸¶¨Òª¾ÛºÏµÄ±êÇ©',
+	'articlelist_titlelength' => '±êÌâ³¤¶È',
+	'articlelist_titlelength_comment' => 'ÉèÖÃ±êÌâ×î´ó³¤¶È',
+	'articlelist_summarylength' => '¼ò½é³¤¶È',
+	'articlelist_summarylength_comment' => 'ÉèÖÃ¼ò½é×î´ó³¤¶È',
+	'articlelist_starttime' => '·¢²¼Ê±¼ä-ÆðÊ¼',
+	'articlelist_starttime_comment' => 'ÎÄÕÂµÄ·¢²¼Ê±¼äÔÚÖ¸¶¨Ê±¼äÖ®ºó',
+	'articlelist_endtime' => '·¢²¼Ê±¼ä-½áÊø',
+	'articlelist_endtime_comment' => 'ÎÄÕÂµÄ·¢²¼Ê±¼äÔÚÖ¸¶¨Ê±¼äÖ®Ç°',
+	'articlelist_catid' => 'ÎÄÕÂÀ¸Ä¿',
+	'articlelist_catid_comment' => 'Ñ¡ÔñÎÄÕÂËùÊôÀ¸Ä¿',
+	'articlelist_picrequired' => '¹ýÂËÎÞ·âÃæÎÄÕÂ',
+	'articlelist_picrequired_comment' => 'ÊÇ·ñ¹ýÂËÎ´ÉèÖÃ·âÃæÍ¼Æ¬µÄÎÄÕÂ',
+	'articlelist_orderby' => 'ÎÄÕÂÅÅÐò·½Ê½',
+	'articlelist_orderby_comment' => 'ÉèÖÃÒÔÄÄÒ»×Ö¶Î»ò·½Ê½¶ÔÎÄÕÂ½øÐÐÅÅÐò',
+	'articlelist_orderby_dateline' => '°´·¢²¼Ê±¼äµ¹Ðò',
+	'articlelist_orderby_viewnum' => '°´²é¿´Êýµ¹Ðò',
+	'articlelist_orderby_commentnum' => '°´ÆÀÂÛÊýµ¹Ðò',
+	'articlelist_orderby_click' => '°´±íÌ¬ {clickname} Êýµ¹Ðò',
+	'articlelist_publishdateline' => 'ÎÄÕÂ·¢²¼Ê±¼ä',
+	'articlelist_publishdateline_nolimit' => '²»ÏÞÖÆ',
+	'articlelist_publishdateline_hour' => '1Ð¡Ê±ÄÚ',
+	'articlelist_publishdateline_day' => '24Ð¡Ê±ÄÚ',
+	'articlelist_publishdateline_week' => '7ÌìÄÚ',
+	'articlelist_publishdateline_month' => '1¸öÔÂÄÚ',
+	'articlelist_keyword' => '±êÌâ¹Ø¼ü×Ö',
+	'articlelist_keyword_comment' => 'ÉèÖÃ±êÌâ°üº¬µÄ¹Ø¼ü×Ö¡£×¢Òâ: Áô¿ÕÎª²»½øÐÐÈÎºÎ¹ýÂË£» ¹Ø¼ü×ÖÖÐ¿ÉÊ¹ÓÃÍ¨Åä·û *£» Æ¥Åä¶à¸ö¹Ø¼ü×ÖÈ«²¿£¬¿ÉÓÃ¿Õ¸ñ»ò AND Á¬½Ó¡£Èç win32 AND unix£» Æ¥Åä¶à¸ö¹Ø¼ü×ÖÆäÖÐ²¿·Ö£¬¿ÉÓÃ | »ò OR Á¬½Ó¡£Èç win32 OR unix',
 );
 
 ?>

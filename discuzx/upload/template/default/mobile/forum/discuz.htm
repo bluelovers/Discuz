@@ -1,6 +1,6 @@
 <!--{subtemplate mobile/common/header}-->
 <!--{hook/index_top_mobile}-->
-<!--{if $forum_favlist}--> 
+<!--{if $forum_favlist}-->
 <div class="fl">
 	<div class="bm">
 		<div class="bm_h">
@@ -19,9 +19,9 @@
 <div class="fl">
 	<div class="bm">
     	<div class="bm_h">
-    	<!--{if $_G[setting][mobile][mobileforumview] == 1}--><a href="forum.php?viewgid={if $cat[fid] != $_G[gp_viewgid]}{$cat[fid]}{else}0{/if}">$cat[name]</a><!--{else}-->$cat[name]<!--{/if}-->
+    	<!--{if $_G[setting][mobile][mobileforumview] == 1}--><a href="forum.php?viewgid={if $cat[fid] != $_GET[viewgid]}{$cat[fid]}{else}0{/if}">$cat[name]</a><!--{else}-->$cat[name]<!--{/if}-->
         </div>
-        <!--{if $_G[setting][mobile][mobileforumview] == 0 || ($cat[fid] == $_G[gp_viewgid])}-->
+        <!--{if $_G[setting][mobile][mobileforumview] == 0 || ($cat[fid] == $_GET[viewgid])}-->
             {eval $i=1;}
             <!--{loop $cat[forums] $forumid}-->
                 <div class="bm_c <!--{if $i%2 == 1}-->add<!--{else}-->even<!--{/if}-->">

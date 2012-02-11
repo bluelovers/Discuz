@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_adv.php 24783 2011-10-11 07:45:32Z monkey $
+ *      $Id: admincp_adv.php 26686 2011-12-20 03:03:48Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -17,9 +17,9 @@ $operation = $operation ? $operation : 'list';
 
 $defaulttargets = array('portal', 'home', 'member', 'forum', 'group', 'userapp', 'plugin');
 
-if(!empty($_G['gp_preview'])) {
-	$_G['gp_advnew'][$_G['gp_advnew']['style']]['url'] = $_G['gp_TMPadvnew'.$_G['gp_advnew']['style']] ? $_G['gp_TMPadvnew'.$_G['gp_advnew']['style']] : $_G['gp_advnew'.$_G['gp_advnew']['style']];
-	$data = dstripslashes(encodeadvcode($_G['gp_advnew']));
+if(!empty($_GET['preview'])) {
+	$_GET['advnew'][$_GET['advnew']['style']]['url'] = $_GET['TMPadvnew'.$_GET['advnew']['style']] ? $_GET['TMPadvnew'.$_GET['advnew']['style']] : $_GET['advnew'.$_GET['advnew']['style']];
+	$data = encodeadvcode($_GET['advnew']);
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -49,8 +49,8 @@ if($operation == 'ad') {
 	if(!submitcheck('advsubmit')) {
 
 		shownav('extended', 'adv_admin');
-		$type = $_G['gp_type'];
-		$target = $_G['gp_target'];
+		$type = $_GET['type'];
+		$target = $_GET['target'];
 		$typeadd = '';
 		if($type) {
 			$advfile = libfile('adv/'.$type, 'class');
@@ -79,30 +79,22 @@ if($operation == 'ad') {
 		$order_by = 'displayorder, advid DESC, targets DESC';
 		$start_limit = ($page - 1) * $advppp;
 
-		$title = $_G['gp_title'];
-		$starttime = $_G['gp_starttime'];
-		$endtime = $_G['gp_endtime'];
-		$orderby = $_G['gp_orderby'];
-		$conditions .= $title ? " AND title LIKE '%$title%'" : '';
-		$conditions .= $starttime > 0 ? " AND starttime>='".(TIMESTAMP - $starttime)."'" : ($starttime == -1 ? " AND starttime='0'" : '');
-		$conditions .= $endtime > 0 ? " AND endtime>0 AND endtime<'".(TIMESTAMP + $endtime)."'" : ($endtime == -1 ? " AND endtime='0'" : '');
-		$conditions .= $type ? " AND type='$type'" : '';
-		$conditions .= $target ? " AND targets LIKE '%".$target."%'" : '';
-		$order_by = $orderby == 'starttime' ? 'starttime' : ($orderby == 'type' ? 'type' : ($orderby == 'displayorder' ? 'displayorder' : 'advid DESC'));
+		$title = $_GET['title'];
+		$starttime = $_GET['starttime'];
+		$endtime = $_GET['endtime'];
+		$orderby = $_GET['orderby'];
 
-		$advnum = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_advertisement')." WHERE 1 $conditions");
+		$advnum = C::t('common_advertisement')->count_search($title, $starttime, $endtime, $type, $target);
 
 		if(!$type) {
-			$query = DB::query("SELECT * FROM ".DB::table('common_advertisement_custom'));
 			$customadv = array();
-			while($custom = DB::fetch($query)) {
+			foreach(C::t('common_advertisement_custom')->fetch_all_data() as $custom) {
 				$customadv[$custom['id']] = $custom['name'];
 			}
 		}
 
-		$query = DB::query("SELECT * FROM ".DB::table('common_advertisement')." WHERE 1 $conditions ORDER BY available DESC, $order_by LIMIT $start_limit, $advppp");
 		$typenames = array();
-		while($adv = DB::fetch($query)) {
+		foreach(C::t('common_advertisement')->fetch_all_search($title, $starttime, $endtime, $type, $target, $orderby, $start_limit, $advppp) as $adv) {
 			if(!$type) {
 				$advfile = libfile('adv/'.$adv['type'], 'class');
 				if(!file_exists($advfile)) {
@@ -119,14 +111,14 @@ if($operation == 'ad') {
 					}
 				}
 			}
-			$adv['parameters'] = unserialize($adv['parameters']);
-			if($adv['type'] == 'custom' && $type && $_G['gp_customid'] != $adv['parameters']['extra']['customid']) {
+			$adv['parameters'] = dunserialize($adv['parameters']);
+			if($adv['type'] == 'custom' && $type && $_GET['customid'] != $adv['parameters']['extra']['customid']) {
 				continue;
 			}
 			$targets = array();
-			foreach(explode("\t", $adv['targets']) as $target) {
-				if('adv_edit_targets_'.$target != 'adv_edit_targets_custom') {
-					$targets[] = $lang['adv_edit_targets_'.$target] ? $lang['adv_edit_targets_'.$target] : $target;
+			foreach(explode("\t", $adv['targets']) as $t) {
+				if('adv_edit_targets_'.$t != 'adv_edit_targets_custom') {
+					$targets[] = $lang['adv_edit_targets_'.$t] ? $lang['adv_edit_targets_'.$t] : $t;
 				}
 			}
 
@@ -156,7 +148,7 @@ if($operation == 'ad') {
 		}
 		$targetselect .= '</select>';
 
-		showsubmit('advsubmit', 'submit', 'del', $type ? '<input type="button" class="btn" onclick="location.href=\''.ADMINSCRIPT.'?action=adv&operation=add&type='.$_G['gp_type'].($_G['gp_type'] != 'custom' ? '' : '&customid='.$_G['gp_customid']).'\'" value="'.cplang('add').'" />' : '', $multipage.'
+		showsubmit('advsubmit', 'submit', 'del', $type ? '<input type="button" class="btn" onclick="location.href=\''.ADMINSCRIPT.'?action=adv&operation=add&type='.$_GET['type'].($_GET['type'] != 'custom' ? '' : '&customid='.$_GET['customid']).'\'" value="'.cplang('add').'" />' : '', $multipage.'
 <input type="text" class="txt" name="title" value="'.$title.'" size="15" onkeyup="if(event.keyCode == 13) this.form.searchsubmit.click()" onclick="this.value=\'\'"> &nbsp;&nbsp;
 <select name="starttime">
 <option value=""> '.cplang('start_time').'</option>
@@ -194,15 +186,17 @@ if($operation == 'ad') {
 
 	} else {
 
-		$advids = dimplode($_G['gp_delete']);
-
-		if($advids) {
-			DB::query("DELETE FROM ".DB::table('common_advertisement')." WHERE advid IN ($advids)");
+		if($_GET['delete']) {
+			C::t('common_advertisement')->delete($_GET['delete']);
 		}
 
-		if(is_array($_G['gp_titlenew'])) {
-			foreach($_G['gp_titlenew'] as $advid => $title) {
-				DB::query("UPDATE ".DB::table('common_advertisement')." SET available='".$_G['gp_availablenew'][$advid]."', displayorder='".$_G['gp_displayordernew'][$advid]."', title='".cutstr($_G['gp_titlenew'][$advid], 50)."' WHERE advid='$advid'", 'UNBUFFERED');
+		if(is_array($_GET['titlenew'])) {
+			foreach($_GET['titlenew'] as $advid => $title) {
+				C::t('common_advertisement')->update($advid, array(
+					'available' => $_GET['availablenew'][$advid],
+					'displayorder' => $_GET['displayordernew'][$advid],
+					'title' => cutstr($_GET['titlenew'][$advid], 50)
+				));
 			}
 		}
 
@@ -213,21 +207,21 @@ if($operation == 'ad') {
 
 	}
 
-} elseif($operation == 'add' && !empty($_G['gp_type']) || $operation == 'edit' && !empty($_G['gp_advid'])) {
+} elseif($operation == 'add' && !empty($_GET['type']) || $operation == 'edit' && !empty($_GET['advid'])) {
 
 	if(!submitcheck('advsubmit')) {
 
 		if($operation == 'edit') {
-			$advid = $_G['gp_advid'];
-			$adv = DB::fetch_first("SELECT * FROM ".DB::table('common_advertisement')." WHERE advid='$advid'");
+			$advid = $_GET['advid'];
+			$adv = C::t('common_advertisement')->fetch($advid);
 			if(!$adv) {
 				cpmsg('advertisement_nonexistence', '', 'error');
 			}
-			$adv['parameters'] = unserialize($adv['parameters']);
+			$adv['parameters'] = dunserialize($adv['parameters']);
 			$type = $adv['type'];
 		} else {
 			$adv['parameters']['style'] = 'code';
-			$type = $_G['gp_type'];
+			$type = $_GET['type'];
 		}
 
 		require_once libfile('adv/'.$type, 'class');
@@ -235,9 +229,9 @@ if($operation == 'ad') {
 		$advclass = new $advclass;
 		$advsetting = $advclass->getsetting();
 		$advtitle = lang('adv/'.$type, $advclass->name).($type != 'custom' ? '' : ' '.$advclass->customname);
-		$returnurl = 'action=adv&operation=ad'.(empty($_G['gp_from']) ? '&type='.$type.($type != 'custom' ? '' : '&customid='.$_G['gp_customid']) : '');
+		$returnurl = 'action=adv&operation=ad'.(empty($_GET['from']) ? '&type='.$type.($type != 'custom' ? '' : '&customid='.$_GET['customid']) : '');
 
-		$return = '<a href="'.ADMINSCRIPT.'?'.$returnurl.'">'.cplang('adv_list').(empty($_G['gp_from']) ? ' - '.$advtitle : '').'</a>';
+		$return = '<a href="'.ADMINSCRIPT.'?'.$returnurl.'">'.cplang('adv_list').(empty($_GET['from']) ? ' - '.$advtitle : '').'</a>';
 		shownav('extended', 'adv_admin');
 		showsubmenu($root.' &raquo; '.$return.' &raquo; '.($operation == 'edit' ? cplang('adv_edit') : cplang('adv_add')));
 		echo '<br />';
@@ -280,7 +274,7 @@ if($operation == 'ad') {
 
 		showformheader("adv&operation=$operation".($operation == 'add' ? '&type='.$type : '&advid='.$advid), 'enctype');
 		if($type == 'custom') {
-			showhiddenfields(array('parameters[extra][customid]' => $_G['gp_customid']));
+			showhiddenfields(array('parameters[extra][customid]' => $_GET['customid']));
 		}
 		showhiddenfields(array('referer' => $returnurl));
 		showtableheader();
@@ -300,7 +294,7 @@ if($operation == 'ad') {
 				$varname = in_array($setting['type'], array('mradio', 'mcheckbox', 'select', 'mselect')) ?
 					($setting['type'] == 'mselect' ? array('parameters[extra]['.$settingvar.'][]', $setting['value']) : array('parameters[extra]['.$settingvar.']', $setting['value']))
 					: 'parameters['.$settingvar.']';
-				$value = $adv['parameters']['extra'][$settingvar] != '' ? dstripslashes($adv['parameters']['extra'][$settingvar]) : $setting['default'];
+				$value = $adv['parameters']['extra'][$settingvar] != '' ? $adv['parameters']['extra'][$settingvar] : $setting['default'];
 				$comment = lang('adv/'.$type, $setting['title'].'_comment');
 				$comment = $comment != $setting['title'].'_comment' ? $comment : '';
 				showsetting(lang('adv/'.$type, $setting['title']).':', $varname, $value, $setting['type'], '', 0, $comment);
@@ -327,7 +321,7 @@ if($operation == 'ad') {
 
 		showtagheader('tbody', 'style_text', $adv['parameters']['style'] == 'text');
 		showtitle('adv_edit_style_text');
-		showsetting('adv_edit_style_text_title', 'advnew[text][title]', $adv['parameters']['title'], 'text');
+		showsetting('adv_edit_style_text_title', 'advnew[text][title]', $adv['parameters']['title'], 'htmltext');
 		showsetting('adv_edit_style_text_link', 'advnew[text][link]', $adv['parameters']['link'], 'text');
 		showsetting('adv_edit_style_text_size', 'advnew[text][size]', $adv['parameters']['size'], 'text');
 		showtagfooter('tbody');
@@ -394,20 +388,20 @@ if($operation == 'ad') {
 	} else {
 
 		if($operation == 'edit') {
-			$advid = $_G['gp_advid'];
-			$adv = DB::fetch_first("SELECT * FROM ".DB::table('common_advertisement')." WHERE advid='$advid'");
+			$advid = $_GET['advid'];
+			$adv = C::t('common_advertisement')->fetch($advid);
 			$type = $adv['type'];
-			$adv['parameters'] = unserialize($adv['parameters']);
+			$adv['parameters'] = dunserialize($adv['parameters']);
 		} else {
-			$type = $_G['gp_type'];
+			$type = $_GET['type'];
 		}
 
 		require_once libfile('adv/'.$type, 'class');
 		$advclass = 'adv_'.$type;
 		$advclass = new $advclass;
-		$advnew = $_G['gp_advnew'];
+		$advnew = $_GET['advnew'];
 
-		$parameters = !empty($_G['gp_parameters']) ? $_G['gp_parameters'] : array();
+		$parameters = !empty($_GET['parameters']) ? $_GET['parameters'] : array();
 		if(@in_array('custom', $advnew['targets'])) {
 			$targetcustom = explode(',', $advnew['targetcustom']);
 			$advnew['targets'] = array_merge($advnew['targets'], $targetcustom);
@@ -425,29 +419,24 @@ if($operation == 'ad') {
 			cpmsg('adv_endtime_invalid', '', 'error');
 		} elseif(($advnew['style'] == 'code' && !$advnew['code']['html'])
 			|| ($advnew['style'] == 'text' && (!$advnew['text']['title'] || !$advnew['text']['link']))
-			|| ($advnew['style'] == 'image' && (!$_FILES['advnewimage'] && !$_G['gp_advnewimage'] || !$advnew['image']['link']))
-			|| ($advnew['style'] == 'flash' && (!$_FILES['advnewflash'] && !$_G['gp_advnewflash'] || !$advnew['flash']['width'] || !$advnew['flash']['height']))) {
+			|| ($advnew['style'] == 'image' && (!$_FILES['advnewimage'] && !$_GET['advnewimage'] || !$advnew['image']['link']))
+			|| ($advnew['style'] == 'flash' && (!$_FILES['advnewflash'] && !$_GET['advnewflash'] || !$advnew['flash']['width'] || !$advnew['flash']['height']))) {
 			cpmsg('adv_parameter_invalid', '', 'error');
 		}
 
 		if($operation == 'add') {
-			$advid = DB::insert('common_advertisement', array('available' => 1, 'type' => $type), 1);
+			$advid = C::t('common_advertisement')->insert(array('available' => 1, 'type' => $type), true);
 		}
 
 		if($advnew['style'] == 'image' || $advnew['style'] == 'flash') {
 			if($_FILES['advnew'.$advnew['style']]) {
-				require_once libfile('class/upload');
 				$upload = new discuz_upload();
 				if($upload->init($_FILES['advnew'.$advnew['style']], 'common') && $upload->save(1)) {
 					$advnew[$advnew['style']]['url'] = $_G['siteurl'].$_G['setting']['attachurl'].'common/'.$upload->attach['attachment'];
 				}
 			} else {
-				$advnew[$advnew['style']]['url'] = $_G['gp_advnew'.$advnew['style']];
+				$advnew[$advnew['style']]['url'] = $_GET['advnew'.$advnew['style']];
 			}
-		}
-
-		foreach($advnew[$advnew['style']] as $key => $val) {
-			$advnew[$advnew['style']][$key] = dstripslashes($val);
 		}
 
 		$advnew['displayorder'] = isset($advnew['displayorder']) ? implode("\t", $advnew['displayorder']) : '';
@@ -455,10 +444,16 @@ if($operation == 'ad') {
 
 		$extra = $type != 'custom' ? '' : '&customid='.$parameters['extra']['customid'];
 
-		$advnew['parameters'] = addslashes(serialize(array_merge(is_array($parameters) ? $parameters : array(), array('style' => $advnew['style']), $advnew['style'] == 'code' ? array() : $advnew[$advnew['style']], array('html' => $advnew['code']), array('displayorder' => $advnew['displayorder']))));
-		$advnew['code'] = addslashes($advnew['code']);
+		$advnew['parameters'] = serialize(array_merge(is_array($parameters) ? $parameters : array(), array('style' => $advnew['style']), $advnew['style'] == 'code' ? array() : $advnew[$advnew['style']], array('html' => $advnew['code']), array('displayorder' => $advnew['displayorder'])));
 
-		$query = DB::query("UPDATE ".DB::table('common_advertisement')." SET title='$advnew[title]', targets='$advnew[targets]', parameters='$advnew[parameters]', code='$advnew[code]', starttime='$advnew[starttime]', endtime='$advnew[endtime]' WHERE advid='$advid'");
+		C::t('common_advertisement')->update($advid, array(
+			'title' => $advnew['title'],
+			'targets' => $advnew['targets'],
+			'parameters' => $advnew['parameters'],
+			'code' => $advnew['code'],
+			'starttime' => $advnew['starttime'],
+			'endtime' => $advnew['endtime']
+		));
 
 		updatecache('advs');
 		updatecache('setting');
@@ -470,8 +465,8 @@ if($operation == 'ad') {
 } elseif($operation == 'setting') {
 
 	if(submitcheck('advsubmit')) {
-		$_G['gp_advexpirationnew']['allow'] = $_G['gp_advexpirationnew']['allow'] && $_G['gp_advexpirationnew']['day'] > 0 && $_G['gp_advexpirationnew']['method'] && $_G['gp_advexpirationnew']['users'];
-		DB::query("REPLACE INTO ".DB::table('common_setting')." (`skey`, `svalue`) VALUES ('advexpiration', '".addslashes(serialize($_G['gp_advexpirationnew']))."')");
+		$_GET['advexpirationnew']['allow'] = $_GET['advexpirationnew']['allow'] && $_GET['advexpirationnew']['day'] > 0 && $_GET['advexpirationnew']['method'] && $_GET['advexpirationnew']['users'];
+		C::t('common_setting')->update('advexpiration', $_GET['advexpirationnew']);
 		updatecache('setting');
 		cpmsg('setting_update_succeed', 'action=adv&operation=setting', 'succeed');
 	} else {
@@ -482,7 +477,7 @@ if($operation == 'ad') {
 			array('adv_admin_listall', 'adv&operation=ad', 0),
 		));
 
-		$advexpiration = (array)unserialize(DB::result_first("SELECT svalue FROM ".DB::table('common_setting')." WHERE skey='advexpiration'"));
+		$advexpiration = C::t('common_setting')->fetch('advexpiration', true);
 		showformheader('adv&operation=setting');
 		showtableheader();
 		showsetting('adv_setting_advexpiration', 'advexpirationnew[allow]', $advexpiration['allow'], 'radio', 0, 1);
@@ -505,6 +500,7 @@ if($operation == 'ad') {
 		array('adv_admin_setting', 'adv&operation=setting', 0),
 		array('adv_admin_list', 'adv&operation=list', 1),
 		array('adv_admin_listall', 'adv&operation=ad', 0),
+		array('Discuz!ÁªÃË', 'http://union.discuz.qq.com/?ADTAG=CP.DISCUZ. ADSET.TAG', 0, 1, 1),
 	));
 	showtips('adv_list_tip');
 
@@ -522,13 +518,11 @@ if($operation == 'ad') {
 	$tmp = $advs['adv_custom.php'];
 	unset($advs['adv_custom.php']);
 	$advs['adv_custom.php'] = $tmp;
-	$query = DB::query("SELECT type, count(type) as count FROM ".DB::table('common_advertisement')." GROUP BY type");
-	while($ad = DB::fetch($query)) {
+	foreach(C::t('common_advertisement')->fetch_all_type() as $ad) {
 		$ads[$ad['type']] = $ad['count'];
 	}
-	$query = DB::query("SELECT parameters FROM ".DB::table('common_advertisement')." WHERE type='custom'");
-	while($ad = DB::fetch($query)) {
-		$parameters = unserialize($ad['parameters']);
+	foreach(C::t('common_advertisement')->fetch_all_by_type('custom') as $ad) {
+		$parameters = dunserialize($ad['parameters']);
 		$ads['custom_'.$parameters['extra']['customid']]++;
 	}
 	if($advs) {
@@ -564,9 +558,8 @@ if($operation == 'ad') {
 	}
 	if($customadv) {
 		$img = file_exists(DISCUZ_ROOT.'./static/image/admincp/'.$customadv['class'].'.gif') ? '<img src="static/image/admincp/'.$customadv['class'].'.gif" /><br />' : '';
-		$query = DB::query("SELECT * FROM ".DB::table('common_advertisement_custom')." ORDER BY id");
 		$i = $row;
-		while($custom = DB::fetch($query)) {
+		foreach(C::t('common_advertisement_custom')->fetch_all_data() as $custom) {
 			if($i == $row) {
 				echo '<tr>';
 			}
@@ -591,40 +584,40 @@ if($operation == 'ad') {
 } elseif($operation == 'custom') {
 
 	if($do == 'add') {
-		$addcustom = strip_tags($_G['gp_addcustom']);
+		$addcustom = strip_tags($_GET['addcustom']);
 		if($addcustom) {
-			if(!($customid = DB::result_first("SELECT id FROM ".DB::table('common_advertisement_custom')." WHERE name='$addcustom'"))) {
-				DB::insert('common_advertisement_custom', array('name' => $addcustom));
-				$customid = DB::insert_id();
+			if(!($customid = C::t('common_advertisement_custom')->get_id_by_name($addcustom))) {
+				$customid = C::t('common_advertisement_custom')->insert(array('name' => $addcustom), true);
 			}
 			dheader('location: '.ADMINSCRIPT.'?action=adv&operation=add&type=custom&customid='.$customid);
 		}
 	} elseif($do == 'edit') {
-		$name = DB::result_first("SELECT name FROM ".DB::table('common_advertisement_custom')." WHERE id='$_G[gp_id]'");
+		$custom = C::t('common_advertisement_custom')->fetch($_GET['id']);
+		$name = $custom['name'];
 		if(!submitcheck('submit')) {
 			ajaxshowheader();
-			showformheader("adv&operation=custom&do=edit&id=$_G[gp_id]");
+			showformheader("adv&operation=custom&do=edit&id=$_GET[id]");
 			echo $lang['adv_custom_edit'].'<br /><input name="customnew" class="txt" value="'.htmlspecialchars($name).'" />&nbsp;'.
 				'<input name="submit" class="btn" type="submit" value="'.$lang['submit'].'" />&nbsp;'.
 				'<input class="btn" type="button" onclick="location.href=\''.ADMINSCRIPT.'?action=adv&operation=list\'" value="'.$lang['cancel'].'" />';
 			showformfooter();
 			ajaxshowfooter();
 		} else {
-			$customnew = strip_tags($_G['gp_customnew']);
-			if($_G['gp_customnew'] != $name) {
-				DB::update('common_advertisement_custom', array('name' => $customnew), "id='$_G[gp_id]'");
+			$customnew = strip_tags($_GET['customnew']);
+			if($_GET['customnew'] != $name) {
+				C::t('common_advertisement_custom')->update($_GET['id'], array('name' => $customnew));
 			}
 		}
 	} elseif($do == 'delete') {
 		if(!submitcheck('submit')) {
 			ajaxshowheader();
-			showformheader("adv&operation=custom&do=delete&id=$_G[gp_id]");
+			showformheader("adv&operation=custom&do=delete&id=$_GET[id]");
 			echo $lang['adv_custom_delete'].'<br /><input name="submit" class="btn" type="submit" value="'.$lang['delete'].'" />&nbsp;'.
 				'<input class="btn" type="button" onclick="location.href=\''.ADMINSCRIPT.'?action=adv&operation=list\'" value="'.$lang['cancel'].'" />';
 			showformfooter();
 			ajaxshowfooter();
 		} else {
-			DB::delete('common_advertisement_custom', "id='$_G[gp_id]'");
+			C::t('common_advertisement_custom')->delete($_GET['id']);
 		}
 	}
 	dheader('location: '.ADMINSCRIPT.'?action=adv&operation=list');

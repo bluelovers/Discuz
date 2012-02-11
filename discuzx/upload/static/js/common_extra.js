@@ -1,8 +1,8 @@
 /*
-	[Discuz!] (C)2001-2009 Comsenz Inc.
+	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: common_extra.js 25470 2011-11-10 08:54:19Z zhangguosheng $
+	$Id: common_extra.js 27547 2012-02-06 02:02:00Z monkey $
 */
 
 function _relatedlinks(rlinkmsgid) {
@@ -56,7 +56,7 @@ function _updatesecqaa(idhash) {
 		}
 		$('checksecqaaverify_' + idhash).innerHTML = '<img src="'+ IMGDIR + '/none.gif" width="16" height="16" class="vm" />';
 		ajaxget('misc.php?mod=secqaa&action=update&idhash=' + idhash, 'secqaa_' + idhash, null, '', '', function() {
-			secST['qaa_' + idhash] = setTimeout(function() {$('secqaa_' + idhash).innerHTML = '<span class="xi2 cur1" onclick="updatesecqaa(\''+idhash+'\')">åˆ·æ–°é©—è­‰å•ç­”</span>';}, 180000);
+			secST['qaa_' + idhash] = setTimeout(function() {$('secqaa_' + idhash).innerHTML = '<span class="xi2 cur1" onclick="updatesecqaa(\''+idhash+'\')">Ë¢ĞÂÑéÖ¤ÎÊ´ğ</span>';}, 180000);
 		});
 	}
 }
@@ -70,7 +70,7 @@ function _updateseccode(idhash, play) {
 			}
 			$('checkseccodeverify_' + idhash).innerHTML = '<img src="'+ IMGDIR + '/none.gif" width="16" height="16" class="vm" />';
 			ajaxget('misc.php?mod=seccode&action=update&idhash=' + idhash, 'seccode_' + idhash, null, '', '', function() {
-				secST['code_' + idhash] = setTimeout(function() {$('seccode_' + idhash).innerHTML = '<span class="xi2 cur1" onclick="updateseccode(\''+idhash+'\')">åˆ·æ–°é©—è­‰ç¢¼</span>';}, 180000);
+				secST['code_' + idhash] = setTimeout(function() {$('seccode_' + idhash).innerHTML = '<span class="xi2 cur1" onclick="updateseccode(\''+idhash+'\')">Ë¢ĞÂÑéÖ¤Âë</span>';}, 180000);
 			});
 		}
 	} else {
@@ -99,9 +99,9 @@ function _checksec(type, idhash, showmsg, recall) {
 			obj.innerHTML = '<img src="'+ IMGDIR + '/check_error.gif" width="16" height="16" class="vm" />';
 			if(showmsg) {
 				if(type == 'code') {
-					showError('é©—è­‰ç¢¼éŒ¯èª¤ï¼Œè«‹é‡æ–°å¡«å¯«');
+					showError('ÑéÖ¤Âë´íÎó£¬ÇëÖØĞÂÌîĞ´');
 				} else if(type == 'qaa') {
-					showError('é©—è­‰å•ç­”éŒ¯èª¤ï¼Œè«‹é‡æ–°å¡«å¯«');
+					showError('ÑéÖ¤ÎÊ´ğ´íÎó£¬ÇëÖØĞÂÌîĞ´');
 				}
 				recall(0);
 			}
@@ -165,7 +165,7 @@ function _copycode(obj) {
 		rng.moveToElementText(obj);
 		rng.select();
 	}
-	setCopy(BROWSER.ie ? obj.innerText.replace(/\r\n\r\n/g, '\r\n') : obj.textContent, 'ä»£ç¢¼å·²è¤‡è£½åˆ°å‰ªè²¼æ¿');
+	setCopy(BROWSER.ie ? obj.innerText.replace(/\r\n\r\n/g, '\r\n') : obj.textContent, '´úÂëÒÑ¸´ÖÆµ½¼ôÌù°å');
 }
 
 function _setCopy(text, msg){
@@ -176,10 +176,10 @@ function _setCopy(text, msg){
 				showPrompt(null, null, '<span>' + msg + '</span>', 1500);
 			}
 		} else {
-			showDialog('<div class="c"><div style="width: 200px; text-align: center;">è¤‡è£½å¤±æ•—ï¼Œè«‹é¸æ“‡ã€Œå…è¨±è¨ªå•ã€</div></div>', 'alert');
+			showDialog('<div class="c"><div style="width: 200px; text-align: center;">¸´ÖÆÊ§°Ü£¬ÇëÑ¡Ôñ¡°ÔÊĞí·ÃÎÊ¡±</div></div>', 'alert');
 		}
 	} else {
-		var msg = '<div class="c"><div style="width: 200px; text-align: center; text-decoration:underline;">é»æ­¤è¤‡è£½åˆ°å‰ªè²¼æ¿</div>' +
+		var msg = '<div class="c"><div style="width: 200px; text-align: center; text-decoration:underline;">µã´Ë¸´ÖÆµ½¼ôÌù°å</div>' +
 		AC_FL_RunContent('id', 'clipboardswf', 'name', 'clipboardswf', 'devicefont', 'false', 'width', '200', 'height', '40', 'src', STATICURL + 'image/common/clipboard.swf', 'menu', 'false',  'allowScriptAccess', 'sameDomain', 'swLiveConnect', 'true', 'wmode', 'transparent', 'style' , 'margin-top:-20px') + '</div>';
 		showDialog(msg, 'info');
 		text = text.replace(/[\xA0]/g, ' ');
@@ -226,27 +226,27 @@ function _showselect(obj, inpid, t, rettype) {
 		$('append_parent').appendChild(div);
 		s = '';
 		if(!t) {
-			s += showselect_row(inpid, 'ä¸€å¤©', 1, 0, rettype);
-			s += showselect_row(inpid, 'ä¸€å‘¨', 7, 0, rettype);
-			s += showselect_row(inpid, 'ä¸€å€‹æœˆ', 30, 0, rettype);
-			s += showselect_row(inpid, 'ä¸‰å€‹æœˆ', 90, 0, rettype);
-			s += showselect_row(inpid, 'è‡ªå®šç¾©', -2);
+			s += showselect_row(inpid, 'Ò»Ìì', 1, 0, rettype);
+			s += showselect_row(inpid, 'Ò»ÖÜ', 7, 0, rettype);
+			s += showselect_row(inpid, 'Ò»¸öÔÂ', 30, 0, rettype);
+			s += showselect_row(inpid, 'Èı¸öÔÂ', 90, 0, rettype);
+			s += showselect_row(inpid, '×Ô¶¨Òå', -2);
 		} else {
 			if($(t)) {
 				var lis = $(t).getElementsByTagName('LI');
 				for(i = 0;i < lis.length;i++) {
 					s += '<a href="javascript:;" onclick="$(\'' + inpid + '\').value = this.innerHTML;$(\''+obj.id+'_menu\').style.display=\'none\'">' + lis[i].innerHTML + '</a>';
 				}
-				s += showselect_row(inpid, 'è‡ªå®šç¾©', -1);
+				s += showselect_row(inpid, '×Ô¶¨Òå', -1);
 			} else {
-				s += '<a href="javascript:;" onclick="$(\'' + inpid + '\').value = \'0\'">æ°¸ä¹…</a>';
-				s += showselect_row(inpid, '7 å¤©', 7, 1, rettype);
-				s += showselect_row(inpid, '14 å¤©', 14, 1, rettype);
-				s += showselect_row(inpid, 'ä¸€å€‹æœˆ', 30, 1, rettype);
-				s += showselect_row(inpid, 'ä¸‰å€‹æœˆ', 90, 1, rettype);
-				s += showselect_row(inpid, 'åŠå¹´', 182, 1, rettype);
-				s += showselect_row(inpid, 'ä¸€å¹´', 365, 1, rettype);
-				s += showselect_row(inpid, 'è‡ªå®šç¾©', -1);
+				s += '<a href="javascript:;" onclick="$(\'' + inpid + '\').value = \'0\'">ÓÀ¾Ã</a>';
+				s += showselect_row(inpid, '7 Ìì', 7, 1, rettype);
+				s += showselect_row(inpid, '14 Ìì', 14, 1, rettype);
+				s += showselect_row(inpid, 'Ò»¸öÔÂ', 30, 1, rettype);
+				s += showselect_row(inpid, 'Èı¸öÔÂ', 90, 1, rettype);
+				s += showselect_row(inpid, '°ëÄê', 182, 1, rettype);
+				s += showselect_row(inpid, 'Ò»Äê', 365, 1, rettype);
+				s += showselect_row(inpid, '×Ô¶¨Òå', -1);
 			}
 		}
 		$(div.id).innerHTML = s;
@@ -257,20 +257,25 @@ function _showselect(obj, inpid, t, rettype) {
 	}
 }
 
-function _zoom(obj, zimg, nocover, pn) {
+function _zoom(obj, zimg, nocover, pn, showexif) {
 	zimg = !zimg ? obj.src : zimg;
+	showexif = !parseInt(showexif) ? 0 : showexif;
 	if(!zoomstatus) {
 		window.open(zimg, '', '');
 		return;
 	}
 	if(!obj.id) obj.id = 'img_' + Math.random();
+	var faid = !obj.getAttribute('aid') ? 0 : obj.getAttribute('aid');
 	var menuid = 'imgzoom';
+	var menu = $(menuid);
 	var zoomid = menuid + '_zoom';
-	var imgtitle = !nocover && obj.title ? '<div class="ptn pbn">' + obj.title + '</div>' : '';
+	var imgtitle = !nocover && obj.title ? '<div class="imgzoom_title">' + obj.title + '</div>' +
+		(showexif ? '<div id="' + zoomid + '_exif" class="imgzoom_exif onmouseover="this.className=\'imgzoom_exif imgzoom_exif_hover\'" onmouseout="this.className=\'imgzoom_exif\'"></div>' : '')
+		: '';
 	var cover = !nocover ? 1 : 0;
 	var pn = !pn ? 0 : 1;
 	var maxh = (document.documentElement.clientHeight ? document.documentElement.clientHeight : document.body.clientHeight) - 70;
-	var loadCheck = function (obj) {
+	var loadCheck = function (obj) {;
 		if(obj.complete) {
 			var imgw = loading.width;
 			var imgh = loading.height;
@@ -278,11 +283,23 @@ function _zoom(obj, zimg, nocover, pn) {
 			var w = document.body.clientWidth * 0.95;
 			w = imgw > w ? w : imgw;
 			var h = w / r;
+			if(w < 100 & h < 100) {
+				$(menuid + '_waiting').style.display = 'none';
+				hideMenu();
+				return;
+			}
 			if(h > maxh) {
 				h = maxh;
 				w = h * r;
 			}
+			if($(menuid)) {
+				$(menuid).removeAttribute('top_');$(menuid).removeAttribute('left_');
+				clearTimeout($(menuid).getAttribute('timer'));
+			}
 			showimage(zimg, w, h, imgw, imgh);
+			if(showexif && faid) {
+				ajaxget('forum.php?mod=ajax&action=exif&aid=' + faid, zoomid + '_exif');
+			}
 		} else {
 			setTimeout(function () { loadCheck(loading); }, 100);
 		}
@@ -296,7 +313,7 @@ function _zoom(obj, zimg, nocover, pn) {
 				waiting.style.opacity = '0.8';
 				waiting.style.filter = 'alpha(opacity=80)';
 				waiting.style.position = 'absolute';
-				waiting.style.zIndex = 100000;
+				waiting.style.zIndex = '100000';
 				$('append_parent').appendChild(waiting);
 			}
 		}
@@ -324,9 +341,9 @@ function _zoom(obj, zimg, nocover, pn) {
 		$(menuid + '_zoomlayer').style.display = '';
 		$(menuid + '_img').style.width = 'auto';
 		$(menuid + '_img').style.height = 'auto';
-		$(menuid).style.width = (w < 300 ? 300 : w + 20) + 'px';
-		mheight = h + 50;
-		$(menuid).style.height = mheight + 'px';
+		$(menuid).style.width = (w < 300 ? 320 : w + 20) + 'px';
+		mheight = h + 63;
+		menu.style.height = mheight + 'px';
 		$(menuid + '_zoomlayer').style.height = (mheight < 120 ? 120 : mheight) + 'px';
 		$(menuid + '_img').innerHTML = '<img id="' + zoomid + '" src="' + zimg + '" width="' + w + '" height="' + h + '" w="' + imgw + '" h="' + imgh + '" />' + imgtitle;
 		if($(menuid + '_imglink')) {
@@ -335,51 +352,116 @@ function _zoom(obj, zimg, nocover, pn) {
 		setMenuPosition('', menuid, '00');
 		adjustpn(h);
 	};
+	var adjustTimer = 0;
+	var adjustTimerCount = 0;
+	var wheelDelta = 0;
+	var clientX = 0;
+	var clientY = 0;
 	var adjust = function(e, a) {
-		if(!$(zoomid)) {
+		if(BROWSER.ie && BROWSER.ie<7) {
+		} else {
+			if(adjustTimerCount) {
+				adjustTimer = (function(){
+					return setTimeout(function () {
+						adjustTimerCount++;
+						adjust(e);
+					}, 20);
+					})();
+					$(menuid).setAttribute('timer', adjustTimer);
+				if(adjustTimerCount > 17) {
+					clearTimeout(adjustTimer);
+					adjustTimerCount = 0;
+					doane();
+				}
+			} else if(!a) {
+				adjustTimerCount = 1;
+				if(adjustTimer) {
+					clearTimeout(adjustTimer);
+					adjust(e, a);
+				} else {
+					adjust(e, a);
+				}
+				doane();
+			}
+		}
+		var ele = $(zoomid);
+		if(!ele) {
 			return;
 		}
-		var imgw = $(zoomid).getAttribute('w');
-		var imgh = $(zoomid).getAttribute('h');
-		var imgwstep = imgw / 10;
-		var imghstep = imgh / 10;
+		var imgw = ele.getAttribute('w');
+		var imgh = ele.getAttribute('h');
+
 		if(!a) {
-			if(!e) e = window.event;
-			if(e.altKey || e.shiftKey || e.ctrlKey) return;
+			e = e || window.event;
+			try {
+				if(e.altKey || e.shiftKey || e.ctrlKey) return;
+			} catch (e) {
+				e = {'wheelDelta':wheelDelta, 'clientX':clientX, 'clientY':clientY};
+			}
+			var step = 0;
 			if(e.wheelDelta <= 0 || e.detail > 0) {
-				if($(zoomid).width - imgwstep <= 200 || $(zoomid).height - imghstep <= 200) {
+				if(ele.width - 1 <= 200 || ele.height - 1 <= 200) {
+					clearTimeout(adjustTimer);
+					adjustTimerCount = 0;
 					doane(e);return;
 				}
-				$(zoomid).width -= imgwstep;
-				$(zoomid).height -= imghstep;
+				step = parseInt(imgw/ele.width)-4;
 			} else {
-				if($(zoomid).width + imgwstep >= imgw) {
+				if(ele.width + 1 >= imgw*40) {
+					clearTimeout(adjustTimer);
+					adjustTimerCount = 0;
 					doane(e);return;
 				}
-				$(zoomid).width += imgwstep;
-				$(zoomid).height += imghstep;
+				step = 4-parseInt(imgw/ele.width);
+			}
+			if(BROWSER.ie && BROWSER.ie<7) { step *= 5;}
+			wheelDelta = e.wheelDelta;
+			clientX = e.clientX;
+			clientY = e.clientY;
+			var ratio = 0;
+			if(imgw > imgh) {
+				ratio = step/ele.height;
+				ele.height += step;
+				ele.width = imgw*(ele.height/imgh);
+			} else if(imgw < imgh) {
+				ratio = step/ele.width;
+				ele.width += step;
+				ele.height = imgh*(ele.width/imgw);
+			}
+			if(BROWSER.ie && BROWSER.ie<7) {
+				setMenuPosition('', menuid, '00');
+			} else {
+				var menutop = parseFloat(menu.getAttribute('top_') || menu.style.top);
+				var menuleft = parseFloat(menu.getAttribute('left_') || menu.style.left);
+				var imgY = clientY - menutop - 39;
+				var imgX = clientX - menuleft - 10;
+				var newTop = (menutop - imgY*ratio) + 'px';
+				var newLeft = (menuleft - imgX*ratio) + 'px';
+				menu.style.top = newTop;
+				menu.style.left = newLeft;
+				menu.setAttribute('top_', newTop);
+				menu.setAttribute('left_', newLeft);
 			}
 		} else {
-			$(zoomid).width = imgw;
-			$(zoomid).height = imgh;
+			ele.width = imgw;
+			ele.height = imgh;
 		}
-		$(menuid).style.width = (parseInt($(zoomid).width < 300 ? 300 : parseInt($(zoomid).width)) + 20) + 'px';
-		mheight = (parseInt($(zoomid).height) + 50);
-		$(menuid).style.height = mheight + 'px';
+		menu.style.width = (parseInt(ele.width < 300 ? 300 : parseInt(ele.width)) + 20) + 'px';
+		var mheight = (parseInt(ele.height) + 50);
+		menu.style.height = mheight + 'px';
 		$(menuid + '_zoomlayer').style.height = (mheight < 120 ? 120 : mheight) + 'px';
-		adjustpn($(zoomid).height);
-		setMenuPosition('', menuid, '00');
+		adjustpn(ele.height);
 		doane(e);
 	};
-	if(!$(menuid) && !pn) {
+	if(!menu && !pn) {
 		menu = document.createElement('div');
 		menu.id = menuid;
 		if(cover) {
-			menu.innerHTML = '<div class="zoominner" id="' + menuid + '_zoomlayer" style="display:none"><p><span class="y"><a id="' + menuid + '_imglink" class="imglink" target="_blank" title="åœ¨æ–°çª—å£æ‰“é–‹">åœ¨æ–°çª—å£æ‰“é–‹</a><a id="' + menuid + '_adjust" href="javascipt:;" class="imgadjust" title="å¯¦éš›å¤§å°">å¯¦éš›å¤§å°</a>' +
-				'<a href="javascript:;" onclick="hideMenu()" class="imgclose" title="é—œé–‰">é—œé–‰</a></span>é¼ æ¨™æ»¾è¼ªç¸®æ”¾åœ–ç‰‡</p>' +
+			menu.innerHTML = '<div class="zoominner" id="' + menuid + '_zoomlayer" style="display:none"><p><span class="y"><a id="' + menuid + '_imglink" class="imglink" target="_blank" title="ÔÚĞÂ´°¿Ú´ò¿ª">ÔÚĞÂ´°¿Ú´ò¿ª</a><a id="' + menuid + '_adjust" href="javascipt:;" class="imgadjust" title="Êµ¼Ê´óĞ¡">Êµ¼Ê´óĞ¡</a>' +
+				'<a href="javascript:;" onclick="hideMenu()" class="imgclose" title="¹Ø±Õ">¹Ø±Õ</a></span>Êó±ê¹öÂÖËõ·ÅÍ¼Æ¬</p>' +
 				'<div class="zimg_p" id="' + menuid + '_picpage"></div><div class="hm" id="' + menuid + '_img"></div></div>';
 		} else {
-			menu.innerHTML = '<div class="popupmenu_popup" id="' + menuid + '_zoomlayer" style="width:auto"><span class="right y"><a href="javascript:;" onclick="hideMenu()" class="flbc" style="width:20px;margin:0 0 2px 0">é—œé–‰</a></span>é¼ æ¨™æ»¾è¼ªç¸®æ”¾åœ–ç‰‡<div class="zimg_p" id="' + menuid + '_picpage"></div><div class="hm" id="' + menuid + '_img"></div></div>';
+			menu.innerHTML = '<div class="popupmenu_popup" id="' + menuid + '_zoomlayer" style="width:auto"><span class="right y"><a href="javascript:;" onclick="hideMenu()" class="flbc" style="width:20px;margin:0 0 2px 0">¹Ø±Õ</a></span>Êó±ê¹öÂÖËõ·ÅÍ¼Æ¬<div class="zimg_p" id="' + menuid + '_picpage"></div><div class="hm" id="' + menuid + '_img"></div></div>';
 		}
 		if(BROWSER.ie || BROWSER.chrome){
 			menu.onmousewheel = adjust;
@@ -405,9 +487,9 @@ function _zoom(obj, zimg, nocover, pn) {
 			}
 			if(authorcurrent !== '') {
 				paid = authorcurrent > 0 ? authorimgs[authorcurrent - 1] : authorimgs[authorlength - 1];
-				picpage += ' <div id="zimg_prev" onmouseover="dragMenuDisabled=true;this.style.backgroundPosition=\'0 50px\'" onmouseout="dragMenuDisabled=false;this.style.backgroundPosition=\'0 -100px\';" onclick="zoom($(\'aimg_' + paid + '\'), $(\'aimg_' + paid + '\').getAttribute(\'zoomfile\'), 0, 1)" class="zimg_prev"><strong>ä¸Šä¸€å¼µ</strong></div> ';
+				picpage += ' <div id="zimg_prev" onmouseover="dragMenuDisabled=true;this.style.backgroundPosition=\'0 50px\'" onmouseout="dragMenuDisabled=false;this.style.backgroundPosition=\'0 -100px\';" onclick="_zoom_page(\'' + paid + '\', ' + (showexif ? 1 : 0) + ')" class="zimg_prev"><strong>ÉÏÒ»ÕÅ</strong></div> ';
 				paid = authorcurrent < authorlength - 1 ? authorimgs[authorcurrent + 1] : authorimgs[0];
-				picpage += ' <div id="zimg_next" onmouseover="dragMenuDisabled=true;this.style.backgroundPosition=\'100% 50px\'" onmouseout="dragMenuDisabled=false;this.style.backgroundPosition=\'100% -100px\';" onclick="zoom($(\'aimg_' + paid + '\'), $(\'aimg_' + paid + '\').getAttribute(\'zoomfile\'), 0, 1)" class="zimg_next"><strong>ä¸‹ä¸€å¼µ</strong></div> ';
+				picpage += ' <div id="zimg_next" onmouseover="dragMenuDisabled=true;this.style.backgroundPosition=\'100% 50px\'" onmouseout="dragMenuDisabled=false;this.style.backgroundPosition=\'100% -100px\';" onclick="_zoom_page(\'' + paid + '\', ' + (showexif ? 1 : 0) + ')" class="zimg_next"><strong>ÏÂÒ»ÕÅ</strong></div> ';
 			}
 			if(picpage) {
 				$(menuid + '_picpage').innerHTML = picpage;
@@ -415,6 +497,11 @@ function _zoom(obj, zimg, nocover, pn) {
 		}
 	}
 	showMenu({'ctrlid':obj.id,'menuid':menuid,'duration':3,'pos':'00','cover':cover,'drag':menuid,'maxh':''});
+}
+
+function _zoom_page(paid, showexif) {
+	var imagesrc = $('aimg_' + paid).getAttribute('zoomfile') ? $('aimg_' + paid).getAttribute('zoomfile') : $('aimg_' + paid).getAttribute('file');
+	zoom($('aimg_' + paid), imagesrc, 0, 1, showexif ? 1 : 0);
 }
 
 function _switchTab(prefix, current, total, activeclass) {
@@ -823,13 +910,13 @@ function _showTip(ctrlobj) {
 	if(!$(menuid)) {
 		var div = document.createElement('div');
 		div.id = ctrlobj.id + '_menu';
-		div.className = 'tip tip_js';
+		div.className = 'tip tip_4';
 		div.style.display = 'none';
 		div.innerHTML = '<div class="tip_horn"></div><div class="tip_c">' + ctrlobj.getAttribute('tip') + '</div>';
 		$('append_parent').appendChild(div);
 	}
 	$(ctrlobj.id).onmouseout = function () { hideMenu('', 'prompt'); };
-	showMenu({'mtype':'prompt','ctrlid':ctrlobj.id,'pos':'210!','duration':2,'zindex':JSMENU['zIndex']['prompt']});
+	showMenu({'mtype':'prompt','ctrlid':ctrlobj.id,'pos':'12!','duration':2,'zindex':JSMENU['zIndex']['prompt']});
 }
 
 function _showPrompt(ctrlid, evt, msg, timeout) {
@@ -940,7 +1027,7 @@ function _showColorBox(ctrlid, layer, k, bgcolor) {
 		menu.unselectable = true;
 		menu.style.display = 'none';
 		var coloroptions = ['Black', 'Sienna', 'DarkOliveGreen', 'DarkGreen', 'DarkSlateBlue', 'Navy', 'Indigo', 'DarkSlateGray', 'DarkRed', 'DarkOrange', 'Olive', 'Green', 'Teal', 'Blue', 'SlateGray', 'DimGray', 'Red', 'SandyBrown', 'YellowGreen', 'SeaGreen', 'MediumTurquoise', 'RoyalBlue', 'Purple', 'Gray', 'Magenta', 'Orange', 'Yellow', 'Lime', 'Cyan', 'DeepSkyBlue', 'DarkOrchid', 'Silver', 'Pink', 'Wheat', 'LemonChiffon', 'PaleGreen', 'PaleTurquoise', 'LightBlue', 'Plum', 'White'];
-		var colortexts = ['é»‘è‰²', 'èµ­è‰²', 'æš—æ©„æ¬–ç¶ è‰²', 'æš—ç¶ è‰²', 'æš—ç°è—è‰²', 'æµ·è»è‰²', 'é›é’è‰²', 'å¢¨ç¶ è‰²', 'æš—ç´…è‰²', 'æš—æ¡”é»ƒè‰²', 'æ©„æ¬–è‰²', 'ç¶ è‰²', 'æ°´é´¨è‰²', 'è—è‰²', 'ç°çŸ³è‰²', 'æš—ç°è‰²', 'ç´…è‰²', 'æ²™è¤è‰²', 'é»ƒç¶ è‰²', 'æµ·ç¶ è‰²', 'é–“ç¶ å¯¶çŸ³', 'çš‡å®¶è—', 'ç´«è‰²', 'ç°è‰²', 'ç´…ç´«è‰²', 'æ©™è‰²', 'é»ƒè‰²', 'é…¸æ©™è‰²', 'é’è‰²', 'æ·±å¤©è—è‰²', 'æš—ç´«è‰²', 'éŠ€è‰²', 'ç²‰è‰²', 'æ·ºé»ƒè‰²', 'æª¸æª¬ç¶¢è‰²', 'è’¼ç¶ è‰²', 'è’¼å¯¶çŸ³ç¶ ', 'äº®è—è‰²', 'æ´‹æè‰²', 'ç™½è‰²'];
+		var colortexts = ['ºÚÉ«', 'ô÷É«', '°µéÏé­ÂÌÉ«', '°µÂÌÉ«', '°µ»ÒÀ¶É«', 'º£¾üÉ«', 'µåÇàÉ«', 'Ä«ÂÌÉ«', '°µºìÉ«', '°µ½Û»ÆÉ«', 'éÏé­É«', 'ÂÌÉ«', 'Ë®Ñ¼É«', 'À¶É«', '»ÒÊ¯É«', '°µ»ÒÉ«', 'ºìÉ«', 'É³ºÖÉ«', '»ÆÂÌÉ«', 'º£ÂÌÉ«', '¼äÂÌ±¦Ê¯', '»Ê¼ÒÀ¶', '×ÏÉ«', '»ÒÉ«', 'ºì×ÏÉ«', '³ÈÉ«', '»ÆÉ«', 'Ëá³ÈÉ«', 'ÇàÉ«', 'ÉîÌìÀ¶É«', '°µ×ÏÉ«', 'ÒøÉ«', '·ÛÉ«', 'Ç³»ÆÉ«', 'ÄûÃÊ³ñÉ«', '²ÔÂÌÉ«', '²Ô±¦Ê¯ÂÌ', 'ÁÁÀ¶É«', 'ÑóÀîÉ«', '°×É«'];
 		var str = '';
 		for(var i = 0; i < 40; i++) {
 			str += '<input type="button" style="background-color: ' + coloroptions[i] + '"' + (typeof setEditorTip == 'function' ? ' onmouseover="setEditorTip(\'' + colortexts[i] + '\')" onmouseout="setEditorTip(\'\')"' : '') + ' onclick="'
@@ -1014,12 +1101,12 @@ function _widthauto(obj) {
 		}
 		HTMLNODE.className += ' widthauto';
 		setcookie('widthauto', 1, 86400 * 30);
-		obj.innerHTML = 'åˆ‡æ›åˆ°çª„ç‰ˆ';
+		obj.innerHTML = 'ÇĞ»»µ½Õ­°æ';
 	} else {
 		$('css_widthauto').disabled = true;
 		HTMLNODE.className = HTMLNODE.className.replace(' widthauto', '');
 		setcookie('widthauto', -1, 86400 * 30);
-		obj.innerHTML = 'åˆ‡æ›åˆ°å¯¬ç‰ˆ';
+		obj.innerHTML = 'ÇĞ»»µ½¿í°æ';
 	}
 	hideMenu();
 }
@@ -1030,11 +1117,25 @@ function _showCreditmenu() {
 		menu.id = 'extcreditmenu_menu';
 		menu.style.display = 'none';
 		menu.className = 'p_pop';
-		menu.innerHTML = '<div class="p_opt"><img src="'+ IMGDIR + '/loading.gif" width="16" height="16" class="vm" /> è«‹ç¨å€™...</div>';
+		menu.innerHTML = '<div class="p_opt"><img src="'+ IMGDIR + '/loading.gif" width="16" height="16" class="vm" /> ÇëÉÔºò...</div>';
 		$('append_parent').appendChild(menu);
 		ajaxget($('extcreditmenu').href, 'extcreditmenu_menu', 'ajaxwaitid');
 	}
 	showMenu({'ctrlid':'extcreditmenu','ctrlclass':'a','duration':1});
+}
+
+function _showForummenu(fid) {
+	if(!$('fjump_menu')) {
+		fid = !fid ? 0 : fid;
+		menu = document.createElement('div');
+		menu.id = 'fjump_menu';
+		menu.style.display = 'none';
+		menu.className = 'p_pop';
+		menu.innerHTML = '<div class="p_opt"><img src="'+ IMGDIR + '/loading.gif" width="16" height="16" class="vm" /> ÇëÉÔºò...</div>';
+		$('append_parent').appendChild(menu);
+		ajaxget('forum.php?mod=ajax&action=forumjump&jfid=' + fid, 'fjump_menu', 'ajaxwaitid');
+	}
+	showMenu({'ctrlid':'fjump','ctrlclass':'a','duration':2});
 }
 
 function _imageRotate(imgid, direct) {
@@ -1101,10 +1202,8 @@ function _createPalette(colorid, id, func) {
 		dom.innerHTML = iframe;
 		$('append_parent').appendChild(dom);
 	}
-	var base = document.getElementsByTagName('base');
-	var baseurl = base && base > 0 ? base[0].getAttribute('href') : '';
 	func = !func ? '' : '|' + func;
-	window.frames["c"+colorid+"_frame"].location.href = baseurl+STATICURL+"image/admincp/getcolor.htm?c"+colorid+"|"+id+func;
+	window.frames["c"+colorid+"_frame"].location.href = STATICURL+"image/admincp/getcolor.htm?c"+colorid+"|"+id+func;
 	showMenu({'ctrlid':'c'+colorid});
 	var iframeid = "c"+colorid+"_menu";
 	_attachEvent(window, 'scroll', function(){hideMenu(iframeid);});

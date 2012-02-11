@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: task_member.php 16614 2010-09-10 06:26:06Z monkey $
+ *      $Id: task_member.php 26595 2011-12-16 03:50:07Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -27,6 +27,7 @@ class task_member {
 			'value' => array(
 				array('favorite', 'member_complete_var_act_favorite'),
 				array('magic', 'member_complete_var_act_magic'),
+				array('userapp', 'member_complete_var_act_userapp'),
 			),
 			'default' => 'favorite',
 			'sort' => 'complete',
@@ -48,9 +49,23 @@ class task_member {
 	function preprocess($task) {
 		global $_G;
 
-		$act = DB::result_first("SELECT value FROM ".DB::table('common_taskvar')." WHERE taskid='$task[taskid]' AND variable='act'");
+		$act = C::t('common_taskvar')->get_value_by_taskid($task['taskid'], 'act');
 		if($act == 'favorite') {
-			DB::query("REPLACE INTO ".DB::table('forum_spacecache')." (uid, variable, value, expiration) VALUES ('$_G[uid]', 'favorite$task[taskid]', '".DB::result_first("SELECT COUNT(*) FROM ".DB::table('home_favorite')." WHERE uid='$_G[uid]' AND idtype='tid'")."', '$_G[timestamp]')");
+			$value = C::t('home_favorite')->count_by_uid_idtype($_G['uid'], 'tid');
+			C::t('forum_spacecache')->insert(array(
+				'uid' => $_G['uid'],
+				'variable' => 'favorite'.$task['taskid'],
+				'value' => $value,
+				'expiration' => $_G['timestamp'],
+			), false, true);
+		} elseif($act == 'userapp') {
+			$num = C::t('home_userapp')->count_by_uid($_G['uid']);
+			C::t('forum_spacecache')->insert(array(
+				'uid' => $_G['uid'],
+				'variable' => 'userapp'.$task['taskid'],
+				'value' => $num,
+				'expiration' => $_G['timestamp'],
+			), false, true);
 		}
 	}
 
@@ -59,8 +74,7 @@ class task_member {
 
 		$taskvars = array('num' => 0);
 		$num = 0;
-		$query = DB::query("SELECT variable, value FROM ".DB::table('common_taskvar')." WHERE taskid='$task[taskid]'");
-		while($taskvar = DB::fetch($query)) {
+		foreach(C::t('common_taskvar')->fetch_all_by_taskid($task['taskid']) as $taskvar) {
 			if($taskvar['value']) {
 				$taskvars[$taskvar['variable']] = $taskvar['value'];
 			}
@@ -68,14 +82,21 @@ class task_member {
 
 		$taskvars['time'] = floatval($taskvars['time']);
 		if($taskvars['act'] == 'favorite') {
-			$num = DB::result_first("SELECT COUNT(*) FROM ".DB::table('home_favorite')." WHERE uid='$_G[uid]' AND idtype='tid'") - DB::result_first("SELECT value FROM ".DB::table('forum_spacecache')." WHERE uid='$_G[uid]' AND variable='favorite$task[taskid]'");
+			$favorite = C::t('forum_spacecache')->fetch($_G['uid'], 'favorite'.$task['taskid']);
+			$favorite = $favorite['value'];
+			$num = C::t('home_favorite')->count_by_uid_idtype($_G['uid'], 'tid') - $favorite;
 		} elseif($taskvars['act'] == 'magic') {
-			$num = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_magiclog')." WHERE action='2' AND uid='$_G[uid]'".($taskvars['time'] ? " AND dateline BETWEEN $task[applytime] AND $task[applytime]+3600*$taskvars[time]" : " AND dateline>$task[applytime]"));
+			$maxtime = $taskvars['time'] ? $task['applytime']+3600*$taskvars['time'] : 0;
+			$num = C::t('common_magiclog')->count_by_action_uid_dateline(2, $_G['uid'], $task['applytime'], $maxtime);
+		} elseif($taskvars['act'] == 'userapp') {
+			$userapp = C::t('forum_spacecache')->fetch($_G['uid'], 'userapp'.$task['taskid']);
+			$userapp = $userapp['value'];
+			$num = C::t('home_userapp')->count_by_uid($_G['uid']) - $userapp;
 		}
 
 		if($num && $num >= $taskvars['num']) {
-			if($taskvars['act'] == 'favorite') {
-				DB::query("DELETE FROM ".DB::table('forum_spacecache')." WHERE uid='$_G[uid]' AND variable='$taskvars[act]$task[taskid]'");
+			if($taskvars['act'] == 'favorite' || $taskvars['act'] == 'userapp') {
+				C::t('forum_spacecache')->delete($_G['uid'], $taskvars['act'].$task['taskid']);
 			}
 			return TRUE;
 		} elseif($taskvars['time'] && TIMESTAMP >= $task['applytime'] + 3600 * $taskvars['time'] && (!$num || $num < $taskvars['num'])) {
@@ -93,6 +114,8 @@ class task_member {
 		$taskvars['complete']['num']['value'] = intval($taskvars['complete']['num']['value']);
 		if($taskvars['complete']['act']['value'] == 'favorite') {
 			$return .= lang('task/member', 'task_complete_act_favorite', array('value' => $taskvars['complete']['num']['value']));
+		} elseif($taskvars['complete']['act']['value'] == 'userapp') {
+			$return .= lang('task/member', 'task_complete_act_userapp', array('value' => $taskvars['complete']['num']['value']));
 		} else {
 			$return .= lang('task/member', 'task_complete_act_magic', array('value' => $taskvars['complete']['num']['value']));
 		}

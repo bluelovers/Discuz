@@ -4,19 +4,23 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_showip.php 14918 2010-08-17 05:35:02Z chenchunshao $
+ *      $Id: lang_showip.php 27449 2012-02-01 05:32:35Z zhangguosheng $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 $lang = array
 (
-	'showip_name' => 'çªºè¦–å¡',
-	'showip_desc' => 'å¯ä»¥æŸ¥çœ‹æŒ‡å®šç”¨æˆ¶çš„ IP',
-	'showip_targetuser' => 'ä½ è¦æŸ¥çœ‹èª°çš„ IP',
-	'showip_info_nonexistence' => 'è«‹è¼¸å…¥ç”¨æˆ¶å',
-	'showip_ip_message' => '{username} çš„ IP ç‚º {ip}',
-	'showip_info_noperm' => 'å°ä¸èµ·ï¼Œä½ ç„¡æ¬ŠæŸ¥çœ‹æ­¤äººçš„ IP',
+	'showip_name' => '¿úÊÓ¿¨',
+	'showip_desc' => '¿ÉÒÔ²é¿´Ö¸¶¨ÓÃ»§µÄ IP',
+	'showip_targetuser' => 'ÄúÒª²é¿´Ë­µÄ IP',
+	'showip_info_nonexistence' => 'ÇëÊäÈëÓÃ»§Ãû',
+	'showip_ip_message' => '{username} µÄ IP Îª {ip}',
+	'showip_info_noperm' => '¶Ô²»Æð£¬ÄúÎÞÈ¨²é¿´´ËÈËµÄ IP',
 
-	'showip_notification' => 'ä½ è¢«äººä½¿ç”¨äº†{magicname}',
+	'showip_notification' => 'Äú±»ÈËÊ¹ÓÃÁË{magicname}',
 );
 
 ?>

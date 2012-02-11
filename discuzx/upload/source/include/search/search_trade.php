@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: search_trade.php 18409 2010-11-23 03:58:39Z zhangguosheng $
+ *      $Id: search_trade.php 25387 2011-11-08 08:07:16Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -16,10 +16,10 @@ $ascdesc = isset($ascdesc) && $ascdesc == 'asc' ? 'asc' : 'desc';
 
 if(!empty($searchid)) {
 
-	$page = max(1, intval($_G['gp_page']));
+	$page = max(1, intval($_GET['page']));
 	$start_limit = ($page - 1) * $_G['tpp'];
 
-	$index = DB::fetch_first("SELECT searchstring, keywords, threads, tids FROM ".DB::table('common_searchindex')." WHERE searchid='$searchid'");
+	$index = C::t('common_searchindex')->fetch($searchid);
 	if(!$index) {
 		showmessage('search_id_invalid');
 	}
@@ -28,8 +28,8 @@ if(!empty($searchid)) {
 
 	$threadlist = $tradelist = array();
 
-	$query = DB::query("SELECT * FROM ".DB::table('forum_trade')." WHERE pid IN ($index[tids]) ORDER BY $orderby $ascdesc LIMIT $start_limit, $_G[tpp]");
-	while($tradethread = DB::fetch($query)) {
+	$query = C::t('forum_trade')->fetch_goods(0, explode(',', $index['tids']), $orderby, $ascdesc, $start_limit, $_G['tpp']);
+	foreach($query as $tradethread) {
 		$tradethread['lastupdate'] = dgmdate($tradethread['lastupdate'], 'u');
 		$tradethread['lastbuyer'] = rawurlencode($tradethread['lastbuyer']);
 		if($tradethread['expiration']) {
@@ -81,14 +81,7 @@ if(!empty($searchid)) {
 	$searchstring = 'trade|'.addslashes($srchtxt).'|'.intval($srchtypeid).'|'.intval($srchuid).'|'.$srchuname.'|'.addslashes($fids).'|'.intval($srchfrom).'|'.intval($before).'|'.$srchfilter;
 	$searchindex = array('id' => 0, 'dateline' => '0');
 
-	$query = DB::query("SELECT searchid, dateline,
-		('".$_G['setting']['searchctrl']."'<>'0' AND ".(empty($_G['uid']) ? "useip='$_G[clientip]'" : "uid='$_G[uid]'")." AND $_G[timestamp]-dateline<".$_G['setting']['searchctrl'].") AS flood,
-		(searchstring='$searchstring' AND expiration>'$_G[timestamp]') AS indexvalid
-		FROM ".DB::table('common_searchindex')."
-		WHERE ('".$_G['setting']['searchctrl']."'<>'0' AND ".(empty($_G['uid']) ? "useip='$_G[clientip]'" : "uid='$_G[uid]'")." AND $_G[timestamp]-dateline<".$_G['setting']['searchctrl'].") OR (searchstring='$searchstring' AND expiration>'$_G[timestamp]')
-		ORDER BY flood");
-
-	while($index = DB::fetch($query)) {
+	foreach(C::t('common_searchindex')->fetch_all_search($_G['setting']['searchctrl'], $_G['clientip'], $_G['uid'], $_G['timestamp'], $searchstring) as $index) {
 		if($index['indexvalid'] && $index['dateline'] > $searchindex['dateline']) {
 			$searchindex = array('id' => $index['searchid'], 'dateline' => $index['dateline']);
 			break;
@@ -112,7 +105,7 @@ if(!empty($searchid)) {
 		}
 
 		if($_G['setting']['maxspm']) {
-			if(DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_searchindex')." WHERE dateline>'$_G[timestamp]'-60") >= $_G['setting']['maxspm']) {
+			if(C::t('common_searchindex')->count_by_dateline($_G['timestamp']) >= $_G['setting']['maxspm']) {
 				showmessage('search_toomany', 'forum.php?mod=search', array('maxspm' => $_G['setting']['maxspm']));
 			}
 		}
@@ -124,28 +117,22 @@ if(!empty($searchid)) {
 
 			$searchfrom = $before ? '<=' : '>=';
 			$searchfrom .= TIMESTAMP - $srchfrom;
-			$sqlsrch = "FROM ".DB::table('forum_trade')." tr INNER JOIN ".DB::table('forum_thread')." t ON tr.tid=t.tid AND $digestltd t.fid IN ($fids) $topltd WHERE tr.dateline$searchfrom";
+			$sqlsrch = " tr.dateline$searchfrom";
 			$expiration = TIMESTAMP + $cachelife_time;
 			$keywords = '';
 
 		} else {
 
-			$sqlsrch = "FROM ".DB::table('forum_trade')." tr INNER JOIN ".DB::table('forum_thread')." t ON tr.tid=t.tid AND $digestltd t.fid IN ($fids) $topltd WHERE 1";
+			$sqlsrch = ' 1 ';
 
 			if($srchuname) {
-				$srchuid = $comma = '';
-				$srchuname = str_replace('*', '%', addcslashes($srchuname, '%_'));
-				$query = DB::query("SELECT uid FROM ".DB::table('common_member')." WHERE username LIKE '".str_replace('_', '\_', $srchuname)."' LIMIT 50");
-				while($member = DB::fetch($query)) {
-					$srchuid .= "$comma'$member[uid]'";
-					$comma = ', ';
-				}
+				$srchuid = array_keys(C::t('common_member')->fetch_all_by_like_username($srchuname, 0, 50));
 				if(!$srchuid) {
 					$sqlsrch .= ' AND 0';
 				}
-			} elseif($srchuid) {
+			}/* elseif($srchuid) {
 				$srchuid = "'$srchuid'";
-			}
+			}*/
 
 			if($srchtypeid) {
 				$srchtypeid = intval($srchtypeid);
@@ -160,7 +147,7 @@ if(!empty($searchid)) {
 			}
 
 			if($srchuid) {
-				$sqlsrch .= " AND tr.sellerid IN ($srchuid)";
+				$sqlsrch .= ' AND tr.sellerid IN ('.dimplode((array)$srchuid).')';
 			}
 
 			if(!empty($srchfrom)) {
@@ -175,18 +162,25 @@ if(!empty($searchid)) {
 		}
 
 		$threads = $tids = 0;
-		$query = DB::query("SELECT tr.tid, tr.pid, t.closed $sqlsrch ORDER BY tr.pid DESC LIMIT ".$_G['setting']['maxsearchresults']);
-		while($post = DB::fetch($query)) {
+		$query = C::t('forum_trade')->fetch_all_for_search($digestltd, $fids, $topltd, $sqlsrch, 0, $_G['setting']['maxsearchresults']);
+		foreach($query as $post) {
 			if($thread['closed'] <= 1) {
 				$tids .= ','.$post['pid'];
 				$threads++;
 			}
 		}
-		DB::free_result($query);
 
-		DB::query("INSERT INTO ".DB::table('common_searchindex')." (keywords, searchstring, useip, uid, dateline, expiration, threads, tids)
-				VALUES ('$keywords', '$searchstring', '$_G[clientip]', '$_G[uid]', '$_G[timestamp]', '$expiration', '$threads', '$tids')");
-		$searchid = DB::insert_id();
+		$searchid = C::t('common_searchindex')->insert(array(
+			'keywords' => $keywords,
+			'searchstring' => $searchstring,
+			'useip' => $_G['clientip'],
+			'uid' => $_G['uid'],
+			'dateline' => $_G['timestamp'],
+			'expiration' => $expiration,
+			'threads' => $threads,
+			'threadsortid' => $_GET['selectsortid'],
+			'tids' => $tids
+		), true);
 
 		!($_G['group']['exempt'] & 2) && updatecreditbyaction('search');
 

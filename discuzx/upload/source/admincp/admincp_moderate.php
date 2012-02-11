@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_moderate.php 20616 2011-03-01 01:05:56Z monkey $
+ *      $Id: admincp_moderate.php 25246 2011-11-02 03:34:53Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -13,13 +13,13 @@ if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 
 cpheader();
 
-$ignore = $_G['gp_ignore'];
-$filter = $_G['gp_filter'];
-$modfid = $_G['gp_modfid'];
-$modsubmit = $_G['gp_modsubmit'];
-$moderate = $_G['gp_moderate'];
-$pm = $_G['gp_pm'];
-$showcensor = !empty($_G['gp_showcensor']) ? 1 : 0;
+$ignore = $_GET['ignore'];
+$filter = $_GET['filter'];
+$modfid = $_GET['modfid'];
+$modsubmit = $_GET['modsubmit'];
+$moderate = $_GET['moderate'];
+$pm = $_GET['pm'];
+$showcensor = !empty($_GET['showcensor']) ? 1 : 0;
 
 $_G['setting']['memberperpage'] = 100;
 if(empty($operation)) {
@@ -40,8 +40,8 @@ if($operation == 'members') {
 	$fids = 0;
 	$recyclebins = $forumlist = array();
 
-	$query = DB::query("SELECT fid, name, recyclebin FROM ".DB::table('forum_forum')." WHERE status='1' AND type<>'group'");
-	while($forum = DB::fetch($query)) {
+	$query = C::t('forum_forum')->fetch_all_valid_forum();
+	foreach($query as $forum) {
 		$recyclebins[$forum['fid']] = $forum['recyclebin'];
 		$forumlist[$forum['fid']] = $forum['name'];
 	}
@@ -64,7 +64,9 @@ if($operation == 'members') {
 	}
 
 	$forumoptions = '<option value="all"'.(empty($modfid) ? ' selected' : '').'>'.$lang['moderate_all_fields'].'</option>';
-	$forumoptions .= '<option value="-1" '.($modfid == '-1' ? 'selected' : '').'>'.$lang['moderate_all_groups'].'</option>'."\n";
+	if($operation != 'replies') {
+		$forumoptions .= '<option value="-1" '.($modfid == '-1' ? 'selected' : '').'>'.$lang['moderate_all_groups'].'</option>'."\n";
+	}
 	foreach($forumlist as $fid => $forumname) {
 		$selected = $modfid == $fid ? ' selected' : '';
 		$forumoptions .= '<option value="'.$fid.'" '.$selected.'>'.$forumname.'</option>'."\n";

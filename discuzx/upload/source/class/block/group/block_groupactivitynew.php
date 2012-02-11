@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: block_groupactivitynew.php 7212 2010-03-30 13:05:47Z xupeng $
+ *      $Id: block_groupactivitynew.php 25525 2011-11-14 04:39:11Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -60,7 +60,7 @@ class block_groupactivitynew extends block_groupactivity {
 
 	function cookparameter($parameter) {
 		$parameter['orderby'] = 'dateline';
-		return $parameter;
+		return parent::cookparameter($parameter);
 	}
 }
 

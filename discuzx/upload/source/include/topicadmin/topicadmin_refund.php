@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: topicadmin_refund.php 16938 2010-09-17 04:37:59Z monkey $
+ *      $Id: topicadmin_refund.php 25289 2011-11-03 10:06:19Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -25,8 +25,7 @@ if($thread['special'] != 0) {
 
 if(!submitcheck('modsubmit')) {
 
-	$extcredit = 'extcredits'.$_G['setting']['creditstransextra'][1];
-	$payment = DB::fetch_first("SELECT COUNT(*) AS payers, SUM($extcredit) AS netincome FROM ".DB::table('common_credit_log')." WHERE operation='STC' AND relatedid='$_G[tid]'");
+	$payment = C::t('common_credit_log')->count_stc_by_relatedid($_G['tid'], $_G['setting']['creditstransextra'][1]);
 	$payment['payers'] = intval($payment['payers']);
 	$payment['netincome'] = intval($payment['netincome']);
 
@@ -43,25 +42,24 @@ if(!submitcheck('modsubmit')) {
 	$amountarray = array();
 
 	$logarray = array();
-	$query = DB::query("SELECT * FROM ".DB::table('common_credit_log')." WHERE operation='BTC' AND relatedid='$_G[tid]'");
-	while($log = DB::fetch($query)) {
+	foreach(C::t('common_credit_log')->fetch_all_by_uid_operation_relatedid(0, 'BTC', $_G['tid']) as $log) {
 		$totalamount += $log['amount'];
 		$amountarray[$log['amount']][] = $log['uid'];
 	}
 
 	updatemembercount($thread['authorid'], array($_G['setting']['creditstransextra'][1] => -$totalamount));
-	DB::query("UPDATE ".DB::table('forum_thread')." SET price='-1', moderated='1' WHERE tid='$_G[tid]'");
+	C::t('forum_thread')->update($_G['tid'], array('price'=>-1, 'moderated'=>1));
 
 	foreach($amountarray as $amount => $uidarray) {
 		updatemembercount($uidarray, array($_G['setting']['creditstransextra'][1] => $amount));
 	}
 
-	DB::delete('common_credit_log',  "relatedid='$_G[tid]' AND operation IN('BTC', 'STC')");
+	C::t('common_credit_log')->delete_by_operation_relatedid(array('BTC', 'STC'), $_G['tid']);
 
 	$resultarray = array(
 	'redirect'	=> "forum.php?mod=viewthread&tid=$_G[tid]",
 	'reasonpm'	=> ($sendreasonpm ? array('data' => array($thread), 'var' => 'thread', 'item' => 'reason_moderate') : array()),
-	'reasonvar'	=> array('tid' => $thread['tid'], 'subject' => $thread['subject'], 'modaction' => $modaction, 'reason' => stripslashes($reason)),
+	'reasonvar'	=> array('tid' => $thread['tid'], 'subject' => $thread['subject'], 'modaction' => $modaction, 'reason' => $reason),
 	'modtids'	=> $thread['tid'],
 	'modlog'	=> $thread
 	);

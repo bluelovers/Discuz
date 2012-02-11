@@ -1,9 +1,9 @@
 <div class="sort pd5">
-    <!--{if $_G[gp_action] == 'newthread'}-->
+    <!--{if $_GET[action] == 'newthread'}-->
         <label for="rewardprice">{lang reward_price}:</label>
         <input type="text" name="rewardprice" id="rewardprice" class="txt_s" value="{$_G['group']['minrewardprice']}"  />
         <span class="xi1">, {lang you_have} <!--{echo getuserprofile('extcredits'.$_G['setting']['creditstransextra'][2]);}--> {$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][2]][unit]}{$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][2]][title]}</span>
-    <!--{elseif $_G[gp_action] == 'edit'}-->
+    <!--{elseif $_GET[action] == 'edit'}-->
         <!--{if $isorigauthor}-->
             <!--{if $thread['price'] > 0}-->
                 <label for="rewardprice">{lang reward_price}:</label>

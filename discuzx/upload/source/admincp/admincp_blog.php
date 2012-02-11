@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_blog.php 22995 2011-06-13 03:15:57Z zhangguosheng $
+ *      $Id: admincp_blog.php 26807 2011-12-23 07:35:33Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -14,28 +14,28 @@ include_once libfile('function/portalcp');
 
 cpheader();
 
-$detail = !empty($_GET['uid']) ? true : $_G['gp_detail'];
-$uid = $_G['gp_uid'];
-$blogid = $_G['gp_blogid'];
-$users = $_G['gp_users'];
-$keywords = $_G['gp_keywords'];
-$lengthlimit = $_G['gp_lengthlimit'];
-$viewnum1 = $_G['gp_viewnum1'];
-$viewnum2 = $_G['gp_viewnum2'];
-$replynum1 = $_G['gp_replynum1'];
-$replynum2 = $_G['gp_replynum2'];
-$hot1 = $_G['gp_hot1'];
-$hot2 = $_G['gp_hot2'];
-$starttime = $_G['gp_starttime'];
-$endtime = $_G['gp_endtime'];
-$searchsubmit = $_G['gp_searchsubmit'];
-$blogids = $_G['gp_blogids'];
-$friend = $_G['gp_friend'];
-$ip = $_G['gp_ip'];
-$orderby = $_G['gp_orderby'];
-$ordersc = $_G['gp_ordersc'];
+$detail = !empty($_GET['uid']) ? true : $_GET['detail'];
+$uid = $_GET['uid'];
+$blogid = $_GET['blogid'];
+$users = $_GET['users'];
+$keywords = $_GET['keywords'];
+$lengthlimit = $_GET['lengthlimit'];
+$viewnum1 = $_GET['viewnum1'];
+$viewnum2 = $_GET['viewnum2'];
+$replynum1 = $_GET['replynum1'];
+$replynum2 = $_GET['replynum2'];
+$hot1 = $_GET['hot1'];
+$hot2 = $_GET['hot2'];
+$starttime = $_GET['starttime'];
+$endtime = $_GET['endtime'];
+$searchsubmit = $_GET['searchsubmit'];
+$blogids = $_GET['blogids'];
+$friend = $_GET['friend'];
+$ip = $_GET['ip'];
+$orderby = $_GET['orderby'];
+$ordersc = $_GET['ordersc'];
 
-$fromumanage = $_G['gp_fromumanage'] ? 1 : 0;
+$fromumanage = $_GET['fromumanage'] ? 1 : 0;
 
 $muticondition = '';
 $muticondition .= $uid ? '&uid='.$uid : '';
@@ -57,11 +57,11 @@ $muticondition .= $orderby ? '&orderby='.$orderby : '';
 $muticondition .= $ordersc ? '&ordersc='.$ordersc : '';
 $muticondition .= $fromumanage ? '&fromumanage='.$fromumanage : '';
 $muticondition .= $searchsubmit ? '&searchsubmit='.$searchsubmit : '';
-$muticondition .= $_G['gp_search'] ? '&search='.$_G['gp_search'] : '';
+$muticondition .= $_GET['search'] ? '&search='.$_GET['search'] : '';
 $muticondition .= $detail ? '&detail='.$detail : '';
 
 if(!submitcheck('blogsubmit')) {
-	if(empty($_G['gp_search'])) {
+	if(empty($_GET['search'])) {
 		$newlist = 1;
 		$detail = 1;
 	}
@@ -96,11 +96,11 @@ function page(number) {
 </script>
 EOT;
 	showtagheader('div', 'searchposts', !$searchsubmit && empty($newlist));
-	showformheader("blog".(!empty($_G['gp_search']) ? '&search=true' : ''), '', 'blogforum');
-	showhiddenfields(array('page' => $page, 'pp' => $_G['gp_pp'] ? $_G['gp_pp'] : $_G['gp_perpage']));
+	showformheader("blog".(!empty($_GET['search']) ? '&search=true' : ''), '', 'blogforum');
+	showhiddenfields(array('page' => $page, 'pp' => $_GET['pp'] ? $_GET['pp'] : $_GET['perpage']));
 	showtableheader();
 	showsetting('blog_search_detail', 'detail', $detail, 'radio');
-	showsetting('blog_search_perpage', '', $_G['gp_perpage'], "<select name='perpage'><option value='20'>$lang[perpage_20]</option><option value='50'>$lang[perpage_50]</option><option value='100'>$lang[perpage_100]</option></select>");
+	showsetting('blog_search_perpage', '', $_GET['perpage'], "<select name='perpage'><option value='20'>$lang[perpage_20]</option><option value='50'>$lang[perpage_50]</option><option value='100'>$lang[perpage_100]</option></select>");
 	showsetting('resultsort', '', $orderby, "<select name='orderby'><option value=''>$lang[defaultsort]</option><option value='dateline'>$lang[forums_edit_extend_order_starttime]</option><option value='viewnum'>$lang[blog_search_view]</option><option value='replynum'>$lang[blog_search_reply]</option><option value='hot'>$lang[blog_search_hot]</option></select> ");
 	showsetting('', '', $ordersc, "<select name='ordersc'><option value='desc'>$lang[orderdesc]</option><option value='asc'>$lang[orderasc]</option></select>");
 	showsetting('blog_search_uid', 'uid', $uid, 'text');
@@ -121,18 +121,18 @@ EOT;
 	showtagfooter('div');
 
 } else {
-    if($_G['gp_blogids']) {
-		$blogids = authcode($_G['gp_blogids'], 'DECODE');
-		$blogidsadd = $blogids ? explode(',', $blogids) : $_G['gp_delete'];
+    if($_GET['blogids']) {
+		$blogids = authcode($_GET['blogids'], 'DECODE');
+		$blogidsadd = $blogids ? explode(',', $blogids) : $_GET['delete'];
 		include_once libfile('function/delete');
 		$deletecount = count(deleteblogs($blogidsadd));
 		$cpmsg = cplang('blog_succeed', array('deletecount' => $deletecount));
 	} else {
 		$blogs = $catids = array();
-		$selectblogids = !empty($_G['gp_ids']) && is_array($_G['gp_ids']) ? $_G['gp_ids'] : array();
+		$selectblogids = !empty($_GET['ids']) && is_array($_GET['ids']) ? $_GET['ids'] : array();
 		if($selectblogids) {
-			$query = DB::query('SELECT blogid, catid FROM '.DB::table('home_blog')." WHERE blogid IN (".dimplode($selectblogids).')');
-			while($value=DB::fetch($query)) {
+			$query = C::t('home_blog')->fetch_all($selectblogids);
+			foreach($query as $value) {
 				$blogs[$value['blogid']] = $value;
 				$catids[] = intval($value['catid']);
 			}
@@ -148,11 +148,11 @@ EOT;
 				$catids[] = $tocatid;
 				$catids = array_merge($catids);
 
-				DB::update('home_blog', array('catid'=>$tocatid), 'blogid IN ('.dimplode($selectblogids).')');
+				C::t('home_blog')->update($selectblogids, array('catid'=>$tocatid));
 				foreach($catids as $catid) {
 					$catid = intval($catid);
-					$cnt = DB::result_first('SELECT COUNT(*) FROM '.DB::table('home_blog')." WHERE catid = '$catid'");
-					DB::update('home_blog_category', array('num'=>intval($cnt)), array('catid'=>$catid));
+					$cnt = C::t('home_blog')->count_by_catid($catid);
+					C::t('home_blog_category')->update($catid, array('num'=>$cnt));
 				}
 				$cpmsg = cplang('blog_move_succeed');
 			} else {
@@ -174,73 +174,44 @@ if(submitcheck('searchsubmit', 1) || $newlist) {
 	$sql = $error = '';
 	$keywords = trim($keywords);
 	$users = trim($users);
+	$uids = array();
 
 	if($blogid != '') {
-		$sql .= " AND  b.blogid IN ('".str_replace(',', '\',\'', str_replace(' ', '', $blogid))."')";
+		$blogid = explode(',', $blogid);
 	}
 
 	if($users != '') {
-		$uids = array();
-		$query = DB::query("SELECT uid FROM ".DB::table('common_member')." WHERE username IN ('".str_replace(',', '\',\'', str_replace(' ', '', $users))."')");
-		while($member = DB::fetch($query)) {
-			$uids[] = intval($member['uid']);
+		$uids = C::t('common_member')->fetch_all_uid_by_username(array_map('trim', explode(',', $users)));
+		if(!$uids) {
+			$uids = array(-1);
 		}
-		$uid = ($uid ? $uid.',':'').implode(',',$uids);
 	}
 
 	$uid = trim($uid, ', ');
 	if($uid != '') {
-		$sql .= " AND b.uid IN ('".str_replace(',', '\',\'', str_replace(' ', '', $uid))."')";
+		$uid = explode(',', $uid);
+		if($uids && $uids[0] != -1) {
+			$uids = array_intersect($uids, $uid);
+		} else {
+			$uids = $uid;
+		}
+		if(!$uids) {
+			$uids = array(-1);
+		}
 	}
 
 	if($starttime != '') {
 		$starttime = strtotime($starttime);
-		$sql .= " AND b.dateline>'$starttime'";
 	}
 
 	if($_G['adminid'] == 1 && $endtime != dgmdate(TIMESTAMP, 'Y-n-j')) {
 		if($endtime != '') {
 			$endtime = strtotime($endtime);
-			$sql .= " AND b.dateline<'$endtime'";
 		}
 	} else {
 		$endtime = TIMESTAMP;
 	}
 
-	$sql .= $hot1 ? " AND b.hot >= '$hot1'" : '';
-	$sql .= $hot2 ? " AND b.hot <= '$hot2'" : '';
-
-	$sql .= $viewnum1 ? " AND b.viewnum >= '$viewnum1'" : '';
-	$sql .= $viewnum2 ? " AND b.viewnum <= '$viewnum2'" : '';
-	$sql .= $replynum1 ? " AND b.replynum >= '$replynum1'" : '';
-	$sql .= $replynum2 ? " AND b.replynum <= '$replynum2'" : '';
-	$sql .= $friend ? " AND b.friend = '$friend'" : '';
-	$ip = str_replace('*', '', $ip);
-	$sql .= $ip ? " AND bf.postip LIKE '%$ip%'" : '';
-	$orderby = $orderby ? "b.$orderby" : 'b.dateline';
-	$ordersc = $ordersc ? "$ordersc" : 'DESC';
-
-	if($keywords != '') {
-		$sqlkeywords = '';
-		$or = '';
-		$keywords = explode(',', str_replace(' ', '', $keywords));
-
-		for($i = 0; $i < count($keywords); $i++) {
-			if(preg_match("/\{(\d+)\}/", $keywords[$i])) {
-				$keywords[$i] = preg_replace("/\\\{(\d+)\\\}/", ".{0,\\1}", preg_quote($keywords[$i], '/'));
-				$sqlkeywords .= " $or b.subject REGEXP '".$keywords[$i]."' OR bf.message REGEXP '".$keywords[$i]."'";
-			} else {
-				$sqlkeywords .= " $or b.subject LIKE '%".$keywords[$i]."%' OR bf.message LIKE '%".$keywords[$i]."%'";
-			}
-			$or = 'OR';
-		}
-		$sql .= " AND ($sqlkeywords)";
-	}
-
-	if($lengthlimit != '') {
-		$lengthlimit = intval($lengthlimit);
-		$sql .= " AND LENGTH(bf.message) > $lengthlimit";
-	}
 
 	if(($_G['adminid'] == 2 && $endtime - $starttime > 86400 * 16) || ($_G['adminid'] == 3 && $endtime - $starttime > 86400 * 8)) {
 		$error = 'blog_mod_range_illegal';
@@ -249,15 +220,14 @@ if(submitcheck('searchsubmit', 1) || $newlist) {
 	if(!$error) {
 		if($detail) {
 			$pagetmp = $page;
-			$_G['gp_perpage'] = intval($_G['gp_perpage']) < 1 ? 20 : intval($_G['gp_perpage']);
-			$perpage = $_G['gp_pp'] ? $_G['gp_pp'] : $_G['gp_perpage'];
+			$_GET['perpage'] = intval($_GET['perpage']) < 1 ? 20 : intval($_GET['perpage']);
+			$perpage = $_GET['pp'] ? $_GET['pp'] : $_GET['perpage'];
 			do{
-				$query = DB::query("SELECT b.hot, b.replynum, b.viewnum, b.blogid, b.uid, b.username, b.dateline, bf.message, b.subject, b.friend FROM ".DB::table('home_blog')." b LEFT JOIN ".DB::table('home_blogfield')." bf USING(blogid) " .
-						"WHERE 1 $sql ORDER BY $orderby $ordersc LIMIT ".(($pagetmp - 1) * $perpage).",{$perpage}");
+				$query = C::t('home_blog')->fetch_all_by_search(1, $blogid, $uids, $starttime, $endtime, $hot1, $hot2, $viewnum1, $viewnum2, $replynum1, $replynum2, $friend, $ip, $keywords, $lengthlimit, $orderby, $ordersc, (($pagetmp - 1) * $perpage), $perpage);
 				$pagetmp--;
-			} while(!DB::num_rows($query) && $pagetmp);
+			} while(!count($query) && $pagetmp);
 			$blogs = '';
-			while($blog = DB::fetch($query)) {
+			foreach($query as $blog) {
 				$blog['dateline'] = dgmdate($blog['dateline']);
 				$blog['subject'] = cutstr($blog['subject'], 30);
 				switch ($blog['friend']) {
@@ -292,12 +262,12 @@ if(submitcheck('searchsubmit', 1) || $newlist) {
 					$blog['friend']
 				), TRUE);
 			}
-			$blogcount = DB::result_first("SELECT count(*) FROM ".DB::table('home_blog')." b LEFT JOIN ".DB::table('home_blogfield')." bf USING(blogid) WHERE 1 $sql");
+			$blogcount = C::t('home_blog')->count_all_by_search($blogid, $uids, $starttime, $endtime, $hot1, $hot2, $viewnum1, $viewnum2, $replynum1, $replynum2, $friend, $ip, $keywords, $lengthlimit);
 			$multi = multi($blogcount, $perpage, $page, ADMINSCRIPT."?action=blog$muticondition");
 		} else {
 			$blogcount = 0;
-			$query = DB::query("SELECT b.blogid FROM ".DB::table('home_blog')." b LEFT JOIN ".DB::table('home_blogfield')." bf USING(blogid) WHERE 1 $sql");
-			while($blog = DB::fetch($query)) {
+			$query = C::t('home_blog')->fetch_all_by_search(2, $blogid, $uids, $starttime, $endtime, $hot1, $hot2, $viewnum1, $viewnum2, $replynum1, $replynum2, $friend, $ip, $keywords, $lengthlimit);
+			foreach($query as $blog) {
 				$blogids .= ','.$blog['blogid'];
 				$blogcount++;
 			}

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_inputpwd.php 9821 2010-05-05 04:03:14Z wangjinbo $
+ *      $Id: misc_inputpwd.php 24741 2011-10-10 03:41:51Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -18,13 +18,11 @@ if(submitcheck('pwdsubmit')) {
 
 	$itemarr = array();
 	if($blogid) {
-		$query = DB::query("SELECT * FROM ".DB::table('home_blog')." WHERE blogid='$blogid'");
-		$itemarr = DB::fetch($query);
+		$itemarr = C::t('home_blog')->fetch($blogid);
 		$itemurl = "home.php?mod=space&uid=$itemarr[uid]&do=blog&id=$itemarr[blogid]";
 		$cookiename = 'view_pwd_blog_'.$blogid;
 	} elseif($albumid) {
-		$query = DB::query("SELECT * FROM ".DB::table('home_album')." WHERE albumid='$albumid'");
-		$itemarr = DB::fetch($query);
+		$itemarr = C::t('home_album')->fetch($albumid);
 		$itemurl = "home.php?mod=space&uid=$itemarr[uid]&do=album&id=$itemarr[albumid]";
 		$cookiename = 'view_pwd_album_'.$albumid;
 	}

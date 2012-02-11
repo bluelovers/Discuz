@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: modcp_forum.php 17136 2010-09-25 01:39:54Z liulanbo $
+ *      $Id: modcp_forum.php 25782 2011-11-22 05:29:19Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_MODCP')) {
@@ -21,7 +21,7 @@ if(empty($_G['fid'])) {
 	} else {
 		list($fid) = array_keys($modforums['list']);
 	}
-	dheader("Location: {$cpscript}?mod=modcp&action=$_G[gp_action]&op=$op&fid=$fid");
+	dheader("Location: {$cpscript}?mod=modcp&action=$_GET[action]&op=$op&fid=$fid");
 }
 
 if($_G['fid'] && $_G['forum']['ismoderator']) {
@@ -38,32 +38,32 @@ if($_G['fid'] && $_G['forum']['ismoderator']) {
 
 			require_once libfile('function/discuzcode');
 			$forumupdate = true;
-			$rulesnew = $alloweditrules ? addslashes(preg_replace('/on(mousewheel|mouseover|click|load|onload|submit|focus|blur)="[^"]*"/i', '', discuzcode(stripslashes($_G['gp_rulesnew']), 1, 0, 0, 0, 1, 1, 0, 0, 1))) : addslashes($_G['forum']['rules']);
-			DB::query("UPDATE ".DB::table('forum_forumfield')." SET rules='$rulesnew' WHERE fid='$_G[fid]'");
+			$rulesnew = $alloweditrules ? preg_replace('/on(mousewheel|mouseover|click|load|onload|submit|focus|blur)="[^"]*"/i', '', discuzcode($_GET['rulesnew'], 1, 0, 0, 0, 1, 1, 0, 0, 1)) : $_G['forum']['rules'];
+			C::t('forum_forumfield')->update($_G['fid'], array('rules' => $rulesnew));
 
-			$_G['forum']['description'] = html2bbcode(dstripslashes($descnew));
-			$_G['forum']['rules'] = html2bbcode(dstripslashes($rulesnew));
+			$_G['forum']['description'] = html2bbcode($descnew);
+			$_G['forum']['rules'] = html2bbcode($rulesnew);
 
 		}
 
 	} elseif($op == 'recommend') {
 
-		$useradd = '';
+		$useradd = 0;
 
 		if($_G['adminid'] == 3) {
-			$useradd = "AND moderatorid IN ('$_G[uid]', 0)";
+			$useradd = $_G['uid'];
 		}
-		$ordernew = !empty($_G['gp_ordernew']) && is_array($_G['gp_ordernew']) ? $_G['gp_ordernew'] : array();
+		$ordernew = !empty($_GET['ordernew']) && is_array($_GET['ordernew']) ? $_GET['ordernew'] : array();
 
 		if(submitcheck('editsubmit') && $_G['forum']['modrecommend']['sort'] != 1) {
 			$threads = array();
-			foreach($_G['gp_order'] as $id => $position) {
+			foreach($_GET['order'] as $id => $position) {
 				$threads[$id]['order'] = $position;
 			}
-			foreach($_G['gp_subject'] as $id => $title) {
+			foreach($_GET['subject'] as $id => $title) {
 				$threads[$id]['subject'] = $title;
 			}
-			foreach($_G['gp_expirationrecommend'] as $id => $expiration) {
+			foreach($_GET['expirationrecommend'] as $id => $expiration) {
 				$expiration = trim($expiration);
 				if(!empty($expiration)) {
 					if(!preg_match('/^\d{4}-\d{1,2}-\d{1,2} +\d{1,2}:\d{1,2}$/', $expiration)) {
@@ -80,12 +80,12 @@ if($_G['fid'] && $_G['forum']['ismoderator']) {
 				}
 				$threads[$id]['expiration'] = $expiration_timestamp;
 			}
-			if(@$ids = dimplode($_G['gp_delete'])) {
+			if($_GET['delete']) {
 				$listupdate = true;
-				DB::query("DELETE FROM ".DB::table('forum_forumrecommend')." WHERE fid='$_G[fid]' AND tid IN($ids)");
+				C::t('forum_forumrecommend')->delete($_GET['delete']);
 			}
-			if(!empty($_G['gp_delete']) && is_array($_G['gp_delete'])) {
-				foreach($_G['gp_delete'] as $id) {
+			if(!empty($_GET['delete']) && is_array($_GET['delete'])) {
+				foreach($_GET['delete'] as $id) {
 					$threads[$id]['delete'] = true;
 					unset($threads[$id]);
 				}
@@ -93,7 +93,12 @@ if($_G['fid'] && $_G['forum']['ismoderator']) {
 			foreach($threads as $id => $item) {
 				$item['displayorder'] = intval($item['order']);
 				$item['subject'] = dhtmlspecialchars($item['subject']);
-				DB::query("UPDATE ".DB::table('forum_forumrecommend')." SET subject='$item[subject]', displayorder='$item[displayorder]', moderatorid='$_G[uid]', expiration='$item[expiration]' WHERE tid='$id'");
+				C::t('forum_forumrecommend')->update($id, array(
+					'subject' => $item['subject'],
+					'displayorder' => $item['displayorder'],
+					'moderatorid' => $_G['uid'],
+					'expiration' => $item['expiration']
+				));
 			}
 			$listupdate = true;
 		}
@@ -101,19 +106,21 @@ if($_G['fid'] && $_G['forum']['ismoderator']) {
 		$page = max(1, intval($_G['page']));
 		$start_limit = ($page - 1) * $_G['tpp'];
 
-		$threadcount = DB::result_first("SELECT COUNT(*) FROM ".DB::table('forum_forumrecommend')." WHERE fid='$_G[fid]'");
-		$multipage = multi($threadcount, $_G['tpp'], $page, "$cpscript?action=$_G[gp_action]&fid=$_G[fid]&page=$page");
+		$threadcount = C::t('forum_forumrecommend')->count_by_fid($_G['fid']);
+		$multipage = multi($threadcount, $_G['tpp'], $page, "$cpscript?action=$_GET[action]&fid=$_G[fid]&page=$page");
 
-		$threadlist = array();
-		$query = DB::query("SELECT f.*, m.username as moderator
-				FROM ".DB::table('forum_forumrecommend')." f
-				LEFT JOIN ".DB::table('common_member')." m ON f.moderatorid=m.uid
-				WHERE f.fid='$_G[fid]' $useradd LIMIT $start_limit,$_G[tpp]");
-		while($thread = DB::fetch($query)) {
+		$threadlist = $moderatormembers = array();
+		$moderatorids = array();
+		foreach(C::t('forum_forumrecommend')->fetch_all_by_fid($_G['fid'], false, $useradd, $start_limit, $_G['tpp']) as $thread) {
+			if($thread['moderatorid']) {
+				$moderatorids[$thread['moderatorid']] = $thread['moderatorid'];
+			}
 			$thread['authorlink'] = $thread['authorid'] ? "<a href=\"home.php?mod=space&uid=$thread[authorid]\" target=\"_blank\">$thread[author]</a>" : 'Guest';
-			$thread['moderatorlink'] = $thread['moderator'] ? "<a href=\"home.php?mod=space&uid=$thread[moderatorid]\" target=\"_blank\">$thread[moderator]</a>" : 'System';
 			$thread['expiration'] = $thread['expiration'] ? dgmdate($thread['expiration']) : '';
 			$threadlist[] = $thread;
+		}
+		if($moderatorids) {
+			$moderatormembers = C::t('common_member')->fetch_all($moderatorids, false, 0);
 		}
 
 	}

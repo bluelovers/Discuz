@@ -1,7 +1,7 @@
 <div id="postmessage_$post[pid]" class="postmessage">$post[message]</div>
 
 <div class="bt pd2">
-<form id="poll" name="poll" method="post" autocomplete="off" action="forum.php?mod=misc&action=votepoll&fid=$_G[fid]&tid=$_G[tid]&pollsubmit=yes{if $_G[gp_from]}&from=$_G[gp_from]{/if}&quickforward=yes&mobile=yes" >
+<form id="poll" name="poll" method="post" autocomplete="off" action="forum.php?mod=misc&action=votepoll&fid=$_G[fid]&tid=$_G[tid]&pollsubmit=yes{if $_GET[from]}&from=$_GET[from]{/if}&quickforward=yes&mobile=yes" >
 	<input type="hidden" name="formhash" value="{FORMHASH}" />
 	<div>
 		<!--{if $multiple}--><strong>{lang poll_multiple}{lang thread_poll}</strong><!--{if $maxchoices}-->: ( {lang poll_more_than} )<!--{/if}--><!--{else}--><strong>{lang poll_single}{lang thread_poll}</strong><!--{/if}--><!--{if $visiblepoll && $_G['group']['allowvote']}--> , {lang poll_after_result}<!--{/if}-->, {lang poll_voterscount}
@@ -36,7 +36,7 @@
             <input type="submit" name="pollsubmit" id="pollsubmit" value="{lang submit}" />
             <!--{if $overt}-->
                 <span class="xg2">({lang poll_msg_overt})</span>
-            <!--{/if}-->				
+            <!--{/if}-->
         <!--{elseif !$allwvoteusergroup}-->
             <!--{if !$_G['uid']}-->
             <span class="xi1">{lang poll_msg_allwvote_user}</span>

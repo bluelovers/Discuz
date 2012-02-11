@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: thread_poll.php 19433 2010-12-31 04:04:47Z monkey $
+ *      $Id: thread_poll.php 24621 2011-09-28 06:29:43Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -13,11 +13,9 @@ if(!defined('IN_DISCUZ')) {
 
 $polloptions = array();
 $votersuid = '';
+if($count = C::t('forum_polloption')->fetch_count_by_tid($_G['tid'])) {
 
-if($count = DB::fetch_first("SELECT MAX(votes) AS max, SUM(votes) AS total FROM ".DB::table('forum_polloption')." WHERE tid='$_G[tid]'")) {
-
-
-	$options = DB::fetch_first("SELECT * FROM ".DB::table('forum_poll')." WHERE tid='$_G[tid]'");
+	$options = C::t('forum_poll')->fetch($_G['tid']);
 	$multiple = $options['multiple'];
 	$visible = $options['visible'];
 	$maxchoices = $options['maxchoices'];
@@ -25,12 +23,12 @@ if($count = DB::fetch_first("SELECT MAX(votes) AS max, SUM(votes) AS total FROM 
 	$overt = $options['overt'];
 	$voterscount = $options['voters'];
 
-	$query = DB::query("SELECT polloptionid, votes, polloption, voterids FROM ".DB::table('forum_polloption')." WHERE tid='$_G[tid]' ORDER BY displayorder");
+	$query = C::t('forum_polloption')->fetch_all_by_tid($_G['tid'], 1);
 	$colors = array('E92725', 'F27B21', 'F2A61F', '5AAF4A', '42C4F5', '0099CC', '3365AE', '2A3591', '592D8E', 'DB3191');
 	$voterids = $polloptionpreview = '';
 	$ci = 0;
 	$opts = 1;
-	while($options = DB::fetch($query)) {
+	foreach($query as $options) {
 		$viewvoteruid[] = $options['voterids'];
 		$voterids .= "\t".$options['voterids'];
 		$option = preg_replace("/\[url=(https?){1}:\/\/([^\[\"']+?)\](.+?)\[\/url\]/i", "<a href=\"\\1://\\2\" target=\"_blank\">\\3</a>", $options['polloption']);

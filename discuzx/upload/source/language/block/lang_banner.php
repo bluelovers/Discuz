@@ -4,20 +4,24 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_banner.php 15100 2010-08-19 02:51:15Z zhaoxiongfei $
+ *      $Id: lang_banner.php 27449 2012-02-01 05:32:35Z zhangguosheng $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 $lang = array
 (
-	'banner_pic' => 'åœ–ç‰‡åœ°å€',
-	'banner_width' => 'åœ–ç‰‡å¯¬åº¦',
-	'banner_height' => 'åœ–ç‰‡é«˜åº¦',
-	'banner_url' => 'åœ–ç‰‡éˆæŽ¥',
-	'banner_text' => 'åœ–ç‰‡ä»‹ç´¹',
-	'banner_atarget' => 'éˆæŽ¥æ‰“é–‹æ–¹å¼',
-	'banner_atarget_top' => 'æœ¬é é¢æ‰“é–‹(è·³å‡ºæ¡†æž¶)',
-	'banner_atarget_blank' => 'æ–°çª—å£æ‰“é–‹',
-	'banner_atarget_self' => 'æœ¬é é¢æ‰“é–‹',
+	'banner_pic' => 'Í¼Æ¬µØÖ·',
+	'banner_width' => 'Í¼Æ¬¿í¶È',
+	'banner_height' => 'Í¼Æ¬¸ß¶È',
+	'banner_url' => 'Í¼Æ¬Á´½Ó',
+	'banner_text' => 'Í¼Æ¬½éÉÜ',
+	'banner_atarget' => 'Á´½Ó´ò¿ª·½Ê½',
+	'banner_atarget_top' => '±¾Ò³Ãæ´ò¿ª(Ìø³ö¿ò¼Ü)',
+	'banner_atarget_blank' => 'ÐÂ´°¿Ú´ò¿ª',
+	'banner_atarget_self' => '±¾Ò³Ãæ´ò¿ª',
 );
 
 ?>

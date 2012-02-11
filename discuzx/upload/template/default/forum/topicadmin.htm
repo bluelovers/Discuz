@@ -1,7 +1,6 @@
 <!--{template common/header}-->
-<!--{if empty($_G['gp_infloat'])}-->
+<!--{if empty($_GET['infloat'])}-->
 <div id="pt" class="bm cl">
-	<!--{subtemplate common/simplesearchform}-->
 	<div class="z"><a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em> $navigation</div>
 </div>
 <div id="ct" class="wp cl">
@@ -21,13 +20,13 @@
 		<input type="hidden" name="formhash" value="{FORMHASH}" />
 		<input type="hidden" name="fid" value="$_G[fid]" />
 		<input type="hidden" name="redirect" value="{echo dreferer()}" />
-		<!--{if !empty($_G['gp_listextra'])}--><input type="hidden" name="listextra" value="$_G['gp_listextra']" /><!--{/if}-->
-		<!--{if !empty($_G['gp_infloat'])}--><input type="hidden" name="handlekey" value="$_G['gp_handlekey']" /><!--{/if}-->
+		<!--{if !empty($_GET['listextra'])}--><input type="hidden" name="listextra" value="$_GET['listextra']" /><!--{/if}-->
+		<!--{if !empty($_GET['infloat'])}--><input type="hidden" name="handlekey" value="$_GET['handlekey']" /><!--{/if}-->
 		<!--{loop $threadlist $thread}-->
 			<input type="hidden" name="moderate[]" value="$thread[tid]" />
 		<!--{/loop}-->
 		<div class="c">
-			<!--{if $_G['gp_optgroup'] == 1}-->
+			<!--{if $_GET['optgroup'] == 1}-->
 				<ul class="tpcl">
 				<!--{if count($threadlist) > 1 || empty($defaultcheck[recommend])}-->
 					<!--{if $_G['group']['allowstickthread']}-->
@@ -222,7 +221,7 @@
 					</li>
 				<!--{/if}-->
 				</ul>
-			<!--{elseif $_G['gp_optgroup'] == 2}-->
+			<!--{elseif $_GET['optgroup'] == 2}-->
 				<div class="tplw">
 					<!--{if $operation != 'type'}-->
 						<input type="hidden" name="operations[]" value="move" />
@@ -247,7 +246,7 @@
 						<!--{/if}-->
 					<!--{/if}-->
 				</div>
-			<!--{elseif $_G['gp_optgroup'] == 3}-->
+			<!--{elseif $_GET['optgroup'] == 3}-->
 				<div class="tplw">
 				<ul class="llst">
 					<!--{if $operation == 'delete'}-->
@@ -264,8 +263,13 @@
 						<li class="wide"><label><input type="radio" name="operations[]" class="pr" value="down" />{lang admin_down}</label></li>
 					<!--{/if}-->
 				</ul>
+				<!--{if $operation == 'delete'}-->
+					<!--{if ($modpostsnum == 1 || $authorcount == 1) && $crimenum > 0}-->
+						<br /><div style="clear: both; text-align: right;">{lang topicadmin_crime_delpost_nums}</div>
+					<!--{/if}-->
+				<!--{/if}-->
 				</div>
-			<!--{elseif $_G['gp_optgroup'] == 4}-->
+			<!--{elseif $_GET['optgroup'] == 4}-->
 				<table cellspacing="0" cellpadding="0" width="100%">
 					<tr>
 						<td>{lang expire}:&nbsp;</td>
@@ -279,13 +283,13 @@
 					<tr>
 						<td colspan="2" style="padding: 5px 0;">
 							<ul class="llst">
-								<li class="wide"><label><input type="radio" name="operations[]" class="pr" value="open" $closecheck[0] />{lang admin_open}</label></li>
+								<li class="wide"><label><input type="radio" name="operations[]" class="pr" value="open" $closecheck[0]  onclick="$('expirationclose').value='';" />{lang admin_open}</label></li>
 								<li class="wide"><label><input type="radio" name="operations[]" class="pr" value="close" $closecheck[1] />{lang admin_close}</label></li>
 							</ul>
 						</td>
 					</tr>
 				</table>
-			<!--{elseif $_G['gp_optgroup'] == 5}-->
+			<!--{elseif $_GET['optgroup'] == 5}-->
 				<div class="tplw">
 					<!--{if $operation == 'recommend_group'}-->
 						<input type="hidden" name="operations[]" value="recommend_group" />
@@ -309,7 +313,10 @@
 		</div>
 		<!--{if empty($hiddensubmit)}-->
 			<p class="o pns">
-				<label for="sendreasonpm"><input type="checkbox" name="sendreasonpm" id="sendreasonpm" class="pc"{if $_G['group']['reasonpm'] == 2 || $_G['group']['reasonpm'] == 3} checked="checked" disabled="disabled"{/if} />{lang admin_pm}</label> 
+				<!--{if $_GET['optgroup'] == 3 && $operation == 'delete'}-->
+				<label for="crimerecord"><input type="checkbox" name="crimerecord" id="crimerecord" class="pc" />{lang crimerecord}</label>
+				<!--{/if}-->
+				<label for="sendreasonpm"><input type="checkbox" name="sendreasonpm" id="sendreasonpm" class="pc"{if $_G['group']['reasonpm'] == 2 || $_G['group']['reasonpm'] == 3} checked="checked" disabled="disabled"{/if} />{lang admin_pm}</label>
 				<button type="submit" name="modsubmit" id="modsubmit" class="pn pnc" value="{lang confirms}"><span>{lang confirms}</span></button>
 			</p>
 		<!--{/if}-->
@@ -321,8 +328,8 @@
 <script type="text/javascript" reload="1">
 function succeedhandle_mods(locationhref) {
 	hideWindow('mods');
-	<!--{if !empty($_G[gp_from])}-->
-		location.href = 'forum.php?mod=viewthread&tid=$_G[gp_from]&extra=$_G[gp_listextra]';
+	<!--{if !empty($_GET[from])}-->
+		location.href = 'forum.php?mod=viewthread&tid=$_GET[from]&extra=$_GET[listextra]';
 	<!--{else}-->
 		location.href = locationhref;
 	<!--{/if}-->
@@ -369,7 +376,7 @@ function showHighLightColor(hlid) {
 }
 </script>
 
-<!--{if empty($_G['gp_infloat'])}-->
+<!--{if empty($_GET['infloat'])}-->
 		</div>
 	</div>
 </div>

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_home.php 22638 2011-05-16 06:29:59Z svn_project_zhangjie $
+ *      $Id: function_home.php 27154 2012-01-09 05:02:29Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -15,6 +15,10 @@ function getstr($string, $length, $in_slashes=0, $out_slashes=0, $bbcode=0, $htm
 	global $_G;
 
 	$string = trim($string);
+	$sppos = strpos($string, chr(0).chr(0).chr(0));
+	if($sppos !== false) {
+		$string = substr($string, 0, $sppos);
+	}
 	if($in_slashes) {
 		$string = dstripslashes($string);
 	}
@@ -38,105 +42,6 @@ function getstr($string, $length, $in_slashes=0, $out_slashes=0, $bbcode=0, $htm
 		$string = daddslashes($string);
 	}
 	return trim($string);
-}
-
-function addblogtag($tags, $itemid , $typeid = 'blogid') {
-	global $_G;
-
-	if($tags == '') {
-		return;
-	}
-
-	$tags = str_replace(array(chr(0xa3).chr(0xac), chr(0xa1).chr(0x41), chr(0xef).chr(0xbc).chr(0x8c)), ',', censor($tags));
-	if(strexists($tags, ',')) {
-		$tagarray = array_unique(explode(',', $tags));
-	} else {
-		$langcore = lang('core');
-		$tags = str_replace($langcore['fullblankspace'], ' ', $tags);
-		$tagarray = array_unique(explode(' ', $tags));
-	}
-	$tagcount = 0;
-	foreach($tagarray as $tagname) {
-		$tagname = trim($tagname);
-		if(preg_match('/^([\x7f-\xff_-]|\w|\s){3,20}$/', $tagname)) {
-			$result = DB::fetch_first("SELECT tagid, status FROM ".DB::table('common_tag')." WHERE tagname='$tagname'");
-			if($result['tagid']) {
-				if(!$result['status']) {
-					$tagid = $result['tagid'];
-				}
-			} else {
-				DB::query("INSERT INTO ".DB::table('common_tag')." (tagname, status) VALUES ('$tagname', '0')");
-				$tagid = DB::insert_id();
-			}
-			if($tagid) {
-				DB::query("INSERT INTO ".DB::table('common_tagitem')." (tagid, tagname, itemid, idtype) VALUES ('$tagid', '$tagname', '$itemid', '$typeid')");
-				$tagcount++;
-				$tagstr .= $tagid.','.$tagname.'\t';
-			}
-			if($tagcount > 4) {
-				unset($tagarray);
-				break;
-			}
-		}
-	}
-	return $tagstr;
-}
-
-function modblogtag($tags, $itemid) {
-
-	$tagstr = DB::result_first("SELECT tag FROM ".DB::table('home_blogfield')." WHERE blogid='$itemid'");
-
-	$blogtagarray = $blogtagidarray = $blogtagarraynew = array();
-	$query = DB::query("SELECT tagid, tagname FROM ".DB::table('common_tagitem')." WHERE idtype='blogid' AND itemid='$itemid'");
-	while($result = DB::fetch($query)) {
-		$blogtagarray[] = $result['tagname'];
-		$blogtagidarray[] = $result['tagid'];
-	}
-
-	$tags = str_replace(array(chr(0xa3).chr(0xac), chr(0xa1).chr(0x41), chr(0xef).chr(0xbc).chr(0x8c)), ',', censor($tags));
-	if(strexists($tags, ',')) {
-		$tagarray = array_unique(explode(',', $tags));
-	} else {
-		$langcore = lang('core');
-		$tags = str_replace($langcore['fullblankspace'], ' ', $tags);
-		$tagarray = array_unique(explode(' ', $tags));
-	}
-
-	$tagcount = 0;
-	foreach($tagarray as $tagname) {
-		$tagname = trim($tagname);
-		if(preg_match('/^([\x7f-\xff_-]|\w|\s){3,20}$/', $tagname)) {
-			$blogtagarraynew[] = $tagname;
-			if(!in_array($tagname, $blogtagarray)) {
-				$result = DB::fetch_first("SELECT tagid, status FROM ".DB::table('common_tag')." WHERE tagname='$tagname'");
-				if($result['tagid']) {
-					if(!$result['status']) {
-						$tagid = $result['tagid'];
-					}
-				} else {
-					DB::query("INSERT INTO ".DB::table('common_tag')." (tagname, status) VALUES ('$tagname', '0')");
-					$tagid = DB::insert_id();
-				}
-				if($tagid) {
-					DB::query("INSERT INTO ".DB::table('common_tagitem')." (tagid, tagname, itemid, idtype) VALUES ('$tagid', '$tagname', '$itemid', 'blogid')");
-					$tagstr = $tagstr.$tagid.','.$tagname.'\t';
-				}
-			}
-		}
-		$tagcount++;
-		if($tagcount > 4) {
-			unset($tagarray);
-			break;
-		}
-	}
-	foreach($blogtagarray as $key => $tagname) {
-		if(!in_array($tagname, $blogtagarraynew)) {
-			DB::query("DELETE FROM	".DB::table('common_tagitem')." WHERE idtype='blogid' AND itemid = '$itemid' AND tagname='$tagname'");
-			$tagid = $blogtagidarray[$key];
-			$tagstr = str_replace("$tagid,$tagname\t", '', $tagstr);
-		}
-	}
-	return $tagstr;
 }
 
 function obclean() {
@@ -169,7 +74,7 @@ function url_implode($gets) {
 	$arr = array();
 	foreach ($gets as $key => $value) {
 		if($value) {
-			$arr[] = $key.'='.urlencode(dstripslashes($value));
+			$arr[] = $key.'='.urlencode($value);
 		}
 	}
 	return implode('&', $arr);
@@ -190,8 +95,7 @@ function get_my_app() {
 	global $_G;
 
 	if($_G['setting']['my_app_status']) {
-		$query = DB::query("SELECT * FROM ".DB::table('common_myapp')." WHERE flag='1' ORDER BY displayorder DESC", 'SILENT');
-		while ($value = DB::fetch($query)) {
+		foreach(C::t('common_myapp')->fetch_all_by_flag(1, '=', 'DESC') as $value) {
 			$_G['my_app'][$value['appid']] = $value;
 		}
 	}
@@ -200,9 +104,8 @@ function get_my_app() {
 function get_my_userapp() {
 	global $_G;
 
-	if($_G['setting']['my_app_status']) {
-		$query = DB::query("SELECT * FROM ".DB::table('home_userapp')." WHERE uid='$_G[uid]' ORDER BY displayorder DESC", 'SILENT');
-		while($value = DB::fetch($query)) {
+	if($_G['setting']['my_app_status'] && $_G['uid']) {
+		foreach(C::t('home_userapp')->fetch_all_by_uid_appid($_G['uid'], 0, 'displayorder') as $value) {
 			if(!empty($value['appname'])) {
 				$_G['my_userapp'][$value['appid']] = $value;
 			}
@@ -211,19 +114,7 @@ function get_my_userapp() {
 }
 
 function getspace($uid) {
-	global $_G;
-
-	$var = "home_space_{$uid}";
-	if(!isset($_G[$var])) {
-		if($uid == $_G['uid'] && $_G['member']['uid']) {
-			$_G[$var] = $_G['member'];
-			$_G[$var]['self'] = 1;
-		} else {
-			$query = DB::query("SELECT * FROM ".DB::table('common_member')." WHERE uid='$uid'");
-			$_G[$var] = DB::fetch($query);
-		}
-	}
-	return $_G[$var];
+	return getuserbyuid($uid);
 }
 
 function ckprivacy($key, $privace_type) {
@@ -372,16 +263,6 @@ function space_domain($space) {
 	return $space['domainurl'];
 }
 
-function my_checkupdate() {
-	global $_G;
-	if($_G['setting']['my_app_status'] && empty($_G['setting']['my_closecheckupdate']) && $_G['group']['radminid'] == 1) {
-		$sid = $_G['setting']['my_siteid'];
-		$ts = $_G['timestamp'];
-		$key = md5($sid.$ts.$_G['setting']['my_sitekey']);
-		echo '<script type="text/javascript" src="http://notice.uchome.manyou.com/notice?sId='.$sid.'&ts='.$ts.'&key='.$key.'" charset="UTF-8"></script>';
-	}
-}
-
 function g_name($groupid) {
 	global $_G;
 	echo $_G['cache']['usergroups'][$groupid]['grouptitle'];
@@ -503,7 +384,6 @@ function pic_delete($pic, $type, $thumb, $remote) {
 }
 
 function pic_upload($FILES, $type='album', $thumb_width=0, $thumb_height=0, $thumb_type=2) {
-	require_once libfile('class/upload');
 	$upload = new discuz_upload();
 
 	$result = array('pic'=>'', 'thumb'=>0, 'remote'=>0);
@@ -569,28 +449,14 @@ function member_count_update($uid, $counts) {
 }
 
 
-function member_status_update($uid, $counts) {
-	global $_G;
-
-	$setsqls = array();
-	foreach ($counts as $key => $value) {
-		$setsqls[] = "{$key}={$key}+'{$value}'";
-	}
-	if($setsqls) {
-		$setsqls[] = "lastactivity='{$_G[timestamp]}'";
-		DB::query("UPDATE ".DB::table('common_member_status')." SET ".implode(',', $setsqls)." WHERE uid='$uid'");
-	}
-}
-
 function getdefaultdoing() {
 	global $_G;
 
 	$result = array();
 	$key = 0;
 
-	$result = DB::fetch_first("SELECT * FROM ".DB::table('common_setting')." WHERE skey='defaultdoing'");
-	if(!empty($result['svalue'])) {
-		$_G['setting']['defaultdoing'] = explode("\r\n", $result['svalue']);
+	if(($result = C::t('common_setting')->fetch('defaultdoing'))) {
+		$_G['setting']['defaultdoing'] = explode("\r\n", $result);
 		$key = rand(0, count($_G['setting']['defaultdoing'])-1);
 	} else {
 		$_G['setting']['defaultdoing'] = array(lang('space', 'doing_you_can'));
@@ -603,7 +469,7 @@ function getuserdiydata($space) {
 	if(empty($_G['blockposition'])) {
 		$userdiy = getuserdefaultdiy();
 		if (!empty($space['blockposition'])) {
-			$blockdata = unserialize($space['blockposition']);
+			$blockdata = dunserialize($space['blockposition']);
 			foreach ((array)$blockdata as $key => $value) {
 				if ($key == 'parameters') {
 					foreach ((array)$value as $k=>$v) {
@@ -674,13 +540,59 @@ function getonlinemember($uids) {
 	global $_G;
 	if ($uids && is_array($uids) && empty($_G['ols'])) {
 		$_G['ols'] = array();
-		$query = DB::query("SELECT * FROM ".DB::table('common_session')." WHERE uid IN (".dimplode($uids).")");
-		while ($value = DB::fetch($query)) {
+		foreach(C::app()->session->fetch_all_by_uid($uids) as $value) {
 			if(!$value['invisible']) {
 				$_G['ols'][$value['uid']] = $value['lastactivity'];
 			}
 		}
 	}
+}
+function getfollowfeed($uid, $viewtype, $archiver = false, $start = 0, $perpage = 0) {
+	global $_G;
+
+	$list = array();
+	if(isset($_G['follwusers'][$uid])) {
+		$list['user'] = $_G['follwusers'][$uid];
+	} else {
+		if($viewtype == 'follow') {
+			$list['user'] = C::t('home_follow')->fetch_all_following_by_uid($uid);
+			$list['user'][$uid] = array('uid' => $uid);
+		} elseif($viewtype == 'special') {
+			$list['user'] = C::t('home_follow')->fetch_all_following_by_uid($uid, 1);
+		}
+		if(!empty($list['user'])) {
+			$_G['follwusers'][$uid] = $list['user'];
+		}
+	}
+	$uids = in_array($viewtype, array('other', 'self')) ? $uid : array_keys($list['user']);
+	if(!empty($uids) || in_array($viewtype, array('other', 'self'))) {
+		$list['feed'] = C::t('home_follow_feed')->fetch_all_by_uid($uids, $archiver, $start, $perpage);
+		if($list['feed']) {
+			$list['content'] = C::t('forum_threadpreview')->fetch_all(C::t('home_follow_feed')->get_tids());
+			if(!$_G['group']['allowgetattach'] || !$_G['group']['allowgetimage']) {
+				foreach($list['content'] as $key => $feed) {
+					if(!$_G['group']['allowgetimage']) {
+						$list['content'][$key]['content'] = preg_replace("/[ \t]*\<li\>\<img id=\"aimg_(.+?)\".*?\>[ \t]*\<\/li\>/is", '', $feed['content']);
+					}
+					if(!$_G['group']['allowgetattach']) {
+						$list['content'][$key]['content'] = preg_replace("/[ \t]*\<li\>\<a href=\"(.+?)\" id=\"attach_(.+?)\".*?\>.*?\<\/a\>[ \t]*\<\/li\>/is", '', $feed['content']);
+					}
+				}
+			}
+			$list['threads'] = C::t('forum_thread')->fetch_all_by_tid(C::t('home_follow_feed')->get_tids());
+		}
+	}
+	return $list;
+}
+
+function getthread() {
+	$threads = array();
+	foreach(C::t('home_follow_feed')->get_ids() as $idtype => $ids) {
+		if($idtype == 'thread') {
+			$threads = C::t('forum_thread')->fetch_all_by_tid($ids);
+		}
+	}
+	return $threads;
 }
 
 ?>

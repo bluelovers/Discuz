@@ -4,14 +4,18 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_thunder.php 7828 2010-04-14 02:11:48Z monkey $
+ *      $Id: lang_thunder.php 27449 2012-02-01 05:32:35Z zhangguosheng $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 $lang = array
 (
-	'thunder_name' => 'é›·é³´ä¹‹è²',
-	'thunder_desc' => 'ç™¼ä½ˆä¸€æ¢å…¨ç«™å‹•æ…‹ï¼Œé€šçŸ¥å¤§å®¶è‡ªå·±ä¸Šç·šäº†',
-	'thunder_info' => 'ç™¼ä½ˆä¸€æ¢å…¨ç«™å‹•æ…‹ï¼Œé€šçŸ¥å¤§å®¶è‡ªå·±ä¸Šç·šäº†',
+	'thunder_name' => 'À×ÃùÖ®Éù',
+	'thunder_desc' => '·¢²¼Ò»ÌõÈ«Õ¾¶¯Ì¬£¬Í¨Öª´ó¼Ò×Ô¼ºÉÏÏßÁË',
+	'thunder_info' => '·¢²¼Ò»ÌõÈ«Õ¾¶¯Ì¬£¬Í¨Öª´ó¼Ò×Ô¼ºÉÏÏßÁË',
 );
 
 ?>

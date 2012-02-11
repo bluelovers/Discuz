@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_styles.php 22806 2011-05-24 01:19:54Z congyushuai $
+ *      $Id: cache_styles.php 24428 2011-09-19 09:45:41Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -16,12 +16,11 @@ function build_cache_styles() {
 
 	$stylevars = $styledata = array();
 	$defaultstyleid = $_G['setting']['styleid'];
-	$query = DB::query("SELECT sv.* FROM ".DB::table('common_stylevar')." sv LEFT JOIN ".DB::table('common_style')." s ON s.styleid = sv.styleid AND (s.available=1 OR s.styleid='$defaultstyleid')");
-	while($var = DB::fetch($query)) {
+	foreach(C::t('common_stylevar')->fetch_all_by_styleid($defaultstyleid, 1) as $var) {
 		$stylevars[$var['styleid']][$var['variable']] = $var['substitute'];
 	}
-	$query = DB::query("SELECT s.*, t.directory AS tpldir FROM ".DB::table('common_style')." s LEFT JOIN ".DB::table('common_template')." t ON s.templateid=t.templateid");
-	while($data = DB::fetch($query)) {
+	foreach(C::t('common_style')->fetch_all_data(true) as $data) {
+		$data['tpldir'] = $data['directory'];
 		$data = array_merge($data, $stylevars[$data['styleid']]);
 		$datanew = array();
 		$data['imgdir'] = $data['imgdir'] ? $data['imgdir'] : STATICURL.'image/common';
@@ -65,9 +64,9 @@ function build_cache_styles() {
 		$styledata[] = $data;
 	}
 	foreach($styledata as $data) {
-		save_syscache('style_'.$data['styleid'], $data);
+		savecache('style_'.$data['styleid'], $data);
 		if($defaultstyleid == $data['styleid']) {
-			save_syscache('style_default', $data);
+			savecache('style_default', $data);
 		}
 		writetocsscache($data);
 	}

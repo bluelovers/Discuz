@@ -4,25 +4,24 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: search_sort.php 7421 2010-04-07 07:16:34Z monkey $
+ *      $Id: search_sort.php 26101 2011-12-01 08:28:32Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 if(!empty($searchid)) {
-	$page = max(1, intval($_G['gp_page']));
+	$page = max(1, intval($_GET['page']));
 	$start_limit = ($page - 1) * $_G['tpp'];
 
-	$index = DB::fetch_first("SELECT searchstring, keywords, threads, threadsortid, tids FROM ".DB::table('common_searchindex')." WHERE searchid='$searchid' AND threadsortid='$sortid'");
+	$index = C::t('common_searchindex')->fetch($searchid);
 
-	if(!$index) {
+	if($index['threadsortid'] != $sortid) {
 		showmessage('search_id_invalid');
 	}
 
 	$threadlist = $typelist = $resultlist = $_G['forum_optionlist'] = array();
-	$query = DB::query("SELECT tid, subject, dateline, iconid FROM ".DB::table('forum_thread')." WHERE tid IN ($index[tids]) AND displayorder>=0 ORDER BY dateline LIMIT $start_limit, $_G[tpp]");
-	while($info = DB::fetch($query)) {
+	foreach(C::t('forum_thread')->fetch_all_by_tid_fid_displayorder(explode(',', $index['tids']), null, 0, 'dateline', $start_limit, $_G['tpp']) as $info) {
 		$threadlist[$info['tid']]['icon'] = isset($_G['cache']['icons'][$info['iconid']]) ? '<img src="'.STATICURL.'image/forum/icon/'.$_G['cache']['icons'][$info['iconid']].'" alt="Icon'.$info['iconid'].'" class="icon" />' : '&nbsp;';
 		$threadlist[$info['tid']]['dateline'] = dgmdate($info['dateline'], 'u');
 		$threadlist[$info['tid']]['subject'] = $info['subject'];
@@ -30,8 +29,7 @@ if(!empty($searchid)) {
 
 	@include_once DISCUZ_ROOT.'./data/cache/forum_threadsort_'.$index['threadsortid'].'.php';
 
-	$query = DB::query("SELECT tid, optionid, value FROM ".DB::table('forum_typeoptionvar')." WHERE tid IN ($index[tids])");
-	while($info = DB::fetch($query)) {
+	foreach(C::t('forum_typeoptionvar')->fetch_all_by_tid_optionid(explode(',', $index['tids'])) as $info) {
 		if($_G['forum_dtype'][$info['optionid']]['search']) {
 			$optionid = $info['optionid'];
 			$identifier = $_G['forum_dtype'][$optionid]['identifier'];
@@ -89,12 +87,12 @@ if(!empty($searchid)) {
 		}
 	}
 
-	$fids = $comma = '';
+	$comma = '';
+	$fids = array();
 	foreach($_G['cache']['forums'] as $fid => $forum) {
 		if($forum['type'] != 'group' && (!$forum['viewperm'] && $_G['group']['readaccess']) || ($forum['viewperm'] && forumperm($forum['viewperm']))) {
 			if(!$forumsarray || in_array($fid, $forumsarray)) {
-				$fids .= "$comma'$fid'";
-				$comma = ',';
+				$fids[] = $fid;
 			}
 		}
 	}
@@ -110,19 +108,12 @@ if(!empty($searchid)) {
 	$searchstring = 'type|'.addslashes($srchoption);
 	$searchindex = array('id' => 0, 'dateline' => '0');
 
-	$query = DB::query("SELECT searchid, dateline,
-		('".$_G['setting']['searchctrl']."'<>'0' AND ".(empty($_G['uid']) ? "useip='$_G[clientip]'" : "uid='$_G[uid]'")." AND $_G[timestamp]-dateline<".$_G['setting']['searchctrl'].") AS flood,
-		(searchstring='$searchstring' AND expiration>'$_G[timestamp]') AS indexvalid
-		FROM ".DB::table('common_searchindex')."
-		WHERE ('".$_G['setting']['searchctrl']."'<>'0' AND ".(empty($_G['uid']) ? "useip='$_G[clientip]'" : "uid='$_G[uid]'")." AND $_G[timestamp]-dateline<".$_G['setting']['searchctrl'].") OR (searchstring='$searchstring' AND expiration>'$_G[timestamp]')
-		ORDER BY flood");
-
-	while($index = DB::fetch($query)) {
+	foreach(C::t('common_searchindex')->fetch_all_search($_G['setting']['searchctrl'], $_G['clientip'], $_G['uid'], $_G['timestamp'], $searchstring) as $index) {
 		if($index['indexvalid'] && $index['dateline'] > $searchindex['dateline']) {
 			$searchindex = array('id' => $index['searchid'], 'dateline' => $index['dateline']);
 			break;
 		} elseif($index['flood']) {
-			showmessage('search_ctrl', "forum.php?mod=search&srchtype=threadsort&sortid=".$_G['gp_selectsortid']."&srchfid=$_G[fid]", array('searchctrl' => $_G['setting']['searchctrl']));
+			showmessage('search_ctrl', "forum.php?mod=search&srchtype=threadsort&sortid=".$_GET['selectsortid']."&srchfid=$_G[fid]", array('searchctrl' => $_G['setting']['searchctrl']));
 		}
 	}
 
@@ -132,22 +123,22 @@ if(!empty($searchid)) {
 
 	} else {
 
-		if((!$searchoption || !is_array($searchoption)) && !$_G['gp_selectsortid']) {
-			showmessage('search_threadtype_invalid', "forum.php?mod=search&srchtype=threadsort&sortid=".$_G['gp_selectsortid']."&srchfid=$_G[fid]");
+		if((!$searchoption || !is_array($searchoption)) && !$_GET['selectsortid']) {
+			showmessage('search_threadtype_invalid', "forum.php?mod=search&srchtype=threadsort&sortid=".$_GET['selectsortid']."&srchfid=$_G[fid]");
 		} elseif(isset($srchfid) && $srchfid != 'all' && !(is_array($srchfid) && in_array('all', $srchfid)) && empty($forumsarray)) {
-			showmessage('search_forum_invalid', "forum.php?mod=search&srchtype=threadsort&sortid=".$_G['gp_selectsortid']."&srchfid=$_G[fid]");
-		} elseif(!$fids) {
+			showmessage('search_forum_invalid', "forum.php?mod=search&srchtype=threadsort&sortid=".$_GET['selectsortid']."&srchfid=$_G[fid]");
+		} elseif(empty($fids)) {
 			showmessage('group_nopermission', NULL, array('grouptitle' => $_G['group']['grouptitle']), array('login' => 1));
 		}
 
 		if($_G['setting']['maxspm']) {
-			if(DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_searchindex')." WHERE dateline>'$_G[timestamp]'-60") >= $_G['setting']['maxspm']) {
+			if(C::t('common_searchindex')->count_by_dateline($_G['timestamp']) >= $_G['setting']['maxspm']) {
 				showmessage('search_toomany', 'forum.php?mod=search', array('maxspm' => $_G['setting']['maxspm']));
 			}
 		}
 
-		$_G['gp_selectsortid'] = intval($_G['gp_selectsortid']);
-		@include_once DISCUZ_ROOT.'./data/cache/forum_threadsort_'.$_G['gp_selectsortid'].'.php';
+		$_GET['selectsortid'] = intval($_GET['selectsortid']);
+		@include_once DISCUZ_ROOT.'./data/cache/forum_threadsort_'.$_GET['selectsortid'].'.php';
 
 		$sqlsrch = $or = '';
 		if(!empty($searchoption) && is_array($searchoption)) {
@@ -172,18 +163,12 @@ if(!empty($searchid)) {
 			}
 		}
 
-		$threads = $tids = 0;
-		$query = DB::query("SELECT tid FROM ".DB::table('forum_optionvalue').$_G['gp_selectsortid'].' '.($sqlsrch ? 'WHERE '.$sqlsrch : '')."");
+		$threads = 0;
+		$tids = C::t('forum_optionvalue')->fetch_all_tid($_GET['selectsortid'], $sqlsrch ? 'WHERE '.$sqlsrch : '');
 
-		while($post = DB::fetch($query)) {
-			$tids .= ','.$post['tid'];
-		}
-		DB::free_result($query);
 
-		$tids = 0;
 		if($fids) {
-			$query = DB::query("SELECT tid, closed FROM ".DB::table('forum_thread')." WHERE tid IN ($tids) AND fid IN ($fids) LIMIT ".$_G['setting']['maxsearchresults']);
-			while($post = DB::fetch($query)) {
+			foreach(C::t('forum_thread')->fetch_all_by_tid_fid_displayorder(explode(',', $tids), $fids, null, 'dateline', $_G['setting']['maxsearchresults']) as $post) {
 				if($thread['closed'] <= 1) {
 					$tids .= ','.$post['tid'];
 					$threads++;
@@ -191,14 +176,22 @@ if(!empty($searchid)) {
 			}
 		}
 
-		DB::query("INSERT INTO ".DB::table('common_searchindex')." (keywords, searchstring, useip, uid, dateline, expiration, threads, threadsortid, tids)
-				VALUES ('$keywords', '$searchstring', '$_G[clientip]', '$_G[uid]', '$_G[timestamp]', '$expiration', '$threads', '".$_G['gp_selectsortid']."', '$tids')");
-		$searchid = DB::insert_id();
+		$searchid = C::t('common_searchindex')->insert(array(
+			'keywords' => $keywords,
+			'searchstring' => $searchstring,
+			'useip' => $_G['clientip'],
+			'uid' => $_G['uid'],
+			'dateline' => $_G['timestamp'],
+			'expiration' => $expiration,
+			'threads' => $threads,
+			'threadsortid' => $_GET['selectsortid'],
+			'tids' => $tids
+		), true);
 
 		!($_G['group']['exempt'] & 2) && updatecreditbyaction('search');
 	}
 
-	showmessage('search_redirect', "forum.php?mod=search&searchid=$searchid&srchtype=threadsort&sortid=".$_G['gp_selectsortid']."&searchsubmit=yes");
+	showmessage('search_redirect', "forum.php?mod=search&searchid=$searchid&srchtype=threadsort&sortid=".$_GET['selectsortid']."&searchsubmit=yes");
 
 }
 

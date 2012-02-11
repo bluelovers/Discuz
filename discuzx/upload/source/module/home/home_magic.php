@@ -4,12 +4,14 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc111.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: home_magic.php 21217 2011-03-18 10:01:16Z monkey $
+	$Id: home_magic.php 27287 2012-01-13 02:36:12Z monkey $
 */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
+
+$_G['disabledwidthauto'] = 0;
 
 if(!$_G['uid']) {
 	showmessage('not_loggedin', NULL, array(), array('login' => 1));
@@ -26,10 +28,10 @@ loadcache('magics');
 
 $_G['mnid'] = 'mn_common';
 $magiclist = array();
-$_G['tpp'] = 14;
-$page = max(1, intval($_G['gp_page']));
-$action = $_G['gp_action'];
-$operation = $_G['gp_operation'];
+$_G['tpp'] = 12;
+$page = max(1, intval($_GET['page']));
+$action = $_GET['action'];
+$operation = $_GET['operation'];
 $start_limit = ($page - 1) * $_G['tpp'];
 
 $comma = $typeadd = $filteradd = $forumperm = $targetgroupperm = '';
@@ -47,10 +49,9 @@ $totalweight = getmagicweight($_G['uid'], $magicarray);
 $allowweight = $_G['group']['maxmagicsweight'] - $totalweight;
 $location = 0;
 
-if(empty($action) && !empty($_G['gp_mid'])) {
-	$_G['gp_magicid'] = DB::result_first("SELECT m.magicid FROM ".DB::table('common_member_magic')." mm,".DB::table('common_magic')." m
-		WHERE mm.uid='$_G[uid]' AND m.identifier='$_G[gp_mid]' AND mm.magicid=m.magicid");
-	if($_G['gp_magicid']) {
+if(empty($action) && !empty($_GET['mid'])) {
+	$_GET['magicid'] = C::t('common_member_magic')->fetch_magicid_by_identifier($_G['uid'], $_GET['mid']);
+	if($_GET['magicid']) {
 		$action = 'mybox';
 		$operation = 'use';
 	} else {
@@ -73,18 +74,14 @@ if($action == 'shop') {
 		$filteradd = '';
 		if($operation == 'index') {
 			$navtitle = lang('core', 'title_magics_shop');
-			$orderby = "ORDER BY displayorder";
 		} else {
 			$navtitle = lang('core', 'title_magics_hot');
-			$filteradd = "AND salevolume>'0'";
-			$orderby = "ORDER BY salevolume DESC";
 		}
 
-		$magiccount = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_magic')." WHERE available='1' $filteradd");
+		$magiccount = C::t('common_magic')->count_page($operation);
 		$multipage = multi($magiccount, $_G['tpp'], $page, "home.php?mod=magic&action=shop&operation=$operation");
 
-		$query = DB::query("SELECT magicid, name, identifier, description, credit, price, num, salevolume, weight FROM ".DB::table('common_magic')." WHERE available='1' $filteradd $orderby LIMIT $start_limit,$_G[tpp]");
-		while($magic = DB::fetch($query)) {
+		foreach(C::t('common_magic')->fetch_all_page($operation, $start_limit, $_G['tpp']) as $magic) {
 			$magic['discountprice'] = $_G['group']['magicsdiscount'] ? intval($magic['price'] * ($_G['group']['magicsdiscount'] / 10)) : intval($magic['price']);
 			$magic['pic'] = strtolower($magic['identifier']).'.gif';
 			$magiclist[] = $magic;
@@ -97,11 +94,11 @@ if($action == 'shop') {
 
 	} elseif($operation == 'buy') {
 
-		$magic = DB::fetch_first("SELECT * FROM ".DB::table('common_magic')." WHERE identifier='$_G[gp_mid]'");
+		$magic = C::t('common_magic')->fetch_by_identifier($_GET['mid']);
 		if(!$magic || !$magic['available']) {
 			showmessage('magics_nonexistence');
 		}
-		$magicperm = unserialize($magic['magicperm']);
+		$magicperm = dunserialize($magic['magicperm']);
 		$querystring = array();
 		foreach($_GET as $k => $v) {
 			$querystring[] = $k.'='.rawurlencode($v);
@@ -153,7 +150,7 @@ if($action == 'shop') {
 
 		} else {
 
-			$magicnum = intval($_G['gp_magicnum']);
+			$magicnum = intval($_GET['magicnum']);
 			$magic['weight'] = $magic['weight'] * $magicnum;
 			$totalprice = $magic['discountprice'] * $magicnum;
 
@@ -172,9 +169,10 @@ if($action == 'shop') {
 			getmagic($magic['magicid'], $magicnum, $magic['weight'], $totalweight, $_G['uid'], $_G['group']['maxmagicsweight']);
 			updatemagiclog($magic['magicid'], '1', $magicnum, $magic['price'].'|'.$magic['credit'], $_G['uid']);
 
-			DB::query("UPDATE ".DB::table('common_magic')." SET num=num+(-'$magicnum'), salevolume=salevolume+'$magicnum' WHERE magicid='$magic[magicid]'");
+			C::t('common_magic')->update_salevolume($magic['magicid'], $magicnum);
 			updatemembercount($_G['uid'], array($magic['credit'] => -$totalprice), true, 'BMC', $magic['magicid']);
 			showmessage('magics_buy_succeed', 'home.php?mod=magic&action=mybox', array('magicname' => $magic['name'], 'num' => $magicnum, 'credit' => $totalprice.' '.$_G['setting']['extcredits'][$magic['credit']]['unit'].$_G['setting']['extcredits'][$magic['credit']]['title']));
+
 
 		}
 
@@ -184,7 +182,7 @@ if($action == 'shop') {
 			showmessage('magics_nopermission');
 		}
 
-		$magic = DB::fetch_first("SELECT * FROM ".DB::table('common_magic')." WHERE identifier='$_G[gp_mid]'");
+		$magic = C::t('common_magic')->fetch_by_identifier($_GET['mid']);
 		if(!$magic || !$magic['available']) {
 			showmessage('magics_nonexistence');
 		}
@@ -201,7 +199,7 @@ if($action == 'shop') {
 
 		} else {
 
-			$magicnum = intval($_G['gp_magicnum']);
+			$magicnum = intval($_GET['magicnum']);
 			$totalprice = $magic['price'] * $magicnum;
 
 			if(getuserprofile('extcredits'.$magic['credit']) < $totalprice) {
@@ -216,14 +214,14 @@ if($action == 'shop') {
 				showmessage('magics_num_invalid');
 			}
 
-			$toname = dhtmlspecialchars(trim($_G['gp_tousername']));
+			$toname = dhtmlspecialchars(trim($_GET['tousername']));
 			if(!$toname) {
 				showmessage('magics_username_nonexistence');
 			}
 
-			$givemessage = dhtmlspecialchars(trim($_G['gp_givemessage']));
+			$givemessage = dhtmlspecialchars(trim($_GET['givemessage']));
 			givemagic($toname, $magic['magicid'], $magicnum, $magic['num'], $totalprice, $givemessage, $magicarray);
-			DB::query("UPDATE ".DB::table('common_magic')." SET num=num+(-'$magicnum'), salevolume=salevolume+'$magicnum' WHERE magicid='$magicid'");
+			C::t('common_magic')->update_salevolume($magic['magicid'], $magicnum);
 			updatemembercount($_G['uid'], array($magic['credit'] => -$totalprice), true, 'BMC', $magicid);
 			showmessage('magics_buygive_succeed', 'home.php?mod=magic&action=shop', array('magicname' => $magic['name'], 'toname' => $toname, 'num' => $magicnum, 'credit' => $_G['setting']['extcredits'][$magic['credit']]['title'].' '.$totalprice.' '.$_G['setting']['extcredits'][$magic['credit']]['unit']), array('locationtime' => true));
 
@@ -237,15 +235,17 @@ if($action == 'shop') {
 
 	if(empty($operation)) {
 
-		$pid = !empty($_G['gp_pid']) ? intval($_G['gp_pid']) : 0;
-		$magiccount = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_member_magic')." mm, ".DB::table('common_magic')." m WHERE mm.uid='$_G[uid]' AND mm.magicid=m.magicid");
+		$pid = !empty($_GET['pid']) ? intval($_GET['pid']) : 0;
+		$magiccount = C::t('common_member_magic')->count_by_uid($_G['uid']);
 
 		$multipage = multi($magiccount, $_G['tpp'], $page, "home.php?mod=magic&action=mybox&pid=$pid$typeadd");
-		$query = DB::query("SELECT mm.num, m.magicid, m.name, m.identifier, m.description, m.weight, m.useevent
-				FROM ".DB::table('common_member_magic')." mm
-				LEFT JOIN ".DB::table('common_magic')." m ON mm.magicid=m.magicid
-				WHERE mm.uid='$_G[uid]' LIMIT $start_limit,$_G[tpp]");
-		while($mymagic = DB::fetch($query)) {
+		$query = C::t('common_member_magic')->fetch_all($_G['uid'], null, $start_limit, $_G['tpp']);
+		foreach($query as $value) {
+			$magicids[] = $value['magicid'];
+		}
+		$magicm = C::t('common_magic')->fetch_all($magicids);
+		foreach($query as $curmagicid => $mymagic) {
+			$mymagic = $mymagic + $magicm[$mymagic['magicid']];
 			$mymagic['pic'] = strtolower($mymagic['identifier']).'.gif';
 			$mymagic['weight'] = intval($mymagic['weight'] * $mymagic['num']);
 			$mymagic['type'] = $mymagic['type'];
@@ -255,18 +255,17 @@ if($action == 'shop') {
 
 	} else {
 
-		$magicid = intval($_G['gp_magicid']);
-		$magic = DB::fetch_first("SELECT m.*, mm.num
-				FROM ".DB::table('common_member_magic')." mm
-				LEFT JOIN ".DB::table('common_magic')." m ON mm.magicid=m.magicid
-				WHERE mm.uid='$_G[uid]' AND mm.magicid='$magicid'");
-		if(!$magic) {
+		$magicid = intval($_GET['magicid']);
+		$membermagic = C::t('common_member_magic')->fetch($_G['uid'], $magicid);
+		$magic = $membermagic +	C::t('common_magic')->fetch($magicid);
+
+		if(!$membermagic) {
 			showmessage('magics_nonexistence');
 		} elseif(!$magic['num']) {
-			DB::query("DELETE FROM ".DB::table('common_member_magic')." WHERE uid='$_G[uid]' AND magicid='$magic[magicid]'");
+			C::t('common_member_magic')->delete($_G['uid'], $magic['magicid']);
 			showmessage('magics_nonexistence');
 		}
-		$magicperm = unserialize($magic['magicperm']);
+		$magicperm = dunserialize($magic['magicperm']);
 		$magic['pic'] = strtolower($magic['identifier']).'.gif';
 
 		if($operation == 'use') {
@@ -277,7 +276,7 @@ if($action == 'shop') {
 			}
 
 			if($magic['num'] <= 0) {
-				DB::query("DELETE FROM ".DB::table('common_member_magic')." WHERE uid='$_G[uid]' AND magicid='$magic[magicid]'");
+				C::t('common_member_magic')->delete($_G['uid'], $magic['magicid']);
 				showmessage('magics_nopermission');
 			}
 
@@ -312,7 +311,7 @@ if($action == 'shop') {
 				include template('home/space_magic_mybox_opreation');
 				dexit();
 			} else {
-				$magicnum = intval($_G['gp_magicnum']);
+				$magicnum = intval($_GET['magicnum']);
 
 				if(!$magicnum || $magicnum < 0) {
 					showmessage('magics_num_invalid');
@@ -332,7 +331,7 @@ if($action == 'shop') {
 				include template('home/space_magic_mybox_opreation');
 				dexit();
 			} else {
-				$magicnum = intval($_G['gp_magicnum']);
+				$magicnum = intval($_GET['magicnum']);
 
 				if(!$magicnum || $magicnum < 0) {
 					showmessage('magics_num_invalid');
@@ -360,15 +359,15 @@ if($action == 'shop') {
 
 			} else {
 
-				$magicnum = intval($_G['gp_magicnum']);
-				$toname = dhtmlspecialchars(trim($_G['gp_tousername']));
+				$magicnum = intval($_GET['magicnum']);
+				$toname = dhtmlspecialchars(trim($_GET['tousername']));
 				if(!$toname) {
 					showmessage('magics_username_nonexistence');
 				} elseif($magic['num'] < $magicnum) {
 					showmessage('magics_num_invalid');
 				}
 
-				$givemessage = dhtmlspecialchars(trim($_G['gp_givemessage']));
+				$givemessage = dhtmlspecialchars(trim($_GET['givemessage']));
 				givemagic($toname, $magic['magicid'], $magicnum, $magic['num'], '0', $givemessage, $magicarray);
 
 			}
@@ -384,61 +383,77 @@ if($action == 'shop') {
 	$subactives[$operation] = 'class="a"';
 	$loglist = array();
 	if($operation == 'uselog') {
-		$query = DB::query("SELECT COUNT(*) FROM ".DB::table('common_magiclog')." WHERE uid='$_G[uid]' AND action='2'");
-		$multipage = multi(DB::result($query, 0), $_G['tpp'], $page, 'home.php?mod=magic&action=log&amp;operation=uselog');
+		$count = C::t('common_magiclog')->count_by_uid_action($_G['uid'], 2);
+		if($count) {
+			$multipage = multi($count, $_G['tpp'], $page, 'home.php?mod=magic&action=log&amp;operation=uselog');
 
-		$query = DB::query("SELECT ml.*, me.username FROM ".DB::table('common_magiclog')." ml
-			LEFT JOIN ".DB::table('common_member')." me ON me.uid=ml.uid
-			WHERE ml.action='2' AND ml.uid='$_G[uid]' ORDER BY ml.dateline DESC
-			LIMIT $start_limit, $_G[tpp]");
-		while($log = DB::fetch($query)) {
-			$log['dateline'] = dgmdate($log['dateline'], 'u');
-			$log['name'] = $magicarray[$log['magicid']]['name'];
-			$loglist[] = $log;
+			$logs = C::t('common_magiclog')->fetch_all_by_uid_action($_G['uid'], 2, $start_limit, $_G['tpp']);
+			$luids=array();
+			foreach($luids as $log) {
+				$luids[$log['uid']] = $log['uid'];
+			}
+			$members = C::t('common_magiclog')->fetch_all($luids);
+			foreach($logs as $log) {
+				$log['username'] = $members[$log['uid']]['username'];
+				$log['dateline'] = dgmdate($log['dateline'], 'u');
+				$log['name'] = $magicarray[$log['magicid']]['name'];
+				$loglist[] = $log;
+			}
 		}
 
 	} elseif($operation == 'buylog') {
-		$query = DB::query("SELECT COUNT(*) FROM ".DB::table('common_magiclog')." WHERE uid='$_G[uid]' AND action='1'");
-		$multipage = multi(DB::result($query, 0), $_G['tpp'], $page, 'home.php?mod=magic&action=log&amp;operation=buylog');
+		$count = C::t('common_magiclog')->count_by_uid_action($_G['uid'], 1);
+		if($count) {
+			$multipage = multi($count, $_G['tpp'], $page, 'home.php?mod=magic&action=log&amp;operation=buylog');
 
-		$query = DB::query("SELECT * FROM ".DB::table('common_magiclog')."
-			WHERE uid='$_G[uid]' AND action='1' ORDER BY dateline DESC
-			LIMIT $start_limit, $_G[tpp]");
-		while($log = DB::fetch($query)) {
-			$log['credit'] = $log['credit'] ? $log['credit'] : $_G['setting']['creditstransextra'][3];
-			$log['dateline'] = dgmdate($log['dateline'], 'u');
-			$log['name'] = $magicarray[$log['magicid']]['name'];
-			$loglist[] = $log;
+			foreach(C::t('common_magiclog')->fetch_all_by_uid_action($_G['uid'], 1, $start_limit, $_G['tpp']) as $log) {
+				$log['credit'] = $log['credit'] ? $log['credit'] : $_G['setting']['creditstransextra'][3];
+				$log['dateline'] = dgmdate($log['dateline'], 'u');
+				$log['name'] = $magicarray[$log['magicid']]['name'];
+				$loglist[] = $log;
+			}
 		}
 
 	} elseif($operation == 'givelog') {
-		$query = DB::query("SELECT COUNT(*) FROM ".DB::table('common_magiclog')." WHERE uid='$_G[uid]' AND action='3'");
-		$multipage = multi(DB::result($query, 0), $_G['tpp'], $page, 'home.php?mod=magic&action=log&amp;operation=givelog');
+		$count = C::t('common_magiclog')->count_by_uid_action($_G['uid'], 3);
+		if($count) {
+			$multipage = multi($count, $_G['tpp'], $page, 'home.php?mod=magic&action=log&amp;operation=givelog');
 
-		$query = DB::query("SELECT ml.*, me.username FROM ".DB::table('common_magiclog')." ml
-			LEFT JOIN ".DB::table('common_member')." me ON me.uid=ml.targetuid
-			WHERE ml.uid='$_G[uid]' AND ml.action='3' ORDER BY ml.dateline DESC
-			LIMIT $start_limit, $_G[tpp]");
-		while($log = DB::fetch($query)) {
-			$log['dateline'] = dgmdate($log['dateline'], 'u');
-			$log['name'] = $magicarray[$log['magicid']]['name'];
-			$loglist[] = $log;
+			$uids = null;
+			$query = C::t('common_magiclog')->fetch_all_by_uid_action($_G['uid'], 3, $start_limit, $_G['tpp']);
+			foreach($query as $log) {
+				$uids[] = $log['targetuid'];
+			}
+			if($uids != null) {
+				$memberdata = C::t('common_member')->fetch_all_username_by_uid($uids);
+			}
+			foreach($query as $log) {
+				$log['username'] = $memberdata[$log['targetuid']];
+				$log['dateline'] = dgmdate($log['dateline'], 'u');
+				$log['name'] = $magicarray[$log['magicid']]['name'];
+				$loglist[] = $log;
+			}
 		}
 
 	} elseif($operation == 'receivelog') {
-		$query = DB::query("SELECT COUNT(*) FROM ".DB::table('common_magiclog')." WHERE targetuid='$_G[uid]' AND action='3'");
-		$multipage = multi(DB::result($query, 0), $_G['tpp'], $page, 'home.php?mod=magic&action=log&amp;operation=receivelog');
+		$count = C::t('common_magiclog')->count_by_targetuid_action($_G['uid'], 3);
+		if($count) {
+			$multipage = multi($count, $_G['tpp'], $page, 'home.php?mod=magic&action=log&amp;operation=receivelog');
 
-		$query = DB::query("SELECT ml.*, me.username FROM ".DB::table('common_magiclog')." ml
-			LEFT JOIN ".DB::table('common_member')." me ON me.uid=ml.uid
-			WHERE ml.targetuid='$_G[uid]' AND ml.action='3' ORDER BY ml.dateline DESC
-			LIMIT $start_limit, $_G[tpp]");
-		while($log = DB::fetch($query)) {
-			$log['dateline'] = dgmdate($log['dateline'], 'u');
-			$log['name'] = $magicarray[$log['magicid']]['name'];
-			$loglist[] = $log;
+			$logs = C::t('common_magiclog')->fetch_all_by_targetuid_action($_G['uid'], 3, $start_limit, $_G['tpp']);
+			$luids = array();
+			foreach($logs as $log) {
+				$luids[$log['uid']] = $log['uid'];
+			}
+			$members = C::t('common_member')->fetch_all_username_by_uid($luids);
+
+			foreach($logs as $log) {
+				$log['username'] = $members[$log['uid']];
+				$log['dateline'] = dgmdate($log['dateline'], 'u');
+				$log['name'] = $magicarray[$log['magicid']]['name'];
+				$loglist[] = $log;
+			}
 		}
-
 	}
 	$navtitle = lang('core', 'title_magics_log');
 

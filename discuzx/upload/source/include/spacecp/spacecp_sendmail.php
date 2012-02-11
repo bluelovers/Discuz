@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_sendmail.php 10647 2010-05-13 07:05:54Z zhengqingpeng $
+ *      $Id: spacecp_sendmail.php 25246 2011-11-02 03:34:53Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -18,8 +18,8 @@ if(empty($_G['setting']['sendmailday'])) {
 }
 
 if(submitcheck('setsendemailsubmit')) {
-	$_G['gp_sendmail'] = addslashes(serialize($_G['gp_sendmail']));
-	DB::update('common_member_field_home', array('acceptemail' => $_G['gp_sendmail']), array('uid' => $_G['uid']));
+	$_GET['sendmail'] = serialize($_GET['sendmail']);
+	C::t('common_member_field_home')->update($_G['uid'], array('acceptemail' => $_GET['sendmail']));
 	showmessage('do_success', 'home.php?mod=spacecp&ac=sendmail');
 }
 

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: magic_open.php 13898 2010-08-03 02:22:52Z monkey $
+ *      $Id: magic_open.php 26749 2011-12-22 07:38:37Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -51,32 +51,31 @@ class magic_open {
 
 	function usesubmit() {
 		global $_G;
-		if(empty($_G['gp_tid'])) {
+		if(empty($_GET['tid'])) {
 			showmessage(lang('magic/open', 'open_info_nonexistence'));
 		}
 
-		$thread = getpostinfo($_G['gp_tid'], 'tid', array('fid', 'authorid', 'subject'));
+		$thread = getpostinfo($_GET['tid'], 'tid', array('fid', 'authorid', 'subject'));
 		$this->_check($thread);
-		magicthreadmod($_G['gp_tid']);
+		magicthreadmod($_GET['tid']);
 
-		DB::query("UPDATE ".DB::table('forum_thread')." SET closed='0', moderated='1' WHERE tid='$_G[gp_tid]'");
-
+		C::t('forum_thread')->update($_GET['tid'], array('closed' => 0, 'moderated' => 1));
 		usemagic($this->magic['magicid'], $this->magic['num']);
-		updatemagiclog($this->magic['magicid'], '2', '1', '0', 0, 'tid', $_G['gp_tid']);
-		updatemagicthreadlog($_G['gp_tid'], $this->magic['magicid'], 'OPN');
+		updatemagiclog($this->magic['magicid'], '2', '1', '0', 0, 'tid', $_GET['tid']);
+		updatemagicthreadlog($_GET['tid'], $this->magic['magicid'], 'OPN');
 
 		if($thread['authorid'] != $_G['uid']) {
-			notification_add($thread['authorid'], 'magic', lang('magic/open', 'open_notification'), array('tid' => $_G['gp_tid'], 'subject' => $thread['subject'], 'magicname' => $this->magic['name']));
+			notification_add($thread['authorid'], 'magic', lang('magic/open', 'open_notification'), array('tid' => $_GET['tid'], 'subject' => $thread['subject'], 'magicname' => $this->magic['name']));
 		}
 
-		showmessage(lang('magic/open', 'open_succeed'), dreferer(), array(), array('showdialog' => 1, 'locationtime' => true));
+		showmessage(lang('magic/open', 'open_succeed'), dreferer(), array(), array('alert' => 'right', 'showdialog' => 1, 'locationtime' => true));
 	}
 
 	function show() {
 		global $_G;
-		$tid = !empty($_G['gp_id']) ? htmlspecialchars($_G['gp_id']) : '';
+		$tid = !empty($_GET['id']) ? htmlspecialchars($_GET['id']) : '';
 		if($tid) {
-			$thread = getpostinfo($_G['gp_id'], 'tid', array('fid', 'authorid'));
+			$thread = getpostinfo($_GET['id'], 'tid', array('fid', 'authorid'));
 			$this->_check($thread);
 		}
 		$this->parameters['expiration'] = $this->parameters['expiration'] ? intval($this->parameters['expiration']) : 24;
@@ -87,8 +86,8 @@ class magic_open {
 
 	function buy() {
 		global $_G;
-		if(!empty($_G['gp_id'])) {
-			$thread = getpostinfo($_G['gp_id'], 'tid', array('fid', 'authorid'));
+		if(!empty($_GET['id'])) {
+			$thread = getpostinfo($_GET['id'], 'tid', array('fid', 'authorid'));
 			$this->_check($thread);
 		}
 	}

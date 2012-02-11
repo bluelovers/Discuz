@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portalcp_article.php 7701 2010-04-12 06:01:33Z zhengqingpeng $
+ *      $Id: portalcp_category.php 26894 2011-12-27 06:34:22Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -22,7 +22,7 @@ $perpagearr = array(20, 30,40, 50, 100);
 $_GET['type'] = isset($_GET['type']) && in_array($_GET['type'], array('unrecommend', 'recommended', 'me')) ? $_GET['type'] : 'all';
 $perpage = isset($_GET['perpage']) && in_array($_GET['perpage'], $perpagearr) ? $_GET['perpage'] : 20;
 $typearr[$_GET['type']] = 'class="a"';
-$theurl = "portal.php?mod=portalcp&ac=category&catid=$catid&perpage=$perpage&type=$_GET[type]";
+$theurl = "portal.php?mod=portalcp&ac=category&catid=$catid&perpage=$perpage&type=$_GET[type]&formhash=".FORMHASH."&searchkey=".urlencode($_GET['searchkey']);
 
 $allowmanage = checkperm('allowmanagearticle');
 $allowpost = checkperm('allowpostarticle');
@@ -64,7 +64,6 @@ if($_GET['type'] == 'recommended') {
 	$wherearr[] = "bid = ''";
 }
 $wheresql = implode(' AND ', $wherearr);
-$wheresql = $wheresql ? " WHERE $wheresql" : '';
 
 $page = max(1,intval($_GET['page']));
 $start = ($page-1)*$perpage;
@@ -73,11 +72,11 @@ if($start<0) $start = 0;
 $list = array();
 $multi = '';
 $article_tags = article_tagnames();
-$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('portal_article_title')."$wheresql"), 0);
+$count = C::t('portal_article_title')->fetch_all_by_sql($wheresql, '', 0, 0, 1);
 if($count) {
 
-	$query = DB::query("SELECT * FROM ".DB::table('portal_article_title')."$wheresql ORDER BY dateline DESC LIMIT $start,$perpage");
-	while ($value = DB::fetch($query)) {
+	$query = C::t('portal_article_title')->fetch_all_by_sql($wheresql, 'ORDER BY dateline DESC', $start, $perpage);
+	foreach($query as $value) {
 		if($value['pic']) $value['pic'] = pic_get($value['pic'], 'portal', $value['thumb'], $value['remote']);
 		$value['dateline'] = dgmdate($value['dateline']);
 		$value['allowmanage'] = ($allowmanage || !empty($permission[$value['catid']]['allowmanage'])) ? true : false;

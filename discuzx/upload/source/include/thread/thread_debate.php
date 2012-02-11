@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: thread_debate.php 16706 2010-09-13 06:37:44Z wangjinbo $
+ *      $Id: thread_debate.php 24551 2011-09-26 03:05:44Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -12,7 +12,7 @@ if(!defined('IN_DISCUZ')) {
 }
 
 $debate = $_G['forum_thread'];
-$debate = DB::fetch_first("SELECT * FROM ".DB::table('forum_debate')." WHERE tid='$_G[tid]'");
+$debate = C::t('forum_debate')->fetch($_G['tid']);
 $debate['dbendtime'] = $debate['endtime'];
 if($debate['dbendtime']) {
 	$debate['endtime'] = dgmdate($debate['dbendtime']);
@@ -44,19 +44,14 @@ if($debate['umpirepoint']) {
 $debate['umpireurl'] = rawurlencode($debate['umpire']);
 list($debate['bestdebater'], $debate['bestdebateruid'], $debate['bestdebaterstand'], $debate['bestdebatervoters'], $debate['bestdebaterreplies']) = explode("\t", $debate['bestdebater']);
 $debate['bestdebaterurl'] = rawurlencode($debate['bestdebater']);
-$posttable = getposttablebytid($_G['tid']);
-$query = DB::query("SELECT author, authorid FROM ".DB::table($posttable)." p, ".DB::table('forum_debatepost')." dp
-	WHERE p.tid='$_G[tid]' AND p.anonymous='0' AND p.invisible='0' AND dp.stand='1' AND p.pid=dp.pid ORDER BY p.dateline DESC LIMIT 16");
-while($affirmavatar = DB::fetch($query)) {
+foreach(C::t('forum_post')->fetch_all_debatepost_by_tid_stand($_G['tid'], 1, 0, 16) as $affirmavatar) {
 	if(!isset($debate['affirmavatars'][$affirmavatar['authorid']])) {
 		$affirmavatar['avatar'] = avatar($affirmavatar['authorid'], 'small');
 		$debate['affirmavatars'][$affirmavatar['authorid']] = $affirmavatar;
 	}
 }
 
-$query = DB::query("SELECT author, authorid FROM ".DB::table($posttable)." p, ".DB::table('forum_debatepost')." dp
-	WHERE p.tid='$_G[tid]' AND p.anonymous='0' AND p.invisible='0' AND dp.stand='2' AND p.pid=dp.pid ORDER BY p.dateline DESC LIMIT 16");
-while($negaavatar = DB::fetch($query)) {
+foreach(C::t('forum_post')->fetch_all_debatepost_by_tid_stand($_G['tid'], 2, 0, 16) as $negaavatar) {
 	if(!isset($debate['negaavatars'][$negaavatar['authorid']])) {
 		$negaavatar['avatar'] = avatar($negaavatar['authorid'], 'small');
 		$debate['negaavatars'][$negaavatar['authorid']] = $negaavatar;
@@ -64,7 +59,7 @@ while($negaavatar = DB::fetch($query)) {
 }
 
 if($_G['setting']['fastpost'] && $allowpostreply && $_G['forum_thread']['closed'] == 0) {
-	$firststand = DB::result_first("SELECT stand FROM ".DB::table('forum_debatepost')." WHERE tid='$_G[tid]' AND uid='$_G[uid]' AND stand>'0' ORDER BY dateline LIMIT 1");
+	$firststand = C::t('forum_debatepost')->get_firststand($_G['tid'], $_G['uid']);
 }
 
 ?>

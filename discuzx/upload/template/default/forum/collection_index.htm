@@ -1,0 +1,49 @@
+<!--{subtemplate common/header}-->
+<div id="pt" class="bm cl">
+	<div class="z">
+		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
+		<a href="$_G[setting][navs][2][filename]">$_G[setting][navs][2][navname]</a> <em>&rsaquo;</em>
+		{lang collection}
+	</div>
+</div>
+
+<div id="ct" class=" wp cl">
+	<div class="bm">
+		<div class="tb tb_h cl">
+			<!--{subtemplate forum/collection_nav}-->
+		</div>
+		<div class="bm_c">
+			<!--{hook/collection_index_top}-->
+			<!--{if count($hotcollection) > 0}-->
+			<div class="clct_list cl">
+				<!--{loop $hotcollection $collectionvalues}-->
+				<div class="xld xlda cl">
+					<dl>
+						<dd class="m hm">
+							<strong class="xi2" {if {$collectionvalues['follownum']} > 999999}style="font-size: 10px;"{/if}>{$collectionvalues['follownum']}</strong>
+							<span style="color: #FFF">{lang collection_follow}</span>
+						</dd>
+						<dt class="xw1"><a href="forum.php?mod=collection&action=view&ctid={$collectionvalues['ctid']}" class="xi2">{$collectionvalues['name']}</a></dt>
+						<dd>
+							<p>{lang collection_threadnum} {$collectionvalues['threadnum']}, {lang collection_commentnum} {$collectionvalues['commentnum']}</p>
+							<p class="xg1"><a href="home.php?mod=space&uid=$collectionvalues['uid']">{$collectionvalues['username']}</a> {lang collection_createtime} {$collectionvalues['dateline']}, {lang collection_lastupdate} {$collectionvalues['lastupdate']}</p>
+							<p>
+								<!--{if $collectionvalues['lastpost']}-->
+								{lang collection_lastthread} <a href="forum.php?mod=viewthread&tid={$collectionvalues['lastpost']}" class="xi2">{$collectionvalues['lastsubject']}</a>
+								<!--{/if}-->
+							</p>
+						</dd>
+					</dl>
+				</div>
+				<!--{/loop}-->
+			</div>
+			<!--{else}-->
+				<div class="emp">{lang collection_nocollection}</div>
+			<!--{/if}-->
+			<!--{hook/collection_index_bottom}-->
+		</div>
+	</div>
+	$multipage
+	<br /><br />
+</div>
+<!--{subtemplate common/footer}-->

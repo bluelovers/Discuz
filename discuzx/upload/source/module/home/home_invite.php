@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: home_invite.php 20808 2011-03-04 07:03:30Z zhengqingpeng $
+ *      $Id: home_invite.php 25756 2011-11-22 02:47:45Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -44,8 +44,7 @@ if($_G['uid']) {
 
 if($id) {
 
-	$query = DB::query("SELECT * FROM ".DB::table('common_invite')." WHERE id='$id'");
-	$invite = DB::fetch($query);
+	$invite = C::t('common_invite')->fetch($id);
 
 	if(empty($invite) || $invite['code'] != $_GET['c']) {
 		showmessage('invite_code_error', '', array(), array('return' => true));
@@ -54,7 +53,7 @@ if($id) {
 		showmessage('invite_code_fuid', '', array(), array('return' => true));
 	}
 	if($invite['endtime'] && $_G['timestamp'] > $invite['endtime']) {
-		DB::query("DELETE FROM ".DB::table('common_invite')." WHERE id='$id'");
+		C::t('common_invite')->delete($id);
 		showmessage('invite_code_endtime_error', '', array(), array('return' => true));
 	}
 
@@ -70,7 +69,7 @@ if($id) {
 	if($_GET['c'] != $invite_code) {
 		showmessage('invite_code_error', '', array(), array('return' => true));
 	}
-	$inviteuser = getspace($uid);
+	$inviteuser = getuserbyuid($uid);
 	loadcache('usergroup_'.$inviteuser['groupid']);
 	if(!empty($_G['cache']['usergroup_'.$inviteuser['groupid']]) && $_G['cache']['usergroup_'.$inviteuser['groupid']]['inviteprice']) {
 		showmessage('invite_code_error', '', array(), array('return' => true));
@@ -84,11 +83,10 @@ if($id) {
 
 $userapp = array();
 if($appid) {
-	$query = DB::query("SELECT * FROM ".DB::table('common_myapp')." WHERE appid='$appid'");
-	$userapp = DB::fetch($query);
+	$userapp = C::t('common_myapp')->fetch($appid);
 }
 
-$space = getspace($uid);
+$space = getuserbyuid($uid);
 if(empty($space)) {
 	showmessage('space_does_not_exist', '', array(), array('return' => true));
 }
@@ -106,10 +104,10 @@ if($acceptconfirm) {
 		showmessage('you_have_friends', $jumpurl);
 	}
 
-	friend_make($space['uid'], addslashes($space['username']));
+	friend_make($space['uid'], $space['username']);
 
 	if($id) {
-		DB::update("common_invite", array('fuid'=>$_G['uid'], 'fusername'=>$_G['username'], 'regdateline' => $_G['timestamp'], 'status' => 2), array('id'=>$id));
+		C::t('common_invite')->update($id, array('fuid'=>$_G['uid'], 'fusername'=>$_G['username'], 'regdateline' => $_G['timestamp'], 'status' => 2));
 		notification_add($uid, 'friend', 'invite_friend', array('actor' => '<a href="home.php?mod=space&uid='.$_G['uid'].'" target="_blank">'.$_G['username'].'</a>'), 1);
 	}
 	space_merge($space, 'field_home');
@@ -141,8 +139,10 @@ space_merge($space, 'count');
 space_merge($space, 'field_home');
 space_merge($space, 'profile');
 $flist = array();
-$query = DB::query("SELECT fuid AS uid, fusername AS username FROM ".DB::table('home_friend')." WHERE uid='$uid' ORDER BY num DESC, dateline DESC LIMIT 0,12");
-while ($value = DB::fetch($query)) {
+$query = C::t('home_friend')->fetch_all_by_uid($uid, 0, 12, true);
+foreach($query as $value) {
+	$value['uid'] = $value['fuid'];
+	$value['username'] = $value['fusername'];
 	$flist[] = $value;
 }
 $jumpurl = urlencode($jumpurl);

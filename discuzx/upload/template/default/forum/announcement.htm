@@ -29,9 +29,9 @@
 		<div class="tbn">
 			<h2 class="mt bbda">{lang announcement}</h2>
 			<ul id="annonav">
-				<li class="cl{if empty($_G[gp_m])} a{/if}"><a href="forum.php?mod=announcement">{lang all}</a></li>
+				<li class="cl{if empty($_GET[m])} a{/if}"><a href="forum.php?mod=announcement">{lang all}</a></li>
 			<!--{loop $months $month}-->
-				<li class="cl{if $_G[gp_m] == $month[0].$month[1]} a{/if}"><a href="forum.php?mod=announcement&m=$month[0].$month[1]">$month[0] {lang year} $month[1] {lang month}</a></li>
+				<li class="cl{if $_GET[m] == $month[0].$month[1]} a{/if}"><a href="forum.php?mod=announcement&m=$month[0].$month[1]">$month[0] {lang year} $month[1] {lang month}</a></li>
 			<!--{/loop}-->
 			</ul>
 		</div>

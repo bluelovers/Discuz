@@ -4,32 +4,36 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_grouplist.php 19504 2011-01-05 04:51:17Z monkey $
+ *      $Id: lang_grouplist.php 27449 2012-02-01 05:32:35Z zhangguosheng $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 $lang = array
 (
-	'grouplist_gtids' => 'ç¾¤çµ„é¡žåˆ¥',
-	'grouplist_gtids_comment' => 'é¸æ“‡ç¾¤çµ„é¡žåˆ¥',
-	'grouplist_fids' => 'æŒ‡å®šç¾¤çµ„',
-	'grouplist_fids_comment' => 'è¼¸å…¥æŒ‡å®šç¾¤çµ„çš„IDï¼Œå¤šå€‹IDä¹‹é–“ç”¨é€—è™Ÿåˆ†éš”',
-	'grouplist_startrow' => 'èµ·å§‹æ•¸æ“šè¡Œæ•¸',
-	'grouplist_startrow_comment' => 'å¦‚éœ€è¨­å®šèµ·å§‹çš„æ•¸æ“šè¡Œæ•¸ï¼Œè«‹è¼¸å…¥å…·é«”æ•¸å€¼ï¼Œ0 ç‚ºå¾žç¬¬ä¸€è¡Œé–‹å§‹ï¼Œä»¥æ­¤é¡žæŽ¨',
-	'grouplist_titlelength' => 'åç¨±é•·åº¦',
-	'grouplist_titlelength' => 'è¨­ç½®ç¾¤çµ„åç¨±æœ€å¤§é•·åº¦',
-	'grouplist_summarylength' => 'ä»‹ç´¹é•·åº¦',
-	'grouplist_summarylength_comment' => 'è¨­ç½®ç¾¤çµ„ä»‹ç´¹æœ€å¤§é•·åº¦',
-	'grouplist_orderby' => 'ç¾¤çµ„æŽ’åºæ–¹å¼',
-	'grouplist_orderby_comment' => 'è¨­ç½®ä»¥å“ªä¸€å­—æ®µæˆ–æ–¹å¼å°ç¾¤çµ„é€²è¡ŒæŽ’åº',
-	'grouplist_orderby_dateline' => 'æŒ‰å‰µå»ºæ™‚é–“å€’åº',
-	'grouplist_orderby_posts' => 'æŒ‰ç¸½ç™¼å¸–æ•¸å€’åº',
-	'grouplist_orderby_todayposts' => 'æŒ‰ä»Šæ—¥ç™¼å¸–æ•¸å€’åº',
-	'grouplist_orderby_threads' => 'æŒ‰è©±é¡Œæ•¸å€’åº',
-	'grouplist_orderby_level' => 'æŒ‰ç­‰ç´šå€’åº',
-	'grouplist_orderby_membernum' => 'æŒ‰æˆå“¡æ•¸å€’åº',
-	'grouplist_orderby_activity' => 'æŒ‰æ´»èºåº¦å€’åº',
-	'grouplist_orderby_commoncredits' => 'æŒ‰å…±åŒç©åˆ†å€’åº',
-	'grouplist_orderby_displayorder' => 'æŒ‰é»˜èªé †åº'
+	'grouplist_gtids' => 'Èº×éÀà±ð',
+	'grouplist_gtids_comment' => 'Ñ¡ÔñÈº×éÀà±ð',
+	'grouplist_fids' => 'Ö¸¶¨Èº×é',
+	'grouplist_fids_comment' => 'ÊäÈëÖ¸¶¨Èº×éµÄID£¬¶à¸öIDÖ®¼äÓÃ¶ººÅ·Ö¸ô',
+	'grouplist_startrow' => 'ÆðÊ¼Êý¾ÝÐÐÊý',
+	'grouplist_startrow_comment' => 'ÈçÐèÉè¶¨ÆðÊ¼µÄÊý¾ÝÐÐÊý£¬ÇëÊäÈë¾ßÌåÊýÖµ£¬0 Îª´ÓµÚÒ»ÐÐ¿ªÊ¼£¬ÒÔ´ËÀàÍÆ',
+	'grouplist_titlelength' => 'Ãû³Æ³¤¶È',
+	'grouplist_titlelength' => 'ÉèÖÃÈº×éÃû³Æ×î´ó³¤¶È',
+	'grouplist_summarylength' => '½éÉÜ³¤¶È',
+	'grouplist_summarylength_comment' => 'ÉèÖÃÈº×é½éÉÜ×î´ó³¤¶È',
+	'grouplist_orderby' => 'Èº×éÅÅÐò·½Ê½',
+	'grouplist_orderby_comment' => 'ÉèÖÃÒÔÄÄÒ»×Ö¶Î»ò·½Ê½¶ÔÈº×é½øÐÐÅÅÐò',
+	'grouplist_orderby_dateline' => '°´´´½¨Ê±¼äµ¹Ðò',
+	'grouplist_orderby_posts' => '°´×Ü·¢ÌûÊýµ¹Ðò',
+	'grouplist_orderby_todayposts' => '°´½ñÈÕ·¢ÌûÊýµ¹Ðò',
+	'grouplist_orderby_threads' => '°´»°ÌâÊýµ¹Ðò',
+	'grouplist_orderby_level' => '°´µÈ¼¶µ¹Ðò',
+	'grouplist_orderby_membernum' => '°´³ÉÔ±Êýµ¹Ðò',
+	'grouplist_orderby_activity' => '°´»îÔ¾¶Èµ¹Ðò',
+	'grouplist_orderby_commoncredits' => '°´¹²Í¬»ý·Öµ¹Ðò',
+	'grouplist_orderby_displayorder' => '°´Ä¬ÈÏË³Ðò'
 );
 
 ?>

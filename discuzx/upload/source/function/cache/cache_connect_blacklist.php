@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_connect_blacklist.php 22591 2011-05-13 08:14:41Z monkey $
+ *      $Id: cache_connect_blacklist.php 24406 2011-09-18 06:53:04Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -15,12 +15,11 @@ function build_cache_connect_blacklist() {
 	global $_G;
 	$data = array();
 
-	$query = DB::query("SELECT * FROM ".DB::table('common_uin_black'), 'SILENT');
-	while($blacklist = DB::fetch($query)) {
+	foreach(C::t('common_uin_black')->fetch_all_by_uin() as $blacklist) {
 		$data[] = $blacklist['uin'];
 	}
 
-	save_syscache('connect_blacklist', $data);
+	savecache('connect_blacklist', $data);
 }
 
 ?>

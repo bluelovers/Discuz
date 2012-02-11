@@ -13,10 +13,8 @@
 			</p>
 			<div class="xg1">
 				<a href="javascript:;" id="interaction_$value[uid]" onmouseover="showMenu(this.id);" class="showmenu">{lang interactive}</a>
-				<!--{if isset($value['isfriend']) && !$value['isfriend']}-->
-					<span class="pipe">|</span>
-					<a href="home.php?mod=spacecp&ac=friend&op=add&uid=$value[uid]" id="a_friend_$key" onclick="showWindow('friend_$key', this.href, 'get', 0)" title="{lang add_friend}">{lang add_friend}</a>
-				<!--{/if}-->
+				<!--{if isset($value['follow']) && $key != $_G['uid']}--><span class="pipe">|</span><a href="home.php?mod=spacecp&ac=follow&op={if $value['follow']}del{else}add{/if}&fuid=$value[uid]" id="a_followmod_$key" onclick="showWindow('followmod', this.href, 'get', 0)">{if $value['follow']}取消收听{else}收听TA{/if}</a><!--{/if}-->
+				<!--{if isset($value['isfriend']) && !$value['isfriend']}--><span class="pipe">|</span><a href="home.php?mod=spacecp&ac=friend&op=add&uid=$value[uid]" id="a_friend_$key" onclick="showWindow('friend_$key', this.href, 'get', 0)" title="{lang add_friend}">{lang add_friend}</a><!--{/if}-->
 			</div>
 			<div id="interaction_$value[uid]_menu" class="p_pop" style="display: none; width: 80px;">
 				<p><a href="home.php?mod=space&uid=$value[uid]&do=profile" target="_blank" title="{lang view_profile}">{lang view_profile}</a></p>
@@ -28,6 +26,20 @@
 		<!--{/loop}-->
 	</ul>
 	<!--{if $multi}--><div class="mtm pgs cl">$multi</div><!--{/if}-->
+<script type="text/javascript">
+function succeedhandle_followmod(url, msg, values) {
+	var fObj = $('a_followmod_'+values['fuid']);
+	if(values['type'] == 'add') {
+		fObj.innerHTML = '取消收听';
+		fObj.className = 'flw_btn_unfo';
+		fObj.href = 'home.php?mod=spacecp&ac=follow&op=del&fuid='+values['fuid'];
+	} else if(values['type'] == 'del') {
+		fObj.innerHTML = '收听TA';
+		fObj.className = 'flw_btn_fo';
+		fObj.href = 'home.php?mod=spacecp&ac=follow&op=add&fuid='+values['fuid'];
+	}
+}
+</script>
 <!--{else}-->
 	<div class="emp">{lang no_members_of}</div>
 <!--{/if}-->

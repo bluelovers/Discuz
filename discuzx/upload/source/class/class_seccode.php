@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_seccode.php 18778 2010-12-03 09:49:21Z monkey $
+ *      $Id: class_seccode.php 27489 2012-02-02 07:41:46Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -257,7 +257,7 @@ class seccode {
 
 	function scatter(&$obj, $level = 0) {
 		$rgb = array();
-		$this->scatter = $leval ? $level : $this->scatter;
+		$this->scatter = $level ? $level : $this->scatter;
 		$width = imagesx($obj);
 		$height = imagesy($obj);
 		for($j = 0;$j < $height;$j++) {

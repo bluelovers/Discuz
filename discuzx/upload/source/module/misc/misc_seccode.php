@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_seccode.php 23427 2011-07-14 06:56:46Z monkey $
+ *      $Id: misc_seccode.php 25246 2011-11-02 03:34:53Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -13,13 +13,13 @@ if(!defined('IN_DISCUZ')) {
 
 require_once libfile('function/seccode');
 
-if($_G['gp_action'] == 'update') {
+if($_GET['action'] == 'update') {
 
 	$message = '';
 	if($_G['setting']['seccodestatus']) {
 		$rand = random(5, 1);
 		$flashcode = '';
-		$idhash = isset($_G['gp_idhash']) && preg_match('/^\w+$/', $_G['gp_idhash']) ? $_G['gp_idhash'] : '';
+		$idhash = isset($_GET['idhash']) && preg_match('/^\w+$/', $_GET['idhash']) ? $_GET['idhash'] : '';
 		$ani = $_G['setting']['seccodedata']['animator'] ? '_ani' : '';
 		if($_G['setting']['seccodedata']['type'] == 2) {
 			$message = '<span id="seccodeswf_'.$idhash.'"></span>'.(extension_loaded('ming') ? "<script type=\"text/javascript\" reload=\"1\">\n$('seccodeswf_$idhash').innerHTML='".lang('core', 'seccode_image'.$ani.'_tips')."' + AC_FL_RunContent(
@@ -42,10 +42,10 @@ if($_G['gp_action'] == 'update') {
 	echo lang('message', $message, array('flashcode' => $flashcode, 'idhash' => $idhash));
 	include template('common/footer_ajax');
 
-} elseif($_G['gp_action'] == 'check') {
+} elseif($_GET['action'] == 'check') {
 
 	include template('common/header_ajax');
-	echo check_seccode($_G['gp_secverify'], $_G['gp_idhash']) ? 'succeed' : 'invalid';
+	echo check_seccode($_GET['secverify'], $_GET['idhash']) ? 'succeed' : 'invalid';
 	include template('common/footer_ajax');
 
 } else {
@@ -57,7 +57,7 @@ if($_G['gp_action'] == 'update') {
 		exit('Access Denied');
 	}
 
-	$seccode = make_seccode($_G['gp_idhash']);
+	$seccode = make_seccode($_GET['idhash']);
 
 	if(!$_G['setting']['nocacheheaders']) {
 		@header("Expires: -1");

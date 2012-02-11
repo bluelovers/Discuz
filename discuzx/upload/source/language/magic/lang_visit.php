@@ -4,15 +4,19 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_visit.php 7828 2010-04-14 02:11:48Z monkey $
+ *      $Id: lang_visit.php 27449 2012-02-01 05:32:35Z zhangguosheng $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 $lang = array
 (
-	'visit_name' => 'äº’è¨ªå¡',
-	'visit_desc' => 'éš¨æ©Ÿè¨ªå•å¥½å‹ç©ºé–“/å‘å¥½å‹æ‰“æ‹›å‘¼/çµ¦å¥½å‹ç•™è¨€',
-	'visit_num' => 'è¨ªå•å¥½å‹æ•¸',
-	'visit_info' => 'éš¨æ©Ÿè¨ªå•(æœ€å¤š {num} å€‹)å¥½å‹ç©ºé–“/å‘å¥½å‹æ‰“æ‹›å‘¼/çµ¦å¥½å‹ç•™è¨€',
+	'visit_name' => '»¥·Ã¿¨',
+	'visit_desc' => 'Ëæ»ú·ÃÎÊºÃÓÑ¿Õ¼ä/ÏòºÃÓÑ´òÕÐºô/¸øºÃÓÑÁôÑÔ',
+	'visit_num' => '·ÃÎÊºÃÓÑÊý',
+	'visit_info' => 'Ëæ»ú·ÃÎÊ(×î¶à {num} ¸ö)ºÃÓÑ¿Õ¼ä/ÏòºÃÓÑ´òÕÐºô/¸øºÃÓÑÁôÑÔ',
 );
 
 ?>

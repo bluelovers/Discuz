@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: group_index.php 20714 2011-03-02 07:02:17Z liulanbo $
+ *      $Id: group_index.php 25246 2011-11-02 03:34:53Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -15,10 +15,11 @@ $navtitle = '';
 
 $gid = intval(getgpc('gid'));
 $sgid = intval(getgpc('sgid'));
-$groupids = $groupnav = $typelist = '';
+$groupids = array();
+$groupnav = $typelist = '';
 $selectorder = array('default' => '', 'thread' => '', 'membernum' => '', 'dateline' => '', 'activity' => '');
-if(!empty($_G['gp_orderby'])) {
-	$selectorder[$_G['gp_orderby']] = 'selected';
+if(!empty($_GET['orderby'])) {
+	$selectorder[$_GET['orderby']] = 'selected';
 } else {
 	$selectorder['default'] = 'selected';
 }
@@ -30,10 +31,13 @@ $url = $_G['basescript'].'.php';
 if($gid) {
 	if(!empty($first[$gid])) {
 		$curtype = $first[$gid];
-		foreach($curtype['secondlist'] as $fid) {
-			$typelist[$fid] = $second[$fid];
+		if($curtype['secondlist']) {
+			foreach($curtype['secondlist'] as $fid) {
+				$typelist[$fid] = $second[$fid];
+			}
+			$groupids = $first[$gid]['secondlist'];
 		}
-		$groupids = $first[$gid]['secondlist'];
+		$groupids[] = $gid;
 		$url .= '?gid='.$gid;
 		$fup = $gid;
 	} else {
@@ -66,14 +70,14 @@ if(empty($curtype)) {
 	$_G['grouptypeid'] = $curtype['fid'];
 	$perpage = 10;
 	if($curtype['forumcolumns'] > 1) {
-		$curtype['forumcolwidth'] = floor(99 / $curtype['forumcolumns']).'%';
+		$curtype['forumcolwidth'] = (floor(100 / $curtype['forumcolumns']) - 0.1).'%';
 		$perpage = $curtype['forumcolumns'] * 10;
 	}
 }
 $seodata = array('first' => $nav['first']['name'], 'second' => $nav['second']['name']);
 list($navtitle, $metadescription, $metakeywords) = get_seosetting('group', $seodata);
 
-
+$_G['cache']['groupindex'] = '';
 $data = $randgrouplist = $randgroupdata = $grouptop = $newgrouplist = array();
 $topgrouplist = $_G['cache']['groupindex']['topgrouplist'];
 $lastupdategroup = $_G['cache']['groupindex']['lastupdategroup'];
@@ -85,26 +89,25 @@ if(empty($_G['cache']['groupindex']) || $cachetimeupdate > 3600 || empty($lastup
 	$data['randgroupdata'] = $randgroupdata = grouplist('lastupdate', array('ff.membernum', 'ff.icon'), 80);
 	$data['topgrouplist'] = $topgrouplist = grouplist('activity', array('f.commoncredits', 'ff.membernum', 'ff.icon'), 10);
 	$data['updateline'] = TIMESTAMP;
-	$groupdata = DB::fetch_first("SELECT SUM(todayposts) AS todayposts, COUNT(fid) AS groupnum FROM ".DB::table('forum_forum')." WHERE status='3' AND type='sub'");
+	$groupdata = C::t('forum_forum')->fetch_group_counter();
 	$data['todayposts'] = $todayposts = $groupdata['todayposts'];
 	$data['groupnum'] = $groupnum = $groupdata['groupnum'];
 	foreach($first as $id => $toptype) {
-		if($toptype['secondlist']) {
-			$query = DB::query("SELECT fid, name FROM ".DB::table('forum_forum')." WHERE fup IN(".dimplode($toptype['secondlist']).") ORDER BY commoncredits DESC LIMIT 20");
-			while($row = DB::fetch($query)) {
-				$data['lastupdategroup'][$id][] = $row;
-			}
+		if(empty($toptype['secondlist'])) $toptype['secondlist'][] = $id;
+		$query = C::t('forum_forum')->fetch_all_sub_group_by_fup($toptype['secondlist']);
+		foreach($query as $row) {
+			$data['lastupdategroup'][$id][] = $row;
 		}
 		if(empty($data['lastupdategroup'][$id])) $data['lastupdategroup'][$id] = array();
 	}
 	$lastupdategroup = $data['lastupdategroup'];
-	save_syscache('groupindex', $data);
+	savecache('groupindex', $data);
 }
 
 $list = array();
 if($groupids) {
 	$orderby = in_array(getgpc('orderby'), array('membernum', 'dateline', 'thread', 'activity')) ? getgpc('orderby') : 'displayorder';
-	$page = intval(getgpc('page')) ? intval($_G['gp_page']) : 1;
+	$page = intval(getgpc('page')) ? intval($_GET['page']) : 1;
 	$start = ($page - 1) * $perpage;
 	$getcount = grouplist('', '', '', $groupids, 1, 1);
 	if($getcount) {
@@ -114,6 +117,7 @@ if($groupids) {
 
 }
 
+$endrows = $curtype['forumcolumns'] > 1 ? str_repeat('<td width="'.$curtype['forumcolwidth'].'"></td>', $curtype['forumcolumns'] - count($list) % $curtype['forumcolumns']) : '';
 $groupviewed_list = get_viewedgroup();
 
 if(empty($sgid) && empty($gid)) {
@@ -123,12 +127,11 @@ if(empty($sgid) && empty($gid)) {
 		}
 	}
 }
-
 if(!$navtitle || !empty($sgid) || !empty($gid)) {
 	if(!$navtitle) {
 		$navtitle = !empty($gid) ? $nav['first']['name'] : (!empty($sgid) ? $nav['second']['name'] : '');
 	}
-	$navtitle = (!empty($sgid) || !empty($gid) ? get_title_page($navtitle, $_G['page']).' - ' : '').$_G['setting']['navs'][3]['navname'];
+	$navtitle = (!empty($sgid) || !empty($gid) ? helper_seo::get_title_page($navtitle, $_G['page']).' - ' : '').$_G['setting']['navs'][3]['navname'];
 	$nobbname = false;
 } else {
 	$nobbname = true;

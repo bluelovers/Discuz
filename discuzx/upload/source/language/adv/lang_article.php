@@ -4,20 +4,24 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_article.php 13730 2010-07-30 03:03:10Z zhangguosheng $
+ *      $Id: lang_article.php 27449 2012-02-01 05:32:35Z zhangguosheng $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 $lang = array
 (
-	'article_name' => 'é–€æˆ¶ æ–‡ç« å»£å‘Š',
-	'article_desc' => 'å±•ç¾æ–¹å¼: æ–‡ç« å»£å‘Šé¡¯ç¤ºæ–¼æ–‡ç« é é¢ï¼Œåˆ†ç‚ºå…§å®¹å€åŸŸç’°ç¹žå»£å‘Šå’Œç›¸é—œé–±è®€ä¸Šæ–¹å»£å‘Š 2 ç¨®ã€‚',
-	'article_position' => 'æŠ•æ”¾ä½ç½®',
-	'article_position_comment' => 'åˆ†ç‚º 3 å€‹ä½ç½®ï¼Œå…¶ä¸­ç›¸é—œé–±è®€ä¸Šæ–¹å»£å‘Šæœ‰ 2 å€‹ç·Šé„°çš„é¡¯ç¤ºä½ç½®',
-	'article_position_float' => 'å…§å®¹å€åŸŸç’°ç¹ž',
-	'article_position_up' => 'ç›¸é—œé–±è®€ä¸Šæ–¹(ä¸Š)',
-	'article_position_down' => 'ç›¸é—œé–±è®€ä¸Šæ–¹(ä¸‹)',
-	'article_category' => 'æŠ•æ”¾é »é“åˆ†é¡ž',
-	'article_category_comment' => 'è¨­ç½®å»£å‘ŠæŠ•æ”¾çš„é »é“åˆ†é¡ž',
+	'article_name' => 'ÃÅ»§ ÎÄÕÂ¹ã¸æ',
+	'article_desc' => 'Õ¹ÏÖ·½Ê½: ÎÄÕÂ¹ã¸æÏÔÊ¾ÓÚÎÄÕÂÒ³Ãæ£¬·ÖÎªÄÚÈÝÇøÓò»·ÈÆ¹ã¸æºÍÏà¹ØÔÄ¶ÁÉÏ·½¹ã¸æ 2 ÖÖ¡£',
+	'article_position' => 'Í¶·ÅÎ»ÖÃ',
+	'article_position_comment' => '·ÖÎª 3 ¸öÎ»ÖÃ£¬ÆäÖÐÏà¹ØÔÄ¶ÁÉÏ·½¹ã¸æÓÐ 2 ¸ö½ôÁÚµÄÏÔÊ¾Î»ÖÃ',
+	'article_position_float' => 'ÄÚÈÝÇøÓò»·ÈÆ',
+	'article_position_up' => 'Ïà¹ØÔÄ¶ÁÉÏ·½(ÉÏ)',
+	'article_position_down' => 'Ïà¹ØÔÄ¶ÁÉÏ·½(ÏÂ)',
+	'article_category' => 'Í¶·ÅÆµµÀ·ÖÀà',
+	'article_category_comment' => 'ÉèÖÃ¹ã¸æÍ¶·ÅµÄÆµµÀ·ÖÀà',
 );
 
 ?>

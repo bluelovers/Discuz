@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portal_view.php 26641 2011-12-19 02:32:31Z zhangguosheng $
+ *      $Id: portal_view.php 27332 2012-01-16 09:24:24Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -15,24 +15,23 @@ $aid = empty($_GET['aid'])?0:intval($_GET['aid']);
 if(empty($aid)) {
 	showmessage('view_no_article_id');
 }
-$article = DB::fetch_first("SELECT * FROM ".DB::table('portal_article_title')." WHERE aid='$aid'");
+$article = C::t('portal_article_title')->fetch($aid);
 require_once libfile('function/portalcp');
 $permission = getallowcategory($_G['uid']);
 
-if(empty($article) || ($article['status'] > 0 && $article['uid'] != $_G['uid'] && !$_G['group']['allowmanagearticle'] && empty($permission[$article['catid']]['allowmanage']) && $_G['adminid'] != 1 && $_G['gp_modarticlekey'] != modauthkey($article['aid']))) {
+if(empty($article) || ($article['status'] > 0 && $article['uid'] != $_G['uid'] && !$_G['group']['allowmanagearticle'] && empty($permission[$article['catid']]['allowmanage']) && $_G['adminid'] != 1 && $_GET['modarticlekey'] != modauthkey($article['aid']))) {
 	showmessage('view_article_no_exist');
 }
 
-$article_count = DB::fetch_first("SELECT * FROM ".DB::table('portal_article_count')." WHERE aid='$aid'");
+$article_count = C::t('portal_article_count')->fetch($aid);
 if($article_count) $article = array_merge($article_count, $article);
 
 if($article_count) {
-	DB::query("UPDATE ".DB::table('portal_article_count')." SET catid='$article[catid]', dateline='$article[dateline]', viewnum=viewnum+1 WHERE aid='$aid'");
+	C::t('portal_article_count')->increase($aid, array('viewnum'=>1));
 } else {
-	DB::insert('portal_article_count', array(
+	C::t('portal_article_count')->insert(array(
 		'aid'=>$aid,
 		'catid'=>$article['catid'],
-		'dateline'=>$article['dateline'],
 		'viewnum'=>1));
 }
 
@@ -48,21 +47,18 @@ $article['pic'] = pic_get($article['pic'], '', $article['thumb'], $article['remo
 
 $page = intval($_GET['page']);
 if($page<1) $page = 1;
-$start = $page-1;
 
 $content = $contents = array();
 $multi = '';
 
-$query = DB::query("SELECT * FROM ".DB::table('portal_article_content')." WHERE aid='$aid' ORDER BY pageorder LIMIT $start,1");
-$content = DB::fetch($query);
+$content = C::t('portal_article_content')->fetch_by_aid_page($aid, $page);
 
 if($article['contents'] && $article['showinnernav']) {
-	$query = DB::query("SELECT title FROM ".DB::table('portal_article_content')." WHERE aid='$aid' ORDER BY pageorder");
-	while ($value = DB::fetch($query)) {
+	foreach(C::t('portal_article_content')->fetch_all($aid) as $value) {
 		$contents[] = $value;
 	}
 	if(empty($contents)) {
-		DB::update('portal_article_title', array('showinnernav' => '0'), "aid ='$aid'");
+		C::t('portal_article_content')->update($aid, array('showinnernav' => '0'));
 	}
 }
 
@@ -77,60 +73,57 @@ if($article['idtype'] == 'tid' || $content['idtype']=='pid') {
 	require_once libfile('function/forum');
 	$thread = get_thread_by_tid($article[id]);
 	if(!empty($thread)) {
-		$wherer = $content['idtype']=='pid' ? "p.pid='$content[id]' AND p.tid='$article[id]'" : "p.tid='$article[id]' AND p.first='1'";
-		$firstpost = DB::fetch_first("SELECT p.first, p.authorid AS uid, p.author AS username, p.dateline, p.message, p.smileyoff, p.bbcodeoff, p.htmlon, p.attachment, p.pid FROM ".DB::table($thread['posttable'])." p WHERE $wherer");
+		if($content['idtype']=='pid') {
+			$firstpost = C::t('forum_post')->fetch($thread['posttableid'], $content['id']);
+		} else {
+			$firstpost = C::t('forum_post')->fetch_threadpost_by_tid_invisible($article['id']);
+		}
+		if($firstpost && $firstpost['tid'] == $article['id']) {
+			$firstpost['uid'] = $firstpost['authorid'];
+			$firstpost['username'] = $firstpost['author'];
+		}
 	}
 	if(!empty($firstpost) && !empty($thread) && $thread['displayorder'] != -1) {
 		$_G['tid'] = $article['id'];
-		$attachpids = -1;
-		$attachtags = $aimgs = array();
+		$aids = array();
 		$firstpost['message'] = $content['content'];
-		if($firstpost['attachment']) {
+		if($thread['attachment']) {
 			if($_G['group']['allowgetattach'] || $_G['group']['allowgetimage']) {
-				$attachpids .= ",$firstpost[pid]";
 				if(preg_match_all("/\[attach\](\d+)\[\/attach\]/i", $firstpost['message'], $matchaids)) {
-					$attachtags[$firstpost['pid']] = $matchaids[1];
+					$aids = $matchaids[1];
 				}
 			} else {
 				$firstpost['message'] = preg_replace("/\[attach\](\d+)\[\/attach\]/i", '', $firstpost['message']);
 			}
 		}
 
-		$post = array();
-		$post[$firstpost['pid']] = $firstpost;
-		if($attachpids != '-1') {
-			require_once libfile('function/attachment');
-			parseattach($attachpids, $attachtags, $post);
+		if($aids) {
+			parseforumattach($firstpost, $aids);
 		}
-
-		$content['content'] = $post[$firstpost['pid']]['message'];
+		$content['content'] = $firstpost['message'];
 		$content['pid'] = $firstpost['pid'];
-		unset($post);
 
 		$org = $firstpost;
 		$org_url = "forum.php?mod=viewthread&tid=$article[id]";
 	} else {
-		DB::update('portal_article_title', array('id' => 0, 'idtype' => ''), array('aid' => $aid));
-		DB::update('portal_article_content', array('id' => 0, 'idtype' => ''), array('aid' => $aid));
+		C::t('portal_article_title')->update($aid, array('id' => 0, 'idtype' => ''));
+		C::t('portal_article_content')->update_by_aid($aid, array('id' => 0, 'idtype' => ''));
 	}
 } elseif($article['idtype']=='blogid') {
-	$org = DB::fetch_first("SELECT * FROM ".DB::table('home_blog')." WHERE blogid='$article[id]'");
+	$org = C::t('home_blog')->fetch($article['id']);
 	if(empty($org)) {
-		DB::update('portal_article_title', array('id'=>'0', 'idtype'=>''),array('aid'=>$aid));
+		C::t('portal_article_title')->update($aid, array('id' => 0, 'idtype' => ''));
 		dheader('location: portal.php?mod=view&aid='.$aid);
 		exit();
 	}
 }
 
 $article['related'] = array();
-$query = DB::query("SELECT a.aid,a.title
-	FROM ".DB::table('portal_article_related')." r
-	LEFT JOIN ".DB::table('portal_article_title')." a ON a.aid=r.raid
-	WHERE r.aid='$aid' ORDER BY r.displayorder");
-while ($value = DB::fetch($query)) {
-	$article['related'][] = $value;
+if(($relateds = C::t('portal_article_related')->fetch_all_by_aid($aid))) {
+	foreach(C::t('portal_article_title')->fetch_all(array_keys($relateds)) as $raid => $value) {
+		$article['related'][$raid] = $value['title'];
+	}
 }
-
 $article['allowcomment'] = !empty($cat['allowcomment']) && !empty($article['allowcomment']) ? 1 : 0;
 $_G['catid'] = $_GET['catid'] = $article['catid'];
 $common_url = '';
@@ -144,11 +137,10 @@ if($article['allowcomment']) {
 			$common_url = "home.php?mod=space&uid=$org[uid]&do=blog&id=$article[id]";
 			$form_url = "home.php?mod=spacecp&ac=comment";
 
-			$article['commentnum'] = getcount('home_comment', array('id'=>$article['id'], 'idtype'=>'blogid'));
+			$article['commentnum'] = C::t('home_comment')->count_by_id_idtype($article['id'], 'blogid');
 			if($article['commentnum']) {
-				$query = DB::query("SELECT authorid AS uid, author AS username, dateline, message
-					FROM ".DB::table('home_comment')." WHERE id='$article[id]' AND idtype='blogid' ORDER BY dateline DESC LIMIT 0,20");
-				while ($value = DB::fetch($query)) {
+				$query = C::t('home_comment')->fetch_all_by_id_idtype($article['id'], 'blogid', 0, 20);
+				foreach($query as $value) {
 					if($value['status'] == 0 || $_G['adminid'] == 1 || $value['uid'] == $_G['uid']) {
 						$commentlist[] = $value;
 					}
@@ -166,12 +158,12 @@ if($article['allowcomment']) {
 			$article['commentnum'] = getcount($posttable, array('tid'=>$article['id'], 'first'=>'0'));
 
 			if($article['allowcomment'] && $article['commentnum']) {
-				$query = DB::query("SELECT pid, first, authorid AS uid, author AS username, dateline, message, smileyoff, bbcodeoff, htmlon, attachment, status
-					FROM ".DB::table($posttable)." WHERE tid='$article[id]' AND invisible='0' ORDER BY dateline DESC LIMIT 0,20");
 				$attachpids = -1;
 				$attachtags = array();
 				$_G['group']['allowgetattach'] = $_G['group']['allowgetimage'] = 1;
-				while ($value = DB::fetch($query)) {
+				foreach(C::t('forum_post')->fetch_all_by_tid('tid:'.$article['id'], $article['id'], true, 'ASC', 0, 20, null, 0) as $value) {
+					$value['uid'] = $value['authorid'];
+					$value['username'] = $value['author'];
 					if($value['status'] != 1 && !$value['first']) {
 						$value['message'] = discuzcode($value['message'], $value['smileyoff'], $value['bbcodeoff'], $value['htmlon']);
 						$value['cid'] = $value['pid'];
@@ -197,9 +189,9 @@ if($article['allowcomment']) {
 		$common_url = "portal.php?mod=comment&id=$aid&idtype=aid";
 		$form_url = "portal.php?mod=portalcp&ac=comment";
 
-		$query = DB::query("SELECT * FROM ".DB::table('portal_comment')." WHERE id='$aid' AND idtype='aid' ORDER BY dateline DESC LIMIT 0,20");
+		$query = C::t('portal_comment')->fetch_all_by_id_idtype($aid, 'aid', 'dateline', 'DESC', 0, 20);
 		$pricount = 0;
-		while ($value = DB::fetch($query)) {
+		foreach($query as $value) {
 			if($value['status'] == 0 || $value['uid'] == $_G['uid'] || $_G['adminid'] == 1) {
 				$value['allowop'] = 1;
 				$commentlist[] = $value;
@@ -225,11 +217,7 @@ foreach ($clicks as $key => $value) {
 }
 
 $clickuserlist = array();
-$query = DB::query("SELECT * FROM ".DB::table('home_clickuser')."
-	WHERE id='$id' AND idtype='$idtype'
-	ORDER BY dateline DESC
-	LIMIT 0,24");
-while ($value = DB::fetch($query)) {
+foreach(C::t('home_clickuser')->fetch_all_by_id_idtype($id, $idtype, 0, 24) as $value) {
 	$value['clickname'] = $clicks[$value['clickid']]['name'];
 	$clickuserlist[] = $value;
 }
@@ -239,10 +227,10 @@ $article['dateline'] = dgmdate($article['dateline']);
 foreach($cat['ups'] as $val) {
 	$cats[] = $val['catname'];
 }
-$seodata = array('firstcat' => $cats[0], 'secondcat' => $cats[1], 'curcat' => $cat['catname'], 'subject' => $article['title'], 'user' => $article['username'], 'summary' => $article['summary'], 'page' => intval($_G['gp_page']));
+$seodata = array('firstcat' => $cats[0], 'secondcat' => $cats[1], 'curcat' => $cat['catname'], 'subject' => $article['title'], 'user' => $article['username'], 'summary' => $article['summary'], 'page' => intval($_GET['page']));
 list($navtitle, $metadescription, $metakeywords) = get_seosetting('article', $seodata);
 if(empty($navtitle)) {
-	$navtitle = get_title_page($article['title'], $_G['page']).' - '.$cat['catname'];
+	$navtitle = helper_seo::get_title_page($article['title'], $_G['page']).' - '.$cat['catname'];
 	$nobbname = false;
 } else {
 	$nobbname = true;
@@ -258,6 +246,58 @@ $seccodecheck = $_G['group']['seccode'] ? $_G['setting']['seccodestatus'] & 4 : 
 $secqaacheck = $_G['group']['seccode'] ? $_G['setting']['secqaa']['status'] & 2 : 0;
 
 $catid = $article['catid'];
-$_G['relatedlinks'] = getrelatedlink('article');
-include_once template("diy:portal/view:{$catid}", NULL, NULL, NULL, $cat['articleprimaltplname']);
+if(!$_G['setting']['relatedlinkstatus']) {
+	$_G['relatedlinks'] = get_related_link('article');
+} else {
+	$content['content'] = parse_related_link($content['content'], 'article');
+}
+
+$tpldirectory = '';
+$articleprimaltplname = $cat['articleprimaltplname'];
+if(strpos($articleprimaltplname, ':') !== false) {
+	list($tpldirectory, $articleprimaltplname) = explode(':', $articleprimaltplname);
+}
+include_once template("diy:portal/view:{$catid}", NULL, $tpldirectory, NULL, $articleprimaltplname);
+
+function parseforumattach(&$post, $aids) {
+	global $_G;
+	if(($aids = array_unique($aids))) {
+		require_once libfile('function/attachment');
+		$finds = $replaces = array();
+		foreach(C::t('forum_attachment_n')->fetch_all_by_id('tid:'.$post['tid'], 'aid', $aids) as $attach) {
+
+			$attach['url'] = ($attach['remote'] ? $_G['setting']['ftp']['attachurl'] : $_G['setting']['attachurl']).'forum/';
+			$attach['dateline'] = dgmdate($attach['dateline'], 'u');
+			$extension = strtolower(fileext($attach['filename']));
+			$attach['ext'] = $extension;
+			$attach['imgalt'] = $attach['isimage'] ? strip_tags(str_replace('"', '\"', $attach['description'] ? $attach['description'] : $attach['filename'])) : '';
+			$attach['attachicon'] = attachtype($extension."\t".$attach['filetype']);
+			$attach['attachsize'] = sizecount($attach['filesize']);
+
+			$attach['refcheck'] = (!$attach['remote'] && $_G['setting']['attachrefcheck']) || ($attach['remote'] && ($_G['setting']['ftp']['hideurl'] || ($attach['isimage'] && $_G['setting']['attachimgpost'] && strtolower(substr($_G['setting']['ftp']['attachurl'], 0, 3)) == 'ftp')));
+			$aidencode = packaids($attach);
+			$widthcode = attachwidth($attach['width']);
+			$is_archive = $_G['forum_thread']['is_archived'] ? "&fid=".$_G['fid']."&archiveid=".$_G['forum_thread']['archiveid'] : '';
+			if($attach['isimage']) {
+				$attachthumb = getimgthumbname($attach['attachment']);
+					if($_G['setting']['thumbstatus'] && $attach['thumb']) {
+						$replaces[$attach['aid']] = "<a href=\"javascript:;\"><img id=\"_aimg_$attach[aid]\" aid=\"$attach[aid]\" onclick=\"zoom(this, this.getAttribute('zoomfile'), 0, 0, '{$_G[forum][showexif]}')\"
+						zoomfile=\"".($attach['refcheck']? "forum.php?mod=attachment{$is_archive}&aid=$aidencode&noupdate=yes&nothumb=yes" : $attach['url'].$attach['attachment'])."\"
+						src=\"".($attach['refcheck'] ? "forum.php?mod=attachment{$is_archive}&aid=$aidencode" : $attach['url'].$attachthumb)."\" alt=\"$attach[imgalt]\" title=\"$attach[imgalt]\" w=\"$attach[width]\" /></a>";
+					} else {
+						$replaces[$attach['aid']] = "<img id=\"_aimg_$attach[aid]\" aid=\"$attach[aid]\"
+						zoomfile=\"".($attach['refcheck'] ? "forum.php?mod=attachment{$is_archive}&aid=$aidencode&noupdate=yes&nothumb=yes" : $attach['url'].$attach['attachment'])."\"
+						src=\"".($attach['refcheck'] ? "forum.php?mod=attachment{$is_archive}&aid=$aidencode&noupdate=yes " : $attach['url'].$attach['attachment'])."\" $widthcode alt=\"$attach[imgalt]\" title=\"$attach[imgalt]\" w=\"$attach[width]\" />";
+					}
+			} else {
+				$replaces[$attach['aid']] = "$attach[attachicon]<a href=\"forum.php?mod=attachment{$is_archive}&aid=$aidencode\" onmouseover=\"showMenu({'ctrlid':this.id,'pos':'12'})\" id=\"aid$attach[aid]\" target=\"_blank\">$attach[filename]</a>";
+			}
+			$finds[$attach['aid']] = '[attach]'.$attach['aid'].'[/attach]';
+		}
+		if($finds && $replaces) {
+			$post['message'] = str_ireplace($finds, $replaces, $post['message']);
+		}
+	}
+}
+
 ?>

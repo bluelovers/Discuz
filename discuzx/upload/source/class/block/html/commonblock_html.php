@@ -4,14 +4,14 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: block_google.php 6752 2010-03-25 08:47:54Z cnteacher $
+ *      $Id: commonblock_html.php 25525 2011-11-14 04:39:11Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
-class commonblock_html {
+class commonblock_html  extends discuz_block{
 
 	function fields() {
 		return array();

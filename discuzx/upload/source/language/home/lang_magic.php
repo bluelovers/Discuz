@@ -4,23 +4,27 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_magic.php 20565 2011-02-28 02:24:52Z congyushuai $
+ *      $Id: lang_magic.php 27449 2012-02-01 05:32:35Z zhangguosheng $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 $lang = array
 (
-	'target_tid' => 'ç›®æ¨™ä¸»é¡Œ tid',
-	'target_pid' => 'ç›®æ¨™å¸–å­ pid',
-	'target_username' => 'ç›®æ¨™ç”¨æˆ¶å',
-	'magics_type_1' => 'å¸–å­é¡ž',
-	'magics_type_2' => 'æœƒå“¡é¡ž',
-	'magics_type_3' => 'å…¶ä»–é¡ž',
+	'target_tid' => 'Ä¿±êÖ÷Ìâ tid',
+	'target_pid' => 'Ä¿±êÌû×Ó pid',
+	'target_username' => 'Ä¿±êÓÃ»§Ãû',
+	'magics_type_1' => 'Ìû×ÓÀà',
+	'magics_type_2' => '»áÔ±Àà',
+	'magics_type_3' => 'ÆäËûÀà',
 
-	'CCK_color' => 'é¡è‰²',
-	'MOK_info' => 'ç²å¾—çš„éŒ¢å¹£æ•¸ç›®è¦å‰‡ï¼šå¤§æ–¼ 1 ä¸”å°æ–¼è³¼è²·åƒ¹æ ¼ 150% çš„éš¨æ©Ÿæ•¸',
-	'CODE_info' => 'ç²å¾— Discuz! æ¸¬è©¦é‚€è«‹ç¢¼ä¸€å€‹',
-	'MVK_target' => 'è¦ç§»å‹•åˆ°çš„ç‰ˆé¢',
-	'SOFA_message' => 'ä¸€é“é–ƒé›»åŠƒç ´æ¹›è—çš„å¤©ç©ºï¼Œéš¨è‘—ä¸€è²å·¨éŸ¿ï¼Œæ²™ç™¼è¢«æˆ‘æ¶äº†ï¼å“ˆå“ˆï¼',
+	'CCK_color' => 'ÑÕÉ«',
+	'MOK_info' => '»ñµÃµÄÇ®±ÒÊýÄ¿¹æÔò£º´óÓÚ 1 ÇÒÐ¡ÓÚ¹ºÂò¼Û¸ñ 150% µÄËæ»úÊý',
+	'CODE_info' => '»ñµÃ Discuz! ²âÊÔÑûÇëÂëÒ»¸ö',
+	'MVK_target' => 'ÒªÒÆ¶¯µ½µÄ°æÃæ',
+	'SOFA_message' => 'Ò»µÀÉÁµç»®ÆÆÕ¿À¶µÄÌì¿Õ£¬Ëæ×ÅÒ»Éù¾ÞÏì£¬É³·¢±»ÎÒÇÀÁË£¡¹þ¹þ£¡',
 );
 
 ?>

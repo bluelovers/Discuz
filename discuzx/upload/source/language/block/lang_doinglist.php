@@ -4,21 +4,25 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_doinglist.php 16414 2010-09-06 07:29:53Z zhangguosheng $
+ *      $Id: lang_doinglist.php 27449 2012-02-01 05:32:35Z zhangguosheng $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 $lang = array
 (
-	'doinglist_uids' => 'ç”¨æˆ¶UID',
-	'doinglist_uids_comment' => 'å¡«å…¥æŒ‡å®šç”¨æˆ¶çš„ID(uid)ï¼Œå¤šå€‹ç”¨æˆ¶ä¹‹é–“ç”¨é€—è™Ÿ(,)åˆ†éš”',
-	'doinglist_startrow' => 'èµ·å§‹æ•¸æ“šè¡Œæ•¸',
-	'doinglist_startrow_comment' => 'å¦‚éœ€è¨­å®šèµ·å§‹çš„æ•¸æ“šè¡Œæ•¸ï¼Œè«‹è¼¸å…¥å…·é«”æ•¸å€¼ï¼Œ0 ç‚ºå¾žç¬¬ä¸€è¡Œé–‹å§‹ï¼Œä»¥æ­¤é¡žæŽ¨',
-	'doinglist_titlelength' => 'è¨˜éŒ„é•·åº¦',
-	'doinglist_titlelength_comment' => 'æŒ‡å®šè¨˜éŒ„çš„æœ€å¤§é•·åº¦ï¼Œè¨­ç½®ç‚º0å‰‡æ”¯æŒè¡¨æƒ…åœ–ç‰‡',
-	'doinglist_orderby' => 'å‹•æ…‹æŽ’åºæ–¹å¼',
-	'doinglist_orderby_comment' => 'è¨­ç½®ä»¥å“ªä¸€å­—æ®µæˆ–æ–¹å¼å°å‹•æ…‹é€²è¡ŒæŽ’åº',
-	'doinglist_orderby_dateline' => 'æŒ‰ç™¼ä½ˆæ™‚é–“å€’åº',
-	'doinglist_orderby_replynum' => 'æŒ‰å›žè¤‡æ•¸å€’åº'
+	'doinglist_uids' => 'ÓÃ»§UID',
+	'doinglist_uids_comment' => 'ÌîÈëÖ¸¶¨ÓÃ»§µÄID(uid)£¬¶à¸öÓÃ»§Ö®¼äÓÃ¶ººÅ(,)·Ö¸ô',
+	'doinglist_startrow' => 'ÆðÊ¼Êý¾ÝÐÐÊý',
+	'doinglist_startrow_comment' => 'ÈçÐèÉè¶¨ÆðÊ¼µÄÊý¾ÝÐÐÊý£¬ÇëÊäÈë¾ßÌåÊýÖµ£¬0 Îª´ÓµÚÒ»ÐÐ¿ªÊ¼£¬ÒÔ´ËÀàÍÆ',
+	'doinglist_titlelength' => '¼ÇÂ¼³¤¶È',
+	'doinglist_titlelength_comment' => 'Ö¸¶¨¼ÇÂ¼µÄ×î´ó³¤¶È£¬ÉèÖÃÎª0ÔòÖ§³Ö±íÇéÍ¼Æ¬',
+	'doinglist_orderby' => '¶¯Ì¬ÅÅÐò·½Ê½',
+	'doinglist_orderby_comment' => 'ÉèÖÃÒÔÄÄÒ»×Ö¶Î»ò·½Ê½¶Ô¶¯Ì¬½øÐÐÅÅÐò',
+	'doinglist_orderby_dateline' => '°´·¢²¼Ê±¼äµ¹Ðò',
+	'doinglist_orderby_replynum' => '°´»Ø¸´Êýµ¹Ðò'
 );
 
 ?>

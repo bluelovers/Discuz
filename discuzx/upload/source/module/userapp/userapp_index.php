@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: userapp_index.php 24305 2011-09-06 10:06:40Z zhangguosheng $
+ *      $Id: userapp_index.php 25889 2011-11-24 09:52:20Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -27,50 +27,43 @@ ckstart($start, $perpage);
 
 $_G['home_today'] = strtotime('today');
 
-if(empty($_G['gp_view'])) $_G['gp_view'] = 'top';
+if(empty($_GET['view'])) $_GET['view'] = 'top';
 space_merge($space, 'field_home');
 
+$uids = '';
 
-if ($_G['gp_view'] == 'all') {
 
-	$wheresql = "1";
-	$ordersql = "dateline DESC";
+if ($_GET['view'] == 'all') {
+
 	$theurl = "userapp.php?view=all";
 	$f_index = '';
 
 } else {
 
-	if(empty($space['feedfriend'])) $_G['gp_view'] = 'me';
+	if(empty($space['feedfriend'])) $_GET['view'] = 'me';
 
-	if($_G['gp_view'] == 'me') {
-		$wheresql = "uid='$space[uid]'";
-		$ordersql = "dateline DESC";
+	if($_GET['view'] == 'me') {
+		$uids = array($space['uid']);
 		$theurl = "userapp.php?view=me";
 		$f_index = '';
 
 	} else {
-		$wheresql = "uid IN (0,$space[feedfriend])";
-		$ordersql = "dateline DESC";
+		$uids = array_merge(explode(',', $space['feedfriend']), array(0));
 		$theurl = "userapp.php?view=we";
-		$f_index = 'USE INDEX(dateline)';
-		$_G['gp_view'] = 'we';
+		$f_index = 'dateline';
+		$_GET['view'] = 'we';
 		$_G['home_tpl_hidden_time'] = 1;
 	}
 }
 
 $icon = empty($_GET['icon'])?'':trim($_GET['icon']);
-if($icon) {
-	$wheresql .= " AND icon='$icon'";
-}
+
 $multi = '';
 
 $feed_list = $appfeed_list = $hiddenfeed_list = $filter_list = $hiddenfeed_num = $icon_num = array();
 $count = $filtercount = 0;
-$query = DB::query("SELECT * FROM ".DB::table('home_feed_app')." $f_index
-	WHERE $wheresql
-	ORDER BY $ordersql
-	LIMIT $start,$perpage");
-while ($value = DB::fetch($query)) {
+$query = C::t('home_feed')->fetch_all_by_search(1, $uids, $icon, '', '', '', '', '', $start, $perpage, $f_index);
+foreach ($query as $value) {
 	$feed_list[$value['icon']][] = $value;
 	$count++;
 }
@@ -108,9 +101,9 @@ if($_G['uid']) {
 	}
 }
 
-$actives = array((in_array($_G['gp_view'], array('we', 'me', 'all', 'hot', 'top')) ? $_G['gp_view'] : 'top') => ' class="a"');
-if($_G['gp_view'] != 'top') {
-	$navtitle = lang('core', 'title_userapp_index_'.$_G['gp_view']).' - '.$navtitle;
+$actives = array((in_array($_GET['view'], array('we', 'me', 'all', 'hot', 'top')) ? $_GET['view'] : 'top') => ' class="a"');
+if($_GET['view'] != 'top') {
+	$navtitle = lang('core', 'title_userapp_index_'.$_GET['view']).' - '.$navtitle;
 }
 
 $metakeywords = $_G['setting']['seokeywords']['userapp'];

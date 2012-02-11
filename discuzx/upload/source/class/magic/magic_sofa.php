@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: magic_sofa.php 21792 2011-04-12 08:42:07Z monkey $
+ *      $Id: magic_sofa.php 26749 2011-12-22 07:38:37Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -50,14 +50,14 @@ class magic_sofa {
 
 	function usesubmit() {
 		global $_G;
-		if(empty($_G['gp_tid'])) {
+		if(empty($_GET['tid'])) {
 			showmessage(lang('magic/sofa', 'sofa_info_nonexistence'));
 		}
 
-		$thread = getpostinfo($_G['gp_tid'], 'tid', array('fid', 'authorid', 'dateline', 'subject'));
+		$thread = getpostinfo($_GET['tid'], 'tid', array('fid', 'authorid', 'dateline', 'subject'));
 		$this->_check($thread);
 
-		$firstsofa = DB::result_first("SELECT COUNT(*) FROM ".DB::table('forum_threadmod')." WHERE magicid='".$this->magic['magicid']."' AND tid='$_G[gp_tid]'");
+		$firstsofa = C::t('forum_threadmod')->count_by_tid_magicid($_GET['tid'], $this->magic['magicid']);
 		if($firstsofa >= 1) {
 			showmessage(lang('magic/sofa', 'sofa_info_sofaexistence'), '', array(), array('login' => 1));
 		}
@@ -68,7 +68,7 @@ class magic_sofa {
 
 		insertpost(array(
 			'fid' => $thread['fid'],
-			'tid' => $_G['gp_tid'],
+			'tid' => $_GET['tid'],
 			'first' => '0',
 			'author' => $_G['username'],
 			'authorid' => $_G['uid'],
@@ -78,25 +78,25 @@ class magic_sofa {
 			'usesig' => '1',
 		));
 
-		DB::query("UPDATE ".DB::table('forum_thread')." SET replies=replies+1, moderated='1' WHERE tid='$_G[gp_tid]'", 'UNBUFFERED');
-		DB::query("UPDATE ".DB::table('forum_forum')." SET posts=posts+1, todayposts=todayposts+1 WHERE fid='$post[fid]'", 'UNBUFFERED');
+		C::t('forum_thread')->increase($_GET['tid'], array('replies' => 1, 'moderated' => array(1)));
+		C::t('forum_forum')->update_forum_counter($post['fid'], 0, 1, 1);
 
 		usemagic($this->magic['magicid'], $this->magic['num']);
-		updatemagiclog($this->magic['magicid'], '2', '1', '0', 0, 'tid', $_G['gp_tid']);
-		updatemagicthreadlog($_G['gp_tid'], $this->magic['magicid']);
+		updatemagiclog($this->magic['magicid'], '2', '1', '0', 0, 'tid', $_GET['tid']);
+		updatemagicthreadlog($_GET['tid'], $this->magic['magicid']);
 
 		if($thread['authorid'] != $_G['uid']) {
-			notification_add($thread['authorid'], 'magic', lang('magic/sofa', 'sofa_notification'), array('tid' => $_G['gp_tid'], 'subject' => $thread['subject'], 'magicname' => $this->magic['name']));
+			notification_add($thread['authorid'], 'magic', lang('magic/sofa', 'sofa_notification'), array('tid' => $_GET['tid'], 'subject' => $thread['subject'], 'magicname' => $this->magic['name']));
 		}
 
-		showmessage(lang('magic/sofa', 'sofa_succeed'), dreferer(), array(), array('showdialog' => 1, 'locationtime' => true));
+		showmessage(lang('magic/sofa', 'sofa_succeed'), dreferer(), array(), array('alert' => 'right', 'showdialog' => 1, 'locationtime' => true));
 	}
 
 	function show() {
 		global $_G;
-		$tid = !empty($_G['gp_id']) ? htmlspecialchars($_G['gp_id']) : '';
+		$tid = !empty($_GET['id']) ? htmlspecialchars($_GET['id']) : '';
 		if($tid) {
-			$thread = getpostinfo($_G['gp_id'], 'tid', array('fid', 'authorid'));
+			$thread = getpostinfo($_GET['id'], 'tid', array('fid', 'authorid'));
 			$this->_check($thread);
 		}
 		$this->parameters['expiration'] = $this->parameters['expiration'] ? intval($this->parameters['expiration']) : 24;
@@ -107,8 +107,8 @@ class magic_sofa {
 
 	function buy() {
 		global $_G;
-		if(!empty($_G['gp_id'])) {
-			$thread = getpostinfo($_G['gp_id'], 'tid', array('fid', 'authorid'));
+		if(!empty($_GET['id'])) {
+			$thread = getpostinfo($_GET['id'], 'tid', array('fid', 'authorid'));
 			$this->_check($thread);
 		}
 	}

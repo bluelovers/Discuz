@@ -4,15 +4,19 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_friendnum.php 7828 2010-04-14 02:11:48Z monkey $
+ *      $Id: lang_friendnum.php 27449 2012-02-01 05:32:35Z zhangguosheng $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 $lang = array
 (
-	'friendnum_name' => 'å¥½å‹å¢žå®¹å¡',
-	'friendnum_desc' => 'å¢žåŠ å¥½å‹å®¹é‡ä¸Šé™',
-	'friendnum_info' => 'é¡å¤–å¢žåŠ  {num} å€‹å¥½å‹ä¸Šé™',
-	'friendnum_addnum' => 'å¢žåŠ å¥½å‹æ•¸',
+	'friendnum_name' => 'ºÃÓÑÔöÈÝ¿¨',
+	'friendnum_desc' => 'Ôö¼ÓºÃÓÑÈÝÁ¿ÉÏÏÞ',
+	'friendnum_info' => '¶îÍâÔö¼Ó {num} ¸öºÃÓÑÉÏÏÞ',
+	'friendnum_addnum' => 'Ôö¼ÓºÃÓÑÊý',
 );
 
 ?>

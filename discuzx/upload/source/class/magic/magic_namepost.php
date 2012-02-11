@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: magic_namepost.php 18832 2010-12-07 04:01:53Z liulanbo $
+ *      $Id: magic_namepost.php 26749 2011-12-22 07:38:37Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -50,29 +50,29 @@ class magic_namepost {
 
 	function usesubmit() {
 		global $_G;
-		$id = intval($_G['gp_id']);
+		$id = intval($_GET['id']);
 		if(empty($id)) {
 			showmessage(lang('magic/namepost', 'namepost_info_nonexistence'));
 		}
-		$idtype = !empty($_G['gp_idtype']) ? htmlspecialchars($_G['gp_idtype']) : '';
+		$idtype = !empty($_GET['idtype']) ? htmlspecialchars($_GET['idtype']) : '';
 		if(!in_array($idtype, array('pid', 'cid'))) {
 			showmessage(lang('magic/namepost', 'namepost_use_error'));
 		}
 		if($idtype == 'pid') {
-			$_G['tid'] = intval($_G['gp_ptid']);
+			$_G['tid'] = intval($_GET['ptid']);
 			$post = getpostinfo($id, 'pid', array('p.first', 'p.tid', 'p.fid', 'p.authorid', 'p.dateline', 'p.anonymous'));
 			$this->_check($post);
 			$authorid = $post['authorid'];
 			$author = $post['anonymous'] ? '' : 1;
 		} elseif($idtype == 'cid') {
-			$comment = DB::fetch_first("SELECT * FROM ".DB::table('home_comment')." WHERE cid='$id'");
+			$comment = C::t('home_comment')->fetch($id);
 			$authorid = $comment['authorid'];
 			$author = $comment['author'];
 		}
 		if($author) {
 			showmessage('magicuse_bad_object');
 		}
-		$member = DB::fetch_first("SELECT username, groupid FROM ".DB::table('common_member')." WHERE uid='$authorid'");
+		$member = getuserbyuid($authorid);
 		if(!checkmagicperm($this->parameters['targetgroups'], $member['groupid'])) {
 			showmessage(lang('magic/namepost', 'namepost_info_user_noperm'));
 		}
@@ -80,13 +80,13 @@ class magic_namepost {
 
 		usemagic($this->magic['magicid'], $this->magic['num']);
 		updatemagiclog($this->magic['magicid'], '2', '1', '0', 0, $idtype, $id);
-		showmessage(lang('magic/namepost', 'magic_namepost_succeed'),'javascript:;', array('uid' => $authorid, 'username' => $author, 'avatar' => 1));
+		showmessage(lang('magic/namepost', 'magic_namepost_succeed'),'javascript:;', array('uid' => $authorid, 'username' => $author, 'avatar' => 1), array('alert' => 'right'));
 	}
 
 	function show() {
 		global $_G;
-		$id = !empty($_G['gp_id']) ? htmlspecialchars($_G['gp_id']) : '';
-		$idtype = !empty($_G['gp_idtype']) ? htmlspecialchars($_G['gp_idtype']) : '';
+		$id = !empty($_GET['id']) ? htmlspecialchars($_GET['id']) : '';
+		$idtype = !empty($_GET['idtype']) ? htmlspecialchars($_GET['idtype']) : '';
 		if($idtype == 'pid') {
 			list($id, $_G['tid']) = explode(':', $id);
 			if($id && $_G['tid']) {
@@ -108,9 +108,9 @@ class magic_namepost {
 
 	function buy() {
 		global $_G;
-		$id = !empty($_G['gp_id']) ? htmlspecialchars($_G['gp_id']) : '';
-		$idtype = !empty($_G['gp_idtype']) ? htmlspecialchars($_G['gp_idtype']) : '';
-		if(!empty($id) && $_G['gp_idtype'] == 'pid') {
+		$id = !empty($_GET['id']) ? htmlspecialchars($_GET['id']) : '';
+		$idtype = !empty($_GET['idtype']) ? htmlspecialchars($_GET['idtype']) : '';
+		if(!empty($id) && $_GET['idtype'] == 'pid') {
 			list($id, $_G['tid']) = explode(':', $id);
 			$post = getpostinfo(intval($id), 'pid', array('p.fid', 'p.authorid'));
 			$this->_check($post);

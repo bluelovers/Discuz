@@ -4,14 +4,18 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_downdateline.php 7828 2010-04-14 02:11:48Z monkey $
+ *      $Id: lang_downdateline.php 27449 2012-02-01 05:32:35Z zhangguosheng $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 $lang = array
 (
-	'downdateline_name' => 'æ™‚å…‰æ©Ÿ',
-	'downdateline_desc' => 'æŠŠè‡ªå·±æ—¥èªŒçš„ç™¼ä½ˆæ™‚é–“ä¿®æ”¹ç‚ºéŽåŽ»',
-	'downdateline_info' => 'æŠŠè‡ªå·±æ—¥èªŒçš„ç™¼ä½ˆæ™‚é–“ä¿®æ”¹ç‚ºéŽåŽ»',
+	'downdateline_name' => 'Ê±¹â»ú',
+	'downdateline_desc' => '°Ñ×Ô¼ºÈÕÖ¾µÄ·¢²¼Ê±¼äÐÞ¸ÄÎª¹ýÈ¥',
+	'downdateline_info' => '°Ñ×Ô¼ºÈÕÖ¾µÄ·¢²¼Ê±¼äÐÞ¸ÄÎª¹ýÈ¥',
 );
 
 ?>

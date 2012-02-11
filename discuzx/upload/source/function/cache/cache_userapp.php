@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_userapp.php 16796 2010-09-15 02:24:56Z zhengqingpeng $
+ *      $Id: cache_userapp.php 24946 2011-10-18 02:54:40Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -13,14 +13,12 @@ if(!defined('IN_DISCUZ')) {
 
 function build_cache_userapp() {
 	$data = array();
-	$query = DB::query("SELECT * FROM ".DB::table('common_myapp')." WHERE flag='1' ORDER BY displayorder");
-
-	while($myapp = DB::fetch($query)) {
+	foreach(C::t('common_myapp')->fetch_all_by_flag(1) as $myapp) {
 		$myapp['icon'] = getmyappiconpath($myapp['appid'], $myapp['iconstatus']);
 		$data[$myapp['appid']] = $myapp;
 	}
 
-	save_syscache('userapp', $data);
+	savecache('userapp', $data);
 }
 
 ?>

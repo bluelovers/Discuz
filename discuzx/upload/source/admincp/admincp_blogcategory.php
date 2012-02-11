@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_blogcategory.php 20616 2011-03-01 01:05:56Z monkey $
+ *      $Id: admincp_blogcategory.php 26322 2011-12-09 02:20:12Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_DISCUZ')) {
@@ -69,30 +69,27 @@ SCRIPT;
 				$sets = array();
 				$value = trim($value);
 				if($category[$key] && $category[$key]['catname'] != $value) {
-					$sets[] = "catname='$value'";
+					$sets['catname'] = $value;
 				}
 				if($category[$key] && $category[$key]['displayorder'] != $_POST['order'][$key]) {
-					$sets[] = "displayorder='".($_POST['order'][$key] ? $_POST['order'][$key] : '0')."'";
+					$sets['displayorder'] = $_POST['order'][$key] ? $_POST['order'][$key] : '0';
 				}
 				if($sets) {
-					DB::query('UPDATE '.DB::table('home_blog_category')." SET ".implode(',',$sets)." WHERE catid = '$key'");
+					C::t('home_blog_category')->update($key, $sets);
 				}
 			}
 		}
 		if($_POST['newname']) {
 			foreach ($_POST['newname'] as $upid=>$names) {
 				foreach ($names as $nameid=>$name) {
-					DB::insert('home_blog_category', array('upid' => $upid, 'catname' => trim($name), 'displayorder'=>intval($_POST['neworder'][$upid][$nameid])));
+					C::t('home_blog_category')->insert(array('upid' => $upid, 'catname' => trim($name), 'displayorder'=>intval($_POST['neworder'][$upid][$nameid])));
 				}
 			}
 		}
-		$settings = array();
-		foreach($_POST['settingnew'] as $key => $value) {
-			$value = intval($value);
-			$settings[] = "('$key', '$value')";
-		}
-		if($settings) {
-			DB::query("REPLACE INTO ".DB::table('common_setting')." (`skey`, `svalue`) VALUES ".implode(',', $settings));
+
+		if($_POST['settingnew']) {
+			$_POST['settingnew'] = array_map('intval', $_POST['settingnew']);
+			C::t('common_setting')->update_batch($_POST['settingnew']);
 			updatecache('setting');
 		}
 
@@ -108,9 +105,9 @@ SCRIPT;
 		cpmsg('blogcategory_catgory_not_found', '', 'error');
 	}
 	if(!submitcheck('deletesubmit')) {
-		$blog_count = DB::result_first('SELECT COUNT(*) FROM '.DB::table('home_blog')." WHERE catid = '$_GET[catid]'");
+		$blog_count = C::t('home_blog')->count_by_catid($_GET['catid']);
 		if(!$blog_count && empty($category[$_GET[catid]]['children'])) {
-			DB::query('DELETE FROM '.DB::table('home_blog_category')." WHERE catid = '$_GET[catid]'");
+			C::t('home_blog_category')->delete($_GET['catid']);
 			include_once libfile('function/cache');
 			updatecache('blogcategory');
 			cpmsg('blogcategory_delete_succeed', 'action=blogcategory', 'succeed');
@@ -147,7 +144,7 @@ SCRIPT;
 		if($category[$_GET['catid']]['children']) {
 			if($_POST['subcat_op'] == 'parent') {
 				$upid = intval($category[$_GET['catid']]['upid']);
-				DB::query('UPDATE '.DB::table('home_blog_category')." SET upid = '$upid' WHERE catid IN (".dimplode($category[$_GET['catid']]['children']).')');
+				C::t('home_blog_category')->update($category[$_GET['catid']]['children'], array('upid' => $upid));
 			} else {
 				$delids = array_merge($delids, $category[$_GET['catid']]['children']);
 				foreach ($category[$_GET['catid']]['children'] as $id) {
@@ -162,10 +159,10 @@ SCRIPT;
 			}
 		}
 		if($delids) {
-			DB::query('DELETE FROM '.DB::table('home_blog_category')." WHERE catid IN (".dimplode($delids).")");
-			DB::query('UPDATE '.DB::table('home_blog')." SET catid = '$_POST[tocatid]' WHERE catid IN (".dimplode($delids).")");
-			$num = DB::result_first('SELECT COUNT(*) FROM '.DB::table('home_blog')." WHERE catid = '$_POST[tocatid]'");
-			DB::update('home_blog_category', array('num'=>$num), array('catid'=>$_POST['tocatid']));
+			C::t('home_blog_category')->delete($delids);
+			C::t('home_blog')->update_by_catid($delids, array('catid'=>$_POST['tocatid']));
+			$num = C::t('home_blog')->count_by_catid($_POST['tocatid']);
+			C::t('home_blog_category')->update_num_by_catid($num, $_POST['tocatid'], false);
 		}
 
 		include_once libfile('function/cache');

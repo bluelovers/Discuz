@@ -4,28 +4,32 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_highlight.php 17773 2010-11-01 09:29:31Z liulanbo $
+ *      $Id: lang_highlight.php 27449 2012-02-01 05:32:35Z zhangguosheng $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 $lang = array
 (
-	'highlight_name' => 'è®Šè‰²å¡',
-	'highlight_desc' => 'å¯ä»¥å°‡å¸–å­æˆ–æ—¥èªŒçš„æ¨™é¡Œé«˜äº®ï¼Œè®Šæ›´é¡è‰²',
-	'highlight_expiration' => 'é«˜äº®æœ‰æ•ˆæœŸ',
-	'highlight_expiration_comment' => 'è¨­ç½®æ¨™é¡Œå¯ä»¥è¢«é«˜äº®å¤šé•·æ™‚é–“ï¼Œé»˜èª 24 å°æ™‚ã€‚ä½œç”¨æ–¼æ—¥èªŒæ™‚ç„¡æœ‰æ•ˆæœŸã€‚',
-	'highlight_forum' => 'å…è¨±ä½¿ç”¨æœ¬é“å…·çš„ç‰ˆå¡Š',
-	'highlight_info_tid' => 'é«˜äº®ä¸»é¡Œçš„æ¨™é¡Œ {expiration} å°æ™‚',
-	'highlight_info_blogid' => 'å¯ä»¥å°‡æ—¥èªŒæˆ–å¸–å­çš„æ¨™é¡Œé«˜äº®ï¼Œè®Šæ›´é¡è‰²',
-	'highlight_color' => 'é¡è‰²',
-	'highlight_info_nonexistence_tid' => 'è«‹æŒ‡å®šè¦é«˜äº®çš„å¸–å­',
-	'highlight_info_nonexistence_blogid' => 'è«‹æŒ‡å®šè¦é«˜äº®çš„æ—¥èªŒ',
-	'highlight_succeed_tid' => 'ä½ æ“ä½œçš„å¸–å­å·²é«˜äº®',
-	'highlight_succeed_blogid' => 'ä½ æ“ä½œçš„æ—¥èªŒå·²é«˜äº®',
-	'highlight_info_noperm' => 'å°ä¸èµ·ï¼Œä¸»é¡Œæ‰€åœ¨ç‰ˆå¡Šä¸å…è¨±ä½¿ç”¨æœ¬é“å…·',
-	'highlight_info_notype' => 'åƒæ•¸éŒ¯èª¤ï¼Œæ²’æœ‰æŒ‡å®šæ“ä½œé¡å‹ã€‚',
+	'highlight_name' => '±äÉ«¿¨',
+	'highlight_desc' => '¿ÉÒÔ½«Ìû×Ó»òÈÕÖ¾µÄ±êÌâ¸ßÁÁ£¬±ä¸üÑÕÉ«',
+	'highlight_expiration' => '¸ßÁÁÓĞĞ§ÆÚ',
+	'highlight_expiration_comment' => 'ÉèÖÃ±êÌâ¿ÉÒÔ±»¸ßÁÁ¶à³¤Ê±¼ä£¬Ä¬ÈÏ 24 Ğ¡Ê±¡£×÷ÓÃÓÚÈÕÖ¾Ê±ÎŞÓĞĞ§ÆÚ¡£',
+	'highlight_forum' => 'ÔÊĞíÊ¹ÓÃ±¾µÀ¾ßµÄ°æ¿é',
+	'highlight_info_tid' => '¸ßÁÁÖ÷ÌâµÄ±êÌâ {expiration} Ğ¡Ê±',
+	'highlight_info_blogid' => '¿ÉÒÔ½«ÈÕÖ¾»òÌû×ÓµÄ±êÌâ¸ßÁÁ£¬±ä¸üÑÕÉ«',
+	'highlight_color' => 'ÑÕÉ«',
+	'highlight_info_nonexistence_tid' => 'ÇëÖ¸¶¨Òª¸ßÁÁµÄÌû×Ó',
+	'highlight_info_nonexistence_blogid' => 'ÇëÖ¸¶¨Òª¸ßÁÁµÄÈÕÖ¾',
+	'highlight_succeed_tid' => 'Äú²Ù×÷µÄÌû×ÓÒÑ¸ßÁÁ',
+	'highlight_succeed_blogid' => 'Äú²Ù×÷µÄÈÕÖ¾ÒÑ¸ßÁÁ',
+	'highlight_info_noperm' => '¶Ô²»Æğ£¬Ö÷ÌâËùÔÚ°æ¿é²»ÔÊĞíÊ¹ÓÃ±¾µÀ¾ß',
+	'highlight_info_notype' => '²ÎÊı´íÎó£¬Ã»ÓĞÖ¸¶¨²Ù×÷ÀàĞÍ¡£',
 
-	'highlight_notification' => 'ä½ çš„ä¸»é¡Œ {subject} è¢« {actor} ä½¿ç”¨äº†{magicname}ï¼Œ<a href="forum.php?mod=viewthread&tid={tid}">å¿«å»çœ‹çœ‹å§ï¼</a>',
-	'highlight_notification_blogid' => 'ä½ çš„æ—¥èªŒ {subject} è¢« {actor} ä½¿ç”¨äº†{magicname}ï¼Œ<a href="home.php?mod=space&do=blog&id={blogid}">å¿«å»çœ‹çœ‹å§ï¼</a>',
+	'highlight_notification' => 'ÄúµÄÖ÷Ìâ {subject} ±» {actor} Ê¹ÓÃÁË{magicname}£¬<a href="forum.php?mod=viewthread&tid={tid}">¿ìÈ¥¿´¿´°É£¡</a>',
+	'highlight_notification_blogid' => 'ÄúµÄÈÕÖ¾ {subject} ±» {actor} Ê¹ÓÃÁË{magicname}£¬<a href="home.php?mod=space&do=blog&id={blogid}">¿ìÈ¥¿´¿´°É£¡</a>',
 );
 
 ?>

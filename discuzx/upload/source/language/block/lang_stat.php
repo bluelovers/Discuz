@@ -4,41 +4,45 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_blank.php 6757 2010-03-25 09:01:29Z cnteacher $
+ *      $Id: lang_stat.php 27449 2012-02-01 05:32:35Z zhangguosheng $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 $lang = array
 (
-	'stat_option' => 'çµ±è¨ˆé¸é …',
-	'stat_option_posts' => 'ç™¼å¸–ç¸½æ•¸',
-	'stat_option_groups' => 'ç¾¤çµ„ç¸½æ•¸',
-	'stat_option_members' => 'æœƒå“¡ç¸½æ•¸',
-	'stat_option_groupnewposts' => 'ç¾¤çµ„ä»Šæ—¥ç™¼å¸–',
-	'stat_option_bbsnewposts' => 'è«–å£‡ä»Šæ—¥ç™¼å¸–æ•¸',
-	'stat_option_bbslastposts' => 'è«–å£‡æ˜¨æ—¥ç™¼å¸–æ•¸',
-	'stat_option_onlinemembers' => 'ç•¶å‰åœ¨ç·šæœƒå“¡æ•¸',
-	'stat_option_maxmembers' => 'æ­·å²æœ€é«˜åœ¨ç·šæœƒå“¡æ•¸',
-	'stat_option_doings' => 'å‹•æ…‹æ•¸',
-	'stat_option_blogs' => 'æ—¥èªŒæ•¸',
-	'stat_option_albums' => 'ç›¸å†Šæ•¸',
-	'stat_option_pics' => 'åœ–ç‰‡æ•¸',
-	'stat_option_shares' => 'åˆ†äº«æ•¸',
+	'stat_option' => 'Í³¼ÆÑ¡Ïî',
+	'stat_option_posts' => '·¢Ìû×ÜÊý',
+	'stat_option_groups' => 'Èº×é×ÜÊý',
+	'stat_option_members' => '»áÔ±×ÜÊý',
+	'stat_option_groupnewposts' => 'Èº×é½ñÈÕ·¢Ìû',
+	'stat_option_bbsnewposts' => 'ÂÛÌ³½ñÈÕ·¢ÌûÊý',
+	'stat_option_bbslastposts' => 'ÂÛÌ³×òÈÕ·¢ÌûÊý',
+	'stat_option_onlinemembers' => 'µ±Ç°ÔÚÏß»áÔ±Êý',
+	'stat_option_maxmembers' => 'ÀúÊ·×î¸ßÔÚÏß»áÔ±Êý',
+	'stat_option_doings' => '¶¯Ì¬Êý',
+	'stat_option_blogs' => 'ÈÕÖ¾Êý',
+	'stat_option_albums' => 'Ïà²áÊý',
+	'stat_option_pics' => 'Í¼Æ¬Êý',
+	'stat_option_shares' => '·ÖÏíÊý',
 
-	'stat_edit_showtitle' => 'é¡¯ç¤ºåç¨±',
-	'stat_edit_showtitle_detail' => 'ä½ å¯ä»¥ç·¨è¼¯ä»¥ä¸‹å°æ‡‰é …ä¾†è‡ªå®šç¾©å„çµ±è¨ˆé …çš„é¡¯ç¤ºåç¨±',
+	'stat_edit_showtitle' => 'ÏÔÊ¾Ãû³Æ',
+	'stat_edit_showtitle_detail' => 'Äú¿ÉÒÔ±à¼­ÒÔÏÂ¶ÔÓ¦ÏîÀ´×Ô¶¨Òå¸÷Í³¼ÆÏîµÄÏÔÊ¾Ãû³Æ',
 
-	'stat_posts' => 'å¸–å­',
-	'stat_groups' => 'ç¾¤çµ„',
-	'stat_members' => 'æœƒå“¡',
-	'stat_groupnewposts' => 'ç¾¤çµ„ä»Šæ—¥ç™¼å¸–',
-	'stat_bbsnewposts' => 'è«–å£‡ä»Šæ—¥ç™¼å¸–',
-	'stat_bbslastposts' => 'è«–å£‡æ˜¨æ—¥ç™¼å¸–',
-	'stat_onlinemembers' => 'ç•¶å‰åœ¨ç·šæœƒå“¡',
-	'stat_maxmembers' => 'æ­·å²æœ€é«˜åœ¨ç·š',
-	'stat_doings' => 'å‹•æ…‹',
-	'stat_blogs' => 'æ—¥èªŒ',
-	'stat_albums' => 'ç›¸å†Š',
-	'stat_pics' => 'åœ–ç‰‡',
-	'stat_shares' => 'åˆ†äº«',
+	'stat_posts' => 'Ìû×Ó',
+	'stat_groups' => 'Èº×é',
+	'stat_members' => '»áÔ±',
+	'stat_groupnewposts' => 'Èº×é½ñÈÕ·¢Ìû',
+	'stat_bbsnewposts' => 'ÂÛÌ³½ñÈÕ·¢Ìû',
+	'stat_bbslastposts' => 'ÂÛÌ³×òÈÕ·¢Ìû',
+	'stat_onlinemembers' => 'µ±Ç°ÔÚÏß»áÔ±',
+	'stat_maxmembers' => 'ÀúÊ·×î¸ßÔÚÏß',
+	'stat_doings' => '¶¯Ì¬',
+	'stat_blogs' => 'ÈÕÖ¾',
+	'stat_albums' => 'Ïà²á',
+	'stat_pics' => 'Í¼Æ¬',
+	'stat_shares' => '·ÖÏí',
 );
 ?>

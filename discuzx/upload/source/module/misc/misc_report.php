@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_report.php 22830 2011-05-25 01:38:56Z svn_project_zhangjie $
+ *      $Id: misc_report.php 25246 2011-11-02 03:34:53Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -13,11 +13,11 @@ if(!defined('IN_DISCUZ')) {
 if(empty($_G['uid'])) {
 	showmessage('not_loggedin', null, array(), array('login' => 1));
 }
-$rtype = $_G['gp_rtype'];
-$rid = intval($_G['gp_rid']);
-$tid = intval($_G['gp_tid']);
-$fid = intval($_G['gp_fid']);
-$uid = intval($_G['gp_uid']);
+$rtype = $_GET['rtype'];
+$rid = intval($_GET['rid']);
+$tid = intval($_GET['tid']);
+$fid = intval($_GET['fid']);
+$uid = intval($_GET['uid']);
 $default_url = array(
 	'user' => 'home.php?mod=space&uid=',
 	'post' => 'forum.php?mod=redirect&goto=findpost&ptid='.$tid.'&pid=',
@@ -31,7 +31,7 @@ $url = '';
 if($rid && !empty($default_url[$rtype])) {
 	$url = $default_url[$rtype].intval($rid);
 } else {
-	$url = addslashes(dhtmlspecialchars(base64_decode($_G['gp_url'])));
+	$url = addslashes(dhtmlspecialchars(base64_decode($_GET['url'])));
 	$url = preg_match("/^http[s]?:\/\/[^\[\"']+$/i", trim($url)) ? trim($url) : '';
 }
 if(empty($url) || empty($_G['inajax'])) {
@@ -39,12 +39,16 @@ if(empty($url) || empty($_G['inajax'])) {
 }
 $urlkey = md5($url);
 if(submitcheck('reportsubmit')) {
-	$message = censor(cutstr(dhtmlspecialchars(trim($_G['gp_message'])), 200, ''));
+	$message = censor(cutstr(dhtmlspecialchars(trim($_GET['message'])), 200, ''));
 	$message = $_G['username'].'&nbsp;:&nbsp;'.rtrim($message, "\\");
-	if($reportid = DB::result_first("SELECT id FROM ".DB::table('common_report')." WHERE urlkey='$urlkey' AND opuid='0'")) {
-		DB::query("UPDATE ".DB::table('common_report')." SET message=CONCAT_WS('<br>', message, '$message'), num=num+1 WHERE id='$reportid'");
+	if($reportid = C::t('common_report')->fetch_by_urlkey($urlkey)) {
+		C::t('common_report')->update_num($reportid, $message);
 	} else {
-		DB::query("INSERT INTO ".DB::table('common_report')."(url, urlkey, uid, username, message, dateline".($fid ? ', fid' : '').") VALUES ('$url', '$urlkey', '$_G[uid]', '$_G[username]', '$message', '".TIMESTAMP."'".($fid ? ", '$fid'" : '').")");
+		$data = array('url' => $url, 'urlkey' => $urlkey, 'uid' => $_G['uid'], 'username' => $_G['username'], 'message' => $message, 'dateline' => TIMESTAMP);
+		if($fid) {
+			$data['fid'] = $fid;
+		}
+		C::t('common_report')->insert($data);
 		$report_receive = unserialize($_G['setting']['report_receive']);
 		$moderators = array();
 		if($report_receive['adminuser']) {
@@ -53,8 +57,7 @@ if(submitcheck('reportsubmit')) {
 			}
 		}
 		if($fid && $rtype == 'post') {
-			$query = DB::query("SELECT uid FROM ".DB::table('forum_moderator')." WHERE fid='$fid'");
-			while($row = DB::fetch($query)) {
+			foreach(C::t('forum_moderator')->fetch_all_by_fid($fid, false) as $row) {
 				$moderators[] = $row['uid'];
 			}
 			if($report_receive['supmoderator']) {
@@ -65,7 +68,7 @@ if(submitcheck('reportsubmit')) {
 			}
 		}
 	}
-	showmessage('report_succeed', '', array(), array('closetime' => true, 'showdialog' => 1));
+	showmessage('report_succeed', '', array(), array('closetime' => true, 'showdialog' => 1, 'alert' => 'right'));
 }
 require_once libfile('function/misc');
 include template('common/report');

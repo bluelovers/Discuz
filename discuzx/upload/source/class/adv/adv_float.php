@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: adv_float.php 19237 2010-12-23 04:27:46Z monkey $
+ *      $Id: adv_float.php 26692 2011-12-20 05:27:38Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -13,7 +13,7 @@ if(!defined('IN_DISCUZ')) {
 
 class adv_float {
 
-	var $version = '1.0';
+	var $version = '1.1';
 	var $name = 'float_name';
 	var $description = 'float_desc';
 	var $copyright = '<a href="http://www.comsenz.com" target="_blank">Comsenz Inc.</a>';
@@ -47,6 +47,15 @@ class adv_float {
 				),
 				'default' => 1,
 			),
+			'disableclose' => array(
+			    'title' => 'float_disableclose',
+			    'type' => 'mradio',
+			    'value' => array(
+			            array(0, 'float_show'),
+				    array(1, 'float_hidden'),
+			    ),
+			    'default' => 0,
+			)
 		);
 		loadcache(array('forums', 'grouptype'));
 		$settings['fids']['value'][] = $settings['groups']['value'][] = array(0, '&nbsp;');
@@ -107,7 +116,7 @@ class adv_float {
 				$checked = false;
 			}',
 			'create' => '
-			$adcode = empty($_G[\'cookie\'][\'adclose_\'.$coupleadid]) ? $codes[$adids[array_rand($adids)]].\'<br /><a href="javascript:;" onclick="setcookie(\\\'adclose_\'.$coupleadid.\'\\\', 1, 86400);this.parentNode.style.display=\\\'none\\\'"><img src="\'.STATICURL.\'image/common/ad_close.gif" /></a>\' : \'\';
+			$adcode = empty($parameter[\'disableclose\']) ? (empty($_G[\'cookie\'][\'adclose_\'.$coupleadid]) ? $codes[$adids[array_rand($adids)]].\'<br /><a href="javascript:;" onclick="setcookie(\\\'adclose_\'.$coupleadid.\'\\\', 1, 86400);this.parentNode.style.display=\\\'none\\\'"><img src="\'.STATICURL.\'image/common/ad_close.gif" /></a>\' : \'\') : $codes[$adids[array_rand($adids)]];
 			'
 		);
 	}

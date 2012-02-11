@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: magic_checkonline.php 7955 2010-04-15 05:18:34Z monkey $
+ *      $Id: magic_checkonline.php 26749 2011-12-22 07:38:37Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -32,14 +32,14 @@ class magic_checkonline {
 
 	function usesubmit() {
 		global $_G;
-		if(empty($_G['gp_username'])) {
+		if(empty($_GET['username'])) {
 			showmessage(lang('magic/checkonline', 'checkonline_info_nonexistence'));
 		}
 
-		$member = getuserinfo($_G['gp_username'], array('uid', 'groupid'));
+		$member = getuserinfo($_GET['username']);
 		$this->_check($member['groupid']);
 
-		$online = DB::fetch_first("SELECT action, lastactivity, invisible FROM ".DB::table('common_session')." WHERE uid='$member[uid]'");
+		$online = C::app()->session->fetch_by_uid($member['uid']);
 
 		usemagic($this->magic['magicid'], $this->magic['num']);
 		updatemagiclog($this->magic['magicid'], '2', '1', '0', 0, 'uid', $member['uid']);
@@ -51,20 +51,20 @@ class magic_checkonline {
 		if($online) {
 			$time = dgmdate($online['lastactivity'], 'u');
 			if($online['invisible']) {
-				showmessage(lang('magic/checkonline', 'checkonline_hidden_message'), '', array('username' => stripslashes($_G['gp_username']), 'time' => $time), array('showdialog' => 1));
+				showmessage(lang('magic/checkonline', 'checkonline_hidden_message'), '', array('username' => $_GET['username'], 'time' => $time), array('alert' => 'info', 'showdialog' => 1));
 			} else {
-				showmessage(lang('magic/checkonline', 'checkonline_online_message'), '', array('username' => stripslashes($_G['gp_username']), 'time' => $time), array('showdialog' => 1));
+				showmessage(lang('magic/checkonline', 'checkonline_online_message'), '', array('username' => $_GET['username'], 'time' => $time), array('alert' => 'info', 'showdialog' => 1));
 			}
 		} else {
-			showmessage(lang('magic/checkonline', 'checkonline_offline_message'), '', array('username' => stripslashes($_G['gp_username'])), array('showdialog' => 1));
+			showmessage(lang('magic/checkonline', 'checkonline_offline_message'), '', array('username' => $_GET['username']), array('alert' => 'info', 'showdialog' => 1));
 		}
 	}
 
 	function show() {
 		global $_G;
-		$user = !empty($_G['gp_id']) ? htmlspecialchars($_G['gp_id']) : '';
+		$user = !empty($_GET['id']) ? htmlspecialchars($_GET['id']) : '';
 		if($user) {
-			$member = getuserinfo($user, array('groupid'));
+			$member = getuserinfo($user);
 			$this->_check($member['groupid']);
 		}
 		magicshowtype('top');
@@ -74,8 +74,8 @@ class magic_checkonline {
 
 	function buy() {
 		global $_G;
-		if(!empty($_G['gp_id'])) {
-			$member = getuserinfo($_G['gp_id'], array('groupid'));
+		if(!empty($_GET['id'])) {
+			$member = getuserinfo($_GET['id']);
 			$this->_check($member['groupid']);
 		}
 	}

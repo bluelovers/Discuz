@@ -1,7 +1,6 @@
 <!--{template common/header}-->
-<!--{if empty($_G['gp_infloat'])}-->
+<!--{if empty($_GET['infloat'])}-->
 <div id="pt" class="bm cl">
-	<!--{subtemplate common/simplesearchform}-->
 	<div class="z"><a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em> $navigation</div>
 </div>
 <div id="ct" class="wp cl">
@@ -26,13 +25,13 @@
 		<!--{block actiontitle}--><!--{if $special == 1}-->{lang post_newthreadpoll}<!--{elseif $special == 2}-->{lang post_newthreadtrade}<!--{elseif $special == 3}-->{lang post_newthreadreward}<!--{elseif $special == 4}-->{lang post_newthreadactivity}<!--{elseif $special == 5}-->{lang post_newthreaddebate}<!--{else}-->{lang send_posts}<!--{/if}--><!--{/block}-->
 		<em>$actiontitle</em>
 	<!--{/if}-->
-	<!--{if !empty($_G['gp_infloat'])}-->
+	<!--{if !empty($_GET['infloat'])}-->
 		<span>
 			<a href="javascript:;" class="flbc" onclick="hideWindow('nav')" title="{lang close}">{lang close}</a>
 		</span>
 	<!--{/if}-->
 </h3>
-<div class="c"{if empty($_G['gp_infloat'])} style="width: 620px;"{/if}>
+<div class="c"{if empty($_GET['infloat'])} style="width: 620px;"{/if}>
 	<p class="cl">
 		<!--{if $_G['group']['allowpost'] || !$_G['uid']}-->
 			<!--{if $special === null}-->
@@ -128,7 +127,7 @@ function locationforums(block, fid) {
 
 </script>
 
-<!--{if empty($_G['gp_infloat'])}-->
+<!--{if empty($_GET['infloat'])}-->
 		</div>
 	</div>
 </div>

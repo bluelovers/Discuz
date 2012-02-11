@@ -3,7 +3,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_verify.php 22493 2011-05-10 05:58:30Z maruitao $
+ *      $Id: admincp_verify.php 26849 2011-12-26 06:56:10Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -12,14 +12,14 @@ if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 cpheader();
 $operation = $operation ? $operation : '';
 
-$anchor = in_array($_G['gp_anchor'], array('base', 'edit', 'verify', 'verify1', 'verify2', 'verify3', 'verify4', 'verify5', 'verify6', 'verify7', 'authstr', 'refusal', 'pass')) ? $_G['gp_anchor'] : 'base';
+$anchor = in_array($_GET['anchor'], array('base', 'edit', 'verify', 'verify1', 'verify2', 'verify3', 'verify4', 'verify5', 'verify6', 'verify7', 'authstr', 'refusal', 'pass')) ? $_GET['anchor'] : 'base';
 $current = array($anchor => 1);
 $navmenu = array();
 
 if($operation == 'verify') {
 	loadcache('profilesetting');
-	$vid = intval($_G['gp_do']);
-	$anchor = in_array($_G['gp_anchor'], array('authstr', 'refusal', 'pass', 'add')) ? $_G['gp_anchor'] : 'authstr';
+	$vid = intval($_GET['do']);
+	$anchor = in_array($_GET['anchor'], array('authstr', 'refusal', 'pass', 'add')) ? $_GET['anchor'] : 'authstr';
 	$current = array($anchor => 1);
 	if($anchor != 'pass') {
 		$_GET['verifytype'] = $vid;
@@ -48,7 +48,7 @@ if($operation == 'verify') {
 			$searchlang[$key] = cplang($key);
 		}
 
-		$orderby = isset($_G['gp_orderby']) ? $_G['gp_orderby'] : '';
+		$orderby = isset($_GET['orderby']) ? $_GET['orderby'] : '';
 		$datehtml = $orderbyhtml = '';
 		if($anchor != 'pass') {
 			$datehtml = "<tr><th>$searchlang[members_verify_dateline]</th><td colspan=\"3\">
@@ -61,8 +61,8 @@ if($operation == 'verify') {
 		}
 
 
-		$ordersc = isset($_G['gp_ordersc']) ? $_G['gp_ordersc'] : '';
-		$perpages = isset($_G['gp_perpages']) ? $_G['gp_perpages'] : '';
+		$ordersc = isset($_GET['ordersc']) ? $_GET['ordersc'] : '';
+		$perpages = isset($_GET['perpages']) ? $_GET['perpages'] : '';
 		$adminscript = ADMINSCRIPT;
 		$expertsearch = $vid ? '&nbsp;<a href="'.ADMINSCRIPT.'?action=members&operation=search&more=1&vid='.$vid.'" target="_top">'.cplang('search_higher').'</a>' : '';
 echo <<<EOF
@@ -157,7 +157,7 @@ echo <<<EOF
 	</script>
 EOF;
 
-		$mpurl = ADMINSCRIPT.'?action=verify&operation=verify&anchor='.$anchor;
+		$mpurl = ADMINSCRIPT.'?action=verify&operation=verify&anchor='.$anchor.'&do='.$vid;
 
 		if($anchor == 'refusal') {
 			$_GET['flag'] = -1;
@@ -174,13 +174,13 @@ EOF;
 		}
 		$mpurl .= '&'.implode('&', $results['urls']);
 		$wherearr = $results['wherearr'];
-		if($_G['gp_dateline1']){
-			$wherearr[] = "v.dateline >= '".strtotime($_G['gp_dateline1'])."'";
-			$mpurl .= '&starttime='.$_G['gp_dateline1'];
+		if($_GET['dateline1']){
+			$wherearr[] = "v.dateline >= '".strtotime($_GET['dateline1'])."'";
+			$mpurl .= '&dateline1='.$_GET['dateline1'];
 		}
-		if($_G['gp_dateline2']){
-			$wherearr[] = "v.dateline <= '".strtotime($_G['gp_dateline2'])."'";
-			$mpurl .= '&endtime='.$_G['gp_dateline2'];
+		if($_GET['dateline2']){
+			$wherearr[] = "v.dateline <= '".strtotime($_GET['dateline2'])."'";
+			$mpurl .= '&dateline2='.$_GET['dateline2'];
 		}
 
 		$wheresql = empty($wherearr)?'1':implode(' AND ', $wherearr);
@@ -191,12 +191,15 @@ EOF;
 		$orderby = array($_GET['orderby']=>' selected');
 		$ordersc = array($_GET['ordersc']=>' selected');
 
-		$perpage = empty($_G['gp_perpage']) ? 0 : intval($_G['gp_perpage']);
+		$orders = in_array($_G['orderby'], array('dateline', 'uid')) ? $_G['orderby'] : 'dateline';
+		$ordersc = in_array(strtolower($_GET['ordersc']), array('asc', 'desc')) ? $_GET['ordersc'] : 'desc';
+
+		$perpage = empty($_GET['perpage']) ? 0 : intval($_GET['perpage']);
 		if(!in_array($perpage, array(10, 20,50,100))) $perpage = 10;
 		$perpages = array($perpage=>' selected');
 		$mpurl .= '&perpage='.$perpage;
 
-		$page = empty($_G['gp_page'])?1:intval($_G['gp_page']);
+		$page = empty($_GET['page'])?1:intval($_GET['page']);
 		if($page<1) $page = 1;
 		$start = ($page-1)*$perpage;
 
@@ -210,25 +213,31 @@ EOF;
 			$cssarr = array('width="90"', 'width="120"', 'width="120"', '');
 			$titlearr = array($lang['members_verify_username'], $lang['members_verify_type'], $lang['members_verify_dateline'], $lang['members_verify_info']);
 			showtablerow('class="header"', $cssarr, $titlearr);
-			$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('common_member_verify_info')." v WHERE $wheresql"), 0);
+			$count = C::t('common_member_verify_info')->count_by_search($_GET['uid'], $vid, $_GET['flag'], $_GET['username'], strtotime($_GET['dateline1']), strtotime($_GET['dateline2']));
 		} else {
 			$cssarr = array('width="80"', 'width="90"', 'width="120"', '');
 			$titlearr = array('', $lang['members_verify_username'], $lang['members_verify_type'], $lang['members_verify_info']);
 			showtablerow('class="header"', $cssarr, $titlearr);
-			$wheresql = (!empty($_G['gp_username']) ? str_replace('v.username', 'm.username', $wheresql) : $wheresql) . ' AND v.uid=m.uid ';
-			$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('common_member_verify')." v, ".DB::table('common_member')." m WHERE $wheresql"), 0);
+			$wheresql = (!empty($_GET['username']) ? str_replace('v.username', 'm.username', $wheresql) : $wheresql) . ' AND v.uid=m.uid ';
+			$count = C::t('common_member_verify')->count_by_search($_GET['uid'], $vid, $_GET['username']);
 		}
 		if($count) {
 
 			if($anchor != 'pass') {
-				$query = DB::query("SELECT * FROM ".DB::table('common_member_verify_info')." v WHERE $wheresql $ordersql LIMIT $start, $perpage");
+				$verifyusers = C::t('common_member_verify_info')->fetch_all_search($_GET['uid'], $vid, $_GET['flag'], $_GET['username'], strtotime($_GET['dateline1']), strtotime($_GET['dateline2']), $orders, $start, $perpage, $ordersc);
 			} else {
-				$query = DB::query("SELECT v.*, f.*, m.username FROM ".DB::table('common_member_verify')." v LEFT JOIN ".DB::table('common_member_profile')." f USING(uid) LEFT JOIN ".DB::table('common_member')." m USING(uid) WHERE $wheresql $ordersql LIMIT $start, $perpage");
+				$verifyusers = C::t('common_member_verify')->fetch_all_search($_GET['uid'], $vid, $_GET['username'], 'v.uid', $start, $perpage, $ordersc);
+				$verifyuids = array_keys($verifyusers);
+				$profiles = C::t('common_member_profile')->fetch_all($verifyuids, false, 0);
 			}
-			while($value = DB::fetch($query)) {
+
+			foreach($verifyusers as $uid => $value) {
+				if($anchor == 'pass') {
+					$value = array_merge($value, $profiles[$uid]);
+				}
 				$value['username'] = '<a href="home.php?mod=space&uid='.$value['uid'].'&do=profile" target="_blank">'.avatar($value['uid'], "small").'<br/>'.$value['username'].'</a>';
 				if($anchor != 'pass') {
-					$fields = $anchor != 'pass' ? unserialize($value['field']) : $_G['setting']['verify'][$vid]['field'];
+					$fields = $anchor != 'pass' ? dunserialize($value['field']) : $_G['setting']['verify'][$vid]['field'];
 					$verifytype = $value['verifytype'] ? $_G['setting']['verify'][$value['verifytype']]['title'] : $lang['members_verify_profile'];
 					$fieldstr = '<table width="96%">';
 					$i = 0;
@@ -281,7 +290,7 @@ EOF;
 					showtablerow("id=\"mod_$value[uid]_row\"", $cssarr, $valuearr);
 				}
 			}
-			$multipage = multi($count, $perpage, $page, ADMINSCRIPT."?action=verify&operation=verify&do=$vid&anchor=$anchor");
+			$multipage = multi($count, $perpage, $page, $mpurl);
 			if($anchor != 'pass') {
 				showsubmit('batchverifysubmit', 'submit', '', '<a href="#all" onclick="mod_setbg_all(\'validate\')">'.cplang('moderate_all_validate').'</a>'. ($anchor == 'authstr' ? ' &nbsp;<a href="#all" onclick="mod_setbg_all(\'refusal\')">'.cplang('moderate_refusal_all').'</a>' : '').' &nbsp;<a href="#all" onclick="mod_cancel_all();">'.cplang('moderate_cancel_all').'</a>', $multipage, false);
 			} else {
@@ -301,7 +310,7 @@ EOF;
 			$note_values = array(
 					'verify' => $vid ? '<a href="home.php?mod=spacecp&ac=profile&op=verify&vid='.$vid.'" target="_blank">'.$_G['setting']['verify'][$vid]['title'].'</a>' : ''
 				);
-			foreach($_G['gp_verify'] as $uid => $type) {
+			foreach($_GET['verify'] as $uid => $type) {
 				if($type == 'export') {
 					$verifyuids['export'][] = $uid;
 				} elseif($type == 'refusal') {
@@ -310,22 +319,25 @@ EOF;
 				}
 			}
 			if(is_array($verifyuids['refusal']) && !empty($verifyuids['refusal'])) {
-				DB::update('common_member_verify', array("verify$vid" => '0'), "uid IN(".dimplode($verifyuids['refusal']).")");
+				C::t('common_member_verify')->update($verifyuids['refusal'], array("verify$vid" => '0'));
 			}
 			if(is_array($verifyuids['export']) && !empty($verifyuids['export']) || empty($verifyuids['refusal'])) {
+				$uids = array();
 				if(is_array($verifyuids['export']) && !empty($verifyuids['export'])) {
-					$wherearr[] = ' v.uid IN('.dimplode($verifyuids['export']).')';
+					$uids = $verifyuids['export'];
 				}
-				$wherearr[] = "v.verify$vid = '1'";
-				$wheresql = implode(' AND ', $wherearr);
 				$fields = $_G['setting']['verify'][$vid]['field'];
 				$fields = array_reverse($fields);
 				$fields['username'] = 'username';
 				$fields = array_reverse($fields);
 				$title = $verifylist = '';
 				$showtitle = true;
-				$query = DB::query("SELECT m.username, v.*, f.* FROM ".DB::table('common_member_verify')." v LEFT JOIN ".DB::table('common_member_profile')." f USING(uid) LEFT JOIN ".DB::table('common_member')." m USING(uid) WHERE $wheresql");
-				while($value = DB::fetch($query)) {
+				$verifyusers = C::t('common_member_verify')->fetch_all_by_vid($vid, 1, $uids);
+				$verifyuids = array_keys($verifyusers);
+				$members = C::t('common_member')->fetch_all($verifyuids, false, 0);
+				$profiles = C::t('common_member_profile')->fetch_all($verifyuids, false, 0);
+				foreach($verifyusers as $uid => $value) {
+					$value = array_merge($value, $members[$uid], $profiles[$uids]);
 					$str = $common = '';
 					foreach($fields as $key => $field) {
 						if(in_array($key, array('constellation', 'zodiac', 'birthyear', 'birthmonth', 'birthprovince', 'birthdist', 'birthcommunity', 'resideprovince', 'residedist', 'residecommunity'))) {
@@ -360,26 +372,25 @@ EOF;
 			}
 		} else {
 			$vids = array();
-			$single = intval($_G['gp_singleverify']);
-			$verifyflag = empty($_G['gp_verify']) ? false : true;
+			$single = intval($_GET['singleverify']);
+			$verifyflag = empty($_GET['verify']) ? false : true;
 			if($verifyflag) {
 				if($single) {
-					$_G['gp_verify'] = array($single => $_G['gp_verify'][$single]);
+					$_GET['verify'] = array($single => $_GET['verify'][$single]);
 				}
-				foreach($_G['gp_verify'] as $id => $type) {
+				foreach($_GET['verify'] as $id => $type) {
 					$vids[] = $id;
 				}
 
 				$verifysetting = $_G['setting']['verify'];
 				$verify = $refusal = array();
-				$query = DB::query("SELECT * FROM ".DB::table('common_member_verify_info')." WHERE  vid IN(".dimplode($vids).")");
-				while($value = DB::fetch($query)) {
-					if(in_array($_G['gp_verify'][$value['vid']], array('refusal', 'validate'))) {
-						$fields = unserialize($value['field']);
+				foreach(C::t('common_member_verify_info')->fetch_all($vids) as $value) {
+					if(in_array($_GET['verify'][$value['vid']], array('refusal', 'validate'))) {
+						$fields = dunserialize($value['field']);
 						$verifysetting = $_G['setting']['verify'][$value['verifytype']];
 
-						if($_G['gp_verify'][$value['vid']] == 'refusal') {
-							$refusalfields = !empty($_G['gp_refusal'][$value['vid']]) ? $_G['gp_refusal'][$value['vid']] : $verifysetting['field'];
+						if($_GET['verify'][$value['vid']] == 'refusal') {
+							$refusalfields = !empty($_GET['refusal'][$value['vid']]) ? $_GET['refusal'][$value['vid']] : $verifysetting['field'];
 							$fieldtitle = $common = '';
 							$deleteverifyimg = false;
 							foreach($refusalfields as $key => $field) {
@@ -392,8 +403,7 @@ EOF;
 								}
 							}
 							if($deleteverifyimg) {
-								$newfields = daddslashes(serialize($fields));
-								DB::update('common_member_verify_info', array('field' => $newfields), array('vid' => $value['vid']));
+								C::t('common_member_verify_info')->update($value['vid'], array('field' => serialize($fields)));
 							}
 							if($value['verifytype']) {
 								$verify["verify"]['-1'][] = $value['uid'];
@@ -402,12 +412,11 @@ EOF;
 							$note_values = array(
 									'verify' => $vid ? '<a href="home.php?mod=spacecp&ac=profile&op=verify&vid='.$vid.'" target="_blank">'.$verifysetting['title'].'</a>' : '',
 									'profile' => $fieldtitle,
-									'reason' => $_G['gp_reason'][$value['vid']],
+									'reason' => $_GET['reason'][$value['vid']],
 								);
 							$note_lang = 'profile_verify_error';
 						} else {
-							$profile = daddslashes($fields);
-							DB::update('common_member_profile', $profile, array('uid' => intval($value['uid'])));
+							C::t('common_member_profile')->update(intval($value['uid']), $fields);
 							$verify['delete'][] = $value['vid'];
 							if($value['verifytype']) {
 								$verify["verify"]['1'][] = $value['uid'];
@@ -423,28 +432,28 @@ EOF;
 				if($vid && !empty($verify["verify"])) {
 					foreach($verify["verify"] as $flag => $uids) {
 						$flag = intval($flag);
-						DB::update('common_member_verify', array("verify$vid" => $flag), "uid IN(".dimplode($uids).")");
+						C::t('common_member_verify')->update($uids, array("verify$vid" => $flag));
 					}
 				}
 
 				if(!empty($verify['delete'])) {
-					DB::delete('common_member_verify_info', "vid IN(".dimplode($verify['delete']).")");
+					C::t('common_member_verify_info')->delete($verify['delete']);
 				}
 
 				if(!empty($verify['flag'])) {
-					DB::update('common_member_verify_info', array('flag' => '-1'), "vid IN(".dimplode($verify['flag']).")");
+					C::t('common_member_verify_info')->update($verify['flag'], array('flag' => '-1'));
 				}
 			}
-			if($single && $_G['gp_frame'] == 'no') {
+			if($single && $_GET['frame'] == 'no') {
 				echo "<script type=\"text/javascript\">var trObj = parent.$('mod_{$single}_row');trObj.parentNode.removeChild(trObj);</script>";
 			} else {
-				cpmsg('members_verify_succeed', 'action=verify&operation=verify&do='.$vid.'&anchor='.$_G['gp_anchor'], 'succeed');
+				cpmsg('members_verify_succeed', 'action=verify&operation=verify&do='.$vid.'&anchor='.$_GET['anchor'], 'succeed');
 			}
 		}
 	}
 } elseif($operation == 'add') {
 
-	$vid = intval($_G['gp_vid']);
+	$vid = intval($_GET['vid']);
 	if(!submitcheck('addverifysubmit') || $vid < 0 || $vid > 7) {
 		$navmenu[0] = array('members_verify_nav_authstr', 'verify&operation=verify&anchor=authstr&do='.$vid, 0);
 		$navmenu[1] = array('members_verify_nav_refusal', 'verify&operation=verify&anchor=refusal&do='.$vid, 0);
@@ -459,20 +468,22 @@ EOF;
 		showtablefooter();
 		showformfooter();
 	} else {
-		$userlist = daddslashes(explode("\r\n", dstripslashes($_G['gp_users'])));
-		$query = DB::query("SELECT m.username, m.uid as muid, v.* FROM ".DB::table('common_member')." m	LEFT JOIN ".DB::table('common_member_verify')." v USING(uid) WHERE m.username IN(".dimplode($userlist).")");
+		$userlist = explode("\r\n", $_GET['users']);
 		$insert = array();
 		$haveuser = false;
-		while($member = DB::fetch($query)) {
-			if($member['uid']) {
-				DB::update('common_member_verify', array("verify$vid" => 1), array('uid' => $member['muid']));
+		$members = C::t('common_member')->fetch_all_by_username($userlist);
+		$vuids = array();
+		foreach($members as $value) {
+			$vuids[$value['uid']] = $value['uid'];
+		}
+		$verifyusers = C::t('common_member_verify')->fetch_all($vuids);
+		foreach($members as $member) {
+			if(isset($verifyusers[$member['uid']])) {
+				C::t('common_member_verify')->update($member['uid'], array("verify$vid" => 1));
 			} else {
-				$insert[] = "('$member[muid]', '1')";
+				C::t('common_member_verify')->insert(array('uid'=>$member['uid'], "verify$vid" => 1));
 			}
 			$haveuser = true;
-		}
-		if(!empty($insert)) {
-			DB::query("INSERT INTO ".DB::table('common_member_verify')." (`uid`, `verify$vid`) VALUES ".implode(',', $insert));
 		}
 		if($haveuser) {
 			cpmsg('members_verify_add_user_succeed', 'action=verify&operation=verify&do='.$vid.'&anchor=pass', 'succeed');
@@ -484,7 +495,7 @@ EOF;
 } elseif($operation == 'edit') {
 
 	shownav('user', 'nav_members_verify');
-	$vid = $_G['gp_vid'] < 8 ? intval($_G['gp_vid']) : 0;
+	$vid = $_GET['vid'] < 8 ? intval($_GET['vid']) : 0;
 	$verifyarr = $_G['setting']['verify'][$vid];
 	if(!submitcheck('verifysubmit')) {
 		if($vid == 7) {
@@ -502,8 +513,18 @@ EOF;
 		if($verifyarr['icon']) {
 			$icon_url = parse_url($verifyarr['icon']);
 		}
+		$unverifyiconhtml = '';
+		if($verifyarr['unverifyicon']) {
+			$unverifyiconhtml = '<label><input type="checkbox" class="checkbox" name="delunverifyicon['.$vid.']" value="yes" /> '.$lang['delete'].'</label><br /><img src="'.$verifyarr['unverifyicon'].'" />';
+		}
+		if($verifyarr['unverifyicon']) {
+			$unverifyiconurl = parse_url($verifyarr['unverifyicon']);
+		}
+		showsetting('members_verify_showicon', "verify[showicon]", $verifyarr['showicon'], 'radio', '', 1);
+		showsetting('members_unverify_icon', 'unverifyiconnew', (!$unverifyiconurl['host'] ? str_replace($_G['setting']['attachurl'].'common/', '', $verifyarr['unverifyicon']) : $verifyarr['unverifyicon']), 'filetext', '', 0, $unverifyiconhtml);
 		showsetting('members_verify_icon', 'iconnew', (!$icon_url['host'] ? str_replace($_G['setting']['attachurl'].'common/', '', $verifyarr['icon']) : $verifyarr['icon']), 'filetext', '', 0, $verificonhtml);
-		showsetting('members_verify_showicon', "verify[showicon]", $verifyarr['showicon'], 'radio');
+		showtagfooter('tbody');
+
 		if($vid == 6) {
 			showsetting('members_verify_view_real_name', "verify[viewrealname]", $verifyarr['viewrealname'], 'radio');
 		} elseif($vid == 7) {
@@ -511,8 +532,7 @@ EOF;
 		}
 		if($vid != 7) {
 			$varname = array('verify[field]', array(), 'isfloat');
-			$query = DB::query("SELECT title, fieldid, available FROM ".DB::table('common_member_profile_setting')." WHERE available='1' ORDER BY available DESC, displayorder");
-			while($value = DB::fetch($query)) {
+			foreach(C::t('common_member_profile_setting')->fetch_all_by_available(1) as $value) {
 				if(!in_array($value['fieldid'], array('constellation', 'zodiac', 'birthyear', 'birthmonth', 'birthprovince', 'birthdist', 'birthcommunity', 'resideprovince', 'residedist', 'residecommunity'))) {
 					$varname[1][] = array($value['fieldid'], $value['title'], $value['fieldid']);
 				}
@@ -520,6 +540,17 @@ EOF;
 
 			showsetting('members_verify_setting_field', $varname, $verifyarr['field'], 'omcheckbox');
 		}
+		$groupselect = array();
+		foreach(C::t('common_usergroup')->fetch_all_not(array(6, 7)) as $group) {
+			$group['type'] = $group['type'] == 'special' && $group['radminid'] ? 'specialadmin' : $group['type'];
+			$groupselect[$group['type']] .= "<option value=\"$group[groupid]\" ".(in_array($group['groupid'], $verifyarr['groupid']) ? 'selected' : '').">$group[grouptitle]</option>\n";
+		}
+		$groupselect = '<optgroup label="'.$lang['usergroups_member'].'">'.$groupselect['member'].'</optgroup>'.
+			($groupselect['special'] ? '<optgroup label="'.$lang['usergroups_special'].'">'.$groupselect['special'].'</optgroup>' : '').
+			($groupselect['specialadmin'] ? '<optgroup label="'.$lang['usergroups_specialadmin'].'">'.$groupselect['specialadmin'].'</optgroup>' : '').
+			'<optgroup label="'.$lang['usergroups_system'].'">'.$groupselect['system'].'</optgroup>';
+		showsetting('members_verify_group', '', '', '<select name="verify[groupid][]" multiple="multiple" size="10">'.$groupselect.'</select>');
+
 		showsubmit('verifysubmit');
 		showtablefooter();
 		showformfooter();
@@ -531,19 +562,14 @@ EOF;
 		if($verifynew['available'] == 1 && !trim($verifynew['title'])) {
 			cpmsg('members_verify_update_title_error', '', 'error');
 		}
-		if($_FILES['iconnew']) {
-			$data = array('extid' => "$vid");
-			$iconnew = upload_icon_banner($data, $_FILES['iconnew'], 'verify_icon');
-		} else {
-			$iconnew = $_G['gp_iconnew'];
+		$verifynew['icon'] = getverifyicon('iconnew', $vid);
+		$verifynew['unverifyicon'] = getverifyicon('unverifyiconnew', $vid, 'unverify_icon');
+
+		if($_GET['deleteicon']) {
+			$verifynew['icon'] = delverifyicon($verifyarr['icon']);
 		}
-		$verifynew['icon'] = $iconnew;
-		if($_G['gp_deleteicon']) {
-			$valueparse = parse_url($verifyarr['icon']);
-			if(!isset($valueparse['host']) && preg_match('/^'.preg_quote($_G['setting']['attachurl'].'common/', '/').'/', $verifyarr['icon'])) {
-				@unlink($verifyarr['icon']);
-			}
-			$verifynew['icon'] = '';
+		if($_GET['delunverifyicon']) {
+			$verifynew['unverifyicon'] = delverifyicon($verifyarr['unverifyicon']);
 		}
 		if(!empty($verifynew['field']['residecity'])) {
 			$verifynew['field']['resideprovince'] = 'resideprovince';
@@ -559,6 +585,7 @@ EOF;
 			$verifynew['field']['birthdist'] = 'birthdist';
 			$verifynew['field']['birthcommunity'] = 'birthcommunity';
 		}
+		$verifynew['groupid'] = !empty($verifynew['groupid']) && is_array($verifynew['groupid']) ? $verifynew['groupid'] : array();
 		$_G['setting']['verify'][$vid] = $verifynew;
 		$_G['setting']['verify']['enabled'] = false;
 		for($i = 1; $i < 8; $i++) {
@@ -570,23 +597,13 @@ EOF;
 			}
 			$_G['setting']['verify'][$i]['icon'] = !$icon_url['host'] ? str_replace($_G['setting']['attachurl'].'common/', '', $_G['setting']['verify'][$i]['icon']) : $_G['setting']['verify'][$i]['icon'] ;
 		}
-		$setting = array(
-			'skey' => 'verify',
-			'svalue' => addslashes(serialize($_G['setting']['verify']))
-		);
-
-		DB::insert('common_setting', $setting, 0, true);
+		C::t('common_setting')->update('verify', $_G['setting']['verify']);
 		if(isset($verifynew['viewrealname']) && !$verifynew['viewrealname']) {
-			DB::update('common_member_profile_setting', array('showinthread' => 0), array('fieldid' => 'realname'));
-			$result = DB::fetch_first("SELECT svalue FROM ".DB::table('common_setting')." WHERE skey='customauthorinfo'");
-			$custominfo = unserialize($result['svalue']);
+			C::t('common_member_profile_setting')->update('realname', array('showinthread' => 0));
+			$custominfo = C::t('common_setting')->fetch('customauthorinfo', true);
 			if(isset($custominfo[0]['field_realname'])) {
 				unset($custominfo[0]['field_realname']);
-				$setting = array(
-					'skey' => 'customauthorinfo',
-					'svalue' => addslashes(serialize($custominfo))
-				);
-				DB::insert('common_setting', $setting, 0, true);
+				C::t('common_setting')->update('customauthorinfo', $custominfo);
 				updatecache(array('custominfo'));
 			}
 		}
@@ -635,15 +652,32 @@ EOF;
 			$_G['setting']['verify'][$key]['title'] = $value['title'];
 		}
 		$_G['setting']['verify']['enabled'] = $enabled;
-		$setting = array(
-			'skey' => 'verify',
-			'svalue' => addslashes(serialize($_G['setting']['verify']))
-		);
-		DB::insert('common_setting', $setting, 0, true);
+		C::t('common_setting')->update('verify', $_G['setting']['verify']);
 		updatecache(array('setting'));
 		updatemenu('user');
 		cpmsg('members_verify_update_succeed', 'action=verify', 'succeed');
 	}
 }
 
+function getverifyicon($iconkey = 'iconnew', $vid = 1, $extstr = 'verify_icon') {
+	global $_G, $_FILES;
+
+	if($_FILES[$iconkey]) {
+		$data = array('extid' => "$vid");
+		$iconnew = upload_icon_banner($data, $_FILES[$iconkey], $extstr);
+	} else {
+		$iconnew = $_GET[''.$iconkey];
+	}
+	return $iconnew;
+}
+
+function delverifyicon($icon) {
+	global $_G;
+
+	$valueparse = parse_url($icon);
+	if(!isset($valueparse['host']) && preg_match('/^'.preg_quote($_G['setting']['attachurl'].'common/', '/').'/', $icon)) {
+		@unlink($icon);
+	}
+	return '';
+}
 ?>

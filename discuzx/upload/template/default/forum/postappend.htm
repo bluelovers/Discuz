@@ -1,21 +1,21 @@
 <!--{template common/header}-->
-<!--{if empty($_G['gp_infloat'])}-->
+<!--{if empty($_GET['infloat'])}-->
 <div id="ct" class="wp cl">
 	<div class="mn">
 		<div class="bm bw0">
 <!--{/if}-->
 
-<form method="post" autocomplete="off" id="postappendform" action="forum.php?mod=misc&action=postappend&tid=$post[tid]&pid=$_G[gp_pid]&extra=$extra{if !empty($_G[gp_page])}&page=$_G[gp_page]{/if}&postappendsubmit=yes&infloat=yes" onsubmit="this.postappendmessage.value = parseurl(this.postappendmessage.value);{if !empty($_G['gp_infloat'])}ajaxpost('postappendform', 'return_$_G['gp_handlekey']', 'return_$_G['gp_handlekey']', 'onerror');return false;{/if}">
+<form method="post" autocomplete="off" id="postappendform" action="forum.php?mod=misc&action=postappend&tid=$post[tid]&pid=$_GET[pid]&extra=$extra{if !empty($_GET[page])}&page=$_GET[page]{/if}&postappendsubmit=yes&infloat=yes" onsubmit="this.postappendmessage.value = parseurl(this.postappendmessage.value);{if !empty($_GET['infloat'])}ajaxpost('postappendform', 'return_$_GET['handlekey']', 'return_$_GET['handlekey']', 'onerror');return false;{/if}">
 	<div class="f_c">
 		<h3 class="flb">
-			<em id="return_$_G['gp_handlekey']">{lang postappend}</em>
+			<em id="return_$_GET['handlekey']">{lang postappend}</em>
 			<span>
-				<!--{if !empty($_G['gp_infloat'])}--><a href="javascript:;" class="flbc" onclick="hideWindow('$_G['gp_handlekey']')" title="{lang close}">{lang close}</a><!--{/if}-->
+				<!--{if !empty($_GET['infloat'])}--><a href="javascript:;" class="flbc" onclick="hideWindow('$_GET['handlekey']')" title="{lang close}">{lang close}</a><!--{/if}-->
 			</span>
 		</h3>
 		<input type="hidden" name="formhash" id="formhash" value="{FORMHASH}" />
-		<input type="hidden" name="handlekey" value="$_G['gp_handlekey']" />
-		<div class="c{if empty($_G['gp_infloat'])} mbm{/if}">
+		<input type="hidden" name="handlekey" value="$_GET['handlekey']" />
+		<div class="c{if empty($_GET['infloat'])} mbm{/if}">
 			<div class="tedt">
 				<div class="bar cm">
 					<!--{eval $seditor = array('postappend', array('bold', 'color'));}-->
@@ -30,7 +30,7 @@
 				</script>
 			</div>
 			<!--{if checkperm('seccode') && ($secqaacheck || $seccodecheck)}-->
-				<!--{block sectpl}--><sec>: <span id="sec<hash>" onclick="showMenu({'ctrlid':this.id,'win':'{$_G[gp_handlekey]}'})"><sec></span><div id="sec<hash>_menu" class="p_pop p_opt" style="display:none"><sec></div><!--{/block}-->
+				<!--{block sectpl}--><sec>: <span id="sec<hash>" onclick="showMenu({'ctrlid':this.id,'win':'{$_GET[handlekey]}'})"><sec></span><div id="sec<hash>_menu" class="p_pop p_opt" style="display:none"><sec></div><!--{/block}-->
 				<div class="mtm"><!--{subtemplate common/seccheck}--></div>
 			<!--{/if}-->
 		</div>
@@ -41,7 +41,7 @@
 	</div>
 </form>
 
-<!--{if empty($_G['gp_infloat'])}-->
+<!--{if empty($_GET['infloat'])}-->
 		</div>
 	</div>
 </div>

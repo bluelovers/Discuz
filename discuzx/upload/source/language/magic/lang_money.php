@@ -4,14 +4,18 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_money.php 7828 2010-04-14 02:11:48Z monkey $
+ *      $Id: lang_money.php 27449 2012-02-01 05:32:35Z zhangguosheng $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 $lang = array
 (
-	'money_name' => 'é‡‘éŒ¢å¡',
-	'money_desc' => 'å¯ä»¥éš¨æ©Ÿç²å¾—ä¸€äº›é‡‘å¹£',
-	'money_info' => 'ç²å¾—çš„éŒ¢å¹£æ•¸ç›®è¦å‰‡ï¼šå¤§æ–¼1ä¸”å°æ–¼è³¼è²·åƒ¹æ ¼150%çš„éš¨æ©Ÿæ•¸',
+	'money_name' => '½ðÇ®¿¨',
+	'money_desc' => '¿ÉÒÔËæ»ú»ñµÃÌØ¶¨»ý·Ö',
+	'money_info' => '»ñµÃµÄÇ®±ÒÊýÄ¿¹æÔò£º´óÓÚ1ÇÒÐ¡ÓÚ¹ºÂò¼Û¸ñ150%µÄËæ»úÊý',
 );
 
 ?>

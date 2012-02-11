@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_domain.php 18449 2010-11-24 02:11:16Z zhengqingpeng $
+ *      $Id: function_domain.php 24601 2011-09-27 12:26:41Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -61,7 +61,7 @@ function existdomain($domain, $domainroot) {
 	global $_G;
 
 	$exist = false;
-	if(getcount('common_domain', array('domain' => $domain, 'domainroot' => $domainroot))) {
+	if(C::t('common_domain')->count_by_domain_domainroot($domain, $domainroot)) {
 		$exist = true;
 	}
 	return $exist;

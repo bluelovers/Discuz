@@ -4,7 +4,7 @@
  *      [Discuz! X] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: soso.class.php 22620 2011-05-16 03:04:20Z monkey $
+ *      $Id: soso.class.php 27610 2012-02-07 05:56:05Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -35,7 +35,7 @@ class plugin_soso_smilies_base {
 			if(!isset($smiliecount)) {
 				$smiliecount = array();
 			}
-			$smiliekey = addslashes("{$pid}_{$smiliekey}");
+			$smiliekey = "{$pid}_{$smiliekey}";
 			if(empty($smiliecount[$smiliekey])) {
 				$smiliecount[$smiliekey] = 1;
 			} else {
@@ -58,13 +58,13 @@ class plugin_soso_smilies extends plugin_soso_smilies_base {
 	function global_footer() {
 		global $_G;
 		if(CURSCRIPT == 'home' && !empty($_G['uid'])) {
-			if($_G['gp_ac'] == 'pm' && $_G['gp_mod'] == 'spacecp') {
-				if(empty($_G['gp_op'])) {
+			if($_GET['ac'] == 'pm' && $_GET['mod'] == 'spacecp') {
+				if(empty($_GET['op'])) {
 					return $this->_soso_script('send');
-				} elseif($_G['gp_op'] == 'showmsg') {
+				} elseif($_GET['op'] == 'showmsg') {
 					return $this->_soso_script('pm');
 				}
-			} elseif($_G['gp_subop'] == 'view' && $_G['gp_do'] == 'pm' && $_G['gp_mod'] == 'space') {
+			} elseif($_GET['subop'] == 'view' && $_GET['do'] == 'pm' && $_GET['mod'] == 'space') {
 				return $this->_soso_script('reply');
 			}
 		}
@@ -110,7 +110,7 @@ class plugin_soso_smilies_forum extends plugin_soso_smilies {
 
 	function post_smileyoff() {
 		global $_G;
-		if(!empty($_G['gp_message'])) {
+		if(!empty($_GET['message'])) {
 			$_G['cache']['smileycodes'][] = '{:soso_';
 		}
 		return '';
@@ -136,7 +136,7 @@ class plugin_soso_smilies_home extends plugin_soso_smilies {
 
 	function spacecp_profile_sightml() {
 		global $_G;
-		if($_G['gp_ac'] == 'profile' && submitcheck('profilesubmitbtn') && !empty($_POST['sightml'])) {
+		if($_GET['ac'] == 'profile' && submitcheck('profilesubmitbtn') && !empty($_POST['sightml'])) {
 			$_POST['sightml'] = preg_replace("/\{\:soso_((e\d+)|(_\d+_\d))\:\}/e", '$this->_soso_smiles("\\1", -1, 0, 1)', $_POST['sightml']);;
 		}
 	}
@@ -163,6 +163,14 @@ class plugin_soso_smilies_home extends plugin_soso_smilies {
 				} else {
 					$GLOBALS['list'][$key] = preg_replace("/\{\:soso_((e\d+)|(_\d+_\d))\:\}/", '', $GLOBALS['list'][$key]);
 				}
+			}
+		}
+	}
+
+	function follow_soso_output() {
+		if(!empty($GLOBALS['list']['content'])) {
+			foreach($GLOBALS['list']['content'] as $key => $value) {
+				$GLOBALS['list']['content'][$key]['content'] = preg_replace("/\{\:soso_((e\d+)|(_\d+_\d))\:\}/e", '$this->_soso_smiles("\\1", -1, 0, 0)', $GLOBALS['list']['content'][$key]['content']);
 			}
 		}
 	}

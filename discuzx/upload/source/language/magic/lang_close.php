@@ -4,23 +4,27 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_close.php 7980 2010-04-15 07:04:00Z monkey $
+ *      $Id: lang_close.php 27449 2012-02-01 05:32:35Z zhangguosheng $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 $lang = array
 (
-	'close_name' => 'æ²‰é»˜å¡',
-	'close_desc' => 'å¯ä»¥å°‡ä¸»é¡Œé—œé–‰ï¼Œç¦æ­¢å›å¾©',
-	'close_expiration' => 'é—œé–‰æœ‰æ•ˆæœŸ',
-	'close_expiration_comment' => 'è¨­ç½®ä¸»é¡Œå¯ä»¥è¢«é—œé–‰å¤šé•·æ™‚é–“ï¼Œé»˜èª 24 å°æ™‚',
-	'close_forum' => 'å…è¨±ä½¿ç”¨æœ¬é“å…·çš„ç‰ˆå¡Š',
-	'close_info' => 'é—œé–‰æŒ‡å®šçš„ä¸»é¡Œ {expiration} å°æ™‚ï¼Œè«‹è¼¸å…¥ä¸»é¡Œçš„ ID',
-	'close_info_nonexistence' => 'è«‹æŒ‡å®šè¦é—œé–‰çš„ä¸»é¡Œ',
-	'close_succeed' => 'ä½ æ“ä½œçš„ä¸»é¡Œå·²é—œé–‰',
-	'close_info_noperm' => 'å°ä¸èµ·ï¼Œä¸»é¡Œæ‰€åœ¨ç‰ˆå¡Šä¸å…è¨±ä½¿ç”¨æœ¬é“å…·',
-	'close_info_user_noperm' => 'å°ä¸èµ·ï¼Œä½ ä¸èƒ½å°æ­¤äººä½¿ç”¨æœ¬é“å…·',
+	'close_name' => '³ÁÄ¬¿¨',
+	'close_desc' => '¿ÉÒÔ½«Ö÷Ìâ¹Ø±Õ£¬½ûÖ¹»Ø¸´',
+	'close_expiration' => '¹Ø±ÕÓĞĞ§ÆÚ',
+	'close_expiration_comment' => 'ÉèÖÃÖ÷Ìâ¿ÉÒÔ±»¹Ø±Õ¶à³¤Ê±¼ä£¬Ä¬ÈÏ 24 Ğ¡Ê±',
+	'close_forum' => 'ÔÊĞíÊ¹ÓÃ±¾µÀ¾ßµÄ°æ¿é',
+	'close_info' => '¹Ø±ÕÖ¸¶¨µÄÖ÷Ìâ {expiration} Ğ¡Ê±£¬ÇëÊäÈëÖ÷ÌâµÄ ID',
+	'close_info_nonexistence' => 'ÇëÖ¸¶¨Òª¹Ø±ÕµÄÖ÷Ìâ',
+	'close_succeed' => 'Äú²Ù×÷µÄÖ÷ÌâÒÑ¹Ø±Õ',
+	'close_info_noperm' => '¶Ô²»Æğ£¬Ö÷ÌâËùÔÚ°æ¿é²»ÔÊĞíÊ¹ÓÃ±¾µÀ¾ß',
+	'close_info_user_noperm' => '¶Ô²»Æğ£¬Äú²»ÄÜ¶Ô´ËÈËÊ¹ÓÃ±¾µÀ¾ß',
 
-	'close_notification' => 'ä½ çš„ä¸»é¡Œ {subject} è¢« {actor} ä½¿ç”¨äº†{magicname}ï¼Œ<a href="forum.php?mod=viewthread&tid={tid}">å¿«å»çœ‹çœ‹å§ï¼</a>',
+	'close_notification' => 'ÄúµÄÖ÷Ìâ {subject} ±» {actor} Ê¹ÓÃÁË{magicname}£¬<a href="forum.php?mod=viewthread&tid={tid}">¿ìÈ¥¿´¿´°É£¡</a>',
 );
 
 ?>

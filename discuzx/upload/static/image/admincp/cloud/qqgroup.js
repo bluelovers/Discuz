@@ -19,11 +19,11 @@ function previewFormSubmit() {
 	saveAllThread();
 
 	if (!selectedTopicId) {
-		alert('è«‹æ¨é€é ­æ¢ä¿¡æ¯');
+		alert('ÇëÍÆËÍÍ·ÌõĞÅÏ¢');
 		return false;
 	}
 	if (selectedNormalIds.length < 1) {
-		alert('è«‹è‡³å°‘æ¨é€ä¸€æ¢ä¿¡æ¯åˆ°åˆ—è¡¨å€åŸŸ');
+		alert('ÇëÖÁÉÙÍÆËÍÒ»ÌõĞÅÏ¢µ½ÁĞ±íÇøÓò');
 		return false;
 	}
 
@@ -65,13 +65,13 @@ function ajaxChangeSearch() {
 }
 
 function ajaxGetSearchResultThreads() {
-	j('#search_result').html('<tr><td colspan="3">åŠ è¼‰ä¸­...</td></tr>');
+	j('#search_result').html('<tr><td colspan="3">¼ÓÔØÖĞ...</td></tr>');
 	qqgroupajaxpost('search_form', 'search_result', 'search_result', null, null, function() {initSelect(); return false});
 	return false;
 }
 
 function ajaxGetPageResultThreads(page, mpurl) {
-	j('#search_result').html('<tr><td colspan="3">åŠ è¼‰ä¸­...</td></tr>');
+	j('#search_result').html('<tr><td colspan="3">¼ÓÔØÖĞ...</td></tr>');
 	if (typeof page == 'undefined' || page === null) {
 		page = 1;
 	}
@@ -164,7 +164,7 @@ function addMiniportalList(tid) {
 		return false;
 	}
 	if (selectedNormalIds.length >= 5) {
-		alert('æ¨é€å¸–å­å·²é”åˆ°5æ¢ï¼Œè«‹åœ¨å³å´å–æ¶ˆä¸€äº›å†é‡è©¦ã€‚');
+		alert('ÍÆËÍÌû×ÓÒÑ´ïµ½5Ìõ£¬ÇëÔÚÓÒ²àÈ¡ÏûÒ»Ğ©ÔÙÖØÊÔ¡£');
 		return false;
 	}
 	if (tid == selectedTopicId) {
@@ -299,14 +299,14 @@ function removeNormalThreadRecall(displayorder, inNormalEditor) {
 		if (inNormalEditor) {
 			saveAllThread();
 		}
-		firstThreadLi.html('<div class="tips">é»æ“Šå·¦å´ <img src="static/image/admincp/cloud/qun_op_list.png" align="absmiddle" /> å°‡ä¿¡æ¯æ¨é€åˆ°åˆ—è¡¨</div>');
+		firstThreadLi.html('<div class="tips">µã»÷×ó²à <img src="static/image/admincp/cloud/qun_op_list.png" align="absmiddle" /> ½«ĞÅÏ¢ÍÆËÍµ½ÁĞ±í</div>');
 		firstThreadLi.show();
 	}
 }
 
 function ajaxUploadQQGroupImage() {
 	j('#uploadImageResult').parent().show();
-	j('#uploadImageResult').text('åœ–ç‰‡ä¸Šå‚³ä¸­ï¼Œè«‹ç¨å¾Œ...');
+	j('#uploadImageResult').text('Í¼Æ¬ÉÏ´«ÖĞ£¬ÇëÉÔºó...');
 	qqgroupajaxpost('uploadImage', 'uploadImageResult', 'uploadImageResult', null, null, 'uploadRecall()');
 }
 
@@ -345,7 +345,7 @@ function qqgroupajaxpost(formid, showid, waitid, showidclass, submitbtn, recall)
 			s = ajaxResponse;
 		}
 		if (!s) {
-			s = 'å…§éƒ¨éŒ¯èª¤ï¼Œç„¡æ³•é¡¯ç¤ºæ­¤å…§å®¹';
+			s = 'ÄÚ²¿´íÎó£¬ÎŞ·¨ÏÔÊ¾´ËÄÚÈİ';
 		}
 
 		if(s != '' && s.indexOf('ajaxerror') != -1) {

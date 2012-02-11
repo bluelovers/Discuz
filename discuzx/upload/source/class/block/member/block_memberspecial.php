@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: block_memberspecial.php 18064 2010-11-11 04:37:36Z zhangguosheng $
+ *      $Id: block_memberspecial.php 25525 2011-11-14 04:39:11Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -45,7 +45,7 @@ class block_memberspecial extends block_member {
 			$parameter['special'] = intval($parameter['special']);
 		}
 		$parameter['orderby'] = 'special';
-		return $parameter;
+		return parent::cookparameter($parameter);
 	}
 }
 

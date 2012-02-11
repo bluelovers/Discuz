@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: install_function.php 26347 2011-12-09 08:19:04Z svn_project_zhangjie $
+ *      $Id: install_function.php 27606 2012-02-07 05:28:26Z monkey $
  */
 
 if(!defined('IN_COMSENZ')) {
@@ -514,7 +514,7 @@ EOT;
 function show_footer($quit = true) {
 
 	echo <<<EOT
-		<div class="footer">&copy;2001 - 2011 <a href="http://www.comsenz.com/">Comsenz</a> Inc.</div>
+		<div class="footer">&copy;2001 - 2012 <a href="http://www.comsenz.com/">Comsenz</a> Inc.</div>
 	</div>
 </div>
 </body>
@@ -808,6 +808,7 @@ function fsocketopen($hostname, $port = 80, &$errno, &$errstr, $timeout = 15) {
 function dfopen($url, $limit = 0, $post = '', $cookie = '', $bysocket = FALSE, $ip = '', $timeout = 15, $block = TRUE) {
 	$return = '';
 	$matches = parse_url($url);
+	$scheme = $matches['scheme'];
 	$host = $matches['host'];
 	$path = $matches['path'] ? $matches['path'].(isset($matches['query']) && $matches['query'] ? '?'.$matches['query'] : '') : '/';
 	$port = !empty($matches['port']) ? $matches['port'] : 80;
@@ -842,10 +843,11 @@ function dfopen($url, $limit = 0, $post = '', $cookie = '', $bysocket = FALSE, $
 				'method' => $post ? 'POST' : 'GET',
 				'header' => $header,
 				'content' => $post,
+				'timeout' => $timeout,
 			),
 		);
 		$context = stream_context_create($context);
-		$fp = @fopen($url, 'b', false, $context);
+		$fp = @fopen($scheme.'://'.($ip ? $ip : $host).':'.$port.$path, 'b', false, $context);
 		$fpflag = 1;
 	}
 
@@ -1318,7 +1320,8 @@ function save_diy_data($primaltplname, $targettplname, $data, $database = false)
 	$_G['curtplbid'] = array();
 	$_G['curtplframe'] = array();
 
-	$file = '../template/default/'.$primaltplname.'.htm';
+	$tpldirectory = './template/default';
+	$file = '.'.$tpldirectory.'/'.$primaltplname.'.htm';
 	$content = file_get_contents(realpath($file));
 	foreach ($data['layoutdata'] as $key => $value) {
 		$html = '';
@@ -1332,7 +1335,7 @@ function save_diy_data($primaltplname, $targettplname, $data, $database = false)
 		$content = preg_replace("/(\<link id\=\"style_css\" rel\=\"stylesheet\" type\=\"text\/css\" href\=\").+?(\"\>)/is", "\\1".$data['style']."\\2", $content);
 	}
 
-	$tplfile =ROOT_PATH.'./data/diy/'.$targettplname.'.htm';
+	$tplfile =ROOT_PATH.'./data/diy/'.$tpldirectory.'/'.$targettplname.'.htm';
 
 	$tplpath = dirname($tplfile);
 	if (!is_dir($tplpath)) dmkdir($tplpath);
@@ -1343,15 +1346,15 @@ function save_diy_data($primaltplname, $targettplname, $data, $database = false)
 		if (!empty($_G['curtplbid'])) {
 			$values = array();
 			foreach ($_G['curtplbid'] as $bid) {
-				$values[] = "('$targettplname','$bid')";
+				$values[] = "('$targettplname', '$tpldirectory', '$bid')";
 			}
 			if (!empty($values)) {
-				$_G['db']->query("INSERT INTO ".$_G['tablepre']."common_template_block (targettplname,bid) VALUES ".implode(',', $values));
+				$_G['db']->query("INSERT INTO ".$_G['tablepre']."common_template_block (targettplname, tpldirectory, bid) VALUES ".implode(',', $values));
 			}
 		}
 
 		$tpldata = daddslashes(serialize($data));
-		$_G['db']->query("REPLACE INTO ".$_G['tablepre']."common_diy_data (targettplname, primaltplname, diycontent) VALUES ('$targettplname', '$primaltplname', '$tpldata')");
+		$_G['db']->query("REPLACE INTO ".$_G['tablepre']."common_diy_data (targettplname, tpldirectory, primaltplname, diycontent) VALUES ('$targettplname', '$tpldirectory', '$primaltplname', '$tpldata')");
 	}
 
 	return $r;
@@ -1635,7 +1638,7 @@ function dstripslashes($string) {
 }
 function dmkdir($dir, $mode = 0777){
 	if(!is_dir($dir)) {
-		dmkdir(dirname($dir));
+		dmkdir(dirname($dir), $mode);
 		@mkdir($dir, $mode);
 		@touch($dir.'/index.htm'); @chmod($dir.'/index.htm', 0777);
 	}

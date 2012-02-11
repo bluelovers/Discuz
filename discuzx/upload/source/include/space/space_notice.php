@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_notice.php 22054 2011-04-20 10:51:36Z congyushuai $
+ *      $Id: space_notice.php 26685 2011-12-20 02:33:07Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -17,6 +17,8 @@ $perpage = mob_perpage($perpage);
 $page = empty($_GET['page'])?0:intval($_GET['page']);
 if($page<1) $page = 1;
 $start = ($page-1)*$perpage;
+
+$_G['disabledwidthauto'] = 0;
 
 ckstart($start, $perpage);
 
@@ -34,8 +36,7 @@ if($view == 'userapp') {
 
 	if($_GET['op'] == 'del') {
 		$appid = intval($_GET['appid']);
-		DB::query("DELETE FROM ".DB::table('common_myinvite')." WHERE appid='$appid' AND touid='$_G[uid]'");
-
+		C::t('common_myinvite')->delete_by_appid_touid($appid, $_G['uid']);
 		showmessage('do_success', "home.php?mod=space&do=notice&view=userapp&quickforward=1");
 	}
 
@@ -43,8 +44,7 @@ if($view == 'userapp') {
 	$count = 0;
 	$apparr = array();
 	$type = intval($_GET['type']);
-	$query = DB::query("SELECT * FROM ".DB::table('common_myinvite')." WHERE touid='$_G[uid]' ORDER BY dateline DESC");
-	while ($value = DB::fetch($query)) {
+	foreach(C::t('common_myinvite')->fetch_all_by_touid($_G['uid']) as $value) {
 		$count++;
 		$key = md5($value['typename'].$value['type']);
 		$apparr[$key][] = $value;
@@ -64,14 +64,14 @@ if($view == 'userapp') {
 } else {
 
 	if(!empty($_GET['ignore'])) {
-		DB::update('home_notification', array('new'=>'0', 'from_num'=>0), array('new'=>'1', 'uid'=>$_G['uid']));
+		C::t('home_notification')->ignore($_G['uid']);
 	}
 
 	foreach (array('wall', 'piccomment', 'blogcomment', 'clickblog', 'clickpic', 'sharecomment', 'doing', 'friend', 'credit', 'bbs', 'system', 'thread', 'task', 'group') as $key) {
 		$noticetypes[$key] = lang('notification', "type_$key");
 	}
 
-	$isread = in_array($_G['gp_isread'], array(0, 1)) ? intval($_G['gp_isread']) : 0;
+	$isread = in_array($_GET['isread'], array(0, 1)) ? intval($_GET['isread']) : 0;
 	$type = trim($_GET['type']);
 	$wherearr = array();
 	if(!empty($type)) {
@@ -84,11 +84,9 @@ if($view == 'userapp') {
 
 
 	$newnotify = false;
-	$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('home_notification')." WHERE uid='$_G[uid]' $sql"), 0);
+	$count = C::t('home_notification')->count_by_uid($_G['uid'], $new, $type);
 	if($count) {
-		$limitstr = $isread ? " LIMIT $start,$perpage" : '';
-		$query = DB::query("SELECT * FROM ".DB::table('home_notification')." WHERE uid='$_G[uid]' $sql ORDER BY new DESC, dateline DESC $limitstr");
-		while ($value = DB::fetch($query)) {
+		foreach(C::t('home_notification')->fetch_all_by_uid($_G['uid'], $new, $type, $start, $perpage) as $value) {
 			if($value['new']) {
 				$newnotify = true;
 				$value['style'] = 'color:#000;font-weight:bold;';
@@ -110,11 +108,11 @@ if($view == 'userapp') {
 	}
 
 	if($newnotify) {
-		DB::query("UPDATE ".DB::table('home_notification')." SET new='0' WHERE uid='$_G[uid]' AND new='1'");
+		C::t('home_notification')->ignore($_G['uid'], true, false);
 	}
 
 	if($space['newprompt']) {
-		DB::update('common_member', array('newprompt'=>0), array('uid'=>$_G['uid']));
+		C::t('common_member')->update($_G['uid'], array('newprompt'=>0));
 	}
 
 	$readtag = array($isread => ' class="a"');

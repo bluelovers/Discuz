@@ -4,26 +4,30 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_albumlist.php 11146 2010-05-25 02:52:53Z xupeng $
+ *      $Id: lang_albumlist.php 27449 2012-02-01 05:32:35Z zhangguosheng $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 $lang = array
 (
-	'albumlist_aids' => 'æŒ‡å®šç›¸å†Š',
-	'albumlist_aids_comment' => 'å¡«å…¥æŒ‡å®šç›¸å†Šçš„ID(aid)ï¼Œå¤šå€‹ç›¸å†Šä¹‹é–“ç”¨é€—è™Ÿ(,)åˆ†éš”',
-	'albumlist_uids' => 'ç”¨æˆ¶UID',
-	'albumlist_uids_comment' => 'å¡«å…¥æŒ‡å®šç”¨æˆ¶çš„ID(uid)ï¼Œå¤šå€‹ç”¨æˆ¶ä¹‹é–“ç”¨é€—è™Ÿ(,)åˆ†éš”',
-	'albumlist_catid' => 'æŒ‡å®šåˆ†é¡ž',
-	'albumlist_catid_comment' => 'é¸æ“‡ç›¸å†Šæ‰€å±¬çš„ç³»çµ±ç›¸å†Šåˆ†é¡žï¼Œå¯å¤šé¸',
-	'albumlist_startrow' => 'èµ·å§‹æ•¸æ“šè¡Œæ•¸',
-	'albumlist_startrow_comment' => 'å¦‚éœ€è¨­å®šèµ·å§‹çš„æ•¸æ“šè¡Œæ•¸ï¼Œè«‹è¼¸å…¥å…·é«”æ•¸å€¼ï¼Œ0 ç‚ºå¾žç¬¬ä¸€è¡Œé–‹å§‹ï¼Œä»¥æ­¤é¡žæŽ¨',
-	'albumlist_titlelength' => 'æ¨™é¡Œé•·åº¦',
-	'albumlist_titlelength' => 'æŒ‡å®šç›¸å†Šåç¨±æœ€å¤§é•·åº¦',
-	'albumlist_orderby' => 'åœ–ç‰‡æŽ’åºæ–¹å¼',
-	'albumlist_orderby_comment' => 'è¨­ç½®ä»¥å“ªä¸€å­—æ®µæˆ–æ–¹å¼å°åœ–ç‰‡é€²è¡ŒæŽ’åº',
-	'albumlist_orderby_dateline' => 'æŒ‰ç™¼ä½ˆæ™‚é–“å€’åº',
-	'albumlist_orderby_picnum' => 'æŒ‰ç…§ç‰‡æ•¸å€’åº',
-	'albumlist_orderby_updatetime' => 'æŒ‰æ›´æ–°æ™‚é–“å€’åº'
+	'albumlist_aids' => 'Ö¸¶¨Ïà²á',
+	'albumlist_aids_comment' => 'ÌîÈëÖ¸¶¨Ïà²áµÄID(aid)£¬¶à¸öÏà²áÖ®¼äÓÃ¶ººÅ(,)·Ö¸ô',
+	'albumlist_uids' => 'ÓÃ»§UID',
+	'albumlist_uids_comment' => 'ÌîÈëÖ¸¶¨ÓÃ»§µÄID(uid)£¬¶à¸öÓÃ»§Ö®¼äÓÃ¶ººÅ(,)·Ö¸ô',
+	'albumlist_catid' => 'Ö¸¶¨·ÖÀà',
+	'albumlist_catid_comment' => 'Ñ¡ÔñÏà²áËùÊôµÄÏµÍ³Ïà²á·ÖÀà£¬¿É¶àÑ¡',
+	'albumlist_startrow' => 'ÆðÊ¼Êý¾ÝÐÐÊý',
+	'albumlist_startrow_comment' => 'ÈçÐèÉè¶¨ÆðÊ¼µÄÊý¾ÝÐÐÊý£¬ÇëÊäÈë¾ßÌåÊýÖµ£¬0 Îª´ÓµÚÒ»ÐÐ¿ªÊ¼£¬ÒÔ´ËÀàÍÆ',
+	'albumlist_titlelength' => '±êÌâ³¤¶È',
+	'albumlist_titlelength' => 'Ö¸¶¨Ïà²áÃû³Æ×î´ó³¤¶È',
+	'albumlist_orderby' => 'Í¼Æ¬ÅÅÐò·½Ê½',
+	'albumlist_orderby_comment' => 'ÉèÖÃÒÔÄÄÒ»×Ö¶Î»ò·½Ê½¶ÔÍ¼Æ¬½øÐÐÅÅÐò',
+	'albumlist_orderby_dateline' => '°´·¢²¼Ê±¼äµ¹Ðò',
+	'albumlist_orderby_picnum' => '°´ÕÕÆ¬Êýµ¹Ðò',
+	'albumlist_orderby_updatetime' => '°´¸üÐÂÊ±¼äµ¹Ðò'
 );
 
 ?>

@@ -30,7 +30,7 @@
 					<!--{if $_G['uid'] && ($_G['group']['radminid'] == 1 || getstatus($_G['member']['allowadmincp'], 1))}--><a href="admin.php" target="_blank">{lang admincp}</a><!--{/if}-->
 					<!--{hook/global_usernav_extra2}-->
 					<a href="member.php?mod=logging&action=logout&formhash={FORMHASH}">{lang logout}</a>
-					<!--{if $space['self'] && $do == 'index'}--><a id="diy-tg" href="home.php?mod=space&diy=yes" title="{lang dress_space}">DIY</a><!--{/if}-->
+					<!--{if $space['self'] && $do == 'index'}--><a id="diy-tg" href="javascript:openDiy();" title="{lang dress_space}">DIY</a><!--{/if}-->
 				</div>
 			<!--{elseif !empty($_G['cookie']['loginuser'])}-->
 				<div class="y">
@@ -53,6 +53,7 @@
 			<p class="ptw xw1 xi1 hm"><img src="{IMGDIR}/locked.gif" alt="Locked" class="vm" /> {lang message_banned}</p>
 		<!--{/if}-->
 		<div id="hd" class="wp cl">
+
 			<h2 id="spaceinfoshow">
 				<!--{eval space_merge($space, 'field_home'); $space[domainurl] = space_domain($space);getuserdiydata($space);$personalnv = isset($_G['blockposition']['nv']) ? $_G['blockposition']['nv'] : '';}-->
 				<strong id="spacename" class="mbn">

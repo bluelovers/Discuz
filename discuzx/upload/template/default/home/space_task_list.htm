@@ -1,8 +1,8 @@
 <h1 class="mt">
 	<img src="{STATICURL}image/feed/task.gif" alt="{lang task}" class="vm" />
-	<!--{if $_G['gp_item'] == "doing"}-->{lang task_doing}
-	<!--{elseif $_G['gp_item'] == "done"}-->{lang task_done}
-	<!--{elseif $_G['gp_item'] == "failed"}-->{lang task_failed}
+	<!--{if $_GET['item'] == "doing"}-->{lang task_doing}
+	<!--{elseif $_GET['item'] == "done"}-->{lang task_done}
+	<!--{elseif $_GET['item'] == "failed"}-->{lang task_failed}
 	<!--{else}-->{lang task_new}<!--{/if}-->
 </h1>
 <div class="ptm">
@@ -14,7 +14,7 @@
 					<td class="bbda ptm pbm">
 						<h3 class="xs2 xi2"><a href="home.php?mod=task&do=view&id=$task[taskid]">$task[name]</a> <span class="xs1 xg2 xw0">({lang task_applies}: <a href="home.php?mod=task&do=view&id=$task[taskid]#parter">$task[applicants]</a> )</span></h3>
 						<p class="xg2">$task[description]</p>
-						<!--{if $_G['gp_item'] == 'doing'}-->
+						<!--{if $_GET['item'] == 'doing'}-->
 						<div class="pbg mtm mbm">
 							<div class="pbr" style="width: {if $task[csc]}$task[csc]%{else}8px{/if};"></div>
 							<div class="xs0">{lang task_complete} <span id="csc_$task[taskid]">$task[csc]</span>%</div>
@@ -35,7 +35,7 @@
 						<!--{/if}-->
 					</td>
 					<td width="120" class="bbda">
-						<!--{if $_G['gp_item'] == 'new'}-->
+						<!--{if $_GET['item'] == 'new'}-->
 							<!--{if $task['noperm']}-->
 								<a href="javascript:;" onclick="doane(event);showDialog('{lang task_group_nopermission}')"><img src="{STATICURL}image/task/disallow.gif" title="{lang task_group_nopermission}" alt="disallow" /></a>
 							<!--{elseif $task['appliesfull']}-->
@@ -43,12 +43,12 @@
 							<!--{else}-->
 								<a href="home.php?mod=task&do=apply&id=$task[taskid]"><img src="{STATICURL}image/task/apply.gif" alt="apply" /></a>
 							<!--{/if}-->
-						<!--{elseif $_G['gp_item'] == 'doing'}-->
+						<!--{elseif $_GET['item'] == 'doing'}-->
 							<p><a href="home.php?mod=task&do=draw&id=$task[taskid]"><img src="{STATICURL}image/task/{if $task[csc] >=100}reward.gif{else}rewardless.gif{/if}"  alt="" /></a></p>
-						<!--{elseif $_G['gp_item'] == 'done'}-->
+						<!--{elseif $_GET['item'] == 'done'}-->
 							<p style="white-space:nowrap">{lang task_complete_on} $task[dateline]
 							<!--{if $task['period'] && $task[t]}--><br /><!--{if $task[allowapply]}--><a href="home.php?mod=task&do=apply&id=$task[taskid]">{lang task_applyagain_now}</a><!--{else}-->{$task[t]}{lang task_applyagain}<!--{/if}--><!--{/if}--></p>
-						<!--{elseif $_G['gp_item'] == 'failed'}-->
+						<!--{elseif $_GET['item'] == 'failed'}-->
 							<p style="white-space:nowrap">{lang task_lose_on} $task[dateline]
 							<!--{if $task['period'] && $task[t]}--><br /><!--{if $task[allowapply]}--><a href="home.php?mod=task&do=apply&id=$task[taskid]">{lang task_applyagain_now}</a><!--{else}-->{$task[t]}{lang task_reapply}<!--{/if}--><!--{/if}--></p>
 						<!--{/if}-->
@@ -57,6 +57,6 @@
 			<!--{/loop}-->
 		</table>
 	<!--{else}-->
-		<p class="emp"><!--{if $_G['gp_item'] == 'new'}-->{lang task_nonew}<!--{elseif $_G['gp_item'] == 'doing'}-->{lang task_nodoing}<!--{else}-->{lang data_nonexistence}<!--{/if}--></p>
+		<p class="emp"><!--{if $_GET['item'] == 'new'}-->{lang task_nonew}<!--{elseif $_GET['item'] == 'doing'}-->{lang task_nodoing}<!--{else}-->{lang data_nonexistence}<!--{/if}--></p>
 	<!--{/if}-->
 </div>

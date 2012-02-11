@@ -2,21 +2,8 @@
 -- DiscuzX INSTALL MAKE SQL DUMP V1.0
 -- DO NOT modify this file
 --
--- Create: 2011-03-16 14:18:45
+-- Create: 2012-02-07 10:30:18
 --
-DROP TABLE IF EXISTS pre_common_addon;
-CREATE TABLE pre_common_addon (
-  `key` varchar(255) NOT NULL DEFAULT '',
-  title varchar(255) NOT NULL DEFAULT '',
-  sitename varchar(255) NOT NULL DEFAULT '',
-  siteurl varchar(255) NOT NULL DEFAULT '',
-  description varchar(255) NOT NULL DEFAULT '',
-  contact varchar(255) NOT NULL DEFAULT '',
-  logo varchar(255) NOT NULL DEFAULT '',
-  system tinyint(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`key`)
-) TYPE=MyISAM;
-
 DROP TABLE IF EXISTS pre_common_admincp_cmenu;
 CREATE TABLE pre_common_admincp_cmenu (
   id smallint(6) unsigned NOT NULL AUTO_INCREMENT,
@@ -44,16 +31,14 @@ CREATE TABLE pre_common_admincp_member (
   uid int(10) unsigned NOT NULL,
   cpgroupid int(10) unsigned NOT NULL,
   customperm text NOT NULL,
-  PRIMARY KEY (uid),
-  KEY uid (uid)
+  PRIMARY KEY (uid)
 ) TYPE=MyISAM;
 
 DROP TABLE IF EXISTS pre_common_admincp_perm;
 CREATE TABLE pre_common_admincp_perm (
   cpgroupid smallint(6) unsigned NOT NULL,
   perm varchar(255) NOT NULL,
-  UNIQUE KEY cpgroupperm (cpgroupid,perm),
-  KEY cpgroupid (cpgroupid)
+  UNIQUE KEY cpgroupperm (cpgroupid,perm)
 ) TYPE=MyISAM;
 
 DROP TABLE IF EXISTS pre_common_admincp_session;
@@ -115,6 +100,7 @@ CREATE TABLE pre_common_admingroup (
   allowdiy tinyint(1) NOT NULL DEFAULT '0',
   allowclearrecycle tinyint(1) NOT NULL DEFAULT '0',
   allowmanagetag tinyint(1) NOT NULL DEFAULT '0',
+  alloweditusertag tinyint(1) NOT NULL DEFAULT '0',
   managefeed tinyint(1) NOT NULL DEFAULT '0',
   managedoing tinyint(1) NOT NULL DEFAULT '0',
   manageshare tinyint(1) NOT NULL DEFAULT '0',
@@ -128,6 +114,7 @@ CREATE TABLE pre_common_admingroup (
   managevideophoto tinyint(1) NOT NULL DEFAULT '0',
   managemagic tinyint(1) NOT NULL DEFAULT '0',
   manageclick tinyint(1) NOT NULL DEFAULT '0',
+  allowmanagecollection tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (admingid)
 ) TYPE=MyISAM;
 
@@ -201,6 +188,7 @@ CREATE TABLE pre_common_block (
   param text NOT NULL,
   shownum smallint(6) unsigned NOT NULL DEFAULT '0',
   cachetime int(10) NOT NULL DEFAULT '0',
+  cachetimerange char(5) NOT NULL DEFAULT '',
   punctualupdate tinyint(1) NOT NULL DEFAULT '0',
   hidedisplay tinyint(1) NOT NULL DEFAULT '0',
   dateline int(10) unsigned NOT NULL DEFAULT '0',
@@ -308,6 +296,7 @@ CREATE TABLE pre_common_block_style (
   makethumb tinyint(1) NOT NULL DEFAULT '0',
   settarget tinyint(1) NOT NULL DEFAULT '0',
   `fields` text NOT NULL,
+  moreurl tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (styleid),
   KEY `hash` (`hash`),
   KEY blockclass (blockclass)
@@ -481,13 +470,14 @@ CREATE TABLE pre_common_district (
 DROP TABLE IF EXISTS pre_common_diy_data;
 CREATE TABLE pre_common_diy_data (
   targettplname varchar(255) NOT NULL DEFAULT '',
+  tpldirectory varchar(80) NOT NULL DEFAULT '',
   primaltplname varchar(255) NOT NULL DEFAULT '',
   diycontent mediumtext NOT NULL,
   `name` varchar(255) NOT NULL DEFAULT '',
   uid mediumint(8) unsigned NOT NULL DEFAULT '0',
   username varchar(15) NOT NULL DEFAULT '',
   dateline int(10) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (targettplname)
+  PRIMARY KEY (targettplname,tpldirectory)
 ) TYPE=MyISAM;
 
 DROP TABLE IF EXISTS pre_common_domain;
@@ -504,7 +494,7 @@ CREATE TABLE pre_common_domain (
 DROP TABLE IF EXISTS pre_common_failedlogin;
 CREATE TABLE pre_common_failedlogin (
   ip char(15) NOT NULL DEFAULT '',
-  username char(15) NOT NULL DEFAULT '',
+  username char(32) NOT NULL DEFAULT '',
   count tinyint(1) unsigned NOT NULL DEFAULT '0',
   lastupdate int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (ip,username)
@@ -639,7 +629,7 @@ CREATE TABLE pre_common_member (
   accessmasks tinyint(1) NOT NULL DEFAULT '0',
   allowadmincp tinyint(1) NOT NULL DEFAULT '0',
   onlyacceptfriendpm tinyint(1) NOT NULL DEFAULT '0',
-  conisbind tinyint(1) unsigned NOT NULL default '0',
+  conisbind tinyint(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (uid),
   UNIQUE KEY username (username),
   KEY email (email),
@@ -655,6 +645,23 @@ CREATE TABLE pre_common_member_action_log (
   dateline int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (id),
   KEY dateline (dateline,`action`,uid)
+) TYPE=MyISAM;
+
+DROP TABLE IF EXISTS pre_common_member_connect;
+CREATE TABLE pre_common_member_connect (
+  uid mediumint(8) unsigned NOT NULL DEFAULT '0',
+  conuin char(40) NOT NULL DEFAULT '',
+  conuinsecret char(16) NOT NULL DEFAULT '',
+  conopenid char(32) NOT NULL DEFAULT '',
+  conisfeed tinyint(1) unsigned NOT NULL DEFAULT '0',
+  conispublishfeed tinyint(1) unsigned NOT NULL DEFAULT '0',
+  conispublisht tinyint(1) unsigned NOT NULL DEFAULT '0',
+  conisregister tinyint(1) unsigned NOT NULL DEFAULT '0',
+  conisqzoneavatar tinyint(1) unsigned NOT NULL DEFAULT '0',
+  conisqqshow tinyint(1) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (uid),
+  KEY conuin (conuin),
+  KEY conopenid (conopenid)
 ) TYPE=MyISAM;
 
 DROP TABLE IF EXISTS pre_common_member_count;
@@ -681,8 +688,25 @@ CREATE TABLE pre_common_member_count (
   oltime smallint(6) unsigned NOT NULL DEFAULT '0',
   todayattachs smallint(6) unsigned NOT NULL DEFAULT '0',
   todayattachsize int(10) unsigned NOT NULL DEFAULT '0',
+  feeds mediumint(8) unsigned NOT NULL DEFAULT '0',
+  follower mediumint(8) unsigned NOT NULL DEFAULT '0',
+  following mediumint(8) unsigned NOT NULL DEFAULT '0',
+  newfollower mediumint(8) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (uid),
   KEY posts (posts)
+) TYPE=MyISAM;
+
+DROP TABLE IF EXISTS pre_common_member_crime;
+CREATE TABLE pre_common_member_crime (
+  cid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  uid mediumint(8) unsigned NOT NULL DEFAULT '0',
+  operatorid mediumint(8) unsigned NOT NULL DEFAULT '0',
+  operator varchar(15) NOT NULL,
+  `action` tinyint(5) NOT NULL,
+  reason text NOT NULL,
+  dateline int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (cid),
+  KEY uid (uid,`action`,dateline)
 ) TYPE=MyISAM;
 
 DROP TABLE IF EXISTS pre_common_member_field_forum;
@@ -747,6 +771,13 @@ CREATE TABLE pre_common_member_magic (
   magicid smallint(6) unsigned NOT NULL DEFAULT '0',
   num smallint(6) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (uid,magicid)
+) TYPE=MyISAM;
+
+DROP TABLE IF EXISTS pre_common_member_medal;
+CREATE TABLE pre_common_member_medal (
+  uid mediumint(8) unsigned NOT NULL,
+  medalid smallint(6) unsigned NOT NULL,
+  PRIMARY KEY (uid,medalid)
 ) TYPE=MyISAM;
 
 DROP TABLE IF EXISTS pre_common_member_profile;
@@ -854,32 +885,6 @@ CREATE TABLE pre_common_member_stat_field (
   KEY fieldid (fieldid)
 ) TYPE=MyISAM;
 
-DROP TABLE IF EXISTS pre_common_member_stat_fieldcache;
-CREATE TABLE pre_common_member_stat_fieldcache (
-  optionid mediumint(8) unsigned NOT NULL DEFAULT '0',
-  uid mediumint(8) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (optionid,uid)
-) TYPE=MyISAM;
-
-DROP TABLE IF EXISTS pre_common_member_stat_search;
-CREATE TABLE pre_common_member_stat_search (
-  optionid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  title varchar(255) NOT NULL DEFAULT '',
-  `condition` text NOT NULL,
-  `hash` varchar(255) NOT NULL DEFAULT '',
-  users mediumint(8) unsigned NOT NULL DEFAULT '0',
-  updatetime int(10) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (optionid),
-  KEY `hash` (`hash`)
-) TYPE=MyISAM;
-
-DROP TABLE IF EXISTS pre_common_member_stat_searchcache;
-CREATE TABLE pre_common_member_stat_searchcache (
-  optionid mediumint(8) unsigned NOT NULL DEFAULT '0',
-  uid mediumint(8) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (optionid,uid)
-) TYPE=MyISAM;
-
 DROP TABLE IF EXISTS pre_common_member_status;
 CREATE TABLE pre_common_member_status (
   uid mediumint(8) unsigned NOT NULL,
@@ -895,7 +900,8 @@ CREATE TABLE pre_common_member_status (
   favtimes mediumint(8) unsigned NOT NULL DEFAULT '0',
   sharetimes mediumint(8) unsigned NOT NULL DEFAULT '0',
   profileprogress tinyint(2) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (uid)
+  PRIMARY KEY (uid),
+  KEY lastactivity (lastactivity,invisible)
 ) TYPE=MyISAM;
 
 DROP TABLE IF EXISTS pre_common_member_validate;
@@ -944,16 +950,6 @@ CREATE TABLE pre_common_member_verify_info (
   PRIMARY KEY (vid),
   KEY verifytype (verifytype,flag),
   KEY uid (uid,verifytype,dateline)
-) TYPE=MyISAM;
-
-DROP TABLE IF EXISTS pre_common_moderate;
-CREATE TABLE pre_common_moderate (
-  id int(10) unsigned NOT NULL DEFAULT '0',
-  idtype varchar(15) NOT NULL DEFAULT '',
-  `status` tinyint(3) NOT NULL DEFAULT '0',
-  dateline int(10) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (id,idtype),
-  KEY idtype (idtype,`status`,dateline)
 ) TYPE=MyISAM;
 
 DROP TABLE IF EXISTS pre_common_myapp;
@@ -1036,6 +1032,16 @@ CREATE TABLE pre_common_onlinetime (
   total mediumint(8) unsigned NOT NULL DEFAULT '0',
   lastupdate int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (uid)
+) TYPE=MyISAM;
+
+DROP TABLE IF EXISTS pre_common_patch;
+CREATE TABLE pre_common_patch (
+  `serial` varchar(10) NOT NULL DEFAULT '',
+  rule text NOT NULL,
+  note text NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '0',
+  dateline int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`serial`)
 ) TYPE=MyISAM;
 
 DROP TABLE IF EXISTS pre_common_plugin;
@@ -1265,7 +1271,7 @@ CREATE TABLE pre_common_syscache (
 DROP TABLE IF EXISTS pre_common_tag;
 CREATE TABLE pre_common_tag (
   tagid smallint(6) unsigned NOT NULL AUTO_INCREMENT,
-  tagname varchar(20) NOT NULL DEFAULT '',
+  tagname char(20) NOT NULL DEFAULT '',
   `status` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (tagid),
   KEY tagname (tagname),
@@ -1274,11 +1280,10 @@ CREATE TABLE pre_common_tag (
 
 DROP TABLE IF EXISTS pre_common_tagitem;
 CREATE TABLE pre_common_tagitem (
-  tagid smallint(6) NOT NULL DEFAULT '0',
-  tagname varchar(20) NOT NULL DEFAULT '',
-  itemid mediumint(8) NOT NULL DEFAULT '0',
-  idtype varchar(255) NOT NULL DEFAULT '',
-  KEY tagid (tagid,idtype),
+  tagid smallint(6) unsigned NOT NULL DEFAULT '0',
+  itemid mediumint(8) unsigned NOT NULL DEFAULT '0',
+  idtype char(10) NOT NULL DEFAULT '',
+  UNIQUE KEY item (tagid,itemid,idtype),
   KEY idtype (idtype,itemid)
 ) TYPE=MyISAM;
 
@@ -1333,8 +1338,9 @@ CREATE TABLE pre_common_template (
 DROP TABLE IF EXISTS pre_common_template_block;
 CREATE TABLE pre_common_template_block (
   targettplname varchar(255) NOT NULL DEFAULT '',
+  tpldirectory varchar(80) NOT NULL DEFAULT '',
   bid mediumint(8) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (targettplname,bid),
+  PRIMARY KEY (targettplname,tpldirectory,bid),
   KEY bid (bid)
 ) TYPE=MyISAM;
 
@@ -1348,6 +1354,15 @@ CREATE TABLE pre_common_template_permission (
   inheritedtplname varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (targettplname,uid),
   KEY uid (uid)
+) TYPE=MyISAM;
+
+DROP TABLE IF EXISTS pre_common_uin_black;
+CREATE TABLE pre_common_uin_black (
+  uin char(40) NOT NULL,
+  uid mediumint(8) unsigned NOT NULL DEFAULT '0',
+  dateline int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (uin),
+  UNIQUE KEY uid (uid)
 ) TYPE=MyISAM;
 
 DROP TABLE IF EXISTS pre_common_usergroup;
@@ -1408,6 +1423,7 @@ CREATE TABLE pre_common_usergroup_field (
   maxsigsize smallint(6) unsigned NOT NULL DEFAULT '0',
   maxattachsize mediumint(8) unsigned NOT NULL DEFAULT '0',
   maxsizeperday int(10) unsigned NOT NULL DEFAULT '0',
+  maxthreadsperhour tinyint(3) unsigned NOT NULL DEFAULT '0',
   maxpostsperhour tinyint(3) unsigned NOT NULL DEFAULT '0',
   attachextensions char(100) NOT NULL DEFAULT '',
   raterange char(150) NOT NULL DEFAULT '',
@@ -1469,8 +1485,14 @@ CREATE TABLE pre_common_usergroup_field (
   allowreplycredit tinyint(1) NOT NULL DEFAULT '0',
   ignorecensor tinyint(1) unsigned NOT NULL DEFAULT '0',
   allowsendallpm tinyint(1) unsigned NOT NULL DEFAULT '0',
+  allowsendpmmaxnum smallint(6) unsigned NOT NULL DEFAULT '0',
   maximagesize mediumint(8) unsigned NOT NULL DEFAULT '0',
   allowmediacode tinyint(1) NOT NULL DEFAULT '0',
+  allowat smallint(6) unsigned NOT NULL DEFAULT '0',
+  allowsetpublishdate tinyint(1) unsigned NOT NULL DEFAULT '0',
+  allowfollowcollection tinyint(1) unsigned NOT NULL DEFAULT '0',
+  allowcommentcollection tinyint(1) unsigned NOT NULL DEFAULT '0',
+  allowcreatecollection smallint(6) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (groupid)
 ) TYPE=MyISAM;
 
@@ -1490,6 +1512,60 @@ CREATE TABLE pre_common_word_type (
   id smallint(6) unsigned NOT NULL AUTO_INCREMENT,
   typename varchar(15) NOT NULL DEFAULT '',
   PRIMARY KEY (id)
+) TYPE=MyISAM;
+
+DROP TABLE IF EXISTS pre_connect_feedlog;
+CREATE TABLE pre_connect_feedlog (
+  flid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  tid mediumint(8) unsigned NOT NULL DEFAULT '0',
+  uid mediumint(8) unsigned NOT NULL DEFAULT '0',
+  publishtimes mediumint(8) unsigned NOT NULL DEFAULT '0',
+  lastpublished int(10) unsigned NOT NULL DEFAULT '0',
+  dateline int(10) unsigned NOT NULL DEFAULT '0',
+  `status` tinyint(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (flid),
+  UNIQUE KEY tid (tid)
+) TYPE=MyISAM;
+
+DROP TABLE IF EXISTS pre_connect_memberbindlog;
+CREATE TABLE pre_connect_memberbindlog (
+  mblid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  uid mediumint(8) unsigned NOT NULL DEFAULT '0',
+  uin char(40) NOT NULL,
+  `type` tinyint(1) NOT NULL DEFAULT '0',
+  dateline int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (mblid),
+  KEY uid (uid),
+  KEY uin (uin),
+  KEY dateline (dateline)
+) TYPE=MyISAM;
+
+DROP TABLE IF EXISTS pre_connect_tlog;
+CREATE TABLE pre_connect_tlog (
+  tlid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  tid mediumint(8) unsigned NOT NULL DEFAULT '0',
+  uid mediumint(8) unsigned NOT NULL DEFAULT '0',
+  publishtimes mediumint(8) unsigned NOT NULL DEFAULT '0',
+  lastpublished int(10) unsigned NOT NULL DEFAULT '0',
+  dateline int(10) unsigned NOT NULL DEFAULT '0',
+  `status` tinyint(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (tlid),
+  UNIQUE KEY tid (tid)
+) TYPE=MyISAM;
+
+DROP TABLE IF EXISTS pre_connect_tthreadlog;
+CREATE TABLE pre_connect_tthreadlog (
+  twid char(16) NOT NULL,
+  tid mediumint(8) unsigned NOT NULL DEFAULT '0',
+  conopenid char(32) NOT NULL,
+  pagetime int(10) unsigned DEFAULT '0',
+  lasttwid char(16) DEFAULT NULL,
+  nexttime int(10) unsigned DEFAULT '0',
+  updatetime int(10) unsigned DEFAULT '0',
+  dateline int(10) unsigned DEFAULT '0',
+  PRIMARY KEY (twid),
+  KEY nexttime (tid,nexttime),
+  KEY updatetime (tid,updatetime)
 ) TYPE=MyISAM;
 
 DROP TABLE IF EXISTS pre_forum_access;
@@ -1818,6 +1894,13 @@ CREATE TABLE pre_forum_attachment_9 (
   KEY uid (uid)
 ) TYPE=MyISAM;
 
+DROP TABLE IF EXISTS pre_forum_attachment_exif;
+CREATE TABLE pre_forum_attachment_exif (
+  aid mediumint(8) unsigned NOT NULL,
+  exif text NOT NULL,
+  PRIMARY KEY (aid)
+) TYPE=MyISAM;
+
 DROP TABLE IF EXISTS pre_forum_attachment_unused;
 CREATE TABLE pre_forum_attachment_unused (
   aid mediumint(8) unsigned NOT NULL,
@@ -1837,9 +1920,11 @@ CREATE TABLE pre_forum_attachment_unused (
 DROP TABLE IF EXISTS pre_forum_attachtype;
 CREATE TABLE pre_forum_attachtype (
   id smallint(6) unsigned NOT NULL AUTO_INCREMENT,
+  fid mediumint(8) unsigned NOT NULL DEFAULT '0',
   extension char(12) NOT NULL DEFAULT '',
   maxsize int(10) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (id)
+  PRIMARY KEY (id),
+  KEY fid (fid)
 ) TYPE=MyISAM;
 
 DROP TABLE IF EXISTS pre_forum_bbcode;
@@ -1857,6 +1942,94 @@ CREATE TABLE pre_forum_bbcode (
   displayorder tinyint(3) NOT NULL DEFAULT '0',
   perm text NOT NULL,
   PRIMARY KEY (id)
+) TYPE=MyISAM;
+
+DROP TABLE IF EXISTS pre_forum_collection;
+CREATE TABLE pre_forum_collection (
+  ctid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  uid mediumint(8) unsigned NOT NULL DEFAULT '0',
+  username varchar(15) NOT NULL DEFAULT '',
+  `name` varchar(50) NOT NULL DEFAULT '',
+  dateline int(10) unsigned NOT NULL DEFAULT '0',
+  follownum mediumint(8) unsigned NOT NULL DEFAULT '0',
+  threadnum mediumint(8) unsigned NOT NULL DEFAULT '0',
+  commentnum mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `desc` varchar(255) NOT NULL DEFAULT '',
+  lastupdate int(10) unsigned NOT NULL DEFAULT '0',
+  rate float NOT NULL DEFAULT '0',
+  ratenum mediumint(8) unsigned NOT NULL DEFAULT '0',
+  lastpost mediumint(8) unsigned NOT NULL DEFAULT '0',
+  lastsubject varchar(80) NOT NULL DEFAULT '',
+  lastposttime int(10) unsigned NOT NULL DEFAULT '0',
+  lastposter varchar(15) NOT NULL DEFAULT '',
+  lastvisit int(10) unsigned NOT NULL DEFAULT '0',
+  keyword varchar(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (ctid),
+  KEY dateline (dateline),
+  KEY hotcollection (threadnum,lastupdate),
+  KEY follownum (follownum)
+) TYPE=MyISAM;
+
+DROP TABLE IF EXISTS pre_forum_collectioncomment;
+CREATE TABLE pre_forum_collectioncomment (
+  cid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  ctid mediumint(8) unsigned NOT NULL DEFAULT '0',
+  uid mediumint(8) unsigned NOT NULL DEFAULT '0',
+  username varchar(15) NOT NULL DEFAULT '',
+  message text NOT NULL,
+  dateline int(10) unsigned NOT NULL DEFAULT '0',
+  useip varchar(16) NOT NULL DEFAULT '',
+  rate float NOT NULL DEFAULT '0',
+  PRIMARY KEY (cid),
+  KEY ctid (ctid,dateline),
+  KEY userrate (ctid,uid,rate)
+) TYPE=MyISAM;
+
+DROP TABLE IF EXISTS pre_forum_collectionfollow;
+CREATE TABLE pre_forum_collectionfollow (
+  uid mediumint(8) unsigned NOT NULL DEFAULT '0',
+  username char(15) NOT NULL DEFAULT '',
+  ctid mediumint(8) unsigned NOT NULL DEFAULT '0',
+  dateline int(10) unsigned NOT NULL DEFAULT '0',
+  lastvisit int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (uid,ctid),
+  KEY ctid (ctid,dateline)
+) TYPE=MyISAM;
+
+DROP TABLE IF EXISTS pre_forum_collectioninvite;
+CREATE TABLE pre_forum_collectioninvite (
+  ctid mediumint(8) unsigned NOT NULL DEFAULT '0',
+  uid mediumint(8) unsigned NOT NULL DEFAULT '0',
+  dateline int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (ctid,uid),
+  KEY dateline (dateline)
+) TYPE=MyISAM;
+
+DROP TABLE IF EXISTS pre_forum_collectionrelated;
+CREATE TABLE pre_forum_collectionrelated (
+  tid mediumint(8) unsigned NOT NULL DEFAULT '0',
+  collection text NOT NULL,
+  PRIMARY KEY (tid)
+) TYPE=MyISAM;
+
+DROP TABLE IF EXISTS pre_forum_collectionteamworker;
+CREATE TABLE pre_forum_collectionteamworker (
+  ctid mediumint(8) unsigned NOT NULL DEFAULT '0',
+  uid mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `name` varchar(50) NOT NULL DEFAULT '',
+  username varchar(15) NOT NULL DEFAULT '',
+  lastvisit int(8) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (ctid,uid)
+) TYPE=MyISAM;
+
+DROP TABLE IF EXISTS pre_forum_collectionthread;
+CREATE TABLE pre_forum_collectionthread (
+  ctid mediumint(8) unsigned NOT NULL DEFAULT '0',
+  tid mediumint(8) unsigned NOT NULL DEFAULT '0',
+  dateline int(10) unsigned NOT NULL DEFAULT '0',
+  reason varchar(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (ctid,tid),
+  KEY ctid (ctid,dateline)
 ) TYPE=MyISAM;
 
 DROP TABLE IF EXISTS pre_forum_creditslog;
@@ -1947,7 +2120,7 @@ CREATE TABLE pre_forum_forum (
   allowspecialonly tinyint(1) unsigned NOT NULL DEFAULT '0',
   allowappend tinyint(1) unsigned NOT NULL DEFAULT '0',
   alloweditrules tinyint(1) NOT NULL DEFAULT '0',
-  allowfeed tinyint(1) NOT NULL DEFAULT '0',
+  allowfeed tinyint(1) NOT NULL DEFAULT '1',
   allowside tinyint(1) NOT NULL DEFAULT '0',
   recyclebin tinyint(1) NOT NULL DEFAULT '0',
   modnewposts tinyint(1) NOT NULL DEFAULT '0',
@@ -1962,13 +2135,14 @@ CREATE TABLE pre_forum_forum (
   `simple` tinyint(1) unsigned NOT NULL DEFAULT '0',
   modworks tinyint(1) unsigned NOT NULL DEFAULT '0',
   allowglobalstick tinyint(1) NOT NULL DEFAULT '1',
-  `level` smallint(6) unsigned NOT NULL DEFAULT '0',
+  `level` smallint(6) NOT NULL DEFAULT '0',
   commoncredits int(10) unsigned NOT NULL DEFAULT '0',
   archive tinyint(1) NOT NULL DEFAULT '0',
   recommend smallint(6) unsigned NOT NULL DEFAULT '0',
   favtimes mediumint(8) unsigned NOT NULL DEFAULT '0',
   sharetimes mediumint(8) unsigned NOT NULL DEFAULT '0',
   disablethumb tinyint(1) NOT NULL DEFAULT '0',
+  disablecollect tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (fid),
   KEY forum (`status`,`type`,displayorder),
   KEY fup_type (fup,`type`,displayorder),
@@ -2146,6 +2320,8 @@ CREATE TABLE pre_forum_medal (
   description varchar(255) NOT NULL,
   expiration smallint(6) unsigned NOT NULL DEFAULT '0',
   permission mediumtext NOT NULL,
+  credit tinyint(1) unsigned NOT NULL DEFAULT '0',
+  price mediumint(8) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (medalid),
   KEY displayorder (displayorder),
   KEY available (available,displayorder)
@@ -2259,7 +2435,7 @@ CREATE TABLE pre_forum_pollvoter (
 
 DROP TABLE IF EXISTS pre_forum_post;
 CREATE TABLE pre_forum_post (
-  pid int(10) unsigned NOT NULL AUTO_INCREMENT,
+  pid int(10) unsigned NOT NULL,
   fid mediumint(8) unsigned NOT NULL DEFAULT '0',
   tid mediumint(8) unsigned NOT NULL DEFAULT '0',
   `first` tinyint(1) NOT NULL DEFAULT '0',
@@ -2279,23 +2455,57 @@ CREATE TABLE pre_forum_post (
   attachment tinyint(1) NOT NULL DEFAULT '0',
   rate smallint(6) NOT NULL DEFAULT '0',
   ratetimes tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `status` tinyint(1) NOT NULL DEFAULT '0',
+  `status` int(10) NOT NULL DEFAULT '0',
   tags varchar(255) NOT NULL DEFAULT '0',
   `comment` tinyint(1) NOT NULL DEFAULT '0',
-  replycredit smallint(6) NOT NULL DEFAULT '0',
-  PRIMARY KEY (pid),
+  replycredit int(10) NOT NULL DEFAULT '0',
+  position int(8) unsigned NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (tid,position),
+  UNIQUE KEY pid (pid),
   KEY fid (fid),
-  KEY authorid (authorid),
+  KEY authorid (authorid,invisible),
   KEY dateline (dateline),
   KEY invisible (invisible),
   KEY displayorder (tid,invisible,dateline),
   KEY `first` (tid,`first`)
 ) TYPE=MyISAM;
 
+DROP TABLE IF EXISTS pre_forum_post_location;
+CREATE TABLE pre_forum_post_location (
+  pid int(10) unsigned NOT NULL DEFAULT '0',
+  tid mediumint(8) unsigned DEFAULT '0',
+  uid mediumint(8) unsigned DEFAULT '0',
+  mapx varchar(255) NOT NULL,
+  mapy varchar(255) NOT NULL,
+  location varchar(255) NOT NULL,
+  PRIMARY KEY (pid),
+  KEY tid (tid),
+  KEY uid (uid)
+) TYPE=MyISAM;
+
+DROP TABLE IF EXISTS pre_forum_post_moderate;
+CREATE TABLE pre_forum_post_moderate (
+  id int(10) unsigned NOT NULL DEFAULT '0',
+  `status` tinyint(3) NOT NULL DEFAULT '0',
+  dateline int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (id),
+  KEY `status` (`status`,dateline)
+) TYPE=MyISAM;
+
 DROP TABLE IF EXISTS pre_forum_post_tableid;
 CREATE TABLE pre_forum_post_tableid (
   pid int(10) unsigned NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (pid)
+) TYPE=MyISAM;
+
+DROP TABLE IF EXISTS pre_forum_postcache;
+CREATE TABLE pre_forum_postcache (
+  pid int(10) unsigned NOT NULL,
+  `comment` text NOT NULL,
+  rate text NOT NULL,
+  dateline int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (pid),
+  KEY dateline (dateline)
 ) TYPE=MyISAM;
 
 DROP TABLE IF EXISTS pre_forum_postcomment;
@@ -2332,15 +2542,6 @@ CREATE TABLE pre_forum_postlog (
   KEY dateline (dateline)
 ) TYPE=MyISAM;
 
-DROP TABLE IF EXISTS pre_forum_postposition;
-CREATE TABLE pre_forum_postposition (
-  tid mediumint(8) unsigned NOT NULL,
-  position int(10) unsigned NOT NULL AUTO_INCREMENT,
-  pid int(10) unsigned NOT NULL,
-  PRIMARY KEY (tid,position),
-  KEY pid (pid)
-) TYPE=MyISAM;
-
 DROP TABLE IF EXISTS pre_forum_poststick;
 CREATE TABLE pre_forum_poststick (
   tid mediumint(8) unsigned NOT NULL,
@@ -2369,7 +2570,8 @@ CREATE TABLE pre_forum_ratelog (
   score smallint(6) NOT NULL DEFAULT '0',
   reason char(40) NOT NULL DEFAULT '',
   KEY pid (pid,dateline),
-  KEY dateline (dateline)
+  KEY dateline (dateline),
+  KEY uid (uid)
 ) TYPE=MyISAM;
 
 DROP TABLE IF EXISTS pre_forum_relatedthread;
@@ -2403,6 +2605,7 @@ CREATE TABLE pre_forum_rsscache (
   author char(15) NOT NULL DEFAULT '',
   `subject` char(80) NOT NULL DEFAULT '',
   description char(255) NOT NULL DEFAULT '',
+  guidetype char(10) NOT NULL DEFAULT '',
   UNIQUE KEY tid (tid),
   KEY fid (fid,dateline)
 ) TYPE=MyISAM;
@@ -2464,6 +2667,8 @@ CREATE TABLE pre_forum_thread (
   pushedaid mediumint(8) NOT NULL DEFAULT '0',
   cover smallint(6) NOT NULL DEFAULT '0',
   replycredit smallint(6) NOT NULL DEFAULT '0',
+  relatebytag char(255) NOT NULL DEFAULT '0',
+  maxposition int(8) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (tid),
   KEY digest (digest),
   KEY sortid (sortid),
@@ -2474,6 +2679,22 @@ CREATE TABLE pre_forum_thread (
   KEY authorid (authorid),
   KEY isgroup (isgroup,lastpost),
   KEY special (special)
+) TYPE=MyISAM;
+
+DROP TABLE IF EXISTS pre_forum_thread_moderate;
+CREATE TABLE pre_forum_thread_moderate (
+  id int(10) unsigned NOT NULL DEFAULT '0',
+  `status` tinyint(3) NOT NULL DEFAULT '0',
+  dateline int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (id),
+  KEY `status` (`status`,dateline)
+) TYPE=MyISAM;
+
+DROP TABLE IF EXISTS pre_forum_threadaddviews;
+CREATE TABLE pre_forum_threadaddviews (
+  tid mediumint(8) unsigned NOT NULL DEFAULT '0',
+  addviews int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (tid)
 ) TYPE=MyISAM;
 
 DROP TABLE IF EXISTS pre_forum_threadclass;
@@ -2533,13 +2754,22 @@ CREATE TABLE pre_forum_threadpartake (
   KEY tid (tid,uid)
 ) TYPE=MyISAM;
 
+DROP TABLE IF EXISTS pre_forum_threadpreview;
+CREATE TABLE pre_forum_threadpreview (
+  tid mediumint(8) unsigned NOT NULL DEFAULT '0',
+  relay int(10) unsigned NOT NULL DEFAULT '0',
+  content text NOT NULL,
+  PRIMARY KEY (tid)
+) TYPE=MyISAM;
+
 DROP TABLE IF EXISTS pre_forum_threadrush;
 CREATE TABLE pre_forum_threadrush (
   tid mediumint(8) unsigned NOT NULL DEFAULT '0',
   stopfloor mediumint(8) unsigned NOT NULL DEFAULT '0',
   starttimefrom int(10) unsigned NOT NULL DEFAULT '0',
   starttimeto int(10) unsigned NOT NULL DEFAULT '0',
-  rewardfloor varchar(255) NOT NULL DEFAULT '',
+  rewardfloor text NOT NULL,
+  creditlimit int(10) NOT NULL DEFAULT '-996',
   PRIMARY KEY (tid)
 ) TYPE=MyISAM;
 
@@ -2686,6 +2916,7 @@ CREATE TABLE pre_forum_typeoption (
   `type` varchar(255) NOT NULL DEFAULT '',
   unit varchar(255) NOT NULL,
   rules mediumtext NOT NULL,
+  permprompt mediumtext NOT NULL,
   PRIMARY KEY (optionid),
   KEY classid (classid)
 ) TYPE=MyISAM;
@@ -2832,6 +3063,15 @@ CREATE TABLE pre_home_blog_category (
   PRIMARY KEY (catid)
 ) TYPE=MyISAM;
 
+DROP TABLE IF EXISTS pre_home_blog_moderate;
+CREATE TABLE pre_home_blog_moderate (
+  id int(10) unsigned NOT NULL DEFAULT '0',
+  `status` tinyint(3) NOT NULL DEFAULT '0',
+  dateline int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (id),
+  KEY `status` (`status`,dateline)
+) TYPE=MyISAM;
+
 DROP TABLE IF EXISTS pre_home_blogfield;
 CREATE TABLE pre_home_blogfield (
   blogid mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -2847,7 +3087,8 @@ CREATE TABLE pre_home_blogfield (
   magiccolor tinyint(6) NOT NULL DEFAULT '0',
   magicpaper tinyint(6) NOT NULL DEFAULT '0',
   pushedaid mediumint(8) NOT NULL DEFAULT '0',
-  PRIMARY KEY (blogid)
+  PRIMARY KEY (blogid),
+  KEY uid (uid)
 ) TYPE=MyISAM;
 
 DROP TABLE IF EXISTS pre_home_class;
@@ -2902,6 +3143,16 @@ CREATE TABLE pre_home_comment (
   KEY id (id,idtype,dateline)
 ) TYPE=MyISAM;
 
+DROP TABLE IF EXISTS pre_home_comment_moderate;
+CREATE TABLE pre_home_comment_moderate (
+  id int(10) unsigned NOT NULL DEFAULT '0',
+  idtype varchar(15) NOT NULL DEFAULT '',
+  `status` tinyint(3) NOT NULL DEFAULT '0',
+  dateline int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (id),
+  KEY idtype (idtype,`status`,dateline)
+) TYPE=MyISAM;
+
 DROP TABLE IF EXISTS pre_home_docomment;
 CREATE TABLE pre_home_docomment (
   id int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -2932,6 +3183,15 @@ CREATE TABLE pre_home_doing (
   PRIMARY KEY (doid),
   KEY uid (uid,dateline),
   KEY dateline (dateline)
+) TYPE=MyISAM;
+
+DROP TABLE IF EXISTS pre_home_doing_moderate;
+CREATE TABLE pre_home_doing_moderate (
+  id int(10) unsigned NOT NULL DEFAULT '0',
+  `status` tinyint(3) NOT NULL DEFAULT '0',
+  dateline int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (id),
+  KEY `status` (`status`,dateline)
 ) TYPE=MyISAM;
 
 DROP TABLE IF EXISTS pre_home_favorite;
@@ -3012,6 +3272,43 @@ CREATE TABLE pre_home_feed_app (
   PRIMARY KEY (feedid),
   KEY uid (uid,dateline),
   KEY dateline (dateline)
+) TYPE=MyISAM;
+
+DROP TABLE IF EXISTS pre_home_follow;
+CREATE TABLE pre_home_follow (
+  uid mediumint(8) unsigned NOT NULL DEFAULT '0',
+  username char(15) NOT NULL DEFAULT '',
+  followuid mediumint(8) unsigned NOT NULL DEFAULT '0',
+  fusername char(15) NOT NULL DEFAULT '',
+  bkname varchar(255) NOT NULL DEFAULT '',
+  `status` tinyint(1) NOT NULL DEFAULT '0',
+  mutual tinyint(1) NOT NULL DEFAULT '0',
+  dateline int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (uid,followuid)
+) TYPE=MyISAM;
+
+DROP TABLE IF EXISTS pre_home_follow_feed;
+CREATE TABLE pre_home_follow_feed (
+  feedid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  uid mediumint(8) unsigned NOT NULL DEFAULT '0',
+  username varchar(15) NOT NULL DEFAULT '',
+  tid mediumint(8) unsigned NOT NULL DEFAULT '0',
+  note varchar(255) NOT NULL DEFAULT '',
+  dateline int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (feedid),
+  KEY uid (uid,dateline)
+) TYPE=MyISAM;
+
+DROP TABLE IF EXISTS pre_home_follow_feed_archiver;
+CREATE TABLE pre_home_follow_feed_archiver (
+  feedid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  uid mediumint(8) unsigned NOT NULL DEFAULT '0',
+  username varchar(15) NOT NULL DEFAULT '',
+  tid mediumint(8) unsigned NOT NULL DEFAULT '0',
+  note varchar(255) NOT NULL DEFAULT '',
+  dateline int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (feedid),
+  KEY uid (uid,dateline)
 ) TYPE=MyISAM;
 
 DROP TABLE IF EXISTS pre_home_friend;
@@ -3100,6 +3397,15 @@ CREATE TABLE pre_home_pic (
   KEY albumid (albumid,dateline)
 ) TYPE=MyISAM;
 
+DROP TABLE IF EXISTS pre_home_pic_moderate;
+CREATE TABLE pre_home_pic_moderate (
+  id int(10) unsigned NOT NULL DEFAULT '0',
+  `status` tinyint(3) NOT NULL DEFAULT '0',
+  dateline int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (id),
+  KEY `status` (`status`,dateline)
+) TYPE=MyISAM;
+
 DROP TABLE IF EXISTS pre_home_picfield;
 CREATE TABLE pre_home_picfield (
   picid mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -3154,6 +3460,15 @@ CREATE TABLE pre_home_share (
   KEY uid (uid,dateline),
   KEY hot (hot),
   KEY dateline (dateline)
+) TYPE=MyISAM;
+
+DROP TABLE IF EXISTS pre_home_share_moderate;
+CREATE TABLE pre_home_share_moderate (
+  id int(10) unsigned NOT NULL DEFAULT '0',
+  `status` tinyint(3) NOT NULL DEFAULT '0',
+  dateline int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (id),
+  KEY `status` (`status`,dateline)
 ) TYPE=MyISAM;
 
 DROP TABLE IF EXISTS pre_home_show;
@@ -3221,9 +3536,9 @@ CREATE TABLE pre_home_visitor (
 
 DROP TABLE IF EXISTS pre_portal_article_content;
 CREATE TABLE pre_portal_article_content (
-  cid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  cid int(10) unsigned NOT NULL AUTO_INCREMENT,
   aid mediumint(8) unsigned NOT NULL DEFAULT '0',
-  id mediumint(8) unsigned NOT NULL DEFAULT '0',
+  id int(10) unsigned NOT NULL DEFAULT '0',
   idtype varchar(255) NOT NULL DEFAULT '',
   title varchar(255) NOT NULL DEFAULT '',
   content text NOT NULL,
@@ -3240,10 +3555,18 @@ CREATE TABLE pre_portal_article_count (
   catid mediumint(8) unsigned NOT NULL DEFAULT '0',
   viewnum mediumint(8) unsigned NOT NULL DEFAULT '0',
   commentnum mediumint(8) unsigned NOT NULL DEFAULT '0',
-  dateline int(10) unsigned NOT NULL DEFAULT '0',
   favtimes mediumint(8) unsigned NOT NULL DEFAULT '0',
   sharetimes mediumint(8) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (aid)
+) TYPE=MyISAM;
+
+DROP TABLE IF EXISTS pre_portal_article_moderate;
+CREATE TABLE pre_portal_article_moderate (
+  id int(10) unsigned NOT NULL DEFAULT '0',
+  `status` tinyint(3) NOT NULL DEFAULT '0',
+  dateline int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (id),
+  KEY `status` (`status`,dateline)
 ) TYPE=MyISAM;
 
 DROP TABLE IF EXISTS pre_portal_article_related;
@@ -3263,7 +3586,6 @@ CREATE TABLE pre_portal_article_title (
   uid mediumint(8) unsigned NOT NULL DEFAULT '0',
   username varchar(255) NOT NULL DEFAULT '',
   title varchar(255) NOT NULL DEFAULT '',
-  shorttitle varchar(255) NOT NULL DEFAULT '',
   highlight varchar(255) NOT NULL DEFAULT '',
   author varchar(255) NOT NULL DEFAULT '',
   `from` varchar(255) NOT NULL DEFAULT '',
@@ -3273,7 +3595,7 @@ CREATE TABLE pre_portal_article_title (
   pic varchar(255) NOT NULL DEFAULT '',
   thumb tinyint(1) NOT NULL DEFAULT '0',
   remote tinyint(1) NOT NULL DEFAULT '0',
-  id mediumint(8) unsigned NOT NULL DEFAULT '0',
+  id int(10) unsigned NOT NULL DEFAULT '0',
   idtype varchar(255) NOT NULL DEFAULT '',
   contents smallint(6) NOT NULL DEFAULT '0',
   allowcomment tinyint(1) NOT NULL DEFAULT '0',
@@ -3374,6 +3696,16 @@ CREATE TABLE pre_portal_comment (
   KEY idtype (id,idtype,dateline)
 ) TYPE=MyISAM;
 
+DROP TABLE IF EXISTS pre_portal_comment_moderate;
+CREATE TABLE pre_portal_comment_moderate (
+  id int(10) unsigned NOT NULL DEFAULT '0',
+  idtype varchar(15) NOT NULL DEFAULT '',
+  `status` tinyint(3) NOT NULL DEFAULT '0',
+  dateline int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (id),
+  KEY idtype (idtype,`status`,dateline)
+) TYPE=MyISAM;
+
 DROP TABLE IF EXISTS pre_portal_rsscache;
 CREATE TABLE pre_portal_rsscache (
   lastupdate int(10) unsigned NOT NULL DEFAULT '0',
@@ -3398,7 +3730,7 @@ CREATE TABLE pre_portal_topic (
   keyword text NOT NULL,
   cover varchar(255) NOT NULL DEFAULT '',
   picflag tinyint(1) NOT NULL DEFAULT '0',
-  primaltplname varchar(255) NOT NULL DEFAULT '0',
+  primaltplname varchar(255) NOT NULL DEFAULT '',
   useheader tinyint(1) NOT NULL DEFAULT '0',
   usefooter tinyint(1) NOT NULL DEFAULT '0',
   uid mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -3427,5 +3759,52 @@ CREATE TABLE pre_portal_topic_pic (
   remote tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (picid),
   KEY topicid (topicid)
+) TYPE=MyISAM;
+
+DROP TABLE IF EXISTS pre_security_evilpost;
+CREATE TABLE pre_security_evilpost (
+  pid int(10) unsigned NOT NULL,
+  tid mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `type` tinyint(1) NOT NULL DEFAULT '0',
+  evilcount int(10) NOT NULL DEFAULT '0',
+  eviltype mediumint(8) unsigned NOT NULL DEFAULT '0',
+  createtime int(10) unsigned NOT NULL DEFAULT '0',
+  operateresult tinyint(1) unsigned NOT NULL DEFAULT '0',
+  isreported tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (pid),
+  KEY `type` (tid,`type`),
+  KEY operateresult (operateresult,createtime)
+) TYPE=MyISAM;
+
+DROP TABLE IF EXISTS pre_security_eviluser;
+CREATE TABLE pre_security_eviluser (
+  uid int(10) unsigned NOT NULL,
+  evilcount int(10) NOT NULL DEFAULT '0',
+  eviltype mediumint(8) unsigned NOT NULL DEFAULT '0',
+  createtime int(10) unsigned NOT NULL DEFAULT '0',
+  operateresult tinyint(1) unsigned NOT NULL DEFAULT '0',
+  isreported tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (uid),
+  KEY operateresult (operateresult,createtime)
+) TYPE=MyISAM;
+
+DROP TABLE IF EXISTS pre_security_failedlog;
+CREATE TABLE pre_security_failedlog (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  reporttype char(20) NOT NULL,
+  tid int(10) unsigned NOT NULL DEFAULT '0',
+  pid int(10) unsigned NOT NULL DEFAULT '0',
+  uid int(10) unsigned NOT NULL DEFAULT '0',
+  failcount int(10) unsigned NOT NULL DEFAULT '0',
+  createtime int(10) unsigned NOT NULL DEFAULT '0',
+  posttime int(10) unsigned NOT NULL DEFAULT '0',
+  delreason char(255) NOT NULL,
+  scheduletime int(10) unsigned NOT NULL DEFAULT '0',
+  lastfailtime int(10) unsigned NOT NULL DEFAULT '0',
+  extra1 int(10) unsigned NOT NULL,
+  extra2 char(255) NOT NULL DEFAULT '0',
+  PRIMARY KEY (id),
+  KEY pid (pid),
+  KEY uid (uid)
 ) TYPE=MyISAM;
 

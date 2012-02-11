@@ -148,7 +148,7 @@
 						<!--{loop $grouplist $groupid $group}-->
 						<li>
 							<a href="forum.php?mod=group&fid=$groupid" title="$group[name]" class="avt"><img src="$group[icon]" alt="$group[name]" /></a>
-							<p><a href="forum.php?mod=group&fid=$groupid" title="$group[name]">$group[name]</a></p>
+							<p><!--{if $group['flevel'] == '-1'}-->(´ýÉóºË)<!--{/if}--><a href="forum.php?mod=group&fid=$groupid" title="$group[name]">$group[name]</a></p>
 						</li>
 						<!--{/loop}-->
 					</ul>

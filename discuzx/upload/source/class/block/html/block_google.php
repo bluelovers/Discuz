@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: block_google.php 6752 2010-03-25 08:47:54Z cnteacher $
+ *      $Id: block_google.php 25525 2011-11-14 04:39:11Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -52,6 +52,7 @@ class block_google extends commonblock_html {
 	}
 
 	function getdata($style, $parameter) {
+		$parameter = dhtmlspecialchars($this->cookparameter($parameter));
 		$return = '<script type="text/javascript">var google_host="'.$_SERVER['HTTP_HOST'].'",google_charset="'.CHARSET.'",google_client="'.$parameter['client'].'",google_hl="'.$parameter['lang'].'",google_lr="'.($parameter['lang'] ? 'lang_'.$parameter['lang'] : '').'";google_default_0="'.($parameter['default'] == 0 ? ' selected' : '').'";google_default_1="'.($parameter['default'] == 1 ? ' selected' : '').'";</script><script type="text/javascript" src="static/js/google.js"></script>';
 		return array('html' => $return, 'data' => null);
 	}

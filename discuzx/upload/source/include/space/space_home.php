@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_home.php 24305 2011-09-06 10:06:40Z zhangguosheng $
+ *      $Id: space_home.php 26752 2011-12-22 08:00:13Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -72,8 +72,8 @@ if(!IS_ROBOT) {
 		if($space['self'] && empty($start) && $_G['setting']['feedhotnum'] > 0 && ($_GET['view'] == 'we' || $_GET['view'] == 'all')) {
 			$hotlist_all = array();
 			$hotstarttime = $_G['timestamp'] - $_G['setting']['feedhotday']*3600*24;
-			$query = DB::query("SELECT * FROM ".DB::table('home_feed')." USE INDEX(hot) WHERE dateline>='$hotstarttime' ORDER BY hot DESC LIMIT 0,10");
-			while ($value = DB::fetch($query)) {
+			$query = C::t('home_feed')->fetch_all_by_hot($hotstarttime);
+			foreach ($query as $value) {
 				if($value['hot']>0 && ckfriend($value['uid'], $value['friend'], $value['target_ids'])) {
 					if(empty($hotlist)) {
 						$hotlist[$value['feedid']] = $value;
@@ -101,69 +101,69 @@ if(!IS_ROBOT) {
 	}
 
 	$need_count = true;
-	$wheresql = array('1');
+	$uids = array();
+	$hot = '';
 
 	if($_GET['view'] == 'all') {
 
 		if($_GET['order'] == 'dateline') {
 			$ordersql = "dateline DESC";
 			$f_index = '';
+			$findex = '';
 			$orderactives = array('dateline' => ' class="a"');
 		} else {
-			$wheresql['hot'] = "hot>='$minhot'";
+			$hot = $minhot;
 			$ordersql = "dateline DESC";
 			$f_index = '';
+			$findex = '';
 			$orderactives = array('hot' => ' class="a"');
 		}
 
 	} elseif($_GET['view'] == 'me') {
 
-		$wheresql['uid'] = "uid='$space[uid]'";
+		$uids = array($space['uid']);
 		$ordersql = "dateline DESC";
 		$f_index = '';
+		$findex = '';
 
 		$diymode = 1;
 		if($space['self'] && $_GET['from'] != 'space') $diymode = 0;
 
 	} elseif($_GET['view'] == 'app' && $_G['setting']['my_app_status']) {
 
-		if ($_G['gp_type'] == 'all') {
+		$uids = null;
+		if ($_GET['type'] == 'all') {
 
-			$wheresql = "1";
 			$ordersql = "dateline DESC";
 			$f_index = '';
+			$findex = '';
 
 		} else {
 
-			if(empty($space['feedfriend'])) $_G['gp_type'] = 'me';
+			if(empty($space['feedfriend'])) $_GET['type'] = 'me';
 
-			if($_G['gp_type'] == 'me') {
-				$wheresql = "uid='$_G[uid]'";
+			if($_GET['type'] == 'me') {
+				$uids = $_G['uid'];
 				$ordersql = "dateline DESC";
 				$f_index = '';
+				$findex = '';
 
 			} else {
-				$wheresql = "uid IN (0,$space[feedfriend])";
+				$uids = array_merge(explode(',', $space['feedfriend']), 0);
 				$ordersql = "dateline DESC";
 				$f_index = 'USE INDEX(dateline)';
-				$_G['gp_type'] = 'we';
+				$findex = 'dateline';
+				$_GET['type'] = 'we';
 				$_G['home_tpl_hidden_time'] = 1;
 			}
 		}
 
 		$icon = empty($_GET['icon'])?'':trim($_GET['icon']);
-		if($icon) {
-			$wheresql .= " AND icon='$icon'";
-		}
 		$multi = '';
 
 		$feed_list = $appfeed_list = $hiddenfeed_list = $filter_list = $hiddenfeed_num = $icon_num = array();
 		$count = $filtercount = 0;
-		$query = DB::query("SELECT * FROM ".DB::table('home_feed_app')." $f_index
-			WHERE $wheresql
-			ORDER BY $ordersql
-			LIMIT $start,$perpage");
-		while ($value = DB::fetch($query)) {
+		foreach(C::t('home_feed_app')->fetch_all_by_uid_icon($uids, $icon, $start, $perpage) as $value) {
 			$feed_list[$value['icon']][] = $value;
 			$count++;
 		}
@@ -183,7 +183,7 @@ if(!IS_ROBOT) {
 			}
 		}
 		$need_count = false;
-		$typeactives = array($_G['gp_type'] => ' class="a"');
+		$typeactives = array($_GET['type'] => ' class="a"');
 
 	} else {
 
@@ -192,31 +192,26 @@ if(!IS_ROBOT) {
 		if(empty($space['feedfriend'])) {
 			$need_count = false;
 		} else {
-			$wheresql['uid'] = "uid IN (0,$space[feedfriend])";
+			$uids = array_merge(explode(',', $space['feedfriend']), array(0));
 			$ordersql = "dateline DESC";
 			$f_index = 'USE INDEX(dateline)';
+			$findex = 'dateline';
 		}
 	}
 
 	$appid = empty($_GET['appid'])?0:intval($_GET['appid']);
-	if($appid) {
-		$wheresql['appid'] = "appid='$appid'";
-	}
 	$icon = empty($_GET['icon'])?'':trim($_GET['icon']);
-	if($icon) {
-		$wheresql['icon'] = "icon='$icon'";
-	}
 	$gid = !isset($_GET['gid'])?'-1':intval($_GET['gid']);
 	if($gid>=0) {
 		$fuids = array();
-		$query = DB::query("SELECT * FROM ".DB::table('home_friend')." WHERE uid='$_G[uid]' AND gid='$gid' ORDER BY num DESC LIMIT 0,100");
-		while ($value = DB::fetch($query)) {
+		$query = C::t('home_friend')->fetch_all_by_uid_gid($_G['uid'], $gid);
+		foreach($query as $value) {
 			$fuids[] = $value['fuid'];
 		}
 		if(empty($fuids)) {
 			$need_count = false;
 		} else {
-			$wheresql['uid'] = "uid IN (".dimplode($fuids).")";
+			$uids = $fuids;
 		}
 	}
 	$gidactives[$gid] = ' class="a"';
@@ -225,13 +220,11 @@ if(!IS_ROBOT) {
 	$multi = '';
 
 	if($need_count) {
-		$query = DB::query("SELECT * FROM ".DB::table('home_feed')." $f_index
-			WHERE ".implode(' AND ', $wheresql)."
-			ORDER BY $ordersql
-			LIMIT $start,$perpage");
+
+		$query = C::t('home_feed')->fetch_all_by_search(1, $uids, $icon, '', '', '', $hot, '', $start, $perpage, $findex, $appid);
 
 		if($_GET['view'] == 'me') {
-			while ($value = DB::fetch($query)) {
+			foreach ($query as $value) {
 				if(!isset($hotlist[$value['feedid']]) && !isset($hotlist_all[$value['feedid']]) && ckfriend($value['uid'], $value['friend'], $value['target_ids'])) {
 					$value = mkfeed($value);
 
@@ -251,7 +244,7 @@ if(!IS_ROBOT) {
 			$more_list = array();
 			$uid_feedcount = array();
 
-			while ($value = DB::fetch($query)) {
+			foreach($query as $value) {
 				if(!isset($hotlist[$value['feedid']]) && !isset($hotlist_all[$value['feedid']]) && ckfriend($value['uid'], $value['friend'], $value['target_ids'])) {
 					$value = mkfeed($value);
 					if(ckicon_uid($value)) {
@@ -328,13 +321,12 @@ if($space['self'] && empty($start)) {
 	if($isnewer) {
 
 		$friendlist = array();
-		$query = DB::query("SELECT * FROM ".DB::table('home_friend')." WHERE uid='$space[uid]'");
-		while ($value = DB::fetch($query)) {
+		$query = C::t('home_friend')->fetch_all($space['uid']);
+		foreach($query as $value) {
 			$friendlist[$value['fuid']] = 1;
 		}
 
-		$query = DB::query("SELECT * FROM ".DB::table('home_specialuser')." WHERE status='1' ORDER BY displayorder");
-		while ($value = DB::fetch($query)) {
+		foreach(C::t('home_specialuser')->fetch_all_by_status(1) as $value) {
 			if(empty($friendlist[$value['uid']])) {
 				$defaultusers[] = $value;
 				$oluids[] = $value['uid'];
@@ -346,15 +338,13 @@ if($space['self'] && empty($start)) {
 		space_merge($space, 'status');
 	}
 
-	$query = DB::query("SELECT * FROM ".DB::table('home_visitor')." WHERE uid='$space[uid]' ORDER BY dateline DESC LIMIT 0,12");
-	while ($value = DB::fetch($query)) {
+	foreach(C::t('home_visitor')->fetch_all_by_uid($space['uid'], 12) as $value) {
 		$visitorlist[$value['vuid']] = $value;
 		$oluids[] = $value['vuid'];
 	}
 
 	if($oluids) {
-		$query = DB::query("SELECT * FROM ".DB::table('common_session')." WHERE uid IN (".dimplode($oluids).")");
-		while ($value = DB::fetch($query)) {
+		foreach(C::app()->session->fetch_all_by_uid($oluids) as $value) {
 			if(!$value['invisible']) {
 				$ols[$value['uid']] = 1;
 			} elseif ($visitorlist[$value['uid']]) {
@@ -366,8 +356,7 @@ if($space['self'] && empty($start)) {
 	$oluids = array();
 	$olfcount = 0;
 	if($space['feedfriend']) {
-		$query = DB::query("SELECT * FROM ".DB::table('common_session')." WHERE uid IN ($space[feedfriend]) ORDER BY lastactivity DESC LIMIT 15");
-		while ($value = DB::fetch($query)) {
+		foreach(C::app()->session->fetch_all_by_uid(explode(',', $space['feedfriend']), 15) as $value) {
 			if($olfcount < 15 && !$value['invisible']) {
 				$olfriendlist[$value['uid']] = $value;
 				$ols[$value['uid']] = 1;
@@ -377,8 +366,10 @@ if($space['self'] && empty($start)) {
 		}
 	}
 	if($olfcount < 15) {
-		$query = DB::query("SELECT fuid AS uid, fusername AS username, num FROM ".DB::table('home_friend')." WHERE uid='$space[uid]' ORDER BY num DESC, dateline DESC LIMIT 0,32");
-		while ($value = DB::fetch($query)) {
+		$query = C::t('home_friend')->fetch_all_by_uid($space['uid'], 0, 32, true);
+		foreach($query as $value) {
+			$value['uid'] = $value['fuid'];
+			$value['username'] = $value['fusername'];
 			if(empty($oluids[$value['uid']])) {
 				$olfriendlist[$value['uid']] = $value;
 				$olfcount++;
@@ -388,34 +379,18 @@ if($space['self'] && empty($start)) {
 	}
 
 	if($space['feedfriend']) {
-		$birthdaycache = DB::fetch_first("SELECT variable, value, expiration FROM ".DB::table('forum_spacecache')." WHERE uid='$_G[uid]' AND variable='birthday'");
+		$birthdaycache = C::t('forum_spacecache')->fetch($_G['uid'], 'birthday');
 		if(empty($birthdaycache) || TIMESTAMP > $birthdaycache['expiration']) {
-			list($s_month, $s_day) = explode('-', dgmdate($_G['timestamp']-3600*24*3, 'n-j'));
-			list($n_month, $n_day) = explode('-', dgmdate($_G['timestamp'], 'n-j'));
-			list($e_month, $e_day) = explode('-', dgmdate($_G['timestamp']+3600*24*7, 'n-j'));
-			if($e_month == $s_month) {
-				$wheresql = "sf.birthmonth='$s_month' AND sf.birthday>='$s_day' AND sf.birthday<='$e_day'";
-			} else {
-				$wheresql = "(sf.birthmonth='$s_month' AND sf.birthday>='$s_day') OR (sf.birthmonth='$e_month' AND sf.birthday<='$e_day' AND sf.birthday>'0')";
-			}
+			$birthlist = C::t('common_member_profile')->fetch_all_will_birthday_by_uid($space['feedfriend']);
 
-			$query = DB::query("SELECT sf.uid,sf.birthyear,sf.birthmonth,sf.birthday,s.username
-				FROM ".DB::table('common_member_profile')." sf
-				LEFT JOIN ".DB::table('common_member')." s USING(uid)
-				WHERE (sf.uid IN ($space[feedfriend])) AND ($wheresql)");
-			while ($value = DB::fetch($query)) {
-				$value['istoday'] = 0;
-				if($value['birthmonth'] == $n_month && $value['birthday'] == $n_day) {
-					$value['istoday'] = 1;
-				}
-				$key = sprintf("%02d", $value['birthmonth']).sprintf("%02d", $value['birthday']);
-				$birthlist[$key][] = $value;
-				ksort($birthlist);
-			}
-
-			DB::query("REPLACE INTO ".DB::table('forum_spacecache')." (uid, variable, value, expiration) VALUES ('$_G[uid]', 'birthday', '".addslashes(serialize($birthlist))."', '".getexpiration()."')");
+			C::t('forum_spacecache')->insert(array(
+				'uid' => $_G['uid'],
+				'variable' => 'birthday',
+				'value' => serialize($birthlist),
+				'expiration' => getexpiration(),
+			), false, true);
 		} else {
-			$birthlist = unserialize($birthdaycache['value']);
+			$birthlist = dunserialize($birthdaycache['value']);
 		}
 	}
 
@@ -434,21 +409,16 @@ if($space['self'] && empty($start)) {
 		}
 	}
 } elseif(empty($_G['uid'])) {
-	$query = DB::query("SELECT * FROM ".DB::table('home_specialuser')." WHERE status='1' ORDER BY displayorder LIMIT 0,12");
-	while ($value = DB::fetch($query)) {
-		$defaultusers[] = $value;
-	}
+	$defaultusers = C::t('home_specialuser')->fetch_all_by_status(1, 12);
 
-	$query = DB::query("SELECT * FROM ".DB::table('home_show')." ORDER BY credit DESC LIMIT 0,12");
-	while ($value = DB::fetch($query)) {
+	$query = C::t('home_show')->fetch_all_by_credit(0, 12); //DB::query("SELECT * FROM ".DB::table('home_show')." ORDER BY credit DESC LIMIT 0,12");
+	foreach($query as $value) {
 		$showusers[] = $value;
 	}
 
-	$time = TIMESTAMP - (7 * 86400);
-	$query = DB::query("SELECT * FROM ".DB::table('common_member')." WHERE regdate>'$time' ORDER BY uid DESC LIMIT 0,12");
-	while ($value = DB::fetch($query)) {
+	foreach(C::t('common_member')->range(0, 12,'DESC') as $uid => $value) {
 		$value['regdate'] = dgmdate($value['regdate'], 'u', 9999, 'm-d');
-		$newusers[] = $value;
+		$newusers[$uid] = $value;
 	}
 }
 
@@ -462,8 +432,8 @@ if($_G['uid']) {
 	}
 }
 $actives = array($_GET['view'] => ' class="a"');
-if($_G['gp_from'] == 'space') {
-	if($_G['gp_do'] == 'home') {
+if($_GET['from'] == 'space') {
+	if($_GET['do'] == 'home') {
 		$navtitle = lang('space', 'sb_feed', array('who' => $space['username']));
 		$metakeywords = lang('space', 'sb_feed', array('who' => $space['username']));
 		$metadescription = lang('space', 'sb_feed', array('who' => $space['username']));

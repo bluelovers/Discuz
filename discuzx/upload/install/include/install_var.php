@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: install_var.php 23087 2011-06-17 02:55:20Z zhangguosheng $
+ *      $Id: install_var.php 27518 2012-02-03 03:39:06Z zhangguosheng $
  */
 
 if(!defined('IN_COMSENZ')) {
@@ -13,7 +13,7 @@ if(!defined('IN_COMSENZ')) {
 
 define('SOFT_NAME', 'Discuz!');
 
-define('INSTALL_LANG', 'TC_UTF8');
+define('INSTALL_LANG', 'SC_GBK');
 
 define('CONFIG', './config/config_global.php');
 define('CONFIG_UC', './config/config_ucenter.php');
@@ -23,8 +23,8 @@ $lockfile = ROOT_PATH.'./data/install.lock';
 
 @include ROOT_PATH.CONFIG;
 
-define('CHARSET', 'utf-8');
-define('DBCHARSET', 'utf8');
+define('CHARSET', 'gbk');
+define('DBCHARSET', 'gbk');
 
 define('ORIG_TABLEPRE', 'pre_');
 
@@ -68,7 +68,7 @@ $func_items = array('mysql_connect', 'fsockopen', 'gethostbyname', 'file_get_con
 $env_items = array
 (
 	'os' => array('c' => 'PHP_OS', 'r' => 'notset', 'b' => 'unix'),
-	'php' => array('c' => 'PHP_VERSION', 'r' => '4.3', 'b' => '5.0'),
+	'php' => array('c' => 'PHP_VERSION', 'r' => '5.1', 'b' => '5.3'),
 	'attachmentupload' => array('r' => 'notset', 'b' => '2M'),
 	'gdversion' => array('r' => '1.0', 'b' => '2.0'),
 	'diskspace' => array('r' => '10M', 'b' => 'notset'),
@@ -136,10 +136,6 @@ $form_db_init_items = array
 		'password' => array('type' => 'password', 'required' => 1, 'reg' => '/^.*$/'),
 		'password2' => array('type' => 'password', 'required' => 1, 'reg' => '/^.*$/'),
 		'email' => array('type' => 'text', 'required' => 1, 'reg' => '/@/', 'value' => array('type' => 'var', 'var' => 'adminemail')),
-		'testdata' => array('type' => 'checkbox', 'required' => 0, 'reg' => '/^1$/', 'value' => array('type' => 'constant', 'var' => '1')),
-		'portalstatus' => array('type' => 'checkbox', 'required' => 0, 'reg' => '/^1$/', 'value' => array('type' => 'constant', 'var' => '1')),
-		'homestatus' => array('type' => 'checkbox', 'required' => 0, 'reg' => '/^1$/', 'value' => array('type' => 'constant', 'var' => '1')),
-		'groupstatus' => array('type' => 'checkbox', 'required' => 0, 'reg' => '/^1$/', 'value' => array('type' => 'constant', 'var' => '1')),
 	)
 );
 
@@ -149,7 +145,7 @@ $serialize_sql_setting = array (
     1 =>
     array (
       'img' => '',
-      'title' => 'å¨æœ›',
+      'title' => 'ÍþÍû',
       'unit' => '',
       'ratio' => 0,
       'available' => '1',
@@ -160,7 +156,7 @@ $serialize_sql_setting = array (
     2 =>
     array (
       'img' => '',
-      'title' => 'é‡‘éŒ¢',
+      'title' => '½ðÇ®',
       'unit' => '',
       'ratio' => 0,
       'available' => '1',
@@ -171,7 +167,7 @@ $serialize_sql_setting = array (
     3 =>
     array (
       'img' => '',
-      'title' => 'è²¢ç»',
+      'title' => '¹±Ï×',
       'unit' => '',
       'ratio' => 0,
       'available' => '1',
@@ -237,16 +233,16 @@ $serialize_sql_setting = array (
   ),
   'postnocustom' =>
   array (
-    0 => 'æ¨“ä¸»',
-    1 => 'æ²™ç™¼',
-    2 => 'æ¿å‡³',
-    3 => 'åœ°æ¿',
+    0 => 'Â¥Ö÷',
+    1 => 'É³·¢',
+    2 => '°åµÊ',
+    3 => 'µØ°å',
   ),
   'recommendthread' =>
   array (
     'status' => '0',
-    'addtext' => 'æ”¯æŒ',
-    'subtracttext' => 'åå°',
+    'addtext' => 'Ö§³Ö',
+    'subtracttext' => '·´¶Ô',
     'defaultshow' => '1',
     'daycount' => '0',
     'ownthread' => '0',
@@ -254,34 +250,34 @@ $serialize_sql_setting = array (
   ),
   'seotitle' =>
   array (
-    'portal' => 'é–€æˆ¶',
-    'forum' => 'è«–å£‡',
-    'group' => 'ç¾¤çµ„',
-    'home' => 'å®¶åœ’',
-    'userapp' => 'æ‡‰ç”¨',
+    'portal' => 'ÃÅ»§',
+    'forum' => 'ÂÛÌ³',
+    'group' => 'Èº×é',
+    'home' => '¼ÒÔ°',
+    'userapp' => 'Ó¦ÓÃ',
   ),
   'activityfield' =>
   array (
-    'realname' => 'çœŸå¯¦å§“å',
-    'mobile' => 'æ‰‹æ©Ÿ',
-    'qq' => 'QQè™Ÿ',
+    'realname' => 'ÕæÊµÐÕÃû',
+    'mobile' => 'ÊÖ»ú',
+    'qq' => 'QQºÅ',
   ),
   'article_tags' =>
   array (
-    1 => 'åŽŸå‰µ',
-    2 => 'ç†±é»ž',
-    3 => 'çµ„åœ–',
-    4 => 'çˆ†æ–™',
-    5 => 'é ­æ¢',
-    6 => 'å¹»ç‡ˆ',
-    7 => 'æ»¾å‹•',
-    8 => 'æŽ¨è–¦',
+    1 => 'Ô­´´',
+    2 => 'ÈÈµã',
+    3 => '×éÍ¼',
+    4 => '±¬ÁÏ',
+    5 => 'Í·Ìõ',
+    6 => '»ÃµÆ',
+    7 => '¹ö¶¯',
+    8 => 'ÍÆ¼ö',
   ),
   'verify' =>
   array (
     6 =>
     array (
-      'title' => 'å¯¦åèªè­‰',
+      'title' => 'ÊµÃûÈÏÖ¤',
       'available' => '0',
       'showicon' => '0',
       'viewrealname' => '0',
@@ -314,7 +310,7 @@ $serialize_sql_setting = array (
     ),
     7 =>
     array (
-      'title' => 'è¦–é »èªè­‰',
+      'title' => 'ÊÓÆµÈÏÖ¤',
       'available' => '0',
       'showicon' => '0',
       'viewvideophoto' => '0',
@@ -323,7 +319,7 @@ $serialize_sql_setting = array (
   ),
   'focus' =>
   array (
-    'title' => 'ç«™é•·æŽ¨è–¦',
+    'title' => 'Õ¾³¤ÍÆ¼ö',
     'data' =>
     array (
     ),
@@ -335,7 +331,7 @@ $serialize_sql_setting = array (
     array (
       'available' => 1,
       'displayorder' => 0,
-      'title' => 'åŸºæœ¬è³‡æ–™',
+      'title' => '»ù±¾×ÊÁÏ',
       'field' =>
       array (
         'realname' => 'realname',
@@ -359,7 +355,7 @@ $serialize_sql_setting = array (
     ),
     'contact' =>
     array (
-      'title' => 'è¯ç¹«æ–¹å¼',
+      'title' => 'ÁªÏµ·½Ê½',
       'available' => '1',
       'displayorder' => '1',
       'field' =>
@@ -377,7 +373,7 @@ $serialize_sql_setting = array (
     array (
       'available' => 1,
       'displayorder' => 2,
-      'title' => 'æ•™è‚²æƒ…æ³',
+      'title' => '½ÌÓýÇé¿ö',
       'field' =>
       array (
         'graduateschool' => 'graduateschool',
@@ -388,7 +384,7 @@ $serialize_sql_setting = array (
     array (
       'available' => 1,
       'displayorder' => 3,
-      'title' => 'å·¥ä½œæƒ…æ³',
+      'title' => '¹¤×÷Çé¿ö',
       'field' =>
       array (
         'occupation' => 'occupation',
@@ -399,7 +395,7 @@ $serialize_sql_setting = array (
     ),
     'info' =>
     array (
-      'title' => 'å€‹äººä¿¡æ¯',
+      'title' => '¸öÈËÐÅÏ¢',
       'available' => '1',
       'displayorder' => '4',
       'field' =>

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_pm.php 21555 2011-03-31 06:04:49Z svn_project_zhangjie $
+ *      $Id: space_pm.php 26685 2011-12-20 02:33:07Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -14,6 +14,7 @@ if(!defined('IN_DISCUZ')) {
 loaducenter();
 
 $list = array();
+$_G['disabledwidthauto'] = 0;
 
 $plid = empty($_GET['plid'])?0:intval($_GET['plid']);
 $daterange = empty($_GET['daterange'])?0:intval($_GET['daterange']);
@@ -30,9 +31,9 @@ if($_GET['subop'] == 'view') {
 		$chatpmmember = uc_pm_chatpmmemberlist($_G['uid'], $plid);
 		if(!empty($chatpmmember)) {
 			$authorid = $founderuid = $chatpmmember['author'];
-			$query = DB::query("SELECT m.uid, m.username, mfh.recentnote FROM ".DB::table('common_member')." m LEFT JOIN ".DB::table('common_member_field_home')." mfh ON m.uid=mfh.uid WHERE m.uid IN (".dimplode($chatpmmember['member']).")");
-			while($member = DB::fetch($query)) {
-				$chatpmmemberlist[$member['uid']] = $member;
+			$chatpmmemberlist = C::t('common_member')->fetch_all($chatpmmember['member']);
+			foreach(C::t('common_member_field_home')->fetch_all($chatpmmember['member']) as $uid => $member) {
+				$chatpmmemberlist[$uid] = array_merge($member, $chatpmmemberlist[$uid]);
 			}
 		}
 		require_once libfile('function/friend');
@@ -48,7 +49,9 @@ if($_GET['subop'] == 'view') {
 			}
 			$perpage = mob_perpage($perpage);
 			if(!$daterange) {
-				$tousername = DB::result_first("SELECT username FROM ".DB::table('common_member')." WHERE uid='$touid'");
+				$member = getuserbyuid($touid);
+				$tousername = $member['username'];
+				unset($member);
 				$count = uc_pm_view_num($_G['uid'], $touid, 0);
 				if(!$page) {
 					$page = ceil($count/$perpage);
@@ -76,13 +79,12 @@ if($_GET['subop'] == 'view') {
 				$chatpmmember = uc_pm_chatpmmemberlist($_G['uid'], $plid);
 				if(!empty($chatpmmember)) {
 					$authorid = $founderuid = $chatpmmember['author'];
-					$query = DB::query("SELECT m.uid, m.username, mfh.recentnote FROM ".DB::table('common_member')." m LEFT JOIN ".DB::table('common_member_field_home')." mfh ON m.uid=mfh.uid WHERE m.uid IN (".dimplode($chatpmmember['member']).")");
-					while($member = DB::fetch($query)) {
-						$chatpmmemberlist[$member['uid']] = $member;
+					$chatpmmemberlist = C::t('common_member')->fetch_all($chatpmmember['member']);
+					foreach(C::t('common_member_field_home')->fetch_all($chatpmmember['member']) as $uid => $member) {
+						$chatpmmemberlist[$uid] = array_merge($member, $chatpmmemberlist[$uid]);
 					}
-					$query = DB::query("SELECT * FROM ".DB::table('common_session')." WHERE uid IN (".dimplode($chatpmmember['member']).")");
-					while ($value = DB::fetch($query)) {
-						if(!$value['magichidden'] && !$value['invisible']) {
+					foreach(C::app()->session->fetch_all_by_uid($chatpmmember['member']) as $value) {
+						if(!$value['invisible']) {
 							$ols[$value['uid']] = $value['lastactivity'];
 						}
 					}
@@ -101,13 +103,15 @@ if($_GET['subop'] == 'view') {
 
 } elseif($_GET['subop'] == 'viewg') {
 
-	$grouppm = DB::fetch_first("SELECT mgp.status, gp.* FROM ".DB::table("common_grouppm")." gp
-		INNER JOIN ".DB::table('common_member_grouppm')." mgp ON gp.id=mgp.gpmid WHERE gp.id='$_G[gp_pmid]' AND mgp.uid='$_G[uid]' AND mgp.status>='0' ORDER BY gp.dateline DESC");
+	$grouppm = C::t('common_grouppm')->fetch($_GET['pmid']);
+	if(!$grouppm) {
+		$grouppm = array_merge((array)C::t('common_member_grouppm')->fetch($_G['uid'], $_GET['pmid']), $grouppm);
+	}
 	if($grouppm) {
 		$grouppm['numbers'] = $grouppm['numbers'] - 1;
 	}
 	if(!$grouppm['status']) {
-		DB::update('common_member_grouppm', array('status' => 1, 'dateline' => TIMESTAMP), "gpmid='$_G[gp_pmid]' AND uid='$_G[uid]'");
+		C::t('common_member_grouppm')->update($_G['uid'], $_GET['pmid'], array('status' => 1, 'dateline' => TIMESTAMP));
 	}
 	$actives['announcepm'] = ' class="a"';
 
@@ -133,18 +137,19 @@ if($_GET['subop'] == 'view') {
 	if($page<1) $page = 1;
 
 	$grouppms = $gpmids = $gpmstatus = array();
-	$newpm = 0;
+	$newpm = $newpmcount = 0;
 
-	if($filter == 'privatepm' && $page == 1 || $filter == 'announcepm') {
-		$status = $filter == 'announcepm' ? "`status`>='0'" : "`status`='0'";
-		$query = DB::query("SELECT gpmid, status FROM ".DB::table("common_member_grouppm")." WHERE uid='$_G[uid]' AND $status");
-		while($gpuser = DB::fetch($query)) {
-			$gpmids[] = $gpuser['gpmid'];
-			$gpmstatus[$gpuser['gpmid']] = $gpuser['status'];
+	if($filter == 'privatepm' && $page == 1 || $filter == 'announcepm' || $filter == 'newpm') {
+		$announcepm  = 0;
+		foreach(C::t('common_member_grouppm')->fetch_all_by_uid($_G['uid'], $filter == 'announcepm' ? 1 : 0) as $gpmid => $gpuser) {
+			$gpmstatus[$gpmid] = $gpuser['status'];
+			if($gpuser['status'] == 0) {
+				$announcepm ++;
+			}
 		}
+		$gpmids = array_keys($gpmstatus);
 		if($gpmids) {
-			$query = DB::query("SELECT * FROM ".DB::table("common_grouppm")." WHERE id IN (".dimplode($gpmids).") ORDER BY id DESC");
-			while($grouppm = DB::fetch($query)) {
+			foreach(C::t('common_grouppm')->fetch_all_by_id_authorid($gpmids) as $grouppm) {
 				$grouppm['message'] = cutstr(strip_tags($grouppm['message']), 100, '');
 				$grouppms[] = $grouppm;
 			}
@@ -157,13 +162,13 @@ if($_GET['subop'] == 'view') {
 		$list = $result['data'];
 	}
 
-	if($filter == 'privatepm' && $page == 1) {
+	if($filter == 'privatepm' && $page == 1 || $filter == 'newpm') {
 		$newpmarr = uc_pm_checknew($_G['uid'], 1);
 		$newpm = $newpmarr['newpm'];
 	}
-
+	$newpmcount = $newpm + $announcepm;
 	if($_G['member']['newpm']) {
-		DB::update('common_member', array('newpm' => 0), array('uid' => $_G['uid']));
+		C::t('common_member')->update($_G['uid'], array('newpm' => 0));
 		uc_pm_ignore($_G['uid']);
 	}
 	$multi = multi($count, $perpage, $page, "home.php?mod=space&do=pm&filter=$filter");

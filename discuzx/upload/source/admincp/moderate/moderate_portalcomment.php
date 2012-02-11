@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: moderate_portalcomment.php 24018 2011-08-22 02:28:39Z svn_project_zhangjie $
+ *      $Id: moderate_portalcomment.php 25246 2011-11-02 03:34:53Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -21,16 +21,16 @@ if($operation == 'articlecomments') {
 	$tablename = 'portal_topic';
 	$mod = 'topic';
 }
-if(!submitcheck('modsubmit') && !$_G['gp_fast']) {
+if(!submitcheck('modsubmit') && !$_GET['fast']) {
 
 	shownav('topic', $lang['moderate_articlecomments']);
 	showsubmenu('nav_moderate_articlecomments', $submenu);
 
-	$select[$_G['gp_tpp']] = $_G['gp_tpp'] ? "selected='selected'" : '';
+	$select[$_GET['tpp']] = $_GET['tpp'] ? "selected='selected'" : '';
 	$tpp_options = "<option value='20' $select[20]>20</option><option value='50' $select[50]>50</option><option value='100' $select[100]>100</option>";
-	$tpp = !empty($_G['gp_tpp']) ? $_G['gp_tpp'] : '20';
+	$tpp = !empty($_GET['tpp']) ? $_GET['tpp'] : '20';
 	$start_limit = ($page - 1) * $ppp;
-	$dateline = $_G['gp_dateline'] ? $_G['gp_dateline'] : '604800';
+	$dateline = $_GET['dateline'] ? $_GET['dateline'] : '604800';
 	$dateline_options = '';
 	foreach(array('all', '604800', '2592000', '7776000') as $v) {
 		$selected = '';
@@ -42,10 +42,10 @@ if(!submitcheck('modsubmit') && !$_G['gp_fast']) {
 	$cat_select = '';
 	if($operation == 'articlecomments') {
 		$cat_select = '<option value="">'.$lang['all'].'</option>';
-		$query = DB::query("SELECT catid, catname FROM ".DB::table('portal_category'));
-		while($cat = DB::fetch($query)) {
+		loadcache('portalcategory');
+		foreach($_G['cache']['portalcategory'] as $cat) {
 			$selected = '';
-			if($cat['catid'] == $_G['gp_catid']) {
+			if($cat['catid'] == $_GET['catid']) {
 				$selected = 'selected="selected"';
 			}
 			$cat_select .= "<option value=\"$cat[catid]\" $selected>$cat[catname]</option>";
@@ -54,7 +54,7 @@ if(!submitcheck('modsubmit') && !$_G['gp_fast']) {
 	}
 
 	$articlecomment_status = 1;
-	if($_G['gp_filter'] == 'ignore') {
+	if($_GET['filter'] == 'ignore') {
 		$articlecomment_status = 2;
 	}
 	showformheader("moderate&operation=$operation");
@@ -63,16 +63,16 @@ if(!submitcheck('modsubmit') && !$_G['gp_fast']) {
 	if($operation == 'articlecomments') {
 		showtablerow('', array('width="60"', 'width="160"', 'width="60"', 'width="200"', 'width="60"'),
 			array(
-				cplang('username'), "<input size=\"15\" name=\"username\" type=\"text\" value=\"$_G[gp_username]\" />",
+				cplang('username'), "<input size=\"15\" name=\"username\" type=\"text\" value=\"$_GET[username]\" />",
 				cplang('moderate_article_category'), $cat_select,
-				cplang('moderate_content_keyword'), "<input size=\"15\" name=\"keyword\" type=\"text\" value=\"$_G[gp_keyword]\" />",
+				cplang('moderate_content_keyword'), "<input size=\"15\" name=\"keyword\" type=\"text\" value=\"$_GET[keyword]\" />",
 			)
 		);
 	} else {
 		showtablerow('', array('width="60"', 'width="160"', 'width="60"'),
 			array(
-				cplang('username'), "<input size=\"15\" name=\"username\" type=\"text\" value=\"$_G[gp_username]\" />",
-				cplang('moderate_content_keyword'), "<input size=\"15\" name=\"keyword\" type=\"text\" value=\"$_G[gp_keyword]\" />",
+				cplang('username'), "<input size=\"15\" name=\"username\" type=\"text\" value=\"$_GET[username]\" />",
+				cplang('moderate_content_keyword'), "<input size=\"15\" name=\"keyword\" type=\"text\" value=\"$_GET[keyword]\" />",
 			)
 		);
 	}
@@ -92,47 +92,22 @@ if(!submitcheck('modsubmit') && !$_G['gp_fast']) {
 	showtablefooter();
 
 	$pagetmp = $page;
-	$sqlwhere = "";
-	if(!empty($_G['gp_catid']) && $idtype == 'aid') {
-		$sqlwhere .= " AND a.catid='{$_G['gp_catid']}'";
-	}
-	if(!empty($_G['gp_username'])) {
-		$sqlwhere .= " AND c.username='{$_G['gp_username']}'";
-	}
-	if($dateline != 'all') {
-		$sqlwhere .= " AND c.dateline>'".(TIMESTAMP - $dateline)."'";
-	}
-	if(!empty($_G['gp_keyword'])) {
-		$sqlwhere .= " AND c.message LIKE '%{$_G['gp_keyword']}%'";
-	}
-	$sqlwhere .=  "AND c.idtype='$idtype'";
-	$modcount = DB::result_first("SELECT COUNT(*)
-		FROM ".DB::table('common_moderate')." m
-		LEFT JOIN ".DB::table('portal_comment')." c ON c.cid=m.id
-		LEFT JOIN ".DB::table($tablename)." a ON a.$idtype=c.id
-		WHERE m.idtype='{$idtype}_cid' AND m.status='$moderatestatus' $sqlwhere");
+	$modcount = C::t('common_moderate')->fetch_all_for_portalcomment($idtype, $tablename, $moderatestatus, $_GET['catid'], $_GET['username'], $dateline, 1, $_GET['keyword']);
 	do {
 		$start_limit = ($pagetmp - 1) * $tpp;
-		$query = DB::query("SELECT c.cid, c.uid, c.username, c.id, c.postip, c.dateline, c.message, a.title
-			FROM ".DB::table('common_moderate')." m
-			LEFT JOIN ".DB::table('portal_comment')." c ON c.cid=m.id
-			LEFT JOIN ".DB::table($tablename)." a ON a.$idtype=c.id
-			WHERE m.idtype='{$idtype}_cid' AND m.status='$moderatestatus' $sqlwhere
-			ORDER BY m.dateline DESC
-			LIMIT $start_limit, $tpp");
-			$pagetmp = $pagetmp - 1;
-	} while($pagetmp > 0 && DB::num_rows($query) == 0);
+		$query  = C::t('common_moderate')->fetch_all_for_portalcomment($idtype, $tablename, $moderatestatus, $_GET['catid'], $_GET['username'], $dateline, 0, $_GET['keyword'], $start_limit, $tpp);
+		$pagetmp = $pagetmp - 1;
+	} while($pagetmp > 0 && count($query) == 0);
 	$page = $pagetmp + 1;
 	$multipage = multi($modcount, $tpp, $page, ADMINSCRIPT."?action=moderate&operation=$operation&filter=$filter&modfid=$modfid&ppp=$tpp&showcensor=$showcensor");
 
 	echo '<p class="margintop marginbot"><a href="javascript:;" onclick="expandall();">'.cplang('moderate_all_expand').'</a> <a href="javascript:;" onclick="foldall();">'.cplang('moderate_all_fold').'</a></p>';
 
 	showtableheader();
-	require_once libfile('class/censor');
 	$censor = & discuz_censor::instance();
 	$censor->highlight = '#FF0000';
 	require_once libfile('function/misc');
-	while($articlecomment = DB::fetch($query)) {
+	foreach($query as $articlecomment) {
 		$articlecomment['dateline'] = dgmdate($articlecomment['dateline']);
 		if($showcensor) {
 			$censor->check($articlecomment['title']);
@@ -179,27 +154,24 @@ if(!submitcheck('modsubmit') && !$_G['gp_fast']) {
 		}
 	}
 
-	if($validate_cids = dimplode($moderation['validate'])) {
-		DB::update('portal_comment', array('status' => '0'), "cid IN ($validate_cids)");
-		$validates = DB::affected_rows();
+	if($moderation['validate']) {
+		$validates = C::t('portal_comment')->update($moderation['validate'], array('status' => '0'));
 		updatemoderate($idtype.'_cid', $moderation['validate'], 2);
 	}
-	if($delete_cids = dimplode($moderation['delete'])) {
-		DB::delete('portal_comment', "cid IN ($delete_cids)");
-		$deletes = DB::affected_rows();
+	if($moderation['delete']) {
+		$validates = C::t('portal_comment')->delete($moderation['delete']);
 		updatemoderate($idtype.'_cid', $moderation['delete'], 2);
 	}
-	if($ignore_cids = dimplode($moderation['ignore'])) {
-		DB::update('portal_comment', array('status' => '2'), "cid IN ($ignore_cids)");
-		$ignores = DB::affected_rows();
+	if($moderation['ignore']) {
+		$validates = C::t('portal_comment')->update($ignore_cids, array('status' => '2'));
 		updatemoderate($idtype.'_cid', $moderation['ignore'], 1);
 	}
 
-	if($_G['gp_fast']) {
-		echo callback_js($_G['gp_cid']);
+	if($_GET['fast']) {
+		echo callback_js($_GET['cid']);
 		exit;
 	} else {
-		cpmsg('moderate_'.$operation.'_succeed', "action=moderate&operation=$operation&page=$page&filter=$filter&dateline={$_G['gp_dateline']}&username={$_G['gp_username']}&keyword={$_G['gp_keyword']}&catid={$_G['gp_catid']}&tpp={$_G['gp_tpp']}&showcensor=$showcensor", 'succeed', array('validates' => $validates, 'ignores' => $ignores, 'deletes' => $deletes));
+		cpmsg('moderate_'.$operation.'_succeed', "action=moderate&operation=$operation&page=$page&filter=$filter&dateline={$_GET['dateline']}&username={$_GET['username']}&keyword={$_GET['keyword']}&catid={$_GET['catid']}&tpp={$_GET['tpp']}&showcensor=$showcensor", 'succeed', array('validates' => $validates, 'ignores' => $ignores, 'deletes' => $deletes));
 	}
 
 }

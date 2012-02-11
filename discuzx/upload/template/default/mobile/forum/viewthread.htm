@@ -33,8 +33,8 @@
             <!--{if $threadsorts && $_G['forum_thread']['sortid']}-->
                 <a href="forum.php?mod=forumdisplay&fid=$_G[fid]&filter=sortid&sortid=$_G[forum_thread][sortid]" >[{$_G['forum']['threadsorts']['types'][$_G['forum_thread']['sortid']]}]</a>
             <!--{/if}-->
-            
-            <a href="forum.php?mod=viewthread&tid=$_G[tid]&extra=$_G[gp_extra]" id="thread_subject" >$_G[forum_thread][subject]</a>
+
+            <a href="forum.php?mod=viewthread&tid=$_G[tid]&extra=$_GET[extra]" id="thread_subject" >$_G[forum_thread][subject]</a>
             <!--{if $_G['forum_thread'][displayorder] == -2}--> <span class="xg1">({lang moderating})</span>
             <!--{elseif $_G['forum_thread'][displayorder] == -3}--> <span class="xg1">({lang have_ignored})</span>
             <!--{elseif $_G['forum_thread'][displayorder] == -4}--> <span class="xg1">({lang draft})</span>
@@ -79,7 +79,7 @@
                 <!--{if !$_G[setting][mobile][mobilesimpletype]}-->
                     <!--{if $post['authorid'] && !$post['anonymous']}-->
                         <!--{if $post['invisible'] == 0}-->
-                            <!--{if !IS_ROBOT && !$_G['gp_authorid'] && !$_G['forum_thread']['archiveid']}-->
+                            <!--{if !IS_ROBOT && !$_GET['authorid'] && !$_G['forum_thread']['archiveid']}-->
                                 <a href="forum.php?mod=viewthread&tid=$post[tid]&page=$page&authorid=$post[authorid]" rel="nofollow" class="xg1">{lang thread_show_author}</a>
                             <!--{elseif !$_G['forum_thread']['archiveid']}-->
                                 <a href="forum.php?mod=viewthread&tid=$post[tid]&page=$page" rel="nofollow" class="xg1">{lang thread_show_all}</a>
@@ -123,7 +123,7 @@
                         <!--{if $_G['forum_thread']['price'] > 0 && $_G['forum_thread']['special'] == 0}-->
                             {lang pay_threads}: <strong>$_G[forum_thread][price] {$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][1]][unit]}{$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][1]][title]} </strong> <a href="forum.php?mod=misc&action=viewpayments&tid=$_G[tid]" >{lang pay_view}</a>
                         <!--{/if}-->
-                        
+
                         <!--{if $post['first'] && $threadsort && $threadsortshow}-->
                         	<!--{if $threadsortshow['optionlist'] && !($post['status'] & 1) && !$_G['forum_threadpay']}-->
                                 <!--{if $threadsortshow['optionlist'] == 'expire'}-->
@@ -140,8 +140,8 @@
                                 <!--{/if}-->
                             <!--{/if}-->
                         <!--{/if}-->
-                        
-                        
+
+
                         <!--{if $post['first']}-->
                             <!--{if !$_G[forum_thread][special]}-->
                                 <div id="postmessage_$post[pid]" class="postmessage">$post[message]</div>
@@ -164,7 +164,7 @@
                         <!--{else}-->
                             <div id="postmessage_$post[pid]" class="postmessage">$post[message]</div>
                         <!--{/if}-->
-                        
+
                         <!--{if $post['attachment']}-->
                         	<div class="warning">
                             {lang attachment}: <em><!--{if $_G['uid']}-->{lang attach_nopermission}<!--{else}-->{lang attach_nopermission_login}<!--{/if}--></em>
@@ -193,7 +193,7 @@
 		    <!--{/block}-->
 		    <!--{block modeditpost}-->
 				<!--{if (($_G['forum']['ismoderator'] && $_G['group']['alloweditpost'] && (!in_array($post['adminid'], array(1, 2, 3)) || $_G['adminid'] <= $post['adminid'])) || ($_G['forum']['alloweditpost'] && $_G['uid'] && $post['authorid'] == $_G['uid']))}-->
-				<!--{if $_G['forum_thread']['special'] != 2 || $_G['forum_thread']['special'] != 4 || !$post['first']}--><a class="editp" href="forum.php?mod=post&action=edit&fid=$_G[fid]&tid=$_G[tid]&pid=$post[pid]<!--{if $_G[forum_thread][sortid]}--><!--{if $post[first]}-->&sortid={$_G[forum_thread][sortid]}<!--{/if}--><!--{/if}-->{if !empty($_G[gp_modthreadkey])}&modthreadkey=$_G[gp_modthreadkey]{/if}&page=$page">{lang edit}</a><!--{/if}-->
+				<!--{if $_G['forum_thread']['special'] != 2 || $_G['forum_thread']['special'] != 4 || !$post['first']}--><a class="editp" href="forum.php?mod=post&action=edit&fid=$_G[fid]&tid=$_G[tid]&pid=$post[pid]<!--{if $_G[forum_thread][sortid]}--><!--{if $post[first]}-->&sortid={$_G[forum_thread][sortid]}<!--{/if}--><!--{/if}-->{if !empty($_GET[modthreadkey])}&modthreadkey=$_GET[modthreadkey]{/if}&page=$page">{lang edit}</a><!--{/if}-->
 				<!--{/if}-->
 		    <!--{/block}-->
 		    <!--{block modmanage}-->

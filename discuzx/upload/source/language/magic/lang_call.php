@@ -4,14 +4,18 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_call.php 7828 2010-04-14 02:11:48Z monkey $
+ *      $Id: lang_call.php 27449 2012-02-01 05:32:35Z zhangguosheng $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 $lang = array
 (
-	'call_name' => 'é»žåå¡',
-	'call_desc' => 'ç™¼é€šçŸ¥çµ¦è‡ªå·±çš„å¥½å‹ï¼Œè®“ä»–å€‘ä¾†æŸ¥çœ‹è‡ªå·±çš„æ—¥èªŒ',
-	'call_info' => 'ç™¼é€šçŸ¥çµ¦è‡ªå·±çš„å¥½å‹ï¼Œè®“ä»–å€‘ä¾†æŸ¥çœ‹è‡ªå·±çš„æ—¥èªŒ',
+	'call_name' => 'µãÃû¿¨',
+	'call_desc' => '·¢Í¨Öª¸ø×Ô¼ºµÄºÃÓÑ£¬ÈÃËûÃÇÀ´²é¿´×Ô¼ºµÄÈÕÖ¾',
+	'call_info' => '·¢Í¨Öª¸ø×Ô¼ºµÄºÃÓÑ£¬ÈÃËûÃÇÀ´²é¿´×Ô¼ºµÄÈÕÖ¾',
 );
 
 ?>

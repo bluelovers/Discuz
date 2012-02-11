@@ -1,8 +1,8 @@
 /*
-	[Discuz!] (C)2001-2009 Comsenz Inc.
+	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: google.js 17172 2010-09-25 08:17:48Z zhangguosheng $
+	$Id: google.js 23838 2011-08-11 06:51:58Z monkey $
 */
 
 document.writeln('<script type="text/javascript">');
@@ -27,8 +27,8 @@ document.writeln('<input type="hidden" name="channel" value="search" />');
 document.write('<div onclick="javascript:submitFormWithChannel(\'logo\')" style="cursor:pointer;float: left;width:70px;height:23px;background: url(' + STATICURL + 'image/common/Google_small.png) !important;background: none;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src=\'' + STATICURL+ 'image/common/Google_small.png\', sizingMethod=\'scale\')"><img src="' + STATICURL + 'image/common/none.gif" border="0" alt="Google" /></div>');
 document.writeln('&nbsp;&nbsp;<input type="text" class="txt" size="20" name="q" id="q" maxlength="255" value=""></input>');
 document.writeln('<select name="site">');
-document.writeln('<option value="0"' + google_default_0 + '>ç¶²é æœç´¢</option>');
-document.writeln('<option value="1"' + google_default_1 + '>ç«™å…§æœç´¢</option>');
+document.writeln('<option value="0"' + google_default_0 + '>ÍøÒ³ËÑË÷</option>');
+document.writeln('<option value="1"' + google_default_1 + '>Õ¾ÄÚËÑË÷</option>');
 document.writeln('</select>');
-document.writeln('&nbsp;<button type="submit" name="sa" value="true">æœç´¢</button>');
+document.writeln('&nbsp;<button type="submit" name="sa" value="true">ËÑË÷</button>');
 document.writeln('</form>');

@@ -1,7 +1,6 @@
 <!--{template common/header}-->
-<!--{if empty($_G['gp_infloat'])}-->
+<!--{if empty($_GET['infloat'])}-->
 <div id="pt" class="bm cl">
-	<!--{subtemplate common/simplesearchform}-->
 	<div class="z"><a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em> $navigation</div>
 </div>
 <div id="ct" class="wp cl">
@@ -9,18 +8,18 @@
 		<div class="bm bw0">
 <!--{/if}-->
 
-<form id="payform" method="post" autocomplete="off" action="forum.php?mod=misc&action=pay&paysubmit=yes&infloat=yes{if !empty($_G['gp_from'])}&from=$_G['gp_from']{/if}"{if !empty($_G['gp_infloat'])} onsubmit="ajaxpost('payform', 'return_$_G['gp_handlekey']', 'return_$_G['gp_handlekey']', 'onerror');return false;"{/if}>
+<form id="payform" method="post" autocomplete="off" action="forum.php?mod=misc&action=pay&paysubmit=yes&infloat=yes{if !empty($_GET['from'])}&from=$_GET['from']{/if}"{if !empty($_GET['infloat'])} onsubmit="ajaxpost('payform', 'return_$_GET['handlekey']', 'return_$_GET['handlekey']', 'onerror');return false;"{/if}>
 	<div class="f_c">
 		<h3 class="flb">
-			<em id="return_$_G['gp_handlekey']">{lang pay}</em>
+			<em id="return_$_GET['handlekey']">{lang pay}</em>
 			<span>
-				<!--{if !empty($_G['gp_infloat'])}--><a href="javascript:;" class="flbc" onclick="hideWindow('$_G['gp_handlekey']')" title="{lang close}">{lang close}</a><!--{/if}-->
+				<!--{if !empty($_GET['infloat'])}--><a href="javascript:;" class="flbc" onclick="hideWindow('$_GET['handlekey']')" title="{lang close}">{lang close}</a><!--{/if}-->
 			</span>
 		</h3>
 		<input type="hidden" name="formhash" value="{FORMHASH}" />
 		<input type="hidden" name="referer" value="{echo dreferer()}" />
 		<input type="hidden" name="tid" value="$_G[tid]" />
-		<!--{if !empty($_G['gp_infloat'])}--><input type="hidden" name="handlekey" value="$_G['gp_handlekey']" /><!--{/if}-->
+		<!--{if !empty($_GET['infloat'])}--><input type="hidden" name="handlekey" value="$_GET['handlekey']" /><!--{/if}-->
 		<div class="c">
 			<table class="list" cellspacing="0" cellpadding="0" style="width:200px">
 				<tr>
@@ -47,21 +46,21 @@
 	</div>
 </form>
 
-<!--{if !empty($_G['gp_infloat'])}-->
+<!--{if !empty($_GET['infloat'])}-->
 <script type="text/javascript" reload="1">
-function succeedhandle_$_G['gp_handlekey'](locationhref) {
-	<!--{if !empty($_G['gp_from'])}-->
+function succeedhandle_$_GET['handlekey'](locationhref) {
+	<!--{if !empty($_GET['from'])}-->
 		location.href = locationhref;
 	<!--{else}-->
-		ajaxget('forum.php?mod=viewthread&tid=$_G[tid]&viewpid=$_G[gp_pid]', 'post_$_G[gp_pid]');
-		hideWindow('$_G['gp_handlekey']');
+		ajaxget('forum.php?mod=viewthread&tid=$_G[tid]&viewpid=$_GET[pid]', 'post_$_GET[pid]');
+		hideWindow('$_GET['handlekey']');
 		showCreditPrompt();
 	<!--{/if}-->
 }
 </script>
 <!--{/if}-->
 
-<!--{if empty($_G['gp_infloat'])}-->
+<!--{if empty($_GET['infloat'])}-->
 		</div>
 	</div>
 </div>

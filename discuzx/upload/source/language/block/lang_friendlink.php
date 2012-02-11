@@ -4,24 +4,28 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_friendlink.php 18915 2010-12-08 09:15:25Z zhangguosheng $
+ *      $Id: lang_friendlink.php 27449 2012-02-01 05:32:35Z zhangguosheng $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 $lang = array
 (
-	'friendlink_content' => 'å±•ç¤ºæ¨£å¼',
-	'friendlink_content_both' => 'logoå’Œæ–‡å­—',
-	'friendlink_content_logo' => 'åƒ…logo',
-	'friendlink_content_text' => 'åƒ…æ–‡å­—',
-	'friendlink_type' => 'éˆæŽ¥åˆ†çµ„',
-	'friendlink_type_group1' => 'åˆ†çµ„1',
-	'friendlink_type_group2' => 'åˆ†çµ„2',
-	'friendlink_type_group3' => 'åˆ†çµ„3',
-	'friendlink_type_group4' => 'åˆ†çµ„4',
-	'friendlink_titlelength' => 'ç«™é»žåç¨±é•·åº¦',
-	'friendlink_titlelength_comment' => 'è¨­ç½®ç«™é»žåç¨±çš„æœ€å¤§é•·åº¦',
-	'friendlink_summarylength' => 'ç°¡ä»‹é•·åº¦',
-	'friendlink_summarylength_comment' => 'è¨­ç½®ç«™é»žç°¡ä»‹æœ€å¤§é•·åº¦',
+	'friendlink_content' => 'Õ¹Ê¾ÑùÊ½',
+	'friendlink_content_both' => 'logoºÍÎÄ×Ö',
+	'friendlink_content_logo' => '½ölogo',
+	'friendlink_content_text' => '½öÎÄ×Ö',
+	'friendlink_type' => 'Á´½Ó·Ö×é',
+	'friendlink_type_group1' => '·Ö×é1',
+	'friendlink_type_group2' => '·Ö×é2',
+	'friendlink_type_group3' => '·Ö×é3',
+	'friendlink_type_group4' => '·Ö×é4',
+	'friendlink_titlelength' => 'Õ¾µãÃû³Æ³¤¶È',
+	'friendlink_titlelength_comment' => 'ÉèÖÃÕ¾µãÃû³ÆµÄ×î´ó³¤¶È',
+	'friendlink_summarylength' => '¼ò½é³¤¶È',
+	'friendlink_summarylength_comment' => 'ÉèÖÃÕ¾µã¼ò½é×î´ó³¤¶È',
 );
 
 ?>

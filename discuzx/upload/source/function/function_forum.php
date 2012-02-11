@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_forum.php 25846 2011-11-24 02:44:59Z chenmengshu $
+ *      $Id: function_forum.php 27203 2012-01-11 03:14:19Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -29,14 +29,17 @@ function dunlink($attach) {
 		$havethumb && @unlink($_G['setting']['attachdir'].'/forum/'.getimgthumbname($filename));
 	}
 	if($attach['aid']) {
-		@unlink($_G['setting']['attachdir'].'image/'.$attach['aid'].'_140_140.jpg');
+		@unlink($_G['setting']['attachdir'].'image/'.$attach['aid'].'_100_100.jpg');
 	}
 }
 
 function formulaperm($formula) {
 	global $_G;
+	if($_G['forum']['ismoderator']) {
+		return TRUE;
+	}
 
-	$formula = unserialize($formula);
+	$formula = dunserialize($formula);
 	$medalperm = $formula['medal'];
 	$permusers = $formula['users'];
 	$permmessage = $formula['message'];
@@ -45,7 +48,9 @@ function formulaperm($formula) {
 		$_G['forum_formulamessage'] = '';
 		$medalpermc = $medalperm;
 		if($_G['uid']) {
-			$medals = explode("\t", DB::result_first("SELECT medals FROM ".DB::table('common_member_field_forum')." WHERE uid='$_G[uid]'"));
+			$memberfieldforum = C::t('common_member_field_forum')->fetch($_G['uid']);
+			$medals = explode("\t", $memberfieldforum['medals']);
+			unset($memberfieldforum);
 			foreach($medalperm as $k => $medal) {
 				foreach($medals as $r) {
 					list($medalid) = explode("|", $r);
@@ -85,31 +90,28 @@ function formulaperm($formula) {
 	}
 	if(strexists($formula, '$memberformula[')) {
 		preg_match_all("/\\\$memberformula\['(\w+?)'\]/", $formula, $a);
-		$fields = $profilefields = array();
-		$mfadd = array();
+		$profilefields = array();
 		foreach($a[1] as $field) {
 			switch($field) {
 				case 'regdate':
 					$formula = preg_replace("/\{(\d{4})\-(\d{1,2})\-(\d{1,2})\}/e", "'\'\\1-'.sprintf('%02d', '\\2').'-'.sprintf('%02d', '\\3').'\''", $formula);
 				case 'regday':
-					$fields[] = 'm.regdate';break;
+					break;
 				case 'regip':
 				case 'lastip':
 					$formula = preg_replace("/\{([\d\.]+?)\}/", "'\\1'", $formula);
 					$formula = preg_replace('/(\$memberformula\[\'(regip|lastip)\'\])\s*=+\s*\'([\d\.]+?)\'/', "strpos(\\1, '\\3')===0", $formula);
 				case 'buyercredit':
 				case 'sellercredit':
-					$mfadd['ms'] = " LEFT JOIN ".DB::table('common_member_status')." ms ON m.uid=ms.uid";
-					$fields[] = 'ms.'.$field;break;
+					space_merge($_G['member'], 'status');break;
 				case substr($field, 0, 5) == 'field':
-					$mfadd['mp'] = " LEFT JOIN ".DB::table('common_member_profile')." mp ON m.uid=mp.uid";
-					$fields[] = 'mp.field'.intval(substr($field, 5));
+					space_merge($_G['member'], 'profile');
 					$profilefields[] = $field;break;
 			}
 		}
 		$memberformula = array();
 		if($_G['uid']) {
-			$memberformula = DB::fetch_first("SELECT ".implode(',', $fields)." FROM ".DB::table('common_member')." m ".implode('', $mfadd)." WHERE m.uid='$_G[uid]'");
+			$memberformula = $_G['member'];
 			if(in_array('regday', $a[1])) {
 				$memberformula['regday'] = intval((TIMESTAMP - $memberformula['regdate']) / 86400);
 			}
@@ -171,7 +173,7 @@ function formulaperm($formula) {
 function medalformulaperm($formula, $type) {
 	global $_G;
 
-	$formula = unserialize($formula);
+	$formula = dunserialize($formula);
 	$permmessage = $formula['message'];
 	$formula = $formula['medal'];
 	if(!empty($formula['usergroupallow']) && is_array($formula['usergroups']) && !in_array($_G['groupid'], $formula['usergroups'])) {
@@ -191,31 +193,28 @@ function medalformulaperm($formula, $type) {
 	}
 	if(strexists($formula, '$memberformula[')) {
 		preg_match_all("/\\\$memberformula\['(\w+?)'\]/", $formula, $a);
-		$fields = $profilefields = array();
-		$mfadd = array();
+		$profilefields = array();
 		foreach($a[1] as $field) {
 			switch($field) {
 				case 'regdate':
 					$formula = preg_replace("/\{(\d{4})\-(\d{1,2})\-(\d{1,2})\}/e", "'\'\\1-'.sprintf('%02d', '\\2').'-'.sprintf('%02d', '\\3').'\''", $formula);
 				case 'regday':
-					$fields[] = 'm.regdate';break;
+					break;
 				case 'regip':
 				case 'lastip':
 					$formula = preg_replace("/\{([\d\.]+?)\}/", "'\\1'", $formula);
 					$formula = preg_replace('/(\$memberformula\[\'(regip|lastip)\'\])\s*=+\s*\'([\d\.]+?)\'/', "strpos(\\1, '\\3')===0", $formula);
 				case 'buyercredit':
 				case 'sellercredit':
-					$mfadd['ms'] = " LEFT JOIN ".DB::table('common_member_status')." ms ON m.uid=ms.uid";
-					$fields[] = 'ms.'.$field;break;
+					space_merge($_G['member'], 'status');break;
 				case substr($field, 0, 5) == 'field':
-					$mfadd['mp'] = " LEFT JOIN ".DB::table('common_member_profile')." mp ON m.uid=mp.uid";
-					$fields[] = 'mp.field'.intval(substr($field, 5));
+					space_merge($_G['member'], 'profile');
 					$profilefields[] = $field;break;
 			}
 		}
 		$memberformula = array();
 		if($_G['uid']) {
-			$memberformula = DB::fetch_first("SELECT ".implode(',', $fields)." FROM ".DB::table('common_member')." m ".implode('', $mfadd)." WHERE m.uid='$_G[uid]'");
+			$memberformula = $_G['member'];
 			if(in_array('regday', $a[1])) {
 				$memberformula['regday'] = intval((TIMESTAMP - $memberformula['regdate']) / 86400);
 			}
@@ -273,7 +272,7 @@ function medalformulaperm($formula, $type) {
 }
 
 function groupexpiry($terms) {
-	$terms = is_array($terms) ? $terms : unserialize($terms);
+	$terms = is_array($terms) ? $terms : dunserialize($terms);
 	$groupexpiry = isset($terms['main']['time']) ? intval($terms['main']['time']) : 0;
 	if(is_array($terms['ext'])) {
 		foreach($terms['ext'] as $expiry) {
@@ -283,10 +282,6 @@ function groupexpiry($terms) {
 		}
 	}
 	return $groupexpiry;
-}
-
-function site() {
-	return $_SERVER['HTTP_HOST'];
 }
 
 
@@ -308,9 +303,15 @@ function updatemodworks($modaction, $posts = 1) {
 	global $_G;
 	$today = dgmdate(TIMESTAMP, 'Y-m-d');
 	if($_G['setting']['modworkstatus'] && $modaction && $posts) {
-		DB::query("UPDATE ".DB::table('forum_modwork')." SET count=count+1, posts=posts+'$posts' WHERE uid='$_G[uid]' AND modaction='$modaction' AND dateline='$today'");
-		if(!DB::affected_rows()) {
-			DB::query("INSERT INTO ".DB::table('forum_modwork')." (uid, modaction, dateline, count, posts) VALUES ('$_G[uid]', '$modaction', '$today', 1, '$posts')");
+		$affect_rows = C::t('forum_modwork')->increase_count_posts_by_uid_modaction_dateline(1, $posts, $_G['uid'], $modaction, $today);
+		if(!$affect_rows) {
+			C::t('forum_modwork')->insert(array(
+				'uid' => $_G['uid'],
+				'modaction' => $modaction,
+				'dateline' => $today,
+				'count' => 1,
+				'posts' => $posts,
+			));
 		}
 	}
 }
@@ -329,7 +330,7 @@ function showmessagenoperm($type, $fid, $formula = '') {
 	global $_G;
 	loadcache('usergroups');
 	if($formula) {
-		$formula = unserialize($formula);
+		$formula = dunserialize($formula);
 		$permmessage = stripslashes($formula['message']);
 	}
 
@@ -351,7 +352,7 @@ function showmessagenoperm($type, $fid, $formula = '') {
 	if($fid == $_G['forum']['fid']) {
 		$forum = $_G['forum'];
 	} else {
-		$forum = DB::fetch_first("SELECT * FROM ".DB::table('forum_forumfield')." WHERE fid='$fid'");
+		$forum = C::t('forum_forumfield')->fetch($fid);
 	}
 
 	foreach($perms as $perm) {
@@ -403,7 +404,7 @@ function loadforum() {
 	if(!$fid && getgpc('gid')) {
 		$fid = intval(getgpc('gid'));
 	}
-	if(!empty($_G['gp_archiver'])) {//X1.5çš„Archiverå…¼å®¹
+	if(!empty($_GET['archiver'])) {//X1.5µÄArchiver¼æÈÝ
 		if($fid) {
 			dheader('location: archiver/?fid-'.$fid.'.html');
 		} elseif($tid) {
@@ -416,7 +417,7 @@ function loadforum() {
 		dheader('location: ../forum.php'.($_G['mod'] ? '?mod='.$_G['mod'].(!empty($_GET['fid']) ? '&fid='.$_GET['fid'] : (!empty($_GET['tid']) ? '&tid='.$_GET['tid'] : '')) : ''));
 	}
 	if($_G['setting']['forumpicstyle']) {
-		$_G['setting']['forumpicstyle'] = unserialize($_G['setting']['forumpicstyle']);
+		$_G['setting']['forumpicstyle'] = dunserialize($_G['setting']['forumpicstyle']);
 		empty($_G['setting']['forumpicstyle']['thumbwidth']) && $_G['setting']['forumpicstyle']['thumbwidth'] = 214;
 		empty($_G['setting']['forumpicstyle']['thumbheight']) && $_G['setting']['forumpicstyle']['thumbheight'] = 160;
 	} else {
@@ -426,28 +427,17 @@ function loadforum() {
 		$fid = is_numeric($fid) ? intval($fid) : (!empty($_G['setting']['forumfids'][$fid]) ? $_G['setting']['forumfids'][$fid] : 0);
 	}
 
-	$modthreadkey = isset($_G['gp_modthreadkey']) && $_G['gp_modthreadkey'] == modauthkey($tid) ? $_G['gp_modthreadkey'] : '';
+	$modthreadkey = isset($_GET['modthreadkey']) && $_GET['modthreadkey'] == modauthkey($tid) ? $_GET['modthreadkey'] : '';
 	$_G['forum_auditstatuson'] = $modthreadkey ? true : false;
 
-	$accessadd1 = $accessadd2 = $modadd1 = $modadd2 = $metadescription = $hookscriptmessage = '';
+	$metadescription = $hookscriptmessage = '';
 	$adminid = $_G['adminid'];
-	if($_G['uid']) {
-		if($_G['member']['accessmasks']) {
-			$accessadd1 = ', a.allowview, a.allowpost, a.allowreply, a.allowgetattach, a.allowgetimage, a.allowpostattach, a.allowpostimage';
-			$accessadd2 = "LEFT JOIN ".DB::table('forum_access')." a ON a.uid='$_G[uid]' AND a.fid=f.fid";
-		}
-
-		if($adminid == 3) {
-			$modadd1 = ', m.uid AS ismoderator';
-			$modadd2 = "LEFT JOIN ".DB::table('forum_moderator')." m ON m.uid='$_G[uid]' AND m.fid=f.fid";
-		}
-	}
 
 	if(!empty($tid) || !empty($fid)) {
 
 		if(!empty ($tid)) {
-			$archiveid = !empty($_G['gp_archiveid']) ? intval($_G['gp_archiveid']) : null;
-			$_G['thread'] = get_thread_by_tid($tid, '*', '', $archiveid);
+			$archiveid = !empty($_GET['archiveid']) ? intval($_GET['archiveid']) : null;
+			$_G['thread'] = get_thread_by_tid($tid, $archiveid);
 			if(!$_G['forum_auditstatuson'] && !empty($_G['thread'])
 					&& !($_G['thread']['displayorder'] >= 0 || (in_array($_G['thread']['displayorder'], array(-4,-3,-2)) && $_G['thread']['authorid'] == $_G['uid']))) {
 				$_G['thread'] = null;
@@ -464,23 +454,35 @@ function loadforum() {
 		}
 
 		if($fid) {
-			$forum = DB::fetch_first("SELECT f.fid, f.*, ff.* $accessadd1 $modadd1, f.fid AS fid
-			FROM ".DB::table('forum_forum')." f
-			LEFT JOIN ".DB::table("forum_forumfield")." ff ON ff.fid=f.fid $accessadd2 $modadd2
-			WHERE f.fid='$fid'");
+			$forum = C::t('forum_forum')->fetch_info_by_fid($fid);
 		}
 
 		if($forum) {
+			if($_G['uid']) {
+				if($_G['member']['accessmasks']) {
+					$query = C::t('forum_access')->fetch_all_by_fid_uid($fid, $_G['uid']);
+					$forum['allowview'] = $query[0]['allowview'];
+					$forum['allowpost'] = $query[0]['allowpost'];
+					$forum['allowreply'] = $query[0]['allowreply'];
+					$forum['allowgetattach'] = $query[0]['allowgetattach'];
+					$forum['allowgetimage'] = $query[0]['allowgetimage'];
+					$forum['allowpostattach'] = $query[0]['allowpostattach'];
+					$forum['allowpostimage'] = $query[0]['allowpostimage'];
+				}
+				if($adminid == 3) {
+					$forum['ismoderator'] = C::t('forum_moderator')->fetch_uid_by_fid_uid($fid, $_G['uid']);
+				}
+			}
 			$forum['ismoderator'] = !empty($forum['ismoderator']) || $adminid == 1 || $adminid == 2 ? 1 : 0;
 			$fid = $forum['fid'];
-			$gorup_admingroupids = $_G['setting']['group_admingroupids'] ? unserialize($_G['setting']['group_admingroupids']) : array('1' => '1');
+			$gorup_admingroupids = $_G['setting']['group_admingroupids'] ? dunserialize($_G['setting']['group_admingroupids']) : array('1' => '1');
 
 			if($forum['status'] == 3) {
 				if(!$_G['setting']['groupstatus']) {
 					showmessage('group_status_off');
 				}
 				if(!empty($forum['moderators'])) {
-					$forum['moderators'] = unserialize($forum['moderators']);
+					$forum['moderators'] = dunserialize($forum['moderators']);
 				} else {
 					require_once libfile('function/group');
 					$forum['moderators'] = update_groupmoderators($fid);
@@ -495,7 +497,7 @@ function loadforum() {
 							$_G['adminid'] = 2;
 						}
 
-						$group_userperm = unserialize($_G['setting']['group_userperm']);
+						$group_userperm = dunserialize($_G['setting']['group_userperm']);
 						if(is_array($group_userperm)) {
 							$_G['group'] = array_merge($_G['group'], $group_userperm);
 							$_G['group']['allowmovethread'] = $_G['group']['allowcopythread'] = $_G['group']['allowedittypethread']= 0;
@@ -504,7 +506,7 @@ function loadforum() {
 				}
 			}
 			foreach(array('threadtypes', 'threadsorts', 'creditspolicy', 'modrecommend') as $key) {
-				$forum[$key] = !empty($forum[$key]) ? unserialize($forum[$key]) : array();
+				$forum[$key] = !empty($forum[$key]) ? dunserialize($forum[$key]) : array();
 				if(!is_array($forum[$key])) {
 					$forum[$key] = array();
 				}
@@ -513,17 +515,20 @@ function loadforum() {
 			if($forum['status'] == 3) {
 				$_G['isgroupuser'] = 0;
 				$_G['basescript'] = 'group';
-				if(empty($forum['level'])) {
-					$levelid = DB::result_first("SELECT levelid FROM ".DB::table('forum_grouplevel')." WHERE creditshigher<='$forum[commoncredits]' AND '$forum[commoncredits]'<creditslower LIMIT 1");
+				if($forum['level'] == 0) {
+					$levelinfo = C::t('forum_grouplevel')->fetch_by_credits($forum['commoncredits']);
+					$levelid = $levelinfo['levelid'];
 					$forum['level'] = $levelid;
-					DB::query("UPDATE ".DB::table('forum_forum')." SET level='$levelid' WHERE fid='$fid'");
+					C::t('forum_forum')->update_group_level($levelid, $fid);
 				}
-				loadcache('grouplevels');
-				$grouplevel = $_G['grouplevels'][$forum['level']];
-				if(!empty($grouplevel['icon'])) {
-					$valueparse = parse_url($grouplevel['icon']);
-					if(!isset($valueparse['host'])) {
-						$grouplevel['icon'] = $_G['setting']['attachurl'].'common/'.$grouplevel['icon'];
+				if($forum['level'] != -1) {
+					loadcache('grouplevels');
+					$grouplevel = $_G['grouplevels'][$forum['level']];
+					if(!empty($grouplevel['icon'])) {
+						$valueparse = parse_url($grouplevel['icon']);
+						if(!isset($valueparse['host'])) {
+							$grouplevel['icon'] = $_G['setting']['attachurl'].'common/'.$grouplevel['icon'];
+						}
 					}
 				}
 
@@ -536,7 +541,8 @@ function loadforum() {
 					if(!empty($forum['moderators'][$_G['uid']])) {
 						$_G['isgroupuser'] = 1;
 					} else {
-						$_G['isgroupuser'] = DB::result_first("SELECT level FROM ".DB::table('forum_groupuser')." WHERE fid='$fid' AND uid='$_G[uid]' LIMIT 1");
+						$groupuserinfo = C::t('forum_groupuser')->fetch_userinfo($_G['uid'], $fid);
+						$_G['isgroupuser'] = $groupuserinfo['level'];
 						if($_G['isgroupuser'] <= 0 && empty($forum['ismoderator'])) {
 							$_G['group']['allowrecommend'] = $_G['cache']['usergroup_'.$_G['groupid']]['allowrecommend'] = 0;
 							$_G['group']['allowcommentpost'] = $_G['cache']['usergroup_'.$_G['groupid']]['allowcommentpost'] = 0;
@@ -559,17 +565,13 @@ function loadforum() {
 	$_G['forum'] = &$forum;
 	$_G['current_grouplevel'] = &$grouplevel;
 
-	if(isset($_G['cookie']['widthauto']) && $_G['setting']['switchwidthauto'] && empty($_G['forum']['widthauto'])) {
-		$_G['forum_widthauto'] = $_G['cookie']['widthauto'] > 0;
-	} else {
-		$_G['forum_widthauto'] = empty($_G['forum']['widthauto']) ? !$_G['setting']['allowwidthauto'] : $_G['forum']['widthauto'] > 0;
-		if(!empty($_G['forum']['widthauto'])) {
-			$_G['setting']['switchwidthauto'] = 0;
-		}
+	$_G['disabledwidthauto'] = 0;
+	if(!empty($_G['forum']['widthauto'])) {
+		$_G['widthauto'] = $_G['forum']['widthauto'];
 	}
 }
 
-function get_thread_by_tid($tid, $fields = '*', $addcondiction = '', $forcetableid = null) {
+function get_thread_by_tid($tid, $forcetableid = null) {
 	global $_G;
 
 	$ret = array();
@@ -585,12 +587,12 @@ function get_thread_by_tid($tid, $fields = '*', $addcondiction = '', $forcetable
 			$threadtableids = array(intval($forcetableid));
 		}
 	}
-
+	$threadtableids = array_unique($threadtableids);
 	foreach($threadtableids as $tableid) {
-		$table = $tableid > 0 ? "forum_thread_{$tableid}" : 'forum_thread';
-		$ret = DB::fetch_first("SELECT $fields FROM ".DB::table($table)." WHERE tid='$tid' $addcondiction LIMIT 1");
+		$tableid = $tableid > 0 ? $tableid : 0;
+		$ret = C::t('forum_thread')->fetch($tid, $tableid);
 		if($ret) {
-			$ret['threadtable'] = $table;
+			$ret['threadtable'] = C::t('forum_thread')->get_table_name($tableid);
 			$ret['threadtableid'] = $tableid;
 			$ret['posttable'] = 'forum_post'.($ret['posttableid'] ? '_'.$ret['posttableid'] : '');
 			break;
@@ -629,7 +631,7 @@ function get_post_by_pid($pid, $fields = '*', $addcondiction = '', $forcetable =
 
 	foreach ($posttableids as $id) {
 		$table = empty($id) ? 'forum_post' : (is_numeric($id) ? 'forum_post_'.$id : $id);
-		$ret = DB::fetch_first("SELECT $fields FROM ".DB::table($table)." WHERE pid='$pid' $addcondiction LIMIT 1");
+		$ret = C::t('forum_post')->fetch_by_pid_condition($id, $pid, $addcondiction, $fields);
 		if($ret) {
 			$ret['posttable'] = $table;
 			break;
@@ -654,30 +656,6 @@ function set_rssauth() {
 	$_G['rssauth'] = rawurlencode($auth);
 }
 
-function my_thread_log($opt, $data) {
-	global $_G;
-    $my_search_data = $_G['setting']['my_search_data'];
-    if ($my_search_data && !is_array($my_search_data)) {
-        $my_search_data = unserialize($my_search_data);
-    }
-	if(!$_G['setting']['my_search_data']) return;
-	$data['action'] = $opt;
-	$data['dateline'] = time();
-	DB::insert('forum_threadlog', $data, false, true);
-}
-
-function my_post_log($opt, $data) {
-	global $_G;
-    $my_search_data = $_G['setting']['my_search_data'];
-    if ($my_search_data && !is_array($my_search_data)) {
-        $my_search_data = unserialize($my_search_data);
-    }
-	if(!$_G['setting']['my_search_data']) return;
-	$data['action'] = $opt;
-	$data['dateline'] = time();
-	DB::insert('forum_postlog', $data, false, true);
-}
-
 function rssforumperm($forum) {
 	$is_allowed = $forum['type'] != 'group' && (!$forum['viewperm'] || ($forum['viewperm'] && forumperm($forum['viewperm'], 7)));
 	return $is_allowed;
@@ -691,7 +669,6 @@ function upload_icon_banner(&$data, $file, $type) {
 	if($data['status'] == 3 && $_G['setting']['group_imgsizelimit']) {
 		$file['size'] > ($_G['setting']['group_imgsizelimit'] * 1024) && showmessage('file_size_overflow', '', array('size' => $_G['setting']['group_imgsizelimit'] * 1024));
 	}
-	require_once libfile('class/upload');
 	$upload = new discuz_upload();
 	$uploadtype = $data['status'] == 3 ? 'group' : 'common';
 
@@ -744,13 +721,14 @@ function update_threadpartake($tid) {
 	global $_G;
 	if($_G['uid'] && $tid) {
 		if($_G['setting']['heatthread']['period']) {
-			$partaked = DB::result_first("SELECT uid FROM ".DB::table('forum_threadpartake')." WHERE tid='$tid' AND uid='$_G[uid]'");
+			$partaked = C::t('forum_threadpartake')->fetch($tid, $_G['uid']);
+			$partaked = $partaked['uid'];
 			if(!$partaked) {
-				DB::query("INSERT INTO ".DB::table('forum_threadpartake')." (tid, uid, dateline) VALUES ('$tid', '$_G[uid]', ".TIMESTAMP.")");
-				DB::query("UPDATE ".DB::table('forum_thread')." SET heats=heats+1 WHERE tid='$tid'", 'UNBUFFERED');
+				C::t('forum_threadpartake')->insert(array('tid' => $tid, 'uid' => $_G['uid'], 'dateline' => TIMESTAMP));
+				C::t('forum_thread')->increase($tid, array('heats' => 1));
 			}
 		} else {
-			DB::query("UPDATE ".DB::table('forum_thread')." SET heats=heats+1 WHERE tid='$tid'", 'UNBUFFERED');
+			C::t('forum_thread')->increase($tid, array('heats' => 1));
 
 		}
 	}
@@ -772,178 +750,217 @@ function getthreadcover($tid, $cover = 0, $getfilename = 0) {
 	return $coverpath;
 }
 
-function addthreadtag($tags, $itemid , $typeid = 'tid') {
-	global $_G;
-
-	if($tags == '') {
-		return;
-	}
-
-	$tags = str_replace(array(chr(0xa3).chr(0xac), chr(0xa1).chr(0x41), chr(0xef).chr(0xbc).chr(0x8c)), ',', censor($tags));
-	if(strexists($tags, ',')) {
-		$tagarray = array_unique(explode(',', $tags));
-	} else {
-		$langcore = lang('core');
-		$tags = str_replace($langcore['fullblankspace'], ' ', $tags);
-		$tagarray = array_unique(explode(' ', $tags));
-	}
-	$tagcount = 0;
-	foreach($tagarray as $tagname) {
-		$tagname = trim($tagname);
-		if(preg_match('/^([\x7f-\xff_-]|\w|\s){3,20}$/', $tagname)) {
-			$result = DB::fetch_first("SELECT tagid, status FROM ".DB::table('common_tag')." WHERE tagname='$tagname'");
-			if($result['tagid']) {
-				if(!$result['status']) {
-					$tagid = $result['tagid'];
-				}
-			} else {
-				DB::query("INSERT INTO ".DB::table('common_tag')." (tagname, status) VALUES ('$tagname', '0')");
-				$tagid = DB::insert_id();
-			}
-			if($tagid) {
-				DB::query("INSERT INTO ".DB::table('common_tagitem')." (tagid, tagname, itemid, idtype) VALUES ('$tagid', '$tagname', '$itemid', '$typeid')");
-				$tagcount++;
-				$tagstr .= $tagid.','.$tagname.'\t';
-			}
-			if($tagcount > 4) {
-				unset($tagarray);
-				break;
-			}
-		}
-	}
-	return $tagstr;
-}
-
-function modthreadtag($tags, $itemid) {
-	global $_G;
-
-	$thread = & $_G['forum_thread'];
-	$posttable = $thread['posttable'];
-	$tagstr = DB::result_first("SELECT tags FROM ".DB::table($posttable)." WHERE tid='$itemid' AND first=1");
-
-	$threadtagarray = $threadtagidarray = $threadtagarraynew = array();
-	$query = DB::query("SELECT tagid, tagname FROM ".DB::table('common_tagitem')." WHERE idtype='tid' AND itemid='$itemid'");
-	while($result = DB::fetch($query)) {
-		$threadtagarray[] = $result['tagname'];
-		$threadtagidarray[] = $result['tagid'];
-	}
-
-	$tags = str_replace(array(chr(0xa3).chr(0xac), chr(0xa1).chr(0x41), chr(0xef).chr(0xbc).chr(0x8c)), ',', censor($tags));
-	if(strexists($tags, ',')) {
-		$tagarray = array_unique(explode(',', $tags));
-	} else {
-		$langcore = lang('core');
-		$tags = str_replace($langcore['fullblankspace'], ' ', $tags);
-		$tagarray = array_unique(explode(' ', $tags));
-	}
-
-	$tagcount = 0;
-	foreach($tagarray as $tagname) {
-		$tagname = trim($tagname);
-		if(preg_match('/^([\x7f-\xff_-]|\w|\s){3,20}$/', $tagname)) {
-			$threadtagarraynew[] = $tagname;
-			if(!in_array($tagname, $threadtagarray)) {
-				$result = DB::fetch_first("SELECT tagid, status FROM ".DB::table('common_tag')." WHERE tagname='$tagname'");
-				if($result['tagid']) {
-					if(!$result['status']) {
-						$tagid = $result['tagid'];
-					}
-				} else {
-					DB::query("INSERT INTO ".DB::table('common_tag')." (tagname, status) VALUES ('$tagname', '0')");
-					$tagid = DB::insert_id();
-				}
-				if($tagid) {
-					DB::query("INSERT INTO ".DB::table('common_tagitem')." (tagid, tagname, itemid, idtype) VALUES ('$tagid', '$tagname', '$itemid', 'tid')");
-					$tagstr = $tagstr.$tagid.','.$tagname.'\t';
-				}
-			}
-		}
-		$tagcount++;
-		if($tagcount > 4) {
-			unset($tagarray);
-			break;
-		}
-	}
-	foreach($threadtagarray as $key => $tagname) {
-		if(!in_array($tagname, $threadtagarraynew)) {
-			DB::query("DELETE FROM	".DB::table('common_tagitem')." WHERE idtype='tid' AND itemid = '$itemid' AND tagname='$tagname'");
-			$tagid = $threadtagidarray[$key];
-			$tagstr = str_replace("$tagid,$tagname\t", '', $tagstr);
-		}
-	}
-	return $tagstr;
-}
-
 function convertunusedattach($aid, $tid, $pid) {
 	if(!$aid) {
 		return;
 	}
 	global $_G;
-	$attach = DB::fetch_first("SELECT * FROM ".DB::table('forum_attachment_unused')." WHERE aid='$aid' AND uid='$_G[uid]'");
+	$attach = C::t('forum_attachment_n')->fetch_by_aid_uid(127, $aid, $_G['uid']);
 	if(!$attach) {
 		return;
 	}
 	$attach = daddslashes($attach);
 	$attach['tid'] = $tid;
 	$attach['pid'] = $pid;
-	DB::insert(getattachtablebytid($tid), $attach, false);
-	DB::update('forum_attachment', array('tid' => $tid, 'pid' => $pid, 'tableid' => getattachtableid($tid)), "aid='$attach[aid]'");
-	DB::delete('forum_attachment_unused', "aid='$attach[aid]'");
+	C::t('forum_attachment_n')->insert('tid:'.$tid, $attach);
+	C::t('forum_attachment')->update($attach['aid'], array('tid' => $tid, 'pid' => $pid, 'tableid' => getattachtableid($tid)));
+	C::t('forum_attachment_unused')->delete($attach['aid']);
 }
 
-function updateattachtid($where, $oldtid, $newtid) {
-	$oldattachtable = getattachtablebytid($oldtid);
-	$newattachtable = getattachtablebytid($newtid);
-	if($oldattachtable != $newattachtable) {
-		$query = DB::query("SELECT * FROM ".DB::table($oldattachtable)." WHERE $where");
-		while($attach = DB::fetch($query)) {
-			$attach = daddslashes($attach);
+function updateattachtid($idtype, $ids, $oldtid, $newtid) {
+		foreach(C::t('forum_attachment_n')->fetch_all_by_id('tid:'.$oldtid, $idtype, $ids) as $attach) {
 			$attach['tid'] = $newtid;
-			DB::insert($newattachtable, $attach);
+			C::t('forum_attachment_n')->insert('tid:'.$newtid, $attach);
 		}
-		DB::delete($oldattachtable, $where);
-	}
-	DB::query("UPDATE ".DB::table('forum_attachment')." SET tid='$newtid',tableid='".getattachtableid($newtid)."' WHERE $where");
+		C::t('forum_attachment_n')->delete_by_id('tid:'.$oldtid, $idtype, $ids);
+	C::t('forum_attachment')->update_by_id($idtype, $ids, $newtid);
 }
 
 function updatepost($data, $condition, $unbuffered = false, $posttableid = false) {
-	global $_G;
-	loadcache('posttableids');
-	$affected_rows = 0;
-	if(!empty($_G['cache']['posttableids'])) {
-		$posttableids = $posttableid !== false && in_array($posttableid, $_G['cache']['posttableids']) ? array($posttableid) : $_G['cache']['posttableids'];
-	} else {
-		$posttableids = array('0');
-	}
-	foreach($posttableids as $id) {
-		DB::update(getposttable($id), $data, $condition, $unbuffered);
-		$affected_rows += DB::affected_rows();
-	}
-	return $affected_rows;
+	return false;
 }
 
 function insertpost($data) {
 	if(isset($data['tid'])) {
-		$tableid = DB::result_first("SELECT posttableid FROM ".DB::table('forum_thread')." WHERE tid='{$data['tid']}'");
+		$thread = C::t('forum_thread')->fetch($data['tid']);
+		$tableid = $thread['posttableid'];
 	} else {
 		$tableid = $data['tid'] = 0;
 	}
-	$pid = DB::insert('forum_post_tableid', array('pid' => null), true);
+	$pid = C::t('forum_post_tableid')->insert(array('pid' => null), true);
 
-	if(!$tableid) {
-		$tablename = 'forum_post';
-	} else {
-		$tablename = "forum_post_$tableid";
-	}
 
 	$data = array_merge($data, array('pid' => $pid));
 
-	DB::insert($tablename, $data);
+	C::t('forum_post')->insert($tableid, $data);
 	if($pid % 1024 == 0) {
-		DB::delete('forum_post_tableid', "pid<$pid");
+		C::t('forum_post_tableid')->delete_by_lesspid($pid);
 	}
-	save_syscache('max_post_id', $pid);
+	savecache('max_post_id', $pid);
 	return $pid;
 }
 
+function threadmodstatus($string) {
+	global $_G;
+	if(periodscheck('postmodperiods', 0)) {
+		$modnewthreads = $modnewreplies = 1;
+	} else {
+		$censormod = censormod($string);
+		$modnewthreads = (!$_G['group']['allowdirectpost'] || $_G['group']['allowdirectpost'] == 1) && $_G['forum']['modnewposts'] || $censormod ? 1 : 0;
+		$modnewreplies = (!$_G['group']['allowdirectpost'] || $_G['group']['allowdirectpost'] == 2) && $_G['forum']['modnewposts'] == 2 || $censormod ? 1 : 0;
+
+		if($_G['forum']['status'] == 3) {
+			$modnewthreads = !$_G['group']['allowgroupdirectpost'] || $_G['group']['allowgroupdirectpost'] == 1 || $censormod ? 1 : 0;
+			$modnewreplies = !$_G['group']['allowgroupdirectpost'] || $_G['group']['allowgroupdirectpost'] == 2 || $censormod ? 1 : 0;
+		}
+	}
+
+	$_G['group']['allowposturl'] = $_G['forum']['status'] != 3 ? $_G['group']['allowposturl'] : $_G['group']['allowgroupposturl'];
+	if($_G['group']['allowposturl'] == 1) {
+		if(censormod($string)) {
+			$modnewthreads = $modnewreplies = 1;
+		}
+	}
+	return array($modnewthreads, $modnewreplies);
+}
+
+function threadpubsave($tid, $passapproval = false) {
+	global $_G;
+	if($_G['setting']['plugins']['func'][HOOKTYPE]['threadpubsave']) {
+		$hookparam = func_get_args();
+		hookscript('threadpubsave', 'global', 'funcs', array('param' => $hookparam, 'step' => 'check'), 'threadpubsave');
+	}
+	$thread = C::t('forum_thread')->fetch_by_tid_displayorder($tid, -4, '=', !$passapproval ? $_G['uid'] : '');
+	if(!$thread) {
+		return 0;
+	}
+	$threadpost = C::t('forum_post')->fetch_threadpost_by_tid_invisible($tid);
+	$thread['message'] = $threadpost['message'];
+
+	$modworksql = 0;
+	$displayorder = 0;
+	$dateline = $_G['timestamp'];
+	$moderatepids = $saveposts = array();
+	$return = 1;
+
+	list($modnewthreads) = threadmodstatus($thread['subject']."\t".$thread['message']);
+	if($modnewthreads && $passapproval === false) {
+		updatemoderate('tid', $tid);
+		manage_addnotify('verifythread');
+		$displayorder = -2;
+		$modworksql = 1;
+		$return = -1;
+	} else {
+		C::t('forum_post')->update_by_tid('tid:'.$tid, $tid, array('dateline' => $dateline, 'invisible' => '0'), false, false, 1);
+	}
+
+	C::t('forum_thread')->update($tid, array('displayorder'=>$displayorder, 'dateline'=>$_G['timestamp'], 'lastpost'=>$_G['timestamp']));
+	$posts = $thread['replies'] + 1;
+	if($thread['replies']) {
+		$saveposts = C::t('forum_post')->fetch_all_by_tid('tid:'.$tid, $tid, true, '', 0, 0, 0);
+		foreach($saveposts as $post) {
+			$dateline++;
+			$invisible = 0;
+			list(, $modnewreplies) = threadmodstatus($post['subject']."\t".$post['message']);
+			if($modnewreplies) {
+				$moderatepids[] = $post['pid'];
+				$verifypost = true;
+				$invisible = -2;
+				$modworksql = 1;
+				$return = -2;
+			}
+			C::t('forum_post')->update('tid:'.$tid, $post['pid'], array('dateline' => $dateline, 'invisible' => $invisible));
+			updatepostcredits('+', $thread['authorid'], 'reply', $thread['fid']);
+		}
+	}
+	if($moderatepids) {
+		updatemoderate('pid', $moderatepids);
+		manage_addnotify('verifypost');
+	}
+	updatepostcredits('+', $thread['authorid'], 'post', $thread['fid']);
+	$attachcount = C::t('forum_attachment_n')->count_by_id('tid:'.$thread['tid'], 'tid', $thread['tid']);
+	updatecreditbyaction('postattach', $thread['authorid'], array(), '', $attachcount, 1, $thread['fid']);
+	if($_G['forum']['status'] == 3) {
+		C::t('forum_groupuser')->update_counter_for_user($thread['authorid'], $thread['fid'], 1);
+	}
+	C::t('forum_forum')->update_forum_counter($thread['fid'], 1, $posts, $posts, $modworksql);
+	if($_G['setting']['plugins']['func'][HOOKTYPE]['threadpubsave']) {
+		hookscript('threadpubsave', 'global', 'funcs', array('param' => $hookparam, 'step' => 'save', 'posts' => $saveposts), 'threadpubsave');
+	}
+	return $return;
+}
+
+function getrelatecollection($tid, $all = false, &$num, &$more) {
+	global $_G;
+
+	$maxdisplay = $_G['setting']['collectionnum'];
+	if(!$maxdisplay) return;
+
+	$tidrelate = C::t('forum_collectionrelated')->fetch($tid);
+	$tids = explode("\t", $tidrelate['collection'], -1);
+	$num = count($tids);
+
+	if($all !== true && $num > $maxdisplay) {
+		$more = 1;
+	} else {
+		$maxdisplay = 0;
+	}
+	return C::t('forum_collection')->fetch_all($tids, 'follownum', 'DESC', 0, $maxdisplay, '', $tid);
+}
+
+function set_atlist_cookie($uids) {
+	global $_G;
+	$atlist = $tmp = array();
+	$num = 0;
+	$maxlist = 10;
+	if(empty($uids)) {
+		return;
+	}
+	$newnum = count($uids);
+	if($newnum >= $maxlist) {
+		$uids = array_slice($uids, 0, $maxlist);
+		dsetcookie('atlist', implode(',', $uids), 86400 * 360);
+		return;
+	}
+	if($_G['cookie']['atlist']) {
+		$atlist = explode(',', $_G['cookie']['atlist']);
+		foreach($atlist as $key => $val) {
+			if(!in_array($val, $uids)) {
+				$num++;
+				if($num == ($maxlist - $newnum)) {
+					break;
+				}
+				$tmp[$key] = $val;
+			}
+		}
+	}
+	dsetcookie('atlist', implode(',', $uids).($tmp ? ','.implode(',', $tmp) : ''), 86400 * 360);
+}
+
+function cloud_referer_related() {
+	global $_G;
+	$my_search_data = $_G['setting']['my_search_data'];
+	if (viewthread_is_search_referer() && $my_search_data['status']) {
+		$appService = Cloud::loadClass('Service_App');
+		if($appService->getCloudAppStatus('search')) {
+			$_params = array('s_site_gid' => $_G['groupid'],
+							'response_type' => 'js',
+							'referer' => $_SERVER['HTTP_REFERER'],
+						);
+			$utilService = Cloud::loadClass('Service_Util');
+			$signUrl = $utilService->generateSiteSignUrl($_params);
+			$my_search_se_url = 'http://search.discuz.qq.com/api/site/se?' . $signUrl . "";
+		}
+	}
+	return $my_search_se_url;
+}
+
+function viewthread_is_search_referer() {
+	$regex = "((http|https)\:\/\/)?";
+	$regex .= "([a-z]*.)?(ask.com|yahoo.com|cn.yahoo.com|bing.com|baidu.com|soso.com|google.com|google.cn)(.[a-z]{2,3})?\/";
+	if(preg_match("/^$regex/", $_SERVER['HTTP_REFERER'])) {
+		return true;
+	}
+	return false;
+}
 ?>

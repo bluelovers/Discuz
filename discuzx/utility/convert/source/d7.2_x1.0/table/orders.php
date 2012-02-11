@@ -35,6 +35,6 @@ while($row = $db_source->fetch_array($query)) {
 }
 $nextstep = $step + 1;
 if($continue) {
-	showmessage("ç¹¼çºŒè½‰æ›æ•¸æ“šè¡¨ ".$table_source."ï¼Œå·²è½‰æ› $total æ¢è¨˜éŒ„ã€‚", "index.php?a=$action&source=$source&prg=$curprg&step=$nextstep&total=$total");
+	showmessage("¼ÌÐø×ª»»Êý¾Ý±í ".$table_source."£¬ÒÑ×ª»» $total Ìõ¼ÇÂ¼¡£", "index.php?a=$action&source=$source&prg=$curprg&step=$nextstep&total=$total");
 }
 ?>

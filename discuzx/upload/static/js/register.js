@@ -1,8 +1,8 @@
 /*
-	[Discuz!] (C)2001-2009 Comsenz Inc.
+	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: register.js 22639 2011-05-16 07:05:16Z lifangming $
+	$Id: register.js 27312 2012-01-16 02:39:24Z monkey $
 */
 
 var lastusername = '', lastpassword = '', lastemail = '', lastinvitecode = '', stmp = new Array();
@@ -23,7 +23,8 @@ function errormessage(id, msg) {
 		if($('chk_' + id)) {
 			$('chk_' + id).innerHTML = msg;
 		}
-		$(id).className = !msg ? $(id).className.replace(/ er/, '') : $(id).className + ' er';
+		$(id).className = $(id).className.replace(/ er/, '');
+		$(id).className += !msg ? '' : ' er';
 	}
 }
 
@@ -50,34 +51,30 @@ function addFormEvent(formid, focus){
 	};
 	formNode[stmp[1]].onblur = function () {
 		if(formNode[stmp[1]].value == '') {
-			errormessage(formNode[stmp[1]].id, 'Ë´ãÂ°´ÂØ´ÂØÜÁ¢º');
+			var pwmsg = '«ÎÃÓ–¥√‹¬Î';
+			if(pwlength > 0) {
+				pwmsg += ', ◊Ó–°≥§∂»Œ™ '+pwlength+' ∏ˆ◊÷∑˚';
+			}
+			errormessage(formNode[stmp[1]].id, pwmsg);
 		}else{
 			errormessage(formNode[stmp[1]].id, 'succeed');
 		}
 		checkpassword(formNode[stmp[1]].id, formNode[stmp[2]].id);
 	};
+	formNode[stmp[1]].onkeyup = function () {
+		if(pwlength == 0 || $(formNode[stmp[1]].id).value.length >= pwlength) {
+			var passlevels = new Array('','»ı','÷–','«ø');
+			var passlevel = checkstrongpw(formNode[stmp[1]].id);
+			errormessage(formNode[stmp[1]].id, '<span class="passlevel passlevel'+passlevel+'">√‹¬Î«ø∂»:'+passlevels[passlevel]+'</span>');
+		}
+	};
 	formNode[stmp[2]].onblur = function () {
 		if(formNode[stmp[2]].value == '') {
-			errormessage(formNode[stmp[2]].id, 'Ë´ãÂÜçÊ¨°Ëº∏ÂÖ•ÂØÜÁ¢º');
+			errormessage(formNode[stmp[2]].id, '«Î‘Ÿ¥Œ ‰»Î√‹¬Î');
 		}
 		checkpassword(formNode[stmp[1]].id, formNode[stmp[2]].id);
 	};
-	formNode[stmp[3]].onclick = function (event) {
-		emailMenu(event, formNode[stmp[3]].id);
-	};
-	formNode[stmp[3]].onkeyup = function (event) {
-		emailMenu(event, formNode[stmp[3]].id);
-	};
-	formNode[stmp[3]].onkeydown = function (event) {
-		emailMenuOp(4, event, formNode[stmp[3]].id);
-	};
-	formNode[stmp[3]].onblur = function () {
-		if(formNode[stmp[3]].value == '') {
-			errormessage(formNode[stmp[3]].id, 'Ë´ãËº∏ÂÖ•ÈÉµÁÆ±Âú∞ÂùÄ');
-		}
-		emailMenuOp(3, null, formNode[stmp[3]].id);
-	};
-	stmp['email'] = formNode[stmp[3]].id;
+	addMailEvent(formNode[stmp[3]]);
 	try {
 		if(focus) {
 			$('invitecode').focus();
@@ -87,6 +84,38 @@ function addFormEvent(formid, focus){
 	} catch(e) {}
 }
 
+function addMailEvent(mailObj) {
+
+	mailObj.onclick = function (event) {
+		emailMenu(event, mailObj.id);
+	};
+	mailObj.onkeyup = function (event) {
+		emailMenu(event, mailObj.id);
+	};
+	mailObj.onkeydown = function (event) {
+		emailMenuOp(4, event, mailObj.id);
+	};
+	mailObj.onblur = function () {
+		if(mailObj.value == '') {
+			errormessage(mailObj.id, '«Î ‰»Î” œ‰µÿ÷∑');
+		}
+		emailMenuOp(3, null, mailObj.id);
+	};
+	stmp['email'] = mailObj.id;
+}
+function checkstrongpw(id) {
+	var passlevel = 0;
+	if($(id).value.match(/\d+/g)) {
+		passlevel ++;
+	}
+	if($(id).value.match(/[a-z]+/ig)) {
+		passlevel ++;
+	}
+	if($(id).value.match(/[^a-z0-9]+/ig)) {
+		passlevel ++;
+	}
+	return passlevel;
+}
 function showInputTip(id) {
 	var p_tips = $('registerform').getElementsByTagName('i');
 	for(i = 0;i < p_tips.length;i++){
@@ -103,7 +132,7 @@ function showbirthday(){
 	var el = $('birthday');
 	var birthday = el.value;
 	el.length=0;
-	el.options.add(new Option('Êó•', ''));
+	el.options.add(new Option('»’', ''));
 	for(var i=0;i<28;i++){
 		el.options.add(new Option(i+1, i+1));
 	}
@@ -232,12 +261,12 @@ function checkusername(id) {
 		lastusername = username;
 	}
 	if(username.match(/<|"/ig)) {
-		errormessage(id, 'Áî®Êà∂ÂêçÂåÖÂê´ÊïèÊÑüÂ≠óÁ¨¶');
+		errormessage(id, '”√ªß√˚∞¸∫¨√Ù∏–◊÷∑˚');
 		return;
 	}
 	var unlen = username.replace(/[^\x00-\xff]/g, "**").length;
 	if(unlen < 3 || unlen > 15) {
-		errormessage(id, unlen < 3 ? 'Áî®Êà∂ÂêçÂ∞èÊñº 3 ÂÄãÂ≠óÁ¨¶' : 'Áî®Êà∂ÂêçË∂ÖÈÅé 15 ÂÄãÂ≠óÁ¨¶');
+		errormessage(id, unlen < 3 ? '”√ªß√˚≤ªµ√–°”⁄ 3 ∏ˆ◊÷∑˚' : '”√ªß√˚≤ªµ√≥¨π˝ 15 ∏ˆ◊÷∑˚');
 		return;
 	}
 	var x = new Ajax();
@@ -251,9 +280,45 @@ function checkpassword(id1, id2) {
 	if(!$(id1).value && !$(id2).value) {
 		return;
 	}
+	if(pwlength > 0) {
+		if($(id1).value.length < pwlength) {
+			errormessage(id1, '√‹¬ÎÃ´∂Ã£¨≤ªµ√…Ÿ”⁄ '+pwlength+' ∏ˆ◊÷∑˚');
+			return;
+		}
+	}
+	if(strongpw) {
+		var strongpw_error = false, j = 0;
+		var strongpw_str = new Array();
+		for(var i in strongpw) {
+			if(strongpw[i] === 1 && !$(id1).value.match(/\d+/g)) {
+				strongpw_error = true;
+				strongpw_str[j] = ' ˝◊÷';
+				j++;
+			}
+			if(strongpw[i] === 2 && !$(id1).value.match(/[a-z]+/g)) {
+				strongpw_error = true;
+				strongpw_str[j] = '–°–¥◊÷ƒ∏';
+				j++;
+			}
+			if(strongpw[i] === 3 && !$(id1).value.match(/[A-Z]+/g)) {
+				strongpw_error = true;
+				strongpw_str[j] = '¥Û–¥◊÷ƒ∏';
+				j++;
+			}
+			if(strongpw[i] === 4 && !$(id1).value.match(/[^A-Za-z0-9]+/g)) {
+				strongpw_error = true;
+				strongpw_str[j] = 'Ãÿ ‚∑˚∫≈';
+				j++;
+			}
+		}
+		if(strongpw_error) {
+			errormessage(id1, '√‹¬ÎÃ´»ı£¨√‹¬Î÷–±ÿ–Î∞¸∫¨ '+strongpw_str.join('£¨'));
+			return;
+		}
+	}
 	errormessage(id2);
 	if($(id1).value != $(id2).value) {
-		errormessage(id2, 'ÂÖ©Ê¨°Ëº∏ÂÖ•ÁöÑÂØÜÁ¢º‰∏ç‰∏ÄËá¥');
+		errormessage(id2, '¡Ω¥Œ ‰»Îµƒ√‹¬Î≤ª“ª÷¬');
 	} else {
 		errormessage(id2, 'succeed');
 	}
@@ -268,7 +333,7 @@ function checkemail(id) {
 		lastemail = email;
 	}
 	if(email.match(/<|"/ig)) {
-		errormessage(id, 'Email ÂåÖÂê´ÊïèÊÑüÂ≠óÁ¨¶');
+		errormessage(id, 'Email ∞¸∫¨√Ù∏–◊÷∑˚');
 		return;
 	}
 	var x = new Ajax();
@@ -287,7 +352,7 @@ function checkinvite() {
 		lastinvitecode = invitecode;
 	}
 	if(invitecode.match(/<|"/ig)) {
-		errormessage('invitecode', 'ÈÇÄË´ãÁ¢ºÂåÖÂê´ÊïèÊÑüÂ≠óÁ¨¶');
+		errormessage('invitecode', '—˚«Î¬Î∞¸∫¨√Ù∏–◊÷∑˚');
 		return;
 	}
 	var x = new Ajax();

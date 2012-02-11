@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cron_cleanup_daily.php 23607 2011-07-27 08:09:08Z monkey $
+ *      $Id: cron_cleanup_daily.php 27055 2011-12-31 06:26:40Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -13,24 +13,28 @@ if(!defined('IN_DISCUZ')) {
 require_once libfile('function/cache');
 updatecache('forumrecommend');
 
-DB::query("UPDATE ".DB::table('common_advertisement')." SET available='0' WHERE endtime>'0' AND endtime<='$_G[timestamp]'", 'UNBUFFERED');
-if(DB::affected_rows()) {
+C::t('common_task')->update_available();
+
+if(C::t('common_advertisement')->close_endtime()) {
 	updatecache(array('setting', 'advs'));
 }
-DB::query("TRUNCATE ".DB::table('common_searchindex'));
-DB::query("DELETE FROM ".DB::table('forum_threadmod')." WHERE tid>0 AND dateline<'$_G[timestamp]'-31536000", 'UNBUFFERED');
-DB::query("DELETE FROM ".DB::table('forum_forumrecommend')." WHERE expiration>0 AND expiration<'$_G[timestamp]'", 'UNBUFFERED');
-DB::query("DELETE FROM ".DB::table('home_visitor')." WHERE uid>0 AND dateline<'$_G[timestamp]'-7776000", 'UNBUFFERED');
-DB::query("DELETE FROM ".DB::table('home_notification')." WHERE uid>0 AND new=0 AND dateline<'$_G[timestamp]'-172800", 'UNBUFFERED');
+C::t('common_searchindex')->truncate();
+C::t('forum_threadmod')->delete_by_dateline($_G['timestamp']-31536000);
+C::t('forum_forumrecommend')->delete_old();
+C::t('home_visitor')->delete_by_dateline($_G['timestamp']-7776000);
+C::t('forum_postcache')->delete_by_dateline(TIMESTAMP-86400);
+
 if($settingnew['heatthread']['type'] == 2 && $settingnew['heatthread']['period']) {
 	$partakeperoid = 86400 * $settingnew['heatthread']['period'];
-	DB::query("DELETE FROM ".DB::table('forum_threadpartake')." WHERE dateline<'$_G[timestamp]'-$partakeperoid", 'UNBUFFERED');
+	C::t('forum_threadpartake')->delete($_G[timestamp]-$partakeperoid);
 }
 
-DB::query("UPDATE ".DB::table('common_member_count')." SET todayattachs='0',todayattachsize='0'");
+C::t('common_member_count')->clear_today_data();
 
-DB::query("UPDATE ".DB::table('forum_trade')." SET closed='1' WHERE expiration>0 AND expiration<'$_G[timestamp]'", 'UNBUFFERED');
-DB::query("DELETE FROM ".DB::table('forum_tradelog')." WHERE buyerid>0 AND status=0 AND lastupdate<'$_G[timestamp]'-432000", 'UNBUFFERED');
+C::t('forum_trade')->update_closed($expiration);
+C::t('forum_tradelog')->clear_failure(7);
+C::t('forum_tradelog')->expiration_payed(7);
+C::t('forum_tradelog')->expiration_finished(7);
 
 if($_G['setting']['cachethreadon']) {
 	removedir($_G['setting']['cachethreaddir'], TRUE);
@@ -38,68 +42,54 @@ if($_G['setting']['cachethreadon']) {
 removedir($_G['setting']['attachdir'].'image', TRUE);
 @touch($_G['setting']['attachdir'].'image/index.htm');
 
-require_once libfile('function/forum');
-$delaids = array();
-$query = DB::query("SELECT aid, attachment, thumb FROM ".DB::table('forum_attachment_unused')." WHERE dateline<'$_G[timestamp]'-86400");
-while($attach = DB::fetch($query)) {
-	dunlink($attach);
-	$delaids[] = $attach['aid'];
-}
-if($delaids) {
-	DB::query("DELETE FROM ".DB::table('forum_attachment')." WHERE aid IN (".dimplode($delaids).")", 'UNBUFFERED');
-	DB::query("DELETE FROM ".DB::table('forum_attachment_unused')." WHERE dateline<'$_G[timestamp]'-86400", 'UNBUFFERED');
-}
+C::t('forum_attachment_unused')->clear();
 
 $uids = $members = array();
-$query = DB::query("SELECT uid, groupid, credits FROM ".DB::table('common_member')." WHERE groupid IN ('4', '5') AND groupexpiry>'0' AND groupexpiry<'$_G[timestamp]'");
-while($row = DB::fetch($query)) {
-	$uids[] = $row['uid'];
-	$members[$row['uid']] = $row;
-}
-if($uids) {
-	$query = DB::query("SELECT uid, groupterms FROM ".DB::table('common_member_field_forum')." WHERE uid IN (".dimplode($uids).")");
-	while($member = DB::fetch($query)) {
-		$sql = 'uid=uid';
-		$member['groupterms'] = unserialize($member['groupterms']);
-		$member['groupid'] = $members[$member['uid']]['groupid'];
-		$member['credits'] = $members[$member['uid']]['credits'];
+$members = C::t('common_member')->fetch_all_ban_by_groupexpiry(TIMESTAMP);
+if(($uids = array_keys($members))) {
+	$setarr = array();
+	foreach(C::t('common_member_field_forum')->fetch_all($uids) as $uid => $member) {
+		$member['groupterms'] = dunserialize($member['groupterms']);
+		$member['groupid'] = $members[$uid]['groupid'];
+		$member['credits'] = $members[$uid]['credits'];
 
 		if(!empty($member['groupterms']['main']['groupid'])) {
 			$groupidnew = $member['groupterms']['main']['groupid'];
 			$adminidnew = $member['groupterms']['main']['adminid'];
 			unset($member['groupterms']['main']);
 			unset($member['groupterms']['ext'][$member['groupid']]);
-			$sql .= ', groupexpiry=\''.groupexpiry($member['groupterms']).'\'';
+			$setarr['groupexpiry'] = groupexpiry($member['groupterms']);
 		} else {
-			$query = DB::query("SELECT groupid FROM ".DB::table('common_usergroup')." WHERE type='member' AND creditshigher<='$member[credits]' AND creditslower>'$member[credits]'");
-			$groupidnew = DB::result($query, 0);
+			$query = C::t('common_usergroup')->fetch_by_credits($member['credits'], 'member');
+			$groupidnew = $query['groupid'];
 			$adminidnew = 0;
 		}
-		$sql .= ", adminid='$adminidnew', groupid='$groupidnew'";
-		DB::query("UPDATE ".DB::table('common_member')." SET $sql WHERE uid='$member[uid]'");
-		DB::query("UPDATE ".DB::table('common_member_field_forum')." SET groupterms='".($member['groupterms'] ? addslashes(serialize($member['groupterms'])) : '')."' WHERE uid='$member[uid]'");
+		$setarr['adminid'] = $adminidnew;
+		$setarr['groupid'] = $groupidnew;
+		C::t('common_member')->update($uid, $setarr);
+		C::t('common_member_field_forum')->update($uid, array('groupterms' => ($member['groupterms'] ? serialize($member['groupterms']) : '')));
 	}
 }
 
 if(!empty($_G['setting']['advexpiration']['allow'])) {
 	$endtimenotice = mktime(0, 0, 0, date('m', TIMESTAMP), date('d', TIMESTAMP), date('Y', TIMESTAMP)) + $_G['setting']['advexpiration']['day'] * 86400;
-	$query = DB::query("SELECT advid, title FROM ".DB::table('common_advertisement')." WHERE endtime='$endtimenotice'");
 	$advs = array();
-	while($adv = DB::fetch($query)) {
+	foreach(C::t('common_advertisement')->fetch_all_endtime($endtimenotice) as $adv) {
 		$advs[] = '<a href="admin.php?action=adv&operation=edit&advid='.$adv['advid'].'" target="_blank">'.$adv['title'].'</a>';
 	}
 	if($advs) {
 		$users = explode("\n", $_G['setting']['advexpiration']['users']);
 		$users = array_map('trim', $users);
 		if($users) {
-			$query = DB::query("SELECT username, uid, email FROM ".DB::table("common_member")." WHERE username IN (".dimplode($users).")");
-			while($member = DB::fetch($query)) {
+			foreach(C::t('common_member')->fetch_all_by_username($users) as $member) {
 				$noticelang = array('day' => $_G['setting']['advexpiration']['day'], 'advs' => implode("<br />", $advs));
 				if(in_array('notice', $_G['setting']['advexpiration']['method'])) {
 					notification_add($member['uid'], 'system', 'system_adv_expiration', $noticelang, 1);
 				}
 				if(in_array('mail', $_G['setting']['advexpiration']['method'])) {
-					sendmail("$member[username] <$member[email]>", lang('email', 'adv_expiration_subject', $noticelang), lang('email', 'adv_expiration_message', $noticelang));
+					if(!sendmail("$member[username] <$member[email]>", lang('email', 'adv_expiration_subject', $noticelang), lang('email', 'adv_expiration_message', $noticelang))) {
+						runlog('sendmail', "$member[email] sendmail failed.");
+					}
 				}
 			}
 		}
@@ -107,14 +97,21 @@ if(!empty($_G['setting']['advexpiration']['allow'])) {
 }
 
 
-$count = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_card')." WHERE status = '1' AND cleardateline <= '{$_G['timestamp']}'");
+$count = C::t('common_card')->count_by_where("status = '1' AND cleardateline <= '{$_G['timestamp']}'");
 if($count) {
-	DB::query("UPDATE ".DB::table('common_card')." SET status = 9 WHERE status = '1' AND cleardateline <= '{$_G['timestamp']}'");
+	C::t('common_card')->update_to_overdue($_G['timestamp']);
 	$card_info = serialize(array('num' => $count));
-	DB::query("INSERT INTO ".DB::table('common_card_log')." (info, dateline, operation)VALUES('{$card_info}', '{$_G['timestamp']}', 9)");
+	$cardlog = array(
+		'info' => $card_info,
+		'dateline' => $_G['timestamp'],
+		'operation' => 9
+	);
+	C::t('common_card_log')->insert($cardlog);
 }
 
-DB::delete('common_member_action_log', 'dateline < '.($_G['timestamp'] - 86400));
+C::t('common_member_action_log')->delete_by_dateline($_G['timestamp'] - 86400);
+
+C::t('forum_collectioninvite')->delete_by_dateline($_G['timestamp'] - 86400*7);
 
 function removedir($dirname, $keepdir = FALSE) {
 	$dirname = str_replace(array( "\n", "\r", '..'), array('', '', ''), $dirname);

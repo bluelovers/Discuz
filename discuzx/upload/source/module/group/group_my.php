@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: group_my.php 14805 2010-08-20 06:06:24Z liulanbo $
+ *      $Id: group_my.php 25889 2011-11-24 09:52:20Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -20,23 +20,17 @@ if(!$_G['setting']['groupstatus']) {
 }
 require_once libfile('function/group');
 
-$view = $_G['gp_view'] && in_array($_G['gp_view'], array('manager', 'join', 'groupthread', 'mythread')) ? $_G['gp_view'] : 'groupthread';
+$view = $_GET['view'] && in_array($_GET['view'], array('manager', 'join', 'groupthread', 'mythread')) ? $_GET['view'] : 'groupthread';
 $actives = array('manager' => '', 'join' => '', 'groupthread' => '', 'mythread' => '');
 $actives[$view] = ' class="a"';
 
 $perpage = 20;
-$page = intval($_G['gp_page']) ? intval($_G['gp_page']) : 1;
+$page = intval($_GET['page']) ? intval($_GET['page']) : 1;
 $start = ($page - 1) * $perpage;
-
 if($view == 'groupthread' || $view == 'mythread') {
-	$typeid = intval($_G['gp_typeid']);
+	$typeid = intval($_GET['typeid']);
 	$attentiongroups = $usergroups = array();
-	$usergroups = getuserprofile('groups');
-	if(!empty($usergroups)) {
-		$usergroups = unserialize($usergroups);
-	} else {
-		$usergroups = update_usergroups($_G['uid']);
-	}
+	$usergroups = update_usergroups($_G['uid']);
 	if($view == 'groupthread' && empty($typeid) && !empty($usergroups['grouptype'])) {
 		$attentiongroup = $_G['member']['attentiongroup'];
 		if(empty($attentiongroup)) {
@@ -46,15 +40,14 @@ if($view == 'groupthread' || $view == 'mythread') {
 		}
 		$attentionthread = $attentiongroup_icon = array();
 		$attentiongroupfid = '';
-		$query = DB::query("SELECT fid, icon FROM ".DB::table('forum_forumfield')." WHERE fid IN (".dimplode($attentiongroups).")");
-		while($row = DB::fetch($query)) {
+		$query = C::t('forum_forum')->fetch_all_info_by_fids($attentiongroups);
+		foreach($query as $row) {
 			$attentiongroup_icon[$row[fid]] = get_groupimg($row['icon'], 'icon');
 		}
 		foreach($attentiongroups as $groupid) {
 			$attentiongroupfid .= $attentiongroupfid ? ','.$groupid : $groupid;
 			if($page == 1) {
-				$query = DB::query("SELECT fid, tid, subject, lastpost, lastposter, views, replies FROM ".DB::table('forum_thread')." WHERE fid='$groupid' AND displayorder='0' ORDER BY lastpost DESC LIMIT 5");
-				while($thread = DB::fetch($query)) {
+				foreach(C::t('forum_thread')->fetch_all_by_fid_displayorder($groupid, 0, null, null, 0, 5, 'lastpost', 'DESC', '=') as $thread) {
 					$attentionthread[$groupid][$thread['tid']]['fid'] = $thread['fid'];
 					$attentionthread[$groupid][$thread['tid']]['subject'] = $thread['subject'];
 					$attentionthread[$groupid][$thread['tid']]['groupname'] = $usergroups['groups'][$thread['fid']];
@@ -97,18 +90,18 @@ if($view == 'groupthread' || $view == 'mythread') {
 		} else {
 			$typeid = 0;
 		}
-		$mythreadsql = $view == 'mythread' ? " AND authorid='$_G[uid]'": '';
 		if(!empty($attentiongroupfid) && !empty($mygroupfid)) {
 			$mygroupfid = array_diff($mygroupfid, explode(',', $attentiongroupfid));
 		}
 		if($mygroupfid) {
+			$lastpost = $authorid = 0;
+			$displayorder = null;
 			if($view != 'mythread') {
-				$query = DB::query("SELECT fid, tid, subject, lastpost, lastposter, views, replies FROM ".DB::table('forum_thread')." FORCE INDEX(isgroup) WHERE isgroup=1 AND lastpost>".(time()-86400*30)." AND fid IN (".dimplode($mygroupfid).") AND displayorder='0' $mythreadsql ORDER BY lastpost DESC LIMIT $start, $perpage");
-			} else {
-				$query = DB::query("SELECT fid, tid, subject, lastpost, lastposter, views, replies FROM ".DB::table('forum_thread')." WHERE authorid='$_G[uid]' AND fid IN (".dimplode($mygroupfid).") ORDER BY lastpost DESC LIMIT $start, $perpage");
+				$displayorder = 0;
+				$authorid = $_G['uid'];
+				$lastpost = TIMESTAMP - 86400*30;
 			}
-
-			while($thread = DB::fetch($query)) {
+			foreach(C::t('forum_thread')->fetch_all_by_fid_authorid_displayorder($mygroupfid, $authorid, $displayorder, $lastpost, $start, $perpage) as $thread) {
 				$groupthreadlist[$thread['tid']]['fid'] = $thread['fid'];
 				$groupthreadlist[$thread['tid']]['subject'] = $thread['subject'];
 				$groupthreadlist[$thread['tid']]['groupname'] = $mygrouplist[$thread['fid']]['name'];
@@ -160,15 +153,11 @@ if($frienduid && is_array($frienduid)) {
 	foreach($frienduid as $friend) {
 		$frienduidarray[] = $friend['fuid'];
 	}
-
-	$query = DB::query("SELECT f.fid, f.name, ff.icon
-		FROM ".DB::table('forum_groupuser')." g
-		LEFT JOIN ".DB::table('forum_forum')." f ON f.fid=g.fid
-		LEFT JOIN ".DB::table("forum_forumfield")." ff ON ff.fid=f.fid
-		WHERE g.uid IN (".dimplode($frienduidarray).") LIMIT 0, 9");
-	while($group = DB::fetch($query)) {
-		$group['icon'] = get_groupimg($group['icon'], 'icon');
-		$friendgrouplist[$group['fid']] = $group;
+	$fids = C::t('forum_groupuser')->fetch_all_fid_by_uids($frienduidarray);
+	$query = C::t('forum_forum')->fetch_all_info_by_fids($fids, 0, 9);
+	foreach($query as $group) {
+		$icon = get_groupimg($group['icon'], 'icon');
+		$friendgrouplist[$group['fid']] = array('fid' => $group['fid'], 'name' => $group['name'], 'icon' => $icon);
 	}
 }
 

@@ -4,23 +4,24 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_trade.php 20095 2011-02-14 09:32:12Z liulanbo $
+ *      $Id: forum_trade.php 27054 2011-12-31 06:04:21Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 define('NOROBOT', TRUE);
-$apitype = $_G['gp_apitype'];
+$apitype = $_GET['apitype'];
 
 if(!$_G['uid']) {
 	showmessage('not_loggedin', NULL, array(), array('login' => 1));
 }
 
-$page = max(1, intval($_G['gp_page']));
-$orderid = $_G['gp_orderid'];
-if(!empty($orderid) && empty($_G['gp_apitype'])) {
-	$paytype = DB::result_first("SELECT paytype FROM ".DB::table('forum_tradelog')." WHERE orderid='$orderid'");
+$page = max(1, intval($_GET['page']));
+$orderid = $_GET['orderid'];
+if(!empty($orderid) && empty($_GET['apitype'])) {
+	$orderinfo = C::t('forum_tradelog')->fetch($orderid);
+	$paytype = $orderinfo['paytype'];
 	if($paytype == 1) {
 		$apitype = 'alipay';
 	}
@@ -34,18 +35,16 @@ if(!empty($orderid)) {
 
 	$language = lang('forum/misc');
 
-	$tradelog = daddslashes(DB::fetch_first("SELECT * FROM ".DB::table('forum_tradelog')." WHERE orderid='$orderid'"), 1);
-	if(empty($tradelog) || $_G['uid'] != $tradelog['sellerid'] && $_G['uid'] != $tradelog['buyerid']) {
+	$tradelog = C::t('forum_tradelog')->fetch($orderid);
+	if(!$_G['forum_auditstatuson'] && (empty($tradelog) || $_G['uid'] != $tradelog['sellerid'] && $_G['uid'] != $tradelog['buyerid'])) {
 		showmessage('undefined_action', NULL);
 	}
 
 	$limit = 6;
-	$query = DB::query("SELECT t.tid, t.pid, t.aid, t.subject, t.price, t.credit, t.displayorder FROM ".DB::table('forum_trade')." t
-		LEFT JOIN ".DB::table(getattachtablebytid($tradelog['tid']))." a ON t.aid=a.aid
-		WHERE t.sellerid='$tradelog[sellerid]' ORDER BY t.displayorder DESC LIMIT $limit");
+	$query = C::t('forum_trade')->fetch_all_for_seller($tradelog['sellerid'], $limit);
 	$usertrades = array();
 	$usertradecount = 0;
-	while($usertrade = DB::fetch($query)) {
+	foreach($query as $usertrade) {
 		$usertradecount++;
 		$usertrades[] = $usertrade;
 	}
@@ -54,14 +53,14 @@ if(!empty($orderid)) {
 	$currentcredit = $_G['setting']['creditstrans'] ? getuserprofile('extcredits'.$_G['setting']['creditstrans']) : 0;
 	$discountprice = $tradelog['baseprice'] * $tradelog['number'];
 
-	if(!empty($_G['gp_pay']) && !$tradelog['offline'] && $tradelog['status'] == 0 && $tradelog['buyerid'] == $_G['uid']) {
+	if(!empty($_GET['pay']) && !$tradelog['offline'] && $tradelog['status'] == 0 && $tradelog['buyerid'] == $_G['uid']) {
 		if($_G['setting']['creditstransextra'][5] != -1 && $tradelog['credit']) {
 			if($tradelog['credit'] > getuserprofile('extcredits'.$_G['setting']['creditstransextra'][5])) {
 				showmessage('trade_credit_lack');
 			}
 			updatemembercount($tradelog['buyerid'], array($_G['setting']['creditstransextra'][5] => -$tradelog['credit']));
 		}
-		$trade = DB::fetch_first("SELECT * FROM ".DB::table('forum_trade')." WHERE tid='$tradelog[tid]' AND pid='$tradelog[pid]'");
+		$trade = C::t('forum_trade')->fetch_goods($tradelog['tid'], $tradelog['pid']);
 
 		if($_G['uid'] && $currentcredit < $discountcredit && $tradelog['discount']) {
 			showmessage('trade_credits_no_enough', '', array('credittitle' => $_G['setting']['extcredits'][$_G['setting']['creditstrans']]['title']));
@@ -78,48 +77,50 @@ if(!empty($orderid)) {
 		} elseif($apitype == 'tenpay') {
 			$paytype = 2;
 		}
-		DB::update('forum_tradelog', array('paytype' => $paytype), "orderid='$orderid'");
+		C::t('forum_tradelog')->update($orderid, array('paytype' => $paytype));
 		showmessage('trade_directtopay', $payurl);
 	}
 
-	if(submitcheck('offlinesubmit') && in_array($_G['gp_offlinestatus'], trade_offline($tradelog, 0))) {
+	if(submitcheck('offlinesubmit') && in_array($_GET['offlinestatus'], trade_offline($tradelog, 0))) {
 
 		loaducenter();
-		$ucresult = uc_user_login($_G['username'], $_G['gp_password']);
+		$ucresult = uc_user_login($_G['username'], $_GET['password']);
 		list($tmp['uid']) = daddslashes($ucresult);
 
 		if($tmp['uid'] <= 0) {
 			showmessage('trade_password_error', 'forum.php?mod=trade&orderid='.$orderid);
 		}
-		if($_G['gp_offlinestatus'] == 4) {
+		if($_GET['offlinestatus'] == 4) {
 			if($_G['setting']['creditstransextra'][5] != -1 && $tradelog['credit']) {
 				if($tradelog['credit'] > getuserprofile('extcredits'.$_G['setting']['creditstransextra'][5])) {
 					showmessage('trade_credit_lack');
 				}
 				updatemembercount($tradelog['buyerid'], array($_G['setting']['creditstransextra'][5] => -$tradelog['credit']));
 			}
-			$trade = DB::fetch_first("SELECT amount FROM ".DB::table('forum_trade')." WHERE tid='$tradelog[tid]' AND pid='$tradelog[pid]'");
+			$trade = C::t('forum_trade')->fetch_goods($tradelog['tid'], $tradelog['pid']);
 			notification_add($tradelog['sellerid'], 'goods', 'trade_seller_send', array(
 				'buyerid' => $tradelog['buyerid'],
 				'buyer' => $tradelog['buyer'],
 				'orderid' => $orderid,
 				'subject' => $tradelog['subject']
 			));
-		} elseif($_G['gp_offlinestatus'] == 5) {
+		} elseif($_GET['offlinestatus'] == 5) {
 			notification_add($tradelog['buyerid'], 'goods', 'trade_buyer_confirm', array(
 				'sellerid' => $tradelog['sellerid'],
 				'seller' => $tradelog['seller'],
 				'orderid' => $orderid,
 				'subject' => $tradelog['subject']
 			));
-		} elseif($_G['gp_offlinestatus'] == 7) {
+		} elseif($_GET['offlinestatus'] == 7) {
 			if($_G['setting']['creditstransextra'][5] != -1 && $tradelog['basecredit']) {
 				$netcredit = round($tradelog['number'] * $tradelog['basecredit'] * (1 - $_G['setting']['creditstax']));
 				updatemembercount($tradelog['sellerid'], array($_G['setting']['creditstransextra'][5] => $netcredit));
 			} else {
 				$netcredit = 0;
 			}
-			DB::query("UPDATE ".DB::table('forum_trade')." SET lastbuyer='$tradelog[buyer]', lastupdate='$_G[timestamp]', totalitems=totalitems+'$tradelog[number]', tradesum=tradesum+'$tradelog[price]', credittradesum=credittradesum+'$netcredit' WHERE tid='$tradelog[tid]' AND pid='$tradelog[pid]'", 'UNBUFFERED');
+			$data = array('lastbuyer' => $tradelog['buyer'], 'lastupdate' => $_G['timestamp']);
+			C::t('forum_trade')->update($tradelog['tid'], $tradelog['pid'], $data);
+			C::t('forum_trade')->update_counter($tradelog['tid'], $tradelog['pid'], $tradelog['number'], $tradelog['price'], $netcredit);
 			notification_add($tradelog['sellerid'], 'goods', 'trade_success', array(
 				'orderid' => $orderid,
 				'subject' => $tradelog['subject']
@@ -128,8 +129,8 @@ if(!empty($orderid)) {
 				'orderid' => $orderid,
 				'subject' => $tradelog['subject']
 			));
-		} elseif($_G['gp_offlinestatus'] == 17) {
-			DB::query("UPDATE ".DB::table('forum_trade')." SET amount=amount+'$tradelog[number]' WHERE tid='$tradelog[tid]' AND pid='$tradelog[pid]'", 'UNBUFFERED');
+		} elseif($_GET['offlinestatus'] == 17) {
+			C::t('forum_trade')->update_counter($tradelog['tid'], $tradelog['pid'], 0, 0, 0, $tradelog['number']);
 			notification_add($tradelog['sellerid'], 'goods', 'trade_fefund_success', array(
 				'orderid' => $orderid,
 				'subject' => $tradelog['subject']
@@ -143,14 +144,18 @@ if(!empty($orderid)) {
 			}
 		}
 
-		$_G['gp_message'] = trim($_G['gp_message']);
-		if($_G['gp_message']) {
-			$_G['gp_message'] = daddslashes(dstripslashes($tradelog['message'])."\t\t\t".$_G['uid']."\t".$_G['member']['username']."\t".TIMESTAMP."\t".nl2br(strip_tags(substr($_G['gp_message'], 0, 200))), 1);
+		$_GET['message'] = trim($_GET['message']);
+		if($_GET['message']) {
+			$_GET['message'] = $tradelog['message']."\t\t\t".$_G['uid']."\t".$_G['member']['username']."\t".TIMESTAMP."\t".nl2br(strip_tags(substr($_GET['message'], 0, 200)));
 		} else {
-			$_G['gp_message'] = daddslashes($tradelog['message'], 1);
+			$_GET['message'] = $tradelog['message'];
 		}
 
-		DB::query("UPDATE ".DB::table('forum_tradelog')." SET status='$_G[gp_offlinestatus]', lastupdate='$_G[timestamp]', message='$_G[gp_message]' WHERE orderid='$orderid'");
+		C::t('forum_tradelog')->update($orderid, array(
+		    'status' => $_GET['offlinestatus'],
+		    'lastupdate' => $_G['timestamp'],
+		    'message' => $_GET['message']
+		));
 		showmessage('trade_orderstatus_updated', 'forum.php?mod=trade&orderid='.$orderid);
 	}
 
@@ -162,17 +167,17 @@ if(!empty($orderid)) {
 			$oldbasecredit = $tradelog['basecredit'];
 			$oldnumber = $tradelog['number'];
 			if($tradelog['sellerid'] == $_G['uid']) {
-				$tradelog['baseprice'] = floatval($_G['gp_newprice']);
-				$tradelog['basecredit'] = intval($_G['gp_newcredit']);
+				$tradelog['baseprice'] = floatval($_GET['newprice']);
+				$tradelog['basecredit'] = intval($_GET['newcredit']);
 				if(!$tradelog['baseprice'] < 0 || $tradelog['basecredit'] < 0) {
 					showmessage('trade_pricecredit_error');
 				}
-				$tradelog['transportfee'] = intval($_G['gp_newfee']);
+				$tradelog['transportfee'] = intval($_GET['newfee']);
 				$newnumber = $tradelog['number'];
 				$update = array(
-					"baseprice='$tradelog[baseprice]'",
-					"basecredit='$tradelog[basecredit]'",
-					"transportfee='$tradelog[transportfee]'"
+					'baseprice' => $tradelog['baseprice'],
+					'basecredit' => $tradelog['basecredit'],
+					'transportfee' => $tradelog['transportfee']
 				);
 				notification_add($tradelog['buyerid'], 'goods', 'trade_order_update_sellerid', array(
 					'seller' => $tradelog['seller'],
@@ -182,27 +187,27 @@ if(!empty($orderid)) {
 				));
 			}
 			if($tradelog['buyerid'] == $_G['uid']) {
-				$newnumber = intval($_G['gp_newnumber']);
+				$newnumber = intval($_GET['newnumber']);
 				if($newnumber <= 0) {
 					showmessage('trade_input_no');
 				}
-				$trade = DB::fetch_first("SELECT amount FROM ".DB::table('forum_trade')." WHERE tid='$tradelog[tid]' AND pid='$tradelog[pid]'");
+				$trade = C::t('forum_trade')->fetch_goods($tradelog['tid'], $tradelog['pid']);
 				if($newnumber > $trade['amount'] + $tradelog['number']) {
 					showmessage('trade_lack');
 				}
 				$amount = $trade['amount'] + $tradelog['number'] - $newnumber;
-				DB::query("UPDATE ".DB::table('forum_trade')." SET amount='$amount' WHERE tid='$tradelog[tid]' AND pid='$tradelog[pid]'", 'UNBUFFERED');
+				C::t('forum_trade')->update($tradelog['tid'], $tradelog['pid'], array('amount' => $amount));
 				$tradelog['number'] = $newnumber;
 
 				$update = array(
-					"number='$tradelog[number]'",
-					"discount=0",
-					"buyername='".dhtmlspecialchars($_G['gp_newbuyername'])."'",
-					"buyercontact='".dhtmlspecialchars($_G['gp_newbuyercontact'])."'",
-					"buyerzip='".dhtmlspecialchars($_G['gp_newbuyerzip'])."'",
-					"buyerphone='".dhtmlspecialchars($_G['gp_newbuyerphone'])."'",
-					"buyermobile='".dhtmlspecialchars($_G['gp_newbuyermobile'])."'",
-					"buyermsg='".dhtmlspecialchars($_G['gp_newbuyermsg'])."'",
+					'number' => $tradelog['number'],
+					'discount' => 0,
+					'buyername' => dhtmlspecialchars($_GET['newbuyername']),
+					'buyercontact' => dhtmlspecialchars($_GET['newbuyercontact']),
+					'buyerzip' => dhtmlspecialchars($_GET['newbuyerzip']),
+					'buyerphone' => dhtmlspecialchars($_GET['newbuyerphone']),
+					'buyermobile' => dhtmlspecialchars($_GET['newbuyermobile']),
+					'buyermsg' => dhtmlspecialchars($_GET['newbuyermsg'])
 				);
 				notification_add($tradelog['sellerid'], 'goods', 'trade_order_update_buyerid', array(
 					'buyer' => $tradelog['buyer'],
@@ -220,12 +225,12 @@ if(!empty($orderid)) {
 				}
 				if($_G['setting']['creditstransextra'][5] != -1 && ($oldnumber != $newnumber || $oldbasecredit != $tradelog['basecredit'])) {
 					$tradelog['credit'] = $newnumber * $tradelog['basecredit'];
-					$update[] = "credit='$tradelog[credit]'";
+					$update['credit'] = $tradelog['credit'];
 				}
 
-				$update[] = "price='".($price + ($tradelog['transport'] == 2 ? $tradelog['transportfee'] : 0))."'";
-				DB::query("UPDATE ".DB::table('forum_tradelog')." SET ".implode(',', $update)." WHERE orderid='$orderid'");
-				$tradelog = DB::fetch_first("SELECT * FROM ".DB::table('forum_tradelog')." WHERE orderid='$orderid'");
+				$update['price'] = $price + ($tradelog['transport'] == 2 ? $tradelog['transportfee'] : 0);
+				C::t('forum_tradelog')->update($orderid, $update);
+				$tradelog = C::t('forum_tradelog')->fetch($orderid);
 			}
 		}
 
@@ -237,7 +242,7 @@ if(!empty($orderid)) {
 	$messagelist = array();
 	if($tradelog['offline']) {
 		$offlinenext = trade_offline($tradelog, 1, $trade_message);
-		$message = explode("\t\t\t", dstripslashes($tradelog['message']));
+		$message = explode("\t\t\t", $tradelog['message']);
 		foreach($message as $row) {
 			$row = explode("\t", $row);
 			$row[2] = dgmdate($row[2], 'u');
@@ -246,26 +251,24 @@ if(!empty($orderid)) {
 	} else {
 		$loginurl = trade_getorderurl($tradelog['tradeno']);
 	}
-	$tradelog['buyer'] = dstripslashes($tradelog['buyer']);
-	$tradelog['seller'] = dstripslashes($tradelog['seller']);
 
-	$trade = DB::fetch_first("SELECT * FROM ".DB::table('forum_trade')." WHERE tid='$tradelog[tid]' AND pid='$tradelog[pid]'");
+	$trade = C::t('forum_trade')->fetch_goods($tradelog['tid'], $tradelog['pid']);
 
 	include template('forum/trade_view');
 
 } else {
 
-	if(empty($_G['gp_pid'])) {
-		$posttable = getposttablebytid($_G['tid']);
-		$pid = DB::result_first("SELECT pid FROM ".DB::table($posttable)." WHERE tid='$_G[tid]' AND first='1' LIMIT 1");
+	if(empty($_GET['pid'])) {
+		$pid = C::t('forum_post')->fetch_threadpost_by_tid_invisible($_G['tid']);
+		$pid = $pid['pid'];
 	} else {
-		$pid = $_G['gp_pid'];
+		$pid = $_GET['pid'];
 	}
-
-	if(DB::result_first("SELECT closed FROM ".DB::table('forum_thread')." WHERE tid='$_G[tid]'")) {
+	$thread = C::t('forum_thread')->fetch($_G['tid']);
+	if($thread['closed']) {
 		showmessage('trade_closed', 'forum.php?mod=viewthread&tid='.$_G['tid'].'&page='.$page);
 	}
-	$trade = DB::fetch_first("SELECT * FROM ".DB::table('forum_trade')." WHERE tid='$_G[tid]' AND pid='$pid'");
+	$trade = C::t('forum_trade')->fetch_goods($_G['tid'], $pid);
 	if(empty($trade)) {
 		showmessage('trade_not_found');
 	}
@@ -283,35 +286,33 @@ if(!empty($orderid)) {
 	}
 
 	$limit = 6;
-	$query = DB::query("SELECT t.tid, t.pid, t.aid, t.subject, t.price, t.credit, t.displayorder FROM ".DB::table('forum_trade')." t
-		LEFT JOIN ".DB::table(getattachtablebytid($_G['tid']))." a ON t.aid=a.aid
-		WHERE t.sellerid='$trade[sellerid]' ORDER BY t.displayorder DESC LIMIT $limit");
+	$query = C::t('forum_trade')->fetch_all_for_seller($trade['sellerid'], $limit);
 	$usertrades = array();
 	$usertradecount = 0;
-	while($usertrade = DB::fetch($query)) {
+	foreach($query as $usertrade) {
 		$usertradecount++;
 		$usertrades[] = $usertrade;
 	}
 
-	if($_G['gp_action'] != 'trade' && !submitcheck('tradesubmit')) {
-		$lastbuyerinfo = dhtmlspecialchars(DB::fetch_first("SELECT buyername,buyercontact,buyerzip,buyerphone,buyermobile FROM ".DB::table('forum_tradelog')." WHERE buyerid='$_G[uid]' AND status!=0 AND buyername!='' ORDER BY lastupdate DESC LIMIT 1"));
+	if($_GET['action'] != 'trade' && !submitcheck('tradesubmit')) {
+		$lastbuyerinfo = dhtmlspecialchars(C::t('forum_tradelog')->fetch_last($_G['uid']));
 		$extra = rawurlencode($extra);
 		include template('forum/trade');
 	} else {
 
 		if($trade['sellerid'] == $_G['uid']) {
 			showmessage('trade_by_myself');
-		} elseif($_G['gp_number'] <= 0) {
+		} elseif($_GET['number'] <= 0) {
 			showmessage('trade_input_no');
-		} elseif(!$fromcode && $_G['gp_number'] > $trade['amount']) {
+		} elseif(!$fromcode && $_GET['number'] > $trade['amount']) {
 			showmessage('trade_lack');
 		}
 
-		$pay['number'] = $_G['gp_number'];
+		$pay['number'] = $_GET['number'];
 		$pay['price'] = $trade['price'];
 		$credit = 0;
 		if($_G['setting']['creditstransextra'][5] != -1 && $trade['credit']) {
-			$credit = $_G['gp_number'] * $trade['credit'];
+			$credit = $_GET['number'] * $trade['credit'];
 		}
 
 		$price = $pay['price'] * $pay['number'];
@@ -320,25 +321,54 @@ if(!empty($orderid)) {
 
 		$orderid = $pay['orderid'] = dgmdate(TIMESTAMP, 'YmdHis').random(18);
 		$transportfee = 0;
-		trade_setprice(array('fee' => $fee, 'trade' => $trade, 'transport' => $_G['gp_transport']), $price, $pay, $transportfee);
+		trade_setprice(array('fee' => $fee, 'trade' => $trade, 'transport' => $_GET['transport']), $price, $pay, $transportfee);
 
 		$buyerid = $_G['uid'] ? $_G['uid'] : 0;
 		$_G['username'] = $_G['username'] ? $_G['username'] : $guestuser;
 		$trade = daddslashes($trade, 1);
-		$buyermsg = dhtmlspecialchars($_G['gp_buyermsg']);
-		$buyerzip = dhtmlspecialchars($_G['gp_buyerzip']);
-		$buyerphone = dhtmlspecialchars($_G['gp_buyerphone']);
-		$buyermobile = dhtmlspecialchars($_G['gp_buyermobile']);
-		$buyername = dhtmlspecialchars($_G['gp_buyername']);
-		$buyercontact = dhtmlspecialchars($_G['gp_buyercontact']);
+		$buyermsg = dhtmlspecialchars($_GET['buyermsg']);
+		$buyerzip = dhtmlspecialchars($_GET['buyerzip']);
+		$buyerphone = dhtmlspecialchars($_GET['buyerphone']);
+		$buyermobile = dhtmlspecialchars($_GET['buyermobile']);
+		$buyername = dhtmlspecialchars($_GET['buyername']);
+		$buyercontact = dhtmlspecialchars($_GET['buyercontact']);
 
-		$offline = !empty($_G['gp_offline']) ? 1 : 0;
-		DB::query("INSERT INTO ".DB::table('forum_tradelog')."
-			(tid, pid, orderid, subject, price, quality, itemtype, number, tax, locus, sellerid, seller, selleraccount, tenpayaccount, buyerid, buyer, buyercontact, buyercredits, buyermsg, lastupdate, offline, buyerzip, buyerphone, buyermobile, buyername, transport, transportfee, baseprice, discount, credit, basecredit) VALUES
-			('$trade[tid]', '$trade[pid]', '$orderid', '$trade[subject]', '$price', '$trade[quality]', '$trade[itemtype]', '$_G[gp_number]', '$tax',
-			 '$trade[locus]', '$trade[sellerid]', '$trade[seller]', '$trade[account]', '$trade[tenpayaccount]', '$_G[uid]', '$_G[username]', '$buyercontact', 0, '$buyermsg', '$_G[timestamp]', '$offline', '$buyerzip', '$buyerphone', '$buyermobile', '$buyername', '$_G[gp_transport]', '$transportfee', '$trade[price]', 0, '$credit', '$trade[credit]')");
+		$offline = !empty($_GET['offline']) ? 1 : 0;
+		C::t('forum_tradelog')->insert(array(
+			'tid' => $trade['tid'],
+			'pid' => $trade['pid'],
+			'orderid' => $orderid,
+			'subject' => $trade['subject'],
+			'price' => $price,
+			'quality' => $trade['quality'],
+			'itemtype' => $trade['itemtype'],
+			'number' => $_GET['number'],
+			'tax' => $tax,
+			'locus' => $trade['locus'],
+			'sellerid' => $trade['sellerid'],
+			'seller' => $trade['seller'],
+			'selleraccount' => $trade['account'],
+			'tenpayaccount' => $trade['tenpayaccount'],
+			'buyerid' => $_G['uid'],
+			'buyer' => $_G['username'],
+			'buyercontact' => $buyercontact,
+			'buyercredits' => 0,
+			'buyermsg' => $buyermsg,
+			'lastupdate' => $_G['timestamp'],
+			'offline' => $offline,
+			'buyerzip' => $buyerzip,
+			'buyerphone' => $buyerphone,
+			'buyermobile' => $buyermobile,
+			'buyername' => $buyername,
+			'transport' => $_GET['transport'],
+			'transportfee' => $transportfee,
+			'baseprice' => $trade['price'],
+			'discount' => 0,
+			'credit' => $credit,
+			'basecredit' => $trade['credit']
+		));
 
-		DB::query("UPDATE ".DB::table('forum_trade')." SET amount=amount-'$_G[gp_number]' WHERE tid='$trade[tid]' AND pid='$trade[pid]'", 'UNBUFFERED');
+		C::t('forum_trade')->update_counter($trade['tid'], $trade['pid'], 0, 0, 0, '-'.$_GET['number']);
 		showmessage('trade_order_created', 'forum.php?mod=trade&orderid='.$orderid);
 	}
 

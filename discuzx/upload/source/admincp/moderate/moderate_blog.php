@@ -4,25 +4,25 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: moderate_blog.php 24018 2011-08-22 02:28:39Z svn_project_zhangjie $
+ *      $Id: moderate_blog.php 25246 2011-11-02 03:34:53Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
 }
 
-if(!submitcheck('modsubmit') && !$_G['gp_fast']) {
+if(!submitcheck('modsubmit') && !$_GET['fast']) {
 
 	require_once libfile('function/discuzcode');
 
 	shownav('topic', $lang['moderate_blogs']);
 	showsubmenu('nav_moderate_posts', $submenu);
 
-	$select[$_G['gp_tpp']] = $_G['gp_tpp'] ? "selected='selected'" : '';
+	$select[$_GET['tpp']] = $_GET['tpp'] ? "selected='selected'" : '';
 	$tpp_options = "<option value='20' $select[20]>20</option><option value='50' $select[50]>50</option><option value='100' $select[100]>100</option>";
-	$tpp = !empty($_G['gp_tpp']) ? $_G['gp_tpp'] : '20';
+	$tpp = !empty($_GET['tpp']) ? $_GET['tpp'] : '20';
 	$start_limit = ($page - 1) * $ppp;
-	$dateline = $_G['gp_dateline'] ? $_G['gp_dateline'] : '604800';
+	$dateline = $_GET['dateline'] ? $_GET['dateline'] : '604800';
 	$dateline_options = '';
 	foreach(array('all', '604800', '2592000', '7776000') as $v) {
 		$selected = '';
@@ -32,7 +32,7 @@ if(!submitcheck('modsubmit') && !$_G['gp_fast']) {
 		$dateline_options .= "<option value=\"$v\" $selected>".cplang("dateline_$v");
 	}
 	$blog_status = 1;
-	if($_G['gp_filter'] == 'ignore') {
+	if($_GET['filter'] == 'ignore') {
 		$blog_status = 2;
 	}
 	showformheader("moderate&operation=blogs");
@@ -40,8 +40,8 @@ if(!submitcheck('modsubmit') && !$_G['gp_fast']) {
 
 	showtablerow('', array('width="60"', 'width="160"', 'width="60"'),
 		array(
-			cplang('username'), "<input size=\"15\" name=\"username\" type=\"text\" value=\"$_G[gp_username]\" />",
-			cplang('moderate_title_keyword'), "<input size=\"15\" name=\"title\" type=\"text\" value=\"$_G[gp_title]\" />",
+			cplang('username'), "<input size=\"15\" name=\"username\" type=\"text\" value=\"$_GET[username]\" />",
+			cplang('moderate_title_keyword'), "<input size=\"15\" name=\"title\" type=\"text\" value=\"$_GET[title]\" />",
 		)
 	);
 	showtablerow('', array('width="60"', 'width="160"', 'width="60"'),
@@ -57,45 +57,22 @@ if(!submitcheck('modsubmit') && !$_G['gp_fast']) {
 	showtablefooter();
 
 	$pagetmp = $page;
-	$sqlwhere = '';
-	if(!empty($_G['gp_username'])) {
-		$sqlwhere .= " AND b.username='{$_G['gp_username']}'";
-	}
-	if(!empty($dateline) && $dateline != 'all') {
-		$sqlwhere .= " AND b.dateline>'".(TIMESTAMP - $dateline)."'";
-	}
-	if(!empty($_G['gp_title'])) {
-		$sqlwhere .= " AND b.subject LIKE '%{$_G['gp_title']}%'";
-	}
-	$modcount = DB::result_first("SELECT COUNT(*)
-		FROM ".DB::table('common_moderate')." m
-		LEFT JOIN ".DB::table('home_blog')." b ON b.blogid=m.id
-		LEFT JOIN ".DB::table('home_blogfield')." bf ON bf.blogid=b.blogid
-		LEFT JOIN ".DB::table('home_class')." c ON b.classid=c.classid
-		WHERE m.idtype='blogid' AND m.status='$moderatestatus' $sqlwhere");
+	$modcount = C::t('common_moderate')->count_by_search_for_blog($moderatestatus, $_GET['username'], (($dateline &&  $dateline != 'all') ? (TIMESTAMP - $dateline) : null), $_GET['title']);
 	do {
 		$start_limit = ($pagetmp - 1) * $tpp;
-		$query = DB::query("SELECT b.blogid, b.uid, b.username, b.classid, b.subject, b.dateline, bf.message, bf.postip, c.classname
-			FROM ".DB::table('common_moderate')." m
-			LEFT JOIN ".DB::table('home_blog')." b ON b.blogid=m.id
-			LEFT JOIN ".DB::table('home_blogfield')." bf ON bf.blogid=b.blogid
-			LEFT JOIN ".DB::table('home_class')." c ON b.classid=c.classid
-			WHERE m.idtype='blogid' AND m.status='$moderatestatus' $sqlwhere
-			ORDER BY m.dateline DESC
-			LIMIT $start_limit, $tpp");
-			$pagetmp = $pagetmp - 1;
-	} while($pagetmp > 0 && DB::num_rows($query) == 0);
+		$blogarr = C::t('common_moderate')->fetch_all_by_search_for_blog($moderatestatus, $_GET['username'], (($dateline &&  $dateline != 'all') ? (TIMESTAMP - $dateline) : null), $_GET['title'], $start_limit, $tpp);
+		$pagetmp = $pagetmp - 1;
+	} while($pagetmp > 0 && empty($blogarr));
 	$page = $pagetmp + 1;
 	$multipage = multi($modcount, $tpp, $page, ADMINSCRIPT."?action=moderate&operation=blogs&filter=$filter&modfid=$modfid&ppp=$tpp&showcensor=$showcensor");
 
 	echo '<p class="margintop marginbot"><a href="javascript:;" onclick="expandall();">'.cplang('moderate_all_expand').'</a> <a href="javascript:;" onclick="foldall();">'.cplang('moderate_all_fold').'</a></p>';
 
 	showtableheader();
-	require_once libfile('class/censor');
 	$censor = & discuz_censor::instance();
 	$censor->highlight = '#FF0000';
 	require_once libfile('function/misc');
-	while($blog = DB::fetch($query)) {
+	foreach($blogarr as $blog) {
 		$blog['dateline'] = dgmdate($blog['dateline']);
 		$blog['subject'] = $blog['subject'] ? '<b>'.$blog['subject'].'</b>' : '<i>'.$lang['nosubject'].'</i>';
 		if($showcensor) {
@@ -142,14 +119,10 @@ if(!submitcheck('modsubmit') && !$_G['gp_fast']) {
 		}
 	}
 
-	if($validate_blogids = dimplode($moderate['validate'])) {
-		DB::update('home_blog', array('status' => '0'), "blogid IN ($validate_blogids)");
-		$validates = DB::affected_rows();
-		$query_t = DB::query("SELECT uid, COUNT(blogid) AS count
-			FROM ".DB::table('home_blog')."
-			WHERE blogid IN ($validate_blogids)
-			GROUP BY uid");
-		while($blog_user = DB::fetch($query_t)) {
+	if($moderate['validate']) {
+		$validates = C::t('home_blog')->update($moderate['validate'], array('status' => '0'));
+		$query_t = C::t('home_blog')->count_uid_by_blogid($moderate['validate']);
+		foreach($query_t as $blog_user) {
 			$credit_times = $blog_user['count'];
 			updatecreditbyaction('publishblog', $blog_user['uid'], array('blogs' => 1), '', $credit_times);
 		}
@@ -163,17 +136,16 @@ if(!submitcheck('modsubmit') && !$_G['gp_fast']) {
 		updatemoderate('blogid', $moderate['delete'], 2);
 	}
 
-	if($ignore_blogids = dimplode($moderate['ignore'])) {
-		DB::update('home_blog', array('status' => '2'), "blogid IN ($ignore_blogids)");
-		$ignores = DB::affected_rows();
+	if($moderate['ignore']) {
+		$ignores = C::t('home_blog')->update($moderate['ignore'], array('status' => '2'));
 		updatemoderate('blogid', $moderate['ignore'], 1);
 	}
 
-	if($_G['gp_fast']) {
-		echo callback_js($_G['gp_blogid']);
+	if($_GET['fast']) {
+		echo callback_js($_GET['blogid']);
 		exit;
 	} else {
-		cpmsg('moderate_blogs_succeed', "action=moderate&operation=blogs&page=$page&filter=$filter&dateline={$_G['gp_dateline']}&username={$_G['gp_username']}&title={$_G['gp_title']}&tpp={$_G['gp_tpp']}&showcensor=$showcensor", 'succeed', array('validates' => $validates, 'ignores' => $ignores, 'recycles' => $recycles, 'deletes' => $deletes));
+		cpmsg('moderate_blogs_succeed', "action=moderate&operation=blogs&page=$page&filter=$filter&dateline={$_GET['dateline']}&username={$_GET['username']}&title={$_GET['title']}&tpp={$_GET['tpp']}&showcensor=$showcensor", 'succeed', array('validates' => $validates, 'ignores' => $ignores, 'recycles' => $recycles, 'deletes' => $deletes));
 	}
 
 }

@@ -1,4 +1,4 @@
-<!--{eval 
+<!--{eval
 	$_G[home_tpl_titles] = array(lang('userapp/template', 'app_management'));
 }-->
 <!--{template common/header}-->
@@ -11,13 +11,13 @@
 <!--{if $_GET['ac'] == 'deleteapp'}-->
 
 	<h3 class="flb">
-		<em id="return_$_G[gp_handlekey]">{lang remove_app}</em>
-		<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="hideWindow('$_G[gp_handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
+		<em id="return_$_GET[handlekey]">{lang remove_app}</em>
+		<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="hideWindow('$_GET[handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
 	</h3>
-	<form id="editcommentform_{$cid}" name="editcommentform_{$cid}" method="post" autocomplete="off" action="userapp.php?mod=manage&my_suffix=%2Fuserapp%2Funinstall%3FappId%3D$_G[gp_appid]">
+	<form id="editcommentform_{$cid}" name="editcommentform_{$cid}" method="post" autocomplete="off" action="userapp.php?mod=manage&my_suffix=%2Fuserapp%2Funinstall%3FappId%3D$_GET[appid]">
 		<input type="hidden" name="referer" value="{echo dreferer()}" />
 		<input type="hidden" name="delappsubmit" value="true" />
-		<!--{if $_G[inajax]}--><input type="hidden" name="handlekey" value="$_G[gp_handlekey]" /><!--{/if}-->
+		<!--{if $_G[inajax]}--><input type="hidden" name="handlekey" value="$_GET[handlekey]" /><!--{/if}-->
 		<input type="hidden" name="formhash" value="{FORMHASH}" />
 		<div class="c">
 			{lang remove_app_message}
@@ -159,5 +159,8 @@
 		<!--{subtemplate userapp/userapp_menu_list}-->
 	</div>
 </div>
+<!--{if $_G['group']['radminid'] == 1}-->
+	<!--{eval helper_manyou::checkupdate();}-->
+<!--{/if}-->
 <!--{/if}-->
 <!--{template common/footer}-->

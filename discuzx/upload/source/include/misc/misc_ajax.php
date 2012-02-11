@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_ajax.php 24331 2011-09-08 08:29:58Z zhangguosheng $
+ *      $Id: misc_ajax.php 26657 2011-12-19 04:13:43Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -18,18 +18,14 @@ if($op == 'comment') {
 	$cid = empty($_GET['cid'])?0:intval($_GET['cid']);
 
 	if($cid) {
-		$cidsql = "cid='$cid' AND";
 		$ajax_edit = 1;
 	} else {
-		$cidsql = '';
 		$ajax_edit = 0;
 	}
 
 	$list = array();
-	$query = DB::query("SELECT * FROM ".DB::table('home_comment')." WHERE $cidsql authorid='$_G[uid]' ORDER BY dateline DESC LIMIT 0,1");
-	while ($value = DB::fetch($query)) {
-		$list[] = $value;
-	}
+	$value = C::t('home_comment')->fetch_latest_by_authorid($_G['uid'], $cid);
+	$list[] = $value;
 
 
 
@@ -37,9 +33,9 @@ if($op == 'comment') {
 
 	$uid = intval($_GET['uid']);
 	if($_G['uid'] && $uid) {
-		$space = getspace($_G['uid']);
-		$query = DB::query("SELECT * FROM ".DB::table('home_friend')." WHERE uid='$_G[uid]' AND fuid='$uid'");
-		$value = DB::fetch($query);
+		$space = getuserbyuid($_G['uid']);
+		$query = C::t('home_friend')->fetch_all_by_uid_fuid($_G['uid'], $uid);
+		$value = $query[0];
 	}
 
 	require_once libfile('function/friend');
@@ -64,8 +60,7 @@ if($op == 'comment') {
 	require_once libfile('function/share');
 
 	$list = array();
-	$query = DB::query("SELECT * FROM ".DB::table('home_share')." WHERE uid='$_G[uid]' ORDER BY dateline DESC LIMIT 0,1");
-	while ($value = DB::fetch($query)) {
+	foreach(C::t('home_share')->fetch_all_by_uid($_G['uid'], 0, 1) as $value) {
 		$value = mkshare($value);
 		$ajax_edit = 1;
 		$list[] = $value;
@@ -84,12 +79,12 @@ if($op == 'comment') {
 		showmessage('to_login', null, array(), array('showmsg' => true, 'login' => 1));
 	}
 
-	$count = getcount('home_pic', array('albumid'=>$id, 'uid'=>$_G['uid']));
+	$count = C::t('home_pic')->check_albumpic($id, NULL, $_G['uid']);
 	$piclist = array();
 	$multi = '';
 	if($count) {
-		$query = DB::query("SELECT * FROM ".DB::table('home_pic')." WHERE albumid='$id' AND uid='$_G[uid]' ORDER BY dateline DESC LIMIT $start,$perpage");
-		while ($value = DB::fetch($query)) {
+		$query = C::t('home_pic')->fetch_all_by_albumid($id, $start, $perpage, 0, 0, 1, $_G['uid']);
+		foreach($query as $value) {
 			$value['bigpic'] = pic_get($value['filepath'], 'album', $value['thumb'], $value['remote'], 0);
 			$value['pic'] = pic_get($value['filepath'], 'album', $value['thumb'], $value['remote']);
 			$piclist[] = $value;
@@ -103,8 +98,7 @@ if($op == 'comment') {
 	$clist = $do = array();
 	$icon = $_GET['icon'] == 'plus' ? 'minus' : 'plus';
 	if($doid) {
-		$query = DB::query("SELECT * FROM ".DB::table('home_doing')." WHERE doid='$doid'");
-		if ($value = DB::fetch($query)) {
+		if($value = C::t('home_doing')->fetch($doid)) {
 			$value['icon'] = 'plus';
 			if($value['replynum'] > 0 && ($value['replynum'] < 20 || $doid == $value['doid'])) {
 				$doids[] = $value['doid'];
@@ -120,12 +114,9 @@ if($op == 'comment') {
 
 	if($_GET['icon'] == 'plus' && $value['replynum']) {
 
-		require_once libfile('class/tree');
+		$tree = new lib_tree();
 
-		$tree = new tree();
-
-		$query = DB::query("SELECT * FROM ".DB::table('home_docomment')." WHERE doid='$doid' ORDER BY dateline");
-		while ($value = DB::fetch($query)) {
+		foreach(C::t('home_docomment')->fetch_all_by_doid($doid) as $value) {
 
 			if(empty($value['upid'])) {
 				$value['upid'] = "do";
@@ -149,10 +140,8 @@ if($op == 'comment') {
 		showmessage('no_privilege_guest');
 	}
 	$hash = trim($_GET['hash']);
-	$query = DB::query("SELECT * FROM ".DB::table('common_myinvite')." WHERE hash='$hash' AND touid='$_G[uid]'");
-	if($value = DB::fetch($query)) {
-		DB::query("DELETE FROM ".DB::table('common_myinvite')." WHERE hash='$hash' AND touid='$_G[uid]'");
-
+	if(C::t('common_myinvite')->count_by_hash_touid($hash, $_G['uid'])) {
+		C::t('common_myinvite')->delete_by_hash_touid($hash, $_G['uid']);
 		showmessage('do_success');
 	} else {
 		showmessage('no_privilege_deluserapp');
@@ -162,9 +151,9 @@ if($op == 'comment') {
 	if(empty($_G['uid'])) {
 		showmessage('no_privilege_guest');
 	}
-	$id = intval($_G['gp_id']);
+	$id = intval($_GET['id']);
 	if($id) {
-		DB::query("DELETE FROM ".DB::table('home_notification')." WHERE id='$id' AND uid='$_G[uid]'");
+		C::t('home_notification')->delete_by_id_uid($id, $uid);
 	}
 	showmessage('do_success');
 
@@ -175,8 +164,7 @@ if($op == 'comment') {
 		if(count($log) == 2 && $log[1]) {
 
 			loadcache('creditrule');
-			$query = DB::query("SELECT * FROM ".DB::table('common_credit_rule_log')." WHERE clid='$log[1]'");
-			$creditlog = DB::fetch($query);
+			$creditlog = C::t('common_credit_rule_log')->fetch($log[1]);
 			$rule = $_G['cache']['creditrule'][$log[0]];
 			$rule['cyclenum'] = $rule['rewardnum']? $rule['rewardnum'] - $creditlog['cyclenum'] : 0;
 		}
@@ -224,8 +212,7 @@ if($op == 'comment') {
 			}
 		}
 		if(!empty($district)) {
-			$query = DB::query('SELECT * FROM '.DB::table('common_district')." WHERE name IN (".dimplode(daddslashes($district)).')');
-			while($value = DB::fetch($query)) {
+			foreach(C::t('common_district')->fetch_all_by_name($district) as $value) {
 				$key = $value['level'] - 1;
 				$values[$key] = $value['id'];
 			}
@@ -249,6 +236,10 @@ if($op == 'comment') {
 
 	include_once libfile('function/profile');
 	$html = showdistrict($values, $elems, $container, $showlevel, $containertype);
+} elseif($_GET['op'] == 'createalbum') {
+	$albumname = 'new:'.$_GET['name'];
+	require_once libfile('function/spacecp');
+	$albumid = album_creat_by_id($albumname, intval($_GET['catid']));
 }
 
 include template('home/misc_ajax');

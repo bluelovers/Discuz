@@ -4,19 +4,23 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_action.php 6752 2010-03-25 08:47:54Z cnteacher $
+ *      $Id: lang_action.php 27449 2012-02-01 05:32:35Z zhangguosheng $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 $lang = array
 (
-	0 => 'è¨»å†Š/ç™»éŒ„',
-	1 => 'ç©ºé–“',
-	2 => 'è«–å£‡',
-	3 => 'ç¾¤çµ„',
-	4 => 'é¦–é ',
+	0 => '×¢²á/µÇÂ¼',
+	1 => '¿Õ¼ä',
+	2 => 'ÂÛÌ³',
+	3 => 'Èº×é',
+	4 => 'Ê×Ò³',
 
-	100 => 'å…¶ä»–',
-	127 => 'æ’ä»¶',
+	100 => 'ÆäËû',
+	127 => '²å¼þ',
 
 );
 

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: magic_anonymouspost.php 18824 2010-12-07 02:39:28Z liulanbo $
+ *      $Id: magic_anonymouspost.php 26918 2011-12-27 09:30:06Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -49,16 +49,16 @@ class magic_anonymouspost {
 
 	function usesubmit() {
 		global $_G;
-		$id = intval($_G['gp_id']);
+		$id = intval($_GET['id']);
 		if(empty($id)) {
 			showmessage(lang('magic/anonymouspost', 'anonymouspost_info_nonexistence'));
 		}
-		$idtype = !empty($_G['gp_idtype']) ? htmlspecialchars($_G['gp_idtype']) : '';
+		$idtype = !empty($_GET['idtype']) ? htmlspecialchars($_GET['idtype']) : '';
 		if(!in_array($idtype, array('pid', 'cid'))) {
 			showmessage(lang('magic/anonymouspost', 'anonymouspost_use_error'));
 		}
 		if($idtype == 'pid') {
-			$_G['tid'] = $_G['gp_ptid'];
+			$_G['tid'] = $_GET['ptid'];
 			$post = getpostinfo($id, 'pid', array('p.first', 'p.tid', 'p.fid', 'p.authorid', 'p.author', 'p.dateline', 'p.anonymous'));
 			$this->_check($post);
 
@@ -67,7 +67,6 @@ class magic_anonymouspost {
 			}
 
 			$thread = getpostinfo($post['tid'], 'tid', array('tid', 'subject', 'author', 'replies', 'lastposter'));
-			$posttable = getposttablebytid($post['tid']);
 			if($post['first']) {
 				$author = '';
 				$lastposter = $thread['replies'] > 0 ? $thread['lastposter'] : '';
@@ -75,34 +74,34 @@ class magic_anonymouspost {
 				$author = $thread['author'];
 				$lastposter = '';
 			}
-			DB::query("UPDATE ".DB::table($posttable)." SET anonymous='1' WHERE pid='$id'");
-
-			$forum['lastpost'] = explode("\t", DB::result_first("SELECT lastpost FROM ".DB::table('forum_forum')." WHERE fid='$post[fid]'"));
+			C::t('forum_post')->update('tid:'.$post['tid'], $id, array('anonymous' => 1));
+			$query = C::t('forum_forum')->fetch($post['fid']);
+			$forum['lastpost'] = explode("\t", $query['lastpost']);
 			if($post['dateline'] == $forum['lastpost'][2] && ($post['author'] == $forum['lastpost'][3] || ($forum['lastpost'][3] == '' && $post['anonymous']))) {
 				$lastpost = "$thread[tid]\t$thread[subject]\t$_G[timestamp]\t$lastposter";
-				DB::query("UPDATE ".DB::table('forum_forum')." SET lastpost='$lastpost' WHERE fid='$post[fid]'", 'UNBUFFERED');
+				C::t('forum_forum')->update($post['fid'], array('lastpost' => $lastpost));
 			}
-			DB::query("UPDATE ".DB::table('forum_thread')." SET author='$author', lastposter='$lastposter' WHERE tid='$post[tid]'");
+			C::t('forum_thread')->update($post['tid'], array('author' => $author, 'lastposter' => $lastposter));
 		} elseif($idtype == 'cid') {
-			$value = DB::fetch_first('SELECT * FROM '.DB::table('home_comment')." WHERE cid = '$id' AND authorid = '$_G[uid]'");
+			$value = C::t('home_comment')->fetch($id, intval($_G['uid']));
 			if(empty($value)) {
-				showmessage('anonymouspost_use_error');
+				showmessage(lang('magic/anonymouspost', 'anonymouspost_use_error'));
 			} elseif($value['author'] == '') {
-				showmessage('anonymouspost_once_limit');
+				showmessage(lang('magic/anonymouspost', 'anonymouspost_once_limit'));
 			}
-			DB::query("UPDATE ".DB::table('home_comment')." SET author='' WHERE cid='$id' AND authorid='$_G[uid]'");
+			C::t('home_comment')->update($id, array('author'=>''), $_G['uid']);
 		}
 
 		usemagic($this->magic['magicid'], $this->magic['num']);
 		updatemagiclog($this->magic['magicid'], '2', '1', '0', 0, $idtype, $id);
 
-		showmessage(lang('magic/anonymouspost', 'anonymouspost_succeed'), dreferer(), array(), array('showdialog' => 1, 'locationtime' => true));
+		showmessage(lang('magic/anonymouspost', 'anonymouspost_succeed'), dreferer(), array(), array('alert' => 'right', 'showdialog' => 1, 'locationtime' => true));
 	}
 
 	function show() {
 		global $_G;
-		$id = !empty($_G['gp_id']) ? htmlspecialchars($_G['gp_id']) : '';
-		$idtype = !empty($_G['gp_idtype']) ? htmlspecialchars($_G['gp_idtype']) : '';
+		$id = !empty($_GET['id']) ? htmlspecialchars($_GET['id']) : '';
+		$idtype = !empty($_GET['idtype']) ? htmlspecialchars($_GET['idtype']) : '';
 		if($idtype == 'pid') {
 			list($id, $_G['tid']) = explode(':', $id);
 			if($id && $_G['tid']) {
@@ -123,8 +122,8 @@ class magic_anonymouspost {
 
 	function buy() {
 		global $_G;
-		$id = !empty($_G['gp_id']) ? htmlspecialchars($_G['gp_id']) : '';
-		$idtype = !empty($_G['gp_idtype']) ? htmlspecialchars($_G['gp_idtype']) : '';
+		$id = !empty($_GET['id']) ? htmlspecialchars($_GET['id']) : '';
+		$idtype = !empty($_GET['idtype']) ? htmlspecialchars($_GET['idtype']) : '';
 		if(!empty($id) && $idtype == 'pid') {
 			list($id, $_G['tid']) = explode(':', $id);
 			$post = getpostinfo(intval($id), 'pid', array('p.fid', 'p.authorid'));

@@ -29,7 +29,7 @@
 	$multipage
     <div class="tl">
     	<div class="bm">
-        	<div class="bm_h">$_G['forum'][name] <!--{if $_G[gp_orderby] != 'dateline'}--><a href="forum.php?mod=forumdisplay&fid={$_G[fid]}&filter=author&orderby=dateline">[{lang viewnewthread}]</a><!--{else}--><a href="forum.php?mod=forumdisplay&fid={$_G[fid]}">[{lang list_default_sort}]</a><!--{/if}--></div>
+        	<div class="bm_h">$_G['forum'][name] <!--{if $_GET[orderby] != 'dateline'}--><a href="forum.php?mod=forumdisplay&fid={$_G[fid]}&filter=author&orderby=dateline">[{lang viewnewthread}]</a><!--{else}--><a href="forum.php?mod=forumdisplay&fid={$_G[fid]}">[{lang list_default_sort}]</a><!--{/if}--></div>
             <!--{if $_G['forum_threadcount']}-->
 				<!--{loop $_G['forum_threadlist'] $key $thread}-->
                 	<!--{if $thread['displayorder'] > 0 && !$displayorder_thread}-->
@@ -82,7 +82,7 @@
                                 <!--{if $thread[recommendicon] && $filter != 'recommend'}-->
                                     [{lang thread_recommend}]
                                 <!--{/if}-->
-                                
+
                                 <!--{if $thread['digest'] > 0 && $filter != 'digest'}-->
                                     [{lang thread_digest}]
                                 <!--{/if}-->
@@ -119,18 +119,18 @@
         <!--{if $_G['forum']['threadtypes']}-->
             <div class="box ttp">
             <span class="xg2">{lang threadtype} </span>
-            <a href="forum.php?mod=forumdisplay&fid=$_G[fid]{if $_G['gp_archiveid']}&archiveid={$_G['gp_archiveid']}{/if}" class="<!--{if $_G['gp_filter'] != 'typeid'}-->xw1<!--{/if}-->">{lang forum_viewall}</a>
+            <a href="forum.php?mod=forumdisplay&fid=$_G[fid]{if $_GET['archiveid']}&archiveid={$_GET['archiveid']}{/if}" class="<!--{if $_GET['filter'] != 'typeid'}-->xw1<!--{/if}-->">{lang forum_viewall}</a>
             <!--{loop $_G['forum']['threadtypes']['types'] $id $name}-->
-                 <a href="forum.php?mod=forumdisplay&fid=$_G[fid]&filter=typeid&typeid=$id$forumdisplayadd[typeid]" {if $_G['gp_filter'] == 'typeid' && $_G['gp_typeid'] == $id} class="xw1"{/if}>$name</a> 
+                 <a href="forum.php?mod=forumdisplay&fid=$_G[fid]&filter=typeid&typeid=$id$forumdisplayadd[typeid]" {if $_GET['filter'] == 'typeid' && $_GET['typeid'] == $id} class="xw1"{/if}>$name</a>
             <!--{/loop}-->
             </div>
         <!--{/if}-->
-        
+
         <!--{if $_G['forum']['threadsorts']}-->
             <div class="box tst">
             <span class="xg2">{lang threadsort} </span>
             <!--{loop $_G['forum']['threadsorts']['types'] $id $name}-->
-                <a href="forum.php?mod=forumdisplay&fid=$_G[fid]&filter=sortid&sortid=$id$forumdisplayadd[sortid]" class="<!--{if $_G[gp_sortid] == $id}-->xw1<!--{/if}-->">$name</a>
+                <a href="forum.php?mod=forumdisplay&fid=$_G[fid]&filter=sortid&sortid=$id$forumdisplayadd[sortid]" class="<!--{if $_GET[sortid] == $id}-->xw1<!--{/if}-->">$name</a>
             <!--{/loop}-->
             </div>
         <!--{/if}-->

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: task_promotion.php 6736 2010-03-25 07:30:28Z cnteacher $
+ *      $Id: task_promotion.php 24735 2011-10-10 02:45:39Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -33,15 +33,22 @@ class task_promotion {
 	function preprocess($task) {
 		global $_G;
 
-		$promotions = DB::result_first("SELECT COUNT(*) FROM ".DB::table('forum_promotion')." WHERE uid='$_G[uid]'");
-		DB::query("REPLACE INTO ".DB::table('forum_spacecache')." (uid, variable, value, expiration) VALUES ('$_G[uid]', 'promotion$task[taskid]', '$promotions', '$_G[timestamp]')");
+		$promotions = C::t('forum_promotion')->count_by_uid($_G['uid']);
+		C::t('forum_spacecache')->insert(array(
+			'uid' => $_G['uid'],
+			'variable' => 'promotion'.$task['taskid'],
+			'value' => $promotions,
+			'expiration' => $_G['timestamp'],
+		), false, true);
 	}
 
 	function csc($task = array()) {
 		global $_G;
 
-		$num = DB::result_first("SELECT COUNT(*) FROM ".DB::table('forum_promotion')." WHERE uid='$_G[uid]'") - DB::result_first("SELECT value FROM ".DB::table('forum_spacecache')." WHERE uid='$_G[uid]' AND variable='promotion$task[taskid]'");
-		$numlimit = DB::result_first("SELECT value FROM ".DB::table('common_taskvar')." WHERE taskid='$task[taskid]' AND variable='num'");
+		$promotion = C::t('forum_spacecache')->fetch($_G['uid'], 'promotion'.$task['taskid']);
+		$promotion = $promotion['value'];
+		$num = C::t('forum_promotion')->count_by_uid($_G['uid']) - $promotion;
+		$numlimit = C::t('common_taskvar')->get_value_by_taskid($task['taskid'], 'num');
 		if($num && $num >= $numlimit) {
 			return TRUE;
 		} else {
@@ -52,7 +59,7 @@ class task_promotion {
 	function sufprocess($task) {
 		global $_G;
 
-		DB::query("DELETE FROM ".DB::table('forum_spacecache')." WHERE uid='$_G[uid]' AND variable='promotion$task[taskid]'");
+		C::t('forum_spacecache')->delete($_G['uid'], 'promotion'.$task['taskid']);
 	}
 
 }

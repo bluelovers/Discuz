@@ -4,14 +4,14 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cron_promotion_hourly.php 6752 2010-03-25 08:47:54Z cnteacher $
+ *      $Id: cron_promotion_hourly.php 24377 2011-09-15 11:02:12Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
-DB::query("DELETE FROM ".DB::table('forum_promotion')."");
+C::t('forum_promotion')->delete_all();
 
 
 ?>

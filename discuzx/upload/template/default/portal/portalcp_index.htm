@@ -8,7 +8,7 @@
 <!--{if $op == 'push'}-->
 	<h3 class="flb">
 	<em>{lang article_push}</em>
-	<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="hideWindow('$_G[gp_handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
+	<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="hideWindow('$_GET[handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
 	</h3>
 
 	<div class="c" style="width:260px; height: 300px; overflow: hidden; overflow-y: scroll;">
@@ -41,7 +41,7 @@
 <!--{else}-->
 <div id="pt" class="bm cl">
 	<div class="z">
-		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em> 
+		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
 		<a href="portal.php">{lang portal}</a> <em>&rsaquo;</em>
 		<a href="portal.php?mod=portalcp">{lang portal_manage}</a> <em>&rsaquo;</em>
 		{lang category_management}

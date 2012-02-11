@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: advertisement.php 6752 2010-03-25 08:47:54Z cnteacher $
+ *      $Id: advertisement.php 25246 2011-11-02 03:34:53Z zhangguosheng $
  */
 
 header('Expires: '.gmdate('D, d M Y H:i:s', time() + 60).' GMT');
@@ -15,7 +15,7 @@ if(!defined('IN_API')) {
 
 loadcore();
 
-$adid = $_G['gp_adid'];
+$adid = $_GET['adid'];
 $data = adshow($adid);
 
 echo 'document.write(\''.preg_replace("/\r\n|\n|\r/", '\n', addcslashes($data, "'\\")).'\');';

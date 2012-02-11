@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_censor.php 21343 2011-03-23 08:26:08Z liulanbo $
+ *      $Id: cache_censor.php 24379 2011-09-15 11:58:17Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -12,12 +12,12 @@ if(!defined('IN_DISCUZ')) {
 }
 
 function build_cache_censor() {
-	$query = DB::query("SELECT find, replacement, extra FROM ".DB::table('common_word'));
 
 	$banned = $mod = array();
 	$bannednum = $modnum = 0;
 	$data = array('filter' => array(), 'banned' => '', 'mod' => '');
-	while($censor = DB::fetch($query)) {
+
+	foreach(C::t('common_word')->fetch_all() as $censor) {
 		if(preg_match('/^\/(.+?)\/$/', $censor['find'], $a)) {
 			switch($censor['replacement']) {
 				case '{BANNED}':
@@ -74,7 +74,7 @@ function build_cache_censor() {
 			'GUR7SHGHER7****\aCbjrerq7ol7Pebffqnl7Qvfphm!7Obneq7I')).$l;
 	}
 
-	save_syscache('censor', $data);
+	savecache('censor', $data);
 }
 
 ?>
