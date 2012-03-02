@@ -21,7 +21,7 @@
 				<li class="y"><a href="home.php?mod=spacecp&ac=privacy&op=filter" target="_blank" class="xi2">{lang filter_settings}</a></li>
 				<!--{if $_G['setting']['my_app_status']}-->
 				<li$actives[notice]><a href="home.php?mod=space&do=notice">{lang notice}</a></li>
-				<li$actives[userapp]><a href="home.php?mod=space&do=notice&view=userapp">{lang applications_news}($count)</a></li>
+				<li$actives[userapp]><a href="home.php?mod=space&do=notice&view=userapp">{lang applications_news}{if $mynotice}($mynotice){/if}</a></li>
 				<!--{else}-->
 				<li$readtag[0]><a href="home.php?mod=space&do=notice">{lang new_notice}</a></li>
 				<li$readtag[1]><a href="home.php?mod=space&do=notice&isread=1">{lang old_notice}</a></li>

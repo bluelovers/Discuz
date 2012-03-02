@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: home_space.php 27593 2012-02-07 03:25:04Z zhengqingpeng $
+ *      $Id: home_space.php 28502 2012-03-01 11:33:29Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -17,11 +17,7 @@ $dos = array('index', 'doing', 'blog', 'album', 'friend', 'wall',
 
 $do = (!empty($_GET['do']) && in_array($_GET['do'], $dos))?$_GET['do']:'index';
 
-if(in_array($do, array('home', 'doing', 'blog', 'album', 'share', 'wall'))) {
-	if(!$_G['setting']['homestatus']) {
-		showmessage('home_status_off');
-	}
-} else {
+if(!in_array($do, array('home', 'doing', 'blog', 'album', 'share', 'wall'))) {
 	$_G['mnid'] = 'mn_common';
 }
 
@@ -40,18 +36,28 @@ if($_GET['view'] == 'admin') {
 	$_GET['do'] = $do;
 }
 if(empty($uid) || in_array($do, array('notice', 'pm'))) $uid = $_G['uid'];
-if($_G['setting']['followreferer'] && empty($_GET['do']) && !isset($_GET['diy']) || $do == 'follow' || (!$_G['inajax'] && !$_G['setting']['homestatus'] && in_array($do, array('profile', 'follow', 'index', 'thread')))) {
-	if($do == 'thread') {
-		$_GET['view'] = 'thread';
+if(empty($_GET['do']) && !isset($_GET['diy'])) {
+	if($_G['adminid'] == 1) {
+		if($_G['setting']['allowquickviewprofile']) {
+			if(!$_G['inajax']) dheader("Location:home.php?mod=space&uid=$uid&do=profile");
+		}
 	}
-	if($_G['adminid'] == 1 && $_G['setting']['allowquickviewprofile'] && !in_array($do, array('follow', 'thread'))) {
-		dheader("Location:home.php?mod=follow&uid=$uid&do=view&view=profile");
-	} elseif($uid != $_G['uid']) {
+	if(helper_access::check_module('follow')) {
+		$do = $_GET['do'] = 'follow';
+	} else {
+		$do = $_GET['do'] = !$_G['setting']['homepagestyle'] ? 'profile' : 'index';
+	}
+}
+
+if($_GET['do'] == 'follow') {
+	if($uid != $_G['uid']) {
 		$_GET['do'] = 'view';
 		$_GET['uid'] = $uid;
 	}
 	require_once libfile('home/follow', 'module');
 	exit;
+} elseif(empty($_GET['do']) && !$_G['inajax'] && !helper_access::check_module('follow')) {
+	$do = 'profile';
 }
 
 if($uid && empty($member)) {
@@ -100,7 +106,9 @@ $diymode = 0;
 
 $seccodecheck = $_G['setting']['seccodestatus'] & 4;
 $secqaacheck = $_G['setting']['secqaa']['status'] & 2;
-
+if($do != 'index') {
+	$_G['disabledwidthauto'] = 0;
+}
 require_once libfile('space/'.$do, 'include');
 
 ?>

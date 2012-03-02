@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portalcp_block.php 27543 2012-02-03 08:56:21Z zhangguosheng $
+ *      $Id: portalcp_block.php 27632 2012-02-08 04:03:54Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -695,6 +695,12 @@ if($op == 'block') {
 		$prefix = ($pic['remote'] ? $_G['setting']['ftp']['attachurl'] : $_G['setting']['attachurl']);
 		$itemfields['pics'] = array();
 		$first = true;
+
+		if(empty($_GET['idtype'])) {
+			$_GET['idtype'] = $itemfields['idtype'].'s';
+			$_GET['id'] = $itemfields['id'];
+		}
+
 		if($_GET['idtype'] == 'tids') {
 			$prefix .= 'forum/';
 			$firstpost = C::t('forum_post')->fetch_threadpost_by_tid_invisible($_GET['id']);

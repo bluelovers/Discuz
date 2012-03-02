@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_core.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: lang_core.php 28082 2012-02-22 06:58:29Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -17,6 +17,7 @@ $lang = array
 	'prevpage' => '上一页',
 	'pageunit' => '页',
 	'total' => '共',
+	'10k' => '万',
 	'pagejumptip' => '输入页码，按回车快速跳转',
 	'date' => array(
 		'before' => '前',

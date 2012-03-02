@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: helper_log.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: helper_log.php 27957 2012-02-17 08:48:07Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -18,7 +18,7 @@ class helper_log {
 
 		$nowurl = $_SERVER['REQUEST_URI']?$_SERVER['REQUEST_URI']:($_SERVER['PHP_SELF']?$_SERVER['PHP_SELF']:$_SERVER['SCRIPT_NAME']);
 		$log = dgmdate($_G['timestamp'], 'Y-m-d H:i:s')."\t".$_G['clientip']."\t$_G[uid]\t{$nowurl}\t".str_replace(array("\r", "\n"), array(' ', ' '), trim($message))."\n";
-		writelog($file, $log);
+		helper_log::writelog($file, $log);
 		if($halt) {
 			exit();
 		}
@@ -78,8 +78,8 @@ class helper_log {
 	}
 
 	public static function coredebuglog($errno, $errstr, $errfile, $errline) {
-		$log = 'Errno['.$errno.'] Errstr['.$errstr.'] File['.str_replace(DISCUZ_ROOT, '', $errfile).'] Line['.$errline."]\n";
-		$show = 'Stack trace:';
+		$log = "Errno:[$errno]\n\rErrstr:[$errstr]\n\rFile:[".str_replace(DISCUZ_ROOT, '', $errfile)."]\n\rLine:[$errline]\n\r";
+		$show = "Stack trace:\n\r";
 		$debug_backtrace = debug_backtrace();
 		array_pop($debug_backtrace);
 		krsort($debug_backtrace);
@@ -93,7 +93,7 @@ class helper_log {
 			$show .= "[Line: $error[line]]".$file."($func)\n";
 		}
 		helper_log::runlog('discuz_core_debug', $log.$show);
-		if($errno == E_ERROR || $errno == E_CORE_ERROR || $errno == E_COMPILE_ERROR) {
+		if($errno == E_ERROR || $errno == E_CORE_ERROR || $errno == E_COMPILE_ERROR || $errno == E_PARSE) {
 			helper_sysmessage::show(nl2br($log.$show), 'System Error');
 		}
 		return false;

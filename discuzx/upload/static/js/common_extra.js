@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: common_extra.js 27547 2012-02-06 02:02:00Z monkey $
+	$Id: common_extra.js 27844 2012-02-15 08:35:28Z monkey $
 */
 
 function _relatedlinks(rlinkmsgid) {
@@ -270,7 +270,7 @@ function _zoom(obj, zimg, nocover, pn, showexif) {
 	var menu = $(menuid);
 	var zoomid = menuid + '_zoom';
 	var imgtitle = !nocover && obj.title ? '<div class="imgzoom_title">' + obj.title + '</div>' +
-		(showexif ? '<div id="' + zoomid + '_exif" class="imgzoom_exif onmouseover="this.className=\'imgzoom_exif imgzoom_exif_hover\'" onmouseout="this.className=\'imgzoom_exif\'"></div>' : '')
+		(showexif ? '<div id="' + zoomid + '_exif" class="imgzoom_exif" onmouseover="this.className=\'imgzoom_exif imgzoom_exif_hover\'" onmouseout="this.className=\'imgzoom_exif\'"></div>' : '')
 		: '';
 	var cover = !nocover ? 1 : 0;
 	var pn = !pn ? 0 : 1;
@@ -298,7 +298,15 @@ function _zoom(obj, zimg, nocover, pn, showexif) {
 			}
 			showimage(zimg, w, h, imgw, imgh);
 			if(showexif && faid) {
-				ajaxget('forum.php?mod=ajax&action=exif&aid=' + faid, zoomid + '_exif');
+				var x = new Ajax();
+				x.get('forum.php?mod=ajax&action=exif&aid=' + faid + '&inajax=1', function(s, x) {
+					if(s) {
+						$(zoomid + '_exif').style.display = '';
+						$(zoomid + '_exif').innerHTML = s;
+					} else {
+						$(zoomid + '_exif').style.display = 'none';
+					}
+				});
 			}
 		} else {
 			setTimeout(function () { loadCheck(loading); }, 100);

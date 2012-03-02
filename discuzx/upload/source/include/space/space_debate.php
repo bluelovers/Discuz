@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_debate.php 25779 2011-11-22 04:35:44Z zhengqingpeng $
+ *      $Id: space_debate.php 28220 2012-02-24 07:52:50Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -48,19 +48,7 @@ $join = $authorid = $replies = 0;
 $displayorder = null;
 $subject = '';
 
-if($_GET['view'] == 'all') {
-
-	$start = 0;
-	$perpage = 100;
-	$alltype = 'dateline';
-	if($_GET['order'] == 'hot') {
-		$replies = $minhot;
-		$alltype = 'hot';
-	}
-	$orderactives = array($_GET['order'] => ' class="a"');
-	loadcache('space_debate');
-
-} elseif($_GET['view'] == 'me') {
+if($_GET['view'] == 'me') {
 
 	if($_GET['type'] == 'reply') {
 		$authorid = $space['uid'];
@@ -110,79 +98,53 @@ if($need_count) {
 		$searchkey = dhtmlspecialchars($searchkey);
 	}
 
-	$havecache = false;
-	if($_GET['view'] == 'all') {
+	$count = C::t('forum_thread')->count_by_special(5, $authorid, $replies, $displayorder, $subject, $join);
+	if($count) {
 
-		$cachetime = $_GET['order'] == 'hot' ? 43200 : 3000;
-		if(!empty($_G['cache']['space_debate'][$alltype]) && is_array($_G['cache']['space_debate'][$alltype])) {
-			$cachearr = $_G['cache']['space_debate'][$alltype];
-			if(!empty($cachearr['dateline']) && $cachearr['dateline'] > $_G['timestamp'] - $cachetime) {
-				$list = $cachearr['data'];
-				$havecache = true;
-			}
-		}
-	}
-
-	if(!$havecache) {
-		$count = C::t('forum_thread')->count_by_special(5, $authorid, $replies, $displayorder, $subject, $join);
-		if($count) {
-
-			$dids = $special = $multitable = $tids = array();
-			require_once libfile('function/post');
-			foreach(C::t('forum_thread')->fetch_all_by_special(5, $authorid, $replies, $displayorder, $subject, $join, $start, $perpage) as $value) {
-				$value['dateline'] = dgmdate($value['dateline']);
-				if($_GET['view'] == 'me' && $_GET['type'] == 'reply' && $page == 1 && count($special) < 2) {
-					$value['message'] = messagecutstr($value['message'], 200);
+		$dids = $special = $multitable = $tids = array();
+		require_once libfile('function/post');
+		foreach(C::t('forum_thread')->fetch_all_by_special(5, $authorid, $replies, $displayorder, $subject, $join, $start, $perpage) as $value) {
+			$value['dateline'] = dgmdate($value['dateline']);
+			if($_GET['view'] == 'me' && $_GET['type'] == 'reply' && $page == 1 && count($special) < 2) {
+				$value['message'] = messagecutstr($value['message'], 200);
+				$special[$value['tid']] = $value;
+			} else {
+				if($page == 1 && count($special) < 2) {
+					$tids[$value['posttableid']][$value['tid']] = $value['tid'];
 					$special[$value['tid']] = $value;
 				} else {
-					if($page == 1 && count($special) < 2) {
-						$tids[$value['posttableid']][$value['tid']] = $value['tid'];
-						$special[$value['tid']] = $value;
-					} else {
-						$list[$value['tid']] = $value;
-					}
-				}
-				$dids[$value['tid']] = $value['tid'];
-			}
-			if($tids) {
-				foreach($tids as $postid => $tid) {
-					foreach(C::t('forum_post')->fetch_all_by_tid(0, $tid) as $value) {
-						$special[$value['tid']]['message'] = messagecutstr($value['message'], 200);
-					}
+					$list[$value['tid']] = $value;
 				}
 			}
-			if($dids) {
-				foreach(C::t('forum_debate')->fetch_all($dids) as $value) {
-					$value['negavotesheight'] = $value['affirmvotesheight'] = '8px';
-					if($value['affirmvotes'] || $value['negavotes']) {
-						$allvotes = $value['affirmvotes'] + $value['negavotes'];
-						$value['negavotesheight'] = round($value['negavotes']/$allvotes * 100, 2).'%';
-						$value['affirmvotesheight'] = round($value['affirmvotes']/$allvotes * 100, 2).'%';
-					}
-					if($list[$value['tid']]) {
-						$list[$value['tid']] = array_merge($value, $list[$value['tid']]);
-					} elseif($special[$value['tid']]) {
-						$special[$value['tid']] = array_merge($value, $special[$value['tid']]);
-					}
-				}
-			}
-
-			if($_GET['view'] == 'all') {
-				$_G['cache']['space_debate'][$alltype] = array(
-					'dateline' => $_G['timestamp'],
-					'data' => $list
-				);
-				savecache('space_debate', $_G['cache']['space_debate']);
-			}
-
-			if($_GET['view'] != 'all') {
-				$multi = multi($count, $perpage, $page, $theurl);
-			}
-
+			$dids[$value['tid']] = $value['tid'];
 		}
-	} else {
-		$count = count($list);
+		if($tids) {
+			foreach($tids as $postid => $tid) {
+				foreach(C::t('forum_post')->fetch_all_by_tid(0, $tid) as $value) {
+					$special[$value['tid']]['message'] = messagecutstr($value['message'], 200);
+				}
+			}
+		}
+		if($dids) {
+			foreach(C::t('forum_debate')->fetch_all($dids) as $value) {
+				$value['negavotesheight'] = $value['affirmvotesheight'] = '8px';
+				if($value['affirmvotes'] || $value['negavotes']) {
+					$allvotes = $value['affirmvotes'] + $value['negavotes'];
+					$value['negavotesheight'] = round($value['negavotes']/$allvotes * 100, 2).'%';
+					$value['affirmvotesheight'] = round($value['affirmvotes']/$allvotes * 100, 2).'%';
+				}
+				if($list[$value['tid']]) {
+					$list[$value['tid']] = array_merge($value, $list[$value['tid']]);
+				} elseif($special[$value['tid']]) {
+					$special[$value['tid']] = array_merge($value, $special[$value['tid']]);
+				}
+			}
+		}
+
+		$multi = multi($count, $perpage, $page, $theurl);
+
 	}
+
 }
 
 

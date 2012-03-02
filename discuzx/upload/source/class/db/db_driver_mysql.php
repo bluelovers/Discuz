@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: db_driver_mysql.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: db_driver_mysql.php 28509 2012-03-02 01:08:16Z cnteacher $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -76,11 +76,15 @@ class db_driver_mysql
 
 	}
 
-	function _dbconnect($dbhost, $dbuser, $dbpw, $dbcharset, $dbname, $pconnect) {
-		$link = null;
-		$func = empty($pconnect) ? 'mysql_connect' : 'mysql_pconnect';
-		if(!$link = @$func($dbhost, $dbuser, $dbpw, 1)) {
-			$this->halt('notconnect', $this->errno());
+	function _dbconnect($dbhost, $dbuser, $dbpw, $dbcharset, $dbname, $pconnect, $halt = true) {
+
+		if($pconnect) {
+			$link = @mysql_pconnect($dbhost, $dbuser, $dbpw, MYSQL_CLIENT_COMPRESS);
+		} else {
+			$link = @mysql_connect($dbhost, $dbuser, $dbpw, 1, MYSQL_CLIENT_COMPRESS);
+		}
+		if(!$link) {
+			$halt && $this->halt('notconnect', $this->errno());
 		} else {
 			$this->curlink = $link;
 			if($this->version() > '4.1') {

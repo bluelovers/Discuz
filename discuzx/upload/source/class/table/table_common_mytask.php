@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_mytask.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_common_mytask.php 27777 2012-02-14 07:07:26Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -33,6 +33,9 @@ class table_common_mytask extends discuz_table
 	}
 
 	public function update($uid, $taskid, $data) {
+		if(!$data || !is_array($data)) {
+			return;
+		}
 		$condition = array();
 		if($uid) {
 			$condition[] = DB::field('uid', $uid);
@@ -50,7 +53,7 @@ class table_common_mytask extends discuz_table
 	}
 
 	public function delete_exceed($exceedtime) {
-		DB::query("DELETE FROM %t WHERE status='-1' AND dateline<%d", array($this->_table, TIMESTAMP - $exceedtime), false, true);
+		DB::query("DELETE FROM %t WHERE status='-1' AND dateline<%d", array($this->_table, TIMESTAMP - intval($exceedtime)), false, true);
 	}
 
 	public function fetch_all_by_taskid($taskid, $limit) {

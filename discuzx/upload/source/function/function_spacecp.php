@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_spacecp.php 27306 2012-01-13 08:13:41Z chenmengshu $
+ *      $Id: function_spacecp.php 27757 2012-02-14 03:08:15Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -469,7 +469,7 @@ function hot_update($idtype, $id, $hotuser) {
 	if($newhot == $_G['setting']['feedhotmin']) {
 		$tablename = gettablebyidtype($idtype);
 		if($tablename) {
-			$item = C::t($tablename)->fetch_by_id_idtype($id, $idtype);
+			$item = C::t($tablename)->fetch_by_id_idtype($id);
 			$itemuid = $item['uid'];
 			updatecreditbyaction('hotinfo', $itemuid);
 		}

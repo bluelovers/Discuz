@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_redirect.php 27100 2012-01-05 04:21:07Z liulanbo $
+ *      $Id: forum_redirect.php 28464 2012-03-01 06:35:27Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -79,14 +79,13 @@ if($_GET['goto'] == 'findpost') {
 	}
 
 	$ordertype = !isset($_GET['ordertype']) && getstatus($thread['status'], 4) ? 1 : $ordertype;
-	if($thread['special'] == 2) {
+	if($thread['special'] == 2 || C::t('forum_threaddisablepos')->fetch($tid)) {
 		$curpostnum = C::t('forum_post')->count_by_tid_dateline($thread['posttableid'], $tid, $post['dateline']);
 	} else {
 		if($thread['maxposition']) {
 			$maxposition = $thread['maxposition'];
 		} else {
 			$maxposition = C::t('forum_post')->fetch_maxposition_by_tid($thread['posttableid'], $tid);
-			C::t('forum_thread')->update($tid, array('maxposition' => $maxposition));
 		}
 		$thread['replies'] = $maxposition;
 		$curpostnum = $post['position'];

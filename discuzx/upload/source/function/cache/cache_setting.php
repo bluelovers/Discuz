@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_setting.php 27152 2012-01-09 02:45:53Z monkey $
+ *      $Id: cache_setting.php 28361 2012-02-28 07:12:03Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -14,7 +14,7 @@ if(!defined('IN_DISCUZ')) {
 function build_cache_setting() {
 	global $_G;
 
-	$skipkeys = array('posttableids', 'siteuniqueid', 'mastermobile', 'masterqq', 'masteremail', 'closedreason',
+	$skipkeys = array('posttableids', 'mastermobile', 'masterqq', 'masteremail', 'closedreason',
 		'creditsnotify', 'backupdir', 'custombackup', 'jswizard', 'maxonlines', 'modreasons', 'newsletter',
 		'postno', 'postnocustom', 'customauthorinfo', 'domainwhitelist', 'ipregctrl',
 		'ipverifywhite', 'fastsmiley', 'defaultdoing', 'profilegroup',
@@ -474,6 +474,7 @@ function get_cachedata_setting_plugin($method = '') {
 			unset($plugin['modules']['extra']);
 			foreach($plugin['modules'] as $k => $module) {
 				if($available && isset($module['name'])) {
+					$module['displayorder'] = $plugin['modules']['system'] ? ($module['displayorder'] < 1000 ? $module['displayorder'] : 999) : $module['displayorder'] + 1000;
 					$k = '';
 					switch($module['type']) {
 						case 1:
@@ -662,14 +663,17 @@ function get_cachedata_mainnav() {
 
 	$data['navs'] = $data['subnavs'] = $data['menunavs'] = $data['navmns'] = $data['navmn'] = $data['navdms'] = $navids = array();
 	foreach(C::t('common_nav')->fetch_all_mainnav() as $nav) {
+		if($nav['available'] < 0) {
+			continue;
+		}
 		$id = $nav['type'] == 0 ? $nav['identifier'] : 100 + $nav['id'];
-		if($nav['identifier'] == 1 && $nav['type'] == 0 && !$_G['setting']['portalstatus']) {
+		if($nav['identifier'] == 1 && $nav['type'] == 0 && !helper_access::check_module('portal')) {
 			$nav['available'] = 0;
 		}
-		if($nav['identifier'] == 3 && $nav['type'] == 0 && !$_G['setting']['groupstatus']) {
+		if($nav['identifier'] == 3 && $nav['type'] == 0 && !helper_access::check_module('group')) {
 			$nav['available'] = 0;
 		}
-		if($nav['identifier'] == 4 && $nav['type'] == 0 && !$_G['setting']['homestatus']) {
+		if($nav['identifier'] == 4 && $nav['type'] == 0 && !helper_access::check_module('feed')) {
 			$nav['available'] = 0;
 		}
 		if($nav['type'] == 3) {
@@ -791,6 +795,9 @@ function get_cachedata_spacenavs() {
 	global $_G;
 	$data['spacenavs'] = array();
 	foreach(C::t('common_nav')->fetch_all_by_navtype(2) as $nav) {
+		if($nav['available'] < 0) {
+			continue;
+		}
 		if($nav['icon']) {
 			$navicon = str_replace('{STATICURL}', STATICURL, $nav['icon']);
 			if(!preg_match("/^".preg_quote(STATICURL, '/')."/i", $navicon) && !(($valueparse = parse_url($navicon)) && isset($valueparse['host']))) {
@@ -848,7 +855,7 @@ function get_cachedata_spacenavs() {
 				$nav['allowsubnew'] = $_G['setting']['ec_ratio'] && ($_G['setting']['ec_account'] || $_G['setting']['ec_tenpay_opentrans_chnid'] || $_G['setting']['ec_tenpay_bargainor']);
 			}
 		}
-		$nav['subcode'] = $nav['allowsubnew'] ? '<span><a href="'.$nav['suburl'].'"'.($nav['target'] == 1 ? ' target="_blank"' : '').$nav['extra'].'>'.$nav['subname'].'</a></span>' : '';
+		$nav['subcode'] = $nav['allowsubnew'] && helper_access::check_module($nav['identifier']) ? '<span><a href="'.$nav['suburl'].'"'.($nav['target'] == 1 ? ' target="_blank"' : '').$nav['extra'].'>'.$nav['subname'].'</a></span>' : '';
 		if($nav['name'] != '{hr}') {
 			if(in_array($nav['name'], array('{userpanelarea1}', '{userpanelarea2}'))) {
 				$nav['code'] = str_replace(array('{', '}'), '', $nav['name']);
@@ -869,6 +876,9 @@ function get_cachedata_mynavs() {
 
 	$data['mynavs'] = array();
 	foreach(C::t('common_nav')->fetch_all_by_navtype(3) as $nav) {
+		if($nav['available'] < 0) {
+			continue;
+		}
 		if($nav['icon']) {
 			$navicon = str_replace('{STATICURL}', STATICURL, $nav['icon']);
 			if(!preg_match("/^".preg_quote(STATICURL, '/')."/i", $navicon) && !(($valueparse = parse_url($navicon)) && isset($valueparse['host']))) {

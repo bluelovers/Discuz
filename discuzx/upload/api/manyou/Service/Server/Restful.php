@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: Restful.php 26205 2011-12-05 10:09:32Z zhangguosheng $
+ *      $Id: Restful.php 27794 2012-02-14 10:08:25Z wangjinghui $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -453,7 +453,7 @@ abstract class Cloud_Service_Server_Restful {
 		return $result;
 	}
 
-	function getUsers($uIds, $spaces = array(), $isReturnSpaceField = true, $isExtra = true, $isReturnFriends = false, $friendNum = MY_FRIEND_NUM_LIMIT, $isOnlyReturnFriendId = false, $isFriendIdKey = false) {
+	function getUsers($uIds, $spaces = array(), $isReturnSpaceField = true, $isExtra = true, $isReturnFriends = false, $friendNum = 500, $isOnlyReturnFriendId = false, $isFriendIdKey = false) {
 		if (!$uIds) {
 			return array();
 		}
@@ -466,8 +466,10 @@ abstract class Cloud_Service_Server_Restful {
 			$spaces = C::t('common_member')->fetch_all($uIds);
 		}
 
+		$totalFriendsNum = 0;
 		foreach(C::t('common_member_count')->fetch_all($uIds) as $uid => $row) {
 			$spaces[$uid] = array_merge($spaces[$uid], $row);
+			$totalFriendsNum += $row['friends'];
 		}
 
 		foreach(C::t('common_member_status')->fetch_all($uIds) as $uid => $row) {
@@ -486,9 +488,18 @@ abstract class Cloud_Service_Server_Restful {
 
 		$friends = array();
 		if ($isReturnFriends) {
-			$query = C::t('home_friend')->fetch_all_by_uid($uIds);
-			foreach($query as $row) {
-				$friends[$row['uid']][] = $row;
+			if ($totalFriendsNum <= 10000) {
+				$query = C::t('home_friend')->fetch_all_by_uid($uIds);
+				foreach($query as $row) {
+					$friends[$row['uid']][] = $row;
+				}
+			} else {
+				foreach ($uIds as $uId) {
+					$query = C::t('home_friend')->fetch_all_by_uid($uId, 0 , $friendNum);
+					foreach($query as $row) {
+						$friends[$uId][] = $row;
+					}
+				}
 			}
 		}
 

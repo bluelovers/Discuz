@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: helper_notification.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: helper_notification.php 28251 2012-02-27 01:40:15Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -63,12 +63,21 @@ class helper_notification {
 			$setarr['authorid'] = 0;
 			$setarr['author'] = '';
 		}
-
+		$pkId = 0;
 		if($oldnote['id']) {
 			C::t('home_notification')->update($oldnote['id'], $setarr);
+			$pkId = $oldnote['id'];
 		} else {
 			$oldnote['new'] = 0;
-			C::t('home_notification')->insert($setarr);
+			$pkId = C::t('home_notification')->insert($setarr, true);
+		}
+		if($_G['setting']['cloud_status'] && $_G['setting']['connect']['allow'] && $tospace['conisbind']) {
+			$noticeService = Cloud::loadClass('Service_Client_Notification');
+			if($oldnote['id']) {
+				$noticeService->update($touid, $pkId, $setarr['from_num'], $setarr['dateline']);
+			} else {
+				$noticeService->add($touid, $pkId, $type, $setarr['authorid'], $setarr['author'], $setarr['from_id'], $setarr['from_idtype'], $setarr['note'], $setarr['from_num'], $setarr['dateline']);
+			}
 		}
 
 		if(empty($oldnote['new'])) {

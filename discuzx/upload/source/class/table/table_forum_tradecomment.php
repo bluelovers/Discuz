@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_forum_tradecomment.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_forum_tradecomment.php 27737 2012-02-13 09:46:21Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -27,7 +27,7 @@ class table_forum_tradecomment extends discuz_table
 	}
 
 	function fetch_all_list($from, $uid, $dateline, $score, $start) {
-		$sql = $from == 'myself' ? "tc.raterid='$uid'" : "tc.rateeid='$uid'";
+		$sql = $from == 'myself' ? "tc.raterid='".intval($uid)."'" : "tc.rateeid='".intval($uid)."'";
 		$sql .= $from == 'buyer' ? ' AND tc.type=0' : ($from == 'seller' ? ' AND tc.type=1' : '');
 		$dateline = $dateline !== false ? ' AND tc.dateline>='.intval($dateline) : '';
 		$score = $score !== false ? ' AND tc.score='.intval($score) : '';
@@ -37,7 +37,7 @@ class table_forum_tradecomment extends discuz_table
 	}
 
 	function count_list($from, $uid, $dateline, $score) {
-		$sql = $from == 'myself' ? "tc.raterid='$uid'" : "tc.rateeid='$uid'";
+		$sql = $from == 'myself' ? "tc.raterid='".intval($uid)."'" : "tc.rateeid='".intval($uid)."'";
 		$sql .= $from == 'buyer' ? ' AND tc.type=0' : ($from == 'seller' ? ' AND tc.type=1' : '');
 		$dateline = $dateline !== false ? ' AND tc.dateline>='.intval($dateline) : '';
 		$score = $score !== false ? ' AND tc.score='.intval($score) : '';

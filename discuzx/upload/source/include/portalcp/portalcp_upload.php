@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portalcp_upload.php 25289 2011-11-03 10:06:19Z zhangguosheng $
+ *      $Id: portalcp_upload.php 27879 2012-02-16 05:24:55Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -151,7 +151,7 @@ if($attachs) {
 	if($downremotefile && $imagereplace) {
 		$string = preg_replace(array("/\<(script|style|iframe)[^\>]*?\>.*?\<\/(\\1)\>/si", "/\<!*(--|doctype|html|head|meta|link|body)[^\>]*?\>/si"), '', $string);
 		$string = str_replace($imagereplace['oldimageurl'], $imagereplace['newimageurl'], $string);
-		$string = str_replace(array("\r", "\n", "\r\n"), '', addcslashes($string, '/"\\'));
+		$string = str_replace(array("\r", "\n", "\r\n"), '', addcslashes($string, '/"\\\''));
 		print <<<EOF
 		<script type="text/javascript">
 			var f = parent.window.frames["uchome-ifrHtmlEditor"].window.frames["HtmlEditor"];
@@ -171,6 +171,7 @@ function portal_upload_error($msg) {
 }
 
 function portal_upload_show($attach) {
+	global $_G;
 
 	$imagehtml = $filehtml = $coverstr ='';
 
@@ -181,8 +182,9 @@ function portal_upload_show($attach) {
 		$filehtml = get_uploadcontent($attach, 'portal', 'upload');
 	}
 
+	echo '<script type="text/javascript" src="'.$_G[setting][jspath].'handlers.js?'.$_G['style']['verhash'].'"></script>';
 	echo '<script>';
-	if($imagehtml) echo 'parent.$(\'attach_image_body\').innerHTML = \''.addslashes($imagehtml).'\'+parent.$(\'attach_image_body\').innerHTML;';
+	if($imagehtml) echo 'var tdObj = getInsertTdId(parent.$(\'imgattachlist\'), \'attach_list_'.$attach['attachid'].'\');tdObj.innerHTML = \''.addslashes($imagehtml).'\';';
 	if($filehtml) echo 'parent.$(\'attach_file_body\').innerHTML = \''.addslashes($filehtml).'\'+parent.$(\'attach_file_body\').innerHTML;';
 	echo 'if(parent.$(\'localfile_'.$_GET['attach_target_id'].'\') != null)parent.$(\'localfile_'.$_GET['attach_target_id'].'\').style.display = \'none\';';
 	echo 'parent.$(\'attach_ids\').value += \','.$attach['attachid'].'\';';

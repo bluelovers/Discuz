@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: group_my.php 25889 2011-11-24 09:52:20Z monkey $
+ *      $Id: group_my.php 28090 2012-02-22 07:33:13Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -14,9 +14,6 @@ if(!defined('IN_DISCUZ')) {
 $_G['mnid'] = 'mn_group';
 if(!$_G['uid']) {
 	showmessage('to_login', null, array(), array('showmsg' => true, 'login' => 1));
-}
-if(!$_G['setting']['groupstatus']) {
-	showmessage('group_status_off');
 }
 require_once libfile('function/group');
 

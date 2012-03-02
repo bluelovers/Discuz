@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_blog.php 26807 2011-12-23 07:35:33Z chenmengshu $
+ *      $Id: admincp_blog.php 27939 2012-02-17 03:03:07Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -14,7 +14,7 @@ include_once libfile('function/portalcp');
 
 cpheader();
 
-$detail = !empty($_GET['uid']) ? true : $_GET['detail'];
+$detail = $_GET['detail'];
 $uid = $_GET['uid'];
 $blogid = $_GET['blogid'];
 $users = $_GET['users'];
@@ -102,7 +102,7 @@ EOT;
 	showsetting('blog_search_detail', 'detail', $detail, 'radio');
 	showsetting('blog_search_perpage', '', $_GET['perpage'], "<select name='perpage'><option value='20'>$lang[perpage_20]</option><option value='50'>$lang[perpage_50]</option><option value='100'>$lang[perpage_100]</option></select>");
 	showsetting('resultsort', '', $orderby, "<select name='orderby'><option value=''>$lang[defaultsort]</option><option value='dateline'>$lang[forums_edit_extend_order_starttime]</option><option value='viewnum'>$lang[blog_search_view]</option><option value='replynum'>$lang[blog_search_reply]</option><option value='hot'>$lang[blog_search_hot]</option></select> ");
-	showsetting('', '', $ordersc, "<select name='ordersc'><option value='desc'>$lang[orderdesc]</option><option value='asc'>$lang[orderasc]</option></select>");
+	showsetting('', '', $ordersc, "<select name='ordersc'><option value='desc'>$lang[orderdesc]</option><option value='asc'>$lang[orderasc]</option></select>", '', 0, '', '', '', true);
 	showsetting('blog_search_uid', 'uid', $uid, 'text');
 	showsetting('blog_search_blogid', 'blogid', $blogid, 'text');
 	showsetting('blog_search_user', 'users', $users, 'text');
@@ -263,7 +263,7 @@ if(submitcheck('searchsubmit', 1) || $newlist) {
 				), TRUE);
 			}
 			$blogcount = C::t('home_blog')->count_all_by_search($blogid, $uids, $starttime, $endtime, $hot1, $hot2, $viewnum1, $viewnum2, $replynum1, $replynum2, $friend, $ip, $keywords, $lengthlimit);
-			$multi = multi($blogcount, $perpage, $page, ADMINSCRIPT."?action=blog$muticondition");
+			$multi = multi($blogcount, $perpage, $page, ADMINSCRIPT."?action=blog".($perpage ? '&perpage='.$perpage : '').$muticondition);
 		} else {
 			$blogcount = 0;
 			$query = C::t('home_blog')->fetch_all_by_search(2, $blogid, $uids, $starttime, $endtime, $hot1, $hot2, $viewnum1, $viewnum2, $replynum1, $replynum2, $friend, $ip, $keywords, $lengthlimit);

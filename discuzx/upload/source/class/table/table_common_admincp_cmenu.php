@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_admincp_cmenu.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_common_admincp_cmenu.php 27806 2012-02-15 03:20:46Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -31,6 +31,9 @@ class table_common_admincp_cmenu extends discuz_table
 	}
 
 	public function delete($id, $uid = 0) {
+		if(empty($id)) {
+			return false;
+		}
 		return DB::query('DELETE FROM %t WHERE '.DB::field('id', $id).' %i', array($this->_table, ($uid ? ' AND '.DB::field('uid', $uid) : '')));
 	}
 

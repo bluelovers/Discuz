@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_pluginvar.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_common_pluginvar.php 27777 2012-02-14 07:07:26Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -29,10 +29,16 @@ class table_common_pluginvar extends discuz_table
 	}
 
 	public function update_by_variable($pluginid, $variable, $data) {
+		if(!$pluginid || !$variable || !$data || !is_array($data)) {
+			return;
+		}
 		DB::update($this->_table, $data, DB::field('pluginid', $pluginid).' AND '.DB::field('variable', $variable));
 	}
 
 	public function update_by_pluginvarid($pluginid, $pluginvarid, $data) {
+		if(!$pluginid || !$pluginvarid || !$data || !is_array($data)) {
+			return;
+		}
 		DB::update($this->_table, $data, DB::field('pluginid', $pluginid).' AND '.DB::field('pluginvarid', $pluginvarid));
 	}
 
@@ -41,10 +47,16 @@ class table_common_pluginvar extends discuz_table
 	}
 
 	public function delete_by_pluginid($pluginid) {
+		if(!$pluginid) {
+			return;
+		}
 		DB::delete($this->_table, DB::field('pluginid', $pluginid));
 	}
 
 	public function delete_by_variable($pluginid, $variable) {
+		if(!$pluginid || !$variable) {
+			return;
+		}
 		DB::delete($this->_table, DB::field('pluginid', $pluginid).' AND '.DB::field('variable', $variable));
 	}
 

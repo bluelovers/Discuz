@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_forumlist.php 25297 2011-11-07 00:57:59Z cnteacher $
+ *      $Id: function_forumlist.php 28510 2012-03-02 01:27:48Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -368,12 +368,11 @@ function forumleftside() {
 	$leftside = array('favorites' => array(), 'forums' => array());
 	$leftside['forums'] = forumselect(FALSE, 1);
 	if($_G['uid']) {
-		$leftside['favorites'] = C::t('home_favorite')->fetch_all_by_uid_idtype($_G['uid'], 'fid');
-		foreach($leftside['favorites'] as $id => $forum) {
-			if($_G['fid'] == $id) {
+		foreach(C::t('home_favorite')->fetch_all_by_uid_idtype($_G['uid'], 'fid') as $id => $forum) {
+			if($_G['fid'] == $forum['id']) {
 				$_G['forum_fidinfav'] = $forum['favid'];
 			}
-			$leftside['favorites'][$id] = array($forum['title'], $forum['favid']);
+			$leftside['favorites'][$forum['id']] = array($forum['title'], $forum['favid']);
 		}
 	}
 	$_G['leftsidewidth_mwidth'] = $_G['setting']['leftsidewidth'] + 15;

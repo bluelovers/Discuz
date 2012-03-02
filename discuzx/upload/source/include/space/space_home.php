@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_home.php 26752 2011-12-22 08:00:13Z chenmengshu $
+ *      $Id: space_home.php 28376 2012-02-28 09:11:37Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -318,7 +318,7 @@ if($space['self'] && empty($start)) {
 	}
 
 	$isnewer = ($_G['timestamp']-$space['regdate'] > 3600*24*7) ?0:1;
-	if($isnewer) {
+	if($isnewer && $_G['setting']['homestyle']) {
 
 		$friendlist = array();
 		$query = C::t('home_friend')->fetch_all($space['uid']);
@@ -338,74 +338,76 @@ if($space['self'] && empty($start)) {
 		space_merge($space, 'status');
 	}
 
-	foreach(C::t('home_visitor')->fetch_all_by_uid($space['uid'], 12) as $value) {
-		$visitorlist[$value['vuid']] = $value;
-		$oluids[] = $value['vuid'];
-	}
+	if($_G['setting']['homestyle']) {
+		foreach(C::t('home_visitor')->fetch_all_by_uid($space['uid'], 12) as $value) {
+			$visitorlist[$value['vuid']] = $value;
+			$oluids[] = $value['vuid'];
+		}
 
-	if($oluids) {
-		foreach(C::app()->session->fetch_all_by_uid($oluids) as $value) {
-			if(!$value['invisible']) {
-				$ols[$value['uid']] = 1;
-			} elseif ($visitorlist[$value['uid']]) {
-				unset($visitorlist[$value['uid']]);
+		if($oluids) {
+			foreach(C::app()->session->fetch_all_by_uid($oluids) as $value) {
+				if(!$value['invisible']) {
+					$ols[$value['uid']] = 1;
+				} elseif ($visitorlist[$value['uid']]) {
+					unset($visitorlist[$value['uid']]);
+				}
 			}
 		}
-	}
 
-	$oluids = array();
-	$olfcount = 0;
-	if($space['feedfriend']) {
-		foreach(C::app()->session->fetch_all_by_uid(explode(',', $space['feedfriend']), 15) as $value) {
-			if($olfcount < 15 && !$value['invisible']) {
-				$olfriendlist[$value['uid']] = $value;
-				$ols[$value['uid']] = 1;
-				$oluids[$value['uid']] = $value['uid'];
-				$olfcount++;
+		$oluids = array();
+		$olfcount = 0;
+		if($space['feedfriend']) {
+			foreach(C::app()->session->fetch_all_by_uid(explode(',', $space['feedfriend']), 15) as $value) {
+				if($olfcount < 15 && !$value['invisible']) {
+					$olfriendlist[$value['uid']] = $value;
+					$ols[$value['uid']] = 1;
+					$oluids[$value['uid']] = $value['uid'];
+					$olfcount++;
+				}
 			}
 		}
-	}
-	if($olfcount < 15) {
-		$query = C::t('home_friend')->fetch_all_by_uid($space['uid'], 0, 32, true);
-		foreach($query as $value) {
-			$value['uid'] = $value['fuid'];
-			$value['username'] = $value['fusername'];
-			if(empty($oluids[$value['uid']])) {
-				$olfriendlist[$value['uid']] = $value;
-				$olfcount++;
-				if($olfcount == 15) break;
+		if($olfcount < 15) {
+			$query = C::t('home_friend')->fetch_all_by_uid($space['uid'], 0, 32, true);
+			foreach($query as $value) {
+				$value['uid'] = $value['fuid'];
+				$value['username'] = $value['fusername'];
+				if(empty($oluids[$value['uid']])) {
+					$olfriendlist[$value['uid']] = $value;
+					$olfcount++;
+					if($olfcount == 15) break;
+				}
 			}
 		}
-	}
 
-	if($space['feedfriend']) {
-		$birthdaycache = C::t('forum_spacecache')->fetch($_G['uid'], 'birthday');
-		if(empty($birthdaycache) || TIMESTAMP > $birthdaycache['expiration']) {
-			$birthlist = C::t('common_member_profile')->fetch_all_will_birthday_by_uid($space['feedfriend']);
+		if($space['feedfriend']) {
+			$birthdaycache = C::t('forum_spacecache')->fetch($_G['uid'], 'birthday');
+			if(empty($birthdaycache) || TIMESTAMP > $birthdaycache['expiration']) {
+				$birthlist = C::t('common_member_profile')->fetch_all_will_birthday_by_uid($space['feedfriend']);
 
-			C::t('forum_spacecache')->insert(array(
-				'uid' => $_G['uid'],
-				'variable' => 'birthday',
-				'value' => serialize($birthlist),
-				'expiration' => getexpiration(),
-			), false, true);
-		} else {
-			$birthlist = dunserialize($birthdaycache['value']);
+				C::t('forum_spacecache')->insert(array(
+					'uid' => $_G['uid'],
+					'variable' => 'birthday',
+					'value' => serialize($birthlist),
+					'expiration' => getexpiration(),
+				), false, true);
+			} else {
+				$birthlist = dunserialize($birthdaycache['value']);
+			}
 		}
-	}
 
-	if($_G['setting']['taskon']) {
-		require_once libfile('class/task');
-		$tasklib = & task::instance();
-		$taskarr = $tasklib->tasklist('canapply');
-		$task = $taskarr[array_rand($taskarr)];
-	}
-	if($_G['setting']['magicstatus']) {
-		loadcache('magics');
-		if(!empty($_G['cache']['magics'])) {
-			$magic = $_G['cache']['magics'][array_rand($_G['cache']['magics'])];
-			$magic['description'] = cutstr($magic['description'], 34, '');
-			$magic['pic'] = strtolower($magic['identifier']).'.gif';
+		if($_G['setting']['taskon']) {
+			require_once libfile('class/task');
+			$tasklib = & task::instance();
+			$taskarr = $tasklib->tasklist('canapply');
+			$task = $taskarr[array_rand($taskarr)];
+		}
+		if($_G['setting']['magicstatus']) {
+			loadcache('magics');
+			if(!empty($_G['cache']['magics'])) {
+				$magic = $_G['cache']['magics'][array_rand($_G['cache']['magics'])];
+				$magic['description'] = cutstr($magic['description'], 34, '');
+				$magic['pic'] = strtolower($magic['identifier']).'.gif';
+			}
 		}
 	}
 } elseif(empty($_G['uid'])) {

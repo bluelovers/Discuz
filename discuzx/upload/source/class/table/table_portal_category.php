@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_portal_category.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_portal_category.php 27876 2012-02-16 04:28:02Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -30,7 +30,7 @@ class table_portal_category extends discuz_table
 	}
 
 	public function increase($catids, $data) {
-		$catids = array_map('dintval', (array)$catids);
+		$catids = array_map('intval', (array)$catids);
 		$sql = array();
 		$allowkey = array('articles');
 		foreach($data as $key => $value) {

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: My.php 26205 2011-12-05 10:09:32Z zhangguosheng $
+ *      $Id: My.php 28361 2012-02-28 07:12:03Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -68,8 +68,8 @@ class Cloud_Service_Server_My extends Cloud_Service_Server_Restful {
 	}
 
 	protected function _checkRequest() {
-		$siteuniqueid = C::t('common_setting')->fetch('siteuniqueid');
-		if (empty($siteuniqueid)) {
+		global $_G;
+		if (empty($_G['setting']['siteuniqueid'])) {
 			throw new Cloud_Service_Server_RestfulException('Client SiteKey NOT Exists', 11);
 		} elseif (empty($this->siteKey)) {
 			throw new Cloud_Service_Server_RestfulException('My SiteKey NOT Exists', 12);

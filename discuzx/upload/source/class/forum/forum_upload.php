@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_upload.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: forum_upload.php 28404 2012-02-29 03:42:14Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -59,18 +59,18 @@ class forum_upload {
 			$this->uploadmsg(3);
 		}
 
-		if($_G['fid'] && C::t('forum_attachtype')->count_by_extension_fid($upload->attach['ext'], $_G['fid'])) {
-			$type = C::t('forum_attachtype')->fetch_by_fid_extension($_G['fid'], $upload->attach['ext']);
-		} else {
-			$type = C::t('forum_attachtype')->fetch_by_fid_extension(0, $upload->attach['ext']);
+		loadcache('attachtype');
+		if($_G['fid'] && isset($_G['cache']['attachtype'][$_G['fid']][$upload->attach['ext']])) {
+			$maxsize = $_G['cache']['attachtype'][$_G['fid']][$upload->attach['ext']];
+		} elseif(isset($_G['cache']['attachtype'][0][$upload->attach['ext']])) {
+			$maxsize = $_G['cache']['attachtype'][0][$upload->attach['ext']];
 		}
-
-		if($type) {
-			if($type['maxsize'] == 0) {
+		if(isset($maxsize)) {
+			if(!$maxsize) {
 				$this->error_sizelimit = 'ban';
 				$this->uploadmsg(4);
-			} elseif($upload->attach['size'] > $type['maxsize']) {
-				$this->error_sizelimit = $type['maxsize'];
+			} elseif($upload->attach['size'] > $maxsize) {
+				$this->error_sizelimit = $maxsize;
 				$this->uploadmsg(5);
 			}
 		}

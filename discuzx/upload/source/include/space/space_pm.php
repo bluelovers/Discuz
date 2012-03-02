@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_pm.php 26685 2011-12-20 02:33:07Z monkey $
+ *      $Id: space_pm.php 28297 2012-02-27 08:35:59Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -14,7 +14,6 @@ if(!defined('IN_DISCUZ')) {
 loaducenter();
 
 $list = array();
-$_G['disabledwidthauto'] = 0;
 
 $plid = empty($_GET['plid'])?0:intval($_GET['plid']);
 $daterange = empty($_GET['daterange'])?0:intval($_GET['daterange']);
@@ -165,6 +164,10 @@ if($_GET['subop'] == 'view') {
 	if($filter == 'privatepm' && $page == 1 || $filter == 'newpm') {
 		$newpmarr = uc_pm_checknew($_G['uid'], 1);
 		$newpm = $newpmarr['newpm'];
+	}
+	if($newpm && $_G['setting']['cloud_status'] &&  $_G['setting']['connect']['allow'] && $_G['member']['conisbind']) {
+		$msgService = Cloud::loadClass('Cloud_Service_Client_Message');
+		$msgService->setMsgFlag($_G['uid'], $_G['timestamp']);
 	}
 	$newpmcount = $newpm + $announcepm;
 	if($_G['member']['newpm']) {

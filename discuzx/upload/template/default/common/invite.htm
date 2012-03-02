@@ -33,7 +33,7 @@
 							<select class="ps" onchange="clearlist=1;getUser(1, this.value)">
 								<option value="-1">{lang invite_all_friend}</option>
 								<!--{if $at == 1 && $_G['group']['allowat']}-->
-									<option value="-2">ÎÒ¹Ø×¢µÄ</option>
+									<option value="-2">{lang invite_my_follow}</option>
 								<!--{/if}-->
 								<!--{loop $friendgrouplist $groupid $group}-->
 									<option value="$groupid">$group</option>

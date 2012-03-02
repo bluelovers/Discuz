@@ -65,7 +65,6 @@
 <div id="pt" class="bm cl">
 	<div class="z">
 		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
-		<a href="home.php">$_G[setting][navs][4][navname]</a> <em>&rsaquo;</em>
 		<!--{if $space[self]}-->
 			<a href="home.php?mod=space&do=blog">{lang blog}</a>
 		<!--{else}-->
@@ -81,16 +80,20 @@
 	</div>
 </div>
 
-<div id="ct" class="ct2_a wp cl">
+<div id="ct" class="wp cl">
 	<div class="mn">
-		<div class="bm bw0 cl">
+		<div class="bm cl">
+			<div class="bm_h">
+				<h1>
+					<span class="y xs1 xw0"><a href="javascript:history.go(-1);">{lang previous_page}</a></span>
+					<!--{if $blog[blogid]}-->{lang edit_blog}<!--{else}-->{lang memcp_blog}<!--{/if}-->
+				</h1>
+			</div>
+			<div class="bm_c">
 			<script type="text/javascript" src="{STATICURL}image/editor/editor_function.js?{VERHASH}"></script>
 			<script type="text/javascript" src="{$_G[setting][jspath]}home_blog.js?{VERHASH}"></script>
 			<form id="ttHtmlEditor" method="post" autocomplete="off" action="home.php?mod=spacecp&ac=blog&blogid=$blog[blogid]{if $_GET[modblogkey]}&modblogkey=$_GET[modblogkey]{/if}" onsubmit="validate(this);" enctype="multipart/form-data">
-				<h1 class="mt cl">
-					<span class="y xs1 xw0 mtn"><a href="javascript:history.go(-1);">{lang previous_page}</a></span>
-					<img class="vm" src="{STATICURL}image/feed/blog.gif" alt="blog" /> <!--{if $blog[blogid]}-->{lang edit_blog}<!--{else}-->{lang memcp_blog}<!--{/if}-->
-				</h1>
+				
 				<!--{hook/spacecp_blog_top}-->
 				<table cellspacing="0" cellpadding="0" class="tfm">
 					<tr>
@@ -199,14 +202,14 @@
 						</td>
 					</tr>
 					<!--{/if}-->
-
+					<!--{if helper_access::check_module('feed')}-->
 					<tr>
 						<th>{lang feed_option}</th>
 						<td>
 							<label for="makefeed"><input type="checkbox" name="makefeed" id="makefeed" value="1" class="pc"{if ckprivacy('blog', 'feed')} checked="checked"{/if}>{lang make_feed} (<a href="home.php?mod=spacecp&ac=privacy&op=feed" target="_blank">{lang change_default_settings}</a>)</label>
 						</td>
 					</tr>
-
+					<!--{/if}-->
 					<!--{if checkperm('seccode') && ($secqaacheck || $seccodecheck)}-->
 					<!--{eval $sectpl = '<tr><th><sec></th><td class="pns"><sec><div class="d"><sec></div></td></tr>';}-->
 					<!--{subtemplate common/seccheck}-->
@@ -266,10 +269,8 @@
 
 
 			<!--{hook/spacecp_blog_bottom}-->
+			</div>
 		</div>
-	</div>
-	<div class="appl">
-		<!--{subtemplate common/userabout}-->
 	</div>
 </div>
 <script type="text/javascript">

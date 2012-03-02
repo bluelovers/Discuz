@@ -41,7 +41,7 @@ var fid = parseInt('$_G[fid]');
 								<!--{hook/forumdisplay_fastpost_func_extra}-->
 								<a href="forum.php?mod=post&action=newthread&fid=$_G[fid]" onclick="switchAdvanceMode(this.href);doane(event);">{lang post_advancemode}</a>
 							</span>
-							<!--{eval $seditor = array('fastpost', array('bold', 'color', 'img', 'link', 'quote', 'code', 'smilies'), !$allowfastpost ? 1 : 0, $allowpostattach && $allowfastpost ? '<span class="pipe z">|</span><span id="spanButtonPlaceholder">上传</span>' : '');}-->
+							<!--{eval $seditor = array('fastpost', array('at', 'bold', 'color', 'img', 'link', 'quote', 'code', 'smilies'), !$allowfastpost ? 1 : 0, $allowpostattach && $allowfastpost ? '<span class="pipe z">|</span><span id="spanButtonPlaceholder">'.lang('template', 'upload').'</span>' : '');}-->
 							<!--{hook/forumdisplay_fastpost_ctrl_extra}-->
 							<!--{subtemplate common/seditor}-->
 						</div>
@@ -54,10 +54,10 @@ var fid = parseInt('$_G[fid]');
 										<!--{if !$_G['connectguest']}-->
 											{lang login_to_post} <a href="member.php?mod=logging&action=login" onclick="showWindow('login', this.href)" class="xi2">{lang login}</a> | <a href="member.php?mod={$_G[setting][regname]}" class="xi2">$_G['setting']['reglinkname']</a>
 										<!--{else}-->
-											您需要<a href="member.php?mod=connect" class="xi2" target="_blank">完善资料</a>或<a href="member.php?mod=connect&ac=bind" class="xi2" target="_blank">绑定帐号</a>后才可以发帖
+											{lang fill_profile_to_post}
 										<!--{/if}-->
 									<!--{else}-->
-										您现在无权发帖，<a href="javascript:;" onclick="$('newspecial').onclick()" class="xi2">点击查看原因</a>
+										{lang no_permission_to_post}<a href="javascript:;" onclick="$('newspecial').onclick()" class="xi2">{lang click_to_show_reason}</a>
 									<!--{/if}-->
 									<!--{hook/global_login_text}-->
 								</div>
@@ -80,113 +80,10 @@ var fid = parseInt('$_G[fid]');
 				var ATTACHNUM = {'imageused':0,'imageunused':0,'attachused':0,'attachunused':0}, ATTACHUNUSEDAID = new Array(), IMGUNUSEDAID = new Array();
 				</script>
 
-
-<style type="text/css">
-
-.progressWrapper {
-	width: 100%;
-	overflow: hidden;
-}
-
-.progressContainer {
-	margin: 5px;
-	padding: 4px;
-	border: solid 1px #E8E8E8;
-	background-color: #F7F7F7;
-	overflow: hidden;
-}
-/* Message */
-.message {
-	margin: 1em 0;
-	padding: 10px 20px;
-	border: solid 1px #FFDD99;
-	background-color: #FFFFCC;
-	overflow: hidden;
-}
-/* Error */
-.red {
-	border: solid 1px #B50000;
-	background-color: #FFEBEB;
-}
-
-/* Current */
-.green {
-	border: solid 1px #DDF0DD;
-	background-color: #EBFFEB;
-}
-
-/* Complete */
-.blue {
-	border: solid 1px #CEE2F2;
-	background-color: #F0F5FF;
-}
-
-.progressName {
-	font-size: 8pt;
-	font-weight: 700;
-	color: #555;
-	width: 323px;
-	height: 14px;
-	text-align: left;
-	white-space: nowrap;
-	overflow: hidden;
-}
-
-.progressBarInProgress,
-.progressBarComplete,
-.progressBarError {
-	font-size: 0;
-	width: 0%;
-	height: 2px;
-	background-color: blue;
-	margin-top: 2px;
-}
-
-.progressBarComplete {
-	width: 100%;
-	background-color: green;
-	visibility: hidden;
-}
-
-.progressBarError {
-	width: 100%;
-	background-color: red;
-	visibility: hidden;
-}
-
-.progressBarStatus {
-	margin-top: 2px;
-	width: 337px;
-	font-size: 7pt;
-	font-family: Arial;
-	text-align: left;
-	white-space: nowrap;
-}
-
-a.progressCancel {
-	font-size: 0;
-	display: block;
-	height: 14px;
-	width: 14px;
-	background-image: url({IMGDIR}/cancelbutton.gif);
-	background-repeat: no-repeat;
-	background-position: -14px 0px;
-	float: right;
-}
-
-a.progressCancel:hover {
-	background-position: 0px 0px;
-}
-.swfupload {
-	vertical-align: top;
-}
-
-</style>
-<script type="text/javascript" src="{$_G[setting][jspath]}swfupload.js?{VERHASH}"></script>
-<script type="text/javascript" src="{$_G[setting][jspath]}swfupload.queue.js?{VERHASH}"></script>
-<script type="text/javascript" src="{$_G[setting][jspath]}handlers.js?{VERHASH}"></script>
-<script type="text/javascript" src="{$_G[setting][jspath]}fileprogress.js?{VERHASH}"></script>
-
+				<script type="text/javascript" src="{$_G[setting][jspath]}swfupload.js?{VERHASH}"></script>
+				<script type="text/javascript" src="{$_G[setting][jspath]}swfupload.queue.js?{VERHASH}"></script>
+				<script type="text/javascript" src="{$_G[setting][jspath]}handlers.js?{VERHASH}"></script>
+				<script type="text/javascript" src="{$_G[setting][jspath]}fileprogress.js?{VERHASH}"></script>
 
 				<input type="hidden" name="posttime" id="posttime" value="{TIMESTAMP}" />
 				<div class="upfl{if empty($_GET[from]) && $_G[setting][fastsmilies]} hasfsl{/if}">
@@ -234,7 +131,7 @@ a.progressCancel:hover {
 						// Button Settings
 						button_image_url : IMGDIR+"/uploadbutton_small.png",
 						button_placeholder_id : "spanButtonPlaceholder",
-						button_width: 90,
+						button_width: 17,
 						button_height: 25,
 						button_cursor:SWFUpload.CURSOR.HAND,
 						button_text_left_padding: 0,
@@ -278,7 +175,9 @@ a.progressCancel:hover {
 						<!--{hook/forumdisplay_fastpost_sync_method}-->
 					</span>
 				<!--{/if}-->
-				<label><input type="checkbox" name="adddynamic" value="1" {if $_G['forum']['allowfeed']}checked="checked"{/if} />转播给听众</label>
+				<!--{if helper_access::check_module('follow')}-->
+				<label><input type="checkbox" name="adddynamic" value="1" {if $_G['forum']['allowfeed'] && !$_G[tid] && empty($_G['forum']['viewperm'])}checked="checked"{/if} />{lang post_relay}</label>
+				<!--{/if}-->
 			</p>
 		</form>
 	</div>

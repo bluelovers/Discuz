@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_forum_tradelog.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_forum_tradelog.php 27751 2012-02-14 02:26:11Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -32,11 +32,11 @@ class table_forum_tradelog extends discuz_table
 	}
 
 	public function clear_failure($days) {
-		DB::query("DELETE FROM %t WHERE buyerid>0 AND status=0 AND lastupdate<%d", array($this->_table, TIMESTAMP - $days * 86400));
+		DB::query("DELETE FROM %t WHERE buyerid>0 AND status=0 AND lastupdate<%d", array($this->_table, TIMESTAMP - intval($days) * 86400));
 	}
 
 	public function expiration_payed($days) {
-		$expiration = TIMESTAMP - $days * 86400;
+		$expiration = TIMESTAMP - intval($days) * 86400;
 		$logs = DB::fetch_all("SELECT * FROM %t WHERE buyerid>0 AND status=4 AND lastupdate<%d", array($this->_table, $expiration));
 		$members = array();
 		foreach($logs as $log) {
@@ -49,7 +49,7 @@ class table_forum_tradelog extends discuz_table
 	}
 
 	public function expiration_finished($days) {
-		$expiration = TIMESTAMP - $days * 86400;
+		$expiration = TIMESTAMP - intval($days) * 86400;
 		$logs = DB::fetch_all("SELECT * FROM %t WHERE sellerid>0 AND status=5 AND lastupdate<%d", array($this->_table, $expiration));
 		$members = array();
 		foreach($logs as $log) {
@@ -66,7 +66,7 @@ class table_forum_tradelog extends discuz_table
 	}
 
 	public function fetch_all_log($viewtype, $uid, $tid, $pid, $ratestatus, $typestatus, $start, $limit) {
-		$sql = ($tid ? 'tl.tid=\''.$tid.'\' AND '.($pid ? 'tl.pid=\''.$pid.'\' AND ' : '') : '').
+		$sql = ($tid ? 'tl.tid=\''.dintval($tid).'\' AND '.($pid ? 'tl.pid=\''.dintval($pid).'\' AND ' : '') : '').
 			('tl.'.($viewtype == 'sell' ? 'sellerid' : 'buyerid').'='.intval($uid)).' '.
 			($ratestatus = $ratestatus ? 'AND (tl.ratestatus=0 OR tl.ratestatus='.intval($ratestatus).')' : '').
 			($typestatus = $typestatus ? 'AND tl.status IN ('.dimplode($typestatus).')' : '');
@@ -76,7 +76,7 @@ class table_forum_tradelog extends discuz_table
 	}
 
 	public function count_log($viewtype, $uid, $tid, $pid, $ratestatus, $typestatus) {
-		$sql = ($tid ? 'tl.tid=\''.$tid.'\' AND '.($pid ? 'tl.pid=\''.$pid.'\' AND ' : '') : '').
+		$sql = ($tid ? 'tl.tid=\''.dintval($tid).'\' AND '.($pid ? 'tl.pid=\''.dintval($pid).'\' AND ' : '') : '').
 			('tl.'.($viewtype == 'sell' ? 'sellerid' : 'buyerid').'='.intval($uid)).' '.
 			($ratestatus = $ratestatus ? 'AND (tl.ratestatus=0 OR tl.ratestatus='.intval($ratestatus).')' : '').
 			($typestatus = $typestatus ? 'AND tl.status IN ('.dimplode($typestatus).')' : '');

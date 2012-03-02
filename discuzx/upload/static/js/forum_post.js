@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: forum_post.js 27410 2012-01-30 09:53:20Z zhengqingpeng $
+	$Id: forum_post.js 28434 2012-02-29 11:03:43Z monkey $
 */
 
 var postSubmited = false;
@@ -112,7 +112,7 @@ function validate(theform) {
 		AUTOPOST = 1;
 		return false;
 	}
-	if(isfirstpost && $('adddynamic') != null && $('adddynamic').checked && isNaN(parseInt($('postsave').value)) && ($('readperm') != null && $('readperm').value || $('price') != null && $('price').value)) {
+	if(isfirstpost && $('adddynamic') != null && $('adddynamic').checked && $('postsave') != null && isNaN(parseInt($('postsave').value)) && ($('readperm') != null && $('readperm').value || $('price') != null && $('price').value)) {
 		if(confirm('由于您设置了阅读权限或出售帖，您确认还转播给您的听众看吗？') == false) {
 			return false;
 		}
@@ -773,6 +773,18 @@ function extraCheck(op) {
 		$('extra_tag_chk').className = $('tags').value !== '' ? 'a' : '';
 	} else if(op == 5 && $('cronpublish')) {
 		$('extra_pubdate_chk').className = $('cronpublish').checked ? 'a' : '';
+	}
+}
+
+function hidenFollowBtn(flag) {
+	var fobj = $('adddynamicspan');
+	if(fobj) {
+		if(flag) {
+			$('adddynamic').checked = !flag;
+			fobj.style.display = 'none';
+		} else {
+			fobj.style.display = '';
+		}
 	}
 }
 

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: search_forum.php 27166 2012-01-09 07:19:36Z yangli $
+ *      $Id: search_forum.php 27704 2012-02-13 02:13:24Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -136,7 +136,7 @@ if($mySearchData['status'] && !$srchfrom && !$searchid) {
 			$params['openid'] = $_G['member']['conopenid'];
 		}
 
-		$params['q'] = urlencode($keyword);
+		$params['q'] = $keyword;
 		$params['module'] = 'forum';
 		if($srhfid) {
 			$params['fId'] = $srhfid;
@@ -364,7 +364,7 @@ if(!submitcheck('searchsubmit', 1)) {
 						}
 						$srchtxt = str_replace('*', '%', addcslashes($srchtxt, '%_'));
 						foreach(explode('+', $srchtxt) as $text) {
-							$text = trim($text);
+							$text = trim(daddslashes($text));
 							if($text) {
 								$sqltxtsrch .= $andor;
 								$sqltxtsrch .= $srchtype == 'fulltext' ? "(p.message LIKE '%".str_replace('_', '\_', $text)."%' OR p.subject LIKE '%$text%')" : "t.subject LIKE '%$text%'";

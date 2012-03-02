@@ -11,7 +11,7 @@
 <form id="medalform" method="post" autocomplete="off" action="home.php?mod=medal&action=apply&medalsubmit=yes">
 	<div class="f_c">
 		<h3 class="flb">
-			<em id="return_$_GET['handlekey']"><!--{if $medal['price']}-->¹ºÂòÑ«ÕÂ<!--{else}-->ÉêÇëÑ«ÕÂ<!--{/if}--></em>
+			<em id="return_$_GET['handlekey']"><!--{if $medal['price']}-->{lang space_medal_buy}{lang medals}<!--{else}-->{lang space_medal_apply}<!--{/if}--></em>
 			<span>
 				<!--{if !empty($_GET['infloat'])}--><a href="javascript:;" class="flbc" onclick="hideWindow('$_GET['handlekey']')" title="{lang close}">{lang close}</a><!--{/if}-->
 			</span>
@@ -64,7 +64,7 @@
 			<button class="pn pnc vm" type="submit" value="true" name="medalsubmit"><span>
 				<span>
 				<!--{if $medal['price']}-->
-					¹ºÂò
+					{lang space_medal_buy}
 				<!--{else}-->
 					<!--{if !$medal[permission]}-->
 						{lang medals_apply}

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_forum_collectionteamworker.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_forum_collectionteamworker.php 27781 2012-02-14 07:38:55Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -22,10 +22,17 @@ class table_forum_collectionteamworker extends discuz_table
 	}
 
 	public function delete_by_ctid($ctid) {
+		if(!$ctid) {
+			return false;
+		}
 		return DB::delete($this->_table, DB::field('ctid', $ctid));
 	}
 
 	public function delete_by_ctid_uid($ctid, $uid) {
+		if(!$ctid && !$uid) {
+			return false;
+		}
+
 		$condition = array();
 
 		if($ctid) {
@@ -40,6 +47,9 @@ class table_forum_collectionteamworker extends discuz_table
 	}
 
 	public function delete_by_uid($uid) {
+		if(!$uid) {
+			return false;
+		}
 		return DB::query("DELETE FROM %t WHERE %i", array($this->_table, DB::field('uid', $uid)));
 	}
 
@@ -56,11 +66,17 @@ class table_forum_collectionteamworker extends discuz_table
 	}
 
 	public function update_by_ctid($ctid, $title) {
+		if(!$ctid || is_array($title)) {
+			return false;
+		}
 		return DB::update($this->_table, array('name'=>$title), DB::field('ctid', $ctid));
 	}
 
 	public function update($ctid, $uid, $data, $unbuffered = false, $low_priority = false) {
-		return DB::update($this->_table, $data, DB::field('ctid', $ctid).' AND '.DB::field('uid', $uid), $unbuffered, $low_priority);
+		if(!empty($data) && is_array($data) && $ctid && $uid) {
+			return DB::update($this->_table, $data, DB::field('ctid', $ctid).' AND '.DB::field('uid', $uid), $unbuffered, $low_priority);
+		}
+		return !$unbuffered ? 0 : false;
 	}
 }
 

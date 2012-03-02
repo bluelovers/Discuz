@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: helper_pm.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: helper_pm.php 28251 2012-02-27 01:40:15Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -19,12 +19,14 @@ class helper_pm {
 		if($fromid === '') {
 			$fromid = $_G['uid'];
 		}
-
+		$author = '';
 		if($fromid) {
 			if($fromid == $_G['uid']) {
 				$sendpmmaxnum = $_G['group']['allowsendpmmaxnum'];
+				$author = $_G['username'];
 			} else {
 				$user = getuserbyuid($fromid);
+				$author = $user['username'];
 				loadcache('usergroup_'.$user['groupid']);
 				$sendpmmaxnum = $_G['cache']['usergroup_'.$user['groupid']]['allowsendpmmaxnum'];
 			}
@@ -37,10 +39,32 @@ class helper_pm {
 		loaducenter();
 		$return = uc_pm_send($fromid, $toid, addslashes($subject), addslashes($message), 1, $replypmid, $isusername, $type);
 		if($return > 0 && $fromid) {
+			if($_G['setting']['cloud_status'] &&  $_G['setting']['connect']['allow']) {
+				$msgService = Cloud::loadClass('Cloud_Service_Client_Message');
+				if(is_numeric($toid)) {
+					$tospace = getuserbyuid($toid);
+					if($tospace['conisbind']) {
+						$msgService->add($toid, $fromid, $author, $_G['timestamp']);
+					}
+				} else {
+					$senduids = array();
+					foreach(C::t('common_member')->fetch_all_by_username(explode(',', $toid)) as $touser) {
+						if($touser['conisbind']) {
+							$senduids[$touser['uid']] = $touser['uid'];
+						}
+					}
+					if($senduids) {
+						$msgService->add($toid, $fromid, $author, $_G['timestamp']);
+					}
+				}
+
+
+			}
 			foreach(explode(',', $fromid) as $v) {
 				useractionlog($fromid, 'pmid');
 			}
 		}
+
 		return $return;
 	}
 }

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_group.php 26992 2011-12-29 04:32:38Z svn_project_zhangjie $
+ *      $Id: admincp_group.php 28291 2012-02-27 07:21:33Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -1124,20 +1124,20 @@ function countgroups() {
 
 	$conditions = 'f.type=\'sub\' AND f.status=\'3\'';
 	if($_GET['srchname'] != '') {
-		$srchname = explode(',', $_GET['srchname']);
+		$srchname = explode(',', addslashes($_GET['srchname']));
 		foreach($srchname as $u) {
 			$srchnameary[] = " f.name LIKE '%".str_replace(array('%', '*', '_'), array('\%', '%', '\_'), $u)."%'";
 		}
 		$conditions .= " AND (".implode(' OR ', $srchnameary).")";
 	}
 	$conditions .= intval($_GET['srchfid']) ? " AND f.fid='".intval($_GET['srchfid'])."'" : '';
-	$conditions .= !empty($_GET['selectgroupid']) && !in_array('all', $_GET['selectgroupid']) != '' ? " AND f.fup IN ('".implode('\',\'', $_GET['selectgroupid'])."')" : '';
+	$conditions .= !empty($_GET['selectgroupid']) && !in_array('all', $_GET['selectgroupid']) != '' ? " AND f.fup IN ('".implode('\',\'', dintval($_GET['selectgroupid'], true))."')" : '';
 
-	$conditions .= $_GET['postshigher'] != '' ? " AND f.posts>'$_GET[postshigher]'" : '';
-	$conditions .= $_GET['postslower'] != '' ? " AND f.posts<'$_GET[postslower]'" : '';
+	$conditions .= $_GET['postshigher'] != '' ? " AND f.posts>'".intval($_GET['postshigher'])."'" : '';
+	$conditions .= $_GET['postslower'] != '' ? " AND f.posts<'".intval($_GET['postslower'])."'" : '';
 
-	$conditions .= $_GET['threadshigher'] != '' ? " AND f.threads>'$_GET[threadshigher]'" : '';
-	$conditions .= $_GET['threadslower'] != '' ? " AND f.threads<'$_GET[threadslower]'" : '';
+	$conditions .= $_GET['threadshigher'] != '' ? " AND f.threads>'".intval($_GET['threadshigher'])."'" : '';
+	$conditions .= $_GET['threadslower'] != '' ? " AND f.threads<'".intval($_GET['threadslower'])."'" : '';
 
 	$conditions .= $_GET['memberhigher'] != '' ? " AND ff.membernum<'".intval($_GET['memberhigher'])."'" : '';
 	$conditions .= $_GET['memberlower'] != '' ? " AND ff.membernum>'".intval($_GET['memberlower'])."'" : '';
@@ -1149,7 +1149,7 @@ function countgroups() {
 	$conditions .= $_GET['lastupafter'] != '' ? " AND ff.lastupdate>'".strtotime($_GET['lastupafter'])."'" : '';
 
 	if($_GET['srchfounder'] != '') {
-		$srchfounder = explode(',', $_GET['srchfounder']);
+		$srchfounder = explode(',', addslashes($_GET['srchfounder']));
 		foreach($srchfounder as $fu) {
 			$srchfnameary[] = " ff.foundername LIKE '".str_replace(array('%', '*', '_'), array('\%', '%', '\_'), $fu)."'";
 		}

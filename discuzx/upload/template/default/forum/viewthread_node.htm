@@ -16,6 +16,7 @@
 <!--{if $post['first'] &&  $_G['forum_threadstamp']}-->
 	<div id="threadstamp"><img src="{STATICURL}image/stamp/$_G[forum_threadstamp][url]" title="$_G[forum_threadstamp][text]" /></div>
 <!--{/if}-->
+<!--{if empty($post['deleted'])}-->
 <table id="pid$post[pid]" summary="pid$post[pid]" cellspacing="0" cellpadding="0">
 <tr>
 	<td class="pls" rowspan="2">
@@ -72,16 +73,22 @@
 			<!--{elseif $post['avatar'] && $showavatars}-->
 				<!--{if $post[mobiletype]}-->
 				<div class="mobile-type mobile-type-$post[mobiletype]">
-					<a href="#" tip="该帖通过手机客户端发布" onmouseover="showTip(this)"></a>
+					<a href="#" tip="{lang post_from_mobile}" onmouseover="showTip(this)"></a>
 				</div>
 				<!--{/if}-->
 				<div class="avatar" onmouseover="showauthor(this, 'userinfo$post[pid]')"><a href="home.php?mod=space&uid=$post[authorid]" target="_blank">$post[avatar]</a></div>
 			<!--{/if}-->
 			<div class="tns xg2">
 				<table cellspacing="0" cellpadding="0">
-					<th><p><a href="home.php?mod=space&uid=$post[authorid]&do=thread&view=me&from=space" class="xi2">$post[threads]</a></p>帖子</th>
-					<th><p><a href="home.php?mod=space&uid=$post[authorid]&do=follow" class="xi2">$post[follower]</a></p>听众</th>
-					<td><p><a href="home.php?mod=space&uid=$post[authorid]&do=profile" class="xi2">$post[credits]</a></p>积分</td>
+					<th><p><a href="home.php?mod=space&uid=$post[authorid]&do=thread&view=me&from=space" class="xi2"><!--{echo dnumber($post[threads])}--></a></p>{lang threads}</th>
+					<th>
+						<!--{if helper_access::check_module('follow')}-->
+						<p><a href="home.php?mod=follow&do=follower&uid=$post[authorid]" class="xi2"><!--{echo dnumber($post[follower])}--></a></p>{lang follower}
+						<!--{else}-->
+						<p><a href="home.php?mod=space&uid=$post[authorid]&do=friend&view=me" class="xi2"><!--{echo dnumber($post[friends])}--></a></p>{lang friends}
+						<!--{/if}-->
+					</th>
+					<td><p><a href="home.php?mod=space&uid=$post[authorid]&do=profile" class="xi2"><!--{echo dnumber($post[credits])}--></a></p>{lang credits}</td>
 				</table>
 			</div>
 			<!--{hook/viewthread_avatar $postcount}-->
@@ -109,16 +116,11 @@
 			<!--{/if}-->
 			<!--{if $post[authorid] != $_G[uid]}-->
 				<ul class="xl xl2 o cl">
+					<!--{if helper_access::check_module('follow')}-->
 					<li class="addflw">
-						<!--{if !$post[followed]}-->
-						<a href="home.php?mod=spacecp&ac=follow&op=add&fuid=$post[authorid]" id="followmod_$post[authorid]" title="收听TA" class="xi2" onclick="showWindow('followmod', this.href, 'get', 0);">收听TA</a>
-						<!--{else}-->
-						<a href="home.php?mod=spacecp&ac=follow&op=del&fuid=$post[authorid]" id="followmod_$post[authorid]" title="不收听" class="xi2" onclick="showWindow('followmod', this.href, 'get', 0);">不收听</a>
-						<!--{/if}-->
+						<a href="home.php?mod=spacecp&ac=follow&op=add&hash={FORMHASH}&fuid=$post[authorid]" id="followmod_$post[authorid]" title="{lang follow}" class="xi2" onclick="showWindow('followmod', this.href, 'get', 0);">{lang follow}</a>
 					</li>
-					<li class="callon"><a href="home.php?mod=space&uid=$post[authorid]" target="_blank" title="{lang viewthread_left_tospace}" class="xi2">{lang viewthread_left_tospace}</a></li>
-					<li class="buddy"><a href="home.php?mod=spacecp&ac=friend&op=add&uid=$post[authorid]&handlekey=addfriendhk_{$post[authorid]}" id="a_friend_li_{$post[pid]}" onclick="showWindow(this.id, this.href, 'get', 1, {'ctrlid':this.id,'pos':'00'});" title="{lang viewthread_left_addfriend}" class="xi2">{lang viewthread_left_addfriend}</a></li>
-					<li class="poke2"><a href="home.php?mod=spacecp&ac=poke&op=send&uid=$post[authorid]" id="a_poke_li_{$post[pid]}" onclick="showWindow(this.id, this.href, 'get', 0);" title="{lang viewthread_left_poke}" class="xi2">{lang viewthread_left_poke}</a></li>
+					<!--{/if}-->
 					<li class="pm2"><a href="home.php?mod=spacecp&ac=pm&op=showmsg&handlekey=showmsg_$post[authorid]&touid=$post[authorid]&pmid=0&daterange=2&pid=$post[pid]&tid=$post[tid]" onclick="showWindow('sendpm', this.href);" title="{lang viewthread_left_sendpm}" class="xi2">{lang viewthread_left_sendpm}</a></li>
 				</ul>
 			<!--{/if}-->
@@ -145,7 +147,7 @@
 			<!--{/if}-->
 			</div>
 		<!--{/if}-->
-		<!--{if $_G['group']['allowedituser'] || $_G['group']['allowbanuser'] || ($_G['forum']['ismoderator'] && $_G['group']['allowviewip'])}-->
+		<!--{if ($_G['group']['allowedituser'] || $_G['group']['allowbanuser'] || ($_G['forum']['ismoderator'] && $_G['group']['allowviewip'])) && !getstatus($post['status'], 5)}-->
 			<p class="cp_pls cl">
 				<!--{if $_G['forum']['ismoderator'] && $_G['group']['allowviewip']}-->
 					<a href="forum.php?mod=topicadmin&action=getip&fid=$_G[fid]&tid=$_G[tid]&pid=$post[pid]{if $_G['forum_auditstatuson']}&modthreadkey=$_GET[modthreadkey]{/if}" onclick="ajaxmenu(this, 0, 0, 2);doane(event)">IP</a>
@@ -162,7 +164,7 @@
 				<!--{/if}-->
 				<a href="forum.php?mod=modcp&action=thread&op=post&do=search&searchsubmit=1&users=$post[usernameenc]" target="_blank">{lang posts}</a>
 				<!--{if $_G['adminid'] == 1}-->
-					<a href="forum.php?mod=ajax&action=quickclear&uid=$post[authorid]" onclick="showWindow('qclear_$post[authorid]', this.href, 'get', 0)">清理</a>
+					<a href="forum.php?mod=ajax&action=quickclear&uid=$post[authorid]" onclick="showWindow('qclear_$post[authorid]', this.href, 'get', 0)">{lang clear}</a>
 				<!--{/if}-->
 			</p>
 		<!--{/if}-->
@@ -289,7 +291,7 @@
 				<!--{if $post['sourcecollection']['ctid']}-->
 				<div>
 					{lang collection_fromctid}
-					<form action="forum.php?mod=collection&action=comment&ctid={$ctid}" method="POST" class="ptm pbm cl">
+					<form action="forum.php?mod=collection&action=comment&ctid={$ctid}&tid={$_G[tid]}" method="POST" class="ptm pbm cl">
 						<input type="hidden" name="ratescore" id="ratescore" />
 						<span class="clct_ratestar">
 							<span class="btn">
@@ -338,13 +340,13 @@
 						</div>
 					<!--{/if}-->
 
-					<!--{if !$post['anonymous']}-->
-					<a href="home.php?mod=spacecp&ac=follow&op=relay&tid=$_G[tid]&from=forum" id="k_relay" onclick="showWindow(this.id, this.href, 'get', 0);" onmouseover="this.title = $('relaynumber').innerHTML + ' {lang activity_member_unit}转播'"><i><img src="{IMGDIR}/rt.png" alt="转播" />转播<span id="relaynumber">{$_G['forum_thread']['relay']}</span></i></a>
+					<!--{if !$post['anonymous'] && helper_access::check_module('follow')}-->
+					<a href="home.php?mod=spacecp&ac=follow&op=relay&tid=$_G[tid]&from=forum" id="k_relay" onclick="showWindow(this.id, this.href, 'get', 0);" onmouseover="this.title = $('relaynumber').innerHTML + ' {lang activity_member_unit}{lang thread_realy}'"><i><img src="{IMGDIR}/rt.png" alt="{lang thread_realy}" />{lang thread_realy}<span id="relaynumber">{$_G['forum_thread']['relay']}</span></i></a>
 					<!--{/if}-->
-					<!--{if !$_G['forum']['disablecollect']}-->
+					<!--{if !$_G['forum']['disablecollect'] && helper_access::check_module('collection')}-->
 						<a href="forum.php?mod=collection&action=edit&op=addthread&tid=$_G[tid]" id="k_collect" onclick="showWindow(this.id, this.href);return false;" onmouseover="this.title = $('collectionnumber').innerHTML + ' {lang activity_member_unit}{lang collection}'"><i><img src="{IMGDIR}/collection.png" alt="{lang thread_share}" />{lang collection}<span id="collectionnumber">{$post['releatcollectionnum']}</span></i></a>
 					<!--{/if}-->
-					<!--{if $_G['setting']['homestatus']}-->
+					<!--{if helper_access::check_module('share')}-->
 						<a href="home.php?mod=spacecp&ac=share&type=thread&id=$_G[tid]" id="k_share" onclick="showWindow(this.id, this.href, 'get', 0);" onmouseover="this.title = $('sharenumber').innerHTML + ' {lang activity_member_unit}{lang thread_share}'"><i><img src="{IMGDIR}/oshr.png" alt="{lang thread_share}" />{lang thread_share}<span id="sharenumber">{$_G['forum_thread']['sharetimes']}</span></i></a>
 					<!--{/if}-->
 					<a href="home.php?mod=spacecp&ac=favorite&type=thread&id=$_G[tid]" id="k_favorite" onclick="showWindow(this.id, this.href, 'get', 0);" onmouseover="this.title = $('favoritenumber').innerHTML + ' {lang activity_member_unit}{lang thread_favorite}'"><i><img src="{IMGDIR}/fav.gif" alt="{lang thread_favorite}" />{lang thread_favorite}<span id="favoritenumber">{$_G['forum_thread']['favtimes']}</span></i></a>
@@ -358,9 +360,6 @@
 					<!--{/if}-->
 					<!--{if $_G['group']['raterange'] && $post['authorid']}-->
 						<a href="javascript:;" id="ak_rate" onclick="showWindow('rate', 'forum.php?mod=misc&action=rate&tid=$_G[tid]&pid=$post[pid]', 'get', -1);return false;" title="{echo count($postlist[$post[pid]][totalrate]);} {lang people_score}"><i><img src="{IMGDIR}/agree.gif" alt="{lang rate}" />{lang rate}</i></a>
-					<!--{/if}-->
-					<!--{if $post['first'] && $_G[uid] && $_G['group']['allowat']}-->
-						<a href="misc.php?mod=invite&action=thread&id=$_G[tid]" onclick="showWindow('invite', this.href, 'get', 0);"><i><img src="{IMGDIR}/activitysmall.gif" alt="{lang invite}" />@好友</i></a>
 					<!--{/if}-->
 					<!--{hook/viewthread_useraction}-->
 				</div>
@@ -492,7 +491,6 @@
 				<!--{/if}-->
 			</div>
 		</div>
-
 	</td>
 </tr>
 <!--{/if}-->
@@ -531,5 +529,21 @@
 		attachimglstshow($post['pid'], <!--{echo intval($_G['setting']['lazyload'])}-->, aimgfid, '{$_G[setting][showexif]}');
 	<!--{/if}-->
 </script>
+<!--{/if}-->
+<!--{else}-->
+	<table id="pid$post[pid]" summary="pid$post[pid]" cellspacing="0" cellpadding="0">
+	<tbody>
+		<tr>
+			<td class="pls"></td>
+			<td class="plc">
+				<div class="pi">
+					<strong><a><!--{if !empty($postno[$post[number]])}-->$postno[$post[number]]<!--{else}--><em>{$post[number]}</em>{$postno[0]}<!--{/if}--></a></strong>
+				</div>
+				<div class="pct">{lang post_deleted}</div>
+			</td>
+		</tr>
+		<tr class="ad"><td class="pls"></td><td class="plc"></td></tr>
+	</tbody>
+</table>
 <!--{/if}-->
 <!--{hook/viewthread_endline $postcount}-->

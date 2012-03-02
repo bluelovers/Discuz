@@ -4,14 +4,14 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_comment.php 26324 2011-12-09 02:44:45Z chenmengshu $
+ *      $Id: admincp_comment.php 27765 2012-02-14 05:32:50Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
 }
 
-$detail = !empty($_GET['authorid']) ? true : $_GET['detail'];
+$detail = $_GET['detail'];
 $idtype = $_GET['idtype'];
 $id = $_GET['id'];
 $author = $_GET['author'];
@@ -281,57 +281,37 @@ EOT;
 		$sql = $error = '';
 		$author = trim($author);
 
-		if($subject != '') {
-			$sqlsubject = '';
-			$or = '';
-			$subject = explode(',', str_replace(' ', '', $subject));
+		$queryAId = $aid ? array($aid) : array();
 
-			for($i = 0; $i < count($subject); $i++) {
-				if(preg_match("/\{(\d+)\}/", $subject[$i])) {
-					$subject[$i] = preg_replace("/\\\{(\d+)\\\}/", ".{0,\\1}", preg_quote($subject[$i], '/'));
-					$subject .= " $or title REGEXP '".$subject[$i]."'";
-				} else {
-					$sqlsubject .= " $or title LIKE '%".$subject[$i]."%'";
-				}
-				$or = 'OR';
-			}
-			if($sqlsubject) {
+		if($subject != '') {
+
 				$ids = array();
-				$query = C::t($tablename)->fetch_all_by_title($idtype, $sqlsubject);
+				$query = C::t($tablename)->fetch_all_by_title($idtype, $subject);
 				foreach($query as $value) {
 					$ids[] = intval($value[$idtype]);
 				}
-				$aid = ($aid ? $aid.',':'').implode(',',$ids);
-			}
+				$queryAId = array_merge($queryAId, $ids);
 		}
 
-		if($aid !='') {
-			$sql .=" AND c.id IN ('".str_replace(',', '\',\'', str_replace(' ', '', $aid))."')";
-		}
 
-		if($idtype != '') {
-			$sql .= " AND c.idtype='$idtype'";
-		}
+
+		$queryAuthorIDs = $authorid ? array($authorid) : array();
 
 		if($author != '') {
 			$authorids = C::t('common_member')->fetch_all_uid_by_username(array_map('trim', explode(',', $author)));
-			$authorid = ($authorid ? $authorid.',' : '').implode(',',$authorids);
+			$queryAuthorIDs = array_merge($queryAuthorIDs, $authorids);
 		}
 
-		$authorid = trim($authorid,', ');
-		if($authorid != '') {
-			$sql .= " AND c.uid IN ('".str_replace(',', '\',\'', str_replace(' ', '', $authorid))."')";
-		}
 
 		if($starttime != '0') {
 			$starttime = strtotime($starttime);
-			$sql .= " AND c.dateline>'$starttime'";
 		}
+
+		$sqlendtime = '';
 
 		if($_G['adminid'] == 1 && $endtime != dgmdate(TIMESTAMP, 'Y-n-j')) {
 			if($endtime != '0') {
-				$endtime = strtotime($endtime);
-				$sql .= " AND c.dateline<'$endtime'";
+				$sqlendtime = $endtime = strtotime($endtime);
 			}
 		} else {
 			$endtime = TIMESTAMP;
@@ -341,30 +321,15 @@ EOT;
 			$error = 'comment_mod_range_illegal';
 		}
 
-		if($message != '') {
-			$sqlmessage = '';
-			$or = '';
-			$message = explode(',', str_replace(' ', '', $message));
 
-			for($i = 0; $i < count($message); $i++) {
-				if(preg_match("/\{(\d+)\}/", $message[$i])) {
-					$message[$i] = preg_replace("/\\\{(\d+)\\\}/", ".{0,\\1}", preg_quote($message[$i], '/'));
-					$message .= " $or c.message REGEXP '".$message[$i]."'";
-				} else {
-					$sqlmessage .= " $or c.message LIKE '%".$message[$i]."%'";
-				}
-				$or = 'OR';
-			}
-			$sql .= " AND ($sqlmessage)";
-		}
 
 		if(!$error) {
 
-			$commentcount = C::t('portal_comment')->count_all_by_search($sql);
+			$commentcount = C::t('portal_comment')->count_all_by_search($queryAId, $queryAuthorIDs, $starttime, $sqlendtime, $idtype, $message);
 			if($commentcount) {
 				$_GET['perpage'] = intval($_GET['perpage']) < 1 ? 20 : intval($_GET['perpage']);
 				$perpage = $_GET['pp'] ? $_GET['pp'] : $_GET['perpage'];
-				$query = C::t('portal_comment')->fetch_all_by_search($idtype, $tablename, $sql, (($page - 1) * $perpage), $perpage);
+				$query = C::t('portal_comment')->fetch_all_by_search($queryAId, $queryAuthorIDs, $starttime, $sqlendtime, $idtype, $message, (($page - 1) * $perpage), $perpage);
 
 				$comments = '';
 

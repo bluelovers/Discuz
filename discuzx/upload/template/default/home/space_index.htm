@@ -55,7 +55,7 @@ function succeedhandle_followmod(url, msg, values) {
 	} else if(values['type'] == 'del') {
 		fObj.innerHTML = ' ’Ã˝TA';
 		fObj.className = 'flw_btn_fo';
-		fObj.href = 'home.php?mod=spacecp&ac=follow&op=add&fuid='+values['fuid'];
+		fObj.href = 'home.php?mod=spacecp&ac=follow&op=add&hash={FORMHASH}&fuid='+values['fuid'];
 	}
 }
 </script>

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: sub_checkpost.php 27451 2012-02-01 05:48:47Z monkey $
+ *      $Id: sub_checkpost.php 28400 2012-02-29 03:07:57Z monkey $
  */
 
 if(!defined('IN_MOBILE_API')) {
@@ -59,13 +59,18 @@ class mobile_api_sub {
 		if($allowupload) {
 			$attachextensions = !$_G['group']['attachextensions'] ? $mobile_attachextensions : array_map('trim', explode(',', $_G['group']['attachextensions']));
 			$allowupload = $forummaxattachsize = array();
-			if(DB::result_first("SELECT COUNT(*) FROM ".DB::table('forum_attachtype')." WHERE fid='".$_G['forum']['fid']."'")) {
-				$query = DB::query("SELECT * FROM ".DB::table('forum_attachtype')." WHERE fid='".$_G['forum']['fid']."'");
+			loadcache('attachtype');
+			if(isset($_G['cache']['attachtype'][$_G['forum']['fid']])) {
+				$attachtype = $_G['cache']['attachtype'][$_G['forum']['fid']];
+			} elseif(isset($_G['cache']['attachtype'][0])) {
+				$attachtype = $_G['cache']['attachtype'][0];
 			} else {
-				$query = DB::query("SELECT * FROM ".DB::table('forum_attachtype')." WHERE fid='0'");
+				$attachtype = array();
 			}
-			while($row = DB::fetch($query)) {
-				$forummaxattachsize[$row['extension']] = $row['maxsize'];
+			if($attachtype) {
+				foreach($attachtype as $extension => $maxsize) {
+					$forummaxattachsize[$extension] = $maxsize;
+				}
 			}
 			foreach($mobile_attachextensions as $ext) {
 				if(in_array($ext, $attachextensions)) {
@@ -90,13 +95,15 @@ class mobile_api_sub {
 			$allowupload = array();
 		}
 		$uploadhash = md5(substr(md5($_G['config']['security']['authkey']), 8).$_G['uid']);
-		return array('allowperm' => array(
-		    'allowpost' => $allowpost,
-		    'allowreply' => $allowreply,
-		    'allowupload' => $allowupload,
-		    'attachremain' => $attachremain,
-		    'uploadhash' => $uploadhash,
-		));
+		$allowperm = array();
+		$allowperm['allowperm'] = array();
+		$allowkey = array('allowpost', 'allowreply', 'allowupload', 'attachremain', 'uploadhash');
+		foreach($allowkey as $key) {
+			if((!empty(${$key}) || ${$key} === 0) || !empty($_GET['debug'])) {
+				$allowperm['allowperm'][$key] = ${$key};
+			}
+		}
+		return $allowperm;
 	}
 
 }

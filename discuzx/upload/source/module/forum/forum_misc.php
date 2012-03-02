@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_misc.php 26795 2011-12-23 06:24:45Z liulanbo $
+ *      $Id: forum_misc.php 28331 2012-02-28 04:25:50Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -184,7 +184,7 @@ if($_GET['action'] == 'paysucceed') {
 
 } elseif($_GET['action'] == 'upload') {
 
-	$type = !empty($_GET['type']) ? $_GET['type'] : 'image';
+	$type = !empty($_GET['type']) && in_array($_GET['type'], array('image', 'file')) ? $_GET['type'] : 'image';
 	$attachexts = $imgexts = '';
 	$_G['group']['allowpostattach'] = $_G['forum']['allowpostattach'] != -1 && ($_G['forum']['allowpostattach'] == 1 || (!$_G['forum']['postattachperm'] && $_G['group']['allowpostattach']) || ($_G['forum']['postattachperm'] && forumperm($_G['forum']['postattachperm'])));
 	$_G['group']['allowpostimage'] = $_G['forum']['allowpostimage'] != -1 && ($_G['forum']['allowpostimage'] == 1 || (!$_G['forum']['postimageperm'] && $_G['group']['allowpostimage']) || ($_G['forum']['postimageperm'] && forumperm($_G['forum']['postimageperm'])));
@@ -656,9 +656,7 @@ if($_GET['action'] == 'votepoll' && submitcheck('pollsubmit', 1)) {
 		foreach($creditsarray as $id => $addcredits) {
 			$logs[] = dhtmlspecialchars("$_G[timestamp]\t{$_G[member][username]}\t$_G[adminid]\t$post[author]\t$id\t$addcredits\t$_G[tid]\t$thread[subject]\t$reason");
 		}
-		if($_G['setting']['heatthread']['type'] == 2) {
-			update_threadpartake($post['tid']);
-		}
+		update_threadpartake($post['tid']);
 		C::t('forum_postcache')->delete($_GET['pid']);
 		writelog('ratelog', $logs);
 
@@ -988,7 +986,7 @@ if($_GET['action'] == 'votepoll' && submitcheck('pollsubmit', 1)) {
 					}
 					$value = cutstr(dhtmlspecialchars(trim($value)), 100, '.');
 					if($_G['cache']['profilesetting'][$key]['formtype'] == 'file' && !preg_match("/^https?:\/\/(.*)?\.(jpg|png|gif|jpeg|bmp)$/i", $value)) {
-						showmessage('Í¼Æ¬µØÖ·´íÎó');
+						showmessage('activity_imgurl_error');
 					}
 					if(empty($value) && $key != 'residedist' && $key != 'residecommunity') {
 						showmessage('activity_exile_field');
@@ -1489,12 +1487,8 @@ if($_GET['action'] == 'votepoll' && submitcheck('pollsubmit', 1)) {
 		$fieldarr['recommend_sub'] = 1;
 	}
 
-	if($_G['setting']['heatthread']['type'] == 1) {
-		$fieldarr['heats'] = abs($_G['group']['allowrecommend']) * $_G['setting']['heatthread']['recommend'];
-	} elseif($_G['setting']['heatthread']['type'] == 2) {
 		update_threadpartake($_G['tid']);
 		$fieldarr['heats'] = 0;
-	}
 	$fieldarr['recommends'] = $_G['group']['allowrecommend'];
 	C::t('forum_thread')->increase($_G['tid'], $fieldarr);
 	C::t('forum_memberrecommend')->insert(array('tid'=>$_G['tid'], 'recommenduid'=>$_G['uid'], 'dateline'=>$_G['timestamp']));

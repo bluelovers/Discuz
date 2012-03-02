@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_credit_rule.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_common_credit_rule.php 27900 2012-02-16 07:50:00Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -25,6 +25,7 @@ class table_common_credit_rule extends discuz_table
 		$parameter = array($this->_table);
 		$wherearr = array();
 		if($rid) {
+			$rid = dintval($rid, true);
 			$parameter[] = $rid;
 			$wherearr[] = is_array($rid) ? 'rid IN(%n)' : 'rid=%d';
 		}
@@ -37,7 +38,10 @@ class table_common_credit_rule extends discuz_table
 	}
 
 	public function fetch_all_by_action($action) {
-		return DB::fetch_all('SELECT * FROM %t WHERE action IN(%n)', array($this->_table, $action), $this->_pk);
+		if(!empty($action)) {
+			return DB::fetch_all('SELECT * FROM %t WHERE action IN(%n)', array($this->_table, $action), $this->_pk);
+		}
+		return array();
 	}
 
 }

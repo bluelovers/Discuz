@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_post.php 27459 2012-02-01 07:44:37Z monkey $
+ *      $Id: function_post.php 28428 2012-02-29 09:10:50Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -45,7 +45,7 @@ function getattach($pid, $posttime = 0, $aids = '') {
 	}
 	if($pid > 0) {
 		$attachmentns = C::t('forum_attachment_n')->fetch_all_by_id('tid:'.$_G['tid'], 'pid', $pid);
-		foreach(C::t('forum_attachment')->fetch_all_by_id('pid', $pid, 'aid DESC') as $attach) {
+		foreach(C::t('forum_attachment')->fetch_all_by_id('pid', $pid, 'aid') as $attach) {
 			$attach = array_merge($attach, $attachmentns[$attach['aid']]);
 			$attach['filenametitle'] = $attach['filename'];
 			$attach['ext'] = fileext($attach['filename']);
@@ -152,12 +152,11 @@ function updateattach($modnewthreads, $tid, $pid, $attachnew, $attachupdate = ar
 	global $_G;
 	$thread = C::t('forum_thread')->fetch($tid);
 	$uid = $uid ? $uid : $_G['uid'];
-	$uidadd = $_G['forum']['ismoderator'] ? '' : " AND uid='$uid'";
 	if($attachnew) {
 		$newaids = array_keys($attachnew);
 		$newattach = $newattachfile = $albumattach = array();
 		foreach(C::t('forum_attachment_unused')->fetch_all($newaids) as $attach) {
-			if($attach['uid'] != $uid) {
+			if($attach['uid'] != $uid && !$_G['forum']['ismoderator']) {
 				continue;
 			}
 			$newattach[$attach['aid']] = daddslashes($attach);
@@ -266,7 +265,7 @@ function updateattach($modnewthreads, $tid, $pid, $attachnew, $attachupdate = ar
 		$attachupdate = array_flip($attachupdate);
 		$unusedaids = array();
 		foreach($unusedattachs as $attach) {
-			if($attach['uid'] != $uid) {
+			if($attach['uid'] != $uid && !$_G['forum']['ismoderator']) {
 				continue;
 			}
 			$unusedaids[] = $attach['aid'];
@@ -388,18 +387,18 @@ function updatepostcredits($operator, $uidarray, $action, $fid = 0) {
 		$uidarr[$uid] = !isset($uidarr[$uid]) ? 1 : $uidarr[$uid]+1;
 	}
 	foreach($uidarr as $uid => $coef) {
-		$val = $val*$coef;
+		$opnum = $val*$coef;
 		if($action == 'reply') {
-			$extsql = array('posts' => $val);
+			$extsql = array('posts' => $opnum);
 		} elseif($action == 'post') {
-			$extsql = array('threads' => $val, 'posts' => $val);
+			$extsql = array('threads' => $opnum, 'posts' => $opnum);
 		}
 		if($uid == $_G['uid']) {
-			updatecreditbyaction($action, $uid, $extsql, '', $val, 1, $fid);
+			updatecreditbyaction($action, $uid, $extsql, '', $opnum, 1, $fid);
 		} elseif(empty($uid)) {
 			continue;
 		} else {
-			batchupdatecredit($action, $uid, $extsql, $val, $fid);
+			batchupdatecredit($action, $uid, $extsql, $opnum, $fid);
 		}
 	}
 	if($operator == '+' && ($action == 'reply' || $action == 'post')) {

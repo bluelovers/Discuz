@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_block_item_data.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_common_block_item_data.php 27846 2012-02-15 09:04:33Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -23,8 +23,8 @@ class table_common_block_item_data extends discuz_table
 
 	public function fetch_all_by_bid($bid, $isverified = 1, $start = 0, $limit = 0, $bannedids = array(), $format = true) {
 		$data = array();
-		if($bid) {
-			$addsql = $bannedids ? ' AND id NOT IN ('.dimplode($bannedids).')' : '';
+		if(($bid = dintval($bid))) {
+			$addsql = $bannedids = dintval($bannedids, true) ? ' AND id NOT IN ('.dimplode($bannedids).')' : '';
 			$query = DB::query('SELECT * FROM %t WHERE '.DB::field('bid', $bid).' AND isverified=%d'.$addsql.' ORDER BY stickgrade DESC, verifiedtime DESC, dataid DESC '.DB::limit($start, $limit), array($this->_table, $isverified));
 			while($value = DB::fetch($query)) {
 				if($format) {
@@ -47,17 +47,17 @@ class table_common_block_item_data extends discuz_table
 	}
 
 	public function count_by_bid($bid, $isverified = 1) {
-		return $bid ? DB::result_first('SELECT COUNT(*) FROM %t WHERE '.DB::field('bid', $bid).' AND isverified=%d', array($this->_table, $isverified)) : 0;
+		return ($bid = dintval($bid, true)) ? DB::result_first('SELECT COUNT(*) FROM %t WHERE '.DB::field('bid', $bid).' AND isverified=%d', array($this->_table, $isverified)) : 0;
 	}
 
 	public function delete_by_bid($bid) {
-		if($bid) {
+		if(($bid = dintval($bid))) {
 			DB::delete($this->_table, DB::field('bid', $bid));
 		}
 	}
 
 	public function delete_by_dataid_bid($dataids, $bid) {
-		if(!empty($dataids) && ($dataids = DB::fetch_all('SELECT dataid FROM %t WHERE dataid IN (%n) AND bid=%d', array($this->_table, $dataids, $bid), $this->_pk))) {
+		if(($dataids = dintval($dataids, true)) && ($dataids = DB::fetch_all('SELECT dataid FROM %t WHERE dataid IN (%n) AND bid=%d', array($this->_table, $dataids, $bid), $this->_pk))) {
 			$this->delete($dataids);
 		}
 	}

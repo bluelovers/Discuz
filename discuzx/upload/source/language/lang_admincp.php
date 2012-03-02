@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_admincp.php 27604 2012-02-07 04:44:34Z zhengqingpeng $
+ *      $Id: lang_admincp.php 28503 2012-03-01 11:41:29Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -435,7 +435,6 @@ $lang = array
 	'nav_members_notify' => '填写通知内容',
 	'nav_defaultuser' => '推荐好友',
 	'nav_follow' => '推荐关注',
-	'nav_hotuser' => '明星会员',
 	'nav_add_hotuser' => '添加推荐',
 	'nav_add_follow' => '添加推荐',
 	'nav_add_defaultuser' => '添加好友',
@@ -542,6 +541,8 @@ $lang = array
 	'founder_patch_reset' => '重试',
 	'patch_fix_complete' => 'Discuz! 重要安全更新: 您已修复了全部严重安全漏洞<span>点击查看</span>',
 	'patch_fix_rigth_now' => 'Discuz! 重要安全更新: 您目前的版本存在严重安全漏洞，请尽快修复<span>立即修复</span>',
+	'founder_patch_fixpatch' => '安全补丁',
+	'founder_patch_failedreason' => '失败原因',
 
 	'nav_founder_upgrade' => '在线升级',
 	'founder_upgrade_updatelist' => '获取待更新文件列表',
@@ -810,6 +811,14 @@ $lang = array
 	'setting_styles_global_showusercard_comment' => '设置当鼠标移动到用户名位置上时是否显示他的名片',
 	'setting_styles_global_anonymoustext' => '匿名用户的昵称',
 	'setting_styles_global_anonymoustext_comment' => '设置帖子或评论留言中的匿名用户显示的文字。如:本站网友',
+	'setting_styles_global_home_style' => '家园展示风格',
+	'setting_styles_global_home_style_comment' => '选择日志、相册、分享、记录、广播展示风格',
+	'setting_styles_global_home_style_1' => '以SNS模块风格展示',
+	'setting_styles_global_home_style_0' => '以论坛模块风格展示',
+	'setting_styles_global_homepage_style' => '个人主页默认皮肤',
+	'setting_styles_global_homepage_style_comment' => '选择个人主页默认展示风格',
+	'setting_styles_global_homepage_style_1' => '个性化DIY风格',
+	'setting_styles_global_homepage_style_0' => '论坛样式',
 
 	'setting_styles_customnav' => '导航设置',
 
@@ -975,8 +984,6 @@ $lang = array
 	'setting_styles_viewthread_postnocustom_comment' => '设置每篇主题所有帖子的顺序名称，每行填写一个名称，第一行代表主题帖，第二行代表主题的第一个回复，以此类推',
 	'setting_styles_viewthread_maxsmilies' => '最大单一表情解析次数',
 	'setting_styles_viewthread_maxsmilies_comment' => '在一篇帖子中解析的单一表情符号的最大次数，超过此次数限制的表情将不被解析而保留原样，以避免用户在一篇帖子中恶意发表大量表情影响正常阅读，0 为不限制',
-	'setting_styles_viewthread_visitedthreads' => '显示最近访问帖子数量',
-	'setting_styles_viewthread_visitedthreads_comment' => '设置在帖子浏览中显示的最近访问过的帖子数量，建议设置为 10 以内，0 为关闭此功能',
 	'setting_styles_viewthread_usernamepos' => '作者用户名显示位置',
 
 	'setting_styles_viewthread_vtonlinestatus' => '显示作者在线状态',
@@ -1347,7 +1354,7 @@ $lang = array
 	'setting_cachethread_coefficient_forum_comment' => '将会覆盖以前的缓存系数值，可以按住 CTRL 多选',
 
 	'setting_memory' => '内存优化',
-	'setting_memory_tips' => '<li>启用内存优化功能将会大幅度提升程序性能和服务器的负载能力，内存优化功能需要服务器系统以及PHP扩展模块支持</li><li>目前支持的内存优化接口有 Memcache、eAccelerator、Alternative PHP Cache(APC)、Xcache 四种，优化系统将会依据当前服务器环境依次选用接口</li><li>内存接口的主要设置位于 config_global.php 当中，您可以通过编辑 config_global.php 进行高级设置</li>',
+	'setting_memory_tips' => '<li>启用内存优化功能将会大幅度提升程序性能和服务器的负载能力，内存优化功能需要服务器系统以及PHP扩展模块支持</li><li>目前支持的内存优化接口有 Memcache、eAccelerator、Alternative PHP Cache(APC)、Xcache、Redis 五种，优化系统将会依据当前服务器环境依次选用接口</li><li>内存接口的主要设置位于 config_global.php 当中，您可以通过编辑 config_global.php 进行高级设置</li>',
 	'setting_memory_status' => '当前内存工作状态',
 	'setting_memory_php_enable' => '支持',
 	'setting_memory_php_disable' => '不支持',
@@ -1368,12 +1375,12 @@ $lang = array
 	'setting_memory_func_diyblockoutput_comment' => '<span class="vtop tips2">推荐开启，时间设置为30秒，模块ID为单位，缓存时间内数据不更新</span>',
 	'setting_memory_func_common_member' => '用户数据',
 	'setting_memory_func_common_member_comment' => '<span class="vtop tips2">推荐开启，时间设置为0，永不过期，UID为单位，表数据更新时缓存数据会同步更新</span>',
-	'setting_memory_func_forum_post' => '帖子数据',
-	'setting_memory_func_forum_post_comment' => '<span class="vtop tips2">推荐开启，时间设置为1800秒，30分钟，TID为单位，表数据更新时缓存数据会同步更新</span>',
 	'setting_memory_func_forum_thread' => '主题数据',
 	'setting_memory_func_forum_thread_comment' => '<span class="vtop tips2">推荐开启，时间设置为172800秒，两天，TID为单位，表数据更新时缓存数据会同步更新</span>',
 	'setting_memory_func_forum_thread_forumdisplay' => '版块列表数据',
 	'setting_memory_func_forum_thread_forumdisplay_comment' => '<span class="vtop tips2">推荐开启，时间设置为300秒，5分钟，FID为单位，第一页数据缓存，缓存时间内数据不更新</span>',
+	'setting_memory_func_forum_postcache' => '回帖点评和评分数据',
+	'setting_memory_func_forum_postcache_comment' => '<span class="vtop tips2">推荐开启，时间设置为300秒，5分钟，PID为单位，缓存时间内数据不更新</span>',
 	'setting_memory_func_forum_collection' => '主题专辑数据',
 	'setting_memory_func_forum_collection_comment' => '<span class="vtop tips2">推荐开启，时间设置为300秒，5分钟，TID为单位，此TID的专辑集合，缓存时间内数据不更新</span>',
 	'setting_memory_func_forum_collectionrelated' => '主题和专辑关系',
@@ -1390,6 +1397,7 @@ $lang = array
 	'setting_memory_data_forum_post_comment' => '<span class="vtop tips2">主题TID</span>',
 	'setting_memory_data_forum_thread_comment' => '<span class="vtop tips2">主题TID</span>',
 	'setting_memory_data_forum_thread_forumdisplay_comment' => '<span class="vtop tips2">版块FID</span>',
+	'setting_memory_data_forum_postcache_comment' => '<span class="vtop tips2">帖子PID</span>',
 	'setting_memory_data_forum_collection_comment' => '<span class="vtop tips2">主题TID</span>',
 	'setting_memory_data_forum_collectionrelated_comment' => '<span class="vtop tips2">主题TID</span>',
 	'setting_memory_data_home_follow_comment' => '<span class="vtop tips2">用户UID</span>',
@@ -1443,6 +1451,33 @@ $lang = array
 	'setting_functions_curscript_scriptclosed_group_comment' => '关闭群组后，群组相关的所有功能将不能使用',
 	'setting_functions_curscript_scriptclosed_home' => '是否开启家园功能',
 	'setting_functions_curscript_scriptclosed_home_comment' => '关闭家园后，站点将不再产生用户动态，用户将不能够使用记录，日志，相册和分享功能，同时个人资料页面不支持自定义',
+	'setting_functions_curscript_list' => '功能列表',
+	'setting_functions_curscript_open' => '开启',
+	'setting_functions_curscript_close' => '关闭',
+	'setting_functions_curscript_portal' => '门户',
+	'setting_functions_curscript_group' => '群组',
+	'setting_functions_curscript_follow' => '广播',
+	'setting_functions_curscript_collection' => '淘帖',
+	'setting_functions_curscript_guide' => '导读',
+	'setting_functions_curscript_feed' => '动态',
+	'setting_functions_curscript_blog' => '日志',
+	'setting_functions_curscript_album' => '相册',
+	'setting_functions_curscript_share' => '分享',
+	'setting_functions_curscript_doing' => '记录',
+	'setting_functions_curscript_message' => '留言板',
+	'setting_functions_curscript_ranklist' => '排行榜',
+	'setting_functions_curscript_portal_intro' => '通过门户，网站可以将最热门的帖子、文章、活动等信息展现给用户',
+	'setting_functions_curscript_group_intro' => '志同道合者的聚集地，更加专业更加隐秘的交流乐园',
+	'setting_functions_curscript_follow_intro' => '收听感兴趣的人，分享有趣的事儿，信息快速传播的利器',
+	'setting_functions_curscript_collection_intro' => '网站优质内容的收集与分类，网站内容运营必不可少的好帮手',
+	'setting_functions_curscript_guide_intro' => '自动聚合网站最具争议、最热门、最精华、最新发布等“最”主题',
+	'setting_functions_curscript_feed_intro' => '了解网站关注好友网站动向的直接渠道，让用户不再感觉孤独',
+	'setting_functions_curscript_blog_intro' => '记录每日见闻，分享人生感悟，用户感情宣泄的家园',
+	'setting_functions_curscript_album_intro' => '自己的美丽容颜，祖国的大好河山，各种美图的影像档案',
+	'setting_functions_curscript_share_intro' => '将网站精华内容推荐给其他网友，形成良好的共享氛围',
+	'setting_functions_curscript_doing_intro' => '分享灵感，表达心情，记录随时想到的人和事儿',
+	'setting_functions_curscript_message_intro' => '通过留言，可以让其他用户不会错过你的互动',
+	'setting_functions_curscript_ranklist_intro' => '通过排行榜，可以查看本站的相关排行内容',
 
 	'setting_functions_mod' => '管理相关',
 	'setting_functions_mod_updatestat' => '<span class="spectitle">开启站点趋势统计</span>',
@@ -2204,6 +2239,8 @@ $lang = array
 	'usertag_add_tags_comment' => '可以输入多个标签，多个标签可以用空格、逗号 分隔',
 	'usertag_add_usernames' => '用户列表',
 	'usertag_add_usernames_comment' => '可以输入多个用户，每行输入一个用户名',
+	'usertag_user' => '用户',
+	'usertag_send_notice' => '发通知',
 	'mobile' => '手机',
 	'setting_mobile' => '手机版访问设置',
 	'setting_mobile_status' => '手机版全局设置',
@@ -2685,6 +2722,46 @@ $lang = array
 	'threadtype_edit_area' => '使用几级分类',
 	'threadtype_edit_profile' => '关联用户栏目初始值',
 	'threadtype_edit_profile_comment' => '可以指定某个用户栏目作为初始值，方便用户在发帖时填写。<br />此项优先于默认值',
+	'threadtype_template' => '模板',
+	'threadtype_template_viewthread' => '帖子页模板',
+	'threadtype_template_forumdisplay' => '列表页模板',
+	'threadtype_template_post' => '发帖页模板',
+	'threadtype_template_diy' => 'DIY调用模板',
+	'threadtype_template_threadtitle' => '主题标题',
+	'threadtype_template_threadurl' => '主题 URL',
+	'threadtype_template_threadid' => '主题 ID',
+	'threadtype_template_dateline' => '发布时间',
+	'threadtype_template_author' => '作者用户名',
+	'threadtype_template_authorid' => '作者用户 ID',
+	'threadtype_template_authorurl' => '作者 URL',
+	'threadtype_template_authoravatar' => '头像 URL',
+	'threadtype_template_authorverify' => '认证标识',
+	'threadtype_template_threadauthor' => '主题作者',
+	'threadtype_template_threadviews' => '主题查看数',
+	'threadtype_template_threadreplies' => '主题回复数',
+	'threadtype_template_lastpostdateline' => '最后回复时间',
+	'threadtype_template_lastposturl' => '最后回复 URL',
+	'threadtype_template_lastpostuser' => '最后回复用户',
+	'threadtype_template_lastpostuserurl' => '最后回复用户 URL',
+	'threadtype_template_lastpost' => '最后回复',
+	'threadtype_template_threadtypename' => '主题分类名称',
+	'threadtype_template_threadtypeurl' => '主题分类 URL',
+	'threadtype_template_threadtype' => '主题分类',
+	'threadtype_template_attachmentexist' => '是否存在附件的标识图片',
+	'threadtype_template_attachment' => '附件标识',
+	'threadtype_template_modcheck' => '版主管理主题的操作选项',
+	'threadtype_template_threadmod' => '主题操作',
+	'threadtype_template_loop' => '单一主题循环内容',
+	'threadtype_template_title' => '标题',
+	'threadtype_template_varname' => '变量名称',
+	'threadtype_template_varvalue' => '变量的值',
+	'threadtype_template_varunit' => '变量单位',
+	'threadtype_template_requiredflag' => '必填标识',
+	'threadtype_template_tipflag' => '提示标识',
+	'threadtype_template_briefdes' => '简短描述',
+	'threadtype_template_tag' => '标签',
+	'threadtype_template_intro' => '说明',
+	'threadtype_template_example' => '范例',
 
 
 
@@ -2736,6 +2813,7 @@ $lang = array
 	'nav_spacenav_userpanelarea1' => "{navname}区域1",
 	'nav_spacenav_userpanelarea2' => "{navname}区域2",
 	'nav_mynav_add' => '添加快捷导航',
+	'nav_spacenav_tips' => '以下导航链接在“家园展示风格”中启用“以SNS模块风格展示”时有效',
 
 	'styles' => '风格管理',
 	'styles_admin' => '风格管理',
@@ -2870,6 +2948,7 @@ $lang = array
 	'styles_install' => '安装',
 	'styles_stylecount' => '风格数',
 	'styles_uninstall' => '卸载',
+	'styles_find_newversion' => '发现新版',
 
 	'styles_import' => '导入界面方案',
 	'styles_import_ignore_version' => '允许导入老版本 Discuz! 的界面(易产生错误!!)',
@@ -3044,6 +3123,7 @@ $lang = array
 	'members_ban_validity' => '禁止用户有效期',
 	'members_ban_validity_comment' => '在有效期过后该用户可以自动解除限制，成为普通用户',
 	'members_ban_delpost' => '帖子',
+	'members_ban_delfollow' => '广播',
 	'members_ban_delblog' => '日志',
 	'members_ban_delalbum' => '相册',
 	'members_ban_deldoing' => '记录',
@@ -3099,6 +3179,8 @@ $lang = array
 	'members_search_verify' => '认证',
 	'members_search_conisbind' => '是否绑定QQ',
 	'members_search_uinblacklist' => 'QQ帐号是否被封',
+	'members_search_nonemedal' => '暂时没有可用勋章',
+	'members_search_noneusertags' => '暂时没有用户标签',
 
 	'members_verify' => '审核资料',
 
@@ -3156,6 +3238,7 @@ $lang = array
 	'members_verify_setting_field' => '<em class="right">(<a href="?action=members&operation=profile">点此新增资料项</a>)</em>可选资料项',
 	'members_verify_group' => '允许参于认证的用户组',
 	'members_verify_group_comment' => '设置允许参与认证的用户组，可以按住 CTRL 多选， 空代表都可以参于认证',
+	'members_verify_pic_removed' => '图片已删除',
 
 	'members_newsletter' => '站点通知',
 	'members_newsletter_method' => '通知发送方式',
@@ -4326,7 +4409,7 @@ $lang = array
 	'moderate_members_succeed' => '注册审核已批准，欢迎光临！',
 	'moderate_members_op_succeed' => '审核操作成功',
 	'moderate_refusal_all' => '全选拒绝',
-	'moderate_cancel_all' => '全选取消',
+	'moderate_cancel_all' => '取消选择',
 	'moderate_export_all' => '全选导出',
 	'moderate_export_getall' => '全部导出',
 	'moderate_nodata' => '暂无相关数据',
@@ -4379,6 +4462,7 @@ $lang = array
 	'moderate_merge' => '合并主题',
 	'moderate_bump' => '提升主题',
 	'moderate_repair' => '修复主题',
+	'moderate_t_comment' => '微博评论',
 
 	'recyclebin' => '回收站',
 	'recyclebin_list' => '主题列表',
@@ -4800,6 +4884,7 @@ $lang = array
 	'plugins_conflict_view' => '查看细节',
 	'plugins_conflict_info' => '联系作者',
 	'plugins_module_sample' => '<span title="下载模块模板文件">[&darr;]</span>',
+	'plugins_find_newversion' => '发现新版',
 
 	'medals' => '勋章',
 	'medals_tips' => '<li>本功能用于设置可以颁发给用户的勋章信息，勋章图片中请填写图片文件名，并将相应图片文件上传到 static/image/common/ 目录中。</li>',
@@ -5218,6 +5303,7 @@ $lang = array
 	'project_option_forum_widthauto' => '默认是否宽屏',
 	'project_option_forum_seodescription' => 'SEO description',
 	'project_option_forum_showexif' => '图片附件显示 EXIF',
+	'project_option_forum_disablecollect' => '禁止淘帖',
 
 	'project_option_group_readaccess' => '阅读权限',
 	'project_option_group_allowvisit' => '允许访问论坛',
@@ -5333,6 +5419,13 @@ $lang = array
 	'project_option_group_maximagesize' => '相册中允许最大图片大小',
 	'project_option_group_allowgetimage' => '允许查看图片',
 	'project_option_group_allowposttag' => '允许使用标签',
+	'project_option_group_allowat' => '发帖时可 @ 其他人的数量',
+	'project_option_group_allowsendpmmaxnum' => '24小时内发布短消息最大数',
+	'project_option_group_allowsetpublishdate' => '允许设置预发帖时间',
+	'project_option_group_allowfollowcollection' => '最多允许关注淘专辑的数量',
+	'project_option_group_allowcommentcollection' => '允许评论淘专辑',
+	'project_option_group_allowcreatecollection' => '允许用户创建淘专辑的数量',
+	'project_option_group_maxthreadsperhour' => '会员每小时发主题数限制',
 
 	'extended' => '扩展',
 
@@ -5636,6 +5729,7 @@ $lang = array
 	'adv_admin_setting' => '设置',
 	'adv_admin_list' => '广告位',
 	'adv_admin_listall' => '所有广告',
+	'adv_admin_discuzunion' => 'Discuz!联盟',
 
 	'adv_type_version' => '模块版本',
 	'adv_type_headerbanner' => '页头通栏广告',
@@ -6497,7 +6591,7 @@ RepeatLimit 32
 );
 
 $adminextend = array();
-if(file_exists($adminextendfile = DISCUZ_ROOT.'./data/cache/cache_adminextend.php')) {
+if(file_exists($adminextendfile = DISCUZ_ROOT.'./data/sysdata/cache_adminextend.php')) {
 	@include $adminextendfile;
 	foreach($adminextend as $extend) {
 		$extend_lang = array();

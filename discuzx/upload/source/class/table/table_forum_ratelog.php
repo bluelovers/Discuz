@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_forum_ratelog.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_forum_ratelog.php 27876 2012-02-16 04:28:02Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -24,6 +24,9 @@ class table_forum_ratelog extends discuz_table
 		return DB::fetch_first('SELECT * FROM %t WHERE uid=%d AND pid=%d LIMIT 1', array($this->_table, $uid, $pid));
 	}
 	public function fetch_all_by_pid($pid, $sort = 'DESC') {
+		if(is_array($pid)) {
+			$pid = array_map('intval', (array)$pid);
+		}
 		$wheresql = is_array($pid) ? 'pid IN(%n)' : 'pid=%d';
 		return DB::fetch_all("SELECT * FROM %t WHERE $wheresql ORDER BY dateline $sort", array($this->_table, $pid));
 	}
@@ -63,6 +66,7 @@ class table_forum_ratelog extends discuz_table
 	}
 
 	public function fetch_postrate_by_pid($pids, &$postlist, &$postcache, $ratelogrecord) {
+		$pids = array_map('intval', (array)$pids);
 		$query = DB::query("SELECT * FROM ".DB::table('forum_ratelog')." WHERE pid IN (".dimplode($pids).") ORDER BY dateline DESC");
 		$ratelogs = array();
 		while($ratelog = DB::fetch($query)) {

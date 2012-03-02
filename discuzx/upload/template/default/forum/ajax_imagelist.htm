@@ -25,7 +25,7 @@
 					<input type="text" name="attachnew[{$image[aid]}][description]" class="px" style="display: none" id="image_desc_$image[aid]" />
 				<!--{/if}-->
 			</p>
-			<!--{if $_G['setting']['homestatus'] && $_G['group']['allowupload']}-->
+			<!--{if helper_access::check_module('album') && $_G['group']['allowupload']}-->
 				<p class="mtn"><!--{if !$attach[pid]}--><input type="hidden" class="pc" id="albumaid_$image[aid]" name="albumaid[]" value="" /><label for="albumaidchk_$image[aid]"><input id="albumaidchk_$image[aid]" type="checkbox" class="pc" onclick="$('albumaid_$image[aid]').value=this.checked?this.value:''" value="$image[aid]" />{lang save_to_album}</label><!--{/if}--></p>
 			<!--{/if}-->
 		</td>

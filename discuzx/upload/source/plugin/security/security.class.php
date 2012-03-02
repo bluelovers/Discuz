@@ -4,7 +4,7 @@
  *		[Discuz! X] (C)2001-2099 Comsenz Inc.
  *		This is NOT a freeware, use is subject to license terms
  *
- *		$Id: security.class.php 26819 2011-12-23 09:17:49Z songlixin $
+ *		$Id: security.class.php 28519 2012-03-02 03:23:38Z songlixin $
  */
 
 
@@ -28,7 +28,7 @@ class plugin_security {
 
 	public function __construct() {
 		self::$cloudAppService = Cloud::loadClass('Service_App');
-		self::$securityStatus = self::$cloudAppService->getcloudappstatus('security', 0);
+		self::$securityStatus = self::$cloudAppService->getCloudAppStatus('security');
 		self::$securityService = Cloud::loadClass('Service_Security');
 	}
 
@@ -38,7 +38,7 @@ class plugin_security {
 			return false;
 		}
 		if ($_G['uid']) {
-            $lastCookieReportTime = $this->_decodeReportTime($_G['cookie']['security_cookiereport']);
+			$lastCookieReportTime = $this->_decodeReportTime($_G['cookie']['security_cookiereport']);
 			if ($lastCookieReportTime < strtotime('today')) {
 
 				$this->_reportLoginUser(array('uid' => $_G['uid']));
@@ -59,32 +59,33 @@ class plugin_security {
 		}
 
 		$formhash = formhash();
-		$ajaxReportScript = '';
-		$processName = 'securitOperate';
-		if (self::$isAdminGroup && !discuz_process::islocked($processName, 10)) {
-			$ajaxReportScript = <<<EOF
-			<script type='text/javascript'>
-			var url = SITEURL + '/plugin.php?id=security:sitemaster';
-			var x = new Ajax();
-			x.post(url, 'formhash=$formhash', function(s){});
-			</script>
+		if ($_G['adminid']) {
+			$processName = 'securityOperate';
+			if (self::$isAdminGroup && !discuz_process::islocked($processName, 30)) {
+				$ajaxReportScript = <<<EOF
+					<script type='text/javascript'>
+					var url = SITEURL + '/plugin.php?id=security:sitemaster';
+					var x = new Ajax();
+					x.post(url, 'formhash=$formhash', function(s){});
+					</script>
 EOF;
+			}
 		}
 
-		$processName = 'securitRetry';
-		$time = 5;
-		if ($_GET['d']) {
-			$time = 1;
-		}
+		$processName = 'securityRetry';
+		$time = 10;
 		if (!discuz_process::islocked($processName, $time)) {
-			$ajaxRetryScript = <<<EOF
-			<script type='text/javascript'>
-			var urlRetry = SITEURL + '/plugin.php?id=security:job';
-			var ajaxRetry = new Ajax();
-			ajaxRetry.post(urlRetry, 'formhash=$formhash', function(s){});
-			</script>
+			if (C::t('#security#security_failedlog')->count()) {
+				$ajaxRetryScript = <<<EOF
+					<script type='text/javascript'>
+					var urlRetry = SITEURL + '/plugin.php?id=security:job';
+					var ajaxRetry = new Ajax();
+					ajaxRetry.post(urlRetry, 'formhash=$formhash', function(s){});
+					</script>
 EOF;
+			}
 		}
+
 		return $ajaxReportScript . $ajaxRetryScript;
 	}
 
@@ -104,6 +105,7 @@ EOF;
 			self::$securityService->updatePostOperate($ids, 'delete');
 			self::$securityService->logDeletePost($ids, $_POST['reason']);
 		}
+
 		return true;
 	}
 
@@ -121,6 +123,7 @@ EOF;
 			self::$securityService->updateThreadOperate($ids, 'delete');
 			self::$securityService->logDeleteThread($ids, $_POST['reason']);
 		}
+
 		return true;
 	}
 
@@ -201,7 +204,7 @@ EOF;
 		$this->secLog('USERLOG-UID', $param['uid']);
 		self::$securityService->reportLogin($param['uid']);
 		$this->_retryReport();
-        $cookieTime = strtotime('tomorrow') - TIMESTAMP;
+		$cookieTime = strtotime('tomorrow') - TIMESTAMP;
 		dsetcookie('security_cookiereport', $this->_encodeReportTime($_G['timestamp']), $cookieTime, 1);
 		return true;
 	}
@@ -211,7 +214,7 @@ EOF;
 			return false;
 		}
 		$username = $param['username'];
-        $result = C::t('common_member')->fetch_by_username($username);
+		$result = C::t('common_member')->fetch_by_username($username);
 		return $this->_reportLoginUser($result);
 	}
 
@@ -224,7 +227,7 @@ EOF;
 		$tid = $param['tid'];
 		$pid = $param['pid'];
 
-		self::$securityService->reportPost('new', $tid, $pid, $extra);
+		self::$securityService->reportPost('new', $tid, $pid, $extra, $param['isFollow']);
 		$this->_retryReport();
 		return true;
 	}
@@ -238,7 +241,7 @@ EOF;
 		$tid = $param['tid'];
 		$pid = $param['pid'];
 
-		self::$securityService->reportPost('new', $tid, $pid, $extra);
+		self::$securityService->reportPost('new', $tid, $pid, $extra, $param['isFollow']);
 		$this->_retryReport();
 		return true;
 	}
@@ -252,7 +255,7 @@ EOF;
 		$tid = $param['tid'];
 		$pid = $param['pid'];
 
-		self::$securityService->reportPost('edit', $tid, $pid, $extra);
+		self::$securityService->reportPost('edit', $tid, $pid, $extra, $param['isFollow']);
 		$this->_retryReport();
 		return true;
 	}
@@ -270,10 +273,6 @@ EOF;
 		if (!self::DEBUG) {
 			return false;
 		}
-		$date = date("Y-m-d", $_G['timestamp']);
-		$logfile = DISCUZ_ROOT."/data/EVIL" . $type . '-' . $date . ".log";
-		$data = date("Y-m-d H:i:s", $_G['timestamp']) . "\t" . json_encode($data) . "\r\n";
-		@file_put_contents($logfile, $data, FILE_APPEND);
 	}
 
 	public function getMergeAction() {
@@ -316,6 +315,36 @@ class plugin_security_forum extends plugin_security {
 }
 
 class plugin_security_group extends plugin_security_forum {}
+class plugin_security_home extends plugin_security_forum {
+
+	public function spacecp_follow_report_message($param) {
+		global $_G, $extra, $redirecturl;
+		if (self::$securityStatus != TRUE) {
+			return false;
+		}
+
+		$param['message'] = $param['param'][0];
+		$param['values'] = $param['param'][2];
+		$param['values']['isFollow'] = 1;
+		if (in_array($param['message'], self::$postReportAction)) {
+			switch ($param['message']) {
+				case 'post_newthread_succeed':
+				case 'post_newthread_mod_succeed':
+					$this->_reportNewThread($param['values']);
+					break;
+				case 'post_edit_succeed':
+				case 'edit_reply_mod_succeed':
+				case 'edit_newthread_mod_succeed':
+					$this->_reportEditPost($param['values']);
+					break;
+				case 'post_reply_succeed':
+				case 'post_reply_mod_succeed':
+					$this->_reportNewPost($param['values']);
+				default:break;
+			}
+		}
+	}
+}
 
 class plugin_security_member extends plugin_security {
 
@@ -376,7 +405,7 @@ class plugin_security_connect extends plugin_security_member {
 	public function login_report_message($param) {
 		if (self::$securityStatus != TRUE) {
 			return false;
-        }
+		}
 
 		$param['message'] = $param['param'][0];
 		$param['values'] = $param['param'][2];
@@ -384,7 +413,7 @@ class plugin_security_connect extends plugin_security_member {
 			switch ($param['message']) {
 				case login_succeed:
 				case location_login_succeed:
-                case location_login_succeed_mobile:
+				case location_login_succeed_mobile:
 					$this->_reportMobileLoginUser($param['values']);
 				default:break;
 			}

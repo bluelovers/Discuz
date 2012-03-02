@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_menu.php 27604 2012-02-07 04:44:34Z zhengqingpeng $
+ *      $Id: admincp_menu.php 27617 2012-02-07 08:24:14Z monkey $
  */
 
 global $_G;
@@ -176,7 +176,7 @@ $menu['extended'] = array(
 
 if(file_exists($menudir = DISCUZ_ROOT.'./source/admincp/menu')) {
 	$adminextend = $adminextendnew = array();
-	if(file_exists($adminextendfile = DISCUZ_ROOT.'./data/cache/cache_adminextend.php')) {
+	if(file_exists($adminextendfile = DISCUZ_ROOT.'./data/sysdata/cache_adminextend.php')) {
 		@include $adminextendfile;
 	}
 	$menudirhandle = dir($menudir);

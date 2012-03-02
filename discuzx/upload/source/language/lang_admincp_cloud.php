@@ -4,7 +4,7 @@
  *	  [Discuz!] (C)2001-2099 Comsenz Inc.
  *	  This is NOT a freeware, use is subject to license terms
  *
- *	  $Id: lang_admincp_cloud.php 27574 2012-02-06 07:00:18Z monkey $
+ *	  $Id: lang_admincp_cloud.php 28535 2012-03-02 05:25:30Z yangli $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -35,11 +35,13 @@ $extend_lang = array
 	'menu_cloud_qqgroup' => '社区QQ群',
 	'menu_cloud_union' => 'Discuz!联盟',
 	'menu_cloud_storage' => '旋风存储',
+    'menu_cloud_mobile' => '手机客户端',
 
 	'close' => '关闭',
 	'continue' => '继续',
 	'message_title' => '提示信息',
 	'jump_to_cloud' => '您即将转向Discuz!云平台（http://cp.discuz.qq.com）完成开通流程',
+	'cloud_waiting' => '请稍候...',
 
 	'cloud_status_error' => '出了点小错，由于站点ID/通信KEY等关键信息丢失导致Discuz!云平台服务出现异常，使用<a href="admin.php?action=cloud&operation=doctor">诊断工具</a>检测站点ID和KEY，如有疑问请访问<a href="http://www.discuz.net/forum-3926-1.html" target="_blank">官方论坛</a>寻求帮助',
 
@@ -172,6 +174,9 @@ $extend_lang = array
 		<li>省略繁琐的上传表情流程，无缝“偷渡”QQ表情到您的网站，论坛表情变得不再单调无味。</li>',
 
 	'cloud_smilies_status' => '启用SOSO 表情',
+	'cloud_storage' => '旋风存储',
+	'cloud_storage_tips' => '<li>为网站节省空间带宽，让用户享受超大文件的高速存储，上传下载尽在云端。</li>
+		<li>体验高速上传下载，支持单个文件高达2GB的附件上传，附件永久有效，为论坛降低成本。</li>',
 
 	'setting_manyou' => '漫游应用设置',
 	'setting_manyou_tips' => '<li>开启漫游应用功能后，用户可以自由选择各种不同的应用(诸如德克萨斯扑克、弹弹堂、十年一剑......)在站内进行使用。</li>
@@ -353,7 +358,7 @@ $extend_lang = array
 	'search_setting_allow_forum_recommend' => '开启板块推荐词',
 	'search_setting_allow_thread_related' => '开启主题相关帖',
 	'search_setting_allow_forum_related' => '开启板块相关帖',
-	'search_setting_allow_collection_related' => '开启淘贴相关帖',
+	'search_setting_allow_collection_related' => '开启淘帖相关帖',
 );
 
 $GLOBALS['admincp_actions_normal'][] = 'cloud';

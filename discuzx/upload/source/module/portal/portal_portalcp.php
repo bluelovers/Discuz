@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portal_portalcp.php 26718 2011-12-21 01:46:02Z monkey $
+ *      $Id: portal_portalcp.php 28492 2012-03-01 10:05:07Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -36,7 +36,7 @@ if (!$_G['inajax'] && in_array($ac, array('index', 'portalblock', 'blockdata', '
 if($ac == 'logout') {
 	$modsession = new discuz_panel(PORTALCP_PANEL);
 	$modsession->dologout();
-	showmessage('modcp_logout_succeed', 'portal.php');
+	showmessage('modcp_logout_succeed', 'index.php');
 }
 
 $navtitle = lang('core', 'title_'.$ac.'_management').' - '.lang('core', 'title_portal_management');

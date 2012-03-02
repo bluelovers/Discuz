@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: post_editpost.php 27027 2011-12-30 07:07:49Z chenmengshu $
+ *      $Id: post_editpost.php 28080 2012-02-22 06:44:16Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -677,10 +677,17 @@ if(!submitcheck('editsubmit')) {
 			C::t('forum_thread')->update($_G['tid'], $threadupdatearr, true);
 
 			if($_G['tid'] > 1) {
-				C::t('forum_thread')->update_by_closed($_G['tid'], array('subject' => $subject));
+				if($_G['thread']['closed'] > 1) {
+					C::t('forum_thread')->update($_G['thread']['closed'], array('subject' => $subject), true);
+				} elseif(empty($_G['thread']['isgroup'])) {
+					$threadclosed = C::t('forum_threadclosed')->fetch($_G['tid']);
+					if($threadclosed['redirect']) {
+						C::t('forum_thread')->update($threadclosed['redirect'], array('subject' => $subject), true);
+					}
+				}
 			}
 			$class_tag = new tag();
-			$tagstr = $class_tag->update_field($_GET['tags'], $_G[tid], 'tid', $_G['thread']);
+			$tagstr = $class_tag->update_field($_GET['tags'], $_G['tid'], 'tid', $_G['thread']);
 
 		} else {
 
@@ -939,7 +946,6 @@ if(!submitcheck('editsubmit')) {
 			$feed = C::t('forum_threadpreview')->fetch($_G['tid']);
 			if($feed) {
 				C::t('forum_threadpreview')->update($_G['tid'], array('content' => followcode($message, $_G['tid'], $pid, 1000)));
-			} else {
 			}
 		}
 		if($thread['lastpost'] == $orig['dateline'] && ((!$orig['anonymous'] && $thread['lastposter'] == $orig['author']) || ($orig['anonymous'] && $thread['lastposter'] == '')) && $orig['anonymous'] != $isanonymous) {

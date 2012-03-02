@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: discuz_table.php 27481 2012-02-02 04:28:46Z monkey $
+ *      $Id: discuz_table.php 28455 2012-03-01 04:55:11Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -47,18 +47,24 @@ class discuz_table extends discuz_base
 	}
 
 	public function update($val, $data, $unbuffered = false, $low_priority = false) {
-		$this->checkpk();
-		$ret = DB::update($this->_table, $data, DB::field($this->_pk, $val), $unbuffered, $low_priority);
-		foreach((array)$val as $id) {
-			$this->update_cache($id, $data);
+		if(isset($val) && !empty($data) && is_array($data)) {
+			$this->checkpk();
+			$ret = DB::update($this->_table, $data, DB::field($this->_pk, $val), $unbuffered, $low_priority);
+			foreach((array)$val as $id) {
+				$this->update_cache($id, $data);
+			}
+			return $ret;
 		}
-		return $ret;
+		return !$unbuffered ? 0 : false;
 	}
 
 	public function delete($val, $unbuffered = false) {
-		$this->checkpk();
-		$ret = DB::delete($this->_table, DB::field($this->_pk, $val), null, $unbuffered);
-		$this->clear_cache($val);
+		$ret = false;
+		if(isset($val)) {
+			$this->checkpk();
+			$ret = DB::delete($this->_table, DB::field($this->_pk, $val), null, $unbuffered);
+			$this->clear_cache($val);
+		}
 		return $ret;
 	}
 

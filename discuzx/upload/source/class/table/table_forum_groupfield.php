@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_forum_groupfield.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_forum_groupfield.php 27763 2012-02-14 03:42:56Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -24,6 +24,9 @@ class table_forum_groupfield extends discuz_table
 		DB::query("TRUNCATE ".DB::table('forum_groupfield'));
 	}
 	public function delete_by_type($types, $fid = 0) {
+		if(empty($types)) {
+			return false;
+		}
 		$addfid = $fid ? " AND fid='".intval($fid)."'" : '';
 		DB::query("DELETE FROM ".DB::table('forum_groupfield')." WHERE ".DB::field('type', $types).$addfid);
 	}

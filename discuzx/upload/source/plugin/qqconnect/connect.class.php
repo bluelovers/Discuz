@@ -4,7 +4,7 @@
  *      [Discuz! X] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: connect.class.php 26655 2011-12-19 04:10:23Z monkey $
+ *      $Id: connect.class.php 28470 2012-03-01 07:24:49Z houdelei $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -77,6 +77,9 @@ class plugin_qqconnect extends plugin_qqconnect_base {
 		global $_G;
 		if($param['caller'] == 'discuzcode') {
 			$_G['discuzcodemessage'] = preg_replace('/\[wb=(.+?)\](.+?)\[\/wb\]/', '<a href="http://t.qq.com/\\1" target="_blank"><img src="\\2" /></a>', $_G['discuzcodemessage']);
+		}
+		if($param['caller'] == 'messagecutstr') {
+			$_G['discuzcodemessage'] = preg_replace('/\[tthread=(.+?)\](.*?)\[\/tthread\]/', '', $_G['discuzcodemessage']);
 		}
 	}
 
@@ -365,7 +368,9 @@ class plugin_qqconnect extends plugin_qqconnect_base {
 			if($post['anonymous']) {
 				continue;
 			}
-			$uids[$post['authorid']] = $post['authorid'];
+			if($post['authorid']) {
+				$uids[$post['authorid']] = $post['authorid'];
+			}
 		}
 		foreach(C::t('#qqconnect#common_member_connect')->fetch_all($uids) as $connect) {
 			if($connect['conisqqshow'] && $connect['conopenid']) {
@@ -373,6 +378,19 @@ class plugin_qqconnect extends plugin_qqconnect_base {
 			}
 		}
 		foreach($GLOBALS['postlist'] as $pid => $post) {
+			if(getstatus($post['status'], 5)) {
+				$matches = array();
+				preg_match('/\[tthread=(.+?),(.+?)\](.*?)\[\/tthread\]/', $post['message'], $matches);
+				if($matches[1] && $matches[2]) {
+					$post['message'] = preg_replace('/\[tthread=(.+?)\](.*?)\[\/tthread\]/', lang('connect', 'connect_tthread_message', array('username' => $matches[1], 'nick' => $matches[2])), $post['message']);
+				}
+				$post['authorid'] = 0;
+				$post['author'] = lang('connect', 'connect_tthread_comment');
+				$post['avatar'] = $matches[3] ? '<img src="'.$matches[3].'/120'.'">' : '<img src="'.$_G['siteurl'].'/static/image/common/tavatar.gif">';
+				$post['groupid'] = '7';
+				$GLOBALS['postlist'][$pid] = $post;
+				continue;
+			}
 			if($post['anonymous']) {
 				continue;
 			}
@@ -391,7 +409,7 @@ class plugin_qqconnect extends plugin_qqconnect_base {
 
 	function _qqshow_img($openid) {
 		global $_G;
-		return '<img src="http://open.show.qq.com/cgi-bin/qs_open_snapshot?appid='.$_G['setting']['connectappid'].'&openid='.$openid.'" />';
+		return '<img width="120" src="http://open.show.qq.com/cgi-bin/qs_open_snapshot?appid='.$_G['setting']['connectappid'].'&openid='.$openid.'" />';
 	}
 
 }

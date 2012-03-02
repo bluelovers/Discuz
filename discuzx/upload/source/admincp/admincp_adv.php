@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_adv.php 26686 2011-12-20 03:03:48Z monkey $
+ *      $Id: admincp_adv.php 28113 2012-02-22 09:25:55Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -500,7 +500,7 @@ if($operation == 'ad') {
 		array('adv_admin_setting', 'adv&operation=setting', 0),
 		array('adv_admin_list', 'adv&operation=list', 1),
 		array('adv_admin_listall', 'adv&operation=ad', 0),
-		array('Discuz!ÁªÃË', 'http://union.discuz.qq.com/?ADTAG=CP.DISCUZ. ADSET.TAG', 0, 1, 1),
+		array('adv_admin_discuzunion', 'http://union.discuz.qq.com/?ADTAG=CP.DISCUZ. ADSET.TAG', 0, 1, 1),
 	));
 	showtips('adv_list_tip');
 

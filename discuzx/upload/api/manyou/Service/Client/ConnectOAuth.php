@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: ConnectOAuth.php 27025 2011-12-30 07:03:10Z zhouxiaobo $
+ *      $Id: ConnectOAuth.php 27709 2012-02-13 03:13:04Z zhouxiaobo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -31,6 +31,8 @@ class Cloud_Service_Client_ConnectOAuth extends Cloud_Service_Client_OAuth {
 	private $_addTURL = 'http://openapi.qzone.qq.com/t/add_t';
 
 	private $_addPicTURL = 'http://openapi.qzone.qq.com/t/add_pic_t';
+
+	private $_getReportListURL = 'http://openapi.qzone.qq.com/t/get_repost_list';
 
 	const RESPONSE_ERROR = 999;
 	const RESPONSE_ERROR_MSG = 'request failed';
@@ -168,10 +170,8 @@ class Cloud_Service_Client_ConnectOAuth extends Cloud_Service_Client_OAuth {
 
 		$connectService = Cloud::loadClass('Service_Connect');
 		$data = $connectService->connectParseXml($data);
-		if(strtoupper(CHARSET) != 'UTF-8') {
-			foreach($data as $k => $v) {
-				$data[diconv($k, 'UTF-8', CHARSET)] = diconv($v, 'UTF-8', CHARSET);
-			}
+		if (strtoupper(CHARSET) != 'UTF-8') {
+			$data = $this->_iconv($data, 'UTF-8', CHARSET);
 		}
 
 		if(!isset($data['ret']) && !isset($data['errcode'])) {
@@ -184,12 +184,25 @@ class Cloud_Service_Client_ConnectOAuth extends Cloud_Service_Client_OAuth {
 		return $data;
 	}
 
+	private function _iconv($data, $inputCharset, $outputCharset) {
+		if (is_array($data)) {
+			foreach($data as $key => $val) {
+				$value = array_map(array(__CLASS__, '_iconv'), array($val), array($inputCharset), array($outputCharset));
+				$result[$key] = $value[0];
+			}
+		} else {
+			$result = diconv($data, $inputCharset, $outputCharset);
+		}
+		return $result;
+
+	}
+
 	public function connectAddShare($openId, $accessToken, $accessTokenSecret, $params) {
 		if(!$params['title'] || !$params['url']) {
 			throw new Exception('Required Parameter Missing');
 		}
 
-		$paramsName = array('title', 'url', 'comment', 'summary', 'images', 'source', 'type', 'playurl');
+		$paramsName = array('title', 'url', 'comment', 'summary', 'images', 'source', 'type', 'playurl', 'nswb');
 		$extra = array(
 			'oauth_token' => $accessToken,
 			'openid' => $openId,
@@ -219,7 +232,7 @@ class Cloud_Service_Client_ConnectOAuth extends Cloud_Service_Client_OAuth {
 			throw new Exception('Required Parameter Missing');
 		}
 
-		$paramsName = array('content', 'pic', 'clientip', 'jing', 'wei');
+		$paramsName = array('content', 'pic', 'clientip', 'jing', 'wei', 'syncflag');
 		$extra = array(
 			'oauth_token' => $accessToken,
 			'openid' => $openId,
@@ -298,6 +311,33 @@ class Cloud_Service_Client_ConnectOAuth extends Cloud_Service_Client_OAuth {
 		$this->setTokenSecret($accessTokenSecret);
 		$response = $this->_request($this->_addWeiBoURL, $extra, 'POST');
 
+		$data = $this->_xmlParse($response);
+		if(isset($data['ret']) && $data['ret'] == 0) {
+			return $data;
+		} else {
+			throw new Exception($data['msg'], $data['ret']);
+		}
+	}
+
+	public function connectGetRepostList($openId, $accessToken, $accessTokenSecret, $params) {
+		if(!isset($params['flag']) || !$params['rootid'] || !isset($params['pageflag']) || !isset($params['pagetime']) || !$params['reqnum'] || !isset($params['twitterid'])) {
+			throw new Exception('Required Parameter Missing');
+		}
+
+		$paramsName = array('flag', 'rootid', 'pageflag', 'pagetime', 'reqnum', 'twitterid');
+		$extra = array(
+			'oauth_token' => $accessToken,
+			'openid' => $openId,
+			'format' => 'xml',
+		);
+
+		foreach($paramsName as $name) {
+			if($params[$name]) {
+				$extra[$name] = $params[$name];
+			}
+		}
+		$this->setTokenSecret($accessTokenSecret);
+		$response = $this->_request($this->_getReportListURL, $extra, 'GET');
 		$data = $this->_xmlParse($response);
 		if(isset($data['ret']) && $data['ret'] == 0) {
 			return $data;

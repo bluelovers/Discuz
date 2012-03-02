@@ -2,14 +2,13 @@
 <div id="pt" class="bm cl">
 	<div class="z">
 		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
-		<a href="$_G[setting][navs][2][filename]">$_G[setting][navs][2][navname]</a> <em>&rsaquo;</em>
 		<a href="forum.php?mod=collection">{lang collection}</a> <em>&rsaquo;</em>
-		{if $op == 'edit'}
+		<!--{if $op == 'edit'}-->
 		<a href="forum.php?mod=collection&action=view&ctid={$_G['collection']['ctid']}">{$_G['collection']['name']}</a> <em>&rsaquo;</em>
 		{lang collection_edit}
-		{else}
+		<!--{else}-->
 		{lang collection_create}
-		{/if}
+		<!--{/if}-->
 	</div>
 </div>
 <script>
@@ -63,7 +62,7 @@ function checklen() {
 							<input type="hidden" value="{$op}" name="op" />
 							<input type="hidden" value="{$ctid}" name="ctid" />
 							<input type="hidden" name="formhash" id="formhash" value="{FORMHASH}" />
-							<button type="submit" name="collectionsubmit" class="pn pnc" value="submit"><span>{if $op == 'edit'}{lang collection_edit}{else}{lang collection_create}{/if}</span></button>
+							<button type="submit" name="collectionsubmit" class="pn pnc" value="submit"><span><!--{if $op == 'edit'}-->{lang collection_edit}<!--{else}-->{lang collection_create}<!--{/if}--></span></button>
 							<!--{if $op != 'edit'}-->
 								<span class="xg1">{lang collection_remain_tips}</span>
 							<!--{/if}-->

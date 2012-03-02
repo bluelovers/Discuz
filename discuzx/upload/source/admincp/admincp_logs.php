@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_logs.php 26547 2011-12-15 02:33:53Z chenmengshu $
+ *      $Id: admincp_logs.php 27854 2012-02-15 11:12:37Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -28,9 +28,9 @@ krsort($logfiles);
 if($logfiles) {
 	if(!isset($_GET['day']) || strexists($_GET['day'], '_')) {
 		list($_GET['day'], $_GET['num']) = explode('_', $_GET['day']);
-		$logs = file(($_GET['day'] ? $logdir.$_GET['day'].'_'.$operation.'log'.($_GET['num'] ? '_'.$_GET['num'] : '').'.php' : $logdir.$lastlog));
+		$logs = file(($_GET['day'] ? $logdir.$_GET['day'].'_'.$operation.($operation == 'sendmail' ? '' : 'log').($_GET['num'] ? '_'.$_GET['num'] : '').'.php' : $logdir.$lastlog));
 	} else {
-		$logs = file($logdir.$operation.'log_'.$_GET['day'].'.php');
+		$logs = file($logdir.$_GET['day'].'_'.$operation.($operation == 'sendmail' ? '' : 'log').'.php');
 	}
 }
 
@@ -74,7 +74,7 @@ if($logfiles) {
 		list($date, $logtype, $num) = explode('_', $logfile);
 		if(is_numeric($date)) {
 			$num = intval($num);
-			$sel .= '<option value="'.$date.'_'.$num.'"'.($date.'_'.$num == $_GET['day'].'_'.$_GET['num'] ? ' selected="selected"' : '').'>'.($num ? '&nbsp;&nbsp;'.$date.' '.cplang('logs_archive').' '.$num : $date).'</option>';
+			$sel .= '<option value="'.$date.'_'.$num.'"'.($date.'_'.$num == $_GET['day'].'_'.intval($_GET['num']) ? ' selected="selected"' : '').'>'.($num ? '&nbsp;&nbsp;'.$date.' '.cplang('logs_archive').' '.$num : $date).'</option>';
 		} else {
 			list($logtype) = explode('.', $logtype);
 			$sel .= '<option value="'.$logtype.'"'.($logtype == $_GET['day'] ? ' selected="selected"' : '').'>'.$logtype.'</option>';

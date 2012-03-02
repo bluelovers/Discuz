@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_template.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_common_template.php 27745 2012-02-14 01:43:38Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -26,6 +26,9 @@ class table_common_template extends discuz_table
 	}
 
 	public function delete($val) {
+		if(!$val) {
+			return;
+		}
 		DB::query("DELETE FROM %t WHERE %i AND templateid<>1", array($this->_table, DB::field('templateid', $val)));
 	}
 

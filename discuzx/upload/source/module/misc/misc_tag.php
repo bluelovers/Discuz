@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_tag.php 25889 2011-11-24 09:52:20Z monkey $
+ *      $Id: misc_tag.php 28214 2012-02-24 06:38:56Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -89,7 +89,7 @@ if($id || $name) {
 		}
 		$threadlist = getthreadsbytids($tidarray);
 
-		if($_G['setting']['homestatus']) {
+		if(helper_access::check_module('blog')) {
 			$blogidarray = $bloglist = array();
 			$query = C::t('common_tagitem')->select($id, 0, 'blogid', '', '', $shownum);
 			foreach($query as $result) {
@@ -131,8 +131,8 @@ function getthreadsbytids($tidarray) {
 		}
 		if(!empty($fids)) {
 			foreach(C::t('forum_forum')->fetch_all_by_fid(array_keys($fids)) as $fid => $forum) {
-				$_G['cache']['forums'][$fid]['name'] = $forum['name'];
-				$threadlist[$fids[$fid]]['name'] = $forum['name'];
+				$_G['cache']['forums'][$fid]['forumname'] = $forum['name'];
+				$threadlist[$fids[$fid]]['forumname'] = $forum['name'];
 			}
 		}
 	}

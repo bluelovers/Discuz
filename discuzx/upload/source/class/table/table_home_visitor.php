@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_home_visitor.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_home_visitor.php 27887 2012-02-16 06:40:08Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -30,12 +30,22 @@ class table_home_visitor extends discuz_table
 		return DB::fetch_all('SELECT * FROM %t WHERE vuid=%d ORDER BY dateline DESC '.DB::limit($start, $limit), array($this->_table, $uid));
 	}
 	public function update_by_uid_vuid($uid, $vuid, $data) {
-		return DB::update($this->_table, $data, DB::field('uid', $uid).' AND '.DB::field('vuid', $vuid));
+		$uid = dintval($uid, true);
+		$vuid = dintval($vuid, true);
+		if($uid && !empty($data) && is_array($data)) {
+			return DB::update($this->_table, $data, DB::field('uid', $uid).' AND '.DB::field('vuid', $vuid));
+		}
+		return 0;
 	}
 	public function delete_by_uid_or_vuid($uids) {
-		return DB::delete($this->_table, DB::field('uid', $uids).' OR '.DB::field('vuid', $uids));
+		$uids = dintval($uids, true);
+		if($uids) {
+			return DB::delete($this->_table, DB::field('uid', $uids).' OR '.DB::field('vuid', $uids));
+		}
+		return 0;
 	}
 	public function delete_by_dateline($dateline) {
+		$dateline = dintval($dateline);
 		return DB::delete($this->_table, DB::field('dateline', $dateline, '<'));
 	}
 	public function count_by_uid($uid) {

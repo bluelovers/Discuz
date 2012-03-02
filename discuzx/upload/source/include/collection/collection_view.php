@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: collection_view.php 26937 2011-12-28 02:24:34Z chenmengshu $
+ *      $Id: collection_view.php 28409 2012-02-29 05:43:20Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -17,6 +17,7 @@ if(!in_array($op, $oplist)) {
 }
 $fromoplist = array('my', 'all');
 $fromop = (!in_array($_GET['fromop'], $fromoplist)) ? '' : $_GET['fromop'];
+$fromtid = dintval($_GET['fromtid']);
 $tids = $fids = array();
 
 if(!$_G['collection']['ctid']) {

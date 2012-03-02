@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_styles.php 27272 2012-01-12 08:19:56Z monkey $
+ *      $Id: admincp_styles.php 28113 2012-02-22 09:25:55Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -223,7 +223,7 @@ if($operation == 'admin') {
 		foreach($checkresult as $addonid => $value) {
 			list($return, $newver) = explode(':', $value);
 			if($newver) {
-				$newvers .= "if($('update_$addonid')) $('update_$addonid').innerHTML=' <a href=\"".ADMINSCRIPT."?action=cloudaddons&id=$addonid\"><font color=\"red\">(·¢ÏÖÐÂ°æ $newver)</font></a>';";
+				$newvers .= "if($('update_$addonid')) $('update_$addonid').innerHTML=' <a href=\"".ADMINSCRIPT."?action=cloudaddons&id=$addonid\"><font color=\"red\">(".cplang('styles_find_newversion')." $newver)</font></a>';";
 			}
 		}
 		if($newvers) {
@@ -283,10 +283,10 @@ if($operation == 'admin') {
 					foreach(C::t('common_style')->fetch_all_data() as $style) {
 						unset($tplids[$style['templateid']]);
 					}
-					foreach(C::t('common_template')->fetch_all($tplids) as $tpl) {
-						cloudaddons_uninstall(basename($tpl['directory']).'.template', $tpl['directory']);
-					}
 					if($tplids) {
+						foreach(C::t('common_template')->fetch_all($tplids) as $tpl) {
+							cloudaddons_uninstall(basename($tpl['directory']).'.template', $tpl['directory']);
+						}
 						C::t('common_template')->delete($tplids);
 					}
 				}

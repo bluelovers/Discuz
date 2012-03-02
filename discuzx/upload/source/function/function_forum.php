@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_forum.php 27203 2012-01-11 03:14:19Z zhangguosheng $
+ *      $Id: function_forum.php 28475 2012-03-01 08:16:46Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -439,7 +439,7 @@ function loadforum() {
 			$archiveid = !empty($_GET['archiveid']) ? intval($_GET['archiveid']) : null;
 			$_G['thread'] = get_thread_by_tid($tid, $archiveid);
 			if(!$_G['forum_auditstatuson'] && !empty($_G['thread'])
-					&& !($_G['thread']['displayorder'] >= 0 || (in_array($_G['thread']['displayorder'], array(-4,-3,-2)) && $_G['thread']['authorid'] == $_G['uid']))) {
+					&& !($_G['thread']['displayorder'] >= 0 || (in_array($_G['thread']['displayorder'], array(-4,-3,-2)) && $_G['uid'] && $_G['thread']['authorid'] == $_G['uid']))) {
 				$_G['thread'] = null;
 			}
 
@@ -478,9 +478,6 @@ function loadforum() {
 			$gorup_admingroupids = $_G['setting']['group_admingroupids'] ? dunserialize($_G['setting']['group_admingroupids']) : array('1' => '1');
 
 			if($forum['status'] == 3) {
-				if(!$_G['setting']['groupstatus']) {
-					showmessage('group_status_off');
-				}
 				if(!empty($forum['moderators'])) {
 					$forum['moderators'] = dunserialize($forum['moderators']);
 				} else {
@@ -565,7 +562,6 @@ function loadforum() {
 	$_G['forum'] = &$forum;
 	$_G['current_grouplevel'] = &$grouplevel;
 
-	$_G['disabledwidthauto'] = 0;
 	if(!empty($_G['forum']['widthauto'])) {
 		$_G['widthauto'] = $_G['forum']['widthauto'];
 	}
@@ -717,20 +713,24 @@ function loadarchiver($path) {
 	return DISCUZ_ROOT . "./source/archiver/$filename";
 }
 
-function update_threadpartake($tid) {
+function update_threadpartake($tid, $getsetarr = false) {
 	global $_G;
+	$setarr = array();
 	if($_G['uid'] && $tid) {
 		if($_G['setting']['heatthread']['period']) {
 			$partaked = C::t('forum_threadpartake')->fetch($tid, $_G['uid']);
 			$partaked = $partaked['uid'];
 			if(!$partaked) {
 				C::t('forum_threadpartake')->insert(array('tid' => $tid, 'uid' => $_G['uid'], 'dateline' => TIMESTAMP));
-				C::t('forum_thread')->increase($tid, array('heats' => 1));
+				$setarr = C::t('forum_thread')->increase($tid, array('heats' => 1), false, 0, $getsetarr);
 			}
 		} else {
-			C::t('forum_thread')->increase($tid, array('heats' => 1));
+			$setarr = C::t('forum_thread')->increase($tid, array('heats' => 1), false, 0, $getsetarr);
 
 		}
+	}
+	if($getsetarr) {
+		return $setarr;
 	}
 }
 
@@ -830,7 +830,7 @@ function threadpubsave($tid, $passapproval = false) {
 		$hookparam = func_get_args();
 		hookscript('threadpubsave', 'global', 'funcs', array('param' => $hookparam, 'step' => 'check'), 'threadpubsave');
 	}
-	$thread = C::t('forum_thread')->fetch_by_tid_displayorder($tid, -4, '=', !$passapproval ? $_G['uid'] : '');
+	$thread = C::t('forum_thread')->fetch_by_tid_displayorder($tid, -4, '=', !$passapproval ? $_G['uid'] : null);
 	if(!$thread) {
 		return 0;
 	}
@@ -897,15 +897,19 @@ function getrelatecollection($tid, $all = false, &$num, &$more) {
 	if(!$maxdisplay) return;
 
 	$tidrelate = C::t('forum_collectionrelated')->fetch($tid);
-	$tids = explode("\t", $tidrelate['collection'], -1);
-	$num = count($tids);
+	$ctids = explode("\t", $tidrelate['collection'], -1);
+	$num = count($ctids);
 
+	if(!$ctids || !$num) {
+		$more = $num = 0;
+		return null;
+	}
 	if($all !== true && $num > $maxdisplay) {
 		$more = 1;
 	} else {
 		$maxdisplay = 0;
 	}
-	return C::t('forum_collection')->fetch_all($tids, 'follownum', 'DESC', 0, $maxdisplay, '', $tid);
+	return C::t('forum_collection')->fetch_all($ctids, 'follownum', 'DESC', 0, $maxdisplay, '', $tid);
 }
 
 function set_atlist_cookie($uids) {

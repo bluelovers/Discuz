@@ -3,7 +3,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_collection.php 25246 2011-11-02 03:34:53Z zhangguosheng $
+ *      $Id: admincp_collection.php 27779 2012-02-14 07:33:17Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -68,25 +68,15 @@ if($operation == 'comment') {
 		$comment_username = trim($_GET['comment_username']);
 		$comment_useip = trim($_GET['comment_useip']);
 		$comment_rate = dintval($_GET['comment_rate']);
-
-		$where = '1=1';
-
-		$where .= $comment_message ? " AND message LIKE '%$comment_message%'" : '';
-		$where .= $comment_cid ? " AND cid = '$comment_cid'" : '';
-		$where .= $comment_ctid ? " AND ctid = '$comment_ctid'" : '';
-		$where .= $comment_username ? " AND username LIKE '%$comment_username%'" : '';
-		$where .= $comment_uid ? " AND uid ='$comment_uid'" : '';
-		$where .= $comment_useip ? " AND useip LIKE '$comment_useip%'" : '';
-		$where .= $comment_rate ? " AND rate > '$comment_rate'" : '';
-		$where .= $_GET['starttime'] != '' ? " AND dateline>'".strtotime($_GET['starttime'])."'" : '';
-		$where .= $_GET['endtime'] != '' ? " AND dateline<='".strtotime($_GET['endtime'])."'" : '';
+		$starttime = $_GET['starttime'] ? strtotime($_GET['starttime']) : '';
+		$endtime = $_GET['endtime'] ? strtotime($_GET['endtime']) : '';
 
 		$ppp = $_GET['perpage'];
 		$startlimit = ($page - 1) * $ppp;
 		$multipage = '';
-		$totalcount = C::t('forum_collectioncomment')->fetch_all_for_search($where, -1);
+		$totalcount = C::t('forum_collectioncomment')->fetch_all_for_search($comment_cid, $comment_ctid, $comment_username, $comment_uid, $comment_useip, $comment_rate, $comment_message, $starttime, $endtime, -1);
 		$multipage = multi($totalcount, $ppp, $page, ADMINSCRIPT."?action=collection&operation=comment&searchsubmit=yes&comment_message=$comment_message&comment_cid=$comment_cid&comment_username=$comment_username&comment_uid=$comment_uid&comment_ctid=$comment_ctid&comment_useip=$comment_useip&comment_rate=$comment_rate&starttime=$starttime&endtime=$endtime&perpage=$ppp");
-		$collectioncomment = C::t('forum_collectioncomment')->fetch_all_for_search($where, $startlimit, $ppp);
+		$collectioncomment = C::t('forum_collectioncomment')->fetch_all_for_search($comment_cid, $comment_ctid, $comment_username, $comment_uid, $comment_useip, $comment_rate, $comment_message, $starttime, $endtime, $startlimit, $ppp);
 		showformheader('collection&operation=comment');
 		showtableheader(cplang('collection_comment_result').' '.$totalcount.' <a href="###" onclick="location.href=\''.ADMINSCRIPT.'?action=collection&operation=comment\';" class="act lightlink normal">'.cplang('research').'</a>', 'nobottom');
 		showhiddenfields(array('page' => $_GET['page'], 'tagname' => $tagname, 'status' => $status, 'perpage' => $ppp));
@@ -149,18 +139,16 @@ if($operation == 'comment') {
 	} else {
 		$collection_name = trim($_GET['collection_name']);
 		$collection_ctid = dintval($_GET['collection_ctid']);
-		$where = '1=1';
-		$where .= $collection_name ? " AND name LIKE '%$collection_name%'" : '';
-		$where .= $collection_ctid ? " AND ctid = '$collection_ctid'" : '';
-		$where .= $collection_username ? " AND username LIKE '%$collection_username%'" : '';
-		$where .= $collection_uid ? " AND uid = '$collection_uid'" : '';
+		$collection_username = trim($_GET['collection_username']);
+		$collection_uid = dintval($_GET['collection_uid']);
+
 
 		$ppp = $_GET['perpage'];
 		$startlimit = ($page - 1) * $ppp;
 		$multipage = '';
-		$totalcount = C::t('forum_collection')->fetch_all_for_search($where, -1);
+		$totalcount = C::t('forum_collection')->fetch_all_for_search($collection_name, $collection_ctid, $collection_username, $collection_uid, -1);
 		$multipage = multi($totalcount, $ppp, $page, ADMINSCRIPT."?action=collection&operation=admin&searchsubmit=yes&collection_name=$collection_name&collection_ctid=$collection_ctid&collection_username=$collection_username&collection_uid=$collection_uid&perpage=$ppp&status=$status");
-		$collection = C::t('forum_collection')->fetch_all_for_search($where, $startlimit, $ppp);
+		$collection = C::t('forum_collection')->fetch_all_for_search($collection_name, $collection_ctid, $collection_username, $collection_uid, $startlimit, $ppp);
 		showformheader('collection&operation=admin');
 		showtableheader(cplang('collection_result').' '.$totalcount.' <a href="###" onclick="location.href=\''.ADMINSCRIPT.'?action=collection&operation=admin\';" class="act lightlink normal">'.cplang('research').'</a>', 'nobottom');
 		showhiddenfields(array('page' => $_GET['page'], 'collection_name' => $collection_name, 'collection_ctid' => $collection_ctid, 'perpage' => $ppp));

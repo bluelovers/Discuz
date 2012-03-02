@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_announce.php 25246 2011-11-02 03:34:53Z zhangguosheng $
+ *      $Id: admincp_announce.php 28390 2012-02-28 10:41:08Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -52,12 +52,7 @@ if(empty($operation)) {
 	} else {
 
 		if(is_array($_GET['delete'])) {
-			$ids = $comma = '';
-			foreach($_GET['delete'] as $id) {
-				$ids .= "$comma'$id'";
-				$comma = ',';
-			}
-			C::t('forum_announcement')->delete_by_id_username($delids, $_G['username'], $_G['adminid']);
+			C::t('forum_announcement')->delete_by_id_username($_GET['delete'], $_G['username'], $_G['adminid']);
 		}
 
 		if(is_array($_GET['displayordernew'])) {

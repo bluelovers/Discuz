@@ -4,22 +4,34 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_filesock.php 27602 2012-02-07 04:27:27Z monkey $
+ *      $Id: function_filesock.php 27904 2012-02-16 08:11:44Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
-function _dfsockopen($url, $limit = 0, $post = '', $cookie = '', $bysocket = FALSE, $ip = '', $timeout = 15, $block = TRUE, $encodetype  = 'URLENCODE') {
-	if(function_exists('curl_init')) {
+function _dfsockopen($url, $limit = 0, $post = '', $cookie = '', $bysocket = FALSE, $ip = '', $timeout = 15, $block = TRUE, $encodetype  = 'URLENCODE', $allowcurl = TRUE) {
+	$return = '';
+	$matches = parse_url($url);
+	$scheme = $matches['scheme'];
+	$host = $matches['host'];
+	$path = $matches['path'] ? $matches['path'].($matches['query'] ? '?'.$matches['query'] : '') : '/';
+	$port = !empty($matches['port']) ? $matches['port'] : 80;
+
+	if(function_exists('curl_init') && $allowcurl) {
 		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $url);
+		$ip && curl_setopt($ch, CURLOPT_HTTPHEADER, array("Host: ".$host));
+		curl_setopt($ch, CURLOPT_URL, $scheme.'://'.($ip ? $ip : $host).':'.$port.$path);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		if($post) {
-			parse_str($post, $postarray);
 			curl_setopt($ch, CURLOPT_POST, 1);
-			curl_setopt($ch, CURLOPT_POSTFIELDS, $postarray);
+			if($encodetype == 'URLENCODE') {
+				curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+			} else {
+				parse_str($post, $postarray);
+				curl_setopt($ch, CURLOPT_POSTFIELDS, $postarray);
+			}
 		}
 		if($cookie) {
 			curl_setopt($ch, CURLOPT_COOKIE, $cookie);
@@ -35,12 +47,6 @@ function _dfsockopen($url, $limit = 0, $post = '', $cookie = '', $bysocket = FAL
 			return !$limit ? $data : substr($data, 0, $limit);
 		}
 	}
-	$return = '';
-	$matches = parse_url($url);
-	$scheme = $matches['scheme'];
-	$host = $matches['host'];
-	$path = $matches['path'] ? $matches['path'].($matches['query'] ? '?'.$matches['query'] : '') : '/';
-	$port = !empty($matches['port']) ? $matches['port'] : 80;
 
 	if($post) {
 		$out = "POST $path HTTP/1.0\r\n";

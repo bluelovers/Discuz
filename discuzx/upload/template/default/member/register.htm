@@ -70,7 +70,7 @@
 								<tr>
 									<th>&nbsp;</th>
 									<td class="tipwide">
-										注册需要验证邮箱，请务必填写正确的邮箱，提交后请及时查收邮件。<br />您可能需要等待几分钟才能收到邮件，如果收件箱没有，请检查一下垃圾邮件箱。
+										{lang register_validate_email_tips}
 									</td>
 								</tr>
 							</table>
@@ -133,7 +133,7 @@
 									<tr>
 										<th><span class="rq">*</span><label for="{$this->setting['reginput']['password']}">{lang password}:</label></th>
 										<td><input type="password" id="{$this->setting['reginput']['password']}" name="" size="25" tabindex="1" class="px" required /></td>
-										<td class="tipcol"><i id="tip_{$this->setting['reginput']['password']}" class="p_tip">{lang register_password_tips}<!--{if $_G['setting']['pwlength']}-->, 最小长度为 $_G['setting']['pwlength'] 个字符<!--{/if}--></i><kbd id="chk_{$this->setting['reginput']['password']}" class="p_chk"></kbd></td>
+										<td class="tipcol"><i id="tip_{$this->setting['reginput']['password']}" class="p_tip">{lang register_password_tips}<!--{if $_G['setting']['pwlength']}-->, {lang register_password_length_tips1} $_G['setting']['pwlength'] {lang register_password_length_tips2}<!--{/if}--></i><kbd id="chk_{$this->setting['reginput']['password']}" class="p_chk"></kbd></td>
 									</tr>
 								</table>
 							</div>
@@ -289,7 +289,7 @@
 		<!--{/if}-->
 	<!--{/if}-->
 	function showBBRule() {
-		showDialog($('layer_bbrule').innerHTML, 'info', '{echo addslashes($this->setting['bbname']);} {lang rulemessage}');
+		showDialog($('layer_bbrule').innerHTML, 'info', '<!--{echo addslashes($this->setting['bbname']);}--> {lang rulemessage}');
 		$('fwin_dialog_close').style.display = 'none';
 	}
 <!--{/if}-->

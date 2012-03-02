@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: install_lang.php 27518 2012-02-03 03:39:06Z zhangguosheng $
+ *      $Id: install_lang.php 28275 2012-02-27 04:14:58Z monkey $
  */
 
 define('UC_VERNAME', '中文版');
@@ -86,10 +86,13 @@ $lang = array(
 	'tips_ucenter_comment' => 'UCenter 是 Comsenz 公司产品的核心服务程序，Discuz! Board 的安装和运行依赖此程序。如果您已经安装了 UCenter，请填写以下信息。否则，请到 <a href="http://www.discuz.com/" target="blank">Comsenz 产品中心</a> 下载并且安装，然后再继续。',
 
 	'advice_mysql_connect' => '请检查 mysql 模块是否正确加载',
-	'advice_fsockopen' => '该函数需要 php.ini 中 allow_url_fopen 选项开启。请联系空间商，确定开启了此项功能',
-	'advice_gethostbyname' => '是否php配置中禁止了gethostbyname函数。请联系空间商，确定开启了此项功能',
+	'advice_gethostbyname' => '是否 PHP 配置中禁止了 gethostbyname 函数。请联系空间商，确定开启了此项功能',
 	'advice_file_get_contents' => '该函数需要 php.ini 中 allow_url_fopen 选项开启。请联系空间商，确定开启了此项功能',
 	'advice_xml_parser_create' => '该函数需要 PHP 支持 XML。请联系空间商，确定开启了此项功能',
+	'advice_fsockopen' => '该函数需要 php.ini 中 allow_url_fopen 选项开启。请联系空间商，确定开启了此项功能',
+	'advice_pfsockopen' => '该函数需要 php.ini 中 allow_url_fopen 选项开启。请联系空间商，确定开启了此项功能',
+	'advice_stream_socket_client' => '是否 PHP 配置中禁止了 stream_socket_client 函数',
+	'advice_curl_init' => '是否 PHP 配置中禁止了 curl_init 函数',
 
 	'ucurl' => 'UCenter 的 URL',
 	'ucpw' => 'UCenter 创始人密码',

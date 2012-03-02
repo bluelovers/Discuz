@@ -7,7 +7,7 @@ loadcache('click');
 $clicks = empty($_G['cache']['click']['picid'])?array():$_G['cache']['click']['picid'];
 
 $picturelist = '';
-$orderby =  $_GET['orderby'];
+$orderby = in_array($_GET['orderby'], array('thisweek', 'thismonth', 'today', 'all')) ? $_GET['orderby'] : '';
 
 $navname = $_G['setting']['navs'][8]['navname'];
 switch($_GET['view']) {

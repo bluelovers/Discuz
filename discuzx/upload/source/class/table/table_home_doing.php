@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_home_doing.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_home_doing.php 27895 2012-02-16 07:26:42Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -26,6 +26,9 @@ class table_home_doing extends discuz_table
 	}
 
 	public function delete_by_uid($uid) {
+		if(!$uid) {
+			return null;
+		}
 		return DB::delete($this->_table, DB::field('uid', $uid));
 	}
 
@@ -40,7 +43,7 @@ class table_home_doing extends discuz_table
 		}
 		if($bannedids) {
 			$parameter[] = $bannedids;
-			$wheres[] = 'doid NOT IN ($n)';
+			$wheres[] = 'doid NOT IN (%n)';
 		}
 		if($status) {
 			$wheres[] = ' status = 0';
@@ -99,12 +102,12 @@ class table_home_doing extends discuz_table
 		}
 
 		if($starttime) {
-			$parameter[] = strtotime($starttime);
+			$parameter[] = is_numeric($starttime) ? $starttime : strtotime($starttime);
 			$wherearr[] = 'dateline>%d';
 		}
 
 		if($endtime) {
-			$parameter[] = $endtime;
+			$parameter[] = is_numeric($endtime) ? $endtime : strtotime($endtime);
 			$wherearr[] = 'dateline<%d';
 		}
 
@@ -119,7 +122,7 @@ class table_home_doing extends discuz_table
 		}
 
 		if($findex) {
-			$findex = 'USE INDEX('.$findex.')';
+			$findex = 'USE INDEX(dateline)';
 		}
 
 		$wheresql = !empty($wherearr) && is_array($wherearr) ? ' WHERE '.implode(' AND ', $wherearr) : '';

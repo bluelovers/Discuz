@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_credit_log.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_common_credit_log.php 27910 2012-02-16 08:42:28Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -21,10 +21,11 @@ class table_common_credit_log extends discuz_table
 		parent::__construct();
 	}
 	public function fetch_by_operation_relatedid($operation, $relatedid) {
+		$relatedid = dintval($relatedid, true);
 		$parameter = array($this->_table, $operation, $relatedid);
 		$wherearr = array();
-		$wherearr[] = is_array($operation) ? 'operation IN(%n)' : 'operation=%s';
-		$wherearr[] = is_array($relatedid) ? 'relatedid IN(%n)' : 'relatedid=%d';
+		$wherearr[] = is_array($operation) && $operation ? 'operation IN(%n)' : 'operation=%s';
+		$wherearr[] = is_array($relatedid) && $relatedid ? 'relatedid IN(%n)' : 'relatedid=%d';
 		return DB::fetch_all('SELECT * FROM %t WHERE '.implode(' AND ', $wherearr), $parameter);
 	}
 	public function fetch_all_by_operation($operation, $start = 0, $limit = 0) {
@@ -34,11 +35,13 @@ class table_common_credit_log extends discuz_table
 		$parameter = array($this->_table);
 		$wherearr = array();
 		if($uid) {
-			$wherearr[] = is_array($uid) ? 'uid IN(%n)' : 'uid=%d';
+			$uid = dintval($uid, true);
+			$wherearr[] = is_array($uid) && $uid ? 'uid IN(%n)' : 'uid=%d';
 			$parameter[] = $uid;
 		}
-		$wherearr[] = is_array($operation) ? 'operation IN(%n)' : 'operation=%s';
-		$wherearr[] = is_array($relatedid) ? 'relatedid IN(%n)' : 'relatedid=%d';
+		$relatedid = dintval($relatedid, true);
+		$wherearr[] = is_array($operation) && $operation ? 'operation IN(%n)' : 'operation=%s';
+		$wherearr[] = is_array($relatedid) && $relatedid ? 'relatedid IN(%n)' : 'relatedid=%d';
 		$parameter[] = $operation;
 		$parameter[] = $relatedid;
 		return DB::fetch_all('SELECT * FROM %t WHERE '.implode(' AND ', $wherearr).' ORDER BY dateline', $parameter);
@@ -51,21 +54,40 @@ class table_common_credit_log extends discuz_table
 		return DB::fetch_all('SELECT * FROM %t '.$condition[0].' ORDER BY dateline DESC '.DB::limit($start, $limit), $condition[1]);
 	}
 	public function delete_by_operation_relatedid($operation, $relatedid) {
-		return DB::delete($this->_table, DB::field('operation', $operation).' AND '.DB::field('relatedid', $relatedid));
+		$relatedid = dintval($relatedid, true);
+		if($operation && $relatedid) {
+			return DB::delete($this->_table, DB::field('operation', $operation).' AND '.DB::field('relatedid', $relatedid));
+		}
+		return 0;
 	}
 
 	public function delete_by_uid_operation_relatedid($uid, $operation, $relatedid) {
-		return DB::delete($this->_table, DB::field('uid', $uid).' AND '.DB::field('operation', $operation).' AND '.DB::field('relatedid', $relatedid));
+		$relatedid = dintval($relatedid, true);
+		$uid = dintval($uid, true);
+		if($relatedid && $uid && $operation) {
+			return DB::delete($this->_table, DB::field('uid', $uid).' AND '.DB::field('operation', $operation).' AND '.DB::field('relatedid', $relatedid));
+		}
+		return 0;
 	}
 	public function update_by_uid_operation_relatedid($uid, $operation, $relatedid, $data) {
-		return DB::update($this->_table, $data, DB::field('uid', $uid).' AND '.DB::field('operation', $operation).' AND '.DB::field('relatedid', $relatedid));
+		$relatedid = dintval($relatedid, true);
+		$uid = dintval($uid, true);
+		if(!empty($data) && is_array($data) && $relatedid && $uid && $operation) {
+			return DB::update($this->_table, $data, DB::field('uid', $uid).' AND '.DB::field('operation', $operation).' AND '.DB::field('relatedid', $relatedid));
+		}
+		return 0;
 	}
 	public function count_by_uid_operation_relatedid($uid, $operation, $relatedid) {
-		$wherearr = array();
-		$wherearr[] = is_array($uid) ? 'uid IN(%n)' : 'uid=%d';
-		$wherearr[] = is_array($operation) ? 'operation IN(%n)' : 'operation=%s';
-		$wherearr[] = is_array($relatedid) ? 'relatedid IN(%n)' : 'relatedid=%d';
-		return DB::result_first('SELECT COUNT(*) FROM %t WHERE '.implode(' AND ', $wherearr), array($this->_table, $uid, $operation, $relatedid));
+		$relatedid = dintval($relatedid, true);
+		$uid = dintval($uid, true);
+		if($relatedid && $uid && $operation) {
+			$wherearr = array();
+			$wherearr[] = is_array($uid) && $uid ? 'uid IN(%n)' : 'uid=%d';
+			$wherearr[] = is_array($operation) && $operation ? 'operation IN(%n)' : 'operation=%s';
+			$wherearr[] = is_array($relatedid) && $relatedid ? 'relatedid IN(%n)' : 'relatedid=%d';
+			return DB::result_first('SELECT COUNT(*) FROM %t WHERE '.implode(' AND ', $wherearr), array($this->_table, $uid, $operation, $relatedid));
+		}
+		return 0;
 	}
 	public function count_by_uid($uid) {
 		return DB::result_first('SELECT COUNT(*) FROM %t WHERE uid=%d', array($this->_table, $uid));
@@ -75,15 +97,23 @@ class table_common_credit_log extends discuz_table
 	}
 	public function count_stc_by_relatedid($relatedid, $creditid, $operation = 'STC') {
 		$creditid = intval($creditid);
-		return DB::fetch_first("SELECT COUNT(*) AS payers, SUM(extcredits%d) AS income FROM %t WHERE relatedid=%d AND operation=%s", array($creditid, $this->_table, $relatedid, $operation));
+		if($creditid) {
+			return DB::fetch_first("SELECT COUNT(*) AS payers, SUM(extcredits%d) AS income FROM %t WHERE relatedid=%d AND operation=%s", array($creditid, $this->_table, $relatedid, $operation));
+		}
+		return 0;
 	}
 	public function count_credit_by_uid_operation_relatedid($uid, $operation, $relatedid, $creditid) {
-		$wherearr = array();
-		$wherearr[] = is_array($uid) ? 'uid IN(%n)' : 'uid=%d';
-		$wherearr[] = is_array($operation) ? 'operation IN(%n)' : 'operation=%s';
-		$wherearr[] = is_array($relatedid) ? 'relatedid IN(%n)' : 'relatedid=%d';
 		$creditid = intval($creditid);
-		return DB::result_first('SELECT SUM(extcredits%d) AS credit FROM %t WHERE '.implode(' AND ', $wherearr), array($creditid, $this->_table, $uid, $operation, $relatedid));
+		if($creditid) {
+			$relatedid = dintval($relatedid, true);
+			$uid = dintval($uid, true);
+			$wherearr = array();
+			$wherearr[] = is_array($uid) && $uid ? 'uid IN(%n)' : 'uid=%d';
+			$wherearr[] = is_array($operation) && $operation ? 'operation IN(%n)' : 'operation=%s';
+			$wherearr[] = is_array($relatedid) && $relatedid ? 'relatedid IN(%n)' : 'relatedid=%d';
+			return DB::result_first('SELECT SUM(extcredits%d) AS credit FROM %t WHERE '.implode(' AND ', $wherearr), array($creditid, $this->_table, $uid, $operation, $relatedid));
+		}
+		return 0;
 	}
 	public function count_by_search($uid, $optype, $begintime = 0, $endtime = 0, $exttype = 0, $income = 0, $extcredits = array(), $relatedid = 0) {
 		$condition = $this->make_query_condition($uid, $optype, $begintime, $endtime, $exttype, $income, $extcredits, $relatedid);
@@ -93,15 +123,17 @@ class table_common_credit_log extends discuz_table
 		$wherearr = array();
 		$parameter = array($this->_table);
 		if($uid) {
-			$wherearr[] = is_array($uid) ? 'uid IN(%n)' : 'uid=%d';
+			$uid = dintval($uid, true);
+			$wherearr[] = is_array($uid) && $uid ? 'uid IN(%n)' : 'uid=%d';
 			$parameter[] = $uid;
 		}
 		if($optype) {
-			$wherearr[] = is_array($optype) ? 'operation IN(%n)' : 'operation=%s';
+			$wherearr[] = is_array($optype) && $optype ? 'operation IN(%n)' : 'operation=%s';
 			$parameter[] = $optype;
 		}
 		if($relatedid) {
-			$wherearr[] = is_array($relatedid) ? 'relatedid IN(%n)' : 'relatedid=%d';
+			$relatedid = dintval($relatedid, true);
+			$wherearr[] = is_array($relatedid) && $relatedid ? 'relatedid IN(%n)' : 'relatedid=%d';
 			$parameter[] = $relatedid;
 		}
 		if($begintime) {
@@ -121,7 +153,9 @@ class table_common_credit_log extends discuz_table
 			foreach(array_keys($extcredits) as $id) {
 				$incomearr[] = 'extcredits'.$id.$incomestr.'0';
 			}
-			$wherearr[] = '('.implode(' OR ', $incomearr).')';
+			if($incomearr) {
+				$wherearr[] = '('.implode(' OR ', $incomearr).')';
+			}
 		}
 		$wheresql = !empty($wherearr) && is_array($wherearr) ? ' WHERE '.implode(' AND ', $wherearr) : '';
 		return array($wheresql, $parameter);

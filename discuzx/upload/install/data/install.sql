@@ -469,7 +469,7 @@ CREATE TABLE pre_common_district (
 
 DROP TABLE IF EXISTS pre_common_diy_data;
 CREATE TABLE pre_common_diy_data (
-  targettplname varchar(255) NOT NULL DEFAULT '',
+  targettplname varchar(100) NOT NULL DEFAULT '',
   tpldirectory varchar(80) NOT NULL DEFAULT '',
   primaltplname varchar(255) NOT NULL DEFAULT '',
   diycontent mediumtext NOT NULL,
@@ -1337,7 +1337,7 @@ CREATE TABLE pre_common_template (
 
 DROP TABLE IF EXISTS pre_common_template_block;
 CREATE TABLE pre_common_template_block (
-  targettplname varchar(255) NOT NULL DEFAULT '',
+  targettplname varchar(100) NOT NULL DEFAULT '',
   tpldirectory varchar(80) NOT NULL DEFAULT '',
   bid mediumint(8) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (targettplname,tpldirectory,bid),
@@ -1346,7 +1346,7 @@ CREATE TABLE pre_common_template_block (
 
 DROP TABLE IF EXISTS pre_common_template_permission;
 CREATE TABLE pre_common_template_permission (
-  targettplname varchar(255) NOT NULL DEFAULT '',
+  targettplname varchar(100) NOT NULL DEFAULT '',
   uid mediumint(8) unsigned NOT NULL DEFAULT '0',
   allowmanage tinyint(1) NOT NULL DEFAULT '0',
   allowrecommend tinyint(1) NOT NULL DEFAULT '0',
@@ -2427,7 +2427,7 @@ CREATE TABLE pre_forum_pollvoter (
   tid mediumint(8) unsigned NOT NULL DEFAULT '0',
   uid mediumint(8) unsigned NOT NULL DEFAULT '0',
   username varchar(15) NOT NULL DEFAULT '',
-  options text NOT NULL,
+  `options` text NOT NULL,
   dateline int(10) unsigned NOT NULL DEFAULT '0',
   KEY tid (tid),
   KEY uid (uid,dateline)
@@ -2709,6 +2709,19 @@ CREATE TABLE pre_forum_threadclass (
   KEY fid (fid,displayorder)
 ) TYPE=MyISAM;
 
+DROP TABLE IF EXISTS pre_forum_threadclosed;
+CREATE TABLE pre_forum_threadclosed (
+  tid mediumint(8) unsigned NOT NULL DEFAULT '0',
+  redirect mediumint(8) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (tid)
+) TYPE=MyISAM;
+
+DROP TABLE IF EXISTS pre_forum_threaddisablepos;
+CREATE TABLE pre_forum_threaddisablepos (
+  tid mediumint(8) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (tid)
+) TYPE=HEAP;
+
 DROP TABLE IF EXISTS pre_forum_threadimage;
 CREATE TABLE pre_forum_threadimage (
   tid mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -2880,7 +2893,7 @@ CREATE TABLE pre_forum_tradelog (
   buyermsg varchar(200) DEFAULT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '0',
   lastupdate int(10) unsigned NOT NULL DEFAULT '0',
-  offline tinyint(1) NOT NULL DEFAULT '0',
+  `offline` tinyint(1) NOT NULL DEFAULT '0',
   buyername varchar(50) NOT NULL,
   buyerzip varchar(10) NOT NULL,
   buyerphone varchar(20) NOT NULL,

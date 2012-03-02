@@ -651,6 +651,7 @@ CSS 写作注意事项：
 	#ct { min-height: 300px; }
 		.ie6 #ct { height: 300px; }
 		.mn { overflow: hidden; }
+		.ct1 { border: 1px solid {WRAPBORDERCOLOR}; border-top: none; }
 		.ct2 .mn { float: left; width: 730px; margin-bottom: 1em; }
 		.ct2 .sd { float: right; width: 220px; overflow: hidden; _overflow-y: visible; }
 
@@ -730,6 +731,29 @@ CSS 写作注意事项：
 			/* XP 或 Windows 7，IE 最高版本为 8 或 9，这几种组合情况对字体的渲染存在差异，所以需要对背景进行微调，以适应更多情况 by Pony 11050511 */
 			.ie_all #pt .z em { background-position: 3px 9px; }
 			.ie_all .nvhm { background-position: -8px -120px; }
+/*
+	Name:			mod_userheader
+	Level:			Global
+	Sample:			div id="uhd"
+	Explain:		论坛皮肤下用户页面头部
+	Last Modify:	lushnis
+*/
+#uhd { padding-top: 10px;border: 1px solid #CCC; border-bottom: none; background: {SPECIALBG}; }
+	#uhd .tb a { border-width: 1px 0; border-top-color: {SPECIALBG}; border-bottom-color: {WRAPBORDERCOLOR}; }
+	#uhd .tb .a a { border: 1px solid #CCC; border-bottom-color: #FFF; }
+	.ie6 #uhd .tb .a { position: relative; }
+	#uhd .mn { float: right; margin-right: 15px; margin-bottom: -30px; line-height: 28px; }
+		#uhd .mn a { padding: 2px 0 2px 20px; background: no-repeat 0 50%; color: {MIDTEXT}; }
+			#uhd .mn a:hover { color: {HIGHLIGHTLINK}; }
+			#uhd .mn .addflw a { background-image: url({IMGDIR}/flw_ico.png); }
+			#uhd .mn .addf a { background-image: url({STATICURL}image/feed/friend.gif); }
+			#uhd .mn .pm2 a { background-image: url({IMGDIR}/pmto.gif); }
+	#uhd .h { padding-left: 75px; }
+		#uhd .avt { display: inline; float: left; margin-left: -65px; }
+		#uhd .mt { padding-bottom: 0; }
+	#uhd .flw_hd { float: right; width: 260px; margin-right: 10px; margin-bottom: -30px; }
+		#uhd .tns th, #uhd .tns td { padding-left: 20px; text-align: left; }
+		#uhd .flw_hd .o { padding-left: 20px; }
 /* 统计数据 */
 .tns { padding: 10px 0; }
 	.tns table { width: 100%; }
@@ -777,7 +801,7 @@ CSS 写作注意事项：
 	.tb_s { margin-top: 0; line-height: 26px; }
 
 	/* 类似menu的Tab */
-.tbmu { padding: 10px; border-bottom: 1px dashed {COMMONBORDER}; }
+.tbmu { padding: 8px 10px 8px 0; border-bottom: 1px dashed {COMMONBORDER}; }
 	.tbmu a { color: {HIGHLIGHTLINK}; }
 	.tbmu .a { color: {LINK}; font-weight: 700; }
 	/* tab的强调信息提示 */
@@ -844,6 +868,7 @@ CSS 写作注意事项：
 		/* text with thumbnail image ( must with the additional class .cl ) */
 		.xld .m { float: left; margin: 8px 8px 10px 0; }
 		.xld .atc { float: right; margin-left: 20px; }
+			.ie8 .xld .atc { max-width: 86px; }
 			.xld .atc img { padding: 2px; max-width: 80px; max-height: 80px; border: 1px solid #CCC; background: {WRAPBG}; }
 				.ie6 .xld .atc img { width: expression(this.width > 80 && this.width>=this.height ? 80 : true); height: expression(this.height > 80 && this.width<=this.height ? 80 : true); }
 		.xld a.d, .xl a.d, .attc a.d, .c a.d, .sinf a.d { float: right; width: 20px; height: 20px; overflow: hidden; line-height: 100px; background: url({IMGDIR}/op.png) no-repeat 0 -2px; }
@@ -1353,6 +1378,27 @@ CSS 写作注意事项：
 /* 上传弹出层 */
 .upfile { width: 220px; }
 	.uploadform { padding: 0 10px; border: 1px dashed {COMMONBORDER}; background: {COMMONBG}; }
+
+/*
+	Name:			mod_flashupload
+	Level:			Global
+	Explain:		Flash 上传时的处理界面，结构参见 /static/js/fileprogress.js
+	Last Modify:	Pony 2012022813
+*/
+.progressWrapper { overflow: hidden; width: 100%; }
+.progressContainer { overflow: hidden; margin: 5px; padding: 4px; border: solid 1px #E8E8E8; background-color: #F7F7F7; }
+.message { overflow: hidden; margin: 1em 0; padding: 10px 20px; border: solid 1px #FD9; background-color: #FFC; } /* Message */
+.red { border: solid 1px #B50000; background-color: #FFEBEB; } /* Error */
+.green { border: solid 1px #DDF0DD; background-color: #EBFFEB; } /* Current */
+.blue { border: solid 1px #CEE2F2; background-color: #F0F5FF; } /* Complete */
+.progressName { overflow: hidden; white-space: nowrap; width: 323px; height: 18px; text-align: left; font-weight: 700; color: #555; }
+.progressBarInProgress, .progressBarComplete, .progressBarError { clear: both; margin-top: 2px; width: 0; height: 2px; background-color: blue; font-size: 0; }
+.progressBarComplete { visibility: hidden; width: 100%; background-color: green; }
+.progressBarError { visibility: hidden; width: 100%; background-color: red; }
+.progressBarStatus { white-space: nowrap; margin-top: 2px; width: 337px; text-align: left; }
+a.progressCancel { display: block; float: right; width: 14px; height: 14px; background: url({IMGDIR}/cancelbutton.gif) no-repeat -14px 0; font-size: 0; }
+	a.progressCancel:hover { background-position: 0 0; }
+.swfupload { vertical-align: top; }
 
 
 /* ------------------------------------------------------------------------ 拖拽及页面 DIY */

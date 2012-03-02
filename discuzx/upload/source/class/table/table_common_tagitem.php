@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_tagitem.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_common_tagitem.php 27769 2012-02-14 06:29:36Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -29,10 +29,10 @@ class table_common_tagitem extends discuz_table
 		$data = self::make_where($tagid, $itemid, $idtype, $itemidglue);
 		$ordersql = $limitsql = '';
 		if($orderfield) {
-			$ordersql = ' ORDER BY '.$orderfield.' '.($ordertype == 'DESC' ? 'DESC' : 'ASC');
+			$ordersql = ' ORDER BY '.DB::order($orderfield, $ordertype);
 		}
 		if($limit) {
-			$limitsql = ' LIMIT '.intval($limit).($count ? ','.intval($count) : '');
+			$limitsql = DB::limit($limit, $count);
 		}
 		if($data) {
 			if($returnnum) {
@@ -62,8 +62,7 @@ class table_common_tagitem extends discuz_table
 			$data['data'][] = $tagid;
 		}
 		if($itemid) {
-			$wheresql .= !is_array($itemid) ? " AND itemid{$itemidglue}%d" : " AND itemid IN (%n)";
-			$data['data'][] = $itemid;
+			$wheresql .= !is_array($itemid) ? " AND ".DB::field('itemid', $itemid, $itemidglue) : " AND ".DB::field('itemid', $itemid);
 		}
 		if($idtype) {
 			$wheresql .= " AND idtype=%s";

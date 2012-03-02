@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_credit.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: class_credit.php 28415 2012-02-29 07:03:42Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -254,7 +254,7 @@ class credit {
 				}
 			}
 			foreach($creditarr as $key => $value) {
-				if(!empty($key) && in_array($key, $allowkey)) {
+				if(!empty($key) && $value && in_array($key, $allowkey)) {
 					$sql[$key] = $value;
 					if($creditnotice && substr($key, 0, 10) == 'extcredits') {
 						$i = substr($key, 10);

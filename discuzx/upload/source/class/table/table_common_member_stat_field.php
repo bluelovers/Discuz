@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_member_stat_field.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_common_member_stat_field.php 27774 2012-02-14 06:55:13Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -32,7 +32,9 @@ class table_common_member_stat_field extends discuz_table
 	public function insert_batch($inserts) {
 		$sql = array();
 		foreach($inserts as $value) {
-			$sql[] = "('$value[fieldid]', '".addslashes($value['fieldvalue'])."')";
+			if($value['fieldid']) {
+				$sql[] = "('$value[fieldid]', '".addslashes($value['fieldvalue'])."')";
+			}
 		}
 		if($sql) {
 			DB::query('INSERT INTO '.DB::table($this->_table)."(fieldid, fieldvalue) VALUES ".implode(', ', $sql));

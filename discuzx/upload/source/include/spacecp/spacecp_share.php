@@ -4,14 +4,12 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_share.php 27038 2011-12-30 09:31:58Z chenmengshu $
+ *      $Id: spacecp_share.php 28331 2012-02-28 04:25:50Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
-
-$_G['disabledwidthauto'] = 1;
 
 $sid = intval($_GET['sid']);
 
@@ -42,7 +40,7 @@ if($_GET['op'] == 'delete') {
 } else {
 
 
-	if(!checkperm('allowshare')) {
+	if(!checkperm('allowshare') || !helper_access::check_module('share')) {
 		showmessage('no_privilege_share');
 	}
 
@@ -476,10 +474,8 @@ if($_GET['op'] == 'delete') {
 				break;
 			case 'thread':
 				C::t('forum_thread')->increase($id, array('sharetimes' => 1));
-				if($_G['setting']['heatthread']['type'] == 2) {
-					require_once libfile('function/forum');
-					update_threadpartake($id);
-				}
+				require_once libfile('function/forum');
+				update_threadpartake($id);
 				break;
 			case 'article':
 				C::t('portal_article_count')->increase($id, array('sharetimes' => 1));

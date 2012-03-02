@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_member_verify_info.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_common_member_verify_info.php 27874 2012-02-16 04:20:30Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -25,7 +25,8 @@ class table_common_member_verify_info extends discuz_table
 	}
 	public function fetch_all_search($uid, $vid, $flag = null, $username = '', $starttime = 0, $endtime = 0, $order = 'dateline', $start = 0, $limit = 0, $sort = 'DESC') {
 		$condition = $this->search_condition($uid, $vid, $flag, $username, $starttime, $endtime);
-		return DB::fetch_all("SELECT * FROM %t $condition[0] ORDER BY $order $sort ".DB::limit($start, $limit), $condition[1], $this->_pk);
+		$ordersql = !empty($order) ? ' ORDER BY '.DB::order($order, $sort) : '';
+		return DB::fetch_all("SELECT * FROM %t $condition[0] $ordersql ".DB::limit($start, $limit), $condition[1], $this->_pk);
 	}
 	public function group_by_verifytype_count() {
 		return DB::result_first('SELECT verifytype, COUNT(*) AS num FROM %t WHERE flag=0 GROUP BY verifytype', array($this->_table));
@@ -33,7 +34,11 @@ class table_common_member_verify_info extends discuz_table
 
 	public function delete_by_uid($uid, $verifytype = null) {
 		if($uid) {
-			$addsql = $verifytype !== null ? ' AND '.DB::field('verifytype', $verifytype) : '';
+			$addsql = '';
+			if($verifytype !== null) {
+				$verifytype = dintval($verifytype, is_array($verifytype) ? true : false);
+				$addsql = ' AND '.DB::field('verifytype', $verifytype);
+			}
 			return DB::fetch_first('DELETE FROM %t WHERE uid=%d'.$addsql, array($this->_table, $uid));
 		}
 		return false;

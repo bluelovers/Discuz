@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: forum.js 27057 2011-12-31 07:22:37Z monkey $
+	$Id: forum.js 28137 2012-02-23 03:28:22Z zhengqingpeng $
 */
 
 function saveData(ignoreempty) {
@@ -206,7 +206,7 @@ function fastpostvalidate(theform, noajaxpost) {
 			return false;
 		}
 	}
-	if(theform.message.value == '' && theform.subject.value == '') {
+	if(theform.message.value == '' || theform.subject.value == '') {
 		s = '抱歉，您尚未输入标题或内容';
 		theform.message.focus();
 	} else if(mb_strlen(theform.subject.value) > 80) {

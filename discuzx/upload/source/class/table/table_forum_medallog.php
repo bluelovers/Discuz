@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_forum_medallog.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_forum_medallog.php 27751 2012-02-14 02:26:11Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -29,8 +29,8 @@ class table_forum_medallog extends discuz_table
 		return DB::result_first("SELECT COUNT(*) FROM %t WHERE uid=%d", array($this->_table, $uid));
 	}
 
-	public function fetch_all_by_type($type, $orderby) {
-		return DB::fetch_all("SELECT * FROM %t WHERE type=%d ORDER BY %i", array($this->_table, $type, $orderby), $this->_pk);
+	public function fetch_all_by_type($type) {
+		return DB::fetch_all("SELECT * FROM %t WHERE type=%d ORDER BY dateline", array($this->_table, $type), $this->_pk);
 	}
 
 	public function fetch_all_lastmedal($limit) {
@@ -46,18 +46,24 @@ class table_forum_medallog extends discuz_table
 	}
 
 	public function update_type_by_uid_medalid($type, $uid, $medalid) {
+		$type = intval($type);
+		if(!$uid || !$medalid) {
+			return;
+		}
 		DB::update($this->_table, array('type' => $type), DB::field('uid', $uid).' AND '.DB::field('medalid', $medalid));
 	}
 
 	public function fetch_all_by_type_medalid($type, $medalid, $start_limit, $lpp) {
 		$where = array();
 		if($type !== '') {
-			$where[] = "type='$type'";
+			$where[] = DB::field('type', $type);
 		}
 		if($medalid !== '') {
-			$where[] = "medalid='$medalid'";
+			$where[] = DB::field('medalid', $medalid);
 		}
 		$where = $where ? 'WHERE '.implode(' AND ', $where) : '';
+		$start_limit = intval($start_limit);
+		$lpp = intval($lpp);
 
 		return DB::fetch_all("SELECT * FROM ".DB::table('forum_medallog')." $where ORDER BY dateline DESC LIMIT $start_limit, $lpp");
 	}
@@ -65,10 +71,10 @@ class table_forum_medallog extends discuz_table
 	public function count_by_type_medalid($type, $medalid) {
 		$where = array();
 		if($type !== '') {
-			$where[] = "type='$type'";
+			$where[] = DB::field('type', $type);
 		}
 		if($medalid !== '') {
-			$where[] = "medalid='$medalid'";
+			$where[] = DB::field('medalid', $medalid);
 		}
 		$where = $where ? 'WHERE '.implode(' AND ', $where) : '';
 

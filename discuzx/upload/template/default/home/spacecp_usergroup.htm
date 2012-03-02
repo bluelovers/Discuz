@@ -244,7 +244,7 @@
 						</tr>
 						<!--{/loop}-->
 					</tbody>
-					<!--{if $_G['setting']['homestatus']}-->
+
 					<tr class="alt h">
 						<th>{lang about_space}</th>
 					</tr>
@@ -255,7 +255,7 @@
 						</tr>
 						<!--{/loop}-->
 					</tbody>
-					<!--{/if}-->
+
 
 					<tr class="alt h">
 						<th>{lang permission_menu_attachment}</th>
@@ -365,7 +365,7 @@ global $_G, $bperms, $pperms, $sperms, $aperms;
 			<!--{elseif $grouppperm == 'allowrecommend'}-->
 				<!--{if $maingroup[allowrecommend] > 0}-->+$maingroup[allowrecommend]<!--{else}--><img src="{IMGDIR}/data_invalid.gif" /><!--{/if}-->
 			<!--{elseif in_array($grouppperm, array('allowat', 'allowcreatecollection'))}-->
-				{echo intval($maingroup[$grouppperm])}
+				<!--{echo intval($maingroup[$grouppperm])}-->
 			<!--{else}-->
 				<!--{if $maingroup[$grouppperm] == 1 || (in_array($grouppperm, array('raterange', 'allowcommentpost')) && !empty($maingroup[$grouppperm]))}--><img src="{IMGDIR}/data_valid.gif" alt="data_valid" /><!--{else}--><img src="{IMGDIR}/data_invalid.gif" alt="data_invalid" /><!--{/if}-->
 			<!--{/if}-->
@@ -373,7 +373,7 @@ global $_G, $bperms, $pperms, $sperms, $aperms;
 	</tr>
 	<!--{/loop}-->
 </tbody>
-<!--{if $_G['setting']['homestatus']}-->
+
 <tr class="alt h">
 	<th>$maingroup[grouptitle]</th>
 </tr>
@@ -390,7 +390,7 @@ global $_G, $bperms, $pperms, $sperms, $aperms;
 	</tr>
 	<!--{/loop}-->
 </tbody>
-<!--{/if}-->
+
 <tr class="alt h">
 	<th>$maingroup[grouptitle]</th>
 </tr>

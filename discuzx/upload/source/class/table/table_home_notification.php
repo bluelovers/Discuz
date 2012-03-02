@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_home_notification.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_home_notification.php 28262 2012-02-27 02:29:28Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -22,10 +22,13 @@ class table_home_notification extends discuz_table
 	}
 
 	public function delete_clear($new, $days) {
-		$days = TIMESTAMP - $days * 86400;
+		$days = TIMESTAMP - intval($days) * 86400;
 		DB::query("DELETE FROM %t WHERE new=%d AND dateline<%d", array($this->_table, $new, $days));
 	}
 	public function delete_by_type($type) {
+		if(!$type) {
+			return;
+		}
 		return DB::delete($this->_table, DB::field('type', $type));
 	}
 
@@ -50,6 +53,7 @@ class table_home_notification extends discuz_table
 	}
 
 	public function ignore($uid, $new = true, $from_num = true) {
+		$uid = intval($uid);
 		$update = array();
 		if($new) {
 			$update['new'] = 0;
@@ -63,12 +67,14 @@ class table_home_notification extends discuz_table
 	}
 
 	public function count_by_uid($uid, $new, $type = '') {
+		$new = intval($new);
 		$type = $type ? ' AND '.DB::field('type', $type) : '';
 		$new = ' AND '.DB::field('new', $new);
 		return DB::result_first("SELECT COUNT(*) FROM %t WHERE uid=%d %i %i", array($this->_table, $uid, $type, $new));
 	}
 
 	public function fetch_all_by_uid($uid, $new, $type, $start, $perpage) {
+		$new = intval($new);
 		$type = $type ? ' AND '.DB::field('type', $type) : '';
 		$new = ' AND '.DB::field('new', $new);
 		return DB::fetch_all("SELECT * FROM %t WHERE uid=%d %i %i ORDER BY new DESC, dateline DESC %i", array($this->_table, $uid, $type, $new, DB::limit($start, $perpage)));

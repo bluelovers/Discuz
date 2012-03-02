@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_trade.php 26205 2011-12-05 10:09:32Z zhangguosheng $
+ *      $Id: space_trade.php 28290 2012-02-27 07:15:44Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -49,17 +49,7 @@ $f_index = '';
 $ordersql = 't.dateline DESC';
 $need_count = true;
 
-if($_GET['view'] == 'all') {
-
-	$start = 0;
-	$perpage = 100;
-	if($_GET['order'] == 'hot') {
-		$wheresql .= " AND t.tradesum>='$minhot'";
-	}
-	$alltype = $ordertype = in_array($_GET['order'], array('new', 'hot')) ? $_GET['order'] : 'new';
-	$orderactives = array($ordertype => ' class="a"');
-	loadcache('space_trade');
-} elseif($_GET['view'] == 'me') {
+if($_GET['view'] == 'me') {
 
 	$wheresql = "t.sellerid = '$space[uid]'";
 
@@ -197,10 +187,10 @@ if($_GET['view'] == 'all') {
 		require_once libfile('function/friend');
 		$fuid = intval($_GET['fuid']);
 		if($fuid && friend_check($fuid, $space['uid'])) {
-			$wheresql = "t.sellerid='$fuid'";
+			$wheresql = 't.'.DB::field('sellerid', $fuid);
 			$fuid_actives = array($fuid=>' selected');
 		} else {
-			$wheresql = "t.sellerid IN ($space[feedfriend])";
+			$wheresql = 't.'.DB::field('sellerid', $space['feedfriend']);
 			$theurl = "home.php?mod=space&uid=$space[uid]&do=$do&view=we";
 		}
 
@@ -218,48 +208,25 @@ $actives = array($_GET['view'] =>' class="a"');
 
 if($need_count) {
 	if($searchkey = stripsearchkey($_GET['searchkey'])) {
-		$wheresql .= " AND t.subject LIKE '%$searchkey%'";
+		$wheresql .= ' AND t.'.DB::field('subject', '%'.$searchkey.'%', 'like');
 	}
 	$havecache = false;
-	if($_GET['view'] == 'all') {
-		$cachetime = $_GET['order'] == 'hot' ? 43200 : 3000;
-		if(!empty($_G['cache']['space_trade'][$alltype]) && is_array($_G['cache']['space_trade'][$alltype])) {
-			$cachearr = $_G['cache']['space_trade'][$alltype];
-			if(!empty($cachearr['dateline']) && $cachearr['dateline'] > $_G['timestamp'] - $cachetime) {
-				$list = $cachearr['data'];
-				$hiddennum = $threadarr['hiddennum'];
-				$havecache = true;
-			}
-		}
-	}
-	if(!$havecache) {
-		$count = C::t('forum_trade')->fetch_all_for_space($wheresql, '', 1);
-		if($count) {
-			$query = C::t('forum_trade')->fetch_all_for_space($wheresql, $ordersql, 0, $start, $perpage);
-			$pids = $aids = $thidden = array();
-			foreach($query as $value) {
-				$aids[$value['aid']] = $value['aid'];
-				$value['dateline'] = dgmdate($value['dateline']);
-				$pids[] = (float)$value['pid'];
-				$list[$value['pid']] = $value;
-			}
-			if($_GET['view'] == 'all') {
-				$_G['cache']['space_trade'][$alltype] = array(
-					'dateline' => $_G['timestamp'],
-					'hiddennum' => $hiddennum,
-					'data' => $list
-				);
-				savecache('space_trade', $_G['cache']['space_trade']);
-			}
 
-			if($_GET['view'] != 'all') {
-				$multi = multi($count, $perpage, $page, $theurl);
-			}
-
+	$count = C::t('forum_trade')->fetch_all_for_space($wheresql, '', 1);
+	if($count) {
+		$query = C::t('forum_trade')->fetch_all_for_space($wheresql, $ordersql, 0, $start, $perpage);
+		$pids = $aids = $thidden = array();
+		foreach($query as $value) {
+			$aids[$value['aid']] = $value['aid'];
+			$value['dateline'] = dgmdate($value['dateline']);
+			$pids[] = (float)$value['pid'];
+			$list[$value['pid']] = $value;
 		}
-	} else {
-		$count = count($list);
+
+
+		$multi = multi($count, $perpage, $page, $theurl);
 	}
+
 }
 
 if($count) {

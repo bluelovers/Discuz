@@ -4,14 +4,12 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc111.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: home_magic.php 27287 2012-01-13 02:36:12Z monkey $
+	$Id: home_magic.php 28297 2012-02-27 08:35:59Z monkey $
 */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
-
-$_G['disabledwidthauto'] = 0;
 
 if(!$_G['uid']) {
 	showmessage('not_loggedin', NULL, array(), array('login' => 1));

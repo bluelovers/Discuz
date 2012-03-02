@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_forum_threadimage.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_forum_threadimage.php 28051 2012-02-21 10:36:56Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -22,10 +22,10 @@ class table_forum_threadimage extends discuz_table
 	}
 
 	public function delete($tid) {
-		DB::delete('forum_threadimage', "tid='$tid'");
+		return ($tid = dintval($tid)) ? DB::delete('forum_threadimage', "tid='$tid'") : false;
 	}
 	public function delete_by_tid($tids) {
-		return DB::delete($this->_table, DB::field('tid', $tids));
+		return !empty($tids) ? DB::delete($this->_table, DB::field('tid', $tids)) : false;
 	}
 
 }

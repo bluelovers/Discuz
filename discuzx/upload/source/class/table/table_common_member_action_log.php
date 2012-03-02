@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_member_action_log.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_common_member_action_log.php 28389 2012-02-28 10:27:38Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -26,7 +26,7 @@ class table_common_member_action_log extends discuz_table
 	}
 
 	public function count_day_hours($action, $uid) {
-		return DB::result_first('SELECT COUNT(*) FROM %t WHERE dateline>%d AND action=%d AND uid=%d', array($this->_table, TIMESTAMP*86400, $action, $uid));
+		return DB::result_first('SELECT COUNT(*) FROM %t WHERE dateline>%d AND action=%d AND uid=%d', array($this->_table, TIMESTAMP - 86400, $action, $uid));
 	}
 
 	public function count_per_hour($uid, $type) {

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_forum_postcomment.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_forum_postcomment.php 27806 2012-02-15 03:20:46Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -47,7 +47,7 @@ class table_forum_postcomment extends discuz_table
 					$message[$i] = preg_replace("/\\\{(\d+)\\\}/", ".{0,\\1}", preg_quote($message[$i], '/'));
 					$message .= " $or comment REGEXP '".$message[$i]."'";
 				} else {
-					$sqlmessage .= " $or comment LIKE '%".$message[$i]."%'";
+					$sqlmessage .= " $or ".DB::field('comment', '%'.$message[$i].'%', 'like');
 				}
 				$or = 'OR';
 			}
@@ -74,7 +74,7 @@ class table_forum_postcomment extends discuz_table
 					$message[$i] = preg_replace("/\\\{(\d+)\\\}/", ".{0,\\1}", preg_quote($message[$i], '/'));
 					$message .= " $or comment REGEXP '".$message[$i]."'";
 				} else {
-					$sqlmessage .= " $or comment LIKE '%".$message[$i]."%'";
+					$sqlmessage .= " $or ".DB::field('comment', '%'.$message[$i].'%', 'like');
 				}
 				$or = 'OR';
 			}
@@ -88,6 +88,9 @@ class table_forum_postcomment extends discuz_table
 	}
 
 	public function fetch_all_by_pid($pids) {
+		if(empty($pids)) {
+			return array();
+		}
 		return DB::fetch_all('SELECT * FROM %t WHERE '.DB::field('pid', $pids).' ORDER BY dateline DESC', array($this->_table));
 	}
 
@@ -100,6 +103,9 @@ class table_forum_postcomment extends discuz_table
 	}
 
 	public function update_by_pid($pids, $data, $unbuffered = false, $low_priority = false, $authorid = null) {
+		if(empty($data)) {
+			return false;
+		}
 		$where = array();
 		$where[] = DB::field('pid', $pids);
 		$authorid !== null && $where[] = DB::field('authorid', $authorid);
@@ -107,6 +113,9 @@ class table_forum_postcomment extends discuz_table
 	}
 
 	public function delete_by_authorid($authorids, $unbuffered = false, $rpid = false) {
+		if(empty($authorids)) {
+			return false;
+		}
 		$where = array();
 		$where[] = DB::field('authorid', $authorids);
 		$rpid && $where[] = DB::field('rpid', 0, '>');
@@ -116,18 +125,21 @@ class table_forum_postcomment extends discuz_table
 	public function delete_by_tid($tids, $unbuffered = false, $authorids = null) {
 		$where = array();
 		$where[] = DB::field('tid', $tids);
-		$authorids !== null && $where[] = DB::field('authorid', $authorids);
+		$authorids !== null && !(is_array($authorids) && empty($authorids)) && $where[] = DB::field('authorid', $authorids);
 		return DB::delete($this->_table, implode(' AND ', $where), null, $unbuffered);
 	}
 
 	public function delete_by_pid($pids, $unbuffered = false, $authorid = null) {
 		$where = array();
 		$where[] = DB::field('pid', $pids);
-		$authorid !== null && $where[] = DB::field('authorid', $authorid);
+		$authorid !== null && !(is_array($authorid) && empty($authorid)) && $where[] = DB::field('authorid', $authorid);
 		return DB::delete($this->_table, implode(' AND ', $where), null, $unbuffered);
 	}
 
 	public function delete_by_rpid($rpids, $unbuffered = false) {
+		if(empty($rpids)) {
+			return false;
+		}
 		return DB::delete($this->_table, DB::field('rpid', $rpids), null, $unbuffered);
 	}
 
@@ -140,7 +152,6 @@ class table_forum_postcomment extends discuz_table
 			}
 			if(count($comments[$comment['pid']]) < $commentnumber && $comment['authorid'] > '-1') {
 				$comment['avatar'] = avatar($comment['authorid'], 'small');
-				$comment['dateline'] = dgmdate($comment['dateline'], 'u');
 				$comment['comment'] = str_replace(array('[b]', '[/b]', '[/color]'), array('<b>', '</b>', '</font>'), preg_replace("/\[color=([#\w]+?)\]/i", "<font color=\"\\1\">", $comment['comment']));
 				$comments[$comment['pid']][] = $comment;
 			}

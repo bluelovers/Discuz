@@ -4,7 +4,7 @@
  *	  [Discuz!] (C)2001-2099 Comsenz Inc.
  *	  This is NOT a freeware, use is subject to license terms
  *
- *	  $Id: connect_feed.php 27608 2012-02-07 05:45:43Z svn_project_zhangjie $
+ *	  $Id: connect_feed.php 28020 2012-02-21 02:13:11Z zhouxiaobo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -42,6 +42,7 @@ if ($op == 'new') {
 		'title' => $thread['subject'],
 		'url' => $url,
 		'summary' => $html_content,
+		'nswb' => '1',
 	);
 
 	$t_params = array(
@@ -79,11 +80,11 @@ if ($op == 'new') {
 			}
 
 			$response = $connectOAuthClient->$method($_G['member']['conopenid'], $_G['member']['conuin'], $_G['member']['conuinsecret'], $t_params);
-			if($response['id']) {
+			if($response['data']['id']) {
 				if($_G['setting']['connect']['t']['reply'] && $thread['tid'] && !$thread['closed'] && !getstatus($thread['status'], 3)) {
 					$conopenid = DB::result_first("SELECT conopenid FROM ".DB::table('common_member_connect')." WHERE uid='".$thread['authorid']."'");
-					DB::insert('connect_tthreadlog', array(
-						'twid' => $response['id'],
+					C::t('#qqconnect#connect_tthreadlog')->insert(array(
+						'twid' => $response['data']['id'],
 						'tid' => $tid,
 						'conopenid' => $conopenid,
 						'pagetime' => 0,

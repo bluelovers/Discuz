@@ -3,7 +3,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: home_editor.php 26425 2011-12-13 03:05:16Z maruitao $
+ *      $Id: home_editor.php 28113 2012-02-22 09:25:55Z svn_project_zhangjie $
  */
 if (!defined('IN_DISCUZ')) {
 	exit('Access Denied');
@@ -191,7 +191,7 @@ if (empty($_GET['op'])) {
 											<div class="icons tbri">
 												<a href="javascript:;" class="icoSwitchMdi" title="<?php echo lang('home/editor', 'editor_switch_media'); ?>" onClick="changeEditType(true, event);return false;"></a>
 												<a href="javascript:;" class="icoSwitchTxt" title="<?php echo lang('home/editor', 'editor_switch_text'); ?>" onClick="changeEditType(false, event);return false;"></a>
-												<a href="javascript:;" class="icoFullTxt" onClick="changeEditFull(true, event);return false;">х╚фа</a>
+												<a href="javascript:;" class="icoFullTxt" onClick="changeEditFull(true, event);return false;"><?php echo lang('home/editor', 'editor_full_screen'); ?></a>
 											</div>
 										</div>
 

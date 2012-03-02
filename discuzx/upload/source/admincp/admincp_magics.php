@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_magics.php 26584 2011-12-16 02:46:55Z chenmengshu $
+ *      $Id: admincp_magics.php 28143 2012-02-23 04:26:52Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -299,7 +299,7 @@ function getmagics() {
 					'price' => $magic->price,
 					'weight' => $magic->weight,
 					'useevent' => !empty($magic->useevent) ? $magic->useevent : 0,
-					'version' => $adv->version,
+					'version' => $magic->version,
 					'copyright' => lang('magic/'.$script, $magic->copyright),
 					'filemtime' => @filemtime($dir.'/'.$entry)
 				);

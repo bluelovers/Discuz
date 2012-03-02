@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_mailcron.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_common_mailcron.php 27806 2012-02-15 03:20:46Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -22,6 +22,9 @@ class table_common_mailcron extends discuz_table
 	}
 
 	public function delete_by_touid($touids) {
+		if(empty($touids)) {
+			return false;
+		}
 		return DB::query('DELETE FROM mc, mq USING %t AS mc, %t AS mq WHERE mc.'.DB::field('touid', $touids).' AND mc.cid=mq.cid',
 				array($this->_table, 'common_mailqueue'), false, true);
 	}

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_index.php 27203 2012-01-11 03:14:19Z zhangguosheng $
+ *      $Id: forum_index.php 28438 2012-03-01 02:20:33Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -47,9 +47,12 @@ if($_G['setting']['indexhot']['status'] && $_G['cache']['heats']['expiration'] <
 	updatecache('heats');
 }
 
-if($_G['uid']) {
+if($_G['uid'] && empty($_G['cookie']['nofavfid'])) {
 	$favfids = array();
 	$forum_favlist = C::t('home_favorite')->fetch_all_by_uid_idtype($_G['uid'], 'fid');
+	if(!$forum_favlist) {
+		dsetcookie('nofavfid', 1, 31536000);
+	}
 	foreach($forum_favlist as $key => $favorite) {
 		if(defined('IN_MOBILE')) {
 			$forum_favlist[$key]['title'] = strip_tags($favorite['title']);
@@ -234,6 +237,7 @@ if(!$gid && (!defined('FORUM_INDEX_PAGE_MEMORY') || !FORUM_INDEX_PAGE_MEMORY)) {
 				dsetcookie('onlineusernum', intval($onlinenum), 300);
 			}
 
+			$invisiblecount = intval($invisiblecount);
 			$guestcount = $onlinenum - $membercount;
 
 			unset($online);

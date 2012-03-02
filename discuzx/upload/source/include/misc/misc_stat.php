@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_stat.php 25246 2011-11-02 03:34:53Z zhangguosheng $
+ *      $Id: misc_stat.php 28361 2012-02-28 07:12:03Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -15,8 +15,7 @@ if(empty($_G['setting']['updatestat'])) {
 	showmessage('not_open_updatestat');
 }
 
-$siteuniqueid = C::t('common_setting')->fetch('siteuniqueid');
-$stat_hash = md5($siteuniqueid."\t".substr($_G['timestamp'], 0, 6));
+$stat_hash = md5($_G['setting']['siteuniqueid']."\t".substr($_G['timestamp'], 0, 6));
 
 if(!checkperm('allowstatdata') && $_GET['hash'] != $stat_hash) {
 	showmessage('no_privilege_statdata');

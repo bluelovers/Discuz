@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: modcp_moderate.php 27552 2012-02-06 02:42:38Z liulanbo $
+ *      $Id: modcp_moderate.php 27999 2012-02-20 09:39:40Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_MODCP')) {
@@ -62,8 +62,8 @@ if($op == 'members') {
 				}
 
 				if($_GET['modact'] == 'validate') {
-					$usergroup = C::t('common_usergroup')->fetch_by_credits(0, '');
-					C::t('common_member')->update($uids, array('adminid' => '0', 'groupid' => $usergroup['groupid']));
+
+					C::t('common_member')->update($uids, array('adminid' => '0', 'groupid' => $_G['setting']['newusergroupid']));
 					C::t('common_member_validate')->delete($uids);
 				}
 

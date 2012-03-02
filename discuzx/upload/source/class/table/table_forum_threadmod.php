@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_forum_threadmod.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_forum_threadmod.php 27913 2012-02-16 09:07:00Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -33,12 +33,13 @@ class table_forum_threadmod extends discuz_table
 		return DB::fetch_all('SELECT * FROM %t WHERE tid=%d AND magicid=%d', array($this->_table, $tid, $magicid));
 	}
 	public function fetch_all_by_tid($tid, $action = '', $start = 0, $limit = 0) {
+		$tid = dintval($tid, true);
 		$parameter = array($this->_table, $tid);
 		$wherearr = array();
-		$wherearr[] = is_array($tid) ? 'tid IN(%n)' : 'tid=%d';
+		$wherearr[] = is_array($tid) && $tid ? 'tid IN(%n)' : 'tid=%d';
 		if($action) {
 			$parameter[] = $action;
-			$wherearr[] = is_array($action) ? 'action IN(%n)' : 'action=%s';
+			$wherearr[] = is_array($action) && $action ? 'action IN(%n)' : 'action=%s';
 		}
 		$wheresql = ' WHERE '.implode(' AND ', $wherearr);
 		return DB::fetch_all("SELECT * FROM %t $wheresql ORDER BY dateline DESC ".DB::limit($start, $limit), $parameter);
@@ -53,13 +54,22 @@ class table_forum_threadmod extends discuz_table
 		return DB::result_first('SELECT COUNT(*) FROM %t WHERE tid=%d AND magicid=%d', array($this->_table, $tid, $magicid));
 	}
 	public function delete_by_dateline($dateline) {
+		$dateline = dintval($dateline);
 		return DB::delete($this->_table, DB::field('tid', 0, '>').' AND '.DB::field('dateline', $dateline, '<'));
 	}
 	public function update_by_tid_action($tids, $action, $data) {
-		return DB::update($this->_table, $data, DB::field('tid', $tids).' AND '.DB::field('action', $action));
+		$tids = dintval($tids, true);
+		if(!empty($data) && is_array($data) && $tids) {
+			return DB::update($this->_table, $data, DB::field('tid', $tids).' AND '.DB::field('action', $action));
+		}
+		return 0;
 	}
 	public function delete_by_tid($tids) {
-		return DB::delete($this->_table, DB::field('tid', $tids));
+		$tids = dintval($tids, true);
+		if($tids) {
+			return DB::delete($this->_table, DB::field('tid', $tids));
+		}
+		return 0;
 	}
 
 }

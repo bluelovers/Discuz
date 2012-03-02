@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_activity.php 25272 2011-11-03 03:16:35Z liulanbo $
+ *      $Id: space_activity.php 28220 2012-02-24 07:52:50Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -48,16 +48,7 @@ $threadsql = $apply_sql = '';
 $f_index = '';
 $need_count = true;
 require_once libfile('function/misc');
-if($_GET['view'] == 'all') {
-	$start = 0;
-	$perpage = 100;
-	$alltype = 'dateline';
-	if($_GET['order'] == 'hot') {
-		$alltype = 'hot';
-	}
-	$orderactives = array($_GET['order'] => ' class="a"');
-	loadcache('space_activity');
-} elseif($_GET['view'] == 'me') {
+if($_GET['view'] == 'me') {
 	$viewtype = in_array($_GET['type'], array('orig', 'apply')) ? $_GET['type'] : 'orig';
 	$orderactives = array($viewtype => ' class="a"');
 } else {
@@ -88,72 +79,44 @@ if($_GET['view'] == 'all') {
 $actives = array($_GET['view'] =>' class="a"');
 
 if($need_count) {
-	$havecache = false;
-	if($_GET['view'] == 'all') {
 
-		$cachetime = $_GET['order'] == 'hot' ? 43200 : 3000;
-		if(!empty($_G['cache']['space_activity'][$alltype]) && is_array($_G['cache']['space_activity'][$alltype])) {
-			$cachearr = $_G['cache']['space_activity'][$alltype];
-			if(!empty($cachearr['dateline']) && $cachearr['dateline'] > $_G['timestamp'] - $cachetime) {
-				$list = $cachearr['data'];
-				$hiddennum = $cachearr['hiddennum'];
-				$havecache = true;
+	$count = C::t('forum_activity')->fetch_all_for_search($_GET['view'], $_GET['order'], $_GET['searchkey'], $_GET['type'], $frienduid, $space['uid'], $minhot, 1);
+	if($count) {
+		$query = C::t('forum_activity')->fetch_all_for_search($_GET['view'], $_GET['order'], $_GET['searchkey'], $_GET['type'], $frienduid, $space['uid'], $minhot, 0, $start, $perpage);
+
+		loadcache('forums');
+		$daytids = $tids = array();
+		foreach($query as $value) {
+			if(empty($value['author']) && $value['authorid'] != $_G['uid']) {
+				$hiddennum++;
+				continue;
 			}
+			$date = dgmdate($value['starttimefrom'], 'Ymd');
+			$posttableid = $value['posttableid'] ? $value['posttableid'] : 0;
+			$tids[$posttableid][$value['tid']] = $value['tid'];
+			$value['week'] = dgmdate($value['starttimefrom'], 'w');
+			$value['month'] = dgmdate($value['starttimefrom'], 'n'.lang('space', 'month'));
+			$value['day'] = dgmdate($value['starttimefrom'], 'j');
+			$value['time'] = dgmdate($value['starttimefrom'], 'Y'.lang('space', 'year').'m'.lang('space', 'month').'d'.lang('space', 'day'));
+			$value['starttimefrom'] = dgmdate($value['starttimefrom']);
+
+			$daytids[$value['tid']] = $date;
+			$list[$date][$value['tid']] = procthread($value);
 		}
-	}
-
-	if(!$havecache) {
-		$count = C::t('forum_activity')->fetch_all_for_search($_GET['view'], $_GET['order'], $_GET['searchkey'], $_GET['type'], $frienduid, $space['uid'], $minhot, 1);
-		if($count) {
-			$query = C::t('forum_activity')->fetch_all_for_search($_GET['view'], $_GET['order'], $_GET['searchkey'], $_GET['type'], $frienduid, $space['uid'], $minhot, 0, $start, $perpage);
-
-			loadcache('forums');
-			$daytids = $tids = array();
-			foreach($query as $value) {
-				if(empty($value['author']) && $value['authorid'] != $_G['uid']) {
-					$hiddennum++;
-					continue;
-				}
-				$date = dgmdate($value['starttimefrom'], 'Ymd');
-				$posttableid = $value['posttableid'] ? $value['posttableid'] : 0;
-				$tids[$posttableid][$value['tid']] = $value['tid'];
-				$value['week'] = dgmdate($value['starttimefrom'], 'w');
-				$value['month'] = dgmdate($value['starttimefrom'], 'n'.lang('space', 'month'));
-				$value['day'] = dgmdate($value['starttimefrom'], 'j');
-				$value['time'] = dgmdate($value['starttimefrom'], 'Y'.lang('space', 'year').'m'.lang('space', 'month').'d'.lang('space', 'day'));
-				$value['starttimefrom'] = dgmdate($value['starttimefrom']);
-
-				$daytids[$value['tid']] = $date;
-				$list[$date][$value['tid']] = procthread($value);
-			}
-			if($tids) {
-				require_once libfile('function/post');
-				foreach($tids as $ptid=>$ids) {
-					foreach(C::t('forum_post')->fetch_all_by_tid($ptid, $ids, true, '', 0, 0, 1) as $value) {
-						$date = $daytids[$value['tid']];
-						$value['message'] = messagecutstr($value['message'], 150);
-						$list[$date][$value['tid']]['message'] = $value['message'];
-					}
+		if($tids) {
+			require_once libfile('function/post');
+			foreach($tids as $ptid=>$ids) {
+				foreach(C::t('forum_post')->fetch_all_by_tid($ptid, $ids, true, '', 0, 0, 1) as $value) {
+					$date = $daytids[$value['tid']];
+					$value['message'] = messagecutstr($value['message'], 150);
+					$list[$date][$value['tid']]['message'] = $value['message'];
 				}
 			}
-
-			if($_GET['view'] == 'all') {
-				$_G['cache']['space_activity'][$alltype] = array(
-					'dateline' => $_G['timestamp'],
-					'hiddennum' => $hiddennum,
-					'data' => $list
-				);
-				savecache('space_activity', $_G['cache']['space_activity']);
-			}
-
-			if($_GET['view'] != 'all') {
-				$multi = multi($count, $perpage, $page, $theurl);
-			}
-
 		}
-	} else {
-		$count = count($list);
+
+		$multi = multi($count, $perpage, $page, $theurl);
 	}
+
 }
 
 if($_G['uid']) {

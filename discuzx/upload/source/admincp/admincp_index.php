@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_index.php 27504 2012-02-03 02:07:03Z chenmengshu $
+ *      $Id: admincp_index.php 28361 2012-02-28 07:12:03Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -27,6 +27,8 @@ if(empty($siteuniqueid) || strlen($siteuniqueid) < 16) {
 	$chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz';
 	$siteuniqueid = 'DX'.$chars[date('y')%60].$chars[date('n')].$chars[date('j')].$chars[date('G')].$chars[date('i')].$chars[date('s')].substr(md5($_G['clientip'].$_G['username'].TIMESTAMP), 0, 4).random(4);
 	C::t('common_setting')->update('siteuniqueid', $siteuniqueid);
+	require_once libfile('function/cache');
+	updatecache('setting');
 }
 
 

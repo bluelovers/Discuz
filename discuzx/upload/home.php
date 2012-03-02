@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: home.php 25368 2011-11-08 06:13:35Z zhengqingpeng $
+ *      $Id: home.php 28499 2012-03-01 11:25:07Z zhengqingpeng $
  */
 
 define('APPTYPEID', 1);
@@ -31,12 +31,11 @@ if(!in_array($mod, array('space', 'spacecp', 'misc', 'magic', 'editor', 'invite'
 	$_GET['do'] = 'home';
 }
 
-if($mod == 'space' && ((empty($_GET['do']) || $_GET['do'] == 'index') && ($_G['inajax'] || !$_G['setting']['homestatus'])) && $_GET['do'] != 'follow') {
+if($mod == 'space' && ((empty($_GET['do']) || $_GET['do'] == 'index') && ($_G['inajax']))) {
 	$_GET['do'] = 'profile';
 }
-$curmod = $_G['setting']['followreferer'] && empty($_GET['do']) && $mod == 'space' || $_GET['do'] == 'follow' ? 'follow' : $mod;
-define('CURMODULE', $curmod);
-runhooks();
+define('CURMODULE', $mod);
+runhooks($_GET['do'] == 'profile' && $_G['inajax'] ? 'card' : $_GET['do']);
 
 require_once libfile('home/'.$mod, 'module');
 

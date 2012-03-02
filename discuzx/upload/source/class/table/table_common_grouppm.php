@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_grouppm.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_common_grouppm.php 27876 2012-02-16 04:28:02Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -26,10 +26,12 @@ class table_common_grouppm extends discuz_table
 		$wherearr = $data = array();
 		$parameter = array($this->_table);
 		if($id) {
+			$id = is_array($id) ? array_map('intval', (array)$id) : dintval($id);
 			$wherearr[] = is_array($id) ? 'id IN(%n)' : 'id=%d';
 			$parameter[] = $id;
 		}
 		if($authorid) {
+			$authorid = dintval($authorid);
 			$wherearr[] = 'authorid=%d';
 			$parameter[] = $authorid;
 		}

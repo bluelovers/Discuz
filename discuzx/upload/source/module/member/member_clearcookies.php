@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: member_clearcookies.php 12326 2010-07-05 06:42:42Z monkey $
+ *      $Id: member_clearcookies.php 28247 2012-02-26 10:42:38Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -22,6 +22,6 @@ if(is_array($_COOKIE) && (empty($_G['uid']) || ($_G['uid'] && $formhash == formh
 	}
 }
 
-showmessage('login_clearcookie', 'forum.php', array(), $_G['inajax'] ? array('msgtype' => 3, 'showmsg' => true) : array());
+showmessage('login_clearcookie', dreferer(), array(), $_G['inajax'] ? array('msgtype' => 3, 'showmsg' => true) : array());
 
 ?>

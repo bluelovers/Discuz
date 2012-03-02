@@ -4,7 +4,7 @@
  *		[Discuz!] (C)2001-2099 Comsenz Inc.
  *		This is NOT a freeware, use is subject to license terms
  *
- *		$Id: Storage.php 27316 2012-01-16 03:08:11Z songlixin $
+ *		$Id: Storage.php 28286 2012-02-27 06:43:22Z yexinhao $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -26,7 +26,7 @@ class Cloud_Service_Storage {
 		if (!(self::$_instance instanceof self)) {
 			self::$_instance = new self();
 			$cloudAppService = Cloud::loadClass('Service_App');
-			self::$_appStatus = $cloudAppService->getcloudappstatus('storage', 0);
+			self::$_appStatus = $cloudAppService->getCloudAppStatus('storage');
 			self::$_siteId = $_G['setting']['my_siteid'];
 			self::$_encKey = $_G['setting']['xf_storage_enc_key'];
 			self::$_util = Cloud::loadClass('Service_Util');
@@ -141,6 +141,7 @@ class Cloud_Service_Storage {
 
 	public function checkAttachment($attach, $redirect = true) {
 		if (strpos($attach['attachment'], 'storage:') !== false) {
+			C::t('forum_attachment')->update_download($attach['aid']);
 			$sha1 = substr($attach['attachment'], -40);
 			$downloadUrl = $this->makeDownloadurl($sha1, $attach['filesize'], $attach['filename']);
 			if ($redirect) {

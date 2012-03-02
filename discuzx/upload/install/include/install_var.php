@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: install_var.php 27518 2012-02-03 03:39:06Z zhangguosheng $
+ *      $Id: install_var.php 28275 2012-02-27 04:14:58Z monkey $
  */
 
 if(!defined('IN_COMSENZ')) {
@@ -63,7 +63,9 @@ define('UNDEFINE_FUNC', 32);
 define('MISSING_PARAMETER', 33);
 define('LOCK_FILE_NOT_TOUCH', 34);
 
-$func_items = array('mysql_connect', 'fsockopen', 'gethostbyname', 'file_get_contents', 'xml_parser_create');
+$func_items = array('mysql_connect', 'gethostbyname', 'file_get_contents', 'xml_parser_create');
+
+$filesock_items = array('fsockopen', 'pfsockopen', 'stream_socket_client', 'curl_init');
 
 $env_items = array
 (
@@ -82,8 +84,10 @@ $dirfile_items = array
 	'config_dir' => array('type' => 'dir', 'path' => './config'),
 	'data' => array('type' => 'dir', 'path' => './data'),
 	'cache' => array('type' => 'dir', 'path' => './data/cache'),
-	'cache' => array('type' => 'dir', 'path' => './data/avatar'),
+	'avatar' => array('type' => 'dir', 'path' => './data/avatar'),
 	'plugindata' => array('type' => 'dir', 'path' => './data/plugindata'),
+	'plugindownload' => array('type' => 'dir', 'path' => './data/download'),
+	'addonmd5' => array('type' => 'dir', 'path' => './data/addonmd5'),
 	'ftemplates' => array('type' => 'dir', 'path' => './data/template'),
 	'threadcache' => array('type' => 'dir', 'path' => './data/threadcache'),
 	'attach' => array('type' => 'dir', 'path' => './data/attachment'),

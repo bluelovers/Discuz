@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_admincp_member.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_common_admincp_member.php 27740 2012-02-13 10:05:22Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -22,6 +22,9 @@ class table_common_admincp_member extends discuz_table
 	}
 
 	public function update_cpgroupid_by_cpgroupid($val, $data) {
+		if(!is_array($data)) {
+			return null;
+		}
 		return DB::update('common_admincp_member', $data, DB::field('cpgroupid', $val));
 	}
 

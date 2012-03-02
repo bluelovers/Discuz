@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_invite.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_common_invite.php 27912 2012-02-16 08:57:43Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -63,6 +63,7 @@ class table_common_invite extends discuz_table
 		return DB::result_first('SELECT COUNT(*) FROM %t '.$condition[0], $condition[1]);
 	}
 	public function delete_by_uid_or_fuid($uids) {
+		$uids = dintval($uids, true);
 		if(!$uids) {
 			return null;
 		}

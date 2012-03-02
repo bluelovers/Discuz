@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: Restful.php 26205 2011-12-05 10:09:32Z zhangguosheng $
+ *      $Id: Restful.php 28361 2012-02-28 07:12:03Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -82,7 +82,7 @@ abstract class Cloud_Service_Client_Restful {
 
 		$this->siteName = !empty($_G['setting']['bbname']) ? $_G['setting']['bbname'] : '';
 
-		$this->uniqueId = C::t('common_setting')->fetch('siteuniqueid');
+		$this->uniqueId = $_G['setting']['siteuniqueid'];
 		$this->siteUrl = $_G['siteurl'];
 		$this->charset = CHARSET;
 		$this->timeZone = !empty($_G['setting']['timeoffset']) ? $_G['setting']['timeoffset'] : '';
@@ -195,6 +195,15 @@ abstract class Cloud_Service_Client_Restful {
 		$this->_cloudApiIp = $ip;
 
 		return true;
+	}
+
+	protected function getUserOpenId($uid) {
+		$openId = '';
+		$connectInfo = C::t('#qqconnect#common_member_connect')->fetch($uid);
+		if($connectInfo) {
+			$openId = $connectInfo['conopenid'];
+		}
+		return $openId;
 	}
 
 }

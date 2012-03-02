@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: discuz_database.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: discuz_database.php 28423 2012-02-29 07:51:49Z cnteacher $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -61,6 +61,9 @@ class discuz_database {
 
 	public static function update($table, $data, $condition, $unbuffered = false, $low_priority = false) {
 		$sql = self::implode($data);
+		if(empty($sql)) {
+			return false;
+		}
 		$cmd = "UPDATE " . ($low_priority ? 'LOW_PRIORITY' : '');
 		$table = self::table($table);
 		$where = '';
@@ -128,6 +131,7 @@ class discuz_database {
 			}
 		}
 		self::checkquery($sql);
+
 		$ret = self::$db->query($sql, $silent, $unbuffered);
 		if (!$unbuffered && $ret) {
 			$cmd = trim(strtoupper(substr($sql, 0, strpos($sql, ' '))));
@@ -166,26 +170,27 @@ class discuz_database {
 		return discuz_database_safecheck::checkquery($sql);
 	}
 
-	public static function quote($str) {
+	public static function quote($str, $noarray = false) {
 
 		if (is_string($str))
 			return '\'' . addcslashes($str, "\n\r\\'\"\032") . '\'';
 
-		if (is_int($str))
+		if (is_int($str) or is_float($str))
 			return $str;
 
 		if (is_array($str)) {
-			foreach ($str as &$v) {
-				$v = self::quote($v);
+			if($noarray === false) {
+				foreach ($str as &$v) {
+					$v = self::quote($v, true);
+				}
+				return $str;
+			} else {
+				return '\'\'';
 			}
-			return $str;
 		}
 
 		if (is_bool($str))
 			return $str ? '1' : '0';
-
-		if (is_float($str))
-			return sprintf('%F', $str);
 
 		return '\'\'';
 	}
@@ -218,7 +223,10 @@ class discuz_database {
 	}
 
 	public static function order($field, $order = 'ASC') {
-		$order = strtoupper($order) == 'ASC' ? 'ASC' : 'DESC';
+		if(empty($field)) {
+			return '';
+		}
+		$order = strtoupper($order) == 'ASC' || empty($order) ? 'ASC' : 'DESC';
 		return self::quote_field($field) . ' ' . $order;
 	}
 
@@ -262,7 +270,7 @@ class discuz_database {
 
 			case 'in':
 			case 'notin':
-				$val = implode(',', self::quote($val));
+				$val = $val ? implode(',', self::quote($val)) : '\'\'';
 				return $field . ($glue == 'notin' ? ' NOT' : '') . ' IN(' . $val . ')';
 				break;
 

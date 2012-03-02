@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_credit_rule_log.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_common_credit_rule_log.php 27876 2012-02-16 04:28:02Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -23,11 +23,10 @@ class table_common_credit_rule_log extends discuz_table
 	}
 
 	public function increase($clid, $logarr) {
-		if($clid) {
+		if($clid && !empty($logarr) && is_array($logarr)) {
 			return DB::query('UPDATE %t SET %i WHERE clid=%d', array($this->_table, implode(',', $logarr), $clid));
-		} else {
-			return false;
 		}
+		return 0;
 	}
 
 	public function fetch_ids_by_rid_fid($rid, $fid) {
@@ -70,7 +69,11 @@ class table_common_credit_rule_log extends discuz_table
 	}
 
 	public function delete_by_uid($uids) {
-		return DB::delete($this->_table, DB::field('uid', $uids));
+		$uids = dintval((array)$uids, true);
+		if(!empty($uids)) {
+			return DB::delete($this->_table, DB::field('uid', $uids));
+		}
+		return 0;
 	}
 	public function get_rids() {
 		return $this->_rids;

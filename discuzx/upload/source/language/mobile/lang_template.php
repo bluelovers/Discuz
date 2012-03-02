@@ -4,14 +4,10 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_template.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: lang_template.php 28113 2012-02-22 09:25:55Z svn_project_zhangjie $
  *
  *      This file is automatically generate
  */
-
-if(!defined('IN_DISCUZ')) {
-	exit('Access Denied');
-}
 
 $lang = array (
   'no_simplemobiletype' => '标准版',
@@ -96,7 +92,6 @@ $lang = array (
   'user_mobile_pm_comment' => '短消息发出后将跳回上一页',
   'reset' => '重填',
   'reg_username' => '用户名必须为大于3位小于15位',
-  'viewimg' => '查看图片',
 );
 
 ?>

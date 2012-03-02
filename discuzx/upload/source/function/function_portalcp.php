@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_portalcp.php 27391 2012-01-30 02:36:09Z zhangguosheng $
+ *      $Id: function_portalcp.php 27926 2012-02-17 01:36:25Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -21,15 +21,14 @@ function get_uploadcontent($attach, $type='portal', $dotype='') {
 		$check = $attach['pic'] == $type.'/'.$attach['attachment'] ? 'checked' : $dotype;
 		$aid = $check ? $attach['aid'] : '';
 
-		$return .= '<table id="attach_list_'.$attach['attachid'].'" width="100%" class="xi2">';
-		$return .= '<td width="50" class="bbs"><a href="'.$pic.'" target="_blank"><img src="'.($small_pic ? $small_pic : $pic).'" width="40" height="40"></a></td>';
-		$return .= '<td align="right" class="bbs">';
-		$return .= '<label for="setconver'.$attach['attachid'].'"><input type="radio" name="setconver" id="setconver'.$attach['attachid'].'" class="pr" value="1" onclick=setConver(\''.addslashes(serialize(array('pic'=>$type.'/'.$attach['attachment'], 'thumb'=>$attach['thumb'], 'remote'=>$attach['remote']))).'\') '.$check.'>'.lang('portalcp', 'set_to_conver').'</label><br>';
-		if($small_pic) $return .= '<a href="javascript:void(0);" onclick="insertImage(\''.$small_pic.'\', \''.$pic.'\');return false;">'.lang('portalcp', 'insert_small_image').'</a><br>';
-		$return .= '<a href="javascript:void(0);" onclick="insertImage(\''.$pic.'\');return false;">'.lang('portalcp', 'insert_large_image').'</a><br>';
-		if($type == 'portal') $return .= '<a href="javascript:void(0);" onclick="deleteAttach(\''.$attach['attachid'].'\', \'portal.php?mod=attachment&id='.$attach['attachid'].'&aid='.$aid.'&op=delete\');return false;">'.lang('portalcp', 'delete').'</a>';
-		$return .= '</td>';
-		$return .= '</table>';
+		$return .= '<a href="javascript:;" class="opattach"><span class="opattach_ctrl">';
+		$return .= '<span onclick="insertImage(\''.$pic.'\');" class="cur1">'.lang('portalcp', 'insert_large_image').'</span>';
+		$return .= '<span class="pipe">|</span>';
+		if($small_pic) $return .= '<span onclick="insertImage(\''.$small_pic.'\', \''.$pic.'\');" class="cur1">'.lang('portalcp', 'small_image').'</span>';
+		$return .= '</span><img src="'.($small_pic ? $small_pic : $pic).'" onclick="insertImage(\''.$pic.'\');" class="cur1"></a>';
+		$return .= '<label for="setconver'.$attach['attachid'].'" class="cur1 xi2"><input type="radio" name="setconver" id="setconver'.$attach['attachid'].'" class="pr" value="1" onclick="setConver(\''.addslashes(serialize(array('pic'=>$type.'/'.$attach['attachment'], 'thumb'=>$attach['thumb'], 'remote'=>$attach['remote']))).'\') '.$check.'>'.lang('portalcp', 'set_to_conver').'</label>';
+		$return .= '<span class="pipe">|</span>';
+		if($type == 'portal') $return .= '<span class="cur1 xi2" onclick="deleteAttach(\''.$attach['attachid'].'\', \'portal.php?mod=attachment&id='.$attach['attachid'].'&aid='.$aid.'&op=delete\');">'.lang('portalcp', 'delete').'</span>';
 
 	} else {
 		$attach_url = $type == 'forum' ? 'forum.php?mod=attachment&aid='.aidencode($attach['attachid'], 1) : 'portal.php?mod=attachment&id='.$attach['attachid'];

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_attachment.php 27462 2012-02-01 08:30:27Z monkey $
+ *      $Id: function_attachment.php 28348 2012-02-28 06:16:29Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -71,10 +71,13 @@ function attachtype($type, $returnval = 'html') {
 
 function parseattach($attachpids, $attachtags, &$postlist, $skipaids = array()) {
 	global $_G;
-
+	if(!$attachpids) {
+		return;
+	}
+	$attachpids = is_array($attachpids) ? $attachpids : array($attachpids);
 	$attachexists = FALSE;
 	$skipattachcode = $aids = $payaids = $findattach = array();
-	foreach(C::t('forum_attachment_n')->fetch_all_by_id('tid:'.$_G['tid'], 'pid', explode(',', $attachpids)) as $attach) {
+	foreach(C::t('forum_attachment_n')->fetch_all_by_id('tid:'.$_G['tid'], 'pid', $attachpids) as $attach) {
 		$attachexists = TRUE;
 		if($skipaids && in_array($attach['aid'], $skipaids)) {
 			$skipattachcode[$attach[pid]][] = "/\[attach\]$attach[aid]\[\/attach\]/i";
@@ -160,7 +163,7 @@ function parseattach($attachpids, $attachtags, &$postlist, $skipaids = array()) 
 		loadcache('posttableids');
 		$posttableids = $_G['cache']['posttableids'] ? $_G['cache']['posttableids'] : array('0');
 		foreach($posttableids as $id) {
-			C::t('forum_post')->update($id, explode(',', $attachpids), array('attachment' => '0'), true);
+			C::t('forum_post')->update($id, $attachpids, array('attachment' => '0'), true);
 		}
 	}
 }

@@ -4,14 +4,12 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_upload.php 26636 2011-12-19 02:26:51Z monkey $
+ *      $Id: spacecp_upload.php 28297 2012-02-27 08:35:59Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
-
-$_G['disabledwidthauto'] = 1;
 
 $albumid = empty($_GET['albumid'])?0:intval($_GET['albumid']);
 
@@ -21,10 +19,10 @@ if($_GET['op'] == 'recount') {
 	showmessage('do_success', 'home.php?mod=spacecp&ac=upload');
 }
 
-if(submitcheck('albumsubmit')) {
+if(submitcheck('albumsubmit') && helper_access::check_module('album')) {
 
 	if(!count($_POST['title'])) {
-		showmessage('请选择要上传的相册图片');
+		showmessage('upload_select_image');
 	}
 	if($_POST['albumop'] == 'creatalbum') {
 		$catid = intval($catid);
@@ -111,7 +109,7 @@ if(submitcheck('albumsubmit')) {
 
 } else {
 
-	if(!checkperm('allowupload')) {
+	if(!checkperm('allowupload') || !helper_access::check_module('album')) {
 		showmessage('no_privilege_upload', '', array(), array('return' => true));
 	}
 

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_album.php 26273 2011-12-07 09:53:00Z liulanbo $
+ *      $Id: space_album.php 28299 2012-02-27 08:48:36Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -317,9 +317,9 @@ if($id) {
 
 			$ordersql = 'p.dateline';
 
-			$count = C::t('home_pic')->fetch_all_by_sql("p.hot>='$minhot'", '', 0, 0, 1);
+			$count = C::t('home_pic')->fetch_all_by_sql('p.'.DB::field('hot', $minhot, '>='), '', 0, 0, 1);
 			if($count) {
-				$query = C::t('home_pic')->fetch_all_by_sql("p.hot>='$minhot'", 'p.dateline DESC', $start, $perpage);
+				$query = C::t('home_pic')->fetch_all_by_sql('p.'.DB::field('hot', $minhot, '>='), 'p.dateline DESC', $start, $perpage);
 				foreach($query as $value) {
 					if($value['friend'] != 4 && ckfriend($value['uid'], $value['friend'], $value['target_ids']) && ($value['status'] == 0 || $value['uid'] == $_G['uid'] || $_G['adminid'] == 1)) {
 						$value['pic'] = pic_get($value['filepath'], 'album', $value['thumb'], $value['remote']);
@@ -382,7 +382,7 @@ if($id) {
 		$count = C::t('home_album')->fetch_all_by_search(3, $uids, $sqlSearchKey, true, $catid, 0, 0, '');
 
 		if($count) {
-			$query = C::t('home_album')->fetch_all_by_search(1, $uids, $sqlSearchKey, true, $catid, 0, 0, '', 'updatetime', 'DESC', $start, $perpage, $f_index);
+			$query = C::t('home_album')->fetch_all_by_search(1, $uids, $sqlSearchKey, true, $catid, 0, 0, '', '', 'updatetime', 'DESC', $start, $perpage, $f_index);
 			foreach($query as $value) {
 				if($value['friend'] != 4 && ckfriend($value['uid'], $value['friend'], $value['target_ids'])) {
 					$value['pic'] = pic_cover_get($value['pic'], $value['picflag']);

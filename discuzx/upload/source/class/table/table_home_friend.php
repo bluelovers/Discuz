@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_home_friend.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_home_friend.php 27777 2012-02-14 07:07:26Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -26,7 +26,7 @@ class table_home_friend extends discuz_table
 	}
 
 	public function fetch_all_by_uid_fuid($uid, $fuid) {
-		if(!$fuid) {
+		if(!$uid || !$fuid) {
 			return null;
 		}
 		return DB::fetch_all('SELECT * FROM %t WHERE uid=%d AND fuid IN (%n)', array($this->_table, $uid, $fuid));
@@ -76,7 +76,7 @@ class table_home_friend extends discuz_table
 				$keywordsrch = '0';
 				$keyword = preg_replace("/( OR |\|)/is", "+", $keyword);
 			}
-			$keyword = str_replace('*', '%', addcslashes($keyword, '%_'));
+			$keyword = str_replace('*', '%', addcslashes(daddslashes($keyword), '%_'));
 			foreach(explode('+', $keyword) as $text) {
 				$text = trim($text);
 				if($text) {
@@ -130,7 +130,7 @@ class table_home_friend extends discuz_table
 	}
 
 	public function update_by_uid_fuid($uid, $fuid, $data) {
-		if(!$uid || !$fuid) {
+		if(!$uid || !$fuid || empty($data) || !is_array($data)) {
 			return null;
 		}
 		return DB::update($this->_table, $data, DB::field('uid', $uid).' AND '.DB::field('fuid', $fuid));

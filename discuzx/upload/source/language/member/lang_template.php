@@ -4,21 +4,12 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_template.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: lang_template.php 28113 2012-02-22 09:25:55Z svn_project_zhangjie $
  *
  *      This file is automatically generate
  */
 
-if(!defined('IN_DISCUZ')) {
-	exit('Access Denied');
-}
-
 $lang = array (
-  'password_weak' => '密码太弱，至少应包含 ',
-  'strongpw_1' => '数字',
-  'strongpw_2' => '小写字母',
-  'strongpw_3' => '大写字母',
-  'strongpw_4' => '特殊字符',
   'getpassword' => '找回密码',
   'login_guest' => '没有帐号？<a href="member.php?mod={$_G[setting][regname]}">{$_G[setting][reglinkname]}</a>',
   'new_password' => '新密码',
@@ -48,9 +39,12 @@ $lang = array (
   'register_email_tips' => '请输入正确的邮箱地址',
   'register_message' => '注册原因',
   'register_message1' => '您填写的注册原因会被当作申请注册的重要参考依据，请认真填写。',
+  'register_password_length_tips1' => '最小长度为',
+  'register_password_length_tips2' => '个字符',
   'register_password_tips' => '请填写密码',
   'register_repassword_tips' => '请再次输入密码',
   'register_username_tips' => '用户名由 3 到 15 个字符组成',
+  'register_validate_email_tips' => '注册需要验证邮箱，请务必填写正确的邮箱，提交后请及时查收邮件。<br />您可能需要等待几分钟才能收到邮件，如果收件箱没有，请检查一下垃圾邮件箱。',
   'rulemessage' => '网站服务条款',
 );
 

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_counter.php 26458 2011-12-13 07:51:13Z liulanbo $
+ *      $Id: admincp_counter.php 27729 2012-02-13 07:35:33Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -45,7 +45,7 @@ if(submitcheck('forumsubmit', 1)) {
 		C::t('forum_forum')->update($forum['fid'], array('archive' => $archive));
 
 		$thread = C::t('forum_thread')->fetch_by_fid_displayorder($forum['fid']);
-		$lastpost = addslashes("$thread[tid]\t$thread[subject]\t$thread[lastpost]\t$thread[lastposter]");
+		$lastpost = "$thread[tid]\t$thread[subject]\t$thread[lastpost]\t$thread[lastposter]";
 
 		C::t('forum_forum')->update($forum['fid'], array('threads' => $threads, 'posts' => $posts, 'lastpost' => $lastpost));
 	}
@@ -321,7 +321,7 @@ if(submitcheck('forumsubmit', 1)) {
 	$query = C::t('forum_forum')->fetch_all_fid_for_group($current, $pertask, 1);
 	foreach($query as $group) {
 		$processed = 1;
-		$membernum = C::t('forum_groupuser')->fetch_count_by_fid($_G['fid']);
+		$membernum = C::t('forum_groupuser')->fetch_count_by_fid($group['fid']);
 		C::t('forum_forumfield')->update($group['fid'], array('membernum' => $membernum));
 	}
 

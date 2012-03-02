@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_group.php 26980 2011-12-29 02:07:24Z svn_project_zhangjie $
+ *      $Id: forum_group.php 27723 2012-02-13 06:50:39Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -274,6 +274,8 @@ if($action == 'index') {
 	if($allowbuildgroup < 1) {
 		showmessage('group_create_max_failed');
 	}
+	$_GET['fupid'] = intval($_GET['fupid']);
+	$_GET['groupid'] = intval($_GET['groupid']);
 
 	if(!submitcheck('createsubmit')) {
 		$groupselect = get_groupselect(getgpc('fupid'), getgpc('groupid'));
@@ -300,7 +302,7 @@ if($action == 'index') {
 			showmessage('group_name_exist');
 		}
 		require_once libfile('function/discuzcode');
-		$descriptionnew = discuzcode(dhtmlspecialchars(censor(trim($_GET['descriptionnew']))));
+		$descriptionnew = discuzcode(dhtmlspecialchars(censor(trim($_GET['descriptionnew']))), 0, 0, 0, 0, 1, 1, 0, 0, 1);
 		$censormod = censormod($descriptionnew);
 		if($censormod) {
 			showmessage('group_description_failed');
@@ -434,7 +436,7 @@ if($action == 'index') {
 				@unlink($_G['forum']['banner']);
 			}
 			require_once libfile('function/discuzcode');
-			$_GET['descriptionnew'] = discuzcode(dhtmlspecialchars(censor(trim($_GET['descriptionnew']))));
+			$_GET['descriptionnew'] = discuzcode(dhtmlspecialchars(censor(trim($_GET['descriptionnew']))), 0, 0, 0, 0, 1, 1, 0, 0, 1);
 			$censormod = censormod($_GET['descriptionnew']);
 			if($censormod) {
 				showmessage('group_description_failed');

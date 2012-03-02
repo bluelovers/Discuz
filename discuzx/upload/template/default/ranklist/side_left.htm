@@ -8,7 +8,7 @@
 		<!--{if $ranklist_setting['thread']['available']}-->
 		<li class="cl{if $_GET['type'] == 'thread'} a{/if}"><a href="misc.php?mod=ranklist&type=thread&view=replies&orderby=thisweek">{lang posts}</a></li>
 		<!--{/if}-->
-		<!--{if $_G['setting']['homestatus'] && $ranklist_setting['blog']['available']}-->
+		<!--{if helper_access::check_module('blog') && $ranklist_setting['blog']['available']}-->
 		<li class="cl{if $_GET['type'] == 'blog'} a{/if}"><a href="misc.php?mod=ranklist&type=blog&view=heats&orderby=thisweek">{lang blogs}</a></li>
 		<!--{/if}-->
 		<!--{if $ranklist_setting['poll']['available']}-->
@@ -17,7 +17,7 @@
 		<!--{if $ranklist_setting['activity']['available']}-->
 		<li class="cl{if $_GET['type'] == 'activity'} a{/if}"><a href="misc.php?mod=ranklist&type=activity&view=heats&orderby=thismonth">{lang activity}</a></li>
 		<!--{/if}-->
-		<!--{if $_G['setting']['homestatus'] && $ranklist_setting['picture']['available']}-->
+		<!--{if helper_access::check_module('album') && $ranklist_setting['picture']['available']}-->
 		<li class="cl{if $_GET['type'] == 'picture'} a{/if}"><a href="misc.php?mod=ranklist&type=picture&view=hot&orderby=thismonth">{lang pics}</a></li>
 		<!--{/if}-->
 		<!--{if $ranklist_setting['forum']['available']}-->

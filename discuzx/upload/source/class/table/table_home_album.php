@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_home_album.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_home_album.php 28041 2012-02-21 07:33:55Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -30,20 +30,28 @@ class table_home_album extends discuz_table
 	}
 
 	public function update_num_by_albumid($albumid, $inc, $field = 'picnum', $uid = '') {
+		if(!in_array($field, array('picnum', 'favtimes', 'sharetimes'))) {
+			return null;
+		}
 		$parameter = array($this->_table, $inc, $albumid);
 		if($uid) {
 			$parameter[] = $uid;
 			$uidsql = ' AND uid = %d';
 		}
-		$field = daddslashes($field);
 		return DB::query('UPDATE %t SET '.$field.'='.$field.'+\'%d\' WHERE albumid=%d '.$uidsql, $parameter);
 	}
 
 	public function delete_by_uid($uid) {
+		if(!$uid) {
+			return null;
+		}
 		return DB::delete($this->_table, DB::field('uid', $uid));
 	}
 
 	public function update_by_catid($catid, $data) {
+		if(!is_array($data) || empty($data)) {
+			return null;
+		}
 		return DB::update($this->_table, $data, DB::field('catid', $catid));
 	}
 
@@ -84,14 +92,14 @@ class table_home_album extends discuz_table
 	public function fetch_all_by_uid($uid, $order = false, $start = 0, $limit = 0, $albumid = '') {
 		$parameter = array($this->_table);
 		$wherearr = array();
-		if($albumid != '') {
+		if($albumid) {
 			$wherearr[] = DB::field('albumid', $albumid);
 		}
 		if($uid) {
 			$wherearr[] = DB::field('uid', $uid);
 		}
-		if($order) {
-			$ordersql = ' ORDER BY '.DB::order($order, 'DESC');
+		if(is_string($order) && $order = DB::order($order, 'DESC')) {
+			$ordersql = ' ORDER BY '.$order;
 		}
 		if($limit) {
 			$parameter[] = DB::limit($start, $limit);
@@ -110,24 +118,28 @@ class table_home_album extends discuz_table
 	public function fetch_all_by_block($aids, $bannedids, $uids, $catid, $startrow, $items, $orderby) {
 		$wheres = array();
 		if($aids) {
-			$wheres[] = 'albumid IN ('.dimplode($aids).')';
+			$wheres[] = DB::field('albumid', $aids, 'in');
 		}
 		if($bannedids) {
-			$wheres[]  = 'albumid NOT IN ('.dimplode($bannedids).')';
+			$wheres[]  = DB::field('albumid', $bannedids, 'notin');
 		}
 		if($uids) {
-			$wheres[] = 'uid IN ('.dimplode($uids).')';
+			$wheres[] = DB::field('uid', $uids, 'in');
 		}
 		if($catid && !in_array('0', $catid)) {
-			$wheres[] = 'catid IN ('.dimplode($catid).')';
+			$wheres[] = DB::field('catid', $catid, 'in');
 		}
 		$wheres[] = "friend = '0'";
 		$wheresql = $wheres ? implode(' AND ', $wheres) : '1';
 
+		if(!in_array($orderby, array('dateline', 'picnum', 'updatetime'))) {
+			$orderby = 'dateline';
+		}
+
 		return DB::fetch_all('SELECT * FROM '.DB::table($this->_table).' WHERE '.$wheresql.' ORDER BY '.DB::order($orderby, 'DESC').DB::limit($startrow, $items));
 	}
 
-	public function fetch_all_by_search($fetchtype, $uids, $albumname, $searchname, $catid, $starttime, $endtime, $albumids, $orderfield = '', $ordersort = 'DESC', $start = 0, $limit = 0, $findex = '') {
+	public function fetch_all_by_search($fetchtype, $uids, $albumname, $searchname, $catid, $starttime, $endtime, $albumids, $friend = '', $orderfield = '', $ordersort = 'DESC', $start = 0, $limit = 0, $findex = '') {
 		$parameter = array($this->_table);
 		$wherearr = array();
 		if(is_array($uids) && count($uids)) {
@@ -151,13 +163,18 @@ class table_home_album extends discuz_table
 		}
 
 		if($starttime) {
-			$parameter[] = strtotime($starttime);
+			$parameter[] = is_numeric($starttime) ? $starttime : strtotime($starttime);
 			$wherearr[] = 'dateline>%d';
 		}
 
 		if($endtime) {
-			$parameter[] = $endtime;
+			$parameter[] = is_numeric($endtime) ? $endtime : strtotime($endtime);
 			$wherearr[] = 'dateline<%d';
+		}
+
+		if(is_numeric($friend)) {
+			$parameter[] = $friend;
+			$wherearr[] = 'friend=%d';
 		}
 
 		if(is_array($albumids) && count($albumids)) {
@@ -171,8 +188,8 @@ class table_home_album extends discuz_table
 			$selectfield = "albumid";
 		} else {
 			$selectfield = "*";
-			if($orderfield) {
-				$ordersql = 'ORDER BY '.DB::order($orderfield, $ordersort);
+			if(is_string($orderfield) && $order = DB::order($orderfield, $ordersort)) {
+				$ordersql = 'ORDER BY '.$order;
 			}
 			if($limit) {
 				$parameter[] = DB::limit($start, $limit);
@@ -181,7 +198,7 @@ class table_home_album extends discuz_table
 		}
 
 		if($findex) {
-			$findex = 'USE INDEX('.$findex.')';
+			$findex = 'USE INDEX(updatetime)';
 		}
 
 		$wheresql = !empty($wherearr) && is_array($wherearr) ? ' WHERE '.implode(' AND ', $wherearr) : '';

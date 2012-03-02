@@ -68,7 +68,7 @@
 	<div id="activityjoin" class="bm mtn">
     	<div class="bm_c pd5">
         <div class="xw1">{lang activity_join}</div>
-	<!--{if $_G['forum']['status'] == 3 && $isgroupuser != 'isgroupuser'}-->
+	<!--{if $_G['forum']['status'] == 3 && helper_access::check_module('group') && $isgroupuser != 'isgroupuser'}-->
         <p>{lang activity_no_member}</p>
         <p><a href="forum.php?mod=group&action=join&fid=$_G[fid]" class="xi2">{lang activity_join_group}</a></p>
 	<!--{else}-->

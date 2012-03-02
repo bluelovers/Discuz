@@ -4,14 +4,10 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_template.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: lang_template.php 28113 2012-02-22 09:25:55Z svn_project_zhangjie $
  *
  *      This file is automatically generate
  */
-
-if(!defined('IN_DISCUZ')) {
-	exit('Access Denied');
-}
 
 $lang = array (
   'all' => '全部',
@@ -21,6 +17,7 @@ $lang = array (
   'join' => '人参加',
   'message' => '条留言',
   'none_data' => '没有相关数据',
+  'ranklist' => '排行',
   'ranklist_activity' => '活动排行',
   'ranklist_activity_end' => '报名截止',
   'ranklist_activity_start' => '活动时间:',
@@ -37,7 +34,6 @@ $lang = array (
   'comment' => '评论',
   'comment_ranklist' => '评论排行',
   'hot_ranklist' => '人气排行',
-  'ranklist' => '排行',
   'ranklist_thread_view' => '查看',
   'views' => '人气:',
   'visit_ranklist' => '查看排行',
@@ -48,7 +44,6 @@ $lang = array (
   'ranklist_forum_post' => '发帖',
   'ranklist_post' => '发帖排行',
   'ranklist_post_day' => '最近 24 小时发帖排行',
-  'ranklist_post_month' => '最近 30 天发帖排行',
   'ranklist_reply' => '回复排行',
   'reply' => '回复',
   'credit_num' => '积分数',

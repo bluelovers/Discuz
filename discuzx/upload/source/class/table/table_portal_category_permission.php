@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_portal_category_permission.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_portal_category_permission.php 27846 2012-02-15 09:04:33Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -22,17 +22,17 @@ class table_portal_category_permission extends discuz_table
 	}
 
 	public function fetch($catid, $uid){
-		return DB::fetch_first('SELECT * FROM %t WHERE catid=%d AND uid=%d', array($this->_table, $catid, $uid));
+		return ($catid = dintval($catid)) && ($uid = dintval($uid)) ? DB::fetch_first('SELECT * FROM %t WHERE catid=%d AND uid=%d', array($this->_table, $catid, $uid)) : array();
 	}
 
 	public function fetch_all_by_catid($catid, $uid = 0) {
-		return DB::fetch_all('SELECT * FROM %t WHERE catid=%d'.($uid ? DB::field('uid', $uid) : ''), array($this->_table, $catid), 'uid');
+		return ($catid = dintval($catid)) ? DB::fetch_all('SELECT * FROM %t WHERE catid=%d'.($uid ? ' AND '.DB::field('uid', $uid) : ''), array($this->_table, $catid), 'uid') :array();
 	}
 
 	public function fetch_all_by_uid($uids, $flag = true, $sort = 'ASC', $start = 0, $limit = 0) {
 		$wherearr = array();
 		$sort = $sort === 'ASC' ? 'ASC' : 'DESC';
-		if($uids) {
+		if(($uids = dintval($uids, true))) {
 			$wherearr[] = DB::field('uid', $uids);
 		}
 		if(!$flag) {
@@ -44,7 +44,7 @@ class table_portal_category_permission extends discuz_table
 
 	public function count_by_uids($uids, $flag) {
 		$wherearr = array();
-		if($uids) {
+		if(($uids = dintval($uids))) {
 			$wherearr[] = DB::field('uid', $uids);
 		}
 		if(!$flag) {
@@ -55,20 +55,20 @@ class table_portal_category_permission extends discuz_table
 	}
 
 	public function fetch_permission_by_uid($uids) {
-		return DB::fetch_all('SELECT uid, sum(allowpublish) as allowpublish, sum(allowmanage) as allowmanage FROM '.DB::table($this->_table)." WHERE uid IN (".dimplode($uids).") GROUP BY uid", null, 'uid');
+		return ($uids = dintval($uids, true)) ? DB::fetch_all('SELECT uid, sum(allowpublish) as allowpublish, sum(allowmanage) as allowmanage FROM '.DB::table($this->_table)." WHERE uid IN (".dimplode($uids).") GROUP BY uid", null, 'uid') : array();
 	}
 
 	public function delete_by_catid_uid_inheritedcatid($catid = false, $uids = false, $inheritedcatid = false) {
 		$wherearr = array();
-		if($catid) {
+		if(($catid = dintval($catid, true))) {
 			$wherearr[] = DB::field('catid', $catid);
 		}
-		if($uids) {
+		if(($uids = dintval($uids, true))) {
 			$wherearr[] = DB::field('uid', $uids);
 		}
 		if($inheritedcatid === true) {
 			$wherearr[] = "inheritedcatid>'0'";
-		} elseif($inheritedcatid !== false) {
+		} elseif($inheritedcatid !== false && ($inheritedcatid = dintval($inheritedcatid, true))) {
 			$wherearr[] = DB::field('inheritedcatid', $inheritedcatid);
 		}
 		return $wherearr ? DB::delete($this->_table, implode(' AND ', $wherearr)) : false;
@@ -76,15 +76,14 @@ class table_portal_category_permission extends discuz_table
 
 	public function insert_batch($users, $catids, $upid = 0) {
 		$perms = array();
-		if(!empty($users) && !empty($catids)){
-			if(!is_array($catids)) {
-				$catids = array($catids);
-			}
+		if(!empty($users) && ($catids = dintval((array)$catids, true))) {
 			foreach($users as $user) {
 				$inheritedcatid = !empty($user['inheritedcatid']) ? $user['inheritedcatid'] : ($upid ? $upid : 0);
 				foreach ($catids as $catid) {
-					$perms[] = "('$catid','$user[uid]','$user[allowpublish]','$user[allowmanage]','$inheritedcatid')";
-					$inheritedcatid = empty($inheritedcatid) ? $catid : $inheritedcatid;
+					if($catid) {
+						$perms[] = "('$catid','$user[uid]','$user[allowpublish]','$user[allowmanage]','$inheritedcatid')";
+						$inheritedcatid = empty($inheritedcatid) ? $catid : $inheritedcatid;
+					}
 				}
 			}
 			if($perms) {

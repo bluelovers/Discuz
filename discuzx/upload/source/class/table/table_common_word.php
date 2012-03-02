@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_word.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_common_word.php 27877 2012-02-16 04:33:37Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -49,14 +49,17 @@ class table_common_word extends discuz_table
 
 
 	public function update_by_type($types, $data) {
-		if(!empty($types)) {
-			$types = array_map('dintval', (array)$types);
+		if(!empty($types) && !empty($data) && is_array($data)) {
+			$types = array_map('intval', (array)$types);
 			return DB::update($this->_table, $data, "type IN (".dimplode($types).")");
 		}
 		return 0;
 	}
 	public function update_by_find($find, $data) {
-		return DB::update($this->_table, $data, DB::field('find', $find));
+		if(!empty($find) && !empty($data) && is_array($data)) {
+			return DB::update($this->_table, $data, DB::field('find', $find));
+		}
+		return 0;
 	}
 
 	public function count_by_type_find($type = null, $find = null) {

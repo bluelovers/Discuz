@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_feed.php 26323 2011-12-09 02:25:14Z chenmengshu $
+ *      $Id: function_feed.php 28299 2012-02-27 08:48:36Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -14,7 +14,7 @@ if(!defined('IN_DISCUZ')) {
 function feed_add($icon, $title_template='', $title_data=array(), $body_template='', $body_data=array(), $body_general='', $images=array(), $image_links=array(), $target_ids='', $friend='', $appid='', $returnid=0, $id=0, $idtype='', $uid=0, $username='') {
 	global $_G;
 
-	if(!$_G['setting']['homestatus']) {
+	if(!helper_access::check_module('feed')) {
 		return false;
 	}
 	$title_template = $title_template?lang('feed', $title_template):'';
@@ -138,7 +138,7 @@ function feed_publish($id, $idtype, $add=0) {
 	if(empty($id)) {
 		return;
 	}
-	if(!$_G['setting']['homestatus']) {
+	if(!helper_access::check_module('feed')) {
 		return false;
 	}
 	$setarr = array();
@@ -184,7 +184,7 @@ function feed_publish($id, $idtype, $add=0) {
 		case 'albumid':
 			$key = 1;
 			if($id > 0) {
-				$query = C::t('home_pic')->fetch_all_by_sql("p.albumid='$id'", 'a.dateline DESC', 0, 4);
+				$query = C::t('home_pic')->fetch_all_by_sql('p.'.DB::field('albumid', $id), 'a.dateline DESC', 0, 4);
 				foreach($query as $value) {
 					if($value['friend'] <= 2) {
 						if(empty($setarr['icon'])) {
@@ -214,7 +214,7 @@ function feed_publish($id, $idtype, $add=0) {
 			}
 			break;
 		case 'picid':
-			$plussql = $id>0?"p.picid='$id'":"p.uid='$_G[uid]' ORDER BY dateline DESC LIMIT 1";
+			$plussql = $id>0 ? 'p.'.DB::field('picid', $id) : 'p.'.DB::field('uid', $_G[uid]).' ORDER BY dateline DESC LIMIT 1';
 			$query = C::t('home_pic')->fetch_all_by_sql($plussql);
 			if($value = $query[0]) {
 				if(empty($value['friend'])) {

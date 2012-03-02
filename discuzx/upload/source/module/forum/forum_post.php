@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_post.php 27229 2012-01-11 09:26:12Z chenmengshu $
+ *      $Id: forum_post.php 28214 2012-02-24 06:38:56Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -34,6 +34,9 @@ if($sortid) {
 }
 
 if($_G['forum']['status'] == 3) {
+	if(!helper_access::check_module('group')) {
+		showmessage('group_status_off');
+	}
 	require_once libfile('function/group');
 	$status = groupperm($_G['forum'], $_G['uid'], 'post');
 	if($status == -1) {
@@ -299,7 +302,7 @@ if($policykey) {
 }
 
 $albumlist = array();
-if($_G['setting']['homestatus'] && $_G['group']['allowupload'] && $_G['uid']) {
+if(helper_access::check_module('album') && $_G['group']['allowupload'] && $_G['uid']) {
 	$query = C::t('home_album')->fetch_all_by_uid($_G['uid'], 'updatetime');
 	foreach($query as $value) {
 		if($value['picnum']) {
@@ -326,7 +329,7 @@ if($_GET['action'] == 'reply') {
 if($special == 4) {
 	$_G['setting']['activityfield'] = $_G['setting']['activityfield'] ? dunserialize($_G['setting']['activityfield']) : array();
 }
-if($_G['setting']['homestatus'] && $_G['group']['allowupload'] && $_G['setting']['albumcategorystat'] && !empty($_G['cache']['albumcategory'])) {
+if(helper_access::check_module('album') && $_G['group']['allowupload'] && $_G['setting']['albumcategorystat'] && !empty($_G['cache']['albumcategory'])) {
 	require_once libfile('function/portalcp');
 }
 $navtitle = lang('core', 'title_'.$_GET['action'].'_post');

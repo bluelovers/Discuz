@@ -34,7 +34,10 @@ template/default/forum/discuz.htm *<!--{hook/index_status_extra}-->
 template/default/forum/discuz.htm *<!--{hook/index_nav_extra}-->
 template/default/forum/discuz.htm *<!--{hook/index_top}-->
 template/default/forum/discuz.htm *<!--{hook/index_catlist_top}-->
+template/default/forum/discuz.htm *<!--{hook/index_favforum_extra $forum[fid]}-->
 template/default/forum/discuz.htm *<!--{hook/index_catlist $cat[fid]}-->
+template/default/forum/discuz.htm *<!--{hook/index_forum_extra $forum[fid]}-->
+template/default/forum/discuz.htm *<!--{hook/index_forum_extra $forumid}-->
 template/default/forum/discuz.htm *<!--{hook/index_middle}-->
 template/default/forum/discuz.htm *<!--{hook/index_bottom}-->
 template/default/forum/discuz.htm *<!--{hook/index_side_top}-->
@@ -71,6 +74,8 @@ template/default/forum/forumdisplay_list.htm *<!--{hook/forumdisplay_author $key
 template/default/forum/forumdisplay_list.htm *<!--{hook/forumdisplay_threadlist_bottom}-->
 template/default/forum/forumdisplay_list.htm *<!--{hook/forumdisplay_postbutton_bottom}-->
 template/default/forum/forumdisplay_sort.htm *<!--{hook/forumdisplay_postbutton_bottom}-->
+template/default/forum/forumdisplay_subforum.htm *<!--{hook/forumdisplay_subforum_extra $sub[fid]}-->
+template/default/forum/forumdisplay_subforum.htm *<!--{hook/forumdisplay_subforum_extra $sub[fid]}-->
 template/default/forum/guide.htm *<!--{hook/guide_nav_extra}-->
 template/default/forum/guide.htm *<!--{hook/guide_top}-->
 template/default/forum/guide.htm *<!--{hook/guide_bottom}-->
@@ -177,12 +182,8 @@ template/default/group/type.htm *<!--{hook/index_bottom}-->
 template/default/group/type.htm *<!--{hook/index_side_top}-->
 template/default/group/type.htm *<!--{hook/index_side_bottom}-->
 template/default/home/follow_feed.htm *<!--{hook/follow_nav_extra}-->
-template/default/home/follow_feed.htm *<!--{hook/follow_nav_extra}-->
-template/default/home/follow_feed.htm *<!--{hook/follow_nav_extra}-->
 template/default/home/follow_feed.htm *<!--{hook/follow_top}-->
-template/default/home/follow_feed.htm *<!--{hook/follow_side_user}-->
-template/default/home/follow_feed.htm *<!--{hook/follow_side_extra}-->
-template/default/home/follow_feed.htm *<!--{hook/follow_side_bottom}-->
+template/default/home/follow_feed.htm *<!--{hook/follow_nav_extra}-->
 template/default/home/spacecp_avatar.htm *<!--{hook/spacecp_avatar_top}-->
 template/default/home/spacecp_avatar.htm *<!--{hook/spacecp_avatar_bottom}-->
 template/default/home/spacecp_blog.htm *<!--{hook/spacecp_blog_top}-->
@@ -232,6 +233,7 @@ template/default/home/space_favorite.htm *<!--{hook/space_favorite_nav_extra}-->
 template/default/home/space_friend.htm *<!--{hook/space_interaction_extra}-->
 template/default/home/space_header.htm *<!--{hook/global_usernav_extra1}-->
 template/default/home/space_header.htm *<!--{hook/global_usernav_extra2}-->
+template/default/home/space_home.htm *<!--{hook/space_home_navlink}-->
 template/default/home/space_home.htm *<!--{hook/space_home_side_top}-->
 template/default/home/space_home.htm *<!--{hook/space_home_side_bottom}-->
 template/default/home/space_home.htm *<!--{hook/space_home_top}-->
@@ -241,9 +243,13 @@ template/default/home/space_magic.htm *<!--{hook/magic_nav_extra}-->
 template/default/home/space_medal.htm *<!--{hook/medal_nav_extra}-->
 template/default/home/space_menu.htm *<!--{hook/space_menu_extra}-->
 template/default/home/space_profile_body.htm *<!--{hook/space_profile_baseinfo_top}-->
+template/default/home/space_profile_body.htm *<!--{hook/follow_profile_baseinfo_top}-->
 template/default/home/space_profile_body.htm *<!--{hook/space_profile_baseinfo_middle}-->
+template/default/home/space_profile_body.htm *<!--{hook/follow_profile_baseinfo_middle}-->
 template/default/home/space_profile_body.htm *<!--{hook/space_profile_baseinfo_bottom}-->
+template/default/home/space_profile_body.htm *<!--{hook/follow_profile_baseinfo_bottom}-->
 template/default/home/space_profile_body.htm *<!--{hook/space_profile_extrainfo}-->
+template/default/home/space_profile_body.htm *<!--{hook/follow_profile_extrainfo}-->
 template/default/home/space_share_li.htm *<!--{hook/space_share_comment_op $k}-->
 template/default/home/space_status.htm *<!--{hook/space_home_doing_sync_method}-->
 template/default/home/space_wall.htm *<!--{hook/space_wall_face_extra}-->

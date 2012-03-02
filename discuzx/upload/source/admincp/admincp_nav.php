@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_nav.php 26205 2011-12-05 10:09:32Z zhangguosheng $
+ *      $Id: admincp_nav.php 28176 2012-02-23 10:38:49Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -61,6 +61,9 @@ if($operation == 'headernav') {
 				}
 			}
 			foreach($navlist as $nav) {
+				if($nav['available'] < 0) {
+					continue;
+				}
 				$navsubtype = array();
 				$navsubtype[$nav['subtype']] = 'selected="selected"';
 				$readonly = $nav['type'] == '4' ? ' readonly="readonly"' : '';
@@ -73,7 +76,7 @@ if($operation == 'headernav') {
 					$nav['type'] == '0' || $nav['type'] == '4' ? "<span title='{$nav['url']}'>".$nav['url'].'<span>' : "<input type=\"text\" class=\"txt\" size=\"15\" name=\"urlnew[$nav[id]]\" value=\"".dhtmlspecialchars($nav['url'])."\">",
 					cplang($nav['type'] == '0' ? 'inbuilt' : ($nav['type'] == '3' ? 'nav_plugin' : ($nav['type'] == '4' ? 'channel' : 'custom'))),
 					$nav['url'] != '#' ? "<input name=\"defaultindex\" class=\"radio\" type=\"radio\" value=\"$nav[url]\"".($_G['setting']['defaultindex'] == $nav['url'] ? ' checked="checked"' : '')." />" : '',
-					"<input class=\"checkbox\" type=\"checkbox\" name=\"availablenew[$nav[id]]\" value=\"1\" ".($nav['available'] ? 'checked' : '').">",
+					"<input class=\"checkbox\" type=\"checkbox\" name=\"availablenew[$nav[id]]\" value=\"1\" ".($nav['available'] > 0 ? 'checked' : '').">",
 					"<a href=\"".ADMINSCRIPT."?action=nav&operation=headernav&do=edit&id=$nav[id]\" class=\"act\">$lang[edit]</a>"
 				));
 				if($nav['identifier'] == 6 && $nav['type'] == 0) {
@@ -551,14 +554,18 @@ EOT;
 		if(!submitcheck('submit')) {
 
 			shownav('style', 'nav_setting_customnav');
-			showsubmenu('nav_setting_customnav', $navdata);
 
+			showsubmenu('nav_setting_customnav', $navdata);
+			showtips('nav_spacenav_tips');
 			showformheader('nav&operation=spacenav');
 			showtableheader();
 			showsubtitle(array('', 'display_order', 'name', 'url', 'type', 'available', ''));
 
 			$navlist = array();
 			foreach(C::t('common_nav')->fetch_all_by_navtype(2) as $nav) {
+				if($nav['available'] < 0) {
+					continue;
+				}
 				$navlist[$nav['id']] = $nav;
 			}
 
@@ -765,6 +772,9 @@ EOT;
 
 			$navlist = array();
 			foreach(C::t('common_nav')->fetch_all_by_navtype(3) as $nav) {
+				if($nav['available'] < 0) {
+					continue;
+				}
 				$navlist[$nav['id']] = $nav;
 			}
 

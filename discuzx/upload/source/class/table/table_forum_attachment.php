@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_forum_attachment.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_forum_attachment.php 27751 2012-02-14 02:26:11Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -30,7 +30,7 @@ class table_forum_attachment extends discuz_table
 	public function fetch_all_by_id($idtype, $ids, $orderby = '') {
 		$attachments = array();
 		if($orderby) {
-			$orderby = 'ORDER BY '.$orderby;
+			$orderby = 'ORDER BY '.DB::order($orderby, 'DESC');
 		}
 		if(in_array($idtype, array('aid', 'tid', 'pid', 'uid')) && $ids) {
 			$query = DB::query("SELECT * FROM %t WHERE %i IN (%n) %i", array($this->_table, $idtype, (array)$ids, $orderby));
@@ -88,6 +88,9 @@ class table_forum_attachment extends discuz_table
 
 	public function fetch_all_for_manage($tableid, $inforum = '', $authorid = 0, $filename = '', $keyword = '', $sizeless = 0, $sizemore = 0, $dlcountless = 0, $dlcountmore = 0, $daysold = 0, $count = 0, $start = 0, $limit = 0) {
 		$sql = "1";
+		if(!is_numeric($tableid) || $tableid < 0 || $tableid > 9) {
+			return;
+		}
 		if($inforum) {
 			$sql .= is_numeric($inforum) ? " AND t.fid=".DB::quote($inforum) : '';
 			$sql .= $inforum == 'isgroup' ? ' AND t.isgroup=\'1\'' : ' AND t.isgroup=\'0\'';

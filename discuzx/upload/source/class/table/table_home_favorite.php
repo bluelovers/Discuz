@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_home_favorite.php 27588 2012-02-07 02:38:18Z chenmengshu $
+ *      $Id: table_home_favorite.php 28511 2012-03-02 01:47:11Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -25,7 +25,7 @@ class table_home_favorite extends discuz_table
 		$parameter = array($this->_table);
 		$wherearr = array();
 		if($favid) {
-			$parameter[] = $favid;
+			$parameter[] = dintval($favid, is_array($favid) ? true : false);
 			$wherearr[] = is_array($favid) ? 'favid IN(%n)' : 'favid=%d';
 		}
 		$parameter[] = $uid;
@@ -43,7 +43,7 @@ class table_home_favorite extends discuz_table
 		$parameter = array($this->_table);
 		$wherearr = array();
 		if($favid) {
-			$parameter[] = $favid;
+			$parameter[] = dintval($favid, is_array($favid) ? true : false);
 			$wherearr[] = is_array($favid) ? 'favid IN(%n)' : 'favid=%d';
 		}
 		$parameter[] = $uid;
@@ -56,8 +56,11 @@ class table_home_favorite extends discuz_table
 		return DB::result_first("SELECT COUNT(*) FROM %t $wheresql ", $parameter);
 	}
 
-	public function fetch_by_id_idtype($id, $idtype) {
-		return DB::fetch_first("SELECT * FROM %t WHERE id=%d AND idtype=%s", array($this->_table, $id, $idtype));
+	public function fetch_by_id_idtype($id, $idtype, $uid = 0) {
+		if($uid) {
+			$uidsql = ' AND '.DB::field('uid', $uid);
+		}
+		return DB::fetch_first("SELECT * FROM %t WHERE id=%d AND idtype=%s $uidsql", array($this->_table, $id, $idtype));
 	}
 
 	public function count_by_id_idtype($id, $idtype) {
@@ -65,8 +68,14 @@ class table_home_favorite extends discuz_table
 	}
 
 	public function delete($val, $unbuffered = false, $uid = 0) {
-		$ret = DB::delete($this->_table, DB::field($this->_pk, $val).($uid ? ' AND '.DB::field('uid', $uid) : ''), null, $unbuffered);
-		return $ret;
+		$val = dintval($val, is_array($val) ? true : false);
+		if($val) {
+			if($uid) {
+				$uid = dintval($uid, is_array($uid) ? true : false);
+			}
+			return DB::delete($this->_table, DB::field($this->_pk, $val).($uid ? ' AND '.DB::field('uid', $uid) : ''), null, $unbuffered);
+		}
+		return !$unbuffered ? 0 : false;
 	}
 
 }

@@ -1,107 +1,5 @@
 <!--{block creditstring}--><!--{loop $postattachcredits $id $credit}--><!--{if $credit != ''}-->{$_G['setting']['extcredits'][$id][title]} <!--{if $credit >= 0}-->+$credit<!--{else}-->$credit<!--{/if}--> {$_G['setting']['extcredits'][$id][unit]} &nbsp;<!--{/if}--><!--{/loop}--><!--{/block}-->
 
-
-<style type="text/css">
-
-.progressWrapper {
-	width: 100%;
-	overflow: hidden;
-}
-
-.progressContainer {
-	margin: 5px;
-	padding: 4px;
-	border: solid 1px #E8E8E8;
-	background-color: #F7F7F7;
-	overflow: hidden;
-}
-/* Message */
-.message {
-	margin: 1em 0;
-	padding: 10px 20px;
-	border: solid 1px #FFDD99;
-	background-color: #FFFFCC;
-	overflow: hidden;
-}
-/* Error */
-.red {
-	border: solid 1px #B50000;
-	background-color: #FFEBEB;
-}
-
-/* Current */
-.green {
-	border: solid 1px #DDF0DD;
-	background-color: #EBFFEB;
-}
-
-/* Complete */
-.blue {
-	border: solid 1px #CEE2F2;
-	background-color: #F0F5FF;
-}
-
-.progressName {
-	font-size: 9pt;
-	font-weight: 700;
-	color: #555;
-	width: 323px;
-	height: 14px;
-	text-align: left;
-	white-space: nowrap;
-	overflow: hidden;
-}
-
-.progressBarInProgress,
-.progressBarComplete,
-.progressBarError {
-	font-size: 0;
-	width: 0%;
-	height: 2px;
-	background-color: blue;
-	margin-top: 2px;
-}
-
-.progressBarComplete {
-	width: 100%;
-	background-color: green;
-	visibility: hidden;
-}
-
-.progressBarError {
-	width: 100%;
-	background-color: red;
-	visibility: hidden;
-}
-
-.progressBarStatus {
-	margin-top: 2px;
-	width: 337px;
-	font-size: 8pt;
-	font-family: Arial;
-	text-align: left;
-	white-space: nowrap;
-}
-
-a.progressCancel {
-	font-size: 0;
-	display: block;
-	height: 14px;
-	width: 14px;
-	background-image: url({IMGDIR}/cancelbutton.gif);
-	background-repeat: no-repeat;
-	background-position: -14px 0px;
-	float: right;
-}
-
-a.progressCancel:hover {
-	background-position: 0px 0px;
-}
-.swfupload {
-	vertical-align: top;
-}
-
-</style>
 <!--{if $allowuploadtoday}-->
 <script type="text/javascript" src="{$_G[setting][jspath]}swfupload.js?{VERHASH}"></script>
 <script type="text/javascript" src="{$_G[setting][jspath]}swfupload.queue.js?{VERHASH}"></script>
@@ -129,12 +27,12 @@ a.progressCancel:hover {
 			<li id="{$editorid}_btn_local" style="display:none;" did="{$editorid}_btn_imgattachlist|local"><a href="javascript:;" hidefocus="true" onclick="switchImagebutton('local');">{lang normal_upload}</a></li>
 			<!--{/if}-->
 		<!--{/if}-->
-		<!--{if $_G['setting']['homestatus']}--><li {if !$allowpostimg}class="current"{/if} id="{$editorid}_btn_albumlist"><a href="javascript:;" hidefocus="true" onclick="switchImagebutton('albumlist');">{lang e_img_albumlist}</a></li><!--{/if}-->
-		<li {if !$allowpostimg && !$_G['setting']['homestatus']}class="current"{/if} id="{$editorid}_btn_www"><a href="javascript:;" hidefocus="true" onclick="switchImagebutton('www');">{lang e_img_www}</a></li>
+		<!--{if helper_access::check_module('album')}--><li {if !$allowpostimg}class="current"{/if} id="{$editorid}_btn_albumlist"><a href="javascript:;" hidefocus="true" onclick="switchImagebutton('albumlist');">{lang e_img_albumlist}</a></li><!--{/if}-->
+		<li {if !$allowpostimg && !helper_access::check_module('album')}class="current"{/if} id="{$editorid}_btn_www"><a href="javascript:;" hidefocus="true" onclick="switchImagebutton('www');">{lang e_img_www}</a></li>
 
 		<!--{hook/post_image_btn_extra}-->
 	</ul>
-	<div unselectable="on" id="{$editorid}_www" {if $allowpostimg || $_G['setting']['homestatus']}style="display: none;"{/if}>
+	<div unselectable="on" id="{$editorid}_www" {if $allowpostimg || helper_access::check_module('album')}style="display: none;"{/if}>
 		<div class="p_opt popupfix">
 			<table cellpadding="0" cellspacing="0" width="100%">
 				<tr class="xg1">
@@ -203,7 +101,7 @@ a.progressCancel:hover {
 			<!--{if $allowuploadtoday}-->
 				<div class="pbm bbda cl">
 					<div id="imgattach_notice" class="y" {if empty($imgattachs['used'])} style="display: none"{/if}>
-						<!--{if $_G['setting']['homestatus'] && $_G['group']['allowupload']}-->
+						<!--{if helper_access::check_module('album') && $_G['group']['allowupload']}-->
 							<div id="uploadPanel">
 								<label style="margin-right:10px;"><input type="checkbox" name="selectallimg" class="pc" value="1" onchange="selectAllSaveImg(this.checked);" onpropertychange="selectAllSaveImg(this.checked);" />{lang attachment_select_attach_image}</label>
 								{lang save_selected_pic}:
@@ -222,7 +120,7 @@ a.progressCancel:hover {
 								<!--{if $_G['setting']['albumcategorystat'] && !empty($_G['cache']['albumcategory'])}-->
 									<!--{eval echo category_showselect('album', 'albumcatid', !$_G['setting']['albumcategoryrequired'] ? true : false, $_GET['catid']);}-->&nbsp;
 								<!--{/if}-->
-								<input type="text" name="newalbum" id="newalbum" class="px vm" size="15" value="请输入相册名称"  onfocus="if(this.value == '请输入相册名称') {this.value = '';}" onblur="if(this.value == '') {this.value = '请输入相册名称';}" />&nbsp;<button type="button" class="pn pnc" onclick="createNewAlbum();"><span>创建</span></button><button type="button" class="pn" onclick="selectCreateTab(1);"><span>取消</span></button>
+								<input type="text" name="newalbum" id="newalbum" class="px vm" size="15" value="{lang input_album_name}"  onfocus="if(this.value == '{lang input_album_name}') {this.value = '';}" onblur="if(this.value == '') {this.value = '{lang input_album_name}';}" />&nbsp;<button type="button" class="pn pnc" onclick="createNewAlbum();"><span>{lang create_new_album}</span></button><button type="button" class="pn" onclick="selectCreateTab(1);"><span>{lang cancel}</span></button>
 							</div>
 						<!--{/if}-->
 					</div>
@@ -305,8 +203,8 @@ a.progressCancel:hover {
 
 					function createNewAlbum() {
 						var inputObj = $('newalbum');
-						if(inputObj.value == '' || inputObj.value == '请输入相册名称') {
-							inputObj.value = '请输入相册名称';
+						if(inputObj.value == '' || inputObj.value == '{lang input_album_name}') {
+							inputObj.value = '{lang input_album_name}';
 						} else {
 							var x = new Ajax();
 							x.get('home.php?mod=misc&ac=ajax&op=createalbum&inajax=1&name=' + inputObj.value, function(s){
@@ -367,7 +265,7 @@ a.progressCancel:hover {
 			</div>
 		</div>
 	<!--{/if}-->
-	<!--{if $_G['setting']['homestatus']}-->
+	<!--{if helper_access::check_module('album')}-->
 		<div unselectable="on" id="{$editorid}_albumlist" {if $allowpostimg}style="display: none;"{/if}>
 			<div class="p_opt">
 			<div class="upfilelist pbm bbda">

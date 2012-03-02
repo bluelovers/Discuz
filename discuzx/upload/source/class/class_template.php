@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_template.php 24355 2011-09-14 06:38:10Z monkey $
+ *      $Id: class_template.php 27948 2012-02-17 04:31:24Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -220,11 +220,11 @@ class template {
 		global $_G;
 		$i = count($this->replacecode['search']);
 		$this->replacecode['search'][$i] = $search = "<!--HOOK_TAG_$i-->";
-		$key = $key !== '' ? "[$key]" : '';
 		$dev = '';
 		if(isset($_G['config']['plugindeveloper']) && $_G['config']['plugindeveloper'] == 2) {
-			$dev = "echo '<hook>[".($key ? 'array' : 'string')." $hookid]</hook>';";
+			$dev = "echo '<hook>[".($key ? 'array' : 'string')." $hookid".($key ? '/\'.'.$key.'.\'' : '')."]</hook>';";
 		}
+		$key = $key !== '' ? "[$key]" : '';
 		$this->replacecode['replace'][$i] = "<?php {$dev}if(!empty(\$_G['setting']['pluginhooks']['$hookid']$key)) echo \$_G['setting']['pluginhooks']['$hookid']$key;?>";
 		return $search;
 	}

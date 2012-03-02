@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_threadsort.php 27607 2012-02-07 05:44:07Z monkey $
+ *      $Id: function_threadsort.php 28293 2012-02-27 07:46:51Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -119,14 +119,14 @@ function sortsearch($sortid, $sortoptionarray, $searchoption = array(), $selectu
 				if($optionide[$fieldname] == 'range') {
 					$value = explode('|', $value);
 					if($value[0] == 'd') {
-						$sql = "$fieldname<'$value[1]'";
+						$sql = DB::field($fieldname, $value[1], '<');
 					} elseif($value[0] == 'u') {
-						$sql = "$fieldname>'$value[1]'";
+						$sql = DB::field($fieldname, $value[1], '>');
 					} else {
 						$sql = "($fieldname BETWEEN ".intval($value[0])." AND ".intval($value[1]).")";
 					}
 				} elseif($optionide[$fieldname] == 'checkbox') {
-					$sql = "$fieldname LIKE '%".$value."%'";
+					$sql = DB::field($fieldname, '%'.$value.'%', 'like');
 				} elseif($optionide[$fieldname] == 'select') {
 					$subvalues = $currentchoices = array();
 					if(!empty($_G['forum_optionlist'])) {
@@ -144,9 +144,9 @@ function sortsearch($sortid, $sortoptionarray, $searchoption = array(), $selectu
 							}
 						}
 					}
-					$sql = "$fieldname IN (".dimplode($subvalues).")";
+					$sql = DB::field($fieldname, $subvalues);
 				} else {
-					$sql = "$fieldname='$value'";
+					$sql = DB::field($fieldname, $value);
 				}
 				$selectsql .= "AND $sql ";
 			}
@@ -163,7 +163,7 @@ function sortsearch($sortid, $sortoptionarray, $searchoption = array(), $selectu
 					if($option['condition']) {
 						$exp = $option['condition'] == 1 ? '>' : '<';
 					}
-					$sql = "$fieldname$exp'$option[value]'";
+					$sql = DB::field($fieldname, $option['value'], $exp);
 				} elseif($option['type'] == 'select') {
 					$subvalues = $currentchoices = array();
 					if(!empty($_G['forum_optionlist'])) {
@@ -181,20 +181,20 @@ function sortsearch($sortid, $sortoptionarray, $searchoption = array(), $selectu
 							}
 						}
 					}
-					$sql = "$fieldname IN (".dimplode($subvalues).")";
+					$sql = DB::field($fieldname, $subvalues);
 				} elseif($option['type'] == 'checkbox') {
-					$sql = "$fieldname LIKE '%".(implode("%", $option['value']))."%'";
+					$sql = DB::field($fieldname, '%'.implode('%', $option['value']).'%', 'like');
 				} elseif($option['type'] == 'range') {
 					$value = explode('|', $option['value']);
 					if($value[0] == 'd') {
-						$sql = "$fieldname<'$value[1]'";
+						$sql = DB::field($fieldname, $value[1], '<');
 					} elseif($value[0] == 'u') {
-						$sql = "$fieldname>'$value[1]'";
+						$sql = DB::field($fieldname, $value[1], '>');
 					} else {
 						$sql = $value[0] || $value[1] ? "($fieldname BETWEEN ".intval($value[0])." AND ".intval($value[1]).")" : '';
 					}
 				} else {
-					$sql = "$fieldname LIKE '%$option[value]%'";
+					$sql = DB::field($fieldname, '%'.$option['value'].'%', 'like');
 				}
 				$selectsql .= "AND $sql ";
 			}

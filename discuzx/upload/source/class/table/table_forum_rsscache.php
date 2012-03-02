@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_forum_rsscache.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_forum_rsscache.php 27775 2012-02-14 06:58:02Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -22,7 +22,7 @@ class table_forum_rsscache extends discuz_table
 	}
 
 	public function fetch_all_by_fid($fid, $limit = 20) {
-		return DB::fetch_all('SELECT * FROM '.DB::table($this->_table).' WHERE '.DB::field('fid', $fid).' ORDER BY dateline DESC LIMIT '.$limit, null, 'tid');
+		return $fid ? DB::fetch_all('SELECT * FROM '.DB::table($this->_table).' WHERE '.DB::field('fid', $fid).' ORDER BY dateline DESC LIMIT '.$limit, null, 'tid') : array();
 	}
 
 	public function fetch_all_by_guidetype($type, $limit = 20) {

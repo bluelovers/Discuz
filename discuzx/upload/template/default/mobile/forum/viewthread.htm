@@ -3,7 +3,7 @@
 	<div class="box"><a href="forum.php">{$_G['setting']['navs'][2]['navname']}</a> <em> &gt; </em> <a href="forum.php?mod=forumdisplay&fid=$_G[fid]">{eval echo strip_tags($_G['forum']['name']) ? strip_tags($_G['forum']['name']) : $_G['forum']['name'];}</a></div>
 <!--{else}-->
 	<!--{if $_G['forum']['status'] != 3}-->
-		<div class="box"><a href="forum.php">{$_G['setting']['navs'][2]['navname']}</a> <em> &gt; </em> <a href="forum.php?mod=forumdisplay&fid={$fup['fid']}">{eval echo strip_tags($_G['cache']['forums'][$fup]['name'])}</a> <em> &gt; </em> <a href="$upnavlink">{eval echo strip_tags($_G['forum']['name']) ? strip_tags($_G['forum']['name']) : $_G['forum']['name'];}</a></div>
+		<div class="box"><a href="forum.php">{$_G['setting']['navs'][2]['navname']}</a> <em> &gt; </em> <a href="forum.php?mod=forumdisplay&fid={$fup}">{eval echo strip_tags($_G['cache']['forums'][$fup]['name'])}</a> <em> &gt; </em> <a href="$upnavlink">{eval echo strip_tags($_G['forum']['name']) ? strip_tags($_G['forum']['name']) : $_G['forum']['name'];}</a></div>
 	<!--{else}-->
 		<div class="box"><a href="group.php">$_G['setting']['navs'][3]['navname']</a> $nav[nav]</div>
     <!--{/if}-->

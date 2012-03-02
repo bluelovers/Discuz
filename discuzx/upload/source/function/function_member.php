@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_member.php 27538 2012-02-03 07:03:36Z zhangguosheng $
+ *      $Id: function_member.php 28471 2012-03-01 07:44:19Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -49,7 +49,7 @@ function userlogin($username, $password, $questionid, $answer, $loginfield = 'us
 	}
 
 	$member = getuserbyuid($return['ucresult']['uid'], 1);
-	if(!$member) {
+	if(!$member || empty($member['uid'])) {
 		$return['status'] = -1;
 		return $return;
 	}
@@ -67,7 +67,7 @@ function userlogin($username, $password, $questionid, $answer, $loginfield = 'us
 
 function setloginstatus($member, $cookietime) {
 	global $_G;
-	$_G['uid'] = $member['uid'];
+	$_G['uid'] = intval($member['uid']);
 	$_G['username'] = $member['username'];
 	$_G['adminid'] = $member['adminid'];
 	$_G['groupid'] = $member['groupid'];
@@ -91,8 +91,10 @@ function setloginstatus($member, $cookietime) {
 	if($_G['setting']['connect']['allow'] && $_G['member']['conisbind']) {
 		updatestat('connectlogin', 1);
 	}
-	updatecreditbyaction('daylogin', $_G['uid']);
-	checkusergroup($_G['uid']);
+	$rule = updatecreditbyaction('daylogin', $_G['uid']);
+	if(!$rule['updatecredit']) {
+		checkusergroup($_G['uid']);
+	}
 }
 
 function logincheck($username) {
@@ -242,7 +244,7 @@ function crime($fun) {
 function checkfollowfeed() {
 	global $_G;
 
-	if($_G['member']['following'] && $_G['member']['uid']) {
+	if($_G['uid']) {
 		$lastcheckfeed = 0;
 		if(!empty($_G['cookie']['lastcheckfeed'])) {
 			$time = explode('|', $_G['cookie']['lastcheckfeed']);
@@ -253,13 +255,13 @@ function checkfollowfeed() {
 		if(!$lastcheckfeed) {
 			$lastcheckfeed = getuserprofile('lastactivity');
 		}
-		dsetcookie('lastcheckfeed', $_G['member']['uid'].'|'.TIMESTAMP, 31536000);
-		$followuser = C::t('home_follow')->fetch_all_following_by_uid($_G['member']['uid']);
+		dsetcookie('lastcheckfeed', $_G['uid'].'|'.TIMESTAMP, 31536000);
+		$followuser = C::t('home_follow')->fetch_all_following_by_uid($_G['uid']);
 		$uids = array_keys($followuser);
 		if(!empty($uids)) {
 			$count = C::t('home_follow_feed')->count_by_uid_dateline($uids, $lastcheckfeed);
 			if($count) {
-				notification_add($_G['uid'], 'follow', 'member_follow', array('count' => $count, 'from_id'=>$_G['member']['uid'], 'from_idtype' => 'follow'), 1);
+				notification_add($_G['uid'], 'follow', 'member_follow', array('count' => $count, 'from_id'=>$_G['uid'], 'from_idtype' => 'follow'), 1);
 			}
 		}
 	}

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: discuz_process.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: discuz_process.php 28412 2012-02-29 06:14:48Z cnteacher $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -15,11 +15,7 @@ class discuz_process
 {
 	public static function islocked($process, $ttl = 0) {
 		$ttl = $ttl < 1 ? 600 : intval($ttl);
-		if(discuz_process::_status('get', $process)) {
-			return true;
-		} else {
-			return discuz_process::_find($process, $ttl);
-		}
+		return discuz_process::_status('get', $process) || discuz_process::_find($process, $ttl);
 	}
 
 	public static function unlock($process) {
@@ -53,7 +49,8 @@ class discuz_process
 	private static function _cmd($cmd, $name, $ttl = 0) {
 		static $allowmem;
 		if($allowmem === null) {
-			$allowmem = memory('check') == 'memcache';
+			$mc = memory('check');
+			$allowmem = $mc == 'memcache' || $mc == 'redis';
 		}
 		if($allowmem) {
 			return discuz_process::_process_cmd_memory($cmd, $name, $ttl);
@@ -63,7 +60,18 @@ class discuz_process
 	}
 
 	private static function _process_cmd_memory($cmd, $name, $ttl = 0) {
-		return memory($cmd, 'process_lock_'.$name, time(), $ttl);
+		$ret = '';
+		switch ($cmd) {
+			case 'set' :
+				$ret = memory('set', 'process_lock_'.$name, time(), $ttl);
+				break;
+			case 'get' :
+				$ret = memory('get', 'process_lock_'.$name);
+				break;
+			case 'rm' :
+				$ret = memory('rm', 'process_lock_'.$name);
+		}
+		return $ret;
 	}
 
 	private static function _process_cmd_db($cmd, $name, $ttl = 0) {

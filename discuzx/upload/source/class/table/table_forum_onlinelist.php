@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_forum_onlinelist.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_forum_onlinelist.php 27876 2012-02-16 04:28:02Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -28,14 +28,20 @@ class table_forum_onlinelist extends discuz_table
 	}
 
 	public function delete_by_groupid($groupid) {
-		return DB::delete($this->_table, DB::field('groupid', $groupid));
+		$groupid = is_array($groupid) ? array_map('intval', (array)$groupid) : dintval($groupid);
+		if($groupid) {
+			return DB::delete($this->_table, DB::field('groupid', $groupid));
+		}
+		return 0;
 	}
 
 	public function update_by_groupid($groupid, $data) {
-		return DB::update($this->_table, $data, DB::field('groupid', $groupid));
+		$groupid = is_array($groupid) ? array_map('intval', (array)$groupid) : dintval($groupid);
+		if($groupid && $data && is_array($data)) {
+			return DB::update($this->_table, $data, DB::field('groupid', $groupid));
+		}
+		return 0;
 	}
-
-
 }
 
 ?>

@@ -1,6 +1,6 @@
 <div class="bm bml" id="main_messaqge">
 	<div class="bm_h cl">
-		<h1 class="xs2">{lang group_create_new}<!--{if $_G['setting']['groupmod']}-->&nbsp;&nbsp;&nbsp;(需要审核开通)<!--{/if}--></h1>
+		<h1 class="xs2">{lang group_create_new}<!--{if $_G['setting']['groupmod']}-->&nbsp;&nbsp;&nbsp;({lang group_create_mod})<!--{/if}--></h1>
 	</div>
 	<div class="bm_c">
 		<form method="post" autocomplete="off" name="groupform" id="groupform" class="s_clear" onsubmit="checkCategory();ajaxpost('groupform', 'returnmessage4', 'returnmessage4', 'onerror');return false;" action="forum.php?mod=group&action=create">
@@ -41,7 +41,7 @@
 						<th>{lang group_description}:</th>
 						<td>
 							<script type="text/javascript">
-								var allowbbcode = allowimgcode = 1;
+								var allowbbcode = allowimgcode = parsetype = 1;
 								var allowhtml = forumallowhtml = allowsmilies = 0;
 							</script>
 							<script type="text/javascript" src="{$_G[setting][jspath]}bbcode.js?{VERHASH}"></script>

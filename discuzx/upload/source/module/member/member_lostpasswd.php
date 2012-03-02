@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: member_lostpasswd.php 26124 2011-12-02 05:52:24Z zhangguosheng $
+ *      $Id: member_lostpasswd.php 28113 2012-02-22 09:25:55Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -27,10 +27,10 @@ if(submitcheck('lostpwsubmit')) {
 	} else {
 		$emailcount = C::t('common_member')->count_by_email($_GET['email'], 1);
 		if(!$emailcount) {
-			showmessage('抱歉，使用此 Email 的用户不存在，不能使用取回密码功能');
+			showmessage('lostpasswd_email_not_exist');
 		}
 		if($emailcount > 1) {
-			showmessage('抱歉，存在多个使用此 Email 的用户，请填写您需要找回密码的用户名');
+			showmessage('lostpasswd_many_users_use_email');
 		}
 		$member = C::t('common_member')->fetch_by_email($_GET['email'], 1);
 		list($tmp['uid'], , $tmp['email']) = uc_get_user(addslashes($member['username']));

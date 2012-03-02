@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_magic.php 26754 2011-12-22 08:14:22Z zhengqingpeng $
+ *      $Id: function_magic.php 27757 2012-02-14 03:08:15Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -225,7 +225,7 @@ function magic_check_idtype($id, $idtype) {
 	$value = '';
 	$tablename = gettablebyidtype($idtype);
 	if($tablename) {
-		$value = C::t($tablename)->fetch_by_id_idtype($id, $idtype);
+		$value = C::t($tablename)->fetch_by_id_idtype($id);
 		if($value['uid'] != $_G['uid']) {
 			$value = null;
 		}

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: topicadmin_moderate.php 27208 2012-01-11 03:50:58Z zhengqingpeng $
+ *      $Id: topicadmin_moderate.php 27810 2012-02-15 03:51:52Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -73,7 +73,7 @@ switch($frommodcp) {
 		$_G['referer'] = "forum.php?mod=modcp&action=forum&op=recommend".(getgpc('show') ? "&show=getgpc('show')" : '')."&fid=$_G[fid]";
 		break;
 	default:
-		if(in_array('delete', $operations) || in_array('move', $operations) || !strpos($_SERVER['HTTP_REFERER'], 'search.php?mod=forum')) {
+		if(in_array('delete', $operations) || in_array('move', $operations) && !strpos($_SERVER['HTTP_REFERER'], 'search.php?mod=forum')) {
 			$_G['referer'] = 'forum.php?mod=forumdisplay&fid='.$_G['fid'].(!empty($_GET['listextra']) ? '&'.rawurldecode($_GET['listextra']) : '');
 		} else {
 			$_G['referer'] = $_GET['redirect'];
@@ -511,7 +511,10 @@ if(!submitcheck('modsubmit')) {
 									'attachment' => 0,
 									'typeid' => $_GET['threadtypeid']
 								);
-							C::t('forum_thread')->insert($insertdata);
+							$newtid = C::t('forum_thread')->insert($insertdata, true);
+							if($newtid) {
+								C::t('forum_threadclosed')->insert(array('tid' => $thread['tid'], 'redirect' => $newtid), true, true);
+							}
 						}
 					}
 				}

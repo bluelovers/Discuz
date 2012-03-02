@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: mobile.class.php 27575 2012-02-06 07:00:31Z monkey $
+ *      $Id: mobile.class.php 28449 2012-03-01 04:12:13Z monkey $
  */
 
 class mobile_core {
@@ -12,7 +12,7 @@ class mobile_core {
 	function result($result) {
 		global $_G;
 		ob_end_clean();
-		$_G['gzipcompress'] ? ob_start('ob_gzhandler') : ob_start();
+		function_exists('ob_gzhandler') ? ob_start('ob_gzhandler') : ob_start();
 		echo mobile_core::json($result);
 		exit;
 	}
@@ -33,7 +33,9 @@ class mobile_core {
 					if($subkeys) {
 						$return[$key] = mobile_core::getvalues($value, $subkeys);
 					} else {
-						$return[$key] = $value;
+						if(!empty($value) || !empty($_GET['debug']) || (is_numeric($value) && intval($value) === 0 )) {
+							$return[$key] = $value;
+						}
 					}
 				}
 			}
@@ -49,16 +51,16 @@ class mobile_core {
 			'saltkey' => $_G['cookie']['saltkey'],
 			'member_uid' => $_G['member']['uid'],
 			'member_username' => $_G['member']['username'],
+			'groupid' => $_G['groupid'],
 			'formhash' => FORMHASH,
-			'ucenterurl' => $_G['setting']['ucenterurl'],
 			'ismoderator' => $_G['forum']['ismoderator'],
 		);
 		if(!empty($_GET['submodule']) == 'checkpost') {
 			$apifile = 'source/plugin/mobile/api/'.$_GET['version'].'/sub_checkpost.php';
 			if(file_exists($apifile)) {
 				require_once $apifile;
+				$globals = $globals + mobile_api_sub::getvariable();
 			}
-			$globals = $globals + mobile_api_sub::getvariable();
 		}
 		$xml = array(
 			'Version' => '2',
@@ -75,6 +77,7 @@ class mobile_core {
 					$message_result = lang('message', $_G['messageparam'][0], $_G['messageparam'][2]);
 				}
 			}
+			$message_result = strip_tags($message_result);
 			if($_G['messageparam'][4]) {
 				$_G['messageparam'][0] = "custom";
 			}
@@ -83,7 +86,7 @@ class mobile_core {
 			}
 			$xml['Message'] = array("messageval" => $_G['messageparam'][0], "messagestr" => $message_result);
 			if($_GET['mobilemessage']) {
-				$return = mobile_core::json($variables);
+				$return = mobile_core::json($xml);
 				header("HTTP/1.1 301 Moved Permanently");
 				header("Location:discuz://" . $_G['messageparam'][0] . "//" . rawurlencode(diconv($message_result, $_G['charset'], "utf-8")) . ($return ? "//" . rawurlencode($return) : '' ));
 				exit;
@@ -94,7 +97,7 @@ class mobile_core {
 
 }
 
-class plugin_mobile {
+class base_plugin_mobile {
 
 	function common() {
 		if(!defined('IN_MOBILE_API')) {
@@ -108,6 +111,7 @@ class plugin_mobile {
 			$_G['ppp'] = intval($_GET['ppp']);
 		}
 		$_G['setting']['msgforward'] = '';
+		$_G['setting']['cacheindexlife'] = $_G['setting']['cachethreadlife'] = false;
 		if(class_exists('mobile_api', 'common')) {
 			mobile_api::common();
 		}
@@ -117,14 +121,14 @@ class plugin_mobile {
 		if(!defined('IN_MOBILE_API')) {
 			return;
 		}
-		if(class_exists('mobile_api', 'global_mobile')) {
+		if(class_exists('mobile_api', 'output')) {
 			mobile_api::output();
 		}
 	}
 
 }
 
-class plugin_mobile_forum extends plugin_mobile {
+class base_plugin_mobile_forum extends base_plugin_mobile {
 
 	function post_mobile_message($param) {
 		if(!defined('IN_MOBILE_API')) {
@@ -138,7 +142,7 @@ class plugin_mobile_forum extends plugin_mobile {
 
 }
 
-class plugin_mobile_misc extends plugin_mobile {
+class base_plugin_mobile_misc extends base_plugin_mobile {
 
 	function mobile() {
 		global $_G;
@@ -150,7 +154,42 @@ class plugin_mobile_misc extends plugin_mobile {
 				QRcode::png($_G['siteurl'], $qrfile);
 			}
 			define('MOBILE_API_OUTPUT', 1);
+			$_G['disabledwidthauto'] = 1;
 			include template('mobile:mobile');exit;
+		}
+	}
+
+}
+
+class plugin_mobile extends base_plugin_mobile {}
+class plugin_mobile_forum extends base_plugin_mobile_forum {}
+class plugin_mobile_misc extends base_plugin_mobile_misc {}
+class mobileplugin_mobile extends base_plugin_mobile {
+	function global_header_mobile() {
+		$useragent = strtolower($_SERVER['HTTP_USER_AGENT']);
+		if(strpos($useragent, 'iphone') !== -1 || strpos($useragent, 'ios') !== -1) {
+			return lang('plugin/mobile', 'mobile_tip_ios');
+		} elseif(strpos($useragent, 'android') !== -1) {
+			return lang('plugin/mobile', 'mobile_tip_android');
+		} elseif(strpos($useragent, 'windows phone') !== -1) {
+			return lang('plugin/mobile', 'mobile_tip_wp7');
+		}
+	}
+}
+class mobileplugin_mobile_forum extends base_plugin_mobile_forum {}
+class mobileplugin_mobile_misc extends base_plugin_mobile_misc {}
+
+class plugin_mobile_connect extends plugin_mobile {
+
+	function login_mobile_output($param) {
+	}
+
+	function login_mobile_message($param) {
+		if(substr($_GET['referer'], 0, 7) == 'Mobile_') {
+			if($_GET['referer'] == 'Mobile_iOS' || $_GET['referer'] == 'Mobile_Android') {
+				$_GET['mobilemessage'] = 1;
+			}
+			mobile_core::result(mobile_core::variable());
 		}
 	}
 

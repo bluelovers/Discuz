@@ -19,8 +19,7 @@ h1 { font-size: 24px; margin-bottom: 20px; color: #999; }
 <!--{loop $postlist $post}-->
 	<hr noshade size="2" width="100%" color="#808080">
 	<b>{lang author}: </b><!--{if $post['author'] && !$post['anonymous']}-->$post[author]<!--{else}-->{lang anonymous}<!--{/if}-->&nbsp; &nbsp; <b>{lang time}: </b>$post[dateline]
-	<!--{if $post['subject']}--> &nbsp; &nbsp; <b>{lang subject}: </b>$post[subject]<!--{/if}-->
-	<br /><br />
+	<br />
 	<!--{if $_G['adminid'] != 1 && $_G['setting']['bannedmessages'] && (($post['authorid'] && !$userinfo[$post[authorid]]['username']) || ($userinfo[$post[authorid]]['groupid'] == 4 || $userinfo[$post[authorid]]['groupid'] == 5))}-->
 		{lang message_banned}
 	<!--{elseif $_G['adminid'] != 1 && $post['status'] & 1}-->
@@ -28,6 +27,7 @@ h1 { font-size: 24px; margin-bottom: 20px; color: #999; }
 	<!--{elseif $post['first'] && $_G['forum_threadpay']}-->
 		{lang pay_comment}
 	<!--{else}-->
+		<!--{if $post['subject']}--><b>{lang subject}: </b>$post[subject]<br /><!--{/if}-->
 		$post[message]
 		<!--{if $post['imagelist']}-->
 			<!--{echo showattach($post, 1)}-->
@@ -49,6 +49,9 @@ h1 { font-size: 24px; margin-bottom: 20px; color: #999; }
 		<!--{/if}-->
 		<!--{if $post['imagelistthumb']}-->
 			attachimglstshow($post['pid'], <!--{echo intval($_G['setting']['lazyload']), 0, 0}-->);
+		<!--{/if}-->
+		<!--{if !IS_ROBOT && !empty($_G[setting][lazyload])}-->
+			new lazyload();
 		<!--{/if}-->
 	</script>
 	<!--{/if}-->

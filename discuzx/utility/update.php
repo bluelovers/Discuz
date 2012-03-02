@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: update.php 27606 2012-02-07 05:28:26Z monkey $
+ *      $Id: update.php 28531 2012-03-02 05:01:47Z liulanbo $
  */
 
 include_once('../source/class/class_core.php');
@@ -215,7 +215,7 @@ if($_GET['step'] == 'start') {
 	if(!$query = DB::query("SHOW CREATE TABLE ".DB::table($newtable), 'SILENT')) {
 		preg_match("/(CREATE TABLE .+?)\s*(ENGINE|TYPE)\s*\=/is", $newsqls[$i], $maths);
 
-		if(strpos($newtable, 'common_session')) {
+		if(in_array($newtable, array('common_session', 'forum_threaddisablepos', 'common_process'))) {
 			$type = mysql_get_server_info() > '4.1' ? " ENGINE=MEMORY".(empty($config['dbcharset'])?'':" DEFAULT CHARSET=$config[dbcharset]" ): " TYPE=HEAP";
 		} else {
 			$type = mysql_get_server_info() > '4.1' ? " ENGINE=MYISAM".(empty($config['dbcharset'])?'':" DEFAULT CHARSET=$config[dbcharset]" ): " TYPE=MYISAM";
@@ -224,6 +224,7 @@ if($_GET['step'] == 'start') {
 
 		$usql = str_replace("CREATE TABLE IF NOT EXISTS pre_", 'CREATE TABLE IF NOT EXISTS '.$config['tablepre'], $usql);
 		$usql = str_replace("CREATE TABLE pre_", 'CREATE TABLE '.$config['tablepre'], $usql);
+
 		if(!DB::query($usql, 'SILENT')) {
 			show_msg('添加表 '.DB::table($newtable).' 出错,请手工执行以下SQL语句后,再重新运行本升级程序:<br><br>'.dhtmlspecialchars($usql));
 		} else {
@@ -287,13 +288,10 @@ if($_GET['step'] == 'start') {
 		}
 
 		if(!empty($updates)) {
-			DB::query('ALTER TABLE '.DB::table($newtable).' DISABLE KEYS');
 			$usql = "ALTER TABLE ".DB::table($newtable)." ".implode(', ', $updates);
 			if(!DB::query($usql, 'SILENT')) {
-				DB::query('ALTER TABLE '.DB::table($newtable).' ENABLE KEYS');
 				show_msg('升级表 '.DB::table($newtable).' 出错,请手工执行以下升级语句后,再重新运行本升级程序:<br><br><b>升级SQL语句</b>:<div style=\"position:absolute;font-size:11px;font-family:verdana,arial;background:#EBEBEB;padding:0.5em;\">'.dhtmlspecialchars($usql)."</div><br><b>Error</b>: ".DB::error()."<br><b>Errno.</b>: ".DB::errno());
 			} else {
-				DB::query('ALTER TABLE '.DB::table($newtable).' ENABLE KEYS');
 				$msg = '升级表 '.DB::table($newtable).' 完成！';
 			}
 		} else {
@@ -410,6 +408,9 @@ if($_GET['step'] == 'start') {
 		}
 		if(!$settings['activitypp']) {
 			$newsettings['activitypp'] = 8;
+		}
+		if(!$settings['followretainday']) {
+			$newsettings['followretainday'] = 7;
 		}
 		if(!isset($settings['allowpostcomment'])) {
 			$newsettings['allowpostcomment'] = array('1');
@@ -728,10 +729,15 @@ if($_GET['step'] == 'start') {
 					}
 				}
 			}
-			$newsettings['memory'] = array_merge(array('common_member' => 0,'common_member_count' => 0,'common_member_status' => 0,
-											'common_member_profile' => 0,'common_member_field_home' => 0,'common_member_field_forum' => 0,
-											'forum_post' => 1800, 'forum_thread' => 172800, 'forum_thread_forumdisplay' => 300, 'forum_collectionrelated' => 0,
+			unset($memory['forum_post']);
+			$newsettings['memory'] = array_merge(array('common_member' => 0,'common_member_count' => 0,'common_member_status' => 0,'common_member_profile' => 0,
+											'common_member_field_home' => 0,'common_member_field_forum' => 0,'common_member_verify' => 0,
+											'forum_thread' => 172800, 'forum_thread_forumdisplay' => 300, 'forum_collectionrelated' => 0, 'forum_postcache' => 300,
 											'forum_collection' => 300,'home_follow' => 86400, 'forumindex' => 30, 'diyblock' => 300, 'diyblockoutput' => 30), $memory);
+		}
+
+		if(!isset($settings['blockmaxaggregationitem'])) {
+			$newsettings['blockmaxaggregationitem'] = 20000;
 		}
 
 		if(!empty($newsettings)) {
@@ -896,6 +902,7 @@ if($_GET['step'] == 'start') {
 		while($nav = DB::fetch($query)) {
 			$navs[] = $nav;
 		}
+		$navid = DB::result_first("SELECT id FROM ".DB::table('common_nav')." WHERE navtype=0 AND type=0 AND identifier=12");
 		DB::delete('common_nav', "type='0'");
 		DB::delete('common_nav', "name='{hr}'");
 		DB::delete('common_nav', "name='{userpanelarea1}'");
@@ -905,8 +912,22 @@ if($_GET['step'] == 'start') {
 		runquery($a[1]);
 		foreach($navs as $nav) {
 			if($nav['identifier']) {
+				if($nav['identifier'] == 4) {
+					$homestatus = C::t('common_setting')->fetch('homestatus');
+					$nav['available'] = $homestatus ? $nav['available'] : -1;
+					if(!$navid) {
+						DB::update('common_nav', array('available' => $homestatus ? 0 : -1),
+								"navtype IN(0, 2, 3) AND type=0 AND identifier IN('feed', 'blog', 'album', 'share', 'doing', 'wall', '12', '13', '14', '15')");
+						if($homestatus) {
+							DB::update('common_nav', array('available' => 1),
+									"navtype=2 AND type=0 AND identifier IN('feed', 'blog', 'album', 'share', 'doing', 'wall')");
+						}
+						DB::query("REPLACE INTO ".DB::table('common_setting')." VALUES ('homestyle', '1'),('homepagestyle', '1'),('feedstatus', '$homestatus'),('blogstatus', '$homestatus'),('doingstatus', '$homestatus'),('albumstatus', '$homestatus'),('sharestatus', '$homestatus'),('wallstatus', '$homestatus')");
+					}
+				}
 				DB::update('common_nav', array('name' => $nav['name'], 'available' => $nav['available'], 'displayorder' => $nav['displayorder']),
 					"navtype='$nav[navtype]' AND identifier='$nav[identifier]'");
+
 			}
 		}
 
@@ -1370,7 +1391,7 @@ if($_GET['step'] == 'start') {
 				$threadimage = DB::fetch_first("SELECT attachment, remote FROM ".DB::table(getattachtablebytid($row['tid']))." WHERE pid='$row[pid]' AND isimage IN ('1', '-1') ORDER BY width DESC LIMIT 1");
 				if($threadimage['attachment']) {
 					$threadimage = daddslashes($threadimage);
-					$insertsql[] = "('$row[tid]', '$threadimage[attachment]', '$threadimage[remote]')";
+					$insertsql[$row['tid']] = "('$row[tid]', '$threadimage[attachment]', '$threadimage[remote]')";
 				}
 			}
 			if($insertsql) {
@@ -1704,7 +1725,7 @@ if($_GET['step'] == 'start') {
 	dir_clear(ROOT_PATH.'./uc_client/data/cache');
 	savecache('setting', '');
 
-	show_msg('<span id="finalmsg">缓存更新中，请稍候 ...</span><iframe src="../misc.php?mod=initsys&formhash='.formhash().'" style="display:none;" onload="document.getElementById(\'finalmsg\').innerHTML = \'恭喜，数据库结构升级完成！为了数据安全，请删除本文件。\'"></iframe>');
+	show_msg('<span id="finalmsg">缓存更新中，请稍候 ...</span><iframe src="../misc.php?mod=initsys" style="display:none;" onload="document.getElementById(\'finalmsg\').innerHTML = \'恭喜，数据库结构升级完成！为了数据安全，请删除本文件。\'"></iframe>');
 
 }
 

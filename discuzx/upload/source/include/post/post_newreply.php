@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: post_newreply.php 27371 2012-01-19 03:27:36Z monkey $
+ *      $Id: post_newreply.php 28475 2012-03-01 08:16:46Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -100,9 +100,7 @@ if($_G['setting']['commentnumber'] && !empty($_GET['comment'])) {
 			'commentmsg' => cutstr(str_replace(array('[b]', '[/b]', '[/color]'), '', preg_replace("/\[color=([#\w]+?)\]/i", "", $comment)), 200)
 		));
 	}
-	if($_G['setting']['heatthread']['type'] == 2) {
-		update_threadpartake($post['tid']);
-	}
+	update_threadpartake($post['tid']);
 	$pcid = C::t('forum_postcomment')->fetch_standpoint_by_pid($_GET['pid']);
 	$pcid = $pcid['id'];
 	if(!empty($_G['uid']) && $_GET['commentitem']) {
@@ -135,7 +133,6 @@ if($_G['setting']['commentnumber'] && !empty($_GET['comment'])) {
 			));
 		}
 	}
-	C::t('forum_postcomment')->update($pcid, array('dateline' => TIMESTAMP + 1));
 	C::t('forum_postcache')->delete($post['pid']);
 	showmessage('comment_add_succeed', "forum.php?mod=viewthread&tid=$post[tid]&pid=$post[pid]&page=$_GET[page]&extra=$extra#pid$post[pid]", array('tid' => $post['tid'], 'pid' => $post['pid']));
 }
@@ -150,7 +147,7 @@ if(getstatus($thread['status'], 3)) {
 	if($rushinfo['creditlimit'] != -996) {
 		$checkcreditsvalue = $_G['setting']['creditstransextra'][11] ? getuserprofile('extcredits'.$_G['setting']['creditstransextra'][11]) : $_G['member']['credits'];
 		if($checkcreditsvalue < $rushinfo['creditlimit']) {
-			$creditlimit_title = $_G['setting']['creditstransextra'][11] ? $_G['setting']['extcredits'][$_G['setting']['creditstransextra'][11]]['title'] : '×Ü»ý·Ö';
+			$creditlimit_title = $_G['setting']['creditstransextra'][11] ? $_G['setting']['extcredits'][$_G['setting']['creditstransextra'][11]]['title'] : lang('forum/misc', 'credit_total');
 			showmessage('post_rushreply_creditlimit', '', array('creditlimit_title' => $creditlimit_title, 'creditlimit' => $rushinfo['creditlimit']));
 		}
 	}
@@ -335,16 +332,7 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 
 	$attentionon = empty($_GET['attention_add']) ? 0 : 1;
 	$attentionoff = empty($attention_remove) ? 0 : 1;
-
-	if($thread['lastposter'] != $_G['member']['username'] && $_G['uid']) {
-		if($_G['setting']['heatthread']['type'] == 1 && $_G['setting']['heatthread']['reply']) {
-			$userreplies = C::t('forum_post')->count_by_tid_authorid($_G['tid'], $_G['uid']);
-			$thread['heats'] += round($_G['setting']['heatthread']['reply'] * pow(0.8, $userreplies));
-			C::t('forum_thread')->update($_G['tid'], array('heats' => $thread['heats']), true);
-		} elseif($_G['setting']['heatthread']['type'] == 2) {
-			update_threadpartake($_G['tid']);
-		}
-	}
+	$heatthreadset = update_threadpartake($_G['tid'], true);
 	if($_G['group']['allowat']) {
 		$atlist = $atlist_tmp = $ateduids = array();
 		preg_match_all("/@([^\r\n]*?)\s/i", $message.' ', $atlist_tmp);
@@ -439,13 +427,13 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 		}
 		set_atlist_cookie(array_keys($atlist));
 	}
+	$updatethreaddata = $heatthreadset ? $heatthreadset : array();
 	$postionid = C::t('forum_post')->fetch_maxposition_by_tid($thread['posttableid'], $_G['tid']);
-	C::t('forum_thread')->update($_G['tid'], array('maxposition' => $postionid));
-
+	$updatethreaddata[] = DB::field('maxposition', $postionid);
 	if(getstatus($thread['status'], 3) && $postionid) {
 		$rushstopfloor = $rushinfo['stopfloor'];
 		if($rushstopfloor > 0 && $thread['closed'] == 0 && $postionid >= $rushstopfloor) {
-			C::t('forum_thread')->update($_G['tid'], array('closed' => 1), true);
+			$updatethreaddata[] = 'closed=1';
 		}
 	}
 	useractionlog($_G['uid'], 'pid');
@@ -507,7 +495,7 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 		));
 	}
 	$feedid = 0;
-	if(!empty($_GET['adddynamic']) && !$isanonymous) {
+	if(helper_access::check_module('follow') && !empty($_GET['adddynamic']) && !$isanonymous) {
 		require_once libfile('function/discuzcode');
 		require_once libfile('function/followcode');
 		$feedcontent = C::t('forum_threadpreview')->count_by_tid($thread['tid']);
@@ -528,7 +516,7 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 			'uid' => $_G['uid'],
 			'username' => $_G['username'],
 			'tid' => $thread['tid'],
-			'note' => cutstr($message, 140),
+			'note' => cutstr(followcode($message, $thread['tid'], $pid, 0, false), 140),
 			'dateline' => TIMESTAMP
 		);
 		$feedid = C::t('home_follow_feed')->insert($followfeed, true);
@@ -551,7 +539,7 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 				if($rand_replycredit) {
 					updatemembercount($_G['uid'], array($replycredit_rule['extcreditstype'] => $replycredit_rule['extcredits']), 1, 'RCA', $_G[tid]);
 					C::t('forum_post')->update('tid:'.$_G['tid'], $pid, array('replycredit' => $replycredit_rule['extcredits']));
-					C::t('forum_thread')->update($_G['tid'], array('replycredit' => $thread['replycredit'] - $replycredit_rule['extcredits']));
+					$updatethreaddata[] = DB::field('replycredit', $thread['replycredit'] - $replycredit_rule['extcredits']);
 				}
 			}
 		}
@@ -637,6 +625,9 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 	if($modnewreplies) {
 		updatemoderate('pid', $pid);
 		unset($param['pid']);
+		if($updatethreaddata) {
+			C::t('forum_thread')->update($_G['tid'], $updatethreaddata, false, false, 0, true);
+		}
 		C::t('forum_forum')->update_forum_counter($_G['fid'], 0, 0, 1, 1);
 		$url = empty($_POST['portal_referer']) ? ("forum.php?mod=viewthread&tid={$thread[tid]}") :  $_POST['portal_referer'];
 		manage_addnotify('verifypost');
@@ -657,8 +648,7 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 			C::t('forum_threadaddviews')->update($_G['tid'], array('addviews' => 0));
 			$fieldarr['views'] = $row['addviews'];
 		}
-		C::t('forum_thread')->increase($_G['tid'], $fieldarr);
-
+		$updatethreaddata = array_merge($updatethreaddata, C::t('forum_thread')->increase($_G['tid'], $fieldarr, false, 0, true));
 		if($thread['displayorder'] != -4) {
 			updatepostcredits('+', $_G['uid'], 'reply', $_G['fid']);
 			if($_G['forum']['status'] == 3) {
@@ -757,6 +747,9 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 
 		$page = getstatus($thread['status'], 4) ? 1 : @ceil(($thread['special'] ? $thread['replies'] + 1 : $thread['replies'] + 2) / $_G['ppp']);
 
+		if($updatethreaddata) {
+			C::t('forum_thread')->update($_G['tid'], $updatethreaddata, false, false, 0, true);
+		}
 		if($special == 2 && !empty($_GET['continueadd'])) {
 			dheader("location: forum.php?mod=post&action=reply&fid={$_G[forum][fid]}&firstpid=$pid&tid={$thread[tid]}&addtrade=yes");
 		} else {

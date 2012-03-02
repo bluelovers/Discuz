@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_portal_article_trash.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_portal_article_trash.php 27836 2012-02-15 08:14:02Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -24,8 +24,9 @@ class table_portal_article_trash extends discuz_table
 	public function insert_batch($inserts) {
 		$sql = array();
 		foreach($inserts as $value) {
-			$value['aid'] = dintval($value['aid']);
-			$sql[] = "('$value[aid]', '".addslashes($value['content'])."')";
+			if(($value['aid'] = dintval($value['aid']))) {
+				$sql[] = "('$value[aid]', '".addslashes($value['content'])."')";
+			}
 		}
 		if($sql) {
 			DB::query('INSERT INTO '.DB::table($this->_table)."(`aid`, `content`) VALUES ".implode(', ', $sql));

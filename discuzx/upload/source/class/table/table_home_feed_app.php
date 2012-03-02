@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_home_feed_app.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_home_feed_app.php 27903 2012-02-16 08:06:10Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -25,6 +25,7 @@ class table_home_feed_app extends discuz_table
 		$parameter = array($this->_table);
 		$wherearr = array();
 		if($uids !== null) {
+			$uids = dintval($uids, true);
 			$wherearr[] = is_array($uids) ? 'uid IN(%n)' : 'uid=%d';
 			$parameter[] = $uids;
 		}
@@ -41,7 +42,11 @@ class table_home_feed_app extends discuz_table
 	}
 
 	public function delete_by_dateline($dateline) {
-		return DB::delete($this->_table, DB::field('dateline', $dateline, '<'));
+		$dateline = dintval($dateline);
+		if($dateline) {
+			return DB::delete($this->_table, DB::field('dateline', $dateline, '<'));
+		}
+		return 0;
 	}
 
 }

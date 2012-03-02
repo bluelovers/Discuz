@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_session.php 27555 2012-02-06 02:48:49Z zhangguosheng $
+ *      $Id: table_common_session.php 28051 2012-02-21 10:36:56Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -22,6 +22,9 @@ class table_common_session extends discuz_table
 	}
 
 	public function fetch($sid, $ip = false, $uid = false) {
+		if(empty($sid)) {
+			return array();
+		}
 		$this->checkpk();
 		$session = parent::fetch($sid);
 		if($session && $ip !== false && $ip != "{$session['ip1']}.{$session['ip2']}.{$session['ip3']}.{$session['ip4']}") {
@@ -45,9 +48,9 @@ class table_common_session extends discuz_table
 		} elseif($invisible === 2) {
 			$sql[] = 'invisible = 0';
 		}
-
-		$sql = 'SELECT * FROM %t WHERE '.implode(' AND ', $sql).' ORDER BY lastactivity DESC'.DB::limit($start, $limit);
-		return (DB::fetch_all($sql, array($this->_table), $this->_pk));
+		$wheresql = !empty($sql) && is_array($sql) ? ' WHERE '.implode(' AND ', $sql) : '';
+		$sql = 'SELECT * FROM %t '.$wheresql.' ORDER BY lastactivity DESC'.DB::limit($start, $limit);
+		return DB::fetch_all($sql, array($this->_table), $this->_pk);
 	}
 
 	public function count_invisible($type = 1) {
@@ -61,16 +64,17 @@ class table_common_session extends discuz_table
 	}
 
 	public function delete_by_session($session, $onlinehold, $guestspan) {
+		if(!empty($session) && is_array($session)) {
+			$onlinehold = time() - $onlinehold;
+			$guestspan = time() - $guestspan;
+			$session = daddslashes($session);
 
-		$onlinehold = time() - $onlinehold;
-		$guestspan = time() - $guestspan;
-		$session = daddslashes($session);
-
-		$condition = " sid='{$session[sid]}' ";
-		$condition .= " OR lastactivity<$onlinehold ";
-		$condition .= " OR (uid='0' AND ip1='{$session['ip1']}' AND ip2='{$session['ip2']}' AND ip3='{$session['ip3']}' AND ip4='{$session['ip4']}' AND lastactivity>$guestspan) ";
-		$condition .= $session['uid'] ? " OR (uid='{$session['uid']}') " : '';
-		DB::delete('common_session', $condition);
+			$condition = " sid='{$session[sid]}' ";
+			$condition .= " OR lastactivity<$onlinehold ";
+			$condition .= " OR (uid='0' AND ip1='{$session['ip1']}' AND ip2='{$session['ip2']}' AND ip3='{$session['ip3']}' AND ip4='{$session['ip4']}' AND lastactivity>$guestspan) ";
+			$condition .= $session['uid'] ? " OR (uid='{$session['uid']}') " : '';
+			DB::delete('common_session', $condition);
+		}
 	}
 
 	public function fetch_by_uid($uid) {
@@ -102,15 +106,18 @@ class table_common_session extends discuz_table
 	}
 
 	public function count_by_fid($fid) {
-		return $fid = dintval($fid) ? DB::result_first('SELECT COUNT(*) FROM '.DB::table('common_session')." WHERE uid>'0' AND fid='$fid' AND invisible='0'") : 0;
+		return ($fid = dintval($fid)) ? DB::result_first('SELECT COUNT(*) FROM '.DB::table('common_session')." WHERE uid>'0' AND fid='$fid' AND invisible='0'") : 0;
 	}
 
 	public function fetch_all_by_fid($fid, $limit = 12) {
-		return $fid = dintval($fid) ? DB::fetch_all('SELECT uid, groupid, username, invisible, lastactivity FROM '.DB::table('common_session')." WHERE uid>'0' AND fid='$fid' AND invisible='0' ORDER BY lastactivity DESC".DB::limit($limit)) : array();
+		return ($fid = dintval($fid)) ? DB::fetch_all('SELECT uid, groupid, username, invisible, lastactivity FROM '.DB::table('common_session')." WHERE uid>'0' AND fid='$fid' AND invisible='0' ORDER BY lastactivity DESC".DB::limit($limit)) : array();
 	}
 
 	public function update_by_uid($uid, $data){
-		return DB::update($this->_table, $data, DB::field('uid', $uid));
+		if(($uid = dintval($uid)) && !empty($data) && is_array($data)) {
+			return DB::update($this->_table, $data, DB::field('uid', $uid));
+		}
+		return 0;
 	}
 
 	public function count_by_ip($ip) {

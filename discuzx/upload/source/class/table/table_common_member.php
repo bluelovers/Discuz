@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_member.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_common_member.php 28524 2012-03-02 03:48:52Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -32,17 +32,20 @@ class table_common_member extends discuz_table_archive
 
 	public function update_by_groupid($groupid, $data) {
 		$uids = array();
-		if($this->_allowmem) {
+		$groupid = dintval($groupid);
+		if($groupid && $this->_allowmem) {
 			$uids = array_keys($this->fetch_all_by_groupid($groupid));
 		}
-		DB::update($this->_table, $data, DB::field('groupid', $groupid), 'UNBUFFERED');
+		if($groupid && !empty($data) && is_array($data)) {
+			DB::update($this->_table, $data, DB::field('groupid', $groupid), 'UNBUFFERED');
+		}
 		if($uids) {
 			$this->update_cache($uids, $data);
 		}
 	}
 
 	public function increase($uids, $setarr) {
-		$uids = array_map('dintval', (array)$uids);
+		$uids = dintval((array)$uids, true);
 		$sql = array();
 		$allowkey = array('credits', 'newpm', 'newprompt');
 		foreach($setarr as $key => $value) {
@@ -98,6 +101,7 @@ class table_common_member extends discuz_table_archive
 
 	public function fetch_all_by_adminid($adminids) {
 		$users = array();
+		$adminids = dintval((array)$adminids, true);
 		if($adminids) {
 			$users = DB::fetch_all('SELECT * FROM %t WHERE adminid IN (%n) ORDER BY adminid, uid', array($this->_table, (array)$adminids), $this->_pk);
 		}
@@ -106,7 +110,7 @@ class table_common_member extends discuz_table_archive
 
 	public function fetch_all_username_by_uid($uids) {
 		$users = array();
-		if(!empty($uids)) {
+		if(($uids = dintval($uids, true))) {
 			foreach($this->fetch_all($uids) as $uid => $value) {
 				$users[$uid] = $value['username'];
 			}
@@ -131,23 +135,29 @@ class table_common_member extends discuz_table_archive
 	}
 
 	public function fetch_all_by_allowadmincp($val, $glue = '=') {
-		return DB::fetch_all('SELECT * FROM '.DB::table($this->_table).' WHERE '.DB::field('allowadmincp', $val, $glue), NULL, 'uid');
+		return DB::fetch_all('SELECT * FROM '.DB::table($this->_table).' WHERE '.DB::field('allowadmincp', intval($val), $glue), NULL, 'uid');
 	}
 
 	public function update_admincp_manage($uids) {
-		$data = DB::query('UPDATE '.DB::table($this->_table).' SET allowadmincp=allowadmincp | 1 WHERE uid IN ('.dimplode($uids).')');
-		$this->reset_cache($uids);
-		return $data;
+		if(($uids = dintval($uids, true))) {
+			$data = DB::query('UPDATE '.DB::table($this->_table).' SET allowadmincp=allowadmincp | 1 WHERE uid IN ('.dimplode($uids).')');
+			$this->reset_cache($uids);
+			return $data;
+		}
+		return false;
 	}
 
 	public function clean_admincp_manage($uids) {
-		$data = DB::query('UPDATE '.DB::table($this->_table).' SET allowadmincp=allowadmincp & 0xFE WHERE uid IN ('.dimplode($uids).')');
-		$this->reset_cache($uids);
-		return $data;
+		if(($uids = dintval($uids, true))) {
+			$data = DB::query('UPDATE '.DB::table($this->_table).' SET allowadmincp=allowadmincp & 0xFE WHERE uid IN ('.dimplode($uids).')');
+			$this->reset_cache($uids);
+			return $data;
+		}
+		return false;
 	}
 
 	public function fetch_all_ban_by_groupexpiry($timestamp) {
-		return $timestamp = intval($timestamp) ? DB::fetch_all("SELECT uid, groupid, credits FROM ".DB::table($this->_table)." WHERE groupid IN ('4', '5') AND groupexpiry>'0' AND groupexpiry<'$timestamp'") : array();
+		return ($timestamp = intval($timestamp)) ? DB::fetch_all("SELECT uid, groupid, credits FROM ".DB::table($this->_table)." WHERE groupid IN ('4', '5') AND groupexpiry>'0' AND groupexpiry<'$timestamp'") : array();
 	}
 
 	public function count($fetch_archive = 1) {
@@ -184,10 +194,10 @@ class table_common_member extends discuz_table_archive
 		return $count;
 	}
 
-	public function fetch_all_by_like_username($username, $start = 0, $limit = 0, $field = '', $sort = '') {
+	public function fetch_all_by_like_username($username, $start = 0, $limit = 0) {
 		$data = array();
 		if($username) {
-			$data = DB::fetch_all('SELECT * FROM %t WHERE username LIKE %s'.($field ? ' ORDER BY '.DB::order($field, $sort) : '').DB::limit($start, $limit), array($this->_table, stripsearchkey($username).'%'), 'uid');
+			$data = DB::fetch_all('SELECT * FROM %t WHERE username LIKE %s'.DB::limit($start, $limit), array($this->_table, stripsearchkey($username).'%'), 'uid');
 		}
 		return $data;
 	}
@@ -232,14 +242,17 @@ class table_common_member extends discuz_table_archive
 	}
 
 	public function delete_no_validate($uids) {
-		$delnum = $this->delete($uids);
-		C::t('common_member_field_forum')->delete($uids);
-		C::t('common_member_field_home')->delete($uids);
-		C::t('common_member_status')->delete($uids);
-		C::t('common_member_count')->delete($uids);
-		C::t('common_member_profile')->delete($uids);
-		C::t('common_member_validate')->delete($uids);
-		return $delnum;
+		if(($uids = dintval($uids, true))) {
+			$delnum = $this->delete($uids);
+			C::t('common_member_field_forum')->delete($uids);
+			C::t('common_member_field_home')->delete($uids);
+			C::t('common_member_status')->delete($uids);
+			C::t('common_member_count')->delete($uids);
+			C::t('common_member_profile')->delete($uids);
+			C::t('common_member_validate')->delete($uids);
+			return $delnum;
+		}
+		return false;
 	}
 
 	public function insert($uid, $username, $password, $email, $ip, $groupid, $extdata, $adminid = 0) {
@@ -249,9 +262,9 @@ class table_common_member extends discuz_table_archive
 			$profile['uid'] = $uid;
 			$base = array(
 				'uid' => $uid,
-				'username' => $username,
-				'password' => $password,
-				'email' => $email,
+				'username' => (string)$username,
+				'password' => (string)$password,
+				'email' => (string)$email,
 				'adminid' => intval($adminid),
 				'groupid' => intval($groupid),
 				'regdate' => TIMESTAMP,
@@ -260,8 +273,8 @@ class table_common_member extends discuz_table_archive
 			);
 			$status = array(
 				'uid' => $uid,
-				'regip' => $ip,
-				'lastip' => $ip,
+				'regip' => (string)$ip,
+				'lastip' => (string)$ip,
 				'lastvisit' => TIMESTAMP,
 				'lastactivity' => TIMESTAMP,
 				'lastpost' => 0,
@@ -291,7 +304,7 @@ class table_common_member extends discuz_table_archive
 
 	public function delete($val, $unbuffered = false) {
 		$ret = false;
-		if($val) {
+		if(($val = dintval($val, true))) {
 			$ret = parent::delete($val, $unbuffered);
 			if($this->_allowmem) {
 				$data = ($data = memory('get', 'deleteuids')) === false ? array() : $data;
@@ -310,48 +323,57 @@ class table_common_member extends discuz_table_archive
 	}
 
 	public function split($splitnum, $iscron = false) {
-		loadcache(array('membersplitstep', 'membersplitdata'));
-		if(getglobal('cache/membersplitstep')) {
-			return 1;
-		}
+		loadcache('membersplitdata');
 		@set_time_limit(0);
 		discuz_database_safecheck::setconfigstatus(0);
 		$dateline = TIMESTAMP - 7776000;//60*60*24*90
-		$zombie = DB::result_first('SELECT mc.uid FROM %t mc, %t ms WHERE mc.posts<5 AND ms.lastvisit<%d AND ms.uid=mc.uid LIMIT 1', array('common_member_count', 'common_member_status', $dateline));
 		$temptablename = DB::table('common_member_temp___');
+		if(!DB::fetch_first("SHOW TABLES LIKE '$temptablename'")) {
+			DB::query("CREATE TABLE $temptablename (`uid` int(10) NOT NULL DEFAULT 0,PRIMARY KEY (`uid`)) ENGINE=MYISAM;");
+		}
 		$splitnum = max(1, intval($splitnum));
+		if(!DB::result_first('SELECT COUNT(*) FROM '.$temptablename)) {
+			DB::query('INSERT INTO '.$temptablename.' (`uid`) SELECT ms.uid AS uid FROM %t mc, %t ms WHERE mc.posts<5 AND ms.lastvisit<%d AND mc.uid=ms.uid ORDER BY ms.lastvisit LIMIT %d', array('common_member_count', 'common_member_status', $dateline, $splitnum));
+		}
 
-		if($zombie) {
-			savecache('membersplitstep', 1);
-			DB::query('DROP TABLE IF EXISTS '.$temptablename.'');
-			DB::query('CREATE TABLE '.$temptablename.' ENGINE=MEMORY SELECT ms.uid AS uid FROM %t mc, %t ms WHERE mc.posts<5 AND ms.lastvisit<%d AND mc.uid=ms.uid ORDER BY ms.lastvisit LIMIT %d', array('common_member_count', 'common_member_status', $dateline, $splitnum));
+		if(DB::result_first('SELECT COUNT(*) FROM '.$temptablename)) {
 
 
 			if(!$iscron && getglobal('setting/memberspliting') === null) {
 				$this->switch_keys('disable');
 			}
-			$movesql = 'INSERT INTO %t SELECT * FROM %t WHERE uid IN (SELECT uid FROM '.$temptablename.')';
+			$movesql = 'REPLACE INTO %t SELECT * FROM %t WHERE uid IN (SELECT uid FROM '.$temptablename.')';
 			$deletesql = 'DELETE FROM %t WHERE uid IN (SELECT uid FROM '.$temptablename.')';
-			DB::query($movesql, array('common_member_archive', 'common_member'), false, true);
-			DB::query($deletesql, array('common_member'), false, true);
-			DB::query($movesql, array('common_member_profile_archive', 'common_member_profile'), false, true);
-			DB::query($deletesql, array('common_member_profile'), false, true);
-			DB::query($movesql, array('common_member_field_forum_archive', 'common_member_field_forum'), false, true);
-			DB::query($deletesql, array('common_member_field_forum'), false, true);
-			DB::query($movesql, array('common_member_field_home_archive', 'common_member_field_home'), false, true);
-			DB::query($deletesql, array('common_member_field_home'), false, true);
-			DB::query($movesql, array('common_member_status_archive', 'common_member_status'), false, true);
-			DB::query($deletesql, array('common_member_status'), false, true);
-			DB::query($movesql, array('common_member_count_archive', 'common_member_count'), false, true);
-			DB::query($deletesql, array('common_member_count'), false, true);
+			if(DB::query($movesql, array('common_member_archive', 'common_member'), false, true)) {
+				DB::query($deletesql, array('common_member'), false, true);
+			}
+			if(DB::query($movesql, array('common_member_profile_archive', 'common_member_profile'), false, true)) {
+				DB::query($deletesql, array('common_member_profile'), false, true);
+			}
+			if(DB::query($movesql, array('common_member_field_forum_archive', 'common_member_field_forum'), false, true)) {
+				DB::query($deletesql, array('common_member_field_forum'), false, true);
+			}
+			if(DB::query($movesql, array('common_member_field_home_archive', 'common_member_field_home'), false, true)) {
+				DB::query($deletesql, array('common_member_field_home'), false, true);
+			}
+			if(DB::query($movesql, array('common_member_status_archive', 'common_member_status'), false, true)) {
+				DB::query($deletesql, array('common_member_status'), false, true);
+			}
+			if(DB::query($movesql, array('common_member_count_archive', 'common_member_count'), false, true)) {
+				DB::query($deletesql, array('common_member_count'), false, true);
+			}
 
 			DB::query('DROP TABLE '.$temptablename);
-			savecache('membersplitstep', 0);
 			$membersplitdata = getglobal('cache/membersplitdata');
-			savecache('membersplitdata', array('membercount' => $membersplitdata['membercount'], 'zombiecount' => $membersplitdata['zombiecount'] - $splitnum, 'dateline' => TIMESTAMP));
+			$zombiecount = $membersplitdata['zombiecount'] - $splitnum;
+			if($zombiecount < 0) {
+				$zombiecount = 0;
+			}
+			savecache('membersplitdata', array('membercount' => $membersplitdata['membercount'], 'zombiecount' => $zombiecount, 'dateline' => TIMESTAMP));
 			C::t('common_setting')->delete('memberspliting');
 			return true;
 		} else {
+			DB::query('DROP TABLE '.$temptablename);
 			if(!$iscron) {
 				$this->switch_keys('enable');
 				C::t('common_member_profile')->optimize();
@@ -363,10 +385,6 @@ class table_common_member extends discuz_table_archive
 	}
 
 	public function switch_keys($type) {
-		$alltable = array('common_member', 'common_member_count', 'common_member_status',
-					'common_member_profile', 'common_member_field_home', 'common_member_field_forum',
-					'common_member_archive', 'common_member_count_archive', 'common_member_status_archive',
-					'common_member_profile_archive', 'common_member_field_home_archive', 'common_member_field_forum_archive');
 		if($type === 'disable') {
 			$type = 'DISABLE';
 			C::t('common_setting')->update_batch(array('memberspliting'=>1, 'membersplit'=>1));
@@ -375,9 +393,6 @@ class table_common_member extends discuz_table_archive
 			C::t('common_setting')->delete('memberspliting');
 		}
 
-		foreach($alltable as $tablename) {
-			DB::query('ALTER TABLE %t '.$type.' KEYS', array($tablename));
-		}
 		require_once libfile('function/cache');
 		updatecache('setting');
 	}
@@ -473,6 +488,13 @@ class table_common_member extends discuz_table_archive
 
 	}
 
+	public function max_uid() {
+		return DB::result_first('SELECT MAX(uid) FROM %t', array($this->_table));
+	}
+
+	public function range_by_uid($from, $limit) {
+		return DB::fetch_all('SELECT * FROM %t WHERE uid > %d ORDER BY uid LIMIT %d', array($this->_table, $from, $limit), $this->_pk);
+	}
 }
 
 ?>

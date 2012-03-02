@@ -109,7 +109,7 @@ function checkreasonlen() {
 <span id="fastcreatereturn"></span>
 <!--{if $reamincreatenum > 0 && count($allowcollections) <= 0}-->
 <script>
-var random = {echo TIMESTAMP};
+var random = <!--{echo TIMESTAMP}-->;
 requirecreate = true;
 $("createRemainTips").style.display='none';
 $("createbutton").style.display='none';

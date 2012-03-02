@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: Site.php 25828 2011-11-23 10:50:40Z zhengqingpeng $
+ *      $Id: Site.php 27899 2012-02-16 07:45:26Z wangjinghui $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -24,15 +24,21 @@ class Cloud_Service_Server_Site extends Cloud_Service_Server_Restful {
 		return self::$_instance;
 	}
 
-	public function onSiteGetAllUsers($from, $userNum, $friendNum = 2000, $isExtra) {
-		$totalNum = C::t('common_member')->count();
+	public function onSiteGetAllUsers($from, $userNum, $friendNum = 500, $isExtra) {
 
-		$spaces = C::t('common_member')->range($from, $userNum);
-		$uIds = array_keys($spaces);
-		$users = $this->getUsers($uIds, $spaces, true, $isExtra, true, $friendNum, true);
-		$result = array('totalNum' => $totalNum,
-				'users' => $users
-				);
+		$result = array();
+		if ($userNum <= 0) {
+			$totalNum = C::t('common_member')->count();
+			$maxUId = C::t('common_member')->max_uid();
+			$result['totalNum'] = $totalNum;
+			$result['maxUId'] = $maxUId;
+		} else {
+			$spaces = C::t('common_member')->range_by_uid($from, $userNum);
+			$uIds = array_keys($spaces);
+			$users = $this->getUsers($uIds, $spaces, true, $isExtra, true, $friendNum, true);
+			$result['users'] = $users;
+		}
+
 		return $result;
 	}
 

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: memory_driver_apc.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: memory_driver_apc.php 27635 2012-02-08 06:38:31Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -20,6 +20,10 @@ class memory_driver_apc
 
 	public function get($key) {
 		return apc_fetch($key);
+	}
+
+	public function getMulti($keys) {
+		return apc_fetch($keys);
 	}
 
 	public function set($key, $value, $ttl = 0) {

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: thread_trade.php 26846 2011-12-26 05:14:21Z monkey $
+ *      $Id: thread_trade.php 28348 2012-02-28 06:16:29Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -95,7 +95,7 @@ if(empty($_GET['do']) || $_GET['do'] == 'tradeinfo') {
 
 		}
 
-		if($_G['forum_attachpids']) {
+		if($_G['forum_attachpids'] && !defined('IN_ARCHIVER')) {
 			require_once libfile('function/attachment');
 			parseattach($_G['forum_attachpids'], $_G['forum_attachtags'], $postlist, array($trade['aid']));
 		}

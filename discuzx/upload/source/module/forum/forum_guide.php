@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_guide.php 27539 2012-02-03 07:24:21Z liulanbo $
+ *      $Id: forum_guide.php 28388 2012-02-28 10:23:30Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -120,7 +120,8 @@ if($view != 'index') {
 
 loadcache('stamps');
 $currentview[$view] = 'class="xw1 a"';
-$navigation = ' <em>&rsaquo;</em> µ¼¶Á';
+
+$navigation = $view != 'index' ? ' <em>&rsaquo;</em> <a href="forum.php?mod=guide&view='.$view.'">'.$lang['guide_'.$view].'</a>' : '';
 include template('forum/guide');
 
 function get_guide_list($view, $start = 0, $num = 50, $again = 0) {
@@ -165,7 +166,7 @@ function get_guide_list($view, $start = 0, $num = 50, $again = 0) {
 	$query = C::t('forum_thread')->fetch_all_for_guide($view, $limittid, $tids, $_G['setting']['heatthread']['guidelimit'], $dateline);
 	$n = 0;
 	foreach($query as $thread) {
-		if(empty($tids) && !$thread['isgroup'] && !in_array($thread['fid'], $fids)) {
+		if(empty($tids) && ($thread['isgroup'] || !in_array($thread['fid'], $fids))) {
 			continue;
 		}
 		if($thread['displayorder'] < 0) {
@@ -273,6 +274,7 @@ function get_my_threads($viewtype, $fid = 0, $filter = '', $searchkey = '', $sta
 			$value['views'] = $tids[$value['tid']]['views'];
 			$value['lastposter'] = $tids[$value['tid']]['lastposter'];
 			$value['lastpost'] = $tids[$value['tid']]['lastpost'];
+			$value['icon'] = $tids[$value['tid']]['icon'];
 			$value['tid'] = $pids[$value['pid']]['tid'];
 
 			$fids[] = $value['fid'];
@@ -304,7 +306,7 @@ function get_my_threads($viewtype, $fid = 0, $filter = '', $searchkey = '', $sta
 			$closed = 0;
 		}
 		require_once libfile('function/post');
-		$posts = C::t('forum_post')->fetch_all_by_authorid(0, $_G['uid'], true, 'DESC', $start, $perpage, null, $invisible, $fid);
+		$posts = C::t('forum_post')->fetch_all_by_authorid(0, $_G['uid'], true, 'DESC', $start, $perpage, null, $invisible, $fid, $followfid);
 		$listcount = count($posts);
 		foreach($posts as $pid => $post) {
 			$tids[$post['tid']][] = $pid;
@@ -327,7 +329,11 @@ function get_my_threads($viewtype, $fid = 0, $filter = '', $searchkey = '', $sta
 					$forumnames[$fid] = $val;
 				}
 			}
-			$list = &$threads;
+			$list = array();
+			foreach($tids as $key => $val) {
+				$list[$key] = $threads[$key];
+			}
+			unset($threads);
 		}
 	}
 	$multi = simplepage($listcount, $perpage, $_G['page'], $theurl);
@@ -437,7 +443,7 @@ function update_guide_rsscache($type, $perpage) {
 			'subject'=>$thread['subject'],
 			'description'=>$thread['description'],
 			'guidetype'=>$type
-		));
+		), false, true);
 	}
 	discuz_process::unlock($processname);
 	return true;

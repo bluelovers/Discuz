@@ -4,14 +4,10 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_template.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: lang_template.php 28113 2012-02-22 09:25:55Z svn_project_zhangjie $
  *
  *      This file is automatically generate
  */
-
-if(!defined('IN_DISCUZ')) {
-	exit('Access Denied');
-}
 
 $lang = array (
   'credits' => '积分',
@@ -41,12 +37,12 @@ $lang = array (
   'choose_please' => '请选择',
   'create' => '创建',
   'group_category' => '所属分类',
+  'group_create_mod' => '需要审核开通',
   'group_create_new' => '创建新{$_G[setting][navs][3][navname]}',
   'group_create_selete_categroy' => '请选择{$_G[setting][navs][3][navname]}分类',
-  'group_description_preview' => '预览',
   'group_description' => '{$_G[setting][navs][3][navname]}简介',
+  'group_description_preview' => '预览',
   'group_name' => '{$_G[setting][navs][3][navname]}名称',
-  'option_required' => '必选项',
   'anonymous' => '匿名',
   'author' => '作者',
   'click_to_readmore' => '点击查看更多话题',
@@ -103,8 +99,8 @@ $lang = array (
   'group_icon' => '{$_G[setting][navs][3][navname]}图标',
   'group_icon_resize' => '自动缩略成 48 X 48 像素大小的图片',
   'group_image' => '{$_G[setting][navs][3][navname]}顶部图片',
-  'group_image_filesize_limit' => '文件小于 $_G[setting][group_imgsizelimit] KB',
   'group_image_filesize_advise' => '建议使用尺寸为 730×150 的图片以取得最佳效果',
+  'group_image_filesize_limit' => '文件小于 $_G[setting][group_imgsizelimit] KB',
   'group_input_password' => '请输入登录密码',
   'group_level_cannot_do' => '目前您的{$_G[setting][navs][3][navname]}等级不能使用此功能。',
   'group_member_management' => '成员管理',
@@ -150,6 +146,7 @@ $lang = array (
   'friend_join_group' => '好友加入的{$_G[setting][navs][3][navname]}',
   'group' => '{$_G[setting][navs][3][navname]}',
   'group_thread' => '{$_G[setting][navs][3][navname]}话题',
+  'group_wait_mod' => '待审核',
   'hot_group' => '热门{$_G[setting][navs][3][navname]}',
   'last_post' => '最后发表',
   'last_topic_in_group' => '新话题(最近30天)',

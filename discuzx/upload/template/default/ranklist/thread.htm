@@ -17,17 +17,17 @@
 		<div class="bm bw0">
 			<h1 class="mt">{lang ranklist_thread}</h1>
 			<ul class="tb cl">
-				<li{if $_GET[view] == 'replies'} class="a"{/if}><a href="misc.php?mod=ranklist&type=thread&view=replies&orderby=$_GET['orderby']">{lang ranklist_reply}</a></li>
-				<li{if $_GET[view] == 'views'} class="a"{/if}><a href="misc.php?mod=ranklist&type=thread&view=views&orderby=$_GET['orderby']">{lang visit_ranklist}</a></li>
-				<li{if $_GET[view] == 'sharetimes'} class="a"{/if}><a href="misc.php?mod=ranklist&type=thread&view=sharetimes&orderby=$_GET['orderby']">{lang ranklist_share}</a></li>
-				<li{if $_GET[view] == 'favtimes'} class="a"{/if}><a href="misc.php?mod=ranklist&type=thread&view=favtimes&orderby=$_GET['orderby']">{lang ranklist_favorite}</a></li>
-				<li{if $_GET[view] == 'heats'} class="a"{/if}><a href="misc.php?mod=ranklist&type=thread&view=heats&orderby=$_GET['orderby']">{lang ranklist_hot}</a></li>
+				<li{if $_GET[view] == 'replies'} class="a"{/if}><a href="misc.php?mod=ranklist&type=thread&view=replies&orderby=$orderby">{lang ranklist_reply}</a></li>
+				<li{if $_GET[view] == 'views'} class="a"{/if}><a href="misc.php?mod=ranklist&type=thread&view=views&orderby=$orderby">{lang visit_ranklist}</a></li>
+				<li{if $_GET[view] == 'sharetimes'} class="a"{/if}><a href="misc.php?mod=ranklist&type=thread&view=sharetimes&orderby=$orderby">{lang ranklist_share}</a></li>
+				<li{if $_GET[view] == 'favtimes'} class="a"{/if}><a href="misc.php?mod=ranklist&type=thread&view=favtimes&orderby=$orderby">{lang ranklist_favorite}</a></li>
+				<li{if $_GET[view] == 'heats'} class="a"{/if}><a href="misc.php?mod=ranklist&type=thread&view=heats&orderby=$orderby">{lang ranklist_hot}</a></li>
 			</ul>
 			<p id="before" class="tbmu{if $threadlist} bw0{/if}">
-				<a href="misc.php?mod=ranklist&type=thread&view=$_GET[view]&orderby=thisweek" id="604800" {if $_GET['orderby'] == 'thisweek'}class="a"{/if} />{lang ranklist_week}</a><span class="pipe">|</span>
-				<a href="misc.php?mod=ranklist&type=thread&view=$_GET[view]&orderby=thismonth" id="2592000" {if $_GET['orderby'] == 'thismonth'}class="a"{/if} />{lang ranklist_month}</a><span class="pipe">|</span>
-				<a href="misc.php?mod=ranklist&type=thread&view=$_GET[view]&orderby=today" id="86400" {if $_GET['orderby'] == 'today'}class="a"{/if} />{lang ranklist_today}</a><span class="pipe">|</span>
-				<a href="misc.php?mod=ranklist&type=thread&view=$_GET[view]&orderby=all" id="all" {if $_GET['orderby'] == 'all'}class="a"{/if} />{lang all}</a>
+				<a href="misc.php?mod=ranklist&type=thread&view=$_GET[view]&orderby=thisweek" id="604800" {if $orderby == 'thisweek'}class="a"{/if} />{lang ranklist_week}</a><span class="pipe">|</span>
+				<a href="misc.php?mod=ranklist&type=thread&view=$_GET[view]&orderby=thismonth" id="2592000" {if $orderby == 'thismonth'}class="a"{/if} />{lang ranklist_month}</a><span class="pipe">|</span>
+				<a href="misc.php?mod=ranklist&type=thread&view=$_GET[view]&orderby=today" id="86400" {if $orderby == 'today'}class="a"{/if} />{lang ranklist_today}</a><span class="pipe">|</span>
+				<a href="misc.php?mod=ranklist&type=thread&view=$_GET[view]&orderby=all" id="all" {if $orderby == 'all'}class="a"{/if} />{lang all}</a>
 			</p>
 			<!--{if $threadlist}-->
 				<div class="tl">

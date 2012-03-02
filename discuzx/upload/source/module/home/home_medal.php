@@ -4,14 +4,12 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: home_medal.php 27408 2012-01-30 09:48:35Z zhengqingpeng $
+ *      $Id: home_medal.php 28297 2012-02-27 08:35:59Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
-
-$_G['disabledwidthauto'] = 0;
 
 loadcache('medals');
 
@@ -99,7 +97,7 @@ if(empty($_GET['action'])) {
 			if($medal['price']) {
 				$medal['credit'] = $medal['credit'] ? $medal['credit'] : $_G['setting']['creditstransextra'][3];
 				if($medal['price'] > getuserprofile('extcredits'.$medal['credit'])) {
-					showmessage('±§Ç¸£¬ÄúµÄ{credit}²»×ã£¬ÎÞ·¨¹ºÂò´ËÑ«ÕÂ', '', array('credit' => $_G['setting']['extcredits'][$medal[credit]][title]));
+					showmessage('medal_not_get_credit', '', array('credit' => $_G['setting']['extcredits'][$medal[credit]][title]));
 				}
 				updatemembercount($_G['uid'], array($medal['credit'] => -$medal['price']), true, 'BME', $medal['medalid']);
 			}

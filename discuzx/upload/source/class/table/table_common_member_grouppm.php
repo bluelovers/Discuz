@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_member_grouppm.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_common_member_grouppm.php 27954 2012-02-17 07:33:51Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -22,7 +22,7 @@ class table_common_member_grouppm extends discuz_table
 	}
 
 	public function delete_by_gpmid($gpmid) {
-		return $gpmid ? DB::delete('common_member_grouppm', 'gpmid='.dinval($gpmid)) : false;
+		return ($gpmid = dintval($gpmid))? DB::delete('common_member_grouppm', 'gpmid='.$gpmid) : false;
 	}
 
 	public function count_by_gpmid($gpmid, $type) {
@@ -42,11 +42,11 @@ class table_common_member_grouppm extends discuz_table
 	}
 
 	public function update($uid, $gpmid, $data) {
-		return $uid && $gpmid && $data ? DB::update($this->_table, $data, DB::field('gpmid', $gpmid).' AND '.DB::field('uid', $uid)) : false;
+		return ($uid = dintval($uid)) && ($gpmid = dintval($gpmid)) && $data && is_array($data) ? DB::update($this->_table, $data, DB::field('gpmid', $gpmid).' AND '.DB::field('uid', $uid)) : false;
 	}
 
 	public function update_to_read_by_unread($uid, $gpmid) {
-		return $uid && $gpmid ? DB::update($this->_table, array('status' => 1), DB::field('gpmid', $gpmid).' AND '.DB::field('uid', $uid).' AND status=0') : false;
+		return ($uid = dintval($uid)) && ($gpmid = dintval($gpmid)) ? DB::update($this->_table, array('status' => 1), DB::field('gpmid', $gpmid).' AND '.DB::field('uid', $uid).' AND status=0') : false;
 	}
 }
 

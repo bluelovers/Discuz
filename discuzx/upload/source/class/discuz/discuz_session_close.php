@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: discuz_session_close.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: discuz_session_close.php 28357 2012-02-28 07:06:09Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -29,7 +29,7 @@ class discuz_session_close {
 		$this->old = array('sid' =>  $sid, 'ip' =>  $ip, 'uid' =>  $uid);
 		$this->var = $this->newguest;
 		$this->onlinehold = getglobal('setting/onlinehold');
-		$this->oltimestamp = TIMESTAMP - $this->onlinehold * 60;
+		$this->oltimestamp = TIMESTAMP - $this->onlinehold;
 
 		$this->table = C::t('common_member_status');
 

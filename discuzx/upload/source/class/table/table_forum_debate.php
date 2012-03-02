@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_forum_debate.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_forum_debate.php 27738 2012-02-13 10:02:53Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -45,6 +45,9 @@ class table_forum_debate extends discuz_table
 		}
 	}
 	public function delete_by_tid($tids) {
+		if(!$tids) {
+			return;
+		}
 		return DB::delete($this->_table, DB::field('tid', $tids));
 	}
 

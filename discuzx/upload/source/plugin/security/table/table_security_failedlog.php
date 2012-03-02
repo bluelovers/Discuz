@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_security_failedlog.php 26819 2011-12-23 09:17:49Z songlixin $
+ *      $Id: table_security_failedlog.php 27666 2012-02-09 05:33:43Z songlixin $
  */
 
 if(!defined('IN_DISCUZ')) {

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_moderate.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_common_moderate.php 28051 2012-02-21 10:36:56Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -55,6 +55,9 @@ class table_common_moderate extends discuz_table
 	}
 
 	private function query_data($type, $idtype, $status = 0, $dateline = 0) {
+		if(!isset($this->_tables[$idtype])) {
+			return $type ? 0 : array();
+		}
 		$parameter = array($this->_get_table($idtype), $this->_is_comment_table($idtype) ? "idtype='$idtype' AND" : '', $status);
 		$othersql = '';
 		if($dateline) {
@@ -70,14 +73,15 @@ class table_common_moderate extends discuz_table
 	}
 	public function fetch_all_for_article($status, $catid = 0, $username = '', $dateline = 'all', $count = 0, $start = 0, $limit = 0) {
 		$sqlwhere = '';
-		if(!empty($catid)) {
+		$status = dintval($status);
+		if(($catid = dintval($catid))) {
 			$sqlwhere .= " AND a.catid='$catid'";
 		}
 		if(!empty($username)) {
-			$sqlwhere .= " AND a.username='$username'";
+			$sqlwhere .= " AND a.username='".addslashes($username)."'";
 		}
 		if($dateline != 'all') {
-			$sqlwhere .= " AND a.dateline>'".(TIMESTAMP - $dateline)."'";
+			$sqlwhere .= " AND a.dateline>'".(TIMESTAMP - dintval($dateline))."'";
 		}
 		if($count) {
 			return DB::result_first("SELECT COUNT(*)
@@ -94,6 +98,9 @@ class table_common_moderate extends discuz_table
 	}
 
 	public function fetch_all_for_portalcomment($idtype, $tablename, $status, $catid = 0, $username = '', $dateline = 'all', $count = 0, $keyword = '', $start = 0, $limit = 0) {
+		if(!isset($this->_tables[$idtype.'_cid'])) {
+			return $count ? 0 : array();
+		}
 		if(!empty($catid)) {
 			$sqlwhere .= " AND a.catid='$catid'";
 		}
@@ -135,6 +142,9 @@ class table_common_moderate extends discuz_table
 	}
 
 	public function delete($id, $idtype, $unbuffered = false) {
+		if(!isset($this->_tables[$idtype])) {
+			return false;
+		}
 		$table = $this->_get_table($idtype);
 		$wheresql = array();
 		$id && $wheresql[] = DB::field('id', $id);
@@ -143,12 +153,18 @@ class table_common_moderate extends discuz_table
 	}
 
 	public function insert($idtype, $data, $return_insert_id = false, $replace = false, $silent = false) {
+		if(!isset($this->_tables[$idtype]) || empty($data)) {
+			return false;
+		}
 		$table = $this->_get_table($idtype);
 		$this->_is_comment_table($idtype) && $data['idtype'] = $idtype;
 		return DB::insert($table, $data, $return_insert_id, $replace, $silent);
 	}
 
 	public function update($id, $idtype, $data, $unbuffered = false, $low_priority = false) {
+		if(!isset($this->_tables[$idtype]) || empty($data)) {
+			return false;
+		}
 		$table = $this->_get_table($idtype);
 		$wheresql = array();
 		$id && $wheresql[] = DB::field('id', $id);
@@ -260,7 +276,7 @@ class table_common_moderate extends discuz_table
 
 	public function count_by_search_for_blog($status = null, $username = null, $dateline = null, $subject = null) {
 		$wheresql = array();
-		if($status !== null) {
+		if($status !== null && !(is_array($status) && empty($status))) {
 			$wheresql[] = 'm.'.DB::field('status', $status);
 		}
 		if($username) {
@@ -283,7 +299,7 @@ class table_common_moderate extends discuz_table
 
 	public function fetch_all_by_search_for_blog($status = null, $username = null, $dateline = null, $subject = null, $start = 0, $limit = 0) {
 		$wheresql = array();
-		if($status !== null) {
+		if($status !== null && !(is_array($status) && empty($status))) {
 			$wheresql[] = 'm.'.DB::field('status', $status);
 		}
 		if($username) {
@@ -313,7 +329,7 @@ class table_common_moderate extends discuz_table
 		} else {
 			$table = 'home_comment_moderate';
 		}
-		if($status !== null) {
+		if($status !== null && !(is_array($status) && empty($status))) {
 			$wheresql[] = 'm.'.DB::field('status', $status);
 		}
 		if($author) {
@@ -338,7 +354,7 @@ class table_common_moderate extends discuz_table
 		} else {
 			$table = 'home_comment_moderate';
 		}
-		if($status !== null) {
+		if($status !== null && !(is_array($status) && empty($status))) {
 			$wheresql[] = 'm.'.DB::field('status', $status);
 		}
 		if($author) {
@@ -361,7 +377,7 @@ class table_common_moderate extends discuz_table
 
 	public function count_by_search_for_doing($status = null, $username = null, $dateline = null, $message = null) {
 		$wheresql = array();
-		if($status !== null) {
+		if($status !== null && !(is_array($status) && empty($status))) {
 			$wheresql[] = 'm.'.DB::field('status', $status);
 		}
 		if($username) {
@@ -383,7 +399,7 @@ class table_common_moderate extends discuz_table
 
 	public function fetch_all_by_search_for_doing($status = null, $username = null, $dateline = null, $message = null, $start = 0, $limit = 0) {
 		$wheresql = array();
-		if($status !== null) {
+		if($status !== null && !(is_array($status) && empty($status))) {
 			$wheresql[] = 'm.'.DB::field('status', $status);
 		}
 		if($username) {
@@ -406,7 +422,7 @@ class table_common_moderate extends discuz_table
 
 	public function count_by_search_for_pic($status = null, $username = null, $dateline = null, $title = null) {
 		$wheresql = array();
-		if($status !== null) {
+		if($status !== null && !(is_array($status) && empty($status))) {
 			$wheresql[] = 'm.'.DB::field('status', $status);
 		}
 		if($username) {
@@ -427,7 +443,7 @@ class table_common_moderate extends discuz_table
 
 	public function fetch_all_by_search_for_pic($status = null, $username = null, $dateline = null, $title = null, $start = 0, $limit = 0) {
 		$wheresql = array();
-		if($status !== null) {
+		if($status !== null && !(is_array($status) && empty($status))) {
 			$wheresql[] = 'm.'.DB::field('status', $status);
 		}
 		if($username) {
@@ -449,6 +465,9 @@ class table_common_moderate extends discuz_table
 	}
 
 	public function delete_by_status_idtype($status, $idtype) {
+		if(!isset($this->_tables[$idtype])) {
+			return false;
+		}
 		$table = $this->_get_table($idtype);
 		$idtype = $table == 'home_comment_moderate' ? DB::field('idtype', $idtype).' AND' : '';
 		return DB::query('DELETE FROM %t WHERE %i status=%d', array($table, $idtype, $status));
@@ -456,7 +475,7 @@ class table_common_moderate extends discuz_table
 
 	public function count_by_search_for_share($status = null, $username = null, $dateline = null, $body_general = null) {
 		$wheresql = array();
-		if($status !== null) {
+		if($status !== null && !(is_array($status) && empty($status))) {
 			$wheresql[] = 'm.'.DB::field('status', $status);
 		}
 		if($username) {
@@ -478,7 +497,7 @@ class table_common_moderate extends discuz_table
 
 	public function fetch_all_by_search_for_share($status = null, $username = null, $dateline = null, $body_general = null, $start = 0, $limit = 0) {
 		$wheresql = array();
-		if($status !== null) {
+		if($status !== null && !(is_array($status) && empty($status))) {
 			$wheresql[] = 'm.'.DB::field('status', $status);
 		}
 		if($username) {

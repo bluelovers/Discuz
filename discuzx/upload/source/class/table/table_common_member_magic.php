@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_member_magic.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_common_member_magic.php 27757 2012-02-14 03:08:15Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -75,6 +75,9 @@ class table_common_member_magic extends discuz_table
 		}
 		if($magicid) {
 			$para[] = DB::field('magicid', $magicid);
+		}
+		if(!count($para)) {
+			return null;
 		}
 		$sql = implode(' AND ', $para);
 		return (int) DB::result_first('SELECT count(*) FROM %t WHERE %i', array($this->_table, $sql));

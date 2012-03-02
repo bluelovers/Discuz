@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_portal_article_content.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_portal_article_content.php 27824 2012-02-15 06:46:05Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -22,10 +22,13 @@ class table_portal_article_content extends discuz_table
 	}
 
 	public function update_by_aid($aid, $data) {
-		return DB::update($this->_table, $data, array('aid' => $aid));
+		if(($aid = dintval($aid)) && !empty($data) && is_array($data)) {
+			return DB::update($this->_table, $data, array('aid' => $aid));
+		}
+		return 0;
 	}
 	public function fetch_by_aid_page($aid, $page = 1) {
-		if($page<1) $page = 1;
+		if(($page = dintval($page))<1) $page = 1;
 		return $aid ? DB::fetch_first('SELECT * FROM %t WHERE aid=%d ORDER BY pageorder'.DB::LIMIT($page-1, 1), array($this->_table, $aid)) : false;
 	}
 

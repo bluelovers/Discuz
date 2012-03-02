@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: block_article.php 25525 2011-11-14 04:39:11Z zhangguosheng $
+ *      $Id: block_article.php 27932 2012-02-17 02:26:59Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -254,7 +254,7 @@ class block_article extends discuz_block {
 			$catid = array_unique($catid);
 			$wheres[] = 'at.catid IN ('.dimplode($catid).')';
 		}
-		if(empty($aids) && ($style['getpic'] || $picrequired)) {
+		if(empty($aids) && ($picrequired)) {
 			$wheres[] = "at.pic != ''";
 		}
 		if($publishdateline) {

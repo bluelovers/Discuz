@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_comment.php 25756 2011-11-22 02:47:45Z zhangguosheng $
+ *      $Id: function_comment.php 28115 2012-02-22 09:47:40Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -14,6 +14,24 @@ if(!defined('IN_DISCUZ')) {
 function add_comment($message, $id, $idtype, $cid = 0) {
 	global $_G, $bbcode;
 
+	$allowcomment = false;
+	switch($idtype) {
+		case 'uid':
+			$allowcomment = helper_access::check_module('wall');
+			break;
+		case 'picid':
+			$allowcomment = helper_access::check_module('album');
+			break;
+		case 'blogid':
+			$allowcomment = helper_access::check_module('blog');
+			break;
+		case 'sid':
+			$allowcomment = helper_access::check_module('share');
+			break;
+	}
+	if(!$allowcomment) {
+		showmessage('quickclear_noperm');
+	}
 	$summay = getstr($message, 150, 0, 0, 0, -1);
 
 

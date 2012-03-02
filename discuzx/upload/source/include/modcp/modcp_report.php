@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: modcp_report.php 25889 2011-11-24 09:52:20Z monkey $
+ *      $Id: modcp_report.php 28392 2012-02-29 01:54:41Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_MODCP')) {
@@ -55,7 +55,7 @@ if(!empty($_G['fid'])) {
 	$start = ($page - 1) * $lpp;
 
 	$reportcount = C::t('common_report')->fetch_count(0, 0, $_G['fid']);
-	$query = C::t('common_report')->fetch_all($start, $lpp, 0, $fid);
+	$query = C::t('common_report')->fetch_all($start, $lpp, 0, $_G['fid']);
 	foreach($query as $row) {
 		$row['dateline'] = dgmdate($row['dateline']);
 		$reportlist[] = $row;

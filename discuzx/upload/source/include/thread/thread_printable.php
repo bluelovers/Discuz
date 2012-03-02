@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: thread_printable.php 27299 2012-01-13 07:02:57Z svn_project_zhangjie $
+ *      $Id: thread_printable.php 28348 2012-02-28 06:16:29Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -35,7 +35,7 @@ foreach($posts as $post) {
 	}
 	$post['attachments'] = array();
 	if($post['attachment'] && ($_G['group']['allowgetattach'] || $_G['group']['allowgetimage'])) {
-		$_G['forum_attachpids'] .= ",$post[pid]";
+		$_G['forum_attachpids'][] = $post['pid'];
 		$post['attachment'] = 0;
 		if(preg_match_all("/\[attach\](\d+)\[\/attach\]/i", $post['message'], $matchaids)) {
 			$_G['forum_attachtags'][$post['pid']] = $matchaids[1];
@@ -50,7 +50,7 @@ if($uids) {
 	$userinfo = C::t('common_member')->fetch_all($uids);
 }
 
-if($_G['forum_attachpids']) {
+if($_G['forum_attachpids'] && !defined('IN_ARCHIVER')) {
 	require_once libfile('function/attachment');
 	if(is_array($threadsortshow) && !empty($threadsortshow['sortaids'])) {
 		$skipaids = array_merge($skipaids, $threadsortshow['sortaids']);

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: collection_edit.php 27303 2012-01-13 07:54:58Z chenmengshu $
+ *      $Id: collection_edit.php 28448 2012-03-01 03:27:53Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -25,6 +25,9 @@ if(empty($_G['uid'])) {
 }
 
 if(empty($op) || $op == 'add') {
+	if(!helper_access::check_module('collection')) {
+		showmessage('quickclear_noperm');
+	}
 	$_GET['handlekey'] = 'createcollection';
 
 	$navtitle = lang('core', 'title_collection_create');
@@ -175,7 +178,7 @@ if(empty($op) || $op == 'add') {
 					}
 
 					$tids[0] = $tid;
-					$checkexist[$tid] = C::t('forum_collectionrelated')->fetch($tid);
+					$checkexist[$tid] = C::t('forum_collectionrelated')->fetch($tid, true);
 				} else {
 					$thread = C::t('forum_thread')->fetch_all($_GET['tids']);
 					foreach ($thread as $perthread) {
@@ -185,7 +188,7 @@ if(empty($op) || $op == 'add') {
 					$foruminfo = C::t('forum_forumfield')->fetch_all($fids);
 					$tids = array_keys($thread);
 					$checkexistctid = C::t('forum_collectionthread')->fetch_all_by_ctid_tid($curcollectiondata['ctid'], $tids);
-					$checkexist = C::t('forum_collectionrelated')->fetch_all($tids);
+					$checkexist = C::t('forum_collectionrelated')->fetch_all($tids, true);
 				}
 
 				$addsum = 0;
@@ -206,6 +209,7 @@ if(empty($op) || $op == 'add') {
 
 					if(!$checkexist[$curtid]) {
 						C::t('forum_collectionrelated')->insert(array('tid'=>$curtid, 'collection'=>$curcollectiondata['ctid']."\t"));
+						$checkexist[$curtid] = 1;
 					} else {
 						C::t('forum_collectionrelated')->update_collection_by_ctid_tid($curcollectiondata['ctid'], $curtid);
 					}

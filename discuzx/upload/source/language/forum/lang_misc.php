@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_misc.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: lang_misc.php 28378 2012-02-28 09:25:19Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -61,7 +61,6 @@ $lang = array
 	'post_trade_pm_buynum' => '购买数量',
 	'post_trade_pm_wishprice' => '我期望的价格是',
 	'post_trade_pm_reason' => '我议价的理由是',
-	'post_deleted' => '无效楼层，该帖已经被删除',
 	'postappend_content' => '补充内容',
 	'payment_unit' => '元',
 
@@ -117,6 +116,8 @@ $lang = array
 	'credit_payment' => '积分充值',
 	'credit_forum_payment' => '论坛积分充值',
 	'credit_forum_royalty' => '交易手续费',
+
+	'credit_total' => '总积分',
 
 	'invite_payment' => '购买邀请码',
 	'invite_forum_payment' => '购买邀请码',
@@ -296,6 +297,25 @@ $lang = array
 
 	'connectguest_message_search' => array('尚未登录', '先登录'),
 	'connectguest_message_replace' => array('尚未<a href="member.php?mod=connect" target="_blank">完善资料</a>或<a href="member.php?mod=connect&ac=bind" target="_blank">绑定帐号</a>', '先<a href="member.php?mod=connect" target="_blank">完善资料</a>或<a href="member.php?mod=connect&ac=bind" target="_blank">绑定帐号</a>'),
+
+	'avatar' => '头像',
+	'signature' => '签名',
+	'custom_title' => '自定义头衔',
+
+	'forum_guide' => '导读',
+
+	'patch_site_have' => '您的网站有',
+	'patch_is_fixed' => '个安全漏洞，已修复',
+	'patch_need_fix' => '个安全漏洞，请尽快修复',
+	'patch_fixed_status' => '已修复',
+	'patch_unfix_status' => '未修复',
+	'patch_fix_failed_status' => '修复失败',
+	'patch_fix_right_now' => '立即修复',
+	'patch_view_fix_detail' => '查看详情',
+	'patch_name' => '漏洞名称',
+	'patch_dateline' => '发布日期',
+	'patch_status' => '当前状态',
+	'patch_close' => '关闭',
 
 );
 

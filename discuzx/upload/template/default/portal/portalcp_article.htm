@@ -350,6 +350,9 @@ function setConver(attach) {
 function deleteAttach(attachid, url) {
 	ajaxget(url);
 	$('attach_list_' + attachid).style.display = 'none';
+	if($('setconver' + attachid).checked) {
+		$('conver').value = '';
+	}
 }
 <!--{if !empty($article['conver'])}-->
 setConver('$article[conver]');

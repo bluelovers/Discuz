@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_forum_groupinvite.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_forum_groupinvite.php 27763 2012-02-14 03:42:56Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -24,6 +24,9 @@ class table_forum_groupinvite extends discuz_table
 		return DB::result_first("SELECT uid FROM %t WHERE fid=%d AND inviteuid=%d", array($this->_table, $fid, $inviteuid));
 	}
 	public function fetch_all_inviteuid($fid, $inviteuids, $uid) {
+		if(empty($fid) || empty($uid) || empty($inviteuids)) {
+			return array();
+		}
 		return DB::fetch_all("SELECT inviteuid FROM %t WHERE fid=%d AND ".DB::field('inviteuid', $inviteuids)." AND uid=%d", array($this->_table, $fid, $uid));
 	}
 	public function delete_by_inviteuid($fid, $inviteuid) {

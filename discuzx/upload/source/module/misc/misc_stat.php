@@ -4,7 +4,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: misc_stat.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+	$Id: misc_stat.php 28373 2012-02-28 08:52:25Z chenmengshu $
 */
 
 if(!defined('IN_DISCUZ')) {
@@ -439,7 +439,7 @@ function getstatvars_memberlist() {
 		$page = 1;
 	}
 	$start_limit = ($page - 1) * $_G['setting']['memberperpage'];
-	$statvars['memberlist'] = C::t('common_member')->fetch_all_stat_memberlist($srchmem, $_GET['order'], isset($_GET['asc']) ? 'ASC' : 'DESC', $start_limit, $_G['setting']['memberperpage']);
+	$statvars['memberlist'] = C::t('common_member')->fetch_all_stat_memberlist($srchmem, $_GET['order'], $_GET['asc'] ? 'ASC' : 'DESC', $start_limit, $_G['setting']['memberperpage']);
 	$num = !empty($srchmem) ?  C::t('common_member')->count_by_like_username($srchmem) :  C::t('common_member')->count();
 	$multipage = multi($num, $_G['setting']['memberperpage'], $page, 'misc.php?mod=stat&op=memberlist&srchmem='.rawurlencode($srchmem).'&order='.rawurlencode($_GET['order']).'&asc='.rawurlencode($_GET['asc']), $_G['setting']['membermaxpages']);
 	$statvars['multipage'] = $multipage;

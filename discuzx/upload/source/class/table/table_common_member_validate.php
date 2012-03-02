@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_member_validate.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_common_member_validate.php 27848 2012-02-15 09:07:27Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -26,7 +26,7 @@ class table_common_member_validate extends discuz_table
 		$sql .= $submittimes ? ' AND v.submittimes>'.intval($submittimes) : '';
 		$sql .= $regdate ? ' AND m.regdate<'.(TIMESTAMP - intval($regdate) * 86400) : '';
 		$sql .= $moddate ? ' AND v.moddate<'.(TIMESTAMP - intval($moddate) * 86400) : '';
-		$sql .= $regip ? " AND m.regip LIKE '".stripsearchkey($regip)."%'" : '';
+		$sql .= ($regip = stripsearchkey(addslashes((string)$regip))) ? " AND m.regip LIKE '".$regip."%'" : '';
 		return DB::fetch_all("SELECT v.uid FROM ".DB::table('common_member_validate')." v, ".DB::table('common_member')." m
 			WHERE $sql AND m.uid=v.uid", null, 'uid');
 	}

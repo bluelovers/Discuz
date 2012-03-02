@@ -3,7 +3,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_usertag.php 25889 2011-11-24 09:52:20Z monkey $
+ *      $Id: admincp_usertag.php 28113 2012-02-22 09:25:55Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -41,14 +41,14 @@ if($operation == '') {
 	$tagcount = C::t('common_tag')->fetch_all_by_status(3, $_GET['srchname'], 0, 0, 1);
 	showtableheader(cplang('usertag_count', array('tagcount' => $tagcount)));
 	if($tagcount) {
-		showsubtitle(array('', 'tagname', '用户数', 'operation'));
+		showsubtitle(array('', 'tagname', 'usernum', 'operation'));
 		$query = C::t('common_tag')->fetch_all_by_status(3, $_GET['srchname'], $start, $lpp);
 		foreach($query as $row) {
 			showtablerow('', array('class="td25"', 'width=100', ''), array(
 					'<input type="checkbox" class="checkbox" name="tagids[]" value="'.$row['tagid'].'" />',
 					$row['tagname'],
-					'<span id="tag_'.$row['tagid'].'"><a href="javascript:;" onclick="ajaxget(\'misc.php?mod=tag&type=countitem&id='.$row['tagid'].'\', \'tag_'.$row['tagid'].'\');return false;">查看</a></span>',
-					'<a href="admin.php?action=members&operation=search&submit=1&tagid='.$row['tagid'].'" target="_blank">'.cplang('view').'用户</a>&nbsp;|&nbsp;<a href="admin.php?action=members&operation=newsletter&tagid='.$row['tagid'].'&submit=1" target="_blank">发通知</a>'
+					'<span id="tag_'.$row['tagid'].'"><a href="javascript:;" onclick="ajaxget(\'misc.php?mod=tag&type=countitem&id='.$row['tagid'].'\', \'tag_'.$row['tagid'].'\');return false;">'.$lang['view'].'</a></span>',
+					'<a href="admin.php?action=members&operation=search&submit=1&tagid='.$row['tagid'].'" target="_blank">'.cplang('view').$lang['usertag_user'].'</a>&nbsp;|&nbsp;<a href="admin.php?action=members&operation=newsletter&tagid='.$row['tagid'].'&submit=1" target="_blank">'.$lang['usertag_send_notice'].'</a>'
 				));
 		}
 		$multipage = multi($tagcount, $lpp, $page, ADMINSCRIPT."?action=usertag$addurl&lpp=$lpp", 0, 3);

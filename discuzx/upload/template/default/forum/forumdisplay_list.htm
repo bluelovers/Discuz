@@ -15,7 +15,7 @@
 						</a>
 						<!--{if $_GET['specialtype'] == 'reward'}-->
 						<a id="filter_reward" href="javascript:;" class="showmenu xi2" onclick="showMenu(this.id)">
-							<!--{if $_GET['rewardtype'] == ''}-->全部悬赏<!--{elseif $_GET['rewardtype'] == '1'}-->进行中<!--{elseif $_GET['rewardtype'] == '2'}-->已解决<!--{/if}-->
+							<!--{if $_GET['rewardtype'] == ''}-->{lang all_reward}<!--{elseif $_GET['rewardtype'] == '1'}-->{lang rewarding}<!--{elseif $_GET['rewardtype'] == '2'}-->{lang reward_solved}<!--{/if}-->
 						</a>
 						<!--{/if}-->
 						<a id="filter_dateline" href="javascript:;" class="showmenu xi2" onclick="showMenu(this.id)">
@@ -29,12 +29,12 @@
 						<!--{hook/forumdisplay_filter_extra}-->
 					</div>
 				<!--{else}-->
-					标题
+					{lang title}
 				<!--{/if}-->
 				</th>
 				<!--{if empty($_G['forum']['picstyle'])}-->
 					<!--{if CURMODULE == 'guide'}-->
-						<td class="by">版块/群组</td>
+						<td class="by">{lang forum_group}</td>
 					<!--{/if}-->
 				<td class="by">{lang author}</td>
 				<td class="num">{lang replies}</td>
@@ -152,12 +152,12 @@
 										<!--{if $thread['readperm']}--> - [{lang readperm} <span class="xw1">$thread[readperm]</span>]<!--{/if}-->
 										<!--{if $thread['price'] > 0}-->
 											<!--{if $thread['special'] == '3'}-->
-											- <a href="forum.php?mod=forumdisplay&fid=$_G[fid]&filter=specialtype&specialtype=reward$forumdisplayadd[specialtype]{if $_GET['archiveid']}&archiveid={$_GET['archiveid']}{/if}&rewardtype=1" title="只看进行中的"><span class="xi1">[{lang thread_reward} <span class="xw1">$thread[price]</span> {$_G[setting][extcredits][$_G['setting']['creditstransextra'][2]][unit]}{$_G[setting][extcredits][$_G['setting']['creditstransextra'][2]][title]}]</span></a>
+											- <a href="forum.php?mod=forumdisplay&fid=$_G[fid]&filter=specialtype&specialtype=reward$forumdisplayadd[specialtype]{if $_GET['archiveid']}&archiveid={$_GET['archiveid']}{/if}&rewardtype=1" title="{lang show_rewarding_only}"><span class="xi1">[{lang thread_reward} <span class="xw1">$thread[price]</span> {$_G[setting][extcredits][$_G['setting']['creditstransextra'][2]][unit]}{$_G[setting][extcredits][$_G['setting']['creditstransextra'][2]][title]}]</span></a>
 											<!--{else}-->
 											- [{lang price} <span class="xw1">$thread[price]</span> {$_G[setting][extcredits][$_G['setting']['creditstransextra'][1]][unit]}{$_G[setting][extcredits][$_G['setting']['creditstransextra'][1]][title]}]
 											<!--{/if}-->
 										<!--{elseif $thread['special'] == '3' && $thread['price'] < 0}-->
-											- <a href="forum.php?mod=forumdisplay&fid=$_G[fid]&filter=specialtype&specialtype=reward$forumdisplayadd[specialtype]{if $_GET['archiveid']}&archiveid={$_GET['archiveid']}{/if}&rewardtype=2" title="只看已解决的">[{lang reward_solved}]</a>
+											- <a href="forum.php?mod=forumdisplay&fid=$_G[fid]&filter=specialtype&specialtype=reward$forumdisplayadd[specialtype]{if $_GET['archiveid']}&archiveid={$_GET['archiveid']}{/if}&rewardtype=2" title="{lang show_rewarded_only}">[{lang reward_solved}]</a>
 										<!--{/if}-->
 										<!--{if $thread['attachment'] == 2}-->
 											<img src="{STATICURL}image/filetype/image_s.gif" alt="attach_img" title="{lang attach_img}" align="absmiddle" />
@@ -165,7 +165,7 @@
 											<img src="{STATICURL}image/filetype/common.gif" alt="attachment" title="{lang attachment}" align="absmiddle" />
 										<!--{/if}-->
 										<!--{if $thread['mobile']}-->
-											<img src="{IMGDIR}/mobile-attach-$thread['mobile'].png" alt="手机发帖" align="absmiddle" />
+											<img src="{IMGDIR}/mobile-attach-$thread['mobile'].png" alt="{lang post_mobile}" align="absmiddle" />
 										<!--{/if}-->
 										<!--{if $thread['digest'] > 0 && $filter != 'digest'}-->
 											<img src="{IMGDIR}/digest_$thread[digest].gif" align="absmiddle" alt="digest" title="{lang thread_digest} $thread[digest]" />
@@ -303,9 +303,9 @@
 	</div>
 	<div id="filter_reward_menu" class="p_pop" style="display:none" change="forum.php?mod=forumdisplay&fid=$_G[fid]&filter=specialtype&specialtype=reward$forumdisplayadd[specialtype]{if $_GET['archiveid']}&archiveid={$_GET['archiveid']}{/if}&rewardtype='+$('filter_reward').value">
 		<ul>
-			<li><a href="forum.php?mod=forumdisplay&fid=$_G[fid]&filter=specialtype&specialtype=reward$forumdisplayadd[specialtype]{if $_GET['archiveid']}&archiveid={$_GET['archiveid']}{/if}">全部悬赏</a></li>
-			<!--{if $showpoll}--><li><a href="forum.php?mod=forumdisplay&fid=$_G[fid]&filter=specialtype&specialtype=reward$forumdisplayadd[specialtype]{if $_GET['archiveid']}&archiveid={$_GET['archiveid']}{/if}&rewardtype=1">进行中</a></li><!--{/if}-->
-			<!--{if $showtrade}--><li><a href="forum.php?mod=forumdisplay&fid=$_G[fid]&filter=specialtype&specialtype=reward$forumdisplayadd[specialtype]{if $_GET['archiveid']}&archiveid={$_GET['archiveid']}{/if}&rewardtype=2">已解决</a></li><!--{/if}-->
+			<li><a href="forum.php?mod=forumdisplay&fid=$_G[fid]&filter=specialtype&specialtype=reward$forumdisplayadd[specialtype]{if $_GET['archiveid']}&archiveid={$_GET['archiveid']}{/if}">{lang all_reward}</a></li>
+			<!--{if $showpoll}--><li><a href="forum.php?mod=forumdisplay&fid=$_G[fid]&filter=specialtype&specialtype=reward$forumdisplayadd[specialtype]{if $_GET['archiveid']}&archiveid={$_GET['archiveid']}{/if}&rewardtype=1">{lang rewarding}</a></li><!--{/if}-->
+			<!--{if $showtrade}--><li><a href="forum.php?mod=forumdisplay&fid=$_G[fid]&filter=specialtype&specialtype=reward$forumdisplayadd[specialtype]{if $_GET['archiveid']}&archiveid={$_GET['archiveid']}{/if}&rewardtype=2">{lang reward_solved}</a></li><!--{/if}-->
 		</ul>
 	</div>
 	<div id="filter_dateline_menu" class="p_pop" style="display:none">

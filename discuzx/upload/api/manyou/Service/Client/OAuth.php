@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: OAuth.php 26976 2011-12-28 13:43:13Z zhouxiaobo $
+ *      $Id: OAuth.php 27709 2012-02-13 03:13:04Z zhouxiaobo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -51,7 +51,7 @@ class Cloud_Service_Client_OAuth {
 			$requestURL = $requestURL.'?';
 		}
 
-		$response = dfsockopen($requestURL, 0, $queryString, '', false, $this->_apiIp, 15, TRUE, !$multi ? 'URLENCODE' : 'FORMDATA');
+		$response = dfsockopen($requestURL, 0, $queryString, '', false, $this->_apiIp, 15, TRUE, !$multi ? 'URLENCODE' : 'FORMDATA', false);
 		return $response;
 	}
 
@@ -178,7 +178,7 @@ class Cloud_Service_Client_OAuth {
 
 	public function rawurlencode($input) {
 		if(is_array($input)) {
-			return array_map(array(__CLASS__, 'rawurlencode'));
+			return array_map(array(__CLASS__, 'rawurlencode'), $input);
 		} elseif(is_scalar($input)) {
 			return str_replace('%7E', '~', rawurlencode($input));
 		} else {

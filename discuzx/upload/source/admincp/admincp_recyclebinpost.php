@@ -4,7 +4,7 @@
 	[Discuz!] (C)2001-2007 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: admincp_recyclebinpost.php 27214 2012-01-11 06:50:55Z monkey $
+	$Id: admincp_recyclebinpost.php 28286 2012-02-27 06:43:22Z yexinhao $
 */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -82,7 +82,7 @@ if(!$operation) {
 	$pendtime = $_GET['pendtime'];
 
 	$appService = Cloud::loadClass('Service_App');
-	$secStatus = $appService->getCloudAppStatus('security', 0);
+	$secStatus = $appService->getCloudAppStatus('security');
 	if($secStatus){
 		$security = $_GET['security'];
 	}
@@ -123,7 +123,7 @@ EOT;
 	showsetting('recyclebin_search_post_time', array('pstarttime', 'pendtime'), array($pstarttime, $pendtime), 'daterange');
 	showsetting('postsplit', '', '', getposttableselect());
 	if($secStatus){
-		showsetting('recyclebin_search_security_thread', 'security', 0, 'radio');
+        showsetting('recyclebin_search_security_thread', 'security', $security, 'radio');
 	}
 	showsubmit('searchsubmit');
 	showtablefooter();

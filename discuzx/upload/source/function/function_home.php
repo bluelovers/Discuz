@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_home.php 27154 2012-01-09 05:02:29Z zhangguosheng $
+ *      $Id: function_home.php 27938 2012-02-17 02:52:35Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {

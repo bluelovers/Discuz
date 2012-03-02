@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: portal_diy.js 27332 2012-01-16 09:24:24Z zhangguosheng $
+	$Id: portal_diy.js 27875 2012-02-16 04:24:34Z zhangguosheng $
 */
 
 var drag = new Drag();
@@ -454,9 +454,16 @@ drag.extend({
 				title.removeChild(arrDel[i]);
 			}
 		} else {
-			var className = obj instanceof Tab ? this.tabClass : obj instanceof Frame ? 'frame' : obj instanceof Block ? 'block' : '';
+			var titleClassName = '';
+			if(obj instanceof Tab) {
+				titleClassName = 'tab-';
+			} else if(obj instanceof Frame) {
+				titleClassName = 'frame-';
+			} else if(obj instanceof Block) {
+				titleClassName = 'block';
+			}
 			title = document.createElement('div');
-			title.className = className + 'title' + ' '+ this.titleClass;
+			title.className = titleClassName + 'title' + ' '+ this.titleClass;
 			ele.insertBefore(title,ele.firstChild);
 		}
 		if (!first) {
@@ -985,7 +992,7 @@ spaceDiy.extend({
 		this.disablePreviewButton();
 		document.diyform.optype.value = 'canceldiy';
 		var x = new Ajax();
-		x.post($('diyform').action+'&inajax=1','optype=canceldiy&diysubmit=1&template='+document.diyform.template.value+'&savemod='+document.diyform.savemod.value+'&formhash='+document.diyform.formhash.value,function(s){});
+		x.post($('diyform').action+'&inajax=1','optype=canceldiy&diysubmit=1&template='+document.diyform.template.value+'&savemod='+document.diyform.savemod.value+'&formhash='+document.diyform.formhash.value+'&tpldirectory='+document.diyform.tpldirectory.value+'&diysign='+document.diyform.diysign.value,function(s){});
 	},
 	switchBlockclass : function(blockclass) {
 		var navs = $('contentblockclass_nav').getElementsByTagName('a');

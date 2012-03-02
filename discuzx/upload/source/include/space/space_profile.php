@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_profile.php 27047 2011-12-31 03:33:04Z zhengqingpeng $
+ *      $Id: space_profile.php 28403 2012-02-29 03:13:46Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -168,9 +168,7 @@ if(in_array($_G['adminid'], array(1, 2, 3))) {
 	include_once libfile('function/member');
 	$clist = crime('getactionlist', $space['uid']);
 }
-if($_G['uid'] != $space['uid']) {
-	$follow = C::t('home_follow')->fetch_all_by_uid_followuid($_G['uid'], $space['uid']);
-}
+
 if(!$_G['privacy']) {
 	if(!$_G['inajax']) {
 		include_once template("home/space_profile");

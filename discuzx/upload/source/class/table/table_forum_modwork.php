@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_forum_modwork.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_forum_modwork.php 27800 2012-02-15 02:13:57Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -35,6 +35,9 @@ class table_forum_modwork extends discuz_table
 	}
 
 	public function fetch_all_user_count_posts_by_uid_dateline($uids, $starttime, $endtime) {
+		if(empty($uids)) {
+			return array();
+		}
 		return DB::fetch_all('SELECT uid, modaction, SUM(count) AS count, SUM(posts) AS posts
 				FROM %t
 				WHERE '.DB::field('uid', $uids).' AND dateline>=%s AND dateline<%s GROUP BY uid, modaction',

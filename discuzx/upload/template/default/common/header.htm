@@ -4,7 +4,7 @@
 	<!--{if $_G['setting']['portalstatus']}--><meta name="msapplication-task" content="name=$_G['setting']['navs'][1]['navname'];action-uri={echo !empty($_G['setting']['domain']['app']['portal']) ? 'http://'.$_G['setting']['domain']['app']['portal'] : $_G[siteurl].'portal.php'};icon-uri={$_G[siteurl]}{IMGDIR}/portal.ico" /><!--{/if}-->
 	<meta name="msapplication-task" content="name=$_G['setting']['navs'][2]['navname'];action-uri={echo !empty($_G['setting']['domain']['app']['forum']) ? 'http://'.$_G['setting']['domain']['app']['forum'] : $_G[siteurl].'forum.php'};icon-uri={$_G[siteurl]}{IMGDIR}/bbs.ico" />
 	<!--{if $_G['setting']['groupstatus']}--><meta name="msapplication-task" content="name=$_G['setting']['navs'][3]['navname'];action-uri={echo !empty($_G['setting']['domain']['app']['group']) ? 'http://'.$_G['setting']['domain']['app']['group'] : $_G[siteurl].'group.php'};icon-uri={$_G[siteurl]}{IMGDIR}/group.ico" /><!--{/if}-->
-	<!--{if $_G['setting']['homestatus']}--><meta name="msapplication-task" content="name=$_G['setting']['navs'][4]['navname'];action-uri={echo !empty($_G['setting']['domain']['app']['home']) ? 'http://'.$_G['setting']['domain']['app']['home'] : $_G[siteurl].'home.php'};icon-uri={$_G[siteurl]}{IMGDIR}/home.ico" /><!--{/if}-->
+	<!--{if helper_access::check_module('feed')}--><meta name="msapplication-task" content="name=$_G['setting']['navs'][4]['navname'];action-uri={echo !empty($_G['setting']['domain']['app']['home']) ? 'http://'.$_G['setting']['domain']['app']['home'] : $_G[siteurl].'home.php'};icon-uri={$_G[siteurl]}{IMGDIR}/home.ico" /><!--{/if}-->
 	<!--{if $_G['basescript'] == 'forum' && $_G['setting']['archiver']}-->
 		<link rel="archives" title="$_G['setting']['bbname']" href="{$_G[siteurl]}archiver/" />
 	<!--{/if}-->
@@ -38,8 +38,8 @@
 			<a id="diy-tg" href="javascript:openDiy();" title="{lang open_diy}" class="xi1 xw1" onmousemove="showMenu(this.id)"><img src="{STATICURL}image/diy/panel-toggle.png" alt="DIY" /></a>
 			<div id="diy-tg_menu" style="display: none;">
 				<ul>
-					<li><a href="javascript:saveUserdata('diy_advance_mode', '');openDiy();" class="xi2">简洁模式</a></li>
-					<li><a href="javascript:saveUserdata('diy_advance_mode', '1');openDiy();" class="xi2">高级模式</a></li>
+					<li><a href="javascript:saveUserdata('diy_advance_mode', '');openDiy();" class="xi2">{lang header_diy_mode_simple}</a></li>
+					<li><a href="javascript:saveUserdata('diy_advance_mode', '1');openDiy();" class="xi2">{lang header_diy_mode_adv}</a></li>
 				</ul>
 			</div>
 		<!--{/block}-->
@@ -134,6 +134,9 @@
 							<!--{if $_G['uid'] && $_G['group']['radminid'] > 1}-->
 								<span class="pipe">|</span><a href="forum.php?mod=modcp&fid=$_G[fid]" target="_blank">{lang forum_manager}</a>
 							<!--{/if}-->
+							<!--{if $_G['uid'] && $_G['adminid'] == 1 && $_G['setting']['cloud_status']}-->
+								<span class="pipe">|</span><a href="admin.php?frames=yes&action=cloud&operation=applist" target="_blank">{lang cloudcp}</a>
+							<!--{/if}-->
 							<!--{if $_G['uid'] && getstatus($_G['member']['allowadmincp'], 1)}-->
 								<span class="pipe">|</span><a href="admin.php" target="_blank">{lang admincp}</a>
 							<!--{/if}-->
@@ -165,7 +168,7 @@
 						</p>
 						<p>
 							<a href="home.php?mod=spacecp&ac=credit&showcredit=1">{lang credits}: 0</a>
-							<span class="pipe">|</span>{lang usergroup}: QQ 登录用户
+							<span class="pipe">|</span>{lang usergroup}: {lang header_qq_login_user}
 						</p>
 					</div>
 					<!--{/if}-->

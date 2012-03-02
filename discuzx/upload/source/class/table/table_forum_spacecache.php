@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_forum_spacecache.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_forum_spacecache.php 27819 2012-02-15 05:12:23Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -26,6 +26,9 @@ class table_forum_spacecache extends discuz_table
 	}
 
 	public function fetch_all($uids, $variables) {
+		if(empty($uids) || empty($variables)) {
+			return array();
+		}
 		return DB::fetch_all('SELECT * FROM %t WHERE '.DB::field('uid', $uids).' AND '.DB::field('variable', $variables), array($this->_table));
 	}
 

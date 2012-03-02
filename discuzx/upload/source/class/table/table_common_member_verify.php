@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_member_verify.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_common_member_verify.php 28405 2012-02-29 03:47:50Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -18,7 +18,6 @@ class table_common_member_verify extends discuz_table
 		$this->_table = 'common_member_verify';
 		$this->_pk    = 'uid';
 		$this->_pre_cache_key = 'common_member_verify_';
-		$this->_cache_ttl = 0;
 
 		parent::__construct();
 	}
@@ -40,7 +39,8 @@ class table_common_member_verify extends discuz_table
 	}
 	public function fetch_all_search($uid, $vid, $username = '', $order = 'dateline', $start = 0, $limit = 0, $sort = 'DESC') {
 		$condition = $this->search_condition($uid, $vid, $username);
-		return DB::fetch_all("SELECT * FROM %t v, %t m  $condition[0] ORDER BY $order $sort ".DB::limit($start, $limit), $condition[1], $this->_pk);
+		$ordersql = !empty($order) ? ' ORDER BY '.$order.' '.$sort : '';
+		return DB::fetch_all("SELECT * FROM %t v, %t m  $condition[0] $ordersql ".DB::limit($start, $limit), $condition[1], $this->_pk);
 
 	}
 

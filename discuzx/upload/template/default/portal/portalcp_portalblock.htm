@@ -3,9 +3,9 @@
 <div id="pt" class="bm cl">
 	<div class="z">
 		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
-		<a href="$_G[setting][navs][1][filename]">{lang portal}</a> <em>&rsaquo;</em>
+		<!--{if $_G['setting']['portalstatus'] }--><a href="$_G[setting][navs][1][filename]">{lang portal}</a> <em>&rsaquo;</em><!--{/if}-->
 		<a href="portal.php?mod=portalcp"><!--{if $_G['setting']['portalstatus'] }-->{lang portal_manage}<!--{else}-->{lang portal_block_manage}<!--{/if}--></a> <em>&rsaquo;</em>
-		{lang block_management}
+		<!--{if $_G['setting']['portalstatus'] }-->{lang block_management}<!--{/if}-->
 	</div>
 </div>
 
@@ -98,11 +98,11 @@
 	<!--{/if}-->
 	<!--{if $blocks}-->
 		<!--{if in_array($op, array('getblocklist', 'verifydata', 'verifieddata'))}-->
-			<!--{eval
+			{eval
 			$addurl = $_GET['targettplname'] ? '&targettplname='.$_GET['targettplname'] : '';
 			$addurl .= $_GET['searchkey'] ? '&searchkey='.$_GET['searchkey'] : '';
 			$_block = current($blocks);
-			}-->
+			}
 			<ul class="tb cl">
 				<!--{if $_GET['searchkey'] && $_block}-->
 					<li{if $op === 'getblocklist'} class="a"{/if}><a href="portal.php?mod=portalcp&ac=portalblock&op=getblocklist$addurl">$_block['name']</a></li>

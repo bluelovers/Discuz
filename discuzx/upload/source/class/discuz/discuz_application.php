@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: discuz_application.php 27477 2012-02-02 03:14:13Z monkey $
+ *      $Id: discuz_application.php 28411 2012-02-29 06:12:53Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -124,7 +124,7 @@ class discuz_application extends discuz_base{
 			'authkey' => '',
 			'timenow' => array(),
 			'widthauto' => 0,
-			'disabledwidthauto' => 1,
+			'disabledwidthauto' => 0,
 
 			'PHP_SELF' => '',
 			'siteurl' => '',
@@ -278,13 +278,16 @@ class discuz_application extends discuz_base{
 
 		if(empty($_config['debug']) || !file_exists(libfile('function/debug'))) {
 			define('DISCUZ_DEBUG', false);
+			error_reporting(0);
 		} elseif($_config['debug'] === 1 || $_config['debug'] === 2 || !empty($_REQUEST['debug']) && $_REQUEST['debug'] === $_config['debug']) {
 			define('DISCUZ_DEBUG', true);
-			if($_config['debug'] == 2) {
+			error_reporting(E_ERROR);
+			if($_config['debug'] === 2) {
 				error_reporting(E_ALL);
 			}
 		} else {
 			define('DISCUZ_DEBUG', false);
+			error_reporting(0);
 		}
 
 		define('STATICURL', !empty($_config['output']['staticurl']) ? $_config['output']['staticurl'] : 'static/');
@@ -546,7 +549,7 @@ class discuz_application extends discuz_base{
 				updatestat('connectlogin', 1);
 			}
 		}
-		if(isset($this->var['member']['conisbind']) && $this->var['member']['conisbind'] && $this->var['setting']['connect']['newbiespan'] !== '') {
+		if(isset($this->var['member']['conisbind']) && $this->var['member']['conisbind'] && $this->var['setting'] && $this->var['setting']['connect']['newbiespan'] !== '') {
 			$this->var['setting']['newbiespan'] = $this->var['setting']['connect']['newbiespan'];
 		}
 

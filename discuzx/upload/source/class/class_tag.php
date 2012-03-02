@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_tag.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: class_tag.php 27654 2012-02-09 03:20:55Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -119,12 +119,18 @@ class tag
 					$result['tagname'] = addslashes($tagnames[$result[tagid]]['tagname']);
 					if($result['idtype'] == 'tid') {
 						$itemid = $result[itemid];
-						$tidarray[$itemid] = $tidarray[$itemid] == '' ? 'tags' : $tidarray[$itemid];
-						$tidarray[$itemid] = "(REPLACE($tidarray[$itemid], '$result[tagid],$result[tagname]\t', ''))";
+						if(!isset($tidarray[$itemid])) {
+							$post = C::t('forum_post')->fetch_threadpost_by_tid_invisible($itemid);
+							$tidarray[$itemid] = $post['tags'];
+						}
+						$tidarray[$itemid] = str_replace("$result[tagid],$result[tagname]\t", '', $tidarray[$itemid]);
 					} elseif($result['idtype'] == 'blogid') {
 						$itemid = $result[itemid];
-						$blogidarray[$itemid] = $blogidarray[$itemid] == '' ? 'tag' : $blogidarray[$itemid];
-						$blogidarray[$itemid] = "(REPLACE($blogidarray[$itemid], '$result[tagid],$result[tagname]\t', ''))";
+						if(!isset($blogidarray[$itemid])) {
+							$blogfield = C::t('home_blogfield')->fetch($itemid);
+							$blogidarray[$itemid] = $blogfield['tag'];
+						}
+						$blogidarray[$itemid] = str_replace("$result[tagid],$result[tagname]\t", '', $blogidarray[$itemid]);
 					}
 				}
 			}
@@ -174,12 +180,18 @@ class tag
 				$result['tagname'] = addslashes($tagnames[$result[tagid]]['tagname']);
 				if($result['idtype'] == 'tid') {
 					$itemid = $result[itemid];
-					$tidarray[$itemid] = $tidarray[$itemid] == '' ? 'tags' : $tidarray[$itemid];
-					$tidarray[$itemid] = "(REPLACE($tidarray[$itemid], '$result[tagid],$result[tagname]\t', ''))";
+					if(!isset($tidarray[$itemid])) {
+						$post = C::t('forum_post')->fetch_threadpost_by_tid_invisible($itemid);
+						$tidarray[$itemid] = $post['tags'];
+					}
+					$tidarray[$itemid] = str_replace("$result[tagid],$result[tagname]\t", '', $tidarray[$itemid]);
 				} elseif($result['idtype'] == 'blogid') {
 					$itemid = $result[itemid];
-					$blogidarray[$itemid] = $blogidarray[$itemid] == '' ? 'tag' : $blogidarray[$itemid];
-					$blogidarray[$itemid] = "(REPLACE($blogidarray[$itemid], '$result[tagid],$result[tagname]\t', ''))";
+					if(!isset($blogidarray[$itemid])) {
+						$blogfield = C::t('home_blogfield')->fetch($itemid);
+						$blogidarray[$itemid] = $blogfield['tag'];
+					}
+					$blogidarray[$itemid] = str_replace("$result[tagid],$result[tagname]\t", '', $blogidarray[$itemid]);
 				}
 			}
 		}

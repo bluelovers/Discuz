@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_notice.php 26685 2011-12-20 02:33:07Z monkey $
+ *      $Id: space_notice.php 28297 2012-02-27 08:35:59Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -18,12 +18,10 @@ $page = empty($_GET['page'])?0:intval($_GET['page']);
 if($page<1) $page = 1;
 $start = ($page-1)*$perpage;
 
-$_G['disabledwidthauto'] = 0;
-
 ckstart($start, $perpage);
 
 $list = array();
-$count = 0;
+$mynotice = $count = 0;
 $multi = '';
 
 $view = (!empty($_GET['view']) && in_array($_GET['view'], array('userapp')))?$_GET['view']:'notice';
@@ -60,6 +58,7 @@ if($view == 'userapp') {
 			}
 		}
 	}
+	$mynotice = $count;
 
 } else {
 
@@ -109,10 +108,17 @@ if($view == 'userapp') {
 
 	if($newnotify) {
 		C::t('home_notification')->ignore($_G['uid'], true, false);
+		if($_G['setting']['cloud_status'] &&  $_G['setting']['connect']['allow'] && $_G['member']['conisbind']) {
+			$noticeService = Cloud::loadClass('Service_Client_Notification');
+			$noticeService->setNoticeFlag($_G['uid'], TIMESTAMP);
+		}
 	}
 
 	if($space['newprompt']) {
 		C::t('common_member')->update($_G['uid'], array('newprompt'=>0));
+	}
+	if($_G['setting']['my_app_status']) {
+		$mynotice = C::t('common_myinvite')->count_by_touid($_G['uid']);
 	}
 
 	$readtag = array($isread => ' class="a"');

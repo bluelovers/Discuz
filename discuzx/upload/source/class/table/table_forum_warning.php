@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_forum_warning.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_forum_warning.php 27800 2012-02-15 02:13:57Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -26,7 +26,7 @@ class table_forum_warning extends discuz_table
 	}
 
 	public function count_by_authorid_dateline($authorid, $dateline = null) {
-		return DB::result_first('SELECT COUNT(*) FROM %t WHERE authorid=%d '.($dateline ? ' AND '.DB::field('dateline', $dateline, '>=') : ''), array($this->_table, $authorid));
+		return DB::result_first('SELECT COUNT(*) FROM %t WHERE authorid=%d '.($dateline ? ' AND '.DB::field('dateline', dintval($dateline), '>=') : ''), array($this->_table, $authorid));
 	}
 
 	public function fetch_all_by_author($authors, $start, $limit) {
@@ -38,6 +38,9 @@ class table_forum_warning extends discuz_table
 	}
 
 	public function delete_by_pid($pids) {
+		if(empty($pids)) {
+			return false;
+		}
 		return DB::query('DELETE FROM %t WHERE '.DB::field('pid', $pids), array($this->_table), false, true);
 	}
 

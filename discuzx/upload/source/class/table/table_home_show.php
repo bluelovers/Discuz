@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_home_show.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_home_show.php 28041 2012-02-21 07:33:55Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -43,10 +43,13 @@ class table_home_show extends discuz_table
 		return DB::fetch_all('SELECT * FROM %t ORDER BY credit DESC %i', array($this->_table, DB::limit($start, $perpage)));
 	}
 
-	public function delete_by_credit($credit = 1, $glue = '<') {
-		return DB::query('DELETE FROM %t WHERE %i', array($this->_table, DB::field('credit', $credit, $glue)));
+	public function delete_by_credit($credit = 1) {
+		return DB::query('DELETE FROM %t WHERE %i', array($this->_table, DB::field('credit', intval($credit), '<')));
 	}
 	public function delete_by_uid($uids) {
+		if(!$uids) {
+			return null;
+		}
 		return DB::delete($this->_table, DB::field('uid', $uids));
 	}
 

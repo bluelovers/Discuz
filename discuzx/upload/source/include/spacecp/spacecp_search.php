@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_search.php 26676 2011-12-19 10:11:23Z zhangguosheng $
+ *      $Id: spacecp_search.php 28292 2012-02-27 07:23:14Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -31,16 +31,16 @@ if(!empty($_GET['searchsubmit']) || !empty($_GET['searchmode'])) {
 	$fromarr['member'] = DB::table('common_member').' s';
 
 	if($searchkey = stripsearchkey($_GET['searchkey'])) {
-		$wherearr[] = "s.username='$searchkey'";
+		$wherearr[] = 's.'.DB::field('username', $searchkey);
 		$searchkey = dhtmlspecialchars($searchkey);
 	} else {
 		foreach (array('uid','username','videophotostatus','avatarstatus') as $value) {
 			if($_GET[$value]) {
 				if($value == 'username' && empty($_GET['precision'])) {
 					$_GET[$value] = stripsearchkey($_GET[$value]);
-					$wherearr[] = "s.$value LIKE '%{$_GET[$value]}%'";
+					$wherearr[] = 's.'.DB::field($value, '%'.$_GET[$value].'%', 'like');
 				} else {
-					$wherearr[] = "s.$value='{$_GET[$value]}'";
+					$wherearr[] = 's.'.DB::field($value, $_GET[$value]);
 				}
 			}
 		}
@@ -55,11 +55,11 @@ if(!empty($_GET['searchsubmit']) || !empty($_GET['searchmode'])) {
 	}
 
 	if($startage && $endage && $endage > $startage) {
-		$wherearr[] = '(sf.birthyear>='.$startage.' AND sf.birthyear<='.$endage.')';
+		$wherearr[] = 'sf.'.DB::field('birthyear', $startage, '>=').' AND sf.'.DB::field('birthyear', $endage, '<=');
 	} else if($startage && empty($endage)) {
-		$wherearr[] = 'sf.birthyear>='.$startage;
+		$wherearr[] = 'sf.'.DB::field('birthyear', $startage, '>=');
 	} else if(empty($startage) && $endage) {
-		$wherearr[] = 'sf.birthyear<='.$endage;
+		$wherearr[] = 'sf.'.DB::field('birthyear', $endage, '<=');
 	}
 
 	$havefield = 0;
@@ -67,7 +67,7 @@ if(!empty($_GET['searchsubmit']) || !empty($_GET['searchmode'])) {
 		$_GET[$fkey] = trim($_GET[$fkey]);
 		if($_GET[$fkey]) {
 			$havefield = 1;
-			$wherearr[] = "sf.$fkey = '$_GET[$fkey]'";
+			$wherearr[] = 'sf.'.DB::field($fkey, $_GET[$fkey]);
 		}
 	}
 
@@ -75,7 +75,7 @@ if(!empty($_GET['searchsubmit']) || !empty($_GET['searchmode'])) {
 		$_GET['field_'.$fkey] = empty($_GET['field_'.$fkey])?'':stripsearchkey($_GET['field_'.$fkey]);
 		if($_GET['field_'.$fkey]) {
 			$havefield = 1;
-			$wherearr[] = "sf.$fkey LIKE '%".$_GET['field_'.$fkey]."%'";
+			$wherearr[] = 'sf.'.DB::field($fkey, '%'.$_GET['field_'.$fkey].'%', 'like');
 		}
 	}
 

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_checktools.php 26205 2011-12-05 10:09:32Z zhangguosheng $
+ *      $Id: admincp_checktools.php 28265 2012-02-27 02:46:37Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -35,10 +35,15 @@ if($operation == 'filecheck') {
 		}
 
 		$md5data = array();
-		$cachelist = checkcachefiles('data/cache/');
+		$cachelist = checkcachefiles('data/sysdata/');
 		checkfiles('./', '', 0);
 		checkfiles('config/', '', 1, 'config_global.php,config_ucenter.php');
 		checkfiles('data/', '\.xml', 0);
+		checkfiles('data/', '\.htm', 0);
+		checkfiles('data/log/', '\.htm', 0);
+		checkfiles('data/plugindata/', '\.htm', 0);
+		checkfiles('data/download/', '\.htm', 0);
+		checkfiles('data/addonmd5/', '\.htm', 0);
 		checkfiles('data/avatar/', '\.htm', 0);
 		checkfiles('data/cache/', '\.htm', 0);
 		checkfiles('data/ipdata/', '\.htm|\.dat', 0);
@@ -517,7 +522,7 @@ function checkcachefiles($currentdir) {
 			$cachedata = fread($fp, filesize($file));
 			fclose($fp);
 
-			if(preg_match("/^<\?php\n\/\/Discuz! cache file, DO NOT modify me!\n\/\/Created: [\w\s,:]+\n\/\/Identify: (\w{32})\n\n(.+?)\?>$/s", $cachedata, $match)) {
+			if(preg_match("/^<\?php\n\/\/Discuz! cache file, DO NOT modify me!\n\/\/Identify: (\w+)\n\n(.+?)\?>$/s", $cachedata, $match)) {
 				$showlist[$file] = $md5 = $match[1];
 				$cachedata = $match[2];
 

@@ -494,6 +494,7 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 				.fromg { visibility: hidden; }
 				.ie6 .fromg, tr:hover .fromg { visibility: visible; }
 			.tl .icn { padding-left: 5px; width: 25px; text-align: left; }
+				.tl .icn a:hover { text-decoration: none; }
 			.tl .new {}
 			.tl .comm {}
 			.tl .frm { width: 150px; }
@@ -996,9 +997,6 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 	#visitedforums_menu td { padding: 5px 10px; vertical-align: top; }
 	#visitedforums_menu a { white-space: normal !important; display: inline-block; overflow: hidden; height: 1.5em; }
 	#v_forums { width: 120px; }
-.visited_w { width: 400px !important; }
-	.visited_w table { table-layout: fixed; width: 100%; }
-	.visited_w #v_threads { border-right: 1px solid {COMMONBORDER}; }
 #v_threads li, #v_forums li { padding-left: 10px; background: url({IMGDIR}/dot.gif) no-repeat 0 7px; }
 
 /* 快速表情 */
@@ -1415,7 +1413,8 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 	#pprl a { color: {HIGHLIGHTLINK}; }
 	#pprl li { clear: both; padding: 3px 0 3px 90px; }
 		#pprl li em { float: left; margin-left: -90px; width: 85px; white-space: nowrap; overflow: hidden; }
-	#pbbs li, #psts li, #pntc li { clear: none; float: left; width: 264px }
+	.pf_l li { float: left; width: 300px; }
+		.pf_l em { padding-right: 10px; color: {MIDTEXT}; }
 /** end **/
 
 
@@ -1787,16 +1786,17 @@ body { background: #FFF none !important; }
 
 
 /** forum::collection,forum::viewthread **/
-.clct_list .xld { float: left; width: 49.9%; height: 90px; overflow: hidden; }
-	.clct_list .xld .m { width: 55px; height: 50px; background: url({IMGDIR}/hotspot.gif) no-repeat 100% 0; overflow: hidden; }
+.clct_list .xld { float: left; margin-bottom: 5px; width: 49.9%; height: 105px; overflow: hidden; }
+	.clct_list .xld .m, .clct_list .xld .m a { width: 55px; height: 50px; overflow: hidden; cursor: pointer; }
+		.clct_list .xld .m { background: url({IMGDIR}/hotspot.gif) no-repeat 100% 0; }
+		.clct_list .xld .m a:hover { text-decoration: none; }
 		.clct_list .xld .m strong { display: block; height: 32px; line-height: 32px; }
-		.clct_list .xld .m span { color: #FFF; }
+		.clct_list .xld .m span { display: block; color: #FFF; }
 .clct_flw { float: right; margin-top: 5px; height: 25px; line-height: 25px; line-height: 25px; overflow: hidden; }
 .clct_flw i { float: right; width: 42px; text-align: center; background: url({IMGDIR}/pdbt.gif) no-repeat 0 0; color: #FFF; font-style: normal; }
+	.clct_flw .u { width: 66px; background-position: 0 -125px; }
 .clct_flw strong { float: right; padding: 0 20px; background: url({IMGDIR}/pdbt.gif) no-repeat 100% -25px; }
-.clct_flw .btn { float: right; padding-left: 10px; }
-	.clct_flw a { display: inline-block; background: url({IMGDIR}/n_rate.png) no-repeat 0 0; }
-		.clct_flw a span { display: inline-block; padding: 0 20px; background: url({IMGDIR}/n_rate.png) no-repeat 100% 100%; cursor: pointer; }
+.clct_flw a { color: #FFF; }
 .clct_ratestar { float: left; width: 80px; height:  24px; background: url({IMGDIR}/fav_grey.gif) repeat-x 0 0; }
 	.clct_ratestar .btn { position: absolute; width: 80px; height:  24px; z-index: 2; }
 	.clct_ratestar a { float: left; width: 16px; height: 20px; text-indent: -9999px; overflow: hidden; }
@@ -1806,4 +1806,174 @@ body { background: #FFF none !important; }
 		.clct_ratestar .star3 { width: 48px; }
 		.clct_ratestar .star4 { width: 64px; }
 		.clct_ratestar .star5 { width: 80px; }
+.tbmu { padding-left: 10px; line-height: 23px; }
+/*
+	Name:			mod_collection_tag
+	Level:			Function
+	Sample:			<span class="ctag ctag0">tag</span>
+	Explain:		淘帖标签样式，从 0 到 2，颜色越来越不醒目
+	Last Modify:	Pony 2012022311
+*/
+.ctag { padding: 1px 3px; font-weight: 400; border-radius: 3px; }
+	.ctag0 { background:#F6C5BE; color: #822111; }
+	.ctag1 { background:#FEF1D1; color: #AA8831; }
+	.ctag2 { background:#EEE; color: #666; }
+/** end **/
+
+
+/** home::follow **/
+/* 广播头像通用样式 */
+.flw_avt { width: 80px; }
+	.flw_avt img { float: left; margin-left: 15px; width: 48px; }
+/* 广播区域样式 */
+.flw_article { margin: 0 0 10px 70px; padding: 5px 10px 15px; border-bottom: 1px solid #DBDBDB; }
+	.flw_thread .flw_article { margin-left: 0; }
+	.flw_article h2 { font-size: 16px; }
+		.flw_article h2 img { vertical-align: middle; }
+	.flw_reply { margin-left: 20px; }
+.flw_author, .flw_author a { color: #79869E; }
+.flw_article .c { font-size: 14px; line-height: 1.8; }
+	.flw_article .c img { display: block; margin: 10px 0; max-width: 600px; }
+		.ie6 .flw_article .c img { width: expression(this.width > 600 ? 600 : true); }
+	.flw_article .c .s { display: inline; margin: 0; }
+	.unread .flw_article { background-color: #FEFEEE; }
+		.unread .flw_article h2 a { color: {HIGHLIGHTLINK}; font-weight: 700; }
+.flw_image { margin-bottom: 10px; max-height: 400px; zoom: 1; overflow: hidden; }
+	.flw_image li { float: left; width: 120px; max-height: 400px; background: #FFF; }
+		.flw_image li img { margin: 0 !important; width: 120px; max-height: 400px; }
+	.flw_image_1 { float: left; margin: 0 15px 10px 0; }
+		.flw_image_1 img { margin: 0 !important; }
+.flw_attach { margin-top: 10px; clear: both; }
+	.flw_attach li { width: 300px; margin-bottom: 5px; height: 31px; line-height: 31px; font-size: 12px; border: 1px solid #DBDBDB; border-radius: 3px; background: url({IMGDIR}/flw_attach_bg.png) repeat-x 0 -31px; box-shadow: 0 1px 0 #FFF; }
+		.flw_attach a { display: block; padding: 0 10px 0 32px; height: 31px; background: url({IMGDIR}/flw_attach_bg.png) no-repeat 10px 8px; color: #369; }
+			.flw_attach a.flw_attach_price { background-image: url({IMGDIR}/viewpay.gif); }
+			.flw_attach a:hover { text-decoration: none; background-color: #EDF1F4; }
+			.flw_attach strong { float: left; width: 160px; font-weight: normal; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
+			.flw_attach span { float: right; width: 90px; color: #999; text-align: right; overflow: hidden; }
+.flw_video, .flw_music { margin: 10px 0; }
+	.flw_article .flw_video img { display: inline; }
+.flw_quote { margin-left: 10px; padding-left: 15px; border-left: 3px solid #B1CCD8; }
+.flw_readfull { padding: 3px 5px; border: 1px solid #DDD; border-radius: 3px; background: #FFF; }
+	.flw_readfull:hover { border-color: #9EB4C2; text-decoration: none; }
+.flw_delete { visibility: hidden; float: right; width: 20px; height: 20px; background: url({IMGDIR}/cls.gif) no-repeat 0 0; text-indent: -9999px; overflow: hidden; }
+	.flw_delete:hover { background-position: 0 100%; }
+	.flw_feed_hover .flw_delete { visibility: visible; }
+.flw_loading { margin: 0 0 10px 80px; padding: 10px; box-shadow: 0 1px 0 rgba(0,0,0,0.05); border: 1px solid #DBDBDB; border-radius: 4px; background: #F4F7F9; }
+.flw_more { margin: 0 0 10px 80px; }
+	.flw_more a { display: block; padding: 10px; box-shadow: 0 1px 0 rgba(0,0,0,0.05); border: 1px solid #DBDBDB; border-radius: 4px; background: #F4F7F9; text-align: center; }
+		.flw_more a:hover { border-color: #9EB4C2; text-decoration: none; }
+
+/* 收听按钮通用样式 */
+.flw_btn_fo, .flw_btn_unfo { float: right; width: 70px; height: 21px; background: url({IMGDIR}/flw_btn_s.png) no-repeat 0 0; text-indent: -9999px; overflow: hidden; }
+	.flw_btn_unfo { background-image: url({IMGDIR}/flw_btn_unfo_s.png); }
+	.ie6 .flw_btn_fo, .ie7 .flw_btn_fo { position: relative; z-index: 1; }
+	.flw_uheader .flw_btn_fo, .flw_uheader .flw_btn_unfo, .flw_hd .flw_btn_fo, .flw_hd .flw_btn_unfo { float: left; }
+
+/* 发广播 */
+#flw_header { padding: 10px; }
+#flw_post_subject { width: 628px; height: 30px; line-height: 30px; border: 1px solid #9EB4C2; border-radius: 4px; background: #FFF url({IMGDIR}/input_shadow.png) repeat-x 0 0; }
+#flw_header #subject { margin: 5px; width: 580px; height: 20px; border: none; outline: none; background: transparent; line-height: 20px; }
+#flw_checklen { padding-right: 10px; }
+#flw_post_extra { width: 629px; }
+.tedt { width: auto; border: 1px solid #9EB4C2; border-radius: 4px; overflow: hidden; }
+#flw_header .bar { padding-left: 10px; border-top: 1px solid #EFEFEF; border-bottom: none; background: #F9FBFC; border-radius: 0 0 4px 4px; }
+#flw_header .area { background: #FFF url({IMGDIR}/input_shadow.png) repeat-x 0 0; border-radius: 4px 4px 0 0; }
+	#flw_header .area .pt { height: 4em; }
+#flw_header .ftid { margin-left: 5px; }
+#fastpostsubmit { margin-right: 0; width: 77px; height: 33px; border: none; background: transparent url({IMGDIR}/flw_post.png) no-repeat 0 0; text-indent: -9999px; }
+#flw_header .tb { padding-left: 0; height: 32px; border-bottom: none; line-height: 32px; }
+	#flw_header .tb a { padding: 0 15px; border: none; background: transparent none; color: #369; }
+		#flw_header .tb .a a { box-shadow: 0 -1px 0 rgba(0,0,0,0.15); border-radius: 4px 4px 0 0; background: #FFF; color: #333; }
+
+.flw_tab { padding-top: 0; border-bottom: none; }
+
+.sd { border-radius: 5px; background: #F4F7F9; }
+
+/* 侧边和主区域头像及统计信息 */
+#flw_avt { padding: 20px; }
+	#flw_avt img { margin: 0 auto 10px; border: 6px solid #FFF; }
+		.sd #flw_avt img { display: block; }
+
+	.flw_user_info { margin: 10px 0; padding: 10px; box-shadow: 0 1px 0 #FFF, 0 -1px 0 #D7DBDF; border-radius: 5px; background: #E9EEF2; }
+		.flw_linktohome { padding: 2px 0 2px 20px; background: url({IMGDIR}/homelink.gif) no-repeat 0 2px; }
+	/* 主区域头像 */
+	.flw_uheader { padding-right: 0; padding-left: 0; }
+
+		.flw_stat_mn { margin-left: 20px; width: 490px; }
+.pg_follow .sd .bm { border-width: 1px 0 0; border-color: #E8EAEB; background: transparent; }
+	.pg_follow .sd .bm_h { padding-left: 20px; border-width: 1px 0 0; border-color: #FFF; background: transparent; }
+
+/* 用户单页顶部 */
+#flw_header.flw_uheader { padding-top: 20px; border-bottom: 1px solid rgba(0,0,0,0.15); background: #F4F7F9 none !important; }
+	.flw_uheader .tb { margin-bottom: -1px; }
+	.flw_uheader h1 { font-size: 16px; }
+	.flw_uheader .tns { margin-left: -10px; padding: 0; width: 240px; }
+		.flw_uheader .tns th, .flw_uheader .tns td { padding-left: 10px; text-align: left; }
+	.flw_uheader .o { line-height: 21px; }
+	.flw_status_1, .flw_status_2 { padding: 0 10px 0 20px; background: url({IMGDIR}/flw_statusico.png) no-repeat 0 4px; }
+		.flw_status_2 { background-position: 0 -35px; }
+.flw_specialfo, .flw_specialunfo { float: right; margin-right: 9px; width: 14px; height: 21px; background: url({IMGDIR}/flw_btn_specialfo.png) no-repeat 0 4px; text-indent: -9999px; overflow: hidden; }
+	.flw_specialunfo { background-position: 0 -26px; }
+	#specialflag_2_menu { width: 80px; }
+	.flw_uheader .flw_linktohome { padding: 0 0 0 20px; background-position: 0 3px; }
+
+/* 回复区域 */
+.flw_replybox { margin: -11px 0 20px 80px; padding: 15px 20px; box-shadow: 0 1px 0 rgba(0,0,0,0.05); border: 1px solid #DBDBDB; background: #F4F7F9; background: #E9EEF1; }
+	.flw_replybox li { padding: 10px 80px 10px 0; border-top: 1px solid #DBE2E6; }
+		.flw_replybox li .d { margin-right: 10px; }
+	.flw_replybox .px, .flw_autopt { border: 1px solid #CCDBE5; border-radius: 4px; background: #FFF url({IMGDIR}/input_shadow.png) repeat-x 0 0; }
+		.flw_autopt { display: inline-block; vertical-align: top; margin: 0 5px 0 0; padding: 5px; width: 420px; }
+			td.flw_autopt { margin-right: 0; }
+			.flw_autopt .pts { padding: 0; width: 100%; height: 19px; min-height: 19px; border: 0; }
+			.ie8 .flw_autopt .pts, .ie9 .flw_autopt .pts { min-height: 21px; }
+	.flw_replybox .pnc { width: 77px; height: 33px; border: none; background: transparent url({IMGDIR}/pn_reply.png) no-repeat 0 0; }
+		.flw_replybox .pnc span { line-height: 99px; }
+		.flw_replybox table .pnc { background-image: url({IMGDIR}/pn_rt.png); }
+	/* 回复并转播选项 */
+	.flw_rert { display: inline-block; padding-right: 5px; width: 95px; text-align: right; }
+	.flw_replybox .cnr { position: relative; float: right; overflow: hidden; display: inline; margin: -22px 16px 0 0; width: 11px; height: 7px; background: transparent url({IMGDIR}/flw_cnr_t.png) no-repeat 0 0; }
+
+/* 侧边切换 */
+#flw_side_tab { margin: 10px 0; }
+	#flw_side_tab li { line-height: 32px; }
+	#flw_side_tab a { display: block; height: 32px; padding-left: 20px; background: url({IMGDIR}/flw_side_tab.png) repeat-x 0 0; }
+		#flw_side_tab li.a a { background-position: 0 -32px; }
+		#flw_side_tab a img { float: left; margin: 8px 10px 0 0; }
+
+/* 侧边用户列表 */
+.flw_side_promote {  }
+	.flw_side_promote .xlda dl { margin-bottom: 8px; }
+	.flw_side_promote .xlda .m { margin: 0 0 8px -55px; }
+	.flw_side_promote .xlda dt { padding-top: 0; }
+	.flw_side_promote .flw_btn_fo { float: left; }
+
+/* 类似听众页面的用户列表 */
+.flw_ulist {}
+	.flw_ulist li { padding: 10px 0 10px 100px; border-bottom: 1px solid #DBDBDB; }
+	.flw_ulist .flw_avt { float: left; margin: 0 0 0 -80px; }
+
+.my_flw_stats { width: 120px; }
+	.my_flw_stats li { margin-bottom: 7px; padding-bottom: 7px; border-bottom: 1px solid {COMMONBORDER}; }
+		.my_flw_stats .xg1 { padding-right: 10px; }
+
+.ie6 .tb .a { position: static; }
+#flw_bar .fpd { position: relative; }
+.ie6 #flw_bar object { position: absolute; }
+
+/*
+	Name:			mod_follow_flashupload
+	Level:			Global
+	Explain:		重定义 follow 页面的 Flash 上传时的处理界面，结构参见 /static/js/fileprogress.js
+	Last Modify:	Pony 2012022813
+*/
+.progressWrapper { overflow: hidden; float: left; width: auto; }
+	.progressWrapper table { float: left; margin: 5px 1px 0 0; width: 209px; border:  1px solid #C3DCEA; border-radius: 4px; background: #FFF; }
+	.progressWrapper td { border-radius: 4px; }
+.attswf p { padding-left: 5px; width: 170px; height: 26px; line-height: 26px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+	.attswf p img { width: 16px; height: 16px; }
+.attc { padding-top: 3px; width: 20px; }
+	.attc .d { background-position-y: 0 !important; }
+
+.progressContainer { overflow: hidden; margin: 5px 0 0; width: 620px; border: 1px dashed #9EB4C2; background-color: transparent; }
+.red { border: none; background-color: transparent; color: red; }
 /** end **/

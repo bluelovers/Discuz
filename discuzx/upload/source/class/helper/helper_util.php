@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: helper_util.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: helper_util.php 27997 2012-02-20 08:28:39Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -114,6 +114,9 @@ class helper_util {
 				return null;
 				break;
 		}
+	}
+	public static function check_glue($glue = '=') {
+		return in_array($glue, array('=', '<', '<=', '>', '>=', '!=', '+', '-', '|', '&')) ? $glue : '=';
 	}
 
 }

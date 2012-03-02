@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: collection_comment.php 26745 2011-12-22 07:03:47Z chenmengshu $
+ *      $Id: collection_comment.php 28324 2012-02-28 03:13:05Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -21,7 +21,7 @@ if(!in_array($op, $oplist)) {
 }
 
 if(empty($op) || $op == 'add') {
-
+	$_GET['handlekey'] = 'addComment';
 	if(!$ctid) {
 		showmessage('undefined_action', NULL);
 	}
@@ -37,15 +37,19 @@ if(empty($op) || $op == 'add') {
 		showmessage('collection_permission_deny');
 	}
 
-
-	if($waittime = interval_check('') > 0) {
-		showmessage('post_flood_ctrl', '', array('floodctrl' => $waittime));
+	$waittime = interval_check('post');
+	if($waittime > 0) {
+		showmessage('operating_too_fast', '', array('waittime' => $waittime), array('return' => true));
 	}
 
 	$memberrate = C::t('forum_collectioncomment')->fetch_rate_by_ctid_uid($_G['collection']['ctid'], $_G['uid']);
 
-	if(!$_GET['message'] && $memberrate && !$_GET['ratescore']) {
+	if(!trim($_GET['message']) && ((!$memberrate && !$_GET['ratescore']) || $memberrate)) {
 		showmessage('collection_edit_checkentire');
+	}
+
+	if($_G['setting']['maxpostsize'] && strlen($_GET['message']) > $_G['setting']['maxpostsize']) {
+		showmessage('post_message_toolong', '', array('maxpostsize' => $_G['setting']['maxpostsize']));
 	}
 
 	$newcomment = array(
@@ -70,7 +74,9 @@ if(empty($op) || $op == 'add') {
 		notification_add($_G['collection']['uid'], "system", 'collection_becommented', array('from_id'=>$_G['collection']['ctid'], 'from_idtype'=>'collectioncomment', 'ctid'=>$_G['collection']['ctid'], 'collectionname'=>$_G['collection']['name']), 1);
 	}
 
-	showmessage('collection_comment_succ', 'forum.php?mod=collection&action=view&ctid='.$ctid);
+	C::t('common_member_status')->update($_G['uid'], array('lastpost' => TIMESTAMP), 'UNBUFFERED');
+
+	showmessage('collection_comment_succ', $tid ? 'forum.php?mod=viewthread&tid='.$tid : dreferer());
 } elseif($op == 'del') {
 	if(!submitcheck('formhash')) {
 		showmessage('undefined_action', NULL);
@@ -128,7 +134,7 @@ if(empty($op) || $op == 'add') {
 			include_once libfile('function/stat');
 			updatestat('sendpm', 0, $coef);
 
-			C::t('common_member_status')->update($_G['uid'], array('lastpost' => TIMESTAMP));
+			C::t('common_member_status')->update($_G['uid'], array('lastpost' => TIMESTAMP), 'UNBUFFERED');
 			!($_G['group']['exempt'] & 1) && updatecreditbyaction('sendpm', 0, array(), '', $coef);
 			showmessage('collection_recommend_succ', '', array(), array('alert'=> 'right', 'closetime' => true, 'showdialog' => 1));
 		}

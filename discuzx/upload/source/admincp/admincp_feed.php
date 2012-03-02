@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_feed.php 25246 2011-11-02 03:34:53Z zhangguosheng $
+ *      $Id: admincp_feed.php 27696 2012-02-10 03:39:50Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -150,7 +150,7 @@ EOF;
 
 } else {
 
-	$detail = !empty($_GET['uid']) ? true : $_GET['detail'];
+	$detail = $_GET['detail'];
 	$uid = $_GET['uid'];
 	$users = $_GET['users'];
 	$feedid = $_GET['feedid'];

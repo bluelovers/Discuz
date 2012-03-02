@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: discuz_memory.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: discuz_memory.php 28402 2012-02-29 03:12:47Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -23,15 +23,25 @@ class discuz_memory extends discuz_base
 	public $debug = array();
 
 	public function __construct() {
-		$this->extension['eaccelerator'] = function_exists('eaccelerator_get');
+		$this->extension['redis'] = extension_loaded('redis');
+		$this->extension['memcache'] = extension_loaded('memcache');
 		$this->extension['apc'] = function_exists('apc_cache_info') && @apc_cache_info();
 		$this->extension['xcache'] = function_exists('xcache_get');
-		$this->extension['memcache'] = extension_loaded('memcache');
+		$this->extension['eaccelerator'] = function_exists('eaccelerator_get');
 	}
 
 	public function init($config) {
 		$this->config = $config;
 		$this->prefix = empty($config['prefix']) ? substr(md5($_SERVER['HTTP_HOST']), 0, 6).'_' : $config['prefix'];
+
+
+		if($this->extension['redis'] && !empty($config['redis']['server'])) {
+			$this->memory = new memory_driver_redis();
+			$this->memory->init($this->config['redis']);
+			if(!$this->memory->enable) {
+				$this->memory = null;
+			}
+		}
 
 		if($this->extension['memcache'] && !empty($config['memcache']['server'])) {
 			$this->memory = new memory_driver_memcache();

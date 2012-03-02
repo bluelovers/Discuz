@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_threadtypes.php 27536 2012-02-03 06:43:13Z svn_project_zhangjie $
+ *      $Id: admincp_threadtypes.php 28113 2012-02-22 09:25:55Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -54,7 +54,7 @@ if(!$operation) {
 				"<input type=\"text\" class=\"txt\" size=\"30\" name=\"descriptionnew[$type[typeid]]\" value=\"$type[description]\">",
 				is_array($forumsarray[$type['typeid']]) ? '<ul class="lineheight"><li class="left">'.implode(',&nbsp;</li><li class="left"> ', $forumsarray[$type['typeid']])."</li></ul><input type=\"hidden\" name=\"fids[$type[typeid]]\" value=\"".implode(', ', $fidsarray[$type['typeid']])."\">" : '',
 				"<a href=\"".ADMINSCRIPT."?action=threadtypes&operation=sortdetail&sortid=$type[typeid]\" class=\"act nowrap\">$lang[detail]</a>&nbsp;&nbsp;
-				<a href=\"".ADMINSCRIPT."?action=threadtypes&operation=sorttemplate&sortid=$type[typeid]\" class=\"act nowrap\">模板</a>",
+				<a href=\"".ADMINSCRIPT."?action=threadtypes&operation=sorttemplate&sortid=$type[typeid]\" class=\"act nowrap\">$lang[threadtype_template]</a>",
 				$tmpstr,
 			), TRUE);
 		}
@@ -763,10 +763,10 @@ EOT;
 		showformheader("threadtypes&operation=sorttemplate&sortid={$_GET['sortid']}");
 		echo '<script type="text/JavaScript">var currentAnchor = \'ltype\';</script>'.
 			'<div class="itemtitle"><ul class="tab1" id="submenu">'.
-			'<li id="nav_ttype" onclick="showanchor(this)" class="current"><a href="#"><span>帖子页模板</span></a></li>'.
-			'<li id="nav_stype" onclick="showanchor(this)"><a href="#"><span>列表页模板</span></a></li>'.
-			'<li id="nav_ptype" onclick="showanchor(this)"><a href="#"><span>发帖页模板</span></a></li>'.
-			'<li id="nav_btype" onclick="showanchor(this)"><a href="#"><span>DIY调用模板</span></a></li>'.
+			'<li id="nav_ttype" onclick="showanchor(this)" class="current"><a href="#"><span>'.$lang['threadtype_template_viewthread'].'</span></a></li>'.
+			'<li id="nav_stype" onclick="showanchor(this)"><a href="#"><span>'.$lang['threadtype_template_forumdisplay'].'</span></a></li>'.
+			'<li id="nav_ptype" onclick="showanchor(this)"><a href="#"><span>'.$lang['threadtype_template_post'].'</span></a></li>'.
+			'<li id="nav_btype" onclick="showanchor(this)"><a href="#"><span>'.$lang['threadtype_template_diy'].'</span></a></li>'.
 			'</ul></div>';
 
 		echo '<div id="ttype">'.
@@ -776,22 +776,22 @@ EOT;
 			'</div>';
 
 		echo '<div id="stype" style="display:none">'.
-			'<button onclick="settip(this, \'subject\', \'subject/主题标题|subject_url/主题 URL|tid/主题 ID\')" type="button">主题标题</button>&nbsp;&nbsp;'.
+			'<button onclick="settip(this, \'subject\', \'subject/'.$lang['threadtype_template_threadtitle'].'|subject_url/'.$lang['threadtype_template_threadurl'].'|tid/'.$lang['threadtype_template_threadid'].'\')" type="button">'.$lang['threadtype_template_threadtitle'].'</button>&nbsp;&nbsp;'.
 			'<textarea id="subject_sample" style="display:none"><a href="{subject_url}">{subject}</a></textarea>'.
-			'<button onclick="settip(this, \'\', \'dateline/发布时间\')" type="button">发布时间</button>&nbsp;&nbsp;'.
-			'<button onclick="settip(this, \'author\', \'author/作者用户名|authorid/作者用户 ID|author_url/作者 URL|avatar_small/头像 URL|author_verify/认证标识\')" type="button">主题作者</button>&nbsp;&nbsp;'.
+			'<button onclick="settip(this, \'\', \'dateline/'.$lang['threadtype_template_dateline'].'\')" type="button">'.$lang['threadtype_template_dateline'].'</button>&nbsp;&nbsp;'.
+			'<button onclick="settip(this, \'author\', \'author/'.$lang['threadtype_template_author'].'|authorid/'.$lang['threadtype_template_authorid'].'|author_url/'.$lang['threadtype_template_authorurl'].'|avatar_small/'.$lang['threadtype_template_authoravatar'].'|author_verify/'.$lang['threadtype_template_authorverify'].'\')" type="button">'.$lang['threadtype_template_threadauthor'].'</button>&nbsp;&nbsp;'.
 			'<textarea id="author_sample" style="display:none"><a href="{author_url}">{author}</a></textarea>'.
-			'<button onclick="settip(this, \'\', \'views/主题查看数\')" type="button">主题查看数</button>&nbsp;&nbsp;'.
-			'<button onclick="settip(this, \'\', \'replies/主题回复数\')" type="button">主题回复数</button>&nbsp;&nbsp;'.
-			'<button onclick="settip(this, \'lastpost\', \'lastpost/最后回复时间|lastpost_url/最后回复 URL|lastposter/最后回复用户|lastposter_url/最后回复用户 URL\')" type="button">最后回复</button>&nbsp;&nbsp;'.
+			'<button onclick="settip(this, \'\', \'views/'.$lang['threadtype_template_threadviews'].'\')" type="button">'.$lang['threadtype_template_threadviews'].'</button>&nbsp;&nbsp;'.
+			'<button onclick="settip(this, \'\', \'replies/'.$lang['threadtype_template_threadreplies'].'\')" type="button">'.$lang['threadtype_template_threadreplies'].'</button>&nbsp;&nbsp;'.
+			'<button onclick="settip(this, \'lastpost\', \'lastpost/'.$lang['threadtype_template_lastpostdateline'].'|lastpost_url/'.$lang['threadtype_template_lastposturl'].'|lastposter/'.$lang['threadtype_template_lastpostuser'].'|lastposter_url/'.$lang['threadtype_template_lastpostuserurl'].'\')" type="button">'.$lang['threadtype_template_lastpost'].'</button>&nbsp;&nbsp;'.
 			'<textarea id="lastpost_sample" style="display:none"><a href="{lastpost_url}">{lastpost}</a> by <a href="{lastposter_url}">{lastposter}</a></textarea>'.
-			'<button onclick="settip(this, \'typename\', \'typename/主题分类名称|typename_url/主题分类 URL\')" type="button">主题分类</button>&nbsp;&nbsp;'.
+			'<button onclick="settip(this, \'typename\', \'typename/'.$lang['threadtype_template_threadtypename'].'|typename_url/'.$lang['threadtype_template_threadtypeurl'].'\')" type="button">'.$lang['threadtype_template_threadtype'].'</button>&nbsp;&nbsp;'.
 			'<textarea id="typename_sample" style="display:none"><a href="{typename_url}">{typename}</a></textarea>'.
-			'<button onclick="settip(this, \'\', \'attachment/是否存在附件的标识图片\')" type="button">附件标识</button>&nbsp;&nbsp'.
-			'<button onclick="settip(this, \'\', \'modcheck/版主管理主题的操作选项\')" type="button">主题操作</button>&nbsp;&nbsp'.
-			'<button onclick="settip(this, \'loop\', \'/单一主题循环内容\')" type="button">[loop]...[/loop]</button>&nbsp;&nbsp;'.
+			'<button onclick="settip(this, \'\', \'attachment/'.$lang['threadtype_template_attachmentexist'].'\')" type="button">'.$lang['threadtype_template_attachment'].'</button>&nbsp;&nbsp'.
+			'<button onclick="settip(this, \'\', \'modcheck/'.$lang['threadtype_template_modcheck'].'\')" type="button">'.$lang['threadtype_template_threadmod'].'</button>&nbsp;&nbsp'.
+			'<button onclick="settip(this, \'loop\', \'/'.$lang['threadtype_template_loop'].'\')" type="button">[loop]...[/loop]</button>&nbsp;&nbsp;'.
 			'<textarea id="loop_sample" style="display:none">
-<table><tr><td>标题</td></tr>
+<table><tr><td>'.$lang['threadtype_template_title'].'</td></tr>
 [loop]<tr><td><a href="{subject_url}">{subject}</a></td></tr>[/loop]
 </table>
 			</textarea>'.
@@ -808,15 +808,15 @@ EOT;
 			'</div>';
 
 		echo '<div id="btype" style="display:none">'.
-			'<button onclick="settip(this, \'subject\', \'subject/主题标题|subject_url/主题 URL|tid/主题 ID\')" type="button">主题标题</button>&nbsp;&nbsp;'.
-			'<button onclick="settip(this, \'\', \'dateline/发布时间\')" type="button">发布时间</button>&nbsp;&nbsp;'.
-			'<button onclick="settip(this, \'author\', \'author/作者用户名|authorid/作者用户 ID|author_url/作者 URL|avatar_small/头像 URL|author_verify/认证标识\')" type="button">主题作者</button>&nbsp;&nbsp;'.
-			'<button onclick="settip(this, \'\', \'views/主题查看数\')" type="button">主题查看数</button>&nbsp;&nbsp;'.
-			'<button onclick="settip(this, \'\', \'replies/主题回复数\')" type="button">主题回复数</button>&nbsp;&nbsp;'.
-			'<button onclick="settip(this, \'lastpost\', \'lastpost/最后回复时间|lastpost_url/最后回复 URL|lastposter/最后回复用户|lastposter_url/最后回复用户 URL\')" type="button">最后回复</button>&nbsp;&nbsp;'.
-			'<button onclick="settip(this, \'typename\', \'typename/主题分类名称|typename_url/主题分类 URL\')" type="button">主题分类</button>&nbsp;&nbsp;'.
-			'<button onclick="settip(this, \'\', \'attachment/是否存在附件的标识图片\')" type="button">附件标识</button>&nbsp;&nbsp'.
-			'<button onclick="settip(this, \'loop\', \'/单一主题循环内容\')" type="button">[loop]...[/loop]</button>&nbsp;&nbsp;'.
+			'<button onclick="settip(this, \'subject\', \'subject/'.$lang['threadtype_template_threadtitle'].'|subject_url/'.$lang['threadtype_template_threadurl'].'|tid/'.$lang['threadtype_template_threadid'].'\')" type="button">'.$lang['threadtype_template_threadtitle'].'</button>&nbsp;&nbsp;'.
+			'<button onclick="settip(this, \'\', \'dateline/'.$lang['threadtype_template_dateline'].'\')" type="button">'.$lang['threadtype_template_dateline'].'</button>&nbsp;&nbsp;'.
+			'<button onclick="settip(this, \'author\', \'author/'.$lang['threadtype_template_author'].'|authorid/'.$lang['threadtype_template_authorid'].'|author_url/'.$lang['threadtype_template_authorurl'].'|avatar_small/'.$lang['threadtype_template_authoravatar'].'|author_verify/'.$lang['threadtype_template_authorverify'].'\')" type="button">'.$lang['threadtype_template_threadauthor'].'</button>&nbsp;&nbsp;'.
+			'<button onclick="settip(this, \'\', \'views/'.$lang['threadtype_template_threadviews'].'\')" type="button">'.$lang['threadtype_template_threadviews'].'</button>&nbsp;&nbsp;'.
+			'<button onclick="settip(this, \'\', \'replies/'.$lang['threadtype_template_threadreplies'].'\')" type="button">'.$lang['threadtype_template_threadreplies'].'</button>&nbsp;&nbsp;'.
+			'<button onclick="settip(this, \'lastpost\', \'lastpost/'.$lang['threadtype_template_lastpostdateline'].'|lastpost_url/'.$lang['threadtype_template_lastposturl'].'|lastposter/'.$lang['threadtype_template_lastpostuser'].'|lastposter_url/'.$lang['threadtype_template_lastpostuserurl'].'\')" type="button">'.$lang['threadtype_template_lastpost'].'</button>&nbsp;&nbsp;'.
+			'<button onclick="settip(this, \'typename\', \'typename/'.$lang['threadtype_template_threadtypename'].'|typename_url/'.$lang['threadtype_template_threadtypeurl'].'\')" type="button">'.$lang['threadtype_template_threadtype'].'</button>&nbsp;&nbsp;'.
+			'<button onclick="settip(this, \'\', \'attachment/'.$lang['threadtype_template_attachmentexist'].'\')" type="button">'.$lang['threadtype_template_attachment'].'</button>&nbsp;&nbsp'.
+			'<button onclick="settip(this, \'loop\', \'/'.$lang['threadtype_template_loop'].'\')" type="button">[loop]...[/loop]</button>&nbsp;&nbsp;'.
 			'<br />'.
 			$showoption.
 			'<div id="btype_tip"></div>'.
@@ -830,18 +830,18 @@ EOT;
 			var tipid = obj.parentNode.id + \'_tip\', s1 = \'\', s2 = \'\', s3 = \'\';
 			if(!tips) {
 				s1 += \'<td>{\' + id + \'}</td>\';
-				s2 += \'<td>变量名称(\' + obj.innerHTML + \')</td>\';
+				s2 += \'<td>'.$lang['threadtype_template_varname'].'(\' + obj.innerHTML + \')</td>\';
 				s1 += \'<td>{\' + id + \'_value}</td>\';
-				s2 += \'<td>变量的值</td>\';
+				s2 += \'<td>'.$lang['threadtype_template_varvalue'].'</td>\';
 				s1 += \'<td>{\' + id + \'_unit}</td>\';
-				s2 += \'<td>变量单位</td>\';
+				s2 += \'<td>'.$lang['threadtype_template_varunit'].'</td>\';
 				if(obj.parentNode.id == \'ptype\') {
 					s1 += \'<td>{\' + id + \'_required}</td>\';
-					s2 += \'<td>必填标识</td>\';
+					s2 += \'<td>'.$lang['threadtype_template_requiredflag'].'</td>\';
 					s1 += \'<td>{\' + id + \'_tips}</td>\';
-					s2 += \'<td>提示标识</td>\';
+					s2 += \'<td>'.$lang['threadtype_template_tipflag'].'</td>\';
 					s1 += \'<td>{\' + id + \'_description}</td>\';
-					s2 += \'<td>简短描述</td>\';
+					s2 += \'<td>'.$lang['threadtype_template_briefdes'].'</td>\';
 				}
 				if(obj.parentNode.id == \'ptype\') {
 					s3 = \'<dt><strong class="rq">{\' + id + \'_required}</strong>{\' + id + \'}</dt><dd>{\' + id + \'_value} {\' + id + \'_unit} {\' + id + \'_tips} {\' + id + \'_description}</dd>\r\n\';
@@ -862,10 +862,10 @@ EOT;
 				}
 			}
 			$(tipid).innerHTML = \'<table class="tb tb2">\' +
-				(s1 ? \'<tr><td class="bold" width="50">标签</td>\' + s1 + \'</tr>\' : \'\') +
-				\'<tr><td class="bold" width="50">说明</td>\' + s2 + \'</tr></table>\';
+				(s1 ? \'<tr><td class="bold" width="50">'.$lang['threadtype_template_tag'].'</td>\' + s1 + \'</tr>\' : \'\') +
+				\'<tr><td class="bold" width="50">'.$lang['threadtype_template_intro'].'</td>\' + s2 + \'</tr></table>\';
 			if(s3) {
-				$(tipid).innerHTML += \'<table class="tb tb2"><tr><td class="bold" width="50">范例</td><td colspan="6"><textarea style="width: 95%;" rows="2" readonly onclick="this.select()" id="\' + obj.parentNode.id + \'_sample"></textarea></td></tr></table>\';
+				$(tipid).innerHTML += \'<table class="tb tb2"><tr><td class="bold" width="50">'.$lang['threadtype_template_example'].'</td><td colspan="6"><textarea style="width: 95%;" rows="2" readonly onclick="this.select()" id="\' + obj.parentNode.id + \'_sample"></textarea></td></tr></table>\';
 				$(obj.parentNode.id + \'_sample\').innerHTML = s3;
 			}
 		}

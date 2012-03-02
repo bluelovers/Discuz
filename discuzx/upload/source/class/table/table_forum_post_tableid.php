@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_forum_post_tableid.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_forum_post_tableid.php 28127 2012-02-23 02:31:37Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -29,6 +29,9 @@ class table_forum_post_tableid extends discuz_table
 		return DB::query("DELETE FROM %t WHERE pid<%d", array($this->_table, $pid));
 	}
 
+	public function fetch_max_id() {
+		return DB::result_first('SELECT MAX(pid) FROM '.DB::table($this->_table));
+	}
 }
 
 ?>

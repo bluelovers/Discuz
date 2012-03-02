@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_member.php 26555 2011-12-15 05:13:50Z monkey $
+ *      $Id: class_member.php 28004 2012-02-20 09:56:54Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -418,7 +418,7 @@ class register_ctl {
 			if($sendurl) {
 				checkemail($_GET['email']);
 				$hashstr = urlencode(authcode("$_GET[email]\t$_G[timestamp]", 'ENCODE', $_G['config']['security']['authkey']));
-				$registerurl = "{$_G[siteurl]}member.php?mod=register&amp;hash={$hashstr}&amp;email={$_GET[email]}";
+				$registerurl = "{$_G[siteurl]}member.php?mod=".$this->setting['regname']."&amp;hash={$hashstr}&amp;email={$_GET[email]}";
 				$email_register_message = lang('email', 'email_register_message', array(
 					'bbname' => $this->setting['bbname'],
 					'siteurl' => $_G['siteurl'],

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_ajax.php 27456 2012-02-01 07:26:31Z zhengqingpeng $
+ *      $Id: forum_ajax.php 28523 2012-03-02 03:38:54Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -540,17 +540,17 @@ EOF;
 			C::t('common_member')->update($uid, array('avatarstatus'=>0));
 			loaducenter();
 			uc_user_deleteavatar($uid);
-			$cleartype[] = '头像';
+			$cleartype[] = lang('forum/misc', 'avatar');
 			crime('recordaction', $uid, 'crime_avatar', lang('forum/misc', 'crime_reason', array('reason' => $reason)));
 		}
 		if(in_array('sightml', $_GET['operations'])) {
 			C::t('common_member_field_forum')->update($uid, array('sightml' => ''), 'UNBUFFERED');
-			$cleartype[] = '签名';
+			$cleartype[] = lang('forum/misc', 'signature');
 			crime('recordaction', $uid, 'crime_sightml', lang('forum/misc', 'crime_reason', array('reason' => $reason)));
 		}
 		if(in_array('customstatus', $_GET['operations'])) {
 			C::t('common_member_field_forum')->update($uid, array('customstatus' => ''), 'UNBUFFERED');
-			$cleartype[] = '自定义头衔';
+			$cleartype[] = lang('forum/misc', 'custom_title');
 			crime('recordaction', $uid, 'crime_customstatus', lang('forum/misc', 'crime_reason', array('reason' => $reason)));
 		}
 		if(($_G['group']['reasonpm'] == 2 || $_G['group']['reasonpm'] == 3) || !empty($_GET['sendreasonpm'])) {
@@ -585,8 +585,60 @@ EOF;
 			$post['message'] = $feed['content'];
 		}
 	}
-	$hrefsuffix = !$_G['setting']['followreferer'] || ($_G['adminid']==1 && $_G['setting']['allowquickviewprofile']) ? '&do=follow' : '';
 	include template('forum/ajax_followpost');
+
+} elseif($_GET['action'] == 'setnav') {
+	if($_G['adminid'] != 1) {
+		showmessage('quickclear_noperm');
+	}
+	$allowfuntype = array('portal', 'group', 'follow', 'collection', 'guide', 'feed', 'blog', 'doing', 'album', 'share', 'wall', 'homepage', 'ranklist');
+	$type = in_array($_GET['type'], $allowfuntype) ? trim($_GET['type']) : '';
+	$do = in_array($_GET['do'], array('open', 'close')) ? $_GET['do'] : 'close';
+	if(!submitcheck('funcsubmit')) {
+		$navtitle = lang('spacecp', $do == 'open' ? 'select_the_navigation_position' : 'close_module', array('type' => lang('spacecp', $type)));
+		$closeprompt = lang('spacecp', 'close_module', array('type' => lang('spacecp', $type)));
+		include template('forum/ajax');
+	} else {
+		if(!empty($type)) {
+			$funkey = $type.'status';
+			$funstatus = $do == 'open' ? 1 : 0;
+			if($type != 'homepage') {
+				$identifier = array('portal' => 1, 'group' => 3, 'feed' => 4, 'ranklist' => 8, 'follow' => 9, 'guide' => 10, 'collection' => 11, 'blog' => 12, 'album' => 13, 'share' => 14, 'doing' => 15);
+				$navdata = array('available' => -1);
+				$navtype = $do == 'open' ? array() : array(0, 3);
+				if(in_array($type, array('blog', 'album', 'share', 'doing', 'follow'))) {
+					$navtype[] = 2;
+				}
+				if($do == 'open') {
+					if($_GET['location']['header']) {
+						$navtype[] = 0;
+						$navdata['available'] = 1;
+					}
+					if($_GET['location']['quick']) {
+						$navtype[] = 3;
+						$navdata['available'] = 1;
+					}
+					$navdata['available'] = $navdata['available'] == 1 ? 1 : 0;
+					if(empty($_GET['location']['header']) || empty($_GET['location']['quick'])) {
+						C::t('common_nav')->update_by_navtype_type_identifier(array(0, 2, 3), 0, array("$type", "$identifier[$type]"), array('available' => 0));
+					}
+				}
+				if($navtype) {
+					C::t('common_nav')->update_by_navtype_type_identifier($navtype, 0, array("$type", "$identifier[$type]"), $navdata);
+					if(in_array($type, array('blog', 'album', 'share', 'doing', 'follow')) && !$navdata['available']) {
+						C::t('common_nav')->update_by_navtype_type_identifier(array(2), 0, array("$type"), array('available' => 1));
+					}
+				}
+			}
+			C::t('common_setting')->update($funkey, $funstatus);
+
+			$setting[$funkey] = $funstatus;
+			include libfile('function/cache');
+			updatecache('setting');
+		}
+		showmessage('do_success', dreferer(), array(), array('showdialog'=>1, 'closetime' => true, 'msgtype' => 2, 'locationtime' => 1));
+	}
+	exit;
 }
 
 function tmpiconv($s, $d, $str) {
@@ -598,6 +650,9 @@ function tmpiconv($s, $d, $str) {
 		$str = iconv($s, $d, $str);
 	}
 	return $str;
+}
+function modifynav($type, $flag) {
+
 }
 
 showmessage('succeed', '', array(), array('handle' => false));

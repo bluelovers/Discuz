@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_swfupload.php 26039 2011-11-29 10:12:57Z zhengqingpeng $
+ *      $Id: misc_swfupload.php 28057 2012-02-21 22:19:33Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -32,18 +32,20 @@ if($_GET['operation'] == 'upload') {
 
 
 	$showerror = true;
-	require_once libfile('function/spacecp');
-	if($_FILES["Filedata"]['error']) {
-		$file = lang('spacecp', 'file_is_too_big');
-	} else {
-		require_once libfile('function/home');
-		$_FILES["Filedata"]['name'] = addslashes(diconv(urldecode($_FILES["Filedata"]['name']), 'UTF-8'));
-		$file = pic_save($_FILES["Filedata"], 0, '', true, 0);
-		if(!empty($file) && is_array($file)) {
-			$url = pic_get($file['filepath'], 'album', $file['thumb'], $file['remote']);
-			$bigimg = pic_get($file['filepath'], 'album', 0, $file['remote']);
-			echo "{\"picid\":\"$file[picid]\", \"url\":\"$url\", \"bigimg\":\"$bigimg\"}";
-			$showerror = false;
+	if(helper_access::check_module('album')) {
+		require_once libfile('function/spacecp');
+		if($_FILES["Filedata"]['error']) {
+			$file = lang('spacecp', 'file_is_too_big');
+		} else {
+			require_once libfile('function/home');
+			$_FILES["Filedata"]['name'] = addslashes(diconv(urldecode($_FILES["Filedata"]['name']), 'UTF-8'));
+			$file = pic_save($_FILES["Filedata"], 0, '', true, 0);
+			if(!empty($file) && is_array($file)) {
+				$url = pic_get($file['filepath'], 'album', $file['thumb'], $file['remote']);
+				$bigimg = pic_get($file['filepath'], 'album', 0, $file['remote']);
+				echo "{\"picid\":\"$file[picid]\", \"url\":\"$url\", \"bigimg\":\"$bigimg\"}";
+				$showerror = false;
+			}
 		}
 	}
 	if($showerror) {

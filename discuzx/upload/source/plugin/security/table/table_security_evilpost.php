@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_security_evilpost.php 26691 2011-12-20 05:25:10Z songlixin $
+ *      $Id: table_security_evilpost.php 27778 2012-02-14 07:11:14Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -67,11 +67,17 @@ class table_security_evilpost extends discuz_table {
 	}
 
 	public function update_by_pid_type($data, $pid, $type) {
-		return DB::update($this->_table, $data, array(DB::field($this->_pk, $pid), DB::field('type', $type)));
+		if(!empty($data) && is_array($data)) {
+			return DB::update($this->_table, $data, array(DB::field($this->_pk, $pid), DB::field('type', $type)));
+		}
+		return 0;
 	}
 
 	public function update_by_tid($ids, $data) {
-		return DB::update($this->_table, $data, DB::field('tid', $ids));
+		if(!empty($data) && is_array($data)) {
+			return DB::update($this->_table, $data, DB::field('tid', $ids));
+		}
+		return 0;
 	}
 
 	public function count_by_recyclebine($fid = 0, $isgroup = 0, $author = array(), $username = array(), $pstarttime = 0, $pendtime = 0, $mstarttime = 0, $mendtime = 0, $keywords = '') {

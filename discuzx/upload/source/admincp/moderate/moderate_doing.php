@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: moderate_doing.php 25289 2011-11-03 10:06:19Z zhangguosheng $
+ *      $Id: moderate_doing.php 28057 2012-02-21 22:19:33Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -123,21 +123,23 @@ if(!submitcheck('modsubmit') && !$_GET['fast']) {
 	if($moderation['validate']) {
 		C::t('home_doing')->update($moderation['validate'], array('status' => '0'));
 		$query_t = C::t('home_doing')->fetch_all($moderation['validate']);
-		foreach ($query_t as $doing) {
-			$feedarr = array(
-				'appid' => '',
-				'icon' => 'doing',
-				'uid' => $doing['uid'],
-				'username' => $doing['username'],
-				'dateline' => $doing['dateline'],
-				'title_template' => lang('feed', 'feed_doing_title'),
-				'title_data' => serialize(array('message'=>$doing['message'])),
-				'body_template' => '',
-				'body_data' => '',
-				'id' => $doing['doid'],
-				'idtype' => 'doid'
-			);
-			$validates += C::t('home_feed')->insert($feedarr);
+		if(helper_access::check_module('feed')) {
+			foreach ($query_t as $doing) {
+				$feedarr = array(
+					'appid' => '',
+					'icon' => 'doing',
+					'uid' => $doing['uid'],
+					'username' => $doing['username'],
+					'dateline' => $doing['dateline'],
+					'title_template' => lang('feed', 'feed_doing_title'),
+					'title_data' => serialize(array('message'=>$doing['message'])),
+					'body_template' => '',
+					'body_data' => '',
+					'id' => $doing['doid'],
+					'idtype' => 'doid'
+				);
+				$validates += C::t('home_feed')->insert($feedarr);
+			}
 		}
 		updatemoderate('doid', $moderation['validate'], 2);
 	}

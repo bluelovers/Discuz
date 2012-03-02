@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_album.php 25246 2011-11-02 03:34:53Z zhangguosheng $
+ *      $Id: admincp_album.php 27892 2012-02-16 07:24:19Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -14,7 +14,7 @@ include_once libfile('function/portalcp');
 
 cpheader();
 
-$detail = !empty($_GET['uid']) ? true : $_GET['detail'];
+$detail = $_GET['detail'];
 $albumname = $_GET['albumname'];
 $albumid = $_GET['albumid'];
 $uid = $_GET['uid'];
@@ -86,7 +86,7 @@ EOT;
 	showsetting('album_search_detail', 'detail', $detail, 'radio');
 	showsetting('album_search_perpage', '', $_GET['perpage'], "<select name='perpage'><option value='20'>$lang[perpage_20]</option><option value='50'>$lang[perpage_50]</option><option value='100'>$lang[perpage_100]</option></select>");
 	showsetting('resultsort', '', $orderby, "<select name='orderby'><option value=''>$lang[defaultsort]</option><option value='dateline'>$lang[topic_dateline]</option><option value='updatetime'>$lang[updatetime]</option><option value='picnum'>$lang[pic_num]</option></select> ");
-	showsetting('', '', $ordersc, "<select name='ordersc'><option value='desc'>$lang[orderdesc]</option><option value='asc'>$lang[orderasc]</option></select>");
+	showsetting('', '', $ordersc, "<select name='ordersc'><option value='desc'>$lang[orderdesc]</option><option value='asc'>$lang[orderasc]</option></select>", '', 0, '', '', '', true);
 	showsetting('album_search_albumname', 'albumname', $albumname, 'text');
 	showsetting('album_search_albumid', 'albumid', $albumid, 'text');
 	showsetting('album_search_uid', 'uid', $uid, 'text');
@@ -199,7 +199,7 @@ if(submitcheck('searchsubmit', 1) || $newlist) {
 		if($detail) {
 			$_GET['perpage'] = intval($_GET['perpage']) < 1 ? 20 : intval($_GET['perpage']);
 			$perpage = $_GET['pp'] ? $_GET['pp'] : $_GET['perpage'];
-			$query = C::t('home_album')->fetch_all_by_search(1, $uids, $albumname, false, '', $starttime, $endtime, $albumids, $orderby, $ordersc, (($page - 1) * $perpage), $perpage);
+			$query = C::t('home_album')->fetch_all_by_search(1, $uids, $albumname, false, '', $starttime, $endtime, $albumids, $friend, $orderby, $ordersc, (($page - 1) * $perpage), $perpage);
 			$albums = '';
 
 			include_once libfile('function/home');
@@ -239,11 +239,11 @@ if(submitcheck('searchsubmit', 1) || $newlist) {
 					$album['friend']
 				), TRUE);
 			}
-			$albumcount = C::t('home_album')->fetch_all_by_search(3, $uids, $albumname, false, '', $starttime, $endtime, $albumids);
+			$albumcount = C::t('home_album')->fetch_all_by_search(3, $uids, $albumname, false, '', $starttime, $endtime, $albumids, $friend);
 			$multi = multi($albumcount, $perpage, $page, ADMINSCRIPT."?action=album$muticondition");
 		} else {
 			$albumcount = 0;
-			$query = C::t('home_album')->fetch_all_by_search(2, $uids, $albumname, false, '', $starttime, $endtime, $albumids);
+			$query = C::t('home_album')->fetch_all_by_search(2, $uids, $albumname, false, '', $starttime, $endtime, $albumids, $friend);
 			foreach($query as $album) {
 				$albumids .= ','.$album['albumid'];
 				$albumcount++;

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_space.php 27037 2011-12-30 09:14:09Z chenmengshu $
+ *      $Id: function_space.php 28493 2012-03-01 10:39:23Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -110,7 +110,7 @@ function getblockhtml($blockname,$parameters = array()) {
 				$showmagicgift = true;
 				$magicinfo = !empty($space['magicgift']) ? dunserialize($space['magicgift']) : array();
 			}
-			$html .= '<li class="ul_broadcast"><a href="home.php?mod=space&uid='.$uid.'&do=follow">'.lang('space', 'block_profile_follow').'</a></li>';
+			$html .= '<li class="ul_broadcast"><a href="home.php?mod=space&uid='.$uid.'">'.lang('space', 'block_profile_follow').'</a></li>';
 			if ($space['self']) {
 				$html .= '<li class="ul_diy"><a href="home.php?mod=space&diy=yes">'.lang('space', 'block_profile_diy').'</a></li>';
 				$html .= '<li class="ul_msg"><a href="home.php?mod=space&uid='.$uid.'&do=wall">'.lang('space', 'block_profile_wall').'</a></li>';
@@ -130,9 +130,9 @@ function getblockhtml($blockname,$parameters = array()) {
 				$isfriend = friend_check($uid);
 				$follow = C::t('home_follow')->fetch_by_uid_followuid($_G['uid'], $uid);
 				if($follow) {
-					$html .= "<li class='ul_flw'><a href=\"home.php?mod=spacecp&ac=follow&op=del&fuid=$space[uid]\" id=\"followmod\" onclick=\"showWindow(this.id, this.href, 'get', 0);\">取消收听</a></li>";
+					$html .= "<li class='ul_flw'><a href=\"home.php?mod=spacecp&ac=follow&op=del&fuid=$space[uid]\" id=\"followmod\" onclick=\"showWindow(this.id, this.href, 'get', 0);\">".lang('space', 'follow_cancle_follow')."</a></li>";
 				} else {
-					$html .= "<li class='ul_flw'><a href=\"home.php?mod=spacecp&ac=follow&op=add&fuid=$space[uid]\" id=\"followmod\" onclick=\"showWindow(this.id, this.href, 'get', 0);\">收听TA</a></li>";
+					$html .= "<li class='ul_flw'><a href=\"home.php?mod=spacecp&ac=follow&op=add&hash=".FORMHASH."&fuid=$space[uid]\" id=\"followmod\" onclick=\"showWindow(this.id, this.href, 'get', 0);\">".lang('space', 'follow_follow_ta')."</a></li>";
 				}
 				if (!$isfriend) {
 					$html .= "<li class='ul_add'><a href=\"home.php?mod=spacecp&ac=friend&op=add&uid=$space[uid]&handlekey=addfriendhk_{$space[uid]}\" id=\"a_friend_li_{$space[uid]}\" onclick=\"showWindow(this.id, this.href, 'get', 0);\">".lang('space', 'block_profile_friend_add')."</a></li>";
@@ -168,13 +168,13 @@ function getblockhtml($blockname,$parameters = array()) {
 				if($_G['adminid'] == 1) {
 					$html .= '<ul id="umanageli_menu" class="p_pop" style="width: 80px; display:none;">';
 					$html .= '<li><a href="forum.php?mod=modcp&action=thread&op=post&searchsubmit=1&do=search&users='.$encodeusername.'" target="_blank">'.lang('space', 'manage_post').'</a></li>';
-					$html .= '<li><a href="admin.php?action=doing&searchsubmit=1&search=true&fromumanage=1&users='.$encodeusername.'" target="_blank">'.lang('space', 'manage_doing').'</a></li>';
-					$html .= '<li><a href="admin.php?action=blog&searchsubmit=1&search=true&fromumanage=1&uid='.$uid.'" target="_blank">'.lang('space', 'manage_blog').'</a></li>';
-					$html .= '<li><a href="admin.php?action=feed&searchsubmit=1&fromumanage=1&uid='.$uid.'" target="_blank">'.lang('space', 'manage_feed').'</a></li>';
-					$html .= '<li><a href="admin.php?action=album&searchsubmit=1&search=true&fromumanage=1&uid='.$uid.'" target="_blank">'.lang('space', 'manage_album').'</a></li>';
+					$html .= '<li><a href="admin.php?action=doing&searchsubmit=1&detail=1&search=true&fromumanage=1&users='.$encodeusername.'" target="_blank">'.lang('space', 'manage_doing').'</a></li>';
+					$html .= '<li><a href="admin.php?action=blog&searchsubmit=1&detail=1&search=true&fromumanage=1&uid='.$uid.'" target="_blank">'.lang('space', 'manage_blog').'</a></li>';
+					$html .= '<li><a href="admin.php?action=feed&searchsubmit=1&detail=1&fromumanage=1&uid='.$uid.'" target="_blank">'.lang('space', 'manage_feed').'</a></li>';
+					$html .= '<li><a href="admin.php?action=album&searchsubmit=1&detail=1&search=true&fromumanage=1&uid='.$uid.'" target="_blank">'.lang('space', 'manage_album').'</a></li>';
 					$html .= '<li><a href="admin.php?action=pic&searchsubmit=1&detail=1&search=true&fromumanage=1&users='.$encodeusername.'" target="_blank">'.lang('space', 'manage_pic').'</a></li>';
-					$html .= '<li><a href="admin.php?action=comment&searchsubmit=1&fromumanage=1&authorid='.$uid.'" target="_blank">'.lang('space', 'manage_comment').'</a></li>';
-					$html .= '<li><a href="admin.php?action=share&searchsubmit=1&search=true&fromumanage=1&uid='.$uid.'" target="_blank">'.lang('space', 'manage_share').'</a></li>';
+					$html .= '<li><a href="admin.php?action=comment&searchsubmit=1&detail=1&fromumanage=1&authorid='.$uid.'" target="_blank">'.lang('space', 'manage_comment').'</a></li>';
+					$html .= '<li><a href="admin.php?action=share&searchsubmit=1&detail=1&search=true&fromumanage=1&uid='.$uid.'" target="_blank">'.lang('space', 'manage_share').'</a></li>';
 					$html .= '<li><a href="admin.php?action=threads&operation=group&searchsubmit=1&detail=1&search=true&fromumanage=1&users='.$encodeusername.'" target="_blank">'.lang('space', 'manage_group_threads').'</a></li>';
 					$html .= '<li><a href="admin.php?action=prune&operation=group&searchsubmit=1&detail=1&fromumanage=1&users='.$encodeusername.'" target="_blank">'.lang('space', 'manage_group_prune').'</a></li>';
 					$html .= '</ul>';
@@ -532,7 +532,9 @@ function getblockhtml($blockname,$parameters = array()) {
 			}
 			$html = !empty($walllist) ? $html.lang('space', 'wall_more', array('uid'=>$uid)) : '<p class="emp">'.lang('space','block_wall_no_content').'</p>';
 			$html = '<div class="xld xlda el" id="comment_ul">'.$html.'</div>';
-			$html = lang('space','wall_form', array('uid' => $uid, 'FORMHASH'=>FORMHASH)).'<hr class="da mtm m0">'.$html;
+			if(helper_access::check_module('wall')) {
+				$html = lang('space', 'wall_form', array('uid' => $uid, 'FORMHASH'=>FORMHASH)).'<hr class="da mtm m0">'.$html;
+			}
 			$titlemore = '<span class="y xw0"><a href="home.php?mod=space&uid='.$uid.'&do=wall">'.lang('space', 'all').'</a></span>';
 			break;
 		case 'group':
@@ -588,8 +590,11 @@ function getblockhtml($blockname,$parameters = array()) {
 			}
 			$html = !$html ? '<p class="emp">'.lang('space','block_myapp_no_content').($space['self'] ? lang('space', 'block_myapp_no_content_publish', $space) : '').'</p>' : '<ul class="'.$listclass.'">'.$html.'</ul>';
 			break;
-		default:
-
+		case 'block1':
+		case 'block2':
+		case 'block3':
+		case 'block4':
+		case 'block5':
 			if($space['self']) {
 				$_G['space_group'] = $_G['group'];
 			} elseif(empty($_G['space_group'])) {
@@ -615,6 +620,9 @@ function getblockhtml($blockname,$parameters = array()) {
 			if (empty ($parameters['content'])) $parameters['content'] = lang('space',$blockname);
 			$html .= $parameters['content'];
 			break;
+
+		default:
+			return false;
 	}
 
 	if (isset($parameters['title'])) {
@@ -725,7 +733,7 @@ function getblockdata($blockname = '') {
 function check_ban_block($blockname, $space) {
 	global $_G;
 	$return = true;
-	if($blockname == 'group' && !$_G['setting']['groupstatus']) {
+	if($blockname == 'group' && !helper_access::check_module('group')) {
 		$return = false;
 	} elseif($blockname == 'thread' && $_G['setting']['allowviewuserthread'] === -1) {
 		$return = false;

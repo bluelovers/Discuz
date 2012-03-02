@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_usergroup.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_common_usergroup.php 28041 2012-02-21 07:33:55Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -47,6 +47,9 @@ class table_common_usergroup extends discuz_table
 	}
 
 	public function update($id, $data, $type = '') {
+		if(!is_array($data) || !$data || !is_array($data) || !$id) {
+			return null;
+		}
 		$condition = DB::field('groupid', $id);
 		if($type) {
 			$condition .= ' AND '.DB::field('type', $type);
@@ -55,6 +58,9 @@ class table_common_usergroup extends discuz_table
 	}
 
 	public function delete($id, $type = '') {
+		if(!$id) {
+			return null;
+		}
 		$condition = DB::field('groupid', $id);
 		if($type) {
 			$condition .= ' AND '.DB::field('type', $type);
@@ -109,7 +115,11 @@ class table_common_usergroup extends discuz_table
 	}
 
 	public function fetch_all_by_radminid($radminid, $glue = '>', $orderby = 'type'){
-		return DB::fetch_all('SELECT * FROM %t WHERE %i ORDER BY %i', array($this->_table, DB::field('radminid', $radminid, $glue), DB::order($orderby, 'DESC')), 'groupid');
+		$ordersql = '';
+		if($ordersql = DB::order($orderby, 'DESC')) {
+			$ordersql = ' ORDER BY '.$ordersql;
+		}
+		return DB::fetch_all('SELECT * FROM %t WHERE %i', array($this->_table, DB::field('radminid', intval($radminid), $glue) . $ordersql), 'groupid');
 	}
 
 	public function fetch_table_struct($result = 'FIELD') {

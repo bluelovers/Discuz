@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_space.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: lang_space.php 28113 2012-02-22 09:25:55Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -262,6 +262,12 @@ $lang = array(
 	'follow_view_my_following' => '我收听的人',
 	'follow_view_do_follower' => '他的听众',
 	'follow_view_do_following' => '他收听的人',
+	'follow_view_fulltext' => '...查看全文',
+	'follow_retract' => '收起',
+	'follow_click_play' => '点击播放',
+	'follow_cancle_follow' => '取消收听',
+	'follow_follow_ta' => '收听TA',
+
 
 );
 

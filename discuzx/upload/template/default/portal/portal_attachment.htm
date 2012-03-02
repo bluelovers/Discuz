@@ -9,23 +9,23 @@
 					</p>
 				</td>
 				<td class="atds">$attach[filesize]</td>
-				<td class="attc"><a href="javascript:;" class="d" onclick="deleteAttach($attach[attachid], 'portal.php?mod=attachment&id=$attach[attachid]&op=delete');;return false;" title="删除">删除</a></td>
+				<td class="attc"><a href="javascript:;" class="d" onclick="deleteAttach($attach[attachid], 'portal.php?mod=attachment&id=$attach[attachid]&op=delete');;return false;" title="{lang delete}">{lang delete}</a></td>
 			</tr>
 		</tbody>
 	</table>
 <!--{else}-->
 	<a href="javascript:;" class="opattach">
 		<span class="opattach_ctrl">
-			<span onclick="insertImage('$bigimg');" class="cur1">插入大图</span><span class="pipe">|</span>
-			<span onclick="insertImage('$smallimg', '$bigimg');" class="cur1">小图</span>
+			<span onclick="insertImage('$bigimg');" class="cur1">{lang portal_attachment_big_img}</span><span class="pipe">|</span>
+			<span onclick="insertImage('$smallimg', '$bigimg');" class="cur1">{lang portal_attachment_small_img}</span>
 		</span>
 		<img src="{if $smallimg}$smallimg{else}$bigimg{/if}" onclick="insertImage('$bigimg');" class="cur1" />
 	</a>
 	<label for="setconver$attach['attachid']" class="cur1 xi2">
-		<input type="radio" name="setconver" id="setconver$attach['attachid']" class="pr" value="1" onclick="setConver('$coverstr')">设为封面
+		<input type="radio" name="setconver" id="setconver$attach['attachid']" class="pr" value="1" onclick="setConver('$coverstr')">{lang portal_attachment_set_cover}
 	</label>
 	<span class="pipe">|</span>
-	<span class="cur1 xi2" onclick="deleteAttach('$attach['attachid']', 'portal.php?mod=attachment&id=$attach['attachid']&op=delete');">删除</span>
+	<span class="cur1 xi2" onclick="deleteAttach('$attach['attachid']', 'portal.php?mod=attachment&id=$attach['attachid']&op=delete');">{lang delete}</span>
 
 <!--{/if}-->
 <script type="text/javascript">

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_credit_base.php 26205 2011-12-05 10:09:32Z zhangguosheng $
+ *      $Id: spacecp_credit_base.php 28214 2012-02-24 06:38:56Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -283,7 +283,11 @@ if($_GET['op'] == 'base') {
 	$select = forumselect(false, 0, $_GET['fid']);
 	$keys = array_keys($_G['setting']['extcredits']);
 	foreach(C::t('common_credit_rule')->fetch_all_by_rid($rid) as $value) {
-		if(!$_G['setting']['homestatus'] && in_array($value['action'], array('doing', 'publishblog', 'guestbook', 'getguestbook', 'poke', 'visit'))) {
+		if(!helper_access::check_module('doing') && $value['action'] == 'doing') {
+			continue;
+		} elseif(!helper_access::check_module('blog') && $value['action'] == 'publishblog') {
+			continue;
+		} elseif(!helper_access::check_module('wall') && in_array($value['action'], array('guestbook', 'getguestbook'))) {
 			continue;
 		}
 		if(empty($_GET['fid']) || in_array($value['action'], array('digest', 'post', 'reply', 'getattach', 'postattach'))) {

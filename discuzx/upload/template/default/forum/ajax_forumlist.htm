@@ -1,13 +1,13 @@
 <!--{template common/header_ajax}-->
 <div id="flsrchdiv">
 	<div class="pbm cl">
-		<div class="sch">搜索: <input type="text" class="px vm" onkeyup="forumlistsearch(this.value)" /></div>
-		<h2><!--{if $visitedforums || $favforums}-->版块列表<!--{else}-->&nbsp;<!--{/if}--></h2>
+		<div class="sch">{lang search}: <input type="text" class="px vm" onkeyup="forumlistsearch(this.value)" /></div>
+		<h2><!--{if $visitedforums || $favforums}-->{lang forumlist}<!--{else}-->&nbsp;<!--{/if}--></h2>
 	</div>
 
 	<ul class="jump_bdl cl">
 		<li>
-			<p class="bbda xg1">所有版块</p>
+			<p class="bbda xg1">{lang forumlist_allforum}</p>
 		<!--{loop $forumlist $upfid $gdata}-->
 			<!--{if $gdata['sub']}-->
 				<p class="xw1{if $_GET['jfid'] == $upfid} a{/if}"><a href="forum.php?gid=$upfid">$gdata['name']</a></p>
@@ -23,7 +23,7 @@
 
 		<!--{if $visitedforums}-->
 			<li>
-				<p class="bbda xg1">最近浏览</p>
+				<p class="bbda xg1">{lang forumlist_recent}</p>
 			<!--{loop $visitedforums $fid $forumname}-->
 				<p{if $_GET['jfid'] == $fid} class="a"{/if}><a href="forum.php?mod=forumdisplay&fid=$fid">$forumname</a></p>
 			<!--{/loop}-->
@@ -32,7 +32,7 @@
 
 		<!--{if $favforums}-->
 			<li>
-				<p class="bbda xg1">我的收藏</p>
+				<p class="bbda xg1">{lang forumlist_myfav}</p>
 			<!--{loop $favforums $forum}-->
 				<p{if $_GET['jfid'] == $forum[id]} class="a"{/if}><a href="forum.php?mod=forumdisplay&fid=$forum[id]">$forum['title']</a></p>
 			<!--{/loop}-->

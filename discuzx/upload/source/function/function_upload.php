@@ -3,7 +3,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_upload.php 27145 2012-01-06 09:30:25Z zhengqingpeng $
+ *      $Id: function_upload.php 28434 2012-02-29 11:03:43Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -14,6 +14,7 @@ function getuploadconfig($uid=0, $fid=0, $limit=true) {
 	global $_G;
 
 	$notallow = $config = array();
+	$config['limit'] = 0;
 	$uid = !empty($uid) ? intval($uid) : $_G['uid'];
 	if(!$uid) {
 		return $config;
@@ -36,14 +37,14 @@ function getuploadconfig($uid=0, $fid=0, $limit=true) {
 	}
 	$extendtype = '';
 
-	$fid = C::t('forum_attachtype')->count_by_fid($fid) ? $fid : 0;
+	loadcache('attachtype');
+	$fid = isset($_G['cache']['attachtype'][$fid]) ? $fid : 0;
 	$filter = array();
-	foreach(C::t('forum_attachtype')->fetch_all_by_fid($fid) as $type) {
-		$type['extension'] = strtolower($type['extension']);
-		if($type['maxsize'] == 0) {
-			$notallow[] = $type['extension'];
+	foreach($_G['cache']['attachtype'][$fid] as $extension => $maxsize) {
+		if($maxsize == 0) {
+			$notallow[] = $extension;
 		} else {
-			$filter[] = "'$type[extension]':$type[maxsize]";
+			$filter[] = "'$extension':$maxsize";
 		}
 	}
 	if(!empty($filter)) {
@@ -83,7 +84,6 @@ function getuploadconfig($uid=0, $fid=0, $limit=true) {
 	}
 	$config['max'] = $config['max'] / 1024;
 
-	$config['limit'] = 0;
 	if($limit) {
 		if($_G['group']['maxattachnum']) {
 			$todayattachs = getuserprofile('todayattachs');

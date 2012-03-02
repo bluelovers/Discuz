@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: forum_viewthread.js 27501 2012-02-02 10:05:43Z monkey $
+	$Id: forum_viewthread.js 28530 2012-03-02 05:01:21Z zhangguosheng $
 */
 
 var replyreload = '', attachimgST = new Array(), zoomgroup = new Array(), zoomgroupinit = new Array();

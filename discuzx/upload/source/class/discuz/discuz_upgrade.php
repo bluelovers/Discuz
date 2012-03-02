@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: discuz_upgrade.php 25884 2011-11-24 09:02:20Z svn_project_zhangjie $
+ *      $Id: discuz_upgrade.php 27678 2012-02-09 08:11:21Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -66,7 +66,7 @@ class discuz_upgrade {
 						$searchlist[] = "\r\n".$file;
 						continue;
 					}
-					if($this->compare_file_content(DISCUZ_ROOT.$file, $this->upgradeurl.substr(DISCUZ_VERSION, 1).'/'.DISCUZ_RELEASE.'/'.$this->locale.'_'.$this->charset.'/upload/'.$file.'sc')) {
+					if($this->compare_file_content(DISCUZ_ROOT.$file, $this->upgradeurl.$this->versionpath().'/'.DISCUZ_RELEASE.'/'.$this->locale.'_'.$this->charset.'/upload/'.$file.'sc')) {
 						$showlist[$file] = $file;
 					} else {
 						$modifylist[$file] = $file;
@@ -107,7 +107,7 @@ class discuz_upgrade {
 		include_once libfile('class/xml');
 		include_once libfile('function/cache');
 
-		$upgradefile = $this->upgradeurl.substr(DISCUZ_VERSION, 1).'/'.DISCUZ_RELEASE.'/upgrade.xml';
+		$upgradefile = $this->upgradeurl.$this->versionpath().'/'.DISCUZ_RELEASE.'/upgrade.xml';
 		$response = xml2array(dfsockopen($upgradefile));
 		if(isset($response['cross']) || isset($response['patch'])) {
 			C::t('common_setting')->update('upgrade', $response);
@@ -168,57 +168,6 @@ class discuz_upgrade {
 		}
 	}
 
-	public function download_packet($upgradeinfo) {
-
-		$tempfilename = tempnam(DISCUZ_ROOT.'./data');
-		if(!$tempfilename) {
-			$tempfilename = DISCUZ_ROOT.'./data/'.random(6).'.tmp';
-		}
-		$fp = fopen($tempfilename, 'wb');
-		if(!$fp) {
-			return null;
-		}
-		$url = $this->upgradeurl.$upgradeinfo['latestversion'].'/'.$upgradeinfo['latestrelease'].'/'.$this->locale.'_'.$this->charset.'/upgradefile.zip';
-		$response = dfsockopen($url);
-		if(!empty($response)) {
-			fwrite($fp, $response);
-		}
-		fclose($fp);
-		return $tempfilename;
-	}
-
-	public function unpack_package($zipfile) {
-		require_once DISCUZ_ROOT.'./source/class/class_zip.php';
-		$unzip = new SimpleUnzip();
-		$unzip->ReadFile($zipfile);
-		if($unzip->Count() == 0 || $unzip->GetError(0) != 0) {
-			return false;
-		}
-
-		foreach($unzip->Entries as $entry) {
-			$file = dirname($zipfile).'./upgradecache/'.($entry->Path ? $entry->Path.'/' : '').$entry->Name;
-			$this->mkdirs(dirname($file));
-			$fp = fopen($file, 'w');
-			fwrite($fp, $entry->Data);
-			fclose($fp);
-		}
-		unlink($zipfile);
-		return true;
-	}
-
-	public function move_file($type) {
-		global $_G;
-		$srcdir = DISCUZ_ROOT.'./data/upgradecache/';
-		if($type == 'file') {
-			$this->copy_dir($srcdir, DISCUZ_ROOT);
-		} elseif($type == 'ftp') {
-			$ftpsrcdir = 'data';
-			siteftp_check($_GET['siteftp'], $ftpsrcdir);
-			$this->copy_dir($srcdir, '', 'ftp');
-		}
-		rmdirs($srcdir);
-	}
-
 	public function mkdirs($dir) {
 		if(!is_dir($dir)) {
 			if(!self::mkdirs(dirname($dir))) {
@@ -229,27 +178,6 @@ class discuz_upgrade {
 			}
 		}
 		return true;
-	}
-
-	public function copy_dir($srcdir, $destdir, $type = '') {
-		$dir = @opendir($srcdir);
-
-		while($entry = @readdir($dir)) {
-			$file = $srcdir.$entry;
-			if($entry != '.' && $entry != '..') {
-				if(is_dir($file)) {
-					self::copy_dir($file.'/', $destdir.$entry.'/', $type);
-				} else {
-					if($type == 'ftp') {
-						siteftp_upload($file, $destdir.$entry);
-					} else {
-						$this->mkdirs($destdir.$entry);
-						copy($file, $destdir.$entry);
-					}
-				}
-			}
-		}
-		closedir($dir);
 	}
 
 	public function copy_file($srcfile, $desfile, $type) {
@@ -275,21 +203,13 @@ class discuz_upgrade {
 		return true;
 	}
 
-	public function rmdirs($srcdir) {
-		$dir = @opendir($srcdir);
-
-		while($entry = @readdir($dir)) {
-			$file = $srcdir.$entry;
-			if($entry != '.' && $entry != '..') {
-				if(is_dir($file)) {
-					self::rmdirs($file.'/');
-				} else {
-					unlink($file);
-				}
-			}
+	public function versionpath() {
+		$versionpath = '';
+		foreach(explode(' ', substr(DISCUZ_VERSION, 1)) as $unit) {
+			$versionpath = $unit;
+			break;
 		}
-		closedir($dir);
-		rmdir($srcdir);
+		return $versionpath;
 	}
 }
 ?>

@@ -4,7 +4,7 @@
  *		[Discuz!] (C)2001-2099 Comsenz Inc.
  *		This is NOT a freeware, use is subject to license terms
  *
- *		$Id: Security.php 26819 2011-12-23 09:17:49Z songlixin $
+ *		$Id: Security.php 28489 2012-03-01 09:32:40Z songlixin $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -28,7 +28,7 @@ class Cloud_Service_Security {
 		if (!(self::$_instance instanceof self)) {
 			self::$_instance = new self();
 			$cloudAppService = Cloud::loadClass('Service_App');
-			self::$_secStatus = $cloudAppService->getcloudappstatus('security', 0);
+			self::$_secStatus = $cloudAppService->getCloudAppStatus('security');
 			self::$_instance->_setClient();
 		}
 
@@ -44,10 +44,11 @@ class Cloud_Service_Security {
 	}
 
 	public function reportRegister($uid) {
-		global $_G;
+        global $_G;
 		if (!self::$_secStatus) {
 			return false;
 		}
+        $startTime = microtime(true);
 
 		$uid = dintval($uid);
 		$member = C::t('common_member')->fetch($uid);
@@ -78,7 +79,9 @@ class Cloud_Service_Security {
 			$ids = array($uid);
 			$this->logFailed('register', $ids);
 		} catch (Exception $e) {
-		}
+        }
+        $this->benchMarkLog($startTime, $member['uid'], $batchData, 'register');
+
 		return $result;
 	}
 
@@ -87,7 +90,8 @@ class Cloud_Service_Security {
 		global $_G;
 		if (!self::$_secStatus) {
 			return false;
-		}
+        }
+        $startTime = microtime(true);
 
         $uid = dintval($uid);
 		$member = C::t('common_member')->fetch($uid, 0 ,1);
@@ -159,17 +163,19 @@ class Cloud_Service_Security {
 		} catch (Exception $e) {
 
         }
+        $this->benchMarkLog($startTime, $uid, $batchData, 'login');
 
         return $result;
 	}
 
 
-	public function reportPost($type, $tid, $pid, $extra = NULL) {
-		global $_G;
-
+	public function reportPost($type, $tid, $pid, $extra = NULL, $isFollow = 0) {
+        global $_G;
+        $utilService = Cloud::loadClass('Service_Util');
 		if (!self::$_secStatus) {
 			return false;
 		}
+        $startTime = microtime(true);
 
 		$tid = dintval($tid);
 		$pid = dintval($pid);
@@ -254,8 +260,30 @@ class Cloud_Service_Security {
 			'postAttachAudio' => 2,
 			'postShield' => ($post['status'] & 1) ? 1 : 2,
 			'postWarning' => ($post['status'] & 2) ? 1 : 2,
-			'isAdmin' => $member['adminid'] ? 1 : 2,
-		);
+            'isAdmin' => $member['adminid'] ? 1 : 2,
+            'isRush' => getstatus($thread['status'], 3) ? 1 : 2,
+            'hasReadPerm' => $thread['readperm'] ? 1 : 2,
+            'hasStamp' => ($thread['stamp'] >= 0) ? 1 : 2,
+            'hasIcon' => ($thread['icon'] >= 0) ? 1 : 2,
+            'isPushed' => $thread['pushedaid'] ? 1 : 2,
+            'hasCover' => $thread['cover'] ? 1 : 2,
+            'hasReward' => $thread['replycredit'] ? 1 : 2,
+            'isFollow' => $isFollow ? 1 : 2,
+            'threadStatus' => $thread['status'],
+            'postStatus' => $post['status'],
+        );
+
+        if ($post['first']) {
+            $contentBitMap['isMobile'] = $utilService->isMobile($thread['status']) ? 1 : 2;
+            if ($contentBitMap['isMobile'] == 1) {
+                $contentBitMap['isMobileSound'] = $utilService->mobileHasSound($thread['status']) ? 1 : 2;
+                $contentBitMap['isMobilePhoto'] = $utilService->mobileHasPhoto($thread['status']) ? 1 : 2;
+                $contentBitMap['isMobileGPS'] = $utilService->mobileHasGPS($thread['status']) ? 1 : 2;
+            }
+        } else {
+            $contentBitMap['isMobile'] = getstatus($post['status'], 4) ? 1 : 2;
+        }
+
 
 		$userBitMap['isAdmin'] = $member['adminid'] ? 1 : 2;
 		$userBitMap['hasMedal'] = $memberField['medals'] ? 1 : 2;
@@ -375,8 +403,10 @@ class Cloud_Service_Security {
 			$this->logFailed($type, $ids);
 		} catch (Exception $e) {
 
-		}
-		return $result;
+        }
+        $this->benchMarkLog($startTime, $pid, $batchData, $type);
+
+        return $result;
 	}
 
 	private function _convertSortInfo($sortId, $tid) {
@@ -547,11 +577,6 @@ class Cloud_Service_Security {
 		if (!self::$debug) {
 			return false;
 		}
-
-		$date = date("Y-m-d", TIMESTAMP);
-		$logfile = DISCUZ_ROOT . '/data/secLog-' . $type . '-' . $date . ".log";
-		$data = date("Y-m-d H:i:s", TIMESTAMP) . "\t" . $id . "\r\n";
-		@file_put_contents($logfile, $data, FILE_APPEND);
 
 		return true;
 	}
@@ -874,4 +899,19 @@ class Cloud_Service_Security {
 
 		return $mapArray[$str];
 	}
+
+    private function benchMarkLog($startTime, $id, $data, $type) {
+        return true;
+        $util = Cloud::loadClass('Service_Util');
+        $endTime = microtime(true);
+        $dataSize = strlen($util->httpBuildQuery($data));
+        $content = array(
+            date('Y-m-d H:i:s', $startTime),
+            $endTime - $startTime,
+            $type,
+            $id,
+            $dataSize,
+        );
+        $content = join(',', $content) . "\n";
+    }
 }

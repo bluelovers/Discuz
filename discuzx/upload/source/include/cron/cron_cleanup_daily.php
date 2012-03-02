@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cron_cleanup_daily.php 27055 2011-12-31 06:26:40Z monkey $
+ *      $Id: cron_cleanup_daily.php 28525 2012-03-02 04:18:37Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -18,6 +18,7 @@ C::t('common_task')->update_available();
 if(C::t('common_advertisement')->close_endtime()) {
 	updatecache(array('setting', 'advs'));
 }
+C::t('forum_threaddisablepos')->truncate();
 C::t('common_searchindex')->truncate();
 C::t('forum_threadmod')->delete_by_dateline($_G['timestamp']-31536000);
 C::t('forum_forumrecommend')->delete_old();

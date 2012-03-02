@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_patch.php 25581 2011-11-15 08:13:13Z svn_project_zhangjie $
+ *      $Id: misc_patch.php 28136 2012-02-23 03:26:19Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -26,8 +26,8 @@ if($_GET['action'] == 'checkpatch') {
 		$discuz_patch = new discuz_patch();
 		$patchnotice = $discuz_patch->fetch_patch_notice();
 		if(!empty($patchnotice['data'])) {
-			include_once DISCUZ_ROOT.'./source/language/lang_template.php';
-			$patchlist .= '<div class="bm'.($patchnotice['fixed'] ? ' allfixed' : '').'"><div class="bm_h cl"><a href="javascript:;" onclick="$(\'patch_notice\').style.display=\'none\'" class="y" title="'.$lang['close'].'">'.$lang['close'].'</a><h2>';
+			include_once DISCUZ_ROOT.'./source/language/forum/lang_misc.php';
+			$patchlist .= '<div class="bm'.($patchnotice['fixed'] ? ' allfixed' : '').'"><div class="bm_h cl"><a href="javascript:;" onclick="$(\'patch_notice\').style.display=\'none\'" class="y" title="'.$lang['patch_close'].'">'.$lang['patch_close'].'</a><h2>';
 			if($patchnotice['fixed']) {
 				$patchlist .= $lang['patch_site_have'].' '.count($patchnotice['data']).' '.$lang['patch_is_fixed'];
 			} else {

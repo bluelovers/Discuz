@@ -4,7 +4,7 @@
  *		[Discuz!] (C)2001-2099 Comsenz Inc.
  *		This is NOT a freeware, use is subject to license terms
  *
- *		$Id: xf_storage.class.php 27316 2012-01-16 03:08:11Z songlixin $
+ *		$Id: xf_storage.class.php 28286 2012-02-27 06:43:22Z yexinhao $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -20,7 +20,7 @@ class plugin_xf_storage {
 	public function plugin_xf_storage() {
 		global $_G;
 		$cloudAppService = Cloud::loadClass('Service_App');
-		$this->appStatus = $cloudAppService->getcloudappstatus('storage', 0);
+		$this->appStatus = $cloudAppService->getCloudAppStatus('storage');
 	}
 
 	public function common(){
@@ -105,10 +105,6 @@ class plugin_xf_storage_forum extends plugin_xf_storage {
 			}
 		}
 		return $return;
-    }
-
-    public function viewthread_jscode_output() {
-        return 'aaaaaaa';
     }
 }
 

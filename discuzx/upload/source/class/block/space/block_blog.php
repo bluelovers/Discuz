@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: block_blog.php 25525 2011-11-14 04:39:11Z zhangguosheng $
+ *      $Id: block_blog.php 27932 2012-02-17 02:26:59Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -200,7 +200,7 @@ class block_blog extends discuz_block {
 			$wheres[] = "b.dateline >= '$timestamp'";
 		}
 		$tablesql = $fieldsql = '';
-		if($style['getpic'] || $style['getsummary'] || $picrequired) {
+		if($style['getsummary'] || $picrequired) {
 			if($picrequired) {
 				$wheres[] = "bf.pic != ''";
 			}

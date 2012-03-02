@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: Util.php 27244 2012-01-12 03:37:40Z songlixin $
+ *      $Id: Util.php 28361 2012-02-28 07:12:03Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -89,6 +89,8 @@ class Cloud_Service_Util {
 			$chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz';
 			$siteuniqueid = 'DX'.$chars[date('y')%60].$chars[date('n')].$chars[date('j')].$chars[date('G')].$chars[date('i')].$chars[date('s')].substr(md5($_G['clientip'].$_G['username'].TIMESTAMP), 0, 4).random(4);
 			C::t('common_setting')->update('siteuniqueid', $siteuniqueid);
+			require_once libfile('function/cache');
+			updatecache('setting');
 		}
 	}
 
@@ -157,5 +159,33 @@ class Cloud_Service_Util {
 
 			return ($raw_output) ? pack($pack, $output) : $output;
 		}
-	}
+    }
+
+    public function isMobile($status) {
+        if (getstatus($status, 11) || getstatus($status, 12) || getstatus($status, 13)) {
+            return true;
+        }
+        return false;
+    }
+
+    public function mobileHasSound() {
+        if (getstatus($status, 13)) {
+            return true;
+        }
+        return false;
+    }
+
+    public function mobileHasPhoto() {
+        if (getstatus($status, 12) && getstatus($status, 11)) {
+            return true;
+        }
+        return false;
+    }
+
+    public function mobileHasGPS() {
+        if (getstatus($status, 12)) {
+            return true;
+        }
+        return false;
+    }
 }

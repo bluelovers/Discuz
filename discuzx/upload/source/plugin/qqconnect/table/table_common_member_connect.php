@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_member_connect.php 26281 2011-12-08 02:00:40Z monkey $
+ *      $Id: table_common_member_connect.php 28497 2012-03-01 11:16:19Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -19,6 +19,8 @@ class table_common_member_connect extends discuz_table {
 		$this->_table = 'common_member_connect';
 		$this->_pk = 'uid';
 		$this->_fields = array('uid', 'conuin', 'conuinsecret', 'conopenid', 'conisfeed', 'conispublishfeed', 'conispublisht', 'conisregister', 'conisqzoneavatar');
+		$this->_pre_cache_key = 'common_member_connect_';
+		$this->_cache_ttl = 0;
 
 		parent::__construct();
 	}
@@ -30,11 +32,7 @@ class table_common_member_connect extends discuz_table {
 		} else {
 			$field = '*';
 		}
-		if($fields) {
-			return DB::fetch_first('SELECT %i FROM %t WHERE conopenid=%s', array($field, $this->_table, $openid));
-		}
-
-		return false;
+		return DB::fetch_first('SELECT %i FROM %t WHERE conopenid=%s', array($field, $this->_table, $openid));
 	}
 
 

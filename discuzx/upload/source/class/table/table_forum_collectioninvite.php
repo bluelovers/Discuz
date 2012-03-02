@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_forum_collectioninvite.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_forum_collectioninvite.php 27779 2012-02-14 07:33:17Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -37,6 +37,10 @@ class table_forum_collectioninvite extends discuz_table
 			$condition[] = DB::field('uid', $uid);
 		}
 
+		if(!count($condition)) {
+			return false;
+		}
+
 		DB::delete($this->_table, implode(' AND ', $condition));
 	}
 
@@ -45,6 +49,9 @@ class table_forum_collectioninvite extends discuz_table
 	}
 
 	public function delete_by_dateline($dateline) {
+		if(!is_numeric($dateline)) {
+			return false;
+		}
 		return DB::delete($this->_table, DB::field('dateline', $dateline, '<='));
 	}
 }

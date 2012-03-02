@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_magiclog.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_common_magiclog.php 27911 2012-02-16 08:54:10Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -22,10 +22,11 @@ class table_common_magiclog extends discuz_table
 	}
 	public function fetch_all_by_magicid_action($magicid, $action, $start = 0, $limit = 0) {
 		$sql = array();
-		if ($magicid) {
+		if($magicid) {
+			$magicid = dintval($magicid, true);
 			$sql[] = DB::field('magicid', $magicid);
 		}
-		if ($action) {
+		if($action) {
 			$sql[] = DB::field('action', $action);
 		}
 		$wheresql = ($sql ? 'WHERE ' : '').implode(' AND ', $sql);
@@ -35,20 +36,21 @@ class table_common_magiclog extends discuz_table
 		return DB::fetch_all('SELECT * FROM %t WHERE magicid=%d AND action=%d AND uid!=%d ORDER BY dateline DESC '.DB::limit($start, $limit), array($this->_table, $mid, $action, $uid));
 	}
 	public function fetch_all_by_uid_action($uid, $action, $start, $limit, $order = 'DESC') {
-		return DB::fetch_all('SELECT * FROM %t WHERE uid=%d AND action=%d '.($order ? 'ORDER BY dateline '.$order : '').' '.($limit ? DB::limit($start, $limit) : ''), array($this->_table, $uid, $action));
+		return DB::fetch_all('SELECT * FROM %t WHERE uid=%d AND action=%d '.($order ? 'ORDER BY '.DB::order('dateline', $order) : '').' '.($limit ? DB::limit($start, $limit) : ''), array($this->_table, $uid, $action));
 	}
 	public function fetch_all_by_targetuid_action($uid, $action, $start, $limit, $order = 'DESC') {
-		return DB::fetch_all('SELECT * FROM %t WHERE targetuid=%d AND action=%d '.($order ? 'ORDER BY dateline '.$order : '').' '.($limit ? DB::limit($start, $limit) : ''), array($this->_table, $uid, $action));
+		return DB::fetch_all('SELECT * FROM %t WHERE targetuid=%d AND action=%d '.($order ? 'ORDER BY '.DB::order('dateline', $order) : '').' '.($limit ? DB::limit($start, $limit) : ''), array($this->_table, $uid, $action));
 	}
 	public function count_by_targetuid_action($uid, $action) {
 		return DB::result_first('SELECT COUNT(*) FROM %t WHERE targetuid=%d AND action=%d', array($this->_table, $uid, $action));
 	}
 	public function count_by_magicid_action($magicid, $action) {
 		$sql = array();
-		if ($magicid) {
+		if($magicid) {
+			$magicid = dintval($magicid, true);
 			$sql[] = DB::field('magicid', $magicid);
 		}
-		if ($action) {
+		if($action) {
 			$sql[] = DB::field('action', $action);
 		}
 		$wheresql = ($sql ? 'WHERE ' : '').implode(' AND ', $sql);
@@ -75,7 +77,11 @@ class table_common_magiclog extends discuz_table
 		return DB::result_first('SELECT COUNT(*) FROM %t WHERE '.implode(' AND ', $wherearr), $parameter);
 	}
 	public function delete_by_magicid($ids) {
-		return DB::delete($this->_table, DB::field('magicid', $ids));
+		$ids = dintval($ids, true);
+		if($ids) {
+			return DB::delete($this->_table, DB::field('magicid', $ids));
+		}
+		return 0;
 	}
 
 }

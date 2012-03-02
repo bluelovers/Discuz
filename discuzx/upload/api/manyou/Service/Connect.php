@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: Connect.php 27244 2012-01-12 03:37:40Z songlixin $
+ *      $Id: Connect.php 27709 2012-02-13 03:13:04Z zhouxiaobo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -177,7 +177,7 @@ class Cloud_Service_Connect {
 		$result = preg_replace('/\[hide(=\d+)?\].+?\[\/hide\](\r\n|\n|\r)/i', '', $bbcode);
 		$result = preg_replace('/\[payto(=\d+)?\].+?\[\/payto\](\r\n|\n|\r)/i', '', $result);
 		$result = discuzcode($result, 0, 0, $isHtml, 1, 2, 1, 0, 0, 0, 0, 1, 0);
-		$result = str_ireplace(array('<br />', '<br>'), ' ', $result);
+		$result = strip_tags($result, '<img><a>');
 		$result = preg_replace('/<img src="images\//i', "<img src=\"".$_G['siteurl']."images/", $result);
 		$result = $this->connectParseAttach($result, $fId, $pId, $attachImages, $attachImageThumb);
 		return $result;
@@ -391,25 +391,116 @@ class Cloud_Service_Connect {
 		return md5($mt.$rand);
 	}
 
-
-	function connectParseXml($xml) {
-
-		$handle = xml_parser_create();
-		xml_parser_set_option($handle, XML_OPTION_CASE_FOLDING, false);
-		$result = xml_parse_into_struct($handle, $xml, $vals, $index);
-		xml_parser_free($handle);
-
-		$data = array();
-		if ($result === 0) {
-			return $data;
+	function connectParseXml($contents, $getAttributes = true, $priority = 'tag') {
+		if (!$contents) {
+			return array();
 		}
 
-		foreach($vals as $valueArray) {
-			$data[$valueArray['tag']] = trim($valueArray['value']);
+		if (!function_exists('xml_parser_create')) {
+			return array();
 		}
 
-		return $data;
+		$parser = xml_parser_create('');
+		xml_parser_set_option($parser, XML_OPTION_TARGET_ENCODING, 'UTF-8');
+		xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
+		xml_parser_set_option($parser, XML_OPTION_SKIP_WHITE, 1);
+		xml_parse_into_struct($parser, trim($contents), $xmlValues);
+		xml_parser_free($parser);
+
+		if (!$xmlValues) {
+			return;
+		}
+
+		$xmlArray = $parent = array();
+
+		$current = &$xmlArray;
+		$repeatedTagIndex = array();
+
+		foreach($xmlValues as $data) {
+			unset($attributes, $value);
+			extract($data);
+
+			$result = $attributesData = array();
+
+			if (isset($value)) {
+				if ($priority == 'tag') {
+					$result = $value;
+				} else {
+					$result['value'] = $value;
+				}
+			}
+
+			if (isset($attributes) && $getAttributes) {
+				foreach ($attributes as $attr => $val) {
+					if ($priority == 'tag') {
+						$attributesData[$attr] = $val;
+					} else {
+						$result['attr'][$attr] = $val;
+					}
+				}
+			}
+
+			if ($type == 'open') {
+				$parent[$level - 1] = &$current;
+				if (!is_array($current) || (!in_array($tag, array_keys($current)))) {
+					$current[$tag] = $result;
+					if ($attributesData) {
+						$current[$tag . '_attr'] = $attributesData;
+					}
+					$repeatedTagIndex[$tag . '_' . $level] = 1;
+					$current = &$current[$tag];
+				} else {
+					if (isset($current[$tag][0])) {
+						$current[$tag][$repeatedTagIndex[$tag . '_' . $level]] = $result;
+						$repeatedTagIndex[$tag . '_' . $level] ++;
+					} else {
+						$current[$tag] = array($current[$tag], $result);
+						$repeatedTagIndex[$tag . '_' . $level] = 2;
+						if (isset($current[$tag . '_attr'])) {
+							$current[$tag]['0_attr'] = $current[$tag . '_attr'];
+							unset($current[$tag . '_attr']);
+						}
+					}
+					$lastItemIndex = $repeatedTagIndex[$tag . '_' . $level] - 1;
+					$current = &$current[$tag][$lastItemIndex];
+				}
+			} elseif($type == 'complete') {
+				if (!isset($current[$tag])) {
+					$current[$tag] = $result;
+					$repeatedTagIndex[$tag . '_' . $level] = 1;
+					if ($priority == 'tag' && $attributesData) {
+						$current[$tag . '_attr'] = $attributesData;
+					}
+				} else {
+					if (isset($current[$tag][0]) && is_array($current[$tag])) {
+						$current[$tag][$repeatedTagIndex[$tag . '_' . $level]] = $result;
+						if ($priority == 'tag' && $getAttributes && $attributesData) {
+							$current[$tag][$repeatedTagIndex[$tag . '_' . $level] . '_attr'] = $attributesData;
+						}
+						$repeatedTagIndex[$tag . '_' . $level] ++;
+					} else {
+						$current[$tag] = array($current[$tag], $result);
+						$repeatedTagIndex[$tag . '_' . $level] = 1;
+						if ($priority == 'tag' && $getAttributes) {
+							if (isset($current[$tag . '_attr'])) {
+								$current[$tag]['0_attr'] = $current[$tag . '_attr'];
+								unset($current[$tag . '_attr']);
+							}
+							if ($attributesData) {
+								$current[$tag][$repeatedTagIndex[$tag . '_' . $level] . '_attr'] = $attributesData;
+							}
+						}
+						$repeatedTagIndex[$tag . '_' . $level] ++;
+					}
+				}
+			} elseif($type == 'close') {
+				$current = &$parent[$level - 1];
+			}
+		}
+
+		return $xmlArray[key($parent[0])] ? $xmlArray[key($parent[0])] : $xmlArray;
 	}
+
 
 	function connectFilterUsername($username) {
 		$username = str_replace(' ', '_', trim($username));

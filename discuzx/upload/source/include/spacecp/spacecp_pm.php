@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_pm.php 27369 2012-01-18 10:29:12Z svn_project_zhangjie $
+ *      $Id: spacecp_pm.php 28251 2012-02-27 01:40:15Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {

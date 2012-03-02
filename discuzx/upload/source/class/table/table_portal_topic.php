@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_portal_topic.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_portal_topic.php 27876 2012-02-16 04:28:02Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -22,13 +22,13 @@ class table_portal_topic extends discuz_table
 	}
 
 	public function count_by_search_where($wherearr) {
-		$wheresql = empty($wherearr) ? '' : ' WHERE '.implode(' AND ', $wherearr);
-		return DB::result_first('SELECT COUNT(*) FROM '.DB::table($this->_table).$wheresql);
+		$wheresql = empty($wherearr) ? '' : implode(' AND ', $wherearr);
+		return DB::result_first('SELECT COUNT(*) FROM '.DB::table($this->_table).($wheresql ? ' WHERE '.$wheresql : ''));
 	}
 
 	public function fetch_all_by_search_where($wherearr, $ordersql, $start, $limit) {
-		$wheresql = empty($wherearr) ? '' : ' WHERE '.implode(' AND ', $wherearr);
-		return DB::fetch_all('SELECT * FROM '.DB::table($this->_table).$wheresql.' '.$ordersql.DB::limit($start, $limit), null, 'topicid');
+		$wheresql = empty($wherearr) ? '' : implode(' AND ', $wherearr);
+		return DB::fetch_all('SELECT * FROM '.DB::table($this->_table).($wheresql ? ' WHERE '.$wheresql : '').' '.$ordersql.DB::limit($start, $limit), null, 'topicid');
 	}
 
 	public function fetch_by_name($name) {
@@ -36,7 +36,7 @@ class table_portal_topic extends discuz_table
 	}
 
 	public function increase($ids, $data) {
-		$ids = array_map('dintval', (array)$ids);
+		$ids = array_map('intval', (array)$ids);
 		$sql = array();
 		$allowkey = array('commentnum', 'viewnum');
 		foreach($data as $key => $value) {
@@ -48,8 +48,25 @@ class table_portal_topic extends discuz_table
 			DB::query('UPDATE '.DB::table($this->_table).' SET '.implode(',', $sql).' WHERE uid IN ('.dimplode($ids).')', 'UNBUFFERED');
 		}
 	}
-	public function fetch_all_by_title($idtype, $sqlsubject) {
-		return DB::fetch_all("SELECT $idtype FROM ".DB::table($this->_table)." WHERE $sqlsubject");
+	public function fetch_all_by_title($idtype, $subject) {
+		if(empty($idtype) || !is_string($idtype) || empty($subject)) {
+			return array();
+		}
+		$parameter = array($this->_table);
+		$or = $wheresql = '';
+		$subject = explode(',', str_replace(' ', '', $subject));
+		for($i = 0; $i < count($subject); $i++) {
+			if(preg_match("/\{(\d+)\}/", $subject[$i])) {
+				$subject[$i] = preg_replace("/\\\{(\d+)\\\}/", ".{0,\\1}", preg_quote($subject[$i], '/'));
+				$wheresql .= " $or title REGEXP %s";
+				$parameter[] = $subject[$i];
+			} else {
+				$wheresql .= " $or title LIKE %s";
+				$parameter[] = '%'.$subject[$i].'%';
+			}
+			$or = 'OR';
+		}
+		return DB::fetch_all("SELECT $idtype FROM %t WHERE $wheresql", $parameter);
 	}
 }
 

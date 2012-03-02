@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_core.php 27483 2012-02-02 05:00:53Z zhangguosheng $
+ *      $Id: function_core.php 28407 2012-02-29 05:18:47Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -190,9 +190,9 @@ function fsocketopen($hostname, $port = 80, &$errno, &$errstr, $timeout = 15) {
 	return $fp;
 }
 
-function dfsockopen($url, $limit = 0, $post = '', $cookie = '', $bysocket = FALSE, $ip = '', $timeout = 15, $block = TRUE, $encodetype  = 'URLENCODE') {
+function dfsockopen($url, $limit = 0, $post = '', $cookie = '', $bysocket = FALSE, $ip = '', $timeout = 15, $block = TRUE, $encodetype  = 'URLENCODE', $allowcurl = TRUE) {
 	require_once libfile('function/filesock');
-	return _dfsockopen($url, $limit, $post, $cookie, $bysocket, $ip, $timeout, $block, $encodetype);
+	return _dfsockopen($url, $limit, $post, $cookie, $bysocket, $ip, $timeout, $block, $encodetype, $allowcurl);
 }
 
 function dhtmlspecialchars($string) {
@@ -305,7 +305,13 @@ function checkmobile() {
 				'alcatel', 'amoi', 'ktouch', 'nexian', 'ericsson', 'philips', 'sagem', 'wellcom', 'bunjalloo', 'maui', 'smartphone',
 				'iemobile', 'spice', 'bird', 'zte-', 'longcos', 'pantech', 'gionee', 'portalmmm', 'jig browser', 'hiptop',
 				'benq', 'haier', '^lct', '320x320', '240x320', '176x220');
+	$pad_list = array('pad', 'gt-p1000');
+
 	$useragent = strtolower($_SERVER['HTTP_USER_AGENT']);
+
+	if(dstrpos($useragent, $pad_list)) {
+		return false;
+	}
 	if(($v = dstrpos($useragent, $mobilebrowser_list, true))) {
 		$_G['mobile'] = $v;
 		return true;
@@ -596,7 +602,7 @@ function getcurrentnav() {
 	$mnid = '';
 	$_G['basefilename'] = $_G['basefilename'] == $_G['basescript'] ? $_G['basefilename'] : $_G['basescript'].'.php';
 	if(isset($_G['setting']['navmns'][$_G['basefilename']])) {
-		if($_G['basefilename'] == 'home.php' && $_GET['mod'] == 'space' && ($_G['setting']['followreferer'] && empty($_GET['do']) || in_array($_GET['do'], array('follow', 'view')))) {
+		if($_G['basefilename'] == 'home.php' && $_GET['mod'] == 'space' && (empty($_GET['do']) || in_array($_GET['do'], array('follow', 'view')))) {
 			$_GET['mod'] = 'follow';
 		}
 		foreach($_G['setting']['navmns'][$_G['basefilename']] as $navmn) {
@@ -712,6 +718,10 @@ function dmktime($date) {
 	return 0;
 }
 
+function dnumber($number) {
+	return abs($number) > 10000 ? '<span title="'.$number.'">'.intval($number / 10000).lang('core', '10k').'</span>' : $number;
+}
+
 function savecache($cachename, $data) {
 	C::t('common_syscache')->insert($cachename, $data);
 }
@@ -732,6 +742,7 @@ function block_display($bid) {
 
 function dimplode($array) {
 	if(!empty($array)) {
+		$array = array_map('addslashes', $array);
 		return "'".implode("','", is_array($array) ? $array : array($array))."'";
 	} else {
 		return 0;
@@ -739,13 +750,14 @@ function dimplode($array) {
 }
 
 function libfile($libname, $folder = '') {
-	$libpath = DISCUZ_ROOT.'/source/'.$folder;
+	$libpath = '/source/'.$folder;
 	if(strstr($libname, '/')) {
 		list($pre, $name) = explode('/', $libname);
-		return realpath("{$libpath}/{$pre}/{$pre}_{$name}.php");
+		$path = "{$libpath}/{$pre}/{$pre}_{$name}";
 	} else {
-		return realpath("{$libpath}/{$libname}.php");
+		$path = "{$libpath}/{$libname}";
 	}
+	return preg_match('/^[\w\d\/_]+$/i', $path) ? realpath(DISCUZ_ROOT.$path.'.php') : false;
 }
 
 function dstrlen($str) {
@@ -949,6 +961,8 @@ function output() {
 	if(defined('IN_MOBILE')) {
 		mobileoutput();
 	}
+	$tipsService = Cloud::loadClass('Service_DiscuzTips');
+	$tipsService->show();
 	$havedomain = implode('', $_G['setting']['domain']['app']);
 	if($_G['setting']['rewritestatus'] || !empty($havedomain)) {
 		$content = ob_get_contents();
@@ -1019,7 +1033,7 @@ function output_ajax() {
 }
 
 
-function runhooks() {
+function runhooks($scriptextra = '') {
 	if(!defined('HOOKTYPE')) {
 		define('HOOKTYPE', !defined('IN_MOBILE') ? 'hookscript' : 'hookscriptmobile');
 	}
@@ -1028,18 +1042,20 @@ function runhooks() {
 		if($_G['setting']['plugins']['func'][HOOKTYPE]['common']) {
 			hookscript('common', 'global', 'funcs', array(), 'common');
 		}
-		hookscript(CURMODULE, $_G['basescript']);
+		hookscript(CURMODULE, $_G['basescript'], 'funcs', array(), '', $scriptextra);
 	}
 }
 
-function hookscript($script, $hscript, $type = 'funcs', $param = array(), $func = '') {
+function hookscript($script, $hscript, $type = 'funcs', $param = array(), $func = '', $scriptextra = '') {
 	global $_G;
 	static $pluginclasses;
 	if($hscript == 'home') {
 		if($script == 'space') {
-			$script = 'space'.(!empty($_GET['do']) ? '_'.$_GET['do'] : (!empty($_GET['do']) ? '_'.$_GET['do'] : ''));
+			$scriptextra = !$scriptextra ? $_GET['do'] : $scriptextra;
+			$script = 'space'.(!empty($scriptextra) ? '_'.$scriptextra : '');
 		} elseif($script == 'spacecp') {
-			$script .= !empty($_GET['ac']) ? '_'.$_GET['ac'] : (!empty($_GET['ac']) ? '_'.$_GET['ac'] : '');
+			$scriptextra = !$scriptextra ? $_GET['ac'] : $scriptextra;
+			$script .= !empty($scriptextra) ? '_'.$scriptextra : '';
 		}
 	}
 	if(!isset($_G['setting'][HOOKTYPE][$hscript][$script][$type])) {
@@ -1312,7 +1328,7 @@ function multi($num, $perpage, $curpage, $mpurl, $maxpages = 0, $page = 10, $aut
 }
 
 function simplepage($num, $perpage, $curpage, $mpurl) {
-	return $num >= $perpage ? helper_page::simplepage($num, $perpage, $curpage, $mpurl) : '';
+	return helper_page::simplepage($num, $perpage, $curpage, $mpurl);
 }
 
 function censor($message, $modword = NULL, $return = FALSE) {
@@ -1558,9 +1574,8 @@ function updatediytemplate($targettplname = '', $tpldirectory = '') {
 }
 
 function space_key($uid, $appid=0) {
-
-	$siteuniqueid = C::t('common_setting')->fetch('siteuniqueid');
-	return substr(md5($siteuniqueid.'|'.$uid.(empty($appid)?'':'|'.$appid)), 8, 16);
+	global $_G;
+	return substr(md5($_G['setting']['siteuniqueid'].'|'.$uid.(empty($appid)?'':'|'.$appid)), 8, 16);
 }
 
 
@@ -1862,10 +1877,15 @@ function userappprompt() {
 	}
 }
 
-function dintval($int) {
+function dintval($int, $allowarray = false) {
 	$ret = intval($int);
-	if($int == $ret || is_array($int)) return $ret;
-	if($int <= 0xffffffff) {
+	if($int == $ret || !$allowarray && is_array($int)) return $ret;
+	if($allowarray && is_array($int)) {
+		foreach($int as &$v) {
+			$v = dintval($v, true);
+		}
+		return $int;
+	} elseif($int <= 0xffffffff) {
 		$l = strlen($int);
 		$m = substr($int, 0, 1) == '-' ? 1 : 0;
 		if(($l - $m) === strspn($int,'0987654321', $m)) {
@@ -1947,6 +1967,24 @@ function browserversion($type) {
 		$return['other'] = $other;
 	}
 	return $return[$type];
+}
+
+function currentlang() {
+	$charset = strtoupper(CHARSET);
+	if($charset == 'GBK') {
+		return 'SC_GBK';
+	} elseif($charset == 'BIG5') {
+		return 'TC_BIG5';
+	} elseif($charset == 'UTF-8') {
+		global $_G;
+		if($_G['config']['output']['language'] == 'zh_cn') {
+			return 'SC_UTF8';
+		} elseif ($_G['config']['output']['language'] == 'zh_tw') {
+			return 'TC_UTF8';
+		}
+	} else {
+		return '';
+	}
 }
 
 

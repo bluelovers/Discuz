@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_usergroup.php 27099 2012-01-05 04:18:51Z monkey $
+ *      $Id: spacecp_usergroup.php 28431 2012-02-29 09:51:23Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -134,8 +134,15 @@ if(in_array($do, array('buy', 'exit'))) {
 				$extgroupidsnew .= "\t".$extgroupid;
 			}
 		}
+		if($_G['adminid'] > 0 && $group['radminid'] > 0) {
+			$newadminid = $_G['adminid'] < $group['radminid'] ? $_G['adminid'] : $group['radminid'];
+		} elseif($_G['adminid'] > 0) {
+			$newadminid = $_G['adminid'];
+		} else {
+			$newadminid = $group['radminid'];
+		}
 
-		C::t('common_member')->update($_G['uid'], array('groupid' => $groupid, 'adminid' => $group['radminid'], 'groupexpiry' => $groupexpirynew, 'extgroupids' => $extgroupidsnew));
+		C::t('common_member')->update($_G['uid'], array('groupid' => $groupid, 'adminid' => $newadminid, 'groupexpiry' => $groupexpirynew, 'extgroupids' => $extgroupidsnew));
 		showmessage('usergroups_switch_succeed', "home.php?mod=spacecp&ac=usergroup".($_GET['gid'] ? "&gid=$_GET[gid]" : '&do=expiry'), array('group' => $group['grouptitle']), array('showdialog' => 3, 'showmsg' => true, 'locationtime' => true));
 	}
 
@@ -305,8 +312,11 @@ if(in_array($do, array('buy', 'exit'))) {
 	}
 	$pperms = array('allowpost','allowreply','allowpostpoll','allowvote','allowpostreward','allowpostactivity','allowpostdebate','allowposttrade','allowat', 'allowreplycredit', 'allowposttag', 'allowcreatecollection','maxsigsize','allowsigbbcode','allowsigimgcode','allowrecommend','raterange','allowcommentpost','allowmediacode');
 	$aperms = array('allowgetattach', 'allowgetimage', 'allowpostattach', 'allowpostimage', 'allowsetattachperm', 'maxattachsize', 'maxsizeperday', 'maxattachnum', 'attachextensions');
-	$sperms = $_G['setting']['homestatus'] ? array('allowblog', 'allowdoing', 'allowupload', 'allowshare', 'allowpoke', 'allowclick', 'allowcomment', 'maxspacesize', 'maximagesize') : array();
-
+	$sperms = array('allowpoke', 'allowclick', 'allowcomment', 'maxspacesize', 'maximagesize');
+	if(helper_access::check_module('blog')) {$sperms[] = 'allowblog';}
+	if(helper_access::check_module('album')) {$sperms[] = 'allowupload';}
+	if(helper_access::check_module('share')) {$sperms[] = 'allowshare';}
+	if(helper_access::check_module('doing')) {$sperms[] = 'allowdoing';}
 	$allperms = array();
 	$allkey = array_merge($bperms, $pperms, $aperms, $sperms);
 	if($sidegroup) {

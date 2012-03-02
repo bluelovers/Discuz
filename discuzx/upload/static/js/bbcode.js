@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: bbcode.js 23838 2011-08-11 06:51:58Z monkey $
+	$Id: bbcode.js 27688 2012-02-10 01:24:30Z svn_project_zhangjie $
 */
 
 var re, DISCUZCODE = [];
@@ -34,7 +34,11 @@ function bbcode2html(str) {
 		return '';
 	}
 
-	if(!fetchCheckbox('bbcodeoff') && allowbbcode) {
+	if(typeof(parsetype) == 'undefined') {
+		parsetype = 0;
+	}
+
+	if(!fetchCheckbox('bbcodeoff') && allowbbcode && parsetype != 1) {
 		str = str.replace(/\[code\]([\s\S]+?)\[\/code\]/ig, function($1, $2) {return parsecode($2);});
 	}
 
@@ -85,7 +89,9 @@ function bbcode2html(str) {
 		str = str.replace(/\[p=(\d{1,2}|null), (\d{1,2}|null), (left|center|right)\]/ig, '<p style="line-height: $1px; text-indent: $2em; text-align: $3;">');
 		str = str.replace(/\[float=left\]/ig, '<br style="clear: both"><span style="float: left; margin-right: 5px;">');
 		str = str.replace(/\[float=right\]/ig, '<br style="clear: both"><span style="float: right; margin-left: 5px;">');
-		str = str.replace(/\[quote]([\s\S]*?)\[\/quote\]\s?\s?/ig, '<div class="quote"><blockquote>$1</blockquote></div>\n');
+		if(parsetype != 1) {
+			str = str.replace(/\[quote]([\s\S]*?)\[\/quote\]\s?\s?/ig, '<div class="quote"><blockquote>$1</blockquote></div>\n');
+		}
 
 		re = /\[table(?:=(\d{1,4}%?)(?:,([\(\)%,#\w ]+))?)?\]\s*([\s\S]+?)\s*\[\/table\]/ig;
 		for (i = 0; i < 4; i++) {

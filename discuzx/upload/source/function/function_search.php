@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_search.php 25885 2011-11-24 09:30:09Z monkey $
+ *      $Id: function_search.php 27661 2012-02-09 04:49:46Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -25,7 +25,7 @@ function searchkey($keyword, $field, $returnsrchtxt = 0) {
 		$keyword = str_replace('*', '%', addcslashes($keyword, '%_'));
 		$srchtxt = $returnsrchtxt ? $keyword : '';
 		foreach(explode('+', $keyword) as $text) {
-			$text = trim($text);
+			$text = trim(daddslashes($text));
 			if($text) {
 				$keywordsrch .= $andor;
 				$keywordsrch .= str_replace('{text}', $text, $field);

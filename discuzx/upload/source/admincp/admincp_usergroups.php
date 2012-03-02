@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_usergroups.php 26348 2011-12-09 08:26:54Z chenmengshu $
+ *      $Id: admincp_usergroups.php 28450 2012-03-01 04:28:10Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -603,7 +603,7 @@ EOT;
 		showsetting('usergroups_edit_basic_disable_periodctrl', 'disableperiodctrlnew', $group['disableperiodctrl'], 'radio');
 		showsetting('usergroups_edit_basic_hour_threads', 'maxthreadsperhournew', intval($group['maxthreadsperhour']), 'text');
 		showsetting('usergroups_edit_basic_hour_posts', 'maxpostsperhournew', intval($group['maxpostsperhour']), 'text');
-		showsetting('usergroups_edit_basic_seccode', 'seccodenew', $group['seccode'], 'radio');
+		showsetting('usergroups_edit_basic_seccode', 'seccodenew', $group['seccode'], 'radio', $group['groupid'] == 7);
 		showsetting('usergroups_edit_basic_disable_postctrl', 'disablepostctrlnew', $group['disablepostctrl'], 'radio');
 		showsetting('usergroups_edit_basic_ignore_censor', 'ignorecensornew', $group['ignorecensor'], 'radio');
 		showsetting('usergroups_edit_basic_allowcreatecollection', 'allowcreatecollectionnew', intval($group['allowcreatecollection']), 'text');
@@ -1165,7 +1165,7 @@ EOT;
 	);
 	$fields = array(
 		'usergroups'		=> C::t('common_usergroup')->fetch_table_struct(),
-		'usergroupfields'	=> C::t('common_usergroup')->fetch_table_struct(),
+		'usergroupfields'	=> C::t('common_usergroup_field')->fetch_table_struct(),
 	);
 
 	if(!submitcheck('copysubmit')) {
@@ -1283,13 +1283,5 @@ function deletegroupcache($groupidarray) {
 	}
 }
 
-function fetch_table_struct($tablename, $result = 'FIELD') {
-	$datas = array();
-	$query = DB::query("DESCRIBE ".DB::table($tablename));
-	while($data = DB::fetch($query)) {
-		$datas[$data['Field']] = $result == 'FIELD' ? $data['Field'] : $data;
-	}
-	return $datas;
-}
 
 ?>

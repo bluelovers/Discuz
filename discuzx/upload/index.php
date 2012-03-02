@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: index.php 27051 2011-12-31 04:46:31Z zhangguosheng $
+ *      $Id: index.php 27617 2012-02-07 08:24:14Z monkey $
  */
 
 if(!empty($_SERVER['QUERY_STRING']) && is_numeric($_SERVER['QUERY_STRING'])) {
@@ -15,7 +15,7 @@ if(!empty($_SERVER['QUERY_STRING']) && is_numeric($_SERVER['QUERY_STRING'])) {
 	$url = '';
 	$domain = $_ENV = array();
 	$jump = false;
-	@include_once './data/cache/cache_domain.php';
+	@include_once './data/sysdata/cache_domain.php';
 	$_ENV['domain'] = $domain;
 	if(empty($_ENV['domain'])) {
 		$_ENV['curapp'] = 'forum';

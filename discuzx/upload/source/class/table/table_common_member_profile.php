@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_member_profile.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_common_member_profile.php 27820 2012-02-15 05:15:59Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -68,6 +68,8 @@ class table_common_member_profile extends discuz_table_archive
 	public function fetch_all_will_birthday_by_uid($uids) {
 		$birthlist = array();
 		if(!empty($uids)) {
+			$uids = explode(',', (string)$uids);
+			$uids = dimplode(dintval($uids, true));
 			list($s_month, $s_day) = explode('-', dgmdate(TIMESTAMP-3600*24*3, 'n-j'));
 			list($n_month, $n_day) = explode('-', dgmdate(TIMESTAMP, 'n-j'));
 			list($e_month, $e_day) = explode('-', dgmdate(TIMESTAMP+3600*24*7, 'n-j'));

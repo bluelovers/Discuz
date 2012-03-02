@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_setting.php 27604 2012-02-07 04:44:34Z zhengqingpeng $
+ *      $Id: admincp_setting.php 28503 2012-03-01 11:41:29Z zhangguosheng $
  */
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
@@ -133,16 +133,16 @@ if(!submitcheck('settingsubmit')) {
 			array('setting_styles_sitemessage', 'setting&operation=styles&anchor=sitemessage', $current['sitemessage'])
 		));
 	} elseif($operation == 'functions') {
-		$_GET['anchor'] = in_array($_GET['anchor'], array('curscript', 'mod', 'heatthread', 'recommend', 'comment', 'activity', 'other')) ? $_GET['anchor'] : 'curscript';
-		showsubmenuanchors('setting_functions', array(
-			array('setting_functions_curscript', 'curscript', $_GET['anchor'] == 'curscript'),
-			array('setting_functions_mod', 'mod', $_GET['anchor'] == 'mod'),
-			array('setting_functions_heatthread', 'heatthread', $_GET['anchor'] == 'heatthread'),
-			array('setting_functions_recommend', 'recommend', $_GET['anchor'] == 'recommend'),
-			array('setting_functions_comment', 'comment', $_GET['anchor'] == 'comment'),
-			array('setting_functions_guide', 'guide', $_GET['anchor'] == 'guide'),
-			array('setting_functions_activity', 'activity', $_GET['anchor'] == 'activity'),
-			array('setting_functions_other', 'other', $_GET['anchor'] == 'other'),
+		$_GET['anchor'] = in_array($_GET['anchor'], array('curscript', 'mod', 'heatthread', 'recommend', 'comment', 'activity', 'other', 'guide')) ? $_GET['anchor'] : 'curscript';
+		showsubmenu('setting_functions', array(
+			array('setting_functions_curscript', 'setting&operation=functions&anchor=curscript', $_GET['anchor'] == 'curscript'),
+			array('setting_functions_mod', 'setting&operation=functions&anchor=mod', $_GET['anchor'] == 'mod'),
+			array('setting_functions_heatthread', 'setting&operation=functions&anchor=heatthread', $_GET['anchor'] == 'heatthread'),
+			array('setting_functions_recommend', 'setting&operation=functions&anchor=recommend', $_GET['anchor'] == 'recommend'),
+			array('setting_functions_comment', 'setting&operation=functions&anchor=comment', $_GET['anchor'] == 'comment'),
+			array('setting_functions_guide', 'setting&operation=functions&anchor=guide', $_GET['anchor'] == 'guide'),
+			array('setting_functions_activity', 'setting&operation=functions&anchor=activity', $_GET['anchor'] == 'activity'),
+			array('setting_functions_other', 'setting&operation=functions&anchor=other', $_GET['anchor'] == 'other'),
 		));
 	} elseif($operation == 'credits') {
 		$_GET['anchor'] = in_array($_GET['anchor'], array('base', 'policytable')) ? $_GET['anchor'] : 'base';
@@ -195,25 +195,7 @@ if(!submitcheck('settingsubmit')) {
 	} elseif($operation == 'follow') {
 		require_once libfile('function/forumlist');
 		showtableheader('', 'nobottom', 'id="base"'.($_GET['anchor'] != 'base' ? ' style="display: none"' : ''));
-		showsetting('setting_follow_base_default_referer', 'settingnew[followreferer]', $setting['followreferer'], 'radio');
 		showsetting('setting_follow_base_default_follow_retain_day', 'settingnew[followretainday]', $setting['followretainday'], 'text');
-		loadcache('forums');
-		$threadtype = array('0' => 'follow');
-		$oldforums = $_G['cache']['forums'];
-		foreach($threadtype as $special => $key) {
-			if($special == 0) {
-				$fields = C::t('forum_forumfield')->fetch_all_by_fid(array_keys($_G['cache']['forums']));
-				foreach($fields as $fid => $field) {
-					if(!empty($field['threadsorts'])) {
-						unset($_G['cache']['forums'][$fid]);
-					}
-				}
-			} else {
-				$_G['cache']['forums'] = $oldforums;
-			}
-			$forumselect = "<select name=\"%s\">\n<option value=\"\">&nbsp;&nbsp;> ".cplang('select')."</option>".str_replace('%', '%%', forumselect(FALSE, 0, $setting[$key.'forumid'], TRUE, FALSE, $special)).'</select>';
-			showsetting('setting_home_base_default_'.$key.'_forum', "settingnew[{$key}forumid]", $setting[$key.'forumid'], sprintf($forumselect, "settingnew[{$key}forumid]"));
-		}
 		showsetting('setting_follow_base_default_view_profile', 'settingnew[allowquickviewprofile]', $setting['allowquickviewprofile'], 'radio');
 		showtablefooter();
 
@@ -524,6 +506,15 @@ if(!submitcheck('settingsubmit')) {
 		showtips('setting_tips', 'global_tips', $_GET['anchor'] == 'global');
 		showtableheader('setting_styles_global', 'nobottom', 'id="global"'.($_GET['anchor'] != 'global' ? ' style="display: none"' : ''));
 		showsetting('setting_styles_global_styleid', '', '', $stylelist);
+		showsetting('setting_styles_global_home_style', array('settingnew[homestyle]', array(
+				array(1, $lang['setting_styles_global_home_style_1']),
+				array(0, $lang['setting_styles_global_home_style_0']),
+		)), $setting['homestyle'], 'mradio');
+		showsetting('setting_styles_global_homepage_style', array('settingnew[homepagestyle]', array(
+				array(1, $lang['setting_styles_global_homepage_style_1']),
+				array(0, $lang['setting_styles_global_homepage_style_0']),
+		)), $setting['homepagestyle'], 'mradio');
+
 		showsetting('setting_styles_global_navsubhover', array('settingnew[navsubhover]', array(
 			array(0, $lang['setting_styles_global_navsubhover_0']),
 			array(1, $lang['setting_styles_global_navsubhover_1']),
@@ -617,7 +608,6 @@ if(!submitcheck('settingsubmit')) {
 		showsetting('setting_styles_viewthread_postno', 'settingnew[postno]', $setting['postno'], 'text');
 		showsetting('setting_styles_viewthread_postnocustom', 'settingnew[postnocustom]', $setting['postnocustom'], 'textarea');
 		showsetting('setting_styles_viewthread_maxsmilies', 'settingnew[maxsmilies]', $setting['maxsmilies'], 'text');
-		showsetting('setting_styles_viewthread_visitedthreads', 'settingnew[visitedthreads]', $setting['visitedthreads'], 'text');
 
 		showsetting('setting_styles_viewthread_author_onleft', array('settingnew[authoronleft]', array(
 			array(1, cplang('setting_styles_viewthread_author_onleft_yes')),
@@ -971,11 +961,25 @@ EOF;
 		showtablefooter();
 
 	} elseif($operation == 'functions') {
+		$allowfuntype = array('portal', 'group', 'follow', 'collection', 'guide', 'feed', 'blog', 'doing', 'album', 'share', 'wall', 'homepage', 'ranklist');
+		$_GET['type'] = in_array($_GET['type'], $allowfuntype) ? trim($_GET['type']) : '';
+		echo "<script>disallowfloat = '{$_G[setting][disallowfloat]}';</script>";
 
-		showtableheader('', 'nobottom', 'id="curscript"'.($_GET['anchor'] != 'curscript' ? ' style="display: none"' : ''));
-		showsetting('setting_functions_curscript_scriptclosed_portal', 'settingnew[portalstatus]', $setting['portalstatus'], 'radio');
-		showsetting('setting_functions_curscript_scriptclosed_group', 'settingnew[groupstatus]', $setting['groupstatus'], 'radio');
-		showsetting('setting_functions_curscript_scriptclosed_home', 'settingnew[homestatus]', $setting['homestatus'], 'radio');
+		showtableheader('setting_functions_curscript_list', 'nobottom', 'id="curscript"'.($_GET['anchor'] != 'curscript' ? ' style="display: none"' : ''));
+		$modulehtml = array();
+		$modulehtml[] = '<td class="td25"><img src="'.STATICURL.'image/feed/portal_b.png"/></td><td class="td23">'.$lang['setting_functions_curscript_portal'].'</td><td width="370">'.$lang['setting_functions_curscript_portal_intro'].'</td><td class="td30"><img class="vm" src="'.$_G['style']['imgdir'].'/data_'.($setting['portalstatus'] ? 'valid':'invalid').'.gif"></td><td><a href="forum.php?mod=ajax&action=setnav&do='.($setting['portalstatus'] ? 'close':'open').'&type=portal" onclick="showWindow(\'setnav\', this.href, \'get\', 0);return false;">'.($setting['portalstatus'] ? $lang['setting_functions_curscript_close']:$lang['setting_functions_curscript_open']).'</a></td>';
+		$modulehtml[] = '<td class="td25"><img src="'.STATICURL.'image/feed/group_b.png"/></td><td class="td23">'.$lang['setting_functions_curscript_group'].'</td><td width="370">'.$lang['setting_functions_curscript_group_intro'].'</td><td class="td30"><img class="vm" src="'.$_G['style']['imgdir'].'/data_'.($setting['groupstatus'] ? 'valid':'invalid').'.gif"></td><td><a href="forum.php?mod=ajax&action=setnav&do='.($setting['groupstatus'] ? 'close':'open').'&type=group" onclick="showWindow(\'setnav\', this.href, \'get\', 0);return false;">'.($setting['groupstatus'] ? $lang['setting_functions_curscript_close']:$lang['setting_functions_curscript_open']).'</a></td>';
+		$modulehtml[] = '<td class="td25"><img src="'.STATICURL.'image/feed/follow_b.png"/></td><td class="td23">'.$lang['setting_functions_curscript_follow'].'</td><td width="370">'.$lang['setting_functions_curscript_follow_intro'].'</td><td class="td30"><img class="vm" src="'.$_G['style']['imgdir'].'/data_'.($setting['followstatus'] ? 'valid':'invalid').'.gif"></td><td><a href="forum.php?mod=ajax&action=setnav&do='.($setting['followstatus'] ? 'close':'open').'&type=follow" onclick="showWindow(\'setnav\', this.href, \'get\', 0);return false;">'.($setting['followstatus'] ? $lang['setting_functions_curscript_close']:$lang['setting_functions_curscript_open']).'</a></td>';
+		$modulehtml[] = '<td class="td25"><img src="'.STATICURL.'image/feed/collection_b.png"/></td><td class="td23">'.$lang['setting_functions_curscript_collection'].'</td><td width="370">'.$lang['setting_functions_curscript_collection_intro'].'</td><td class="td30"><img class="vm" src="'.$_G['style']['imgdir'].'/data_'.($setting['collectionstatus'] ? 'valid':'invalid').'.gif"></td><td><a href="forum.php?mod=ajax&action=setnav&do='.($setting['collectionstatus'] ? 'close':'open').'&type=collection" onclick="showWindow(\'setnav\', this.href, \'get\', 0);return false;">'.($setting['collectionstatus'] ? $lang['setting_functions_curscript_close']:$lang['setting_functions_curscript_open']).'</a></td>';
+		$modulehtml[] = '<td class="td25"><img src="'.STATICURL.'image/feed/guide_b.png"/></td><td class="td23">'.$lang['setting_functions_curscript_guide'].'</td><td width="370">'.$lang['setting_functions_curscript_guide_intro'].'</td><td class="td30"><img class="vm" src="'.$_G['style']['imgdir'].'/data_'.($setting['guidestatus'] ? 'valid':'invalid').'.gif"></td><td><a href="forum.php?mod=ajax&action=setnav&do='.($setting['guidestatus'] ? 'close':'open').'&type=guide" onclick="showWindow(\'setnav\', this.href, \'get\', 0);return false;">'.($setting['guidestatus'] ? $lang['setting_functions_curscript_close']:$lang['setting_functions_curscript_open']).'</a></td>';
+		$modulehtml[] = '<td class="td25"><img src="'.STATICURL.'image/feed/feed_b.png"/></td><td class="td23">'.$lang['setting_functions_curscript_feed'].'</td><td width="370">'.$lang['setting_functions_curscript_feed_intro'].'</td><td class="td30"><img class="vm" src="'.$_G['style']['imgdir'].'/data_'.($setting['feedstatus'] ? 'valid':'invalid').'.gif"></td><td><a href="forum.php?mod=ajax&action=setnav&do='.($setting['feedstatus'] ? 'close':'open').'&type=feed" onclick="showWindow(\'setnav\', this.href, \'get\', 0);return false;">'.($setting['feedstatus'] ? $lang['setting_functions_curscript_close']:$lang['setting_functions_curscript_open']).'</a></td>';
+		$modulehtml[] = '<td class="td25"><img src="'.STATICURL.'image/feed/blog_b.png"/></td><td class="td23">'.$lang['setting_functions_curscript_blog'].'</td><td width="370">'.$lang['setting_functions_curscript_blog_intro'].'</td><td class="td30"><img class="vm" src="'.$_G['style']['imgdir'].'/data_'.($setting['blogstatus'] ? 'valid':'invalid').'.gif"></td><td><a href="forum.php?mod=ajax&action=setnav&do='.($setting['blogstatus'] ? 'close':'open').'&type=blog" onclick="showWindow(\'setnav\', this.href, \'get\', 0);return false;">'.($setting['blogstatus'] ? $lang['setting_functions_curscript_close']:$lang['setting_functions_curscript_open']).'</a></td>';
+		$modulehtml[] = '<td class="td25"><img src="'.STATICURL.'image/feed/album_b.png"/></td><td class="td23">'.$lang['setting_functions_curscript_album'].'</td><td width="370">'.$lang['setting_functions_curscript_album_intro'].'</td><td class="td30"><img class="vm" src="'.$_G['style']['imgdir'].'/data_'.($setting['albumstatus'] ? 'valid':'invalid').'.gif"></td><td><a href="forum.php?mod=ajax&action=setnav&do='.($setting['albumstatus'] ? 'close':'open').'&type=album" onclick="showWindow(\'setnav\', this.href, \'get\', 0);return false;">'.($setting['albumstatus'] ? $lang['setting_functions_curscript_close']:$lang['setting_functions_curscript_open']).'</a></td>';
+		$modulehtml[] = '<td class="td25"><img src="'.STATICURL.'image/feed/share_b.png"/></td><td class="td23">'.$lang['setting_functions_curscript_share'].'</td><td width="370">'.$lang['setting_functions_curscript_share_intro'].'</td><td class="td30"><img class="vm" src="'.$_G['style']['imgdir'].'/data_'.($setting['sharestatus'] ? 'valid':'invalid').'.gif"></td><td><a href="forum.php?mod=ajax&action=setnav&do='.($setting['sharestatus'] ? 'close':'open').'&type=share" onclick="showWindow(\'setnav\', this.href, \'get\', 0);return false;">'.($setting['sharestatus'] ? $lang['setting_functions_curscript_close']:$lang['setting_functions_curscript_open']).'</a></td>';
+		$modulehtml[] = '<td class="td25"><img src="'.STATICURL.'image/feed/doing_b.png"/></td><td class="td23">'.$lang['setting_functions_curscript_doing'].'</td><td width="370">'.$lang['setting_functions_curscript_doing_intro'].'</td><td class="td30"><img class="vm" src="'.$_G['style']['imgdir'].'/data_'.($setting['doingstatus'] ? 'valid':'invalid').'.gif"></td><td><a href="forum.php?mod=ajax&action=setnav&do='.($setting['doingstatus'] ? 'close':'open').'&type=doing" onclick="showWindow(\'setnav\', this.href, \'get\', 0);return false;">'.($setting['doingstatus'] ? $lang['setting_functions_curscript_close']:$lang['setting_functions_curscript_open']).'</a></td>';
+		$modulehtml[] = '<td class="td25"><img src="'.STATICURL.'image/feed/wall_b.png"/></td><td class="td23">'.$lang['setting_functions_curscript_message'].'</td><td width="370">'.$lang['setting_functions_curscript_message_intro'].'</td><td class="td30"><img class="vm" src="'.$_G['style']['imgdir'].'/data_'.($setting['wallstatus'] ? 'valid':'invalid').'.gif"></td><td><a href="forum.php?mod=ajax&action=setnav&do='.($setting['wallstatus'] ? 'close':'open').'&type=wall" onclick="showWindow(\'setnav\', this.href, \'get\', 0);return false;">'.($setting['wallstatus'] ? $lang['setting_functions_curscript_close']:$lang['setting_functions_curscript_open']).'</a></td>';
+		$modulehtml[] = '<td class="td25"><img src="'.STATICURL.'image/feed/ranklist_b.png"/></td><td class="td23">'.$lang['setting_functions_curscript_ranklist'].'</td><td width="370">'.$lang['setting_functions_curscript_ranklist_intro'].'</td><td class="td30"><img class="vm" src="'.$_G['style']['imgdir'].'/data_'.($setting['rankliststatus'] ? 'valid':'invalid').'.gif"></td><td><a href="forum.php?mod=ajax&action=setnav&do='.($setting['rankliststatus'] ? 'close':'open').'&type=ranklist" onclick="showWindow(\'setnav\', this.href, \'get\', 0);return false;">'.($setting['rankliststatus'] ? $lang['setting_functions_curscript_close']:$lang['setting_functions_curscript_open']).'</a></td>';
+		echo '<tr>'.implode('</tr><tr>', $modulehtml).'</tr>';
 		showtablefooter();
 
 		showtips('setting_tips', 'mod_tips', $_GET['anchor'] == 'mod');
@@ -1105,7 +1109,9 @@ EOF;
 		showtablefooter();
 
 		showtableheader('', 'notop');
-		showsubmit('settingsubmit');
+		if($_GET['anchor'] != 'curscript') {
+			showsubmit('settingsubmit');
+		}
 		showtablefooter();
 		showformfooter();
 		exit;
@@ -1809,7 +1815,7 @@ EOT;
 		$appService = Cloud::loadClass('Service_App');
 		showtableheader('setting_search_status', 'fixpadding');
 		showsubtitle(array('setting_search_onoff', 'search_item_name', 'setting_serveropti_searchctrl', 'setting_serveropti_maxspm', 'setting_serveropti_maxsearchresults'));
-		if($_G['setting']['portalstatus']) {
+		if(helper_access::check_module('portal')) {
 			$search_portal = array(
 				$setting['search']['portal']['status'] ? '<input type="checkbox" class="checkbox" name="settingnew[search][portal][status]" value="1" checked="checked" />' : '<input type="checkbox" class="checkbox" name="settingnew[search][portal][status]" value="1" />',
 				cplang('setting_search_status_portal'),
@@ -1827,7 +1833,7 @@ EOT;
 				'<input type="text" class="txt" name="settingnew[search][forum][maxsearchresults]" value="'.$setting['search']['forum']['maxsearchresults'].'" />',
 			);
 		}
-		if($_G['setting']['homestatus']) {
+		if(helper_access::check_module('blog')) {
 			$search_blog = array(
 				$setting['search']['blog']['status'] ? '<input type="checkbox" class="checkbox" name="settingnew[search][blog][status]" value="1" checked="checked" />' : '<input type="checkbox" class="checkbox" name="settingnew[search][blog][status]" value="1" />',
 				cplang('setting_search_status_blog'),
@@ -1835,6 +1841,8 @@ EOT;
 				'<input type="text" class="txt" name="settingnew[search][blog][maxspm]" value="'.$setting['search']['blog']['maxspm'].'" />',
 				'<input type="text" class="txt" name="settingnew[search][blog][maxsearchresults]" value="'.$setting['search']['blog']['maxsearchresults'].'" />',
 			);
+		}
+		if(helper_access::check_module('album')) {
 			$search_album = array(
 				$setting['search']['album']['status'] ? '<input type="checkbox" class="checkbox" name="settingnew[search][album][status]" value="1" checked="checked" />' : '<input type="checkbox" class="checkbox" name="settingnew[search][album][status]" value="1" />',
 				cplang('setting_search_status_album'),
@@ -1843,7 +1851,7 @@ EOT;
 				'<input type="text" class="txt" name="settingnew[search][album][maxsearchresults]" value="'.$setting['search']['album']['maxsearchresults'].'" />',
 			);
 		}
-		if($_G['setting']['groupstatus']) {
+		if(helper_access::check_module('group')) {
 			$search_group = array(
 				$setting['search']['group']['status'] ? '<input type="checkbox" class="checkbox" name="settingnew[search][group][status]" value="1" checked="checked" />' : '<input type="checkbox" class="checkbox" name="settingnew[search][group][status]" value="1" />',
 				cplang('setting_search_status_group'),
@@ -1942,31 +1950,39 @@ EOT;
 		$cache_extension = C::memory()->extension;
 		$cache_config = C::memory()->config;
 		$cache_type = C::memory()->type;
-		$ea = array('eAccelerator',
-			$cache_extension['eaccelerator'] ? cplang('setting_memory_php_enable') : cplang('setting_memory_php_disable'),
-			$cache_config['eaccelerator'] ? cplang('open') : cplang('closed'),
-			'--'
+
+		$redis = array('Redis',
+			$cache_extension['redis'] ? cplang('setting_memory_php_enable') : cplang('setting_memory_php_disable'),
+			$cache_config['redis'] ? cplang('open') : cplang('closed'),
+			$cache_type == 'redis' ? $do_clear_link : '--'
+			);
+
+		$memcache = array('memcache',
+			$cache_extension['memcache'] ? cplang('setting_memory_php_enable') : cplang('setting_memory_php_disable'),
+			$cache_config['memcache']['server'] ? cplang('open') : cplang('closed'),
+			$cache_type == 'memcache' ? $do_clear_link : '--'
 			);
 		$apc = array('APC',
 			$cache_extension['apc'] ? cplang('setting_memory_php_enable') : cplang('setting_memory_php_disable'),
 			$cache_config['apc'] ? cplang('open') : cplang('closed'),
 			$cache_type == 'apc' ? $do_clear_link : '--'
 			);
-		$memcache = array('memcache',
-			$cache_extension['memcache'] ? cplang('setting_memory_php_enable') : cplang('setting_memory_php_disable'),
-			$cache_config['memcache']['server'] ? cplang('open') : cplang('closed'),
-			$cache_type == 'memcache' ? $do_clear_link : '--'
-			);
 		$xcache = array('Xcache',
 			$cache_extension['xcache'] ? cplang('setting_memory_php_enable') : cplang('setting_memory_php_disable'),
 			$cache_config['xcache'] ? cplang('open') : cplang('closed'),
 			$cache_type == 'xcache' ? $do_clear_link : '--'
 			);
+		$ea = array('eAccelerator',
+			$cache_extension['eaccelerator'] ? cplang('setting_memory_php_enable') : cplang('setting_memory_php_disable'),
+			$cache_config['eaccelerator'] ? cplang('open') : cplang('closed'),
+			'--'
+			);
 
-		showtablerow('', array('width="100"', 'width="120"', 'width="120"'), $memcache);
-		showtablerow('', '', $ea);
+		showtablerow('', array('width="100"', 'width="120"', 'width="120"'), $redis);
+		showtablerow('', '', $memcache);
 		showtablerow('', '', $apc);
 		showtablerow('', '', $xcache);
+		showtablerow('', '', $ea);
 		showtablefooter();
 
 		if(!isset($setting['memory'])) {
@@ -2364,9 +2380,9 @@ EOT;
 			}
 		}
 		if(isset($memory['common_member'])) {
-			$memory['common_member_count'] = $memory['common_member_status'] = $memory['common_member_profile'] = $memory['common_member_field_home'] = $memory['common_member_field_forum'] = $memory['common_member'];
+			$memory['common_member_count'] = $memory['common_member_status'] = $memory['common_member_profile'] = $memory['common_member_field_home'] = $memory['common_member_field_forum'] = $memory['common_member_verify'] = $memory['common_member'];
 		} else {
-			unset($memory['common_member_count'], $memory['common_member_status'], $memory['common_member_profile'], $memory['common_member_field_home'], $memory['common_member_field_forum']);
+			unset($memory['common_member_count'], $memory['common_member_status'], $memory['common_member_profile'], $memory['common_member_field_home'], $memory['common_member_field_forum'], $memory['common_member_verify']);
 		}
 		$settingnew['memory'] = $memory;
 	}
@@ -2817,19 +2833,6 @@ EOT;
 		$settingnew['mobile_arr']['mobilecomefrom'] = preg_replace(array("/\son(.*)=[\'\"](.*?)[\'\"]/i"), '', strip_tags($settingnew['mobile']['mobilecomefrom'], '<a><font><img><span><strong><b>'));
 		$settingnew['mobile_arr']['mobilepreview'] = intval($settingnew['mobile']['mobilepreview']);
 		$settingnew['mobile'] = $settingnew['mobile_arr'];
-		$mobilenav = array();
-		if($settingnew['mobile_arr']['allowmobile']) {
-			if(!$_G['setting']['footernavs']['mobile']['available']) {
-				$mobilenavset['available'] = 1;
-			}
-		} else {
-			if($_G['setting']['footernavs']['mobile']['available']) {
-				$mobilenavset['available'] = 0;
-			}
-		}
-		if(!empty($mobilenavset)) {
-			C::t('common_nav')->update_by_identifier('mobile', $mobilenavset);
-		}
 		unset($settingnew['mobile_arr']);
 	}
 	if($operation == 'profile') {
@@ -3083,7 +3086,7 @@ function showdetial(&$forum, $varname, $type = '', $last = '', $toggle = false) 
 }
 
 function getmemorycachekeys() {
-	return array('common_member', 'forum_post', 'forum_thread', 'forum_thread_forumdisplay',
+	return array('common_member', 'forum_thread', 'forum_thread_forumdisplay','forum_postcache',
 				'forum_collectionrelated', 'forum_collection', 'home_follow', 'forumindex', 'diyblock', 'diyblockoutput');
 }
 ?>

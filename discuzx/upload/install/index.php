@@ -68,7 +68,7 @@ if($method == 'show_license') {
 
 	dirfile_check($dirfile_items);
 
-	show_env_result($env_items, $dirfile_items, $func_items);
+	show_env_result($env_items, $dirfile_items, $func_items, $filesock_items);
 
 } elseif($method == 'app_reg') {
 

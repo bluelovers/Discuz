@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portal_view.php 27332 2012-01-16 09:24:24Z zhangguosheng $
+ *      $Id: portal_view.php 28348 2012-02-28 06:16:29Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -88,12 +88,9 @@ if($article['idtype'] == 'tid' || $content['idtype']=='pid') {
 		$aids = array();
 		$firstpost['message'] = $content['content'];
 		if($thread['attachment']) {
-			if($_G['group']['allowgetattach'] || $_G['group']['allowgetimage']) {
-				if(preg_match_all("/\[attach\](\d+)\[\/attach\]/i", $firstpost['message'], $matchaids)) {
-					$aids = $matchaids[1];
-				}
-			} else {
-				$firstpost['message'] = preg_replace("/\[attach\](\d+)\[\/attach\]/i", '', $firstpost['message']);
+			$_G['group']['allowgetimage'] = 1;
+			if(preg_match_all("/\[attach\](\d+)\[\/attach\]/i", $firstpost['message'], $matchaids)) {
+				$aids = $matchaids[1];
 			}
 		}
 
@@ -158,8 +155,7 @@ if($article['allowcomment']) {
 			$article['commentnum'] = getcount($posttable, array('tid'=>$article['id'], 'first'=>'0'));
 
 			if($article['allowcomment'] && $article['commentnum']) {
-				$attachpids = -1;
-				$attachtags = array();
+				$attachpids = $attachtags = array();
 				$_G['group']['allowgetattach'] = $_G['group']['allowgetimage'] = 1;
 				foreach(C::t('forum_post')->fetch_all_by_tid('tid:'.$article['id'], $article['id'], true, 'ASC', 0, 20, null, 0) as $value) {
 					$value['uid'] = $value['authorid'];
@@ -169,7 +165,7 @@ if($article['allowcomment']) {
 						$value['cid'] = $value['pid'];
 						$commentlist[$value['pid']] = $value;
 						if($value['attachment']) {
-							$attachpids .= ",$value[pid]";
+							$attachpids[] = $value['pid'];
 							if(preg_match_all("/\[attach\](\d+)\[\/attach\]/i", $value['message'], $matchaids)) {
 								$attachtags[$value['pid']] = $matchaids[1];
 							}
@@ -177,7 +173,7 @@ if($article['allowcomment']) {
 					}
 				}
 
-				if($attachpids != '-1') {
+				if($attachpids) {
 					require_once libfile('function/attachment');
 					parseattach($attachpids, $attachtags, $commentlist);
 				}

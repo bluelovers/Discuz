@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_medals.php 26205 2011-12-05 10:09:32Z zhangguosheng $
+ *      $Id: admincp_medals.php 27746 2012-02-14 01:57:42Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -180,7 +180,7 @@ if(!$operation) {
 
 		$medals = '';
 		$medallogs = $medalids = $uids = array();
-		foreach(C::t('forum_medallog')->fetch_all_by_type(2, 'dateline') as $id => $medal) {
+		foreach(C::t('forum_medallog')->fetch_all_by_type(2) as $id => $medal) {
 			$medal['dateline'] =  dgmdate($medal['dateline'], 'Y-m-d H:i');
 			$medal['expiration'] =  empty($medal['expiration']) ? $lang['medals_forever'] : dgmdate($medal['expiration'], 'Y-m-d H:i');
 			$medalids[$medal['medalid']] = $medal['medalid'];

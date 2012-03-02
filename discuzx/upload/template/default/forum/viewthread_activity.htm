@@ -94,7 +94,7 @@
 
 <!--{if $_G['uid'] && !$activityclose && (!$applied || $isverified == 2)}-->
 	<div id="activityjoin" style="display:none">
-	<!--{if $_G['forum']['status'] == 3 && $isgroupuser != 'isgroupuser'}-->
+	<!--{if $_G['forum']['status'] == 3 && helper_access::check_module('group') && $isgroupuser != 'isgroupuser'}-->
 		<div class="c">
 			<p>{lang activity_no_member}</p>
 			<p><a href="forum.php?mod=group&action=join&fid=$_G[fid]" class="xi2">{lang activity_join_group}</a></p>

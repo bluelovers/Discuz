@@ -3,38 +3,85 @@
 	$_G[home_tpl_spacemenus][] = "<a href=\"home.php?mod=space&uid=$space[uid]&do=thread&view=me\">{lang they_thread}</a>";
 }
 
-<!--{if empty($diymode)}-->
-<!--{template common/header}-->
-
-
-<div id="pt" class="bm cl">
-	<div class="z">
-		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
-		<a href="home.php?mod=space&do=thread">{lang thread}</a> <em>&rsaquo;</em>
-	 	<a href="home.php?mod=space&uid=$space[uid]&do=thread&view=me">{lang all}</a>
+<!--{if $diymode}-->
+	<!--{if $_G[setting][homepagestyle]}-->
+		<!--{subtemplate home/space_header}-->
+		<div id="ct" class="ct2 wp cl">
+			<div class="mn">
+				<div class="bm">
+					<div class="bm_h">
+						<!--{if $space[self]}--><span class="xi2 y"><a href="forum.php?mod=misc&action=nav" onclick="showWindow('nav', this.href, 'get', 0)" class="addnew">{lang posted}</a></span><!--{/if}-->
+						<h1 class="mt">
+							<!--{if $_GET[type] == 'reply'}-->
+							<span class="xs1 xw0"><a href="home.php?mod=space&do=thread&view=me&type=thread&uid=$space[uid]&from=space">{lang topic}</a><span class="pipe">|</span></span>{lang reply}
+							<!--{else}-->
+							{lang topic}<span class="xs1 xw0"><span class="pipe">|</span><a href="home.php?mod=space&do=thread&view=me&type=reply&uid=$space[uid]&from=space">{lang reply}</a></span>
+							<!--{/if}-->
+						</h1>
+					</div>
+				<div class="bm_c">
+	<!--{else}-->
+		<!--{template common/header}-->
+		<div id="pt" class="bm cl">
+			<div class="z">
+				<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
+				<a href="home.php?mod=space&uid=$space[uid]">{$space[username]}</a> <em>&rsaquo;</em>
+				<a href="home.php?mod=space&uid=$space[uid]&do=blog&view=me">{lang thread}</a>
+			</div>
+		</div>
+		<style id="diy_style" type="text/css"></style>
+		<div class="wp">
+			<!--[diy=diy1]--><div id="diy1" class="area"></div><!--[/diy]-->
+		</div>
+		<!--{template home/space_menu}-->
+		<div id="ct" class="ct1 wp cl">
+			<div class="mn">
+				<!--[diy=diycontenttop]--><div id="diycontenttop" class="area"></div><!--[/diy]-->
+				<div class="bm bw0">
+					<div class="bm_c">
+	<!--{/if}-->
+<!--{else}-->
+	<!--{template common/header}-->
+	<div id="pt" class="bm cl">
+		<div class="z">
+			<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
+			<!--{if $_G[setting][homestyle]}--><a href="home.php">$_G[setting][navs][4][navname]</a> <em>&rsaquo;</em> <!--{/if}-->
+			<a href="home.php?mod=space&do=blog">{lang thread}</a>
+		</div>
 	</div>
-</div>
-
-<style id="diy_style" type="text/css"></style>
-<div class="wp">
-	<!--[diy=diy1]--><div id="diy1" class="area"></div><!--[/diy]-->
-</div>
-
-
-<div id="ct" class="ct2_a wp cl">
-	<div class="mn">
+	<style id="diy_style" type="text/css"></style>
+	<div class="wp">
+		<!--[diy=diy1]--><div id="diy1" class="area"></div><!--[/diy]-->
+	</div>
+	<div id="ct" class="ct2_a wp cl">
+	<!--{if $_G[setting][homestyle]}-->
+		<div class="appl">
+			<!--{subtemplate common/userabout}-->
+		</div>
+		<div class="mn pbw">
+			<!--[diy=diycontenttop]--><div id="diycontenttop" class="area"></div><!--[/diy]-->
+			<div class="bm bw0">
+				<ul class="tb cl">
+					<li$actives[we]><a href="home.php?mod=space&do=thread&view=we">{lang friend_post}</a></li>
+					<li$actives[me]><a href="home.php?mod=space&do=thread&view=me">{lang my_post}</a></li>
+				</ul>
+			</div>
+	<!--{else}-->
+		<div class="appl">
+			<div class="tbn">
+				<h2 class="mt bbda">{lang thread}</h2>
+				<ul>
+					<li$actives[we]><a href="home.php?mod=space&do=thread&view=we">{lang friend_post}</a></li>
+					<li$actives[me]><a href="home.php?mod=space&do=thread&view=me">{lang my_post}</a></li>
+				</ul>
+			</div>
+		</div>
+		<div class="mn pbw">
 		<!--[diy=diycontenttop]--><div id="diycontenttop" class="area"></div><!--[/diy]-->
-		<div class="bm bw0">
-		<!--{if (!$_G['uid'] && !$space[uid]) || $space[self]}-->
-			<h1 class="mt"><img alt="thread" src="{STATICURL}image/feed/thread.gif" class="vm" /> <!--{if $_G['setting']['homestatus']}-->{lang post}<!--{else}-->{lang all}<!--{/if}--></h1>
-		<!--{/if}-->
-		<!--{if $space[self]}-->
-			<ul class="tb cl">
-				<li$actives[we]><a href="home.php?mod=space&do=thread&view=we">{lang friend_post}</a></li>
-				<li$actives[me]><a href="home.php?mod=space&do=thread&view=me">{lang my_post}</a></li>
-				<!--{if $_G['setting']['homestatus']}--><li$actives[all]><a href="home.php?mod=space&do=thread&view=all&order=dateline">{lang view_all}</a></li><!--{/if}-->
-				<li class="o"><a href="forum.php?mod=misc&action=nav" onclick="showWindow('nav', this.href, 'get', 0)">{lang posted}</a></li>
-			</ul>
+	<!--{/if}-->
+<!--{/if}-->
+		
+		<!--{if !$diymode && $space[self]}-->
 			<!--{if $_GET['view'] == 'me'}-->
 			<p class="tbmu bw0">
 				<!--{if $viewtype != 'postcomment'}-->
@@ -42,7 +89,7 @@
 					<a href="home.php?mod=space&uid=$space[uid]&do=thread&view=me&type=$viewtype&from=$_GET[from]&filter=" {if !$_GET[filter]}class="a"{/if}>{lang all}</a>
 					<!--{loop $filter $key $name}--><span class="pipe">|</span><a href="home.php?mod=space&do=thread&view=me&type=$viewtype&from=$_GET[from]&filter=$key" {if $key == $_GET[filter]}class="a"{/if}>$name</a><!--{/loop}--> &nbsp;
 						<select name="forumlist" id="forumlist" class="ps vm" onchange="viewforumthread(this.value);" style="width: 120px; word-wrap: normal;">
-							<option value="0">Ñ¡Ôñ°æ¿é</option>
+							<option value="0">{lang follow_select_forum}</option>
 							$forumlist
 						</select>
 					</span>
@@ -58,11 +105,16 @@
 				<a href="home.php?mod=space&do=thread&view=all&order=hot" $orderactives[hot]>{lang top_thread}</a>
 			</p>
 			<!--{/if}-->
-		<!--{else}-->
-			<!--{template home/space_menu}-->
-			<p class="tbmu bw0">{lang doing_orderby_time}</p>
 		<!--{/if}-->
-
+		
+		<!--{if $diymode && !$_G[setting][homepagestyle] }-->
+			<p class="tbmu">
+				<a href="home.php?mod=space&do=thread&view=me&from=space&type=thread" $orderactives[thread]>{lang topic}</a>
+				<span class="pipe">|</span>
+				<a href="home.php?mod=space&do=thread&view=me&from=space&type=reply" $orderactives[reply]>{lang reply}</a>
+			</p>
+		<!--{/if}-->
+		
 		<!--{if $userlist}-->
 			<p class="tbmu bw0">
 				{lang view_by_friend}
@@ -74,31 +126,7 @@
 				</select>
 			</p>
 		<!--{/if}-->
-
-		<!--{if $actives[we] && !$userlist && !$list}-->
-			<p class="mbm"></p>
-		<!--{/if}-->
-
-
-<!--{else}-->
-<!--{template home/space_header}-->
-	<div id="ct" class="ct2 wp cl">
-		<div class="mn">
-			<div class="bm">
-				<div class="bm_h cl">
-					<!--{if $space[self]}--><span class="xi2 y"><a href="forum.php?mod=misc&action=nav" onclick="showWindow('nav', this.href, 'get', 0)" class="addnew">{lang posted}</a></span><!--{/if}-->
-					<h1{if $_G['setting']['homestatus']} class="mt"{/if}>
-						<!--{if $_GET[type] == 'reply'}-->
-						<span class="xs1 xw0"><a href="home.php?mod=space&do=thread&view=me&type=thread&uid=$space[uid]&from=space">{lang topic}</a><span class="pipe">|</span></span>{lang reply}
-						<!--{else}-->
-						{lang topic}<span class="xs1 xw0"><span class="pipe">|</span><a href="home.php?mod=space&do=thread&view=me&type=reply&uid=$space[uid]&from=space">{lang reply}</a></span>
-						<!--{/if}-->
-					</h1>
-				</div>
-				<div class="bm_c">
-<!--{/if}-->
-
-			<div class="tl">
+		<div class="tl">
 			<form method="post" autocomplete="off" name="delform" id="delform" action="home.php?mod=space&do=thread&view=all&order=dateline" onsubmit="showDialog('{lang del_select_thread_confirm}', 'confirm', '', '$(\'delform\').submit();'); return false;">
 					<input type="hidden" name="formhash" value="{FORMHASH}" />
 					<input type="hidden" name="delthread" value="true" />
@@ -211,7 +239,7 @@
 							<!--{loop $tids[$stid] $pid}-->
 							<!--{eval $post = $posts[$pid];}-->
 							<tr>
-								<td colspan="5" class="xg1">&nbsp;<img src="{IMGDIR}/icon_quote_m_s.gif" style="vertical-align:middle;" /> <a href="forum.php?mod=redirect&goto=findpost&ptid=$thread[tid]&pid=$pid" target="_blank"><!--{if $post[message]}-->{$post[message]}<!--{else}-->¡­¡­<!--{/if}--></a> <img src="{IMGDIR}/icon_quote_m_e.gif" style="vertical-align:middle;" /></td>
+								<td colspan="5" class="xg1">&nbsp;<img src="{IMGDIR}/icon_quote_m_s.gif" style="vertical-align:middle;" /> <a href="forum.php?mod=redirect&goto=findpost&ptid=$thread[tid]&pid=$pid" target="_blank"><!--{if $post[message]}-->{$post[message]}<!--{else}-->......<!--{/if}--></a> <img src="{IMGDIR}/icon_quote_m_e.gif" style="vertical-align:middle;" /></td>
 							</tr>
 							<!--{/loop}-->
 						<!--{/if}-->
@@ -241,45 +269,35 @@
 					<p class="mtm">{lang hide_thread}</p>
 				<!--{/if}-->
 			</div>
-			<!--{if $multi}--><div class="pgs cl mtm">$multi</div><!--{/if}-->
+			<!--{if $multi}--><div class="pgs cl mtm">$multi</div><!--{/if}-->		
+		
+		<script type="text/javascript">
+		function fuidgoto(fuid) {
+			window.location.href = 'home.php?mod=space&do=thread&view=we&fuid='+fuid;
+		}
+		function viewforumthread(fid) {
+			window.location.href = '{$forumurl}&fid='+fid;
+		}
+		</script>
+		
+		<!--{if !$_G[setting][homepagestyle]}--><!--[diy=diycontentbottom]--><div id="diycontentbottom" class="area"></div><!--[/diy]--><!--{/if}-->
 
-
-<script type="text/javascript">
-function fuidgoto(fuid) {
-	window.location.href = 'home.php?mod=space&do=thread&view=we&fuid='+fuid;
-}
-function viewforumthread(fid) {
-	window.location.href = '{$forumurl}&fid='+fid;
-}
-</script>
-
-<!--{if empty($diymode)}-->
-
-		</div>
-		<!--[diy=diycontentbottom]--><div id="diycontentbottom" class="area"></div><!--[/diy]-->
-	</div>
-	<div class="appl">
-		<!--{subtemplate home/space_thread_nav}-->
-
-		<div class="drag">
-			<!--[diy=diy2]--><div id="diy2" class="area"></div><!--[/diy]-->
-		</div>
-
-	</div>
-</div>
-
-<div class="wp mtn">
-	<!--[diy=diy3]--><div id="diy3" class="area"></div><!--[/diy]-->
-</div>
-
-
-<!--{else}-->
+		<!--{if $diymode}-->
+					</div>
+				</div>
+			<!--{if $_G[setting][homepagestyle]}-->
 			</div>
+			<div class="sd">
+				<!--{subtemplate home/space_userabout}-->
+			<!--{/if}-->
+		<!--{/if}-->
 		</div>
 	</div>
-	<div class="sd">
-		<!--{subtemplate home/space_userabout}-->
+
+<!--{if !$_G[setting][homepagestyle]}-->
+	<div class="wp mtn">
+		<!--[diy=diy3]--><div id="diy3" class="area"></div><!--[/diy]-->
 	</div>
-</div>
 <!--{/if}-->
+
 <!--{template common/footer}-->

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: moderate_member.php 26843 2011-12-26 03:31:26Z chenmengshu $
+ *      $Id: moderate_member.php 27999 2012-02-20 09:39:40Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -196,9 +196,8 @@ EOT;
 
 			if(!empty($moderation['validate']) && is_array($moderation['validate'])) {
 
-				$usergroup = C::t('common_usergroup')->fetch_by_credits(0, '');
 				$validateuids = array_intersect($moderation['validate'], $alluids);
-				C::t('common_member')->update($validateuids, array('adminid' => 0, 'groupid' => $usergroup['groupid']));
+				C::t('common_member')->update($validateuids, array('adminid' => 0, 'groupid' => $_G['setting']['newusergroupid']));
 				$numvalidated = count($validateuids);
 				C::t('common_member_validate')->delete($validateuids);
 			} else {

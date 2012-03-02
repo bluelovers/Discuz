@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_advertisement.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_common_advertisement.php 27751 2012-02-14 02:26:11Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -43,17 +43,19 @@ class table_common_advertisement extends discuz_table
 
 	private function _search_conditions($title, $starttime, $endtime, $type, $target) {
 		$conditions = '';
-		$conditions .= $title ? " AND title LIKE '%$title%'" : '';
-		$conditions .= $starttime > 0 ? " AND starttime>='".(TIMESTAMP - $starttime)."'" : ($starttime == -1 ? " AND starttime='0'" : '');
-		$conditions .= $endtime > 0 ? " AND endtime>0 AND endtime<'".(TIMESTAMP + $endtime)."'" : ($endtime == -1 ? " AND endtime='0'" : '');
-		$conditions .= $type ? " AND type='$type'" : '';
-		$conditions .= $target ? " AND targets LIKE '%".$target."%'" : '';
+		$conditions .= $title ? " AND ".DB::field('title', '%'.$title.'%', 'like') : '';
+		$conditions .= $starttime > 0 ? " AND starttime>='".(TIMESTAMP - intval($starttime))."'" : ($starttime == -1 ? " AND starttime='0'" : '');
+		$conditions .= $endtime > 0 ? " AND endtime>0 AND endtime<'".(TIMESTAMP + intval($endtime))."'" : ($endtime == -1 ? " AND endtime='0'" : '');
+		$conditions .= $type ? " AND ".DB::field('type', $type) : '';
+		$conditions .= $target ? " AND ".DB::field('targets', '%'.$target.'%', 'like') : '';
 		return $conditions;
 	}
 
 	public function fetch_all_search($title, $starttime, $endtime, $type, $target, $orderby, $start_limit, $advppp) {
 		$conditions = $this->_search_conditions($title, $starttime, $endtime, $type, $target);
 		$order_by = $orderby == 'starttime' ? 'starttime' : ($orderby == 'type' ? 'type' : ($orderby == 'displayorder' ? 'displayorder' : 'advid DESC'));
+		$start_limit = intval($start_limit);
+		$advppp = intval($advppp);
 
 		return DB::fetch_all("SELECT * FROM ".DB::table('common_advertisement')." WHERE 1 $conditions ORDER BY available DESC, $order_by LIMIT $start_limit, $advppp");
 	}

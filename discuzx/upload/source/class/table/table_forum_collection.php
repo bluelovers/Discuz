@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_forum_collection.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_forum_collection.php 27781 2012-02-14 07:38:55Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -49,7 +49,7 @@ class table_forum_collection extends discuz_table
 		if($title && str_replace('%', '', $title)) {
 			$sql .= ($sql ? ' AND ' : 'WHERE ').DB::field('name', '%'.$title.'%', 'like');
 		}
-		$sql .= ($orderby && $ordersc) ? ' ORDER BY '.DB::order($orderby, $ordersc) : '';
+		$sql .= ($orderby = DB::order($orderby, $ordersc)) ? ' ORDER BY '.$orderby : '';
 		$sql .= ' '.DB::limit($start, $limit);
 		if(!$sql) {
 			return null;
@@ -74,6 +74,9 @@ class table_forum_collection extends discuz_table
 	}
 
 	public function update_by_ctid($ctid, $incthreadnum = 0, $incfollownum = 0, $inccommentnum = 0, $lastupdate = 0, $incratenum = 0, $totalratenum = 0, $lastpost = '') {
+		if(!$ctid) {
+			return false;
+		}
 		$sql = array();
 		$para = array($this->_table);
 		if($incthreadnum) {
@@ -114,23 +117,36 @@ class table_forum_collection extends discuz_table
 		return $result;
 	}
 
-	public function fetch_all_for_search($conditions, $start = 0, $limit = 20) {
-		if(empty($conditions)) {
-			return array();
+	public function fetch_all_for_search($name, $ctid, $username, $uid, $start = 0, $limit = 20) {
+
+		$where = '1';
+		$where .= $name ? ' AND '.DB::field('name', '%'.stripsearchkey($name).'%', 'like') : '';
+		$where .= $ctid ? ' AND '.DB::field('ctid', $ctid) : '';
+		$where .= $username ? ' AND '.DB::field('username', '%'.stripsearchkey($username).'%', 'like') : '';
+		$where .= $uid ? ' AND '.DB::field('uid', $uid) : '';
+
+		if(trim($where) == '1') {
+			return null;
 		}
+
 		if($start == -1) {
-			return DB::result_first("SELECT count(*) FROM %t WHERE %i", array($this->_table, $conditions));
+			return DB::result_first("SELECT count(*) FROM %t WHERE %i", array($this->_table, $where));
 		}
-		return DB::fetch_all("SELECT * FROM %t 	WHERE %i ORDER BY dateline DESC %i", array($this->_table, $conditions, DB::limit($start, $limit)));
+		return DB::fetch_all("SELECT * FROM %t 	WHERE %i ORDER BY dateline DESC %i", array($this->_table, $where, DB::limit($start, $limit)));
 	}
 
 	public function update($val, $data, $unbuffered = false, $low_priority = false) {
-		$this->checkpk();
-		$ret = DB::update($this->_table, $data, DB::field($this->_pk, $val), $unbuffered, $low_priority);
-		return $ret;
+		if(!empty($data) && is_array($data) && $val) {
+			$this->checkpk();
+			return DB::update($this->_table, $data, DB::field($this->_pk, $val), $unbuffered, $low_priority);
+		}
+		return !$unbuffered ? 0 : false;
 	}
 
 	public function delete($val, $unbuffered = false) {
+		if(!$val) {
+			return false;
+		}
 		$this->checkpk();
 		$ret = DB::delete($this->_table, DB::field($this->_pk, $val), null, $unbuffered);
 		return $ret;

@@ -230,8 +230,8 @@
 						<!--{/if}-->
 					<!--{/if}-->
 					<!--{hook/post_btn_extra}-->
-					<!--{if $_GET[action] != 'edit'}-->
-					<label><input type="checkbox" name="adddynamic" value="true" class="pc" {if $_G['forum']['allowfeed'] && !$_G[tid]}checked="checked"{/if} />×ª²¥¸øÌýÖÚ</label>
+					<!--{if helper_access::check_module('follow') && $_GET[action] != 'edit'}-->
+					<span id="adddynamicspan"><label><input type="checkbox" name="adddynamic" id="adddynamic" value="true" class="pc" {if $_G['forum']['allowfeed'] && !$_G[tid] && empty($_G['forum']['viewperm'])}checked="checked"{/if} />{lang post_relay}</label></span>
 					<!--{/if}-->
 					<!--{if !empty($_G['setting']['pluginhooks']['post_sync_method'])}-->
 						<span>

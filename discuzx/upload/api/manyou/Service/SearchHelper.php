@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: SearchHelper.php 27314 2012-01-16 03:01:08Z chenmengshu $
+ *      $Id: SearchHelper.php 28286 2012-02-27 06:43:22Z yexinhao $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -564,7 +564,7 @@ class Cloud_Service_SearchHelper {
     	global $_G;
 
     	$cloudAppService = Cloud::loadClass('Service_App');
-    	if(!$cloudAppService->getcloudappstatus('search')) return;
+    	if(!$cloudAppService->getCloudAppStatus('search')) return;
     	$data['action'] = $opt;
     	$data['dateline'] = time();
     	C::t('forum_threadlog')->insert($data, false, true);
@@ -574,7 +574,7 @@ class Cloud_Service_SearchHelper {
     	global $_G;
 
     	$cloudAppService = Cloud::loadClass('Service_App');
-    	if(!$cloudAppService->getcloudappstatus('search')) return;
+    	if(!$cloudAppService->getCloudAppStatus('search')) return;
     	$data['action'] = $opt;
     	$data['dateline'] = time();
     	C::t('forum_postlog')->insert($data, false, true);
@@ -718,7 +718,7 @@ class Cloud_Service_SearchHelper {
 		$mySiteKey = $_G['setting']['my_sitekey'];
 
 		$cloudAppService = Cloud::loadClass('Service_App');
-		if($mySearchData['status'] && $cloudAppService->getcloudappstatus('search') && $mySiteId) {
+		if($mySearchData['status'] && $cloudAppService->getCloudAppStatus('search') && $mySiteId) {
 			$myExtGroupIds = array();
 			$_extGroupIds = explode("\t", $_G['member']['extgroupids']);
 
@@ -754,7 +754,14 @@ class Cloud_Service_SearchHelper {
 				$key = 'ugSign' . $v;
 				$params[$key] = '';
 			}
+
 			$params['sign'] = md5(implode('|', $params) . '|' . $mySiteKey);
+
+		    if ($cloudAppService->getCloudAppStatus('connect') && !$_G['member']['conopenid']) {
+                $connectService = Cloud::loadClass('Service_Connect');
+                $connectService->connectMergeMember();
+                $params['openid'] = $_G['member']['conopenid'];
+            }
 
 			$params['charset'] = $_G['charset'];
 			if($mySearchData['domain']) {

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_friend.php 27089 2012-01-05 02:37:03Z zhangguosheng $
+ *      $Id: space_friend.php 28360 2012-02-28 07:11:53Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -19,8 +19,6 @@ $count = 0;
 $page = empty($_GET['page'])?0:intval($_GET['page']);
 if($page<1) $page = 1;
 $start = ($page-1)*$perpage;
-
-$_G['disabledwidthauto'] = 0;
 
 if(empty($_GET['view']) || $_GET['view'] == 'all') $_GET['view'] = 'me';
 
@@ -40,10 +38,10 @@ if($_GET['view'] == 'online') {
 		}
 	} elseif($_GET['type']=='friend') {
 		$theurl = "home.php?mod=space&uid=$space[uid]&do=friend&view=online&type=friend";
-		$count = !empty($space['feedfriend']) ? $space['feedfriend'] : 0;
-		if($count) {
+		if(!empty($space['feedfriend'])) {
 			$onlinedata = C::app()->session->fetch_all_by_uid(explode(',', $space['feedfriend']), $start, $perpage);
 		}
+		$count = count($onlinedata);
 	} elseif($_GET['type']=='member') {
 		$theurl = "home.php?mod=space&uid=$space[uid]&do=friend&view=online&type=member";
 		$wheresql = " WHERE uid>0";
@@ -203,7 +201,7 @@ if($_GET['view'] == 'online') {
 	}
 
 	$diymode = 1;
-	if($space['self'] && ($_GET['from'] != 'space' || !$_G['status']['homestatus'])) $diymode = 0;
+	if($space['self'] && ($_GET['from'] != 'space' || !$_G['setting']['homepagestyle'])) $diymode = 0;
 	if($diymode) {
 		$theurl .= "&from=space";
 	}

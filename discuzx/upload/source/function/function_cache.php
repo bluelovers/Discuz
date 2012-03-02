@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_cache.php 26447 2011-12-13 07:16:43Z monkey $
+ *      $Id: function_cache.php 27617 2012-02-07 08:24:14Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -38,15 +38,15 @@ function updatecache($cachename = '') {
 function writetocache($script, $cachedata, $prefix = 'cache_') {
 	global $_G;
 
-	$dir = DISCUZ_ROOT.'./data/cache/';
+	$dir = DISCUZ_ROOT.'./data/sysdata/';
 	if(!is_dir($dir)) {
-		@mkdir($dir, 0777);
+		dmkdir($dir, 0777);
 	}
 	if($fp = @fopen("$dir$prefix$script.php", 'wb')) {
 		fwrite($fp, "<?php\n//Discuz! cache file, DO NOT modify me!\n//Identify: ".md5($prefix.$script.'.php'.$cachedata.$_G['config']['security']['authkey'])."\n\n$cachedata?>");
 		fclose($fp);
 	} else {
-		exit('Can not write to cache files, please check directory ./data/ and ./data/cache/ .');
+		exit('Can not write to cache files, please check directory ./data/ and ./data/sysdata/ .');
 	}
 }
 
@@ -116,7 +116,7 @@ function arrayeval($array, $level = 0) {
 
 function pluginsettingvalue($type) {
 	$pluginsetting = $pluginvalue = array();
-	@include DISCUZ_ROOT.'./data/cache/cache_pluginsetting.php';
+	@include DISCUZ_ROOT.'./data/sysdata/cache_pluginsetting.php';
 	$pluginsetting = isset($pluginsetting[$type]) ? $pluginsetting[$type] : array();
 
 	$varids = $pluginids = array();

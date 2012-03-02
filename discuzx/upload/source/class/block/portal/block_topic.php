@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: block_topic.php 25525 2011-11-14 04:39:11Z zhangguosheng $
+ *      $Id: block_topic.php 27932 2012-02-17 02:26:59Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -111,7 +111,7 @@ class block_topic extends discuz_block {
 		if($uids) {
 			$wherearr[] = 'uid IN ('.dimplode($uids).')';
 		}
-		if($style['getpic'] || $picrequired) {
+		if($picrequired) {
 			$wherearr[] = "cover != ''";
 		}
 		$wherearr[] = "closed = '0'";

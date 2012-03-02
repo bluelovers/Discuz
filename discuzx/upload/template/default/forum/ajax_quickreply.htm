@@ -4,8 +4,14 @@
 	<input type="hidden" name="formhash" id="formhash" value="{FORMHASH}" />
 	<input type="hidden" name="handlekey" value="$_GET['handlekey']" />
 	<span id="subjectbox" style="display: none;"><input name="subject" id="subject" class="px" value="" tabindex="21" style="width: 25em" /></span>
-	<label class="ptn y"><input type="checkbox" name="adddynamic" class="pr" value="1" />同时转播</label>
-	<span class="flw_autopt"><textarea name="message" id="postmessage_{$_GET[tid]}_{$_GET['feedid']}" class="pts" cols="80" rows="4" onkeyup="resizeTx(this);" onkeydown="resizeTx(this);" onpropertychange="resizeTx(this);" oninput="resizeTx(this);"></textarea></span><button type="submit" id="postsubmit" class="pn pnc" value="true" name="{if $_GET[action] == 'newthread'}topicsubmit{elseif $_GET[action] == 'reply'}replysubmit{/if}" tabindex="23"><span>回复</span></button>
+	<table cellspacing="0" cellspacing="0">
+		<tr>
+			<td><span class="flw_autopt"><textarea name="message" id="postmessage_{$_GET[tid]}_{$_GET['feedid']}" class="pts" cols="80" rows="4" onkeyup="resizeTx(this);" onkeydown="resizeTx(this);" onpropertychange="resizeTx(this);" oninput="resizeTx(this);"></textarea></span><button type="submit" id="postsubmit" class="pn pnc" value="true" name="{if $_GET[action] == 'newthread'}topicsubmit{elseif $_GET[action] == 'reply'}replysubmit{/if}" tabindex="23"><span>{lang reply}</span></button></td>
+			<!--{if helper_access::check_module('follow')}-->
+			<td style="vertical-align: top;"><label class="ptn y"><input type="checkbox" name="adddynamic" class="pr" value="1" />{lang post_meanwhile_relay}</label></td>
+			<!--{/if}-->
+		</tr>
+	</table>
 	<!--{if checkperm('seccode') && ($secqaacheck || $seccodecheck)}-->
 		<!--{block sectpl}--><ul><li><em class="d"><sec></em><span id="sec<hash>" onclick="showMenu({'ctrlid':this.id,'win':'{$_GET[handlekey]}'})"><sec></span><div id="sec<hash>_menu" class="p_pop p_opt" style="display:none"><sec></div></li></ul><!--{/block}-->
 		<div class="mtm"><!--{subtemplate common/seccheck}--></div>
@@ -17,8 +23,8 @@
 	<!--{/loop}-->
 </ul>
 <div class="cl">
-	<a href="javascript:;" onclick="display('replybox_{$_GET['feedid']}')" class="y xg1">&uarr; 关闭</a>
-	<a href="forum.php?mod=viewthread&tid={$_GET[tid]}&extra=page%3D1" target="_blank" class="xi2">&rarr; 去论坛查看所有回复</a>
+	<a href="javascript:;" onclick="display('replybox_{$_GET['feedid']}')" class="y xg1">&uarr; {lang close}</a>
+	<a href="forum.php?mod=viewthread&tid={$_GET[tid]}&extra=page%3D1" target="_blank" class="xi2">&rarr; {lang view_all_replies}</a>
 </div>
 <script type="text/javascript">
 	function succeedhandle_$_GET[handlekey](url, msg, values) {

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_member_count.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_common_member_count.php 28415 2012-02-29 07:03:42Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -23,13 +23,13 @@ class table_common_member_count extends discuz_table_archive
 	}
 
 	public function increase($uids, $creditarr) {
-		$uids = array_map('dintval', (array)$uids);
+		$uids = dintval((array)$uids, true);
 		$sql = array();
 		$allowkey = array('extcredits1', 'extcredits2', 'extcredits3', 'extcredits4', 'extcredits5', 'extcredits6', 'extcredits7', 'extcredits8',
 						'friends', 'posts',	'threads', 'oltime', 'digestposts', 'doings', 'blogs', 'albums', 'sharings', 'attachsize', 'views',
 						'todayattachs', 'todayattachsize', 'follower', 'following', 'newfollower', 'feeds');
 		foreach($creditarr as $key => $value) {
-			if(($value = intval($value)) && in_array($key, $allowkey)) {
+			if(($value = intval($value)) && $value && in_array($key, $allowkey)) {
 				$sql[] = "`$key`=`$key`+'$value'";
 			}
 		}
@@ -40,7 +40,7 @@ class table_common_member_count extends discuz_table_archive
 	}
 
 	public function clear_extcredits($uids, $extcredits) {
-		$uids = array_map('dintval', (array)$uids);
+		$uids = dintval((array)$uids, true);
 		$sql = $data = array();
 		$allowkey = array('extcredits1', 'extcredits2', 'extcredits3', 'extcredits4', 'extcredits5', 'extcredits6', 'extcredits7', 'extcredits8');
 		foreach($extcredits as $value) {

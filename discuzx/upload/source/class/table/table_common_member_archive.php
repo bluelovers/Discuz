@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_member_archive.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_common_member_archive.php 28308 2012-02-28 01:51:52Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -22,7 +22,7 @@ class table_common_member_archive extends table_common_member
 
 	public function fetch($id){
 		$data = array();
-		if(isset($this->membersplit) && !empty($id) && ($data = DB::fetch_first('SELECT * FROM '.DB::table($this->_table).' WHERE '.DB::field($this->_pk, $id)))) {
+		if(isset($this->membersplit) && ($id = dintval($id)) && ($data = DB::fetch_first('SELECT * FROM '.DB::table($this->_table).' WHERE '.DB::field($this->_pk, $id)))) {
 			$data['_inarchive'] = true;
 		}
 		return $data;
@@ -67,7 +67,7 @@ class table_common_member_archive extends table_common_member
 
 	public function fetch_all($ids) {
 		$data = array();
-		if(isset($this->membersplit) && !empty($ids)) {
+		if(isset($this->membersplit) && ($ids = dintval($ids, true))) {
 			$query = DB::query('SELECT * FROM '.DB::table($this->_table).' WHERE '.DB::field($this->_pk, $ids));
 			while($value = DB::fetch($query)) {
 				$data[$value[$this->_pk]] = $value;
@@ -95,17 +95,17 @@ class table_common_member_archive extends table_common_member
 	}
 
 	public function delete($val, $unbuffered = false) {
-		return isset($this->membersplit) && DB::delete($this->_table, DB::field($this->_pk, $val), null, $unbuffered);
+		return isset($this->membersplit) && ($val = dintval($val, true)) && DB::delete($this->_table, DB::field($this->_pk, $val), null, $unbuffered);
 	}
 
 	public function check_table() {
-		$mastertables = array('common_member', 'common_member_count', 'common_member_status', 'common_member_profile', 'common_member_field_home', 'common_member_field_forum');
 		if(DB::fetch_first("SHOW TABLES LIKE '".DB::table('common_member_archive')."'")){
 			return false;
 		} else {
+			$mastertables = array('common_member', 'common_member_count', 'common_member_status', 'common_member_profile', 'common_member_field_home', 'common_member_field_forum');
 			foreach($mastertables as $tablename) {
 				$createtable = DB::fetch_first('SHOW CREATE TABLE '.DB::table($tablename));
-				DB::query(str_replace("`$tablename`", "`{$tablename}_archive`", $createtable['Create Table']));
+				DB::query(str_replace(DB::table($tablename), DB::table("{$tablename}_archive"), $createtable['Create Table']));
 			}
 			return true;
 		}
@@ -117,7 +117,6 @@ class table_common_member_archive extends table_common_member
 		if(!isset($mastertables[$step])) {
 			return false;
 		}
-		savecache('membersplitstep', 1);
 		$updates = array();
 		$mastertable = DB::table($mastertables[$step]);
 		$archivetable = DB::table($mastertables[$step].'_archive');
@@ -193,7 +192,6 @@ class table_common_member_archive extends table_common_member
 				DB::query('ALTER TABLE '.$archivetable.' ENABLE KEYS');
 			}
 		}
-		savecache('membersplitstep', 0);
 		return $ret;
 	}
 

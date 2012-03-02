@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_forum_post.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_forum_post.php 28391 2012-02-28 10:56:20Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -19,7 +19,6 @@ class table_forum_post extends discuz_table
 
 		$this->_table = 'forum_post';
 		$this->_pk    = 'pid';
-		$this->_pre_cache_key = 'forum_post_';
 
 		parent::__construct();
 	}
@@ -288,7 +287,7 @@ class table_forum_post extends discuz_table
 		return $return;
 	}
 
-	public function fetch_all_by_authorid($tableid, $authorid, $outmsg = true, $order = '', $start = 0, $limit = 0, $first = null, $invisible = null, $fid = null) {
+	public function fetch_all_by_authorid($tableid, $authorid, $outmsg = true, $order = '', $start = 0, $limit = 0, $first = null, $invisible = null, $fid = null, $filterfid = null) {
 		$postlist = $sql = array();
 		if($first !== null && $invisible !== null) {
 			if($first == 1) {
@@ -305,6 +304,10 @@ class table_forum_post extends discuz_table
 		}
 		if($fid !== null) {
 			$sql[] = DB::field('fid', $fid);
+		}
+		if($filterfid !== null) {
+			$filterfid = dintval($filterfid, true);
+			$sql[] = DB::field('fid', $filterfid, is_array($filterfid) ? 'notin' : '<>');
 		}
 		$query = DB::query('SELECT * FROM %t WHERE '.DB::field('authorid', $authorid).' %i '.($order ? 'ORDER BY dateline '.$order : '').' '.DB::limit($start, $limit),
 				array(self::get_tablename($tableid), ($sql ? 'AND '.implode(' AND ', $sql) : '')));
@@ -643,7 +646,7 @@ class table_forum_post extends discuz_table
 	}
 
 	public function drop_table($tableid) {
-		return DB::query('DROP TABLE %t', array(self::get_tablename($tableid)));
+		return ($tableid = dintval($tableid)) ? DB::query('DROP TABLE %t', array(self::get_tablename($tableid))) : false;
 	}
 
 	public function optimize_table($tableid) {
@@ -669,6 +672,7 @@ class table_forum_post extends discuz_table
 		if(trim($keywords)) {
 			$sqlkeywords = $or = '';
 			foreach(explode(',', str_replace(' ', '', $keywords)) as $keyword) {
+				$keyword = addslashes($keyword);
 				$sqlkeywords .= " $or message LIKE '%$keyword%'";
 				$or = 'OR';
 			}
@@ -695,6 +699,7 @@ class table_forum_post extends discuz_table
 		if(trim($keywords)) {
 			$sqlkeywords = $or = '';
 			foreach(explode(',', str_replace(' ', '', $keywords)) as $keyword) {
+				$keyword = addslashes($keyword);
 				$sqlkeywords .= " $or message LIKE '%$keyword%'";
 				$or = 'OR';
 			}
@@ -725,6 +730,7 @@ class table_forum_post extends discuz_table
 					$keywords[$i] = preg_replace("/\\\{(\d+)\\\}/", ".{0,\\1}", preg_quote($keywords[$i], '/'));
 					$sqlkeywords .= " $or p.subject REGEXP '".$keywords[$i]."' OR p.message REGEXP '".$keywords[$i]."'";
 				} else {
+					$keywords[$i] = addslashes($keywords[$i]);
 					$sqlkeywords .= " $or p.subject LIKE '%".$keywords[$i]."%' OR p.message LIKE '%".$keywords[$i]."%'";
 				}
 				$or = 'OR';
@@ -768,6 +774,7 @@ class table_forum_post extends discuz_table
 					$keywords[$i] = preg_replace("/\\\{(\d+)\\\}/", ".{0,\\1}", preg_quote($keywords[$i], '/'));
 					$sqlkeywords .= " $or p.subject REGEXP '".$keywords[$i]."' OR p.message REGEXP '".$keywords[$i]."'";
 				} else {
+					$keywords[$i] = addslashes($keywords[$i]);
 					$sqlkeywords .= " $or p.subject LIKE '%".$keywords[$i]."%' OR p.message LIKE '%".$keywords[$i]."%'";
 				}
 				$or = 'OR';

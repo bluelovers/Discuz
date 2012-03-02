@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_admincp.php 27574 2012-02-06 07:00:18Z monkey $
+ *      $Id: function_admincp.php 27617 2012-02-07 08:24:14Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -1230,7 +1230,7 @@ function get_custommenu() {
 
 function get_pluginsetting($type) {
 	$pluginsetting = $pluginvalue = array();
-	@include_once DISCUZ_ROOT.'./data/cache/cache_pluginsetting.php';
+	@include_once DISCUZ_ROOT.'./data/sysdata/cache_pluginsetting.php';
 	$pluginsetting = isset($pluginsetting[$type]) ? $pluginsetting[$type] : array();
 
 	$varids = array();

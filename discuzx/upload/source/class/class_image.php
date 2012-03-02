@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_image.php 26205 2011-12-05 10:09:32Z zhangguosheng $
+ *      $Id: class_image.php 28221 2012-02-24 08:00:30Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -335,7 +335,7 @@ class image {
 					if(!file_exists($this->target)) {
 						return -3;
 					}
-					$exec_str = $this->param['imageimpath'].'/convert -quality '.intval($this->param['thumbquality']).' -thumbnail \''.$this->param['thumbwidth'].'x'.$this->param['thumbheight'].'>\' -gravity center -extent '.$this->param['thumbwidth'].'x'.$this->param['thumbheight'].' '.$this->target.' '.$this->target;
+					$exec_str = $this->param['imageimpath'].'/convert -quality '.intval($this->param['thumbquality']).' -thumbnail \''.$this->param['thumbwidth'].'x'.$this->param['thumbheight'].'\' -gravity center -extent '.$this->param['thumbwidth'].'x'.$this->param['thumbheight'].' '.$this->target.' '.$this->target;
 					exec($exec_str);
 					if(!file_exists($this->target)) {
 						return -3;

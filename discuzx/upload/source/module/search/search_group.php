@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: search_group.php 26485 2011-12-14 02:17:16Z liulanbo $
+ *      $Id: search_group.php 28090 2012-02-22 07:33:13Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -15,9 +15,6 @@ define('NOROBOT', TRUE);
 require_once libfile('function/home');
 require_once libfile('function/post');
 
-if(!$_G['setting']['groupstatus']) {
-	showmessage('group_status_off');
-}
 if(!$_G['setting']['search']['group']['status']) {
 	showmessage('search_group_closed');
 }

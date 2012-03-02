@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: discuz_patch.php 26205 2011-12-05 10:09:32Z zhangguosheng $
+ *      $Id: discuz_patch.php 27678 2012-02-09 08:11:21Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -18,13 +18,6 @@ class discuz_patch {
 			return false;
 		}
 		C::t('common_setting')->update_batch($settingnew);
-		include_once libfile('function/cache');
-		updatecache('setting');
-		return true;
-	}
-
-	public function change_patch_notice($patchnotice) {
-		C::t('common_setting')->update('patchnotice', $patchnotice);
 		include_once libfile('function/cache');
 		updatecache('setting');
 		return true;
@@ -58,7 +51,6 @@ class discuz_patch {
 	}
 
 	public function check_patch($ignore = 0) {
-		return true;
 		global $_G;
 
 		if(!$ignore && $_G['cookie']['checkpatch']) {
@@ -67,7 +59,12 @@ class discuz_patch {
 		require_once DISCUZ_ROOT.'source/discuz_version.php';
 		require_once libfile('class/xml');
 
-		$patchdir = 'http://upgrade.discuz.com/DiscuzX/'.substr(DISCUZ_VERSION, 1).'/';
+		$versionpath = '';
+		foreach(explode(' ', substr(DISCUZ_VERSION, 1)) as $unit) {
+			$versionpath = $unit;
+			break;
+		}
+		$patchdir = 'http://upgrade.discuz.com/DiscuzX/'.$versionpath.'/';
 
 		$checkurl = $patchdir.'md5sums';
 		$patchlist = dfsockopen($checkurl);

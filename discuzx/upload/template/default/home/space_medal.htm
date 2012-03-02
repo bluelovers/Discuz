@@ -62,23 +62,23 @@
 								</p>
 								<p>
 									<!--{if in_array($medal[medalid], $membermedal)}-->
-										已拥有
+										{lang space_medal_have}
 									<!--{else}-->
 										<!--{if $medal[type] && $_G['uid']}-->
 											<!--{if in_array($medal[medalid], $mymedals)}-->
 												<!--{if $medal['price']}-->
-													已购买
+													{lang space_medal_purchased}
 												<!--{else}-->
 													<!--{if !$medal[permission]}-->
-														已申请
+														{lang space_medal_applied}
 													<!--{else}-->
-														已领取
+														{lang space_medal_receive}
 													<!--{/if}-->
 												<!--{/if}-->
 											<!--{else}-->
 												<a href="javascript:;" onclick="showWindow('medal', 'home.php?mod=medal&action=confirm&medalid=$medal[medalid]')" class="xi2">
 													<!--{if $medal['price']}-->
-														购买
+														{lang space_medal_buy}
 													<!--{else}-->
 														<!--{if !$medal[permission]}-->
 															{lang medals_apply}

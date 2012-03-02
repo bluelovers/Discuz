@@ -1,7 +1,4 @@
 <div class="pcb">
-	<!--{if !$post['first'] && !empty($post[subject])}-->
-		<h2>$post[subject]</h2>
-	<!--{/if}-->
 <!--{if !$_G['forum']['ismoderator'] && $_G['setting']['bannedmessages'] & 1 && (($post['authorid'] && !$post['username']) || ($_G['thread']['digest'] == 0 && ($post['groupid'] == 4 || $post['groupid'] == 5 || $post['memberstatus'] == '-1')))}-->
 	<div class="locked">{lang message_banned}</div>
 <!--{elseif !$_G['forum']['ismoderator'] && $post['status'] & 1}-->
@@ -11,6 +8,9 @@
 <!--{elseif $post['first'] && $_G['forum_threadpay']}-->
 	<!--{template forum/viewthread_pay}-->
 <!--{else}-->
+	<!--{if !$post['first'] && !empty($post[subject])}-->
+		<h2>$post[subject]</h2>
+	<!--{/if}-->
 	<!--{hook/viewthread_posttop $postcount}-->
 	<!--{if $_G['setting']['bannedmessages'] & 1 && (($post['authorid'] && !$post['username']) || ($_G['thread']['digest'] == 0 && ($post['groupid'] == 4 || $post['groupid'] == 5 || $post['memberstatus'] == '-1')))}-->
 		<div class="locked">{lang admin_message_banned}</div>
@@ -151,7 +151,7 @@
 						<a href="forum.php?mod=post&action=reply&fid=$_G[fid]&tid=$_G[tid]&repquote=$comment[rpid]&extra=$_GET[extra]&page=$page{if $_GET[from]}&from=$_GET[from]{/if}" class="xi2" onclick="showWindow('reply', this.href)">{lang reply}</a>
 					<!--{/if}-->
 					<span class="xg1">
-						{lang poston} $comment[dateline]
+						{lang poston} <!--{date($comment[dateline], 'u')}-->
 						<!--{if $comment['useip'] && $_G['group']['allowviewip']}-->&nbsp;IP:$comment[useip]<!--{/if}-->
 						<!--{if $_G['forum']['ismoderator'] && $_G['group']['allowdelpost']}-->&nbsp;<a href="javascript:;" onclick="modaction('delcomment', $comment[id])">{lang delete}</a><!--{/if}-->
 					</span>

@@ -22,7 +22,7 @@
 		<div class="xs1 cl">
 			<!--{loop $trades $key $trade}-->
 			<!--{if $tradepostlist[$trade[pid]]['invisible'] != 0}-->
-				<div class="trdb">此商品已被删除</div>
+				<div class="trdb">{lang post_trade_removed}</div>
 			<!--{else}-->
 				<div class="trdb">
 					<div id="trade$trade[pid]" class="trdl cl">
@@ -81,7 +81,7 @@
 				</div>
 			<!--{/if}-->
 			<!--{if count($trades) == 1}-->
-				<script type="text/javascript" onload="1">display('trade$trade[pid]');ajaxget('forum.php?mod=viewthread&do=tradeinfo&tid=$_G[tid]&pid=$trade[pid]{if !empty($_GET[modthreadkey])}&modthreadkey=$_GET[modthreadkey]{/if}','tradeinfo$trade[pid]','tradeinfo$trade[pid]')</script>
+				<script type="text/javascript" onload="1">display('trade$trade[pid]');ajaxget('forum.php?mod=viewthread&do=tradeinfo&tid=$_G[tid]&pid=$trade[pid]<!--{if !empty($_GET[modthreadkey])}-->&modthreadkey=$_GET[modthreadkey]<!--{/if}-->','tradeinfo$trade[pid]','tradeinfo$trade[pid]')</script>
 			<!--{/if}-->
 			<!--{/loop}-->
 		</div>

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_block_permission.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_common_block_permission.php 27846 2012-02-15 09:04:33Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -22,18 +22,18 @@ class table_common_block_permission extends discuz_table
 	}
 
 	public function fetch($bid, $uid){
-		return DB::fetch_first('SELECT * FROM %t WHERE bid=%d AND uid=%d', array($this->_table, $bid, $uid));
+		return ($bid = dintval($bid)) && ($uid = dintval($uid)) ? DB::fetch_first('SELECT * FROM %t WHERE bid=%d AND uid=%d', array($this->_table, $bid, $uid)) : array();
 	}
 
 	public function fetch_all_by_bid($bid, $uid = 0) {
-		return DB::fetch_all('SELECT * FROM %t WHERE bid=%d'.($uid ? ' AND '.DB::field('uid', $uid) : '').' ORDER BY inheritedtplname', array($this->_table, $bid), 'uid');
+		return ($bid = dintval($bid, true)) ? DB::fetch_all('SELECT * FROM %t WHERE bid=%d'.($uid ? ' AND '.DB::field('uid', $uid) : '').' ORDER BY inheritedtplname', array($this->_table, $bid), 'uid') : array();
 	}
 
 
 	public function fetch_all_by_uid($uids, $flag = true, $sort = 'ASC', $start = 0, $limit = 0) {
 		$wherearr = array();
 		$sort = $sort === 'ASC' ? 'ASC' : 'DESC';
-		if($uids) {
+		if(($uids = dintval($uids))) {
 			$wherearr[] = DB::field('uid', $uids);
 		}
 		if(!$flag) {
@@ -45,7 +45,7 @@ class table_common_block_permission extends discuz_table
 
 	public function count_by_uids($uids, $flag) {
 		$wherearr = array();
-		if($uids) {
+		if(($uids = dintval($uids, true))) {
 			$wherearr[] = DB::field('uid', $uids);
 		}
 		if(!$flag) {
@@ -56,20 +56,20 @@ class table_common_block_permission extends discuz_table
 	}
 
 	public function fetch_permission_by_uid($uids) {
-		return DB::fetch_all('SELECT uid, sum(allowmanage) as allowmanage, sum(allowrecommend) as allowrecommend, sum(needverify) as needverify FROM '.DB::table($this->_table)." WHERE uid IN (".dimplode($uids).") GROUP BY uid", null, 'uid');
+		return ($uids = dintval($uids, true)) ? DB::fetch_all('SELECT uid, sum(allowmanage) as allowmanage, sum(allowrecommend) as allowrecommend, sum(needverify) as needverify FROM '.DB::table($this->_table)." WHERE ".DB::field('uid', $uids)." GROUP BY uid", null, 'uid') : array();
 	}
 
 	public function delete_by_bid_uid_inheritedtplname($bid = false, $uids = false, $inheritedtplname = false) {
 		$wherearr = array();
-		if($bid) {
+		if(($bid = dintval($bid, true))) {
 			$wherearr[] = DB::field('bid', $bid);
 		}
-		if($uids) {
+		if(($uids = dintval($uids, true))) {
 			$wherearr[] = DB::field('uid', $uids);
 		}
 		if($inheritedtplname === true) {
 			$wherearr[] = "inheritedtplname!=''";
-		} elseif($inheritedtplname !== false) {
+		} elseif($inheritedtplname !== false && is_string($inheritedtplname)) {
 			$wherearr[] = DB::field('inheritedtplname', $inheritedtplname);
 		}
 		return $wherearr ? DB::delete($this->_table, implode(' AND ', $wherearr)) : false;
@@ -78,14 +78,13 @@ class table_common_block_permission extends discuz_table
 
 	public function insert_batch($users, $bids, $tplname = '') {
 		$blockperms = array();
-		if(!empty($users) && !empty($bids)){
-			if(!is_array($bids)) {
-				$bids = array($bids);
-			}
+		if(!empty($users) && $bids = dintval($bids, true)){
 
 			$uids = $notinherit = array();
-			foreach($users as $user) {
-				$uids[] = $user['uid'];
+			foreach($users as &$user) {
+				if(($user['uid'] = dintval($user['uid']))) {
+					$uids[] = $user['uid'];
+				}
 			}
 			if(!empty($uids)) {
 				foreach($this->fetch_all_by_uid($uids, false) as $value) {
@@ -95,10 +94,12 @@ class table_common_block_permission extends discuz_table
 				}
 			}
 			foreach($users as $user) {
-				$tplname = !empty($user['inheritedtplname']) ? $user['inheritedtplname'] : $tplname;
-				foreach ($bids as $bid) {
-					if(empty($notinherit[$bid][$user['uid']])) {
-						$blockperms[] = "('$bid','$user[uid]','$user[allowmanage]','$user[allowrecommend]','$user[needverify]','$tplname')";
+				if($user['uid']) {
+					$tplname = !empty($user['inheritedtplname']) ? $user['inheritedtplname'] : $tplname;
+					foreach ($bids as $bid) {
+						if(empty($notinherit[$bid][$user['uid']])) {
+							$blockperms[] = "('$bid','$user[uid]','$user[allowmanage]','$user[allowrecommend]','$user[needverify]','$tplname')";
+						}
 					}
 				}
 			}
@@ -117,8 +118,10 @@ class table_common_block_permission extends discuz_table
 		$bid = intval($bid);
 		if(!empty($bid) && !empty($users)) {
 			foreach ($users as $v) {
-				$sqlarr[] = "('$bid','$v[uid]','$v[allowmanage]','$v[allowrecommend]','$v[needverify]','')";
-				$uids[] = $v['uid'];
+				if(($v['uid'] = dintval($v['uid']))) {
+					$sqlarr[] = "('$bid','$v[uid]','$v[allowmanage]','$v[allowrecommend]','$v[needverify]','')";
+					$uids[] = $v['uid'];
+				}
 			}
 			if(!empty($sqlarr)) {
 				DB::query('REPLACE INTO '.DB::table($this->_table).' (bid,uid,allowmanage,allowrecommend,needverify,inheritedtplname) VALUES '.implode(',', $sqlarr));

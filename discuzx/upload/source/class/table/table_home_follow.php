@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_home_follow.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_home_follow.php 28321 2012-02-28 03:03:51Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -46,13 +46,21 @@ class table_home_follow extends discuz_table
 	}
 
 	public function fetch_all_follower_by_uid($uids, $start = 0, $limit = 0) {
-		$parameter = array($this->_table, $uids);
-		$fsql = is_array($uids) ? 'followuid IN(%n)' : 'followuid=%d';
-		return DB::fetch_all("SELECT * FROM %t WHERE $fsql ORDER BY dateline DESC ".DB::limit($start, $limit), $parameter, 'uid');
+		$uids = dintval($uids, true);
+		if($uids) {
+			$parameter = array($this->_table, $uids);
+			$fsql = is_array($uids) && $uids ? 'followuid IN(%n)' : 'followuid=%d';
+			return DB::fetch_all("SELECT * FROM %t WHERE $fsql ORDER BY dateline DESC ".DB::limit($start, $limit), $parameter, 'uid');
+		}
+		return array();
 	}
 
 	public function fetch_all_by_uid_followuid($uid, $followuids) {
-		return DB::fetch_all("SELECT * FROM %t WHERE uid=%d AND followuid IN(%n)", array($this->_table, $uid, $followuids), 'followuid');
+		$followuids = dintval($followuids, true);
+		if($followuids) {
+			return DB::fetch_all("SELECT * FROM %t WHERE uid=%d AND followuid IN(%n)", array($this->_table, $uid, $followuids), 'followuid');
+		}
+		return array();
 	}
 	public function fetch_status_by_uid_followuid($uid, $followuid) {
 		return DB::fetch_all('SELECT * FROM %t WHERE (uid=%d AND followuid=%d) OR (uid=%d AND followuid=%d)', array($this->_table, $uid, $followuid, $followuid, $uid), 'uid');
@@ -78,7 +86,6 @@ class table_home_follow extends discuz_table
 
 	public function count_follow_user($uid, $type = 0, $dateline = 0) {
 		$count = 0;
-
 		$parameter = array($this->_table, $uid);
 		$wherearr = array();
 		$field = $type ? 'followuid' : 'uid';
@@ -106,12 +113,25 @@ class table_home_follow extends discuz_table
 		return $count;
 	}
 
+	public function insert($data, $return_insert_id = false, $replace = false, $silent = false) {
+		if($data && is_array($data)) {
+			$this->clear_cache($data['uid']);
+			return DB::insert($this->_table, $data, $return_insert_id, $replace, $silent);
+		}
+		return 0;
+	}
+
 	public function fetch_by_uid_followuid($uid, $followuid) {
 		return DB::fetch_first("SELECT * FROM %t WHERE uid=%d AND followuid=%d", array($this->_table, $uid, $followuid));
 	}
 	public function update_by_uid_followuid($uid, $followuid, $data) {
-		$this->clear_cache($uid);
-		return DB::update($this->_table, $data, DB::field('uid', $uid).' AND '.DB::field('followuid', $followuid));
+		$uid = dintval($uid, true);
+		$followuid = dintval($followuid, true);
+		if(!empty($data) && is_array($data) && $uid && $followuid) {
+			$this->clear_cache($uid);
+			return DB::update($this->_table, $data, DB::field('uid', $uid).' AND '.DB::field('followuid', $followuid));
+		}
+		return 0;
 	}
 
 	public function delete_by_uid_followuid($uid, $followuid) {

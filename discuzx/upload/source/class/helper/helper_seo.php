@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: helper_seo.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: helper_seo.php 28028 2012-02-21 04:41:41Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -89,7 +89,7 @@ class helper_seo {
 				}
 			}
 			if($searcharray && $replacearray) {
-				$content = preg_replace("/(<a\s+.*?>.*?<\/a>)|(<img\s+.*?[\/]?>)|(\[attach\](\d+)\[\/attach\])/ies", "helper_seo::base64_transform('encode', '<relatedlink>', '\\1\\2\\3', '</relatedlink>')", $content);
+				$content = preg_replace("/(<a\s+.*?>.*?<\/a>)|(<img\s+.*?[\/]?>)|(\[attach\](\d+)\[\/attach\])/ies", 'helper_seo::base64_transform("encode", "<relatedlink>", "\\1\\2\\3", "</relatedlink>")', $content);
 				$content = preg_replace($searcharray, $replacearray, $content, 1);
 				$content = preg_replace("/<relatedlink>(.*?)<\/relatedlink>/ies", "helper_seo::base64_transform('decode', '', '\\1', '')", $content);
 			}
@@ -100,7 +100,7 @@ class helper_seo {
 
 	public static function base64_transform($type, $prefix, $string, $suffix) {
 		if($type == 'encode') {
-			return $prefix.base64_encode($string).$suffix;
+			return $prefix.base64_encode(str_replace("\'", "'", $string)).$suffix;
 		} elseif($type == 'decode') {
 			return $prefix.base64_decode($string).$suffix;
 		}

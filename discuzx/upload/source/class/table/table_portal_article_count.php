@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_portal_article_count.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_portal_article_count.php 27876 2012-02-16 04:28:02Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -22,7 +22,7 @@ class table_portal_article_count extends discuz_table
 	}
 
 	public function increase($ids, $data) {
-		$ids = array_map('dintval', (array)$ids);
+		$ids = array_map('intval', (array)$ids);
 		$sql = array();
 		$allowkey = array('commentnum', 'viewnum', 'favtimes', 'sharetimes');
 		foreach($data as $key => $value) {
@@ -36,7 +36,11 @@ class table_portal_article_count extends discuz_table
 	}
 
 	public function fetch_all_hotarticle($wheresql, $dateline) {
-		return DB::fetch_all("SELECT at.* FROM ".DB::table($this->_table)." ac, ".DB::table('portal_article_title')." at WHERE $wheresql AND ac.dateline>'$dateline' AND ac.aid=at.aid ORDER BY ac.viewnum DESC LIMIT 10");
+		if(!empty($wheresql) && ($wheresql = (string)$wheresql) && $dateline = dintval($dateline)) {
+			return DB::fetch_all("SELECT at.* FROM ".DB::table($this->_table)." ac, ".DB::table('portal_article_title')." at WHERE $wheresql AND ac.dateline>'$dateline' AND ac.aid=at.aid ORDER BY ac.viewnum DESC LIMIT 10");
+		} else {
+			return array();
+		}
 	}
 }
 

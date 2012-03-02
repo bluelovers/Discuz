@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_followcode.php 27609 2012-02-07 05:53:20Z zhengqingpeng $
+ *      $Id: function_followcode.php 28355 2012-02-28 07:02:03Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -21,10 +21,10 @@ function fcodedisp($code, $type='codehtml') {
 	return "[\tD_".$_G['forum_discuzcode']['pcodecount']."\t]";
 }
 
-function followcode($message, $tid = 0, $pid = 0, $length = 0) {
+function followcode($message, $tid = 0, $pid = 0, $length = 0, $allowimg = true) {
 	global $_G;
 
-	if($parsetype != 1 && !$bbcodeoff && $allowbbcode && (strpos($message, '[/code]') || strpos($message, '[/CODE]')) !== FALSE) {
+	if((strpos($message, '[/code]') || strpos($message, '[/CODE]')) !== FALSE) {
 		$message = preg_replace("/\s?\[code\](.+?)\[\/code\]\s?/ies", "", $message);
 	}
 
@@ -94,7 +94,6 @@ function followcode($message, $tid = 0, $pid = 0, $length = 0) {
 		}
 	}
 
-
 	if(strpos($msglower, '[/url]') !== FALSE) {
 		$message = preg_replace("/\[url(=((https?|ftp|gopher|news|telnet|rtsp|mms|callto|bctp|thunder|qqdl|synacast){1}:\/\/|www\.|mailto:)?([^\r\n\[\"']+?))?\](.+?)\[\/url\]/ies", "fparseurl('\\1', '\\5', '\\2')", $message);
 	}
@@ -130,10 +129,10 @@ function followcode($message, $tid = 0, $pid = 0, $length = 0) {
 		$message = preg_replace(array(
 			"/\[img\]\s*([^\[\<\r\n]+?)\s*\[\/img\]/ies",
 			"/\[img=(\d{1,4})[x|\,](\d{1,4})\]\s*([^\[\<\r\n]+?)\s*\[\/img\]/ies"
-		), array(
+		), $allowimg ? array(
 			"fparseimg('\\1', '$extra')",
 			"fparseimg('\\3', '$extra')"
-		), $message);
+		) : '', $message);
 	}
 
 	if($tid && $pid) {
@@ -158,9 +157,9 @@ function followcode($message, $tid = 0, $pid = 0, $length = 0) {
 		if(strpos($checkstr, '[') && strpos(strrchr($checkstr, "["), ']') === FALSE) {
 			$length = strpos($message, ']', strrpos($checkstr, strrchr($checkstr, "[")));
 		}
-		$message = cutstr($message, $length+1, ' <a href="javascript:;" class="flw_readfull xi2 xs1"'.$extra.'>...查看全文</a>');
-	} else {
-		$message .= '<div class="ptm cl"><a href="javascript:;" class="flw_readfull y xi2 xs1"'.$extra.'>收起</a></div>';
+		$message = cutstr($message, $length+1, ' <a href="javascript:;" class="flw_readfull xi2 xs1"'.$extra.'>'.lang('space', 'follow_view_fulltext').'</a>');
+	} elseif($allowimg && !empty($extra)) {
+		$message .= '<div class="ptm cl"><a href="javascript:;" class="flw_readfull y xi2 xs1"'.$extra.'>'.lang('space', 'follow_retract').'</a></div>';
 	}
 
 	for($i = 0; $i <= $_G['forum_discuzcode']['pcodecount']; $i++) {
@@ -258,7 +257,8 @@ function fparseurl($url, $text, $scheme) {
 			$url = 'http://'.$url;
 		}
 		$url = !$scheme ? $_G['siteurl'].$url : $url;
-		$html = '<a href="'.$url.'" target="_blank">'.$text.'</a>';
+		$atclass = substr(strtolower($text), 0, 1) == '@' ? ' class="xi2" ' : '';
+		$html = '<a href="'.$url.'" target="_blank" '.$atclass.'>'.$text.'</a>';
 	}
 	return fcodedisp($html);
 }
@@ -274,19 +274,20 @@ function fparseattach($aid, $length = 0, $extra = '') {
 		$attach['isimage'] = $attach['isimage'] && !$attach['price'] ? $attach['isimage'] : 0;
 		$attach['refcheck'] = (!$attach['remote'] && $_G['setting']['attachrefcheck']) || ($attach['remote'] && ($_G['setting']['ftp']['hideurl'] || ($attach['isimage'] && $_G['setting']['attachimgpost'] && strtolower(substr($_G['setting']['ftp']['attachurl'], 0, 3)) == 'ftp')));
 		$rimg_id = random(5).$attach['aid'];
-		if($attach['isimage']) {
-			require_once libfile('function/attachment');
-			$aidencode = packaids($attach);
+		if($attach['isimage'] && !$attach['price'] && !$attach['readperm']) {
 			$nothumb = $length ? 0 : 1;
-			$src = "forum.php?mod=attachment&aid=$aidencode&noupdate=yes&nothumb=$nothumb";
+			$src = $attach['url'].(!$attach['thumb'] ? $attach['attachment'] : getimgthumbname($attach['attachment']));
 			$html = bbcodeurl($src, '<img id="aimg_'.$rimg_id.'" src="'.$src.'" border="0" alt="'.$attach['filename'].'" '.$extra.' style="cursor: pointer;" />');
 
 			return fcodedisp($html, 'image');
 		} else {
-			if($attach['price']) {
+			if($attach['price'] || $attach['readperm']) {
 				$html = '<a href="forum.php?mod=viewthread&tid='.$attach['tid'].'" id="attach_'.$rimg_id.'" target="_blank" class="flw_attach_price"><strong>'.$attach['filename'].'</strong><span>'.sizecount($attach['filesize']).'</span></a>';
 			} else {
-				$html = '<a href="forum.php?mod=misc&action=attachpay&aid='.$attach['aid'].'&tid='.$attach['tid'].'&noupdate=yes&nothumb=yes" id="attach_'.$rimg_id.'" onclick="showWindow(\'attachpay\', this.href)"><strong>'.$attach['filename'].'</strong><span>'.sizecount($attach['filesize']).'</span></a>';
+				require_once libfile('function/attachment');
+				$aidencode = packaids($attach);
+				$attachurl = "forum.php?mod=attachment&aid=$aidencode";
+				$html = '<a href="'.$attachurl.'" id="attach_'.$rimg_id.'"><strong>'.$attach['filename'].'</strong><span>'.sizecount($attach['filesize']).'</span></a>';
 			}
 			return fcodedisp($html, 'attach');
 		}
@@ -299,7 +300,7 @@ function fparseflash($url) {
 	$url = $matches[0];
 	if(fileext($url) != 'flv') {
 		$rimg_id = 'swf_'.random(5);
-		$html = bbcodeurl($url, '<img src="'.IMGDIR.'/flash.gif" alt="点击播放" onclick="javascript:showFlash(\'flash\', \''.$url.'\', this, \''.$rimg_id.'\');" class="tn" style="cursor: pointer;" />');
+		$html = bbcodeurl($url, '<img src="'.IMGDIR.'/flash.gif" alt="'.lang('space', 'follow_click_play').'" onclick="javascript:showFlash(\'flash\', \''.$url.'\', this, \''.$rimg_id.'\');" class="tn" style="cursor: pointer;" />');
 		return fcodedisp($html, 'media');
 	} else {
 		$url = STATICURL.'image/common/flvplayer.swf?&autostart=true&file='.urlencode($matches[0]);
@@ -368,7 +369,7 @@ function fparsetable($width, $bgcolor, $message) {
 function fparseaudio($url) {
 	if(fileext($url) == 'mp3') {
 		$randomid = 'music_'.random(3);
-		$html = '<img src="'.IMGDIR.'/music.gif" alt="点击播放" onclick="javascript:showFlash(\'music\', \''.$url.'\', this, \''.$randomid.'\');" class="tn" style="cursor: pointer;" />';
+		$html = '<img src="'.IMGDIR.'/music.gif" alt="'.lang('space', 'follow_click_play').'" onclick="javascript:showFlash(\'music\', \''.$url.'\', this, \''.$randomid.'\');" class="tn" style="cursor: pointer;" />';
 		return fcodedisp($html, 'audio');
 	} else {
 		$html = '<a href="'.$url.'" target="_blank">'.$url.'</a>';
@@ -381,9 +382,9 @@ function fmakeflv($flv) {
 	$randomid = 'video_'.random(3);
 	$flv = is_array($flv) ? $flv : array('flv' => $flv);
 	if(!empty($flv['imgurl'])) {
-		$html = '<table class="mtm" title="点击播放" onclick="javascript:showFlash(\'flash\', \''.$flv['flv'].'\', this, \''.$randomid.'\');"><tr><td class="vdtn hm" style="background: url('.$flv['imgurl'].') no-repeat;    border: 1px solid #CDCDCD; cursor: pointer; height: 95px; width: 126px;"><img src="'.IMGDIR.'/vds.png" alt="点击播放" />	</td></tr></table>';
+		$html = '<table class="mtm" title="'.lang('space', 'follow_click_play').'" onclick="javascript:showFlash(\'flash\', \''.$flv['flv'].'\', this, \''.$randomid.'\');"><tr><td class="vdtn hm" style="background: url('.$flv['imgurl'].') no-repeat;    border: 1px solid #CDCDCD; cursor: pointer; height: 95px; width: 126px;"><img src="'.IMGDIR.'/vds.png" alt="'.lang('space', 'follow_click_play').'" />	</td></tr></table>';
 	} else {
-		$html = '<img src="'.IMGDIR.'/vd.gif" alt="点击播放" onclick="javascript:showFlash(\'flash\', \''.$flv['flv'].'\', this, \''.$randomid.'\');" class="tn" style="cursor: pointer;" />';
+		$html = '<img src="'.IMGDIR.'/vd.gif" alt="'.lang('space', 'follow_click_play').'" onclick="javascript:showFlash(\'flash\', \''.$flv['flv'].'\', this, \''.$randomid.'\');" class="tn" style="cursor: pointer;" />';
 	}
 	return fcodedisp($html, 'video');
 }

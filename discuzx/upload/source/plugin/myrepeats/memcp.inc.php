@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: memcp.inc.php 27415 2012-01-31 02:29:57Z zhengqingpeng $
+ *      $Id: memcp.inc.php 28042 2012-02-21 07:51:20Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -41,10 +41,9 @@ if($_GET['pluginop'] == 'add' && submitcheck('adduser')) {
 		$usernamenew = addslashes(strip_tags($_GET['usernamenew']));
 		$logindata = addslashes(authcode($_GET['passwordnew']."\t".$_GET['questionidnew']."\t".$_GET['answernew'], 'ENCODE', $_G['config']['security']['authkey']));
 		if(C::t('#myrepeats#myrepeats')->count_by_uid_username($_G['uid'], $usernamenew)) {
-			DB::query("UPDATE ".DB::table('myrepeats')." SET logindata='$logindata' WHERE uid='$_G[uid]' AND username='$usernamenew'");
+			C::t('#myrepeats#myrepeats')->update_logindata_by_uid_username($_G['uid'], $usernamenew, $logindata);
 		} else {
-			$_GET['commentnew'] = addslashes($_GET['commentnew']);
-			DB::query("INSERT INTO ".DB::table('myrepeats')." (uid, username, logindata, comment) VALUES ('$_G[uid]', '$usernamenew', '$logindata', '".strip_tags($_GET['commentnew'])."')");
+			C::t('#myrepeats#myrepeats')->insert(array('uid' => $_G['uid'], 'username' => $usernamenew, 'logindata' => $logindata, 'comment' => strip_tags($_GET['commentnew'])));
 		}
 		dsetcookie('mrn', '');
 		dsetcookie('mrd', '');

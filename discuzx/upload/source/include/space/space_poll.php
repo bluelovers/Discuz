@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_poll.php 25788 2011-11-22 06:39:01Z zhengqingpeng $
+ *      $Id: space_poll.php 28220 2012-02-24 07:52:50Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -49,21 +49,7 @@ $join = $authorid = $replies = 0;
 $displayorder = null;
 $subject = '';
 
-if($_GET['view'] == 'all') {
-
-	$start = 0;
-	$perpage = 100;
-	$alltype = 'dateline';
-	if($_GET['order'] == 'hot') {
-		$replies = $minhot;
-		$orderactives = array('hot' => ' class="a"');
-		$alltype = 'hot';
-	} else {
-		$orderactives = array('dateline' => ' class="a"');
-	}
-	loadcache('space_poll');
-
-} elseif($_GET['view'] == 'me') {
+if($_GET['view'] == 'me') {
 
 	$filter = in_array($_GET['filter'], array('publish', 'join')) ? $_GET['filter'] : 'publish';
 	if($filter == 'join') {
@@ -114,59 +100,31 @@ if($need_count) {
 		$searchkey = dhtmlspecialchars($searchkey);
 	}
 
-	$havecache = false;
-	if($_GET['view'] == 'all') {
+	$count = C::t('forum_thread')->count_by_special(1, $authorid, $replies, $displayorder, $subject, $join);
+	if($count) {
 
-		$cachetime = $_GET['order'] == 'hot' ? 43200 : 3000;
-		if(!empty($_G['cache']['space_poll'][$alltype]) && is_array($_G['cache']['space_poll'][$alltype])) {
-			$pollarr = $_G['cache']['space_poll'][$alltype];
-			if(!empty($pollarr['dateline']) && $pollarr['dateline'] > $_G['timestamp'] - $cachetime) {
-				$list = $pollarr['data'];
-				$hiddennum = $pollarr['hiddennum'];
-				$havecache = true;
+		loadcache('forums');
+		$tids = array();
+		require_once libfile('function/misc');
+		foreach(C::t('forum_thread')->fetch_all_by_special(1, $authorid, $replies, $displayorder, $subject, $join, $start, $perpage) as $value) {
+			if(empty($value['author']) && $value['authorid'] != $_G['uid']) {
+				$hiddennum++;
+				continue;
+			}
+			$tids[$value['tid']] = $value['tid'];
+			$list[$value['tid']] = procthread($value);
+		}
+		if($tids) {
+			$query = C::t('forum_poll')->fetch_all($tids);
+			foreach($query as $value) {
+				$value['pollpreview'] = explode("\t", trim($value['pollpreview']));
+				$list[$value['tid']]['poll'] = $value;
 			}
 		}
+
+		$multi = multi($count, $perpage, $page, $theurl);
 	}
 
-	if(!$havecache) {
-		$count = C::t('forum_thread')->count_by_special(1, $authorid, $replies, $displayorder, $subject, $join);
-		if($count) {
-
-			loadcache('forums');
-			$tids = array();
-			require_once libfile('function/misc');
-			foreach(C::t('forum_thread')->fetch_all_by_special(1, $authorid, $replies, $displayorder, $subject, $join, $start, $perpage) as $value) {
-				if(empty($value['author']) && $value['authorid'] != $_G['uid']) {
-					$hiddennum++;
-					continue;
-				}
-				$tids[$value['tid']] = $value['tid'];
-				$list[$value['tid']] = procthread($value);
-			}
-			if($tids) {
-				$query = C::t('forum_poll')->fetch_all($tids);
-				foreach($query as $value) {
-					$value['pollpreview'] = explode("\t", trim($value['pollpreview']));
-					$list[$value['tid']]['poll'] = $value;
-				}
-			}
-			if($_GET['view'] == 'all') {
-				$_G['cache']['space_poll'][$alltype] = array(
-					'dateline' => $_G['timestamp'],
-					'hiddennum' => $hiddennum,
-					'data' => $list
-				);
-				savecache('space_poll', $_G['cache']['space_poll']);
-			}
-
-			if($_GET['view'] != 'all') {
-				$multi = multi($count, $perpage, $page, $theurl);
-			}
-
-		}
-	} else {
-		$count = count($list);
-	}
 
 }
 

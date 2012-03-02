@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_home_clickuser.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_home_clickuser.php 27862 2012-02-16 02:52:07Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -22,6 +22,7 @@ class table_home_clickuser extends discuz_table
 	}
 
 	public function fetch_all_by_id_idtype($id, $idtype, $start = 0, $limit = 0) {
+		$id = dintval($id, is_array($id) ? true : false);
 		$parameter = array($this->_table, $id, $idtype);
 		$wherearr = array();
 		$wherearr[] = is_array($id) ? 'id IN(%n)' : 'id=%d';
@@ -31,6 +32,7 @@ class table_home_clickuser extends discuz_table
 	}
 
 	public function delete_by_id_idtype($id, $idtype) {
+		$id = dintval($id, is_array($id) ? true : false);
 		$parameter = array($this->_table, $id, $idtype);
 		$wherearr = array();
 		$wherearr[] = is_array($id) ? 'id IN(%n)' : 'id=%d';
@@ -43,7 +45,11 @@ class table_home_clickuser extends discuz_table
 		return DB::query('DELETE FROM %t WHERE dateline<%d', array($this->_table, $dateline));
 	}
 	public function delete_by_uid($uids) {
-		return DB::delete($this->_table, DB::field('uid', $uids));
+		$uids = dintval($uids, is_array($uids) ? true : false);
+		if($uids) {
+			return DB::delete($this->_table, DB::field('uid', $uids));
+		}
+		return 0;
 	}
 
 	public function count_by_uid_id_idtype($uid, $id, $idtype) {

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_member_crime.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_common_member_crime.php 27815 2012-02-15 04:33:38Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -26,7 +26,7 @@ class table_common_member_crime extends discuz_table
 	}
 
 	public function count_by_uid_action($uid, $action) {
-		return DB::result_first('SELECT COUNT(*) FROM %t WHERE uid=%d AND action=%d', array($this->_table, $uid, $action));
+		return $uid ? DB::result_first('SELECT COUNT(*) FROM %t WHERE uid=%d AND action=%d', array($this->_table, $uid, $action)) : array();
 	}
 
 	public function count_by_where($where) {

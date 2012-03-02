@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: connect_login.php 27417 2012-01-31 02:48:29Z liulanbo $
+ *      $Id: connect_login.php 28346 2012-02-28 05:56:51Z zhouxiaobo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -74,13 +74,13 @@ if($op == 'init') {
 
 	$conuin = $response['oauth_token'];
 	$conuinsecret = $response['oauth_token_secret'];
-	$conopenid = $response['openid'];
+	$conopenid = strtoupper($response['openid']);
 	if(!$conuin || !$conuinsecret || !$conopenid) {
 		showmessage('qqconnect:connect_get_access_token_failed', $referer);
 	}
 
 	loadcache('connect_blacklist');
-	if(in_array($conopenid, $_G['cache']['connect_blacklist'])) {
+	if(in_array($conopenid, array_map('strtoupper', $_G['cache']['connect_blacklist']))) {
 		$change_qq_url = $_G['connect']['discuz_change_qq_url'];
 		showmessage('qqconnect:connect_uin_in_blacklist', $referer, array('changeqqurl' => $change_qq_url));
 	}
@@ -142,7 +142,7 @@ if($op == 'init') {
 
 		$current_connect_member = DB::fetch_first("SELECT conopenid FROM ".DB::table('common_member_connect')." WHERE uid='$_G[uid]'");
 		if($_G['member']['conisbind'] && $current_connect_member['conopenid']) {
-			if($current_connect_member['conopenid'] != $conopenid) {
+			if(strtoupper($current_connect_member['conopenid']) != $conopenid) {
 				showmessage('qqconnect:connect_register_bind_already', $referer);
 			}
 			DB::query("UPDATE ".DB::table('common_member_connect')." SET conuin='$conuin', conuinsecret='$conuinsecret', conopenid='$conopenid', conisregister='0', conisfeed='1', conisqqshow='$isqqshow' WHERE uid='$_G[uid]'");

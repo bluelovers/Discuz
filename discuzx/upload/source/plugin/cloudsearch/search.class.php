@@ -4,7 +4,7 @@
  *      [Discuz! X] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: search.class.php 27237 2012-01-12 02:28:57Z chenmengshu $
+ *      $Id: search.class.php 28302 2012-02-27 09:08:49Z yangli $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -26,11 +26,11 @@ class plugin_cloudsearch {
 		global $_G;
 
 		$cloudAppService = Cloud::loadClass('Service_App');
-		$this->allow = $cloudAppService->getcloudappstatus('search');
+		$this->allow = $cloudAppService->getCloudAppStatus('search');
 		if($this->allow) {
 			$this->allow_hot_topic = $_G['setting']['my_search_data']['allow_hot_topic'];
 			$this->allow_thread_related = $_G['setting']['my_search_data']['allow_thread_related'];
-			$this->allow_forum_recommend = $_G['setting']['my_search_data']['allow_forum_recommend'];
+			$this->allow_forum_recommend = FALSE;
 			$this->allow_forum_related = $_G['setting']['my_search_data']['allow_forum_related'];
 			$this->allow_collection_related = $_G['setting']['my_search_data']['allow_collection_related'];
 			include_once template('cloudsearch:module');
@@ -49,6 +49,13 @@ class plugin_cloudsearch {
 		if ($this->allow_forum_recommend && CURSCRIPT == 'forum' && (CURMODULE == 'forumdisplay') && $_GET['cloudop'] == 'relatedthread' && $_GET['fid']) {
 			global $_G;
 			require_once DISCUZ_ROOT.'./source/plugin/cloudsearch/forumdisplay.inc.php';
+		}
+
+		if ($_GET['mod'] == 'redirect' && $_GET['goto'] == 'findpost' && $_GET['ptid'] && $_GET['pid']) {
+            $post = get_post_by_pid($_GET['pid']);
+            if (empty($post)) {
+                $searchHelper->myPostLog('redelete', array('pid' => $_GET['pid']));
+            }
 		}
 	}
 
@@ -91,7 +98,14 @@ class plugin_cloudsearch {
     					foreach($operations as $operation) {
         					if(in_array($operation, array('stick', 'highlight', 'digest', 'bump', 'down', 'delete', 'move', 'close', 'open'))) {
 
-        					    $my_opt = $operation == 'stick' ? 'sticky' : $operation;
+        					    if($operation == 'stick') {
+        					        $my_opt = $_GET['stick_level'] ? 'sticky' : 'update';
+        					    } elseif($operation == 'digest') {
+        					        $my_opt = $_GET['digest_level'] ? 'digest' : 'update';
+        					    } else {
+        					        $my_opt = $operation;
+        					    }
+
             					$data = array('tid' => $tid);
             					if($my_opt == 'move' && $_GET['moveto']) {
             					    global $toforum;

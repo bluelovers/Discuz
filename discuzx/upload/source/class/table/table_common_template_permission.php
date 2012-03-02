@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_template_permission.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_common_template_permission.php 27830 2012-02-15 07:39:23Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -28,7 +28,7 @@ class table_common_template_permission extends discuz_table
 	public function fetch_all_by_uid($uids, $flag = true, $sort = 'ASC', $start = 0, $limit = 0) {
 		$wherearr = array();
 		$sort = $sort === 'ASC' ? 'ASC' : 'DESC';
-		if($uids) {
+		if(($uids = dintval($uids, true))) {
 			$wherearr[] = DB::field('uid', $uids);
 		}
 		if(!$flag) {
@@ -40,7 +40,7 @@ class table_common_template_permission extends discuz_table
 
 	public function count_by_uids($uids, $flag) {
 		$wherearr = array();
-		if($uids) {
+		if(($uids = dintval($uids, true))) {
 			$wherearr[] = DB::field('uid', $uids);
 		}
 		if(!$flag) {
@@ -55,12 +55,12 @@ class table_common_template_permission extends discuz_table
 		if($targettplname) {
 			$wherearr[] = DB::field('targettplname', $targettplname);
 		}
-		if($uids) {
+		if(($uids = dintval($uids, true))) {
 			$wherearr[] = DB::field('uid', $uids);
 		}
 		if($inheritedtplname === true) {
 			$wherearr[] = "inheritedtplname!=''";
-		} elseif($inheritedtplname !== false) {
+		} elseif($inheritedtplname !== false && is_string($inheritedtplname)) {
 			$wherearr[] = DB::field('inheritedtplname', $inheritedtplname);
 		}
 		return $wherearr ? DB::delete($this->_table, implode(' AND ', $wherearr)) : false;
@@ -76,8 +76,10 @@ class table_common_template_permission extends discuz_table
 			foreach($users as $user) {
 				$inheritedtplname = $uptplname ? $uptplname : '';
 				foreach ($templates as $tpl) {
-					$blockperms[] = "('$tpl','$user[uid]','$user[allowmanage]','$user[allowrecommend]','$user[needverify]','$inheritedtplname')";
-					$inheritedtplname = empty($inheritedtplname) ? $tpl : $inheritedtplname;
+					if($tpl) {
+						$blockperms[] = "('$tpl','$user[uid]','$user[allowmanage]','$user[allowrecommend]','$user[needverify]','$inheritedtplname')";
+						$inheritedtplname = empty($inheritedtplname) ? $tpl : $inheritedtplname;
+					}
 				}
 			}
 			if($blockperms) {

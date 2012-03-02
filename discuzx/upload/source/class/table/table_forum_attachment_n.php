@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_forum_attachment_n.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_forum_attachment_n.php 27745 2012-02-14 01:43:38Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -65,10 +65,16 @@ class table_forum_attachment_n extends discuz_table
 	}
 
 	public function update($tableid, $val, $data) {
+		if(!$data) {
+			return;
+		}
 		return DB::update($this->_get_table($tableid), $data, DB::field($this->_pk, $val));
 	}
 
 	public function insert($tableid, $data, $return_insert_id = false, $replace = false, $silent = false) {
+		if(!$data) {
+			return;
+		}
 		return DB::insert($this->_get_table($tableid), $data, $return_insert_id, $replace, $silent);
 	}
 

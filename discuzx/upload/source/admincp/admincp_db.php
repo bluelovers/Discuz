@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_db.php 26205 2011-12-05 10:09:32Z zhangguosheng $
+ *      $Id: admincp_db.php 27637 2012-02-08 09:16:56Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -160,7 +160,7 @@ if($operation == 'export') {
 		$setnames = ($_GET['sqlcharset'] && $db->version() > '4.1' && (!$_GET['sqlcompat'] || $_GET['sqlcompat'] == 'MYSQL41')) ? "SET NAMES '$dumpcharset';\n\n" : '';
 		if($db->version() > '4.1') {
 			if($_GET['sqlcharset']) {
-				DB::query("SET NAMES '".$_GET['sqlcharset']."';\n\n");
+				DB::query('SET NAMES %s', array($_GET['sqlcharset']));
 			}
 			if($_GET['sqlcompat'] == 'MYSQL40') {
 				DB::query("SET SQL_MODE='MYSQL40'");

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_members.php 26920 2011-12-27 09:50:43Z svn_project_zhangjie $
+ *      $Id: admincp_members.php 28247 2012-02-26 10:42:38Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -334,7 +334,7 @@ EOF;
 		}
 		$uids = 0;
 		$extra = '';
-		$delmemberlimit = 1;
+		$delmemberlimit = 300;
 		$deletestart = intval($_GET['deletestart']);
 
 		if(!empty($_GET['uidarray'])) {
@@ -1073,7 +1073,7 @@ EOF;
 			cpmsg('undefined_action', '', 'error');
 		}
 
-		if(strlen(is_array($_GET['extgroupidsnew']) ? implode("\t", $_GET['extgroupidsnew']) : '') > 60) {
+		if(strlen(is_array($_GET['extgroupidsnew']) ? implode("\t", $_GET['extgroupidsnew']) : '') > 30) {
 			cpmsg('members_edit_groups_toomany', '', 'error');
 		}
 
@@ -1420,6 +1420,7 @@ EOT;
 					<ul class="dblist" onmouseover="altStyle(this);">
 						<li style="width: 100%;"><input type="checkbox" name="chkall" onclick="checkAll('prefix', this.form, 'clear')" class="checkbox">&nbsp;$lang[select_all]</li>
 						<li style="width: 8%;"><input type="checkbox" value="post" name="clear[post]" class="checkbox">&nbsp;$lang[members_ban_delpost]</li>
+						<li style="width: 8%;"><input type="checkbox" value="follow" name="clear[follow]" class="checkbox">&nbsp;$lang[members_ban_delfollow]</li>
 						<li style="width: 8%;"><input type="checkbox" value="postcomment" name="clear[postcomment]" class="checkbox">&nbsp;$lang[members_ban_postcomment]</li>
 						<li style="width: 8%;"><input type="checkbox" value="doing" name="clear[doing]" class="checkbox">&nbsp;$lang[members_ban_deldoing]</li>
 						<li style="width: 8%;"><input type="checkbox" value="blog" name="clear[blog]" class="checkbox">&nbsp;$lang[members_ban_delblog]</li>
@@ -1599,6 +1600,10 @@ EOF;
 				}
 				$membercount['posts'] = 0;
 				$membercount['threads'] = 0;
+			}
+			if(in_array('follow', $_GET['clear'])) {
+				C::t('home_follow_feed')->delete_by_uid($member['uid']);
+				$membercount['feeds'] = 0;
 			}
 			if(in_array('blog', $_GET['clear'])) {
 				$blogids = array();
@@ -2638,10 +2643,10 @@ function showsearchform($operation = '') {
 	showtagheader('tbody', 'advanceoption');
 	$_G['showsetting_multirow'] = 1;
 	if(empty($medalselect)) {
-		$medalselect = '<option value="">暂时没有可用勋章</option>';
+		$medalselect = '<option value="">'.cplang('members_search_nonemedal').'</option>';
 	}
 	if(empty($usertagselect)) {
-		$usertagselect = '<option value="">暂时没有用户标签</option>';
+		$usertagselect = '<option value="">'.cplang('members_search_noneusertags').'</option>';
 	}
 	showsetting('members_search_medal', '', '', '<select name="medalid[]" multiple="multiple" size="10">'.$medalselect.'</select>');
 	showsetting('members_search_usertag', '', '', '<select name="tagid[]" multiple="multiple" size="10">'.$usertagselect.'</select>');

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_banned.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_common_banned.php 27876 2012-02-16 04:28:02Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -34,8 +34,11 @@ class table_common_banned extends discuz_table
 	}
 
 	public function delete_by_id($ids, $adminid, $adminname) {
-		DB::query('DELETE FROM %t WHERE id IN(%n) AND (1=%d OR admin=%s)', array($this->_table, $ids, $adminid, $adminname));
-		return DB::affected_rows();
+		$ids = array_map('intval', (array)$ids);
+		if($ids) {
+			return DB::query('DELETE FROM %t WHERE id IN(%n) AND (1=%d OR admin=%s)', array($this->_table, $ids, $adminid, $adminname));
+		}
+		return 0;
 	}
 
 	public function delete_by_expiration($expiration) {
@@ -43,8 +46,7 @@ class table_common_banned extends discuz_table
 	}
 
 	public function update_expiration_by_id($id, $expiration, $isadmin, $admin) {
-		DB::query('UPDATE %t SET expiration=%d WHERE id=%d AND (1=%d OR admin=%s)', array($this->_table, $expiration, $id, $isadmin, $admin));
-		return DB::affected_rows();
+		return DB::query('UPDATE %t SET expiration=%d WHERE id=%d AND (1=%d OR admin=%s)', array($this->_table, $expiration, $id, $isadmin, $admin));
 	}
 
 }

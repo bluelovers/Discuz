@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_misc.php 27230 2012-01-11 09:30:00Z chenmengshu $
+ *      $Id: admincp_misc.php 28372 2012-02-28 08:15:06Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -435,8 +435,7 @@ var rowtypedata = [
 		dheader('Content-Encoding: none');
 		dheader('Content-Disposition: attachment; filename=CensorWords.txt');
 		dheader('Content-Type: text/plain');
-		$query = DB::query("SELECT * FROM ".DB::table('common_word_type'));
-		while($result = DB::fetch($query)) {
+		foreach(C::t('common_word_type')->fetch_all() as $result) {
 			$result['used'] = 0;
 			$word_type[$result['id']] = $result;
 		}
@@ -475,10 +474,11 @@ var rowtypedata = [
 		foreach($wordmatch[3] AS $key => $val) {
 			$word_type = 0;
 			if($wordmatch[2][$key] && !$wordtype_used[$key]) {
-				if(!$word_type = DB::result_first("SELECT id FROM ".DB::table('common_word_type')." WHERE typename = '{$wordmatch[2][$key]}'")) {
-					$wordmatch[2][$key] = daddslashes($wordmatch[2][$key]);
-					DB::insert('common_word_type', array('typename' => $wordmatch[2][$key]), true);
-					$word_type = DB::insert_id();
+				$row = C::t('common_word_type')->fetch_by_typename($wordmatch[2][$key]);
+				if(empty($row)) {
+					$word_type = C::t('common_word_type')->insert(array('typename' => $wordmatch[2][$key]), true);
+				} else {
+					$word_type = $row['id'];
 				}
 				$wordtype_used[$key] = 1;
 			}
@@ -523,8 +523,8 @@ var rowtypedata = [
 
 	} elseif(submitcheck('wordtypesubmit')) {
 		if(is_array($_GET['delete'])) {
-			$del_ids = dimplode($_GET['delete']);
-			DB::query("DELETE FROM ".DB::table('common_word_type')." WHERE id IN (".$del_ids.")");
+			$_GET['delete'] = array_map('intval', (array)$_GET['delete']);
+			C::t('common_word_type')->delete($_GET['delete']);
 			C::t('common_word')->update_by_type($_GET['delete'], array('type'=>0));
 		}
 		if(is_array($_GET['typename'])) {
@@ -538,11 +538,8 @@ var rowtypedata = [
 			foreach($_GET['newtypename'] AS $key => $val) {
 				$val = trim($val);
 				if(!empty($val)) {
-					$sqladd .= $sqladd ? ",('{$val}')" : "('{$val}')";
+					C::t('common_word_type')->insert(array('typename' => $val));
 				}
-			}
-			if($sqladd) {
-				DB::query("INSERT INTO ".DB::table('common_word_type')."(typename)VALUES $sqladd");
 			}
 		}
 		cpmsg('censor_wordtype_edit', 'action=misc&operation=censor&anchor=wordtype', 'succeed');
@@ -560,8 +557,7 @@ var rowtypedata = [
 		$ppp = 50;
 		$startlimit = ($page - 1) * $ppp;
 
-		$query = DB::query("SELECT * FROM ".DB::table('common_word_type'));
-		while($result = DB::fetch($query)) {
+		foreach(C::t('common_word_type')->fetch_all() as $result) {
 			$result['typename'] = dhtmlspecialchars($result['typename']);
 			$word_type[$result['id']] = $result;
 			$word_type_option .= "<option value=\"{$result['id']}\">{$result['typename']}</option>";
@@ -682,9 +678,8 @@ EOT;
 		showformheader("misc&operation=censor", 'fixpadding');
 		showtableheader('', 'fixpadding', 'wordtypeform');
 		showsubtitle(array('', 'misc_censor_wordtype_name'));
-		if($wordtypecount = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_word_type'))) {
-			$query = DB::query("SELECT * FROM ".DB::table('common_word_type'));
-			while($result = DB::fetch($query)) {
+		if($wordtypecount = C::t('common_word_type')->count()) {
+			foreach(C::t('common_word_type')->fetch_all() as $result) {
 				showtablerow('', array('class="td25"', ''), array("<input class=\"checkbox\" type=\"checkbox\" name=\"delete[]\" value=\"{$result['id']}\" $disabled>", "<input type=\"text\" class=\"txt\" size=\"10\" name=\"typename[{$result['id']}]\" value=\"{$result['typename']}\">"));
 			}
 		}
@@ -745,10 +740,7 @@ EOT;
 
 				if($newwordtype[$key] == 0) {
 					if(!empty($newtypename[$key])) {
-						$newtypename[$key] = daddslashes($newtypename[$key]);
-						$newwordtype[$key] = DB::insert('common_word_type', array(
-							'typename' => $newtypename[$key]
-						), true);
+						$newwordtype[$key] = C::t('common_word_type')->insert(array('typename' => $newtypename[$key]), true);
 					}
 				}
 				if($oldcenser = C::t('common_word')->fetch_by_find($newfind)) {
@@ -1020,6 +1012,7 @@ var rowtypedata = [
 			}
 		}
 
+		updatecache('attachtype');
 		cpmsg('attachtypes_succeed', 'action=misc&operation=attachtype', 'succeed');
 
 	}

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_cloudaddons.php 27499 2012-02-02 09:40:10Z monkey $
+ *      $Id: admincp_cloudaddons.php 28363 2012-02-28 07:28:58Z monkey $
  */
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
@@ -16,6 +16,7 @@ cpheader();
 
 if(!$operation) {
 
+	cloudaddons_check();
 	shownav('cloudaddons');
 	$extra = '';
 	if(!empty($_GET['id'])) {
@@ -27,7 +28,7 @@ if(!$operation) {
 } elseif($operation == 'download') {
 	$step = intval($_GET['step']);
 	$addoni = intval($_GET['i']);
-	$uniqueid = C::t('common_setting')->fetch('siteuniqueid');
+	$uniqueid = $_G['setting']['siteuniqueid'] ? $_G['setting']['siteuniqueid'] : C::t('common_setting')->fetch('siteuniqueid');
 	if(!$_GET['md5hash'] || md5($_GET['addonids'].md5($uniqueid.$_GET['timestamp'])) != $_GET['md5hash']) {
 		cpmsg('cloudaddons_validator_error', '', 'error');
 	}
@@ -51,7 +52,7 @@ if(!$operation) {
 				if($array['type'] != $_GET['type'] || $array['key'] != $_GET['key'] || !$array['files']) {
 					dir_clear($tmpdir);
 					cloudaddons_faillog($_GET['rid'], 100);
-					cpmsg('cloudaddons_download_error', '', 'error');
+					cpmsg('cloudaddons_download_error', '', 'error', array('ErrorCode' => 100));
 				}
 				foreach($array['files'] as $file => $data) {
 					$filename = $tmpdir.'/'.$file.'._addons_';
@@ -78,7 +79,7 @@ if(!$operation) {
 					if($md5 != md5_file($file)) {
 						dir_clear($tmpdir);
 						cloudaddons_faillog($_GET['rid'], 102);
-						cpmsg('cloudaddons_download_error', '', 'error');
+						cpmsg('cloudaddons_download_error', '', 'error', array('ErrorCode' => 102));
 					}
 				}
 				$end = rawurlencode(http_build_query($array));
@@ -87,14 +88,15 @@ if(!$operation) {
 		} while(!$end);
 		if($md5total !== '' && md5($md5total) !== cloudaddons_md5($_GET['key'].'_'.$_GET['rid'])) {
 			dir_clear($tmpdir);
-			cpmsg('cloudaddons_download_error', '', 'error');
+			cloudaddons_faillog($_GET['rid'], 105);
+			cpmsg('cloudaddons_download_error', '', 'error', array('ErrorCode' => 105));
 		}
 		cpmsg('cloudaddons_installing', "action=cloudaddons&operation=download&addonids=$_GET[addonids]&i=$addoni&end=$end&step=2&md5hash=".$_GET['md5hash'].'&timestamp='.$_GET['timestamp'], 'loading', array('addonid' => $_GET['key'].'.'.$_GET['type']), FALSE);
 	} elseif($step == 2) {
 		$tmpdir = DISCUZ_ROOT.'./data/download/'.$_GET['rid'];
 		if(!is_dir($tmpdir)) {
 			cloudaddons_faillog($_GET['rid'], 103);
-			cpmsg('cloudaddons_download_error', '', 'error');
+			cpmsg('cloudaddons_download_error', '', 'error', array('ErrorCode' => 103));
 		}
 		$typedir = array(
 		    'plugin' => 'source/plugin',
@@ -103,7 +105,7 @@ if(!$operation) {
 		);
 		if(!$typedir[$_GET['type']]) {
 			cloudaddons_faillog($_GET['rid'], 104);
-			cpmsg('cloudaddons_download_error', '', 'error');
+			cpmsg('cloudaddons_download_error', '', 'error', array('ErrorCode' => 104));
 		}
 		if($_GET['type'] != 'pack') {
 			$descdir = DISCUZ_ROOT.$typedir[$_GET['type']].'/';

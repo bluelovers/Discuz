@@ -39,7 +39,7 @@ body { background: #FFF url(bgimg.jpg) no-repeat 50% 0; }
 .moodfm_btn { background-image: url(mood_input_btn.png) !important; }
 #create_group_btn { display: block; background: url(create_group.png) no-repeat 0 0; }
 	#create_group_btn img { opacity: 0; filter: alpha(opacity=0); }
-.el .ec .hot { background-image: url(hotspot.gif); }
+.el .ec .hot, .clct_list .xld .m { background-image: url(hotspot.gif); }
 .pll .s { background-image:url(polljoins.gif); }
 
 /* 重定义版块快速跳转和侧边导航 */

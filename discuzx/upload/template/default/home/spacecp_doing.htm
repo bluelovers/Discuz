@@ -31,6 +31,7 @@
 <!--{elseif $_GET['op'] == 'spacenote'}-->
 	<!--{if $space[spacenote]}-->$space[spacenote]<!--{/if}-->
 <!--{elseif $_GET['op'] == 'docomment' || $_GET['op'] == 'getcomment'}-->
+	<!--{if helper_access::check_module('doing')}-->
 	<div id="{$_GET[key]}_form_{$doid}_{$id}">
 		<form id="{$_GET[key]}_docommform_{$doid}_{$id}" method="post" autocomplete="off" action="home.php?mod=spacecp&ac=doing&op=comment&doid=$doid&id=$id" {if $_G[inajax]}onsubmit="ajaxpost(this.id, 'return_$_GET[handlekey]');"{/if} class="pns" style="margin: 5px 0 0;">
 			<span id="{$_GET[key]}_form_{$doid}_{$id}_face" onclick="showFace(this.id, '{$_GET[key]}_form_{$doid}_{$id}_t');return false;" class="cur1"><img src="{IMGDIR}/facelist.gif" alt="facelist" class="vm" /></span>
@@ -49,6 +50,7 @@
 			docomment_get(values['doid'], '$_GET[key]');
 		}
 	</script>
+	<!--{/if}-->
 	<!--{if $_GET['op'] == 'getcomment'}-->
 		<!--{template home/space_doing_li}-->
 	<!--{/if}-->
@@ -56,7 +58,9 @@
 <!--{else}-->
 
 <div id="content">
+	<!--{if helper_access::check_module('doing')}-->
 	<!--{template home/space_doing_form}-->
+	<!--{/if}-->
 </div>
 
 <!--{/if}-->

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_delete.php 27478 2012-02-02 03:54:35Z monkey $
+ *      $Id: function_delete.php 28448 2012-03-01 03:27:53Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -256,8 +256,9 @@ function deletethread($tids, $membercount = false, $credit = false, $ponly = fal
 	}
 
 	C::t('common_moderate')->delete($arrtids, 'tid');
+	C::t('forum_threadclosed')->delete($arrtids);
 
-	$atids = $fids = $postids = $threadtables = array();
+	$cachefids = $atids = $fids = $postids = $threadtables = array();
 	foreach($threadtableids as $tableid) {
 		foreach(C::t('forum_thread')->fetch_all_by_tid($arrtids, 0, 0, $tableid) as $row) {
 			$atids[] = $row['tid'];
@@ -266,6 +267,7 @@ function deletethread($tids, $membercount = false, $credit = false, $ponly = fal
 			if($tableid) {
 				$fids[$row['fid']][] = $tableid;
 			}
+			$cachefids[$row['fid']] = $row['fid'];
 		}
 		if(!$tableid && !$ponly) {
 			$threadtables[] = $tableid;
@@ -373,7 +375,9 @@ function deletethread($tids, $membercount = false, $credit = false, $ponly = fal
 		}
 		C::t('forum_collectionrelated')->delete($arrtids);
 	}
-
+	if($cachefids) {
+		C::t('forum_thread')->clear_cache($cachefids, 'forumdisplay_');
+	}
 	if($ponly) {
 		if($_G['setting']['plugins']['func'][HOOKTYPE]['deletethread']) {
 			hookscript('deletethread', 'global', 'funcs', array('param' => $hookparam, 'step' => 'delete'), 'deletethread');
@@ -943,7 +947,7 @@ function deletecollection($ctid) {
 }
 
 function deleterelatedtid($tids, $ctid) {
-	$loadreleated = C::t('forum_collectionrelated')->fetch_all($tids);
+	$loadreleated = C::t('forum_collectionrelated')->fetch_all($tids, true);
 	foreach($loadreleated as $loadexist) {
 		if($loadexist['tid']) {
 			$collectionlist = explode("\t", $loadexist['collection']);

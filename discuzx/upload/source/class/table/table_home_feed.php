@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_home_feed.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_home_feed.php 28335 2012-02-28 04:37:47Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -47,7 +47,7 @@ class table_home_feed extends discuz_table
 	}
 
 	public function fetch_all_by_uid_dateline($uids, $findex = true, $start = 0, $limit = 5) {
-		if(!$uids) {
+		if(!($uids = dintval($uids, true))) {
 			return null;
 		}
 		return DB::fetch_all('SELECT * FROM %t '.(($findex) ? 'USE INDEX(dateline)' : '').' WHERE uid IN (%n) ORDER BY dateline desc %i', array($this->_table, $uids, DB::limit($start, $limit)));
@@ -70,10 +70,9 @@ class table_home_feed extends discuz_table
 			$condition[] = DB::field('uid', $uid);
 		}
 
-		if(!count($condition)) {
+		if(empty($data) || !is_array($data) || !count($condition)) {
 			return null;
 		}
-
 		DB::update($this->_table, $data, implode(' AND ', $condition));
 	}
 
@@ -85,17 +84,24 @@ class table_home_feed extends discuz_table
 		DB::query('UPDATE %t SET hot = hot+\'%d\' WHERE feedid = %d', array($this->_table, $inchot, $feedid));
 	}
 
-	public function delete_by_dateline($dateline, $glue = '<', $hot = 0) {
+	public function delete_by_dateline($dateline, $hot = 0) {
+		if(!is_numeric($dateline) || !is_numeric($hot)) {
+			return false;
+		}
 		$condition = array();
 
-		$condition[] = DB::field('dateline', $dateline, $glue);
+		$condition[] = DB::field('dateline', $dateline, '<');
 		$condition[] = DB::field('hot', $hot);
 
 		DB::delete($this->_table, implode(' AND ', $condition));
 	}
 
 	public function delete_by_id_idtype($ids, $idtype) {
+		if(!$ids || !$idtype) {
+			return null;
+		}
 		$condition = array();
+
 		$condition[] = DB::field('id', $ids);
 		$condition[] = DB::field('idtype', $idtype);
 
@@ -103,6 +109,9 @@ class table_home_feed extends discuz_table
 	}
 
 	public function delete_by_uid_idtype($uid, $idtype) {
+		if(!$uid || !$idtype) {
+			return null;
+		}
 		$condition = array();
 		$condition[] = DB::field('uid', $uid);
 		$condition[] = DB::field('idtype', $idtype);
@@ -111,6 +120,9 @@ class table_home_feed extends discuz_table
 	}
 
 	public function delete_by_icon($icon) {
+		if(!$icon) {
+			return null;
+		}
 		DB::delete($this->_table, DB::field('icon', $icon));
 	}
 
@@ -133,6 +145,9 @@ class table_home_feed extends discuz_table
 	}
 
 	public function delete_by_uid($uids) {
+		if(!$uids) {
+			return null;
+		}
 		DB::delete($this->_table, DB::field('uid', $uids).' OR ('.DB::field('id', $uids).' AND idtype=\'uid\')');
 	}
 
@@ -184,12 +199,12 @@ class table_home_feed extends discuz_table
 		}
 
 		if($starttime) {
-			$parameter[] = strtotime($starttime);
+			$parameter[] = is_numeric($starttime) ? $starttime : strtotime($starttime);
 			$wherearr[] = 'dateline>%d';
 		}
 
 		if($endtime) {
-			$parameter[] = $endtime;
+			$parameter[] = is_numeric($endtime) ? $endtime : strtotime($endtime);
 			$wherearr[] = 'dateline<%d';
 		}
 
@@ -219,7 +234,7 @@ class table_home_feed extends discuz_table
 		}
 
 		if($findex) {
-			$findex = 'USE INDEX('.$findex.')';
+			$findex = 'USE INDEX(dateline)';
 		}
 
 		$wheresql = !empty($wherearr) && is_array($wherearr) ? ' WHERE '.implode(' AND ', $wherearr) : '';

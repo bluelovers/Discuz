@@ -4,7 +4,7 @@
  *		[Discuz!] (C)2001-2099 Comsenz Inc.
  *		This is NOT a freeware, use is subject to license terms
  *
- *		$Id: table_forum_poststick.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *		$Id: table_forum_poststick.php 27806 2012-02-15 03:20:46Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -31,10 +31,16 @@ class table_forum_poststick extends discuz_table
 	}
 
 	public function delete_by_pid($pids) {
+		if(empty($pids)) {
+			return false;
+		}
 		return DB::query('DELETE FROM %t WHERE '.DB::field('pid', $pids), array($this->_table));
 	}
 
 	public function delete_by_tid($tids) {
+		if(empty($tids)) {
+			return false;
+		}
 		return DB::query('DELETE FROM %t WHERE '.DB::field('tid', $tids), array($this->_table));
 	}
 

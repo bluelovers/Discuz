@@ -3,20 +3,22 @@
 <!--{loop $list['feed'] $feed}-->
 	<!--{eval $content = $list['content'][$feed['tid']];}-->
 	<!--{eval $thread = $list['threads'][$content['tid']];}-->
-	<li class="cl" id="feed_li_$feed['feedid']" onmouseover="this.className='flw_feed_hover cl'" onmouseout="this.className='cl'">
+	<li class="cl{if $lastviewtime && $feed[dateline] > $lastviewtime} unread{/if}" id="feed_li_$feed['feedid']" onmouseover="this.className='flw_feed_hover cl'" onmouseout="this.className='cl'">
+		<!--{if $_GET['do'] != 'view' && !isset($_GET[banavatar])}-->
 		<div class="z flw_avt">
 			<!--{if $beforeuser != $feed['uid']}-->
 			<!--{eval $beforeuser = $feed['uid'];}-->
-			<a href="home.php?mod=space&uid=$feed[uid]{$hrefsuffix}" class="z" c="1" shref="home.php?mod=space&uid=$feed[uid]"><!--{avatar($feed[uid],'small')}--></a>
+			<a href="home.php?mod=space&uid=$feed[uid]" class="z" c="1" shref="home.php?mod=space&uid=$feed[uid]"><!--{avatar($feed[uid],'small')}--></a>
 			<span class="cnr"></span>
 			<!--{/if}-->
 		</div>
-		<div class="flw_article">
+		<!--{/if}-->
+		<div class="flw_article" {if $_GET['do'] == 'view' || $_GET[banavatar]}style="margin-left:0"{/if}>
 			<!--{if $feed[uid] == $_G[uid] || $_G['adminid'] == 1}-->
 			<a href="home.php?mod=spacecp&ac=follow&feedid=$feed[feedid]&op=delete" id="c_delete_$feed['feedid']" onclick="showWindow(this.id, this.href, 'get', 0);" class="flw_delete">{lang delete}</a>
 			<!--{/if}-->
-			<div class="flw_author pbm">
-			<a href="home.php?mod=space&uid=$feed[uid]{$hrefsuffix}" c="1" shref="home.php?mod=space&uid=$feed[uid]">$feed['username']</a>
+			<div class="flw_author">
+			<a href="home.php?mod=space&uid=$feed[uid]" c="1" shref="home.php?mod=space&uid=$feed[uid]">$feed['username']</a>
 			<span class="xg1">&nbsp;<!--{eval echo dgmdate($feed['dateline'], 'u');}--></span>
 			</div>
 			<!--{if $feed['note']}-->
@@ -25,31 +27,36 @@
 			</div>
 			<div class="flw_quote">
 			<!--{/if}-->
-			<!--{if !empty($thread)}-->
-			<h2 class="wx pbm">
+			<!--{if !empty($thread) && $thread['displayorder'] >= 0}-->
+			<h2 class="wx pbn">
 				<!--{if isset($carray[$feed['cid']])}-->
-				<a href="javascript:;" onclick="vieworiginal(this, 'original_content_$feed[feedid]');return false;" class="flw_readfull y xw0 xs1 xi2">+ 展开全文</a>
+				<a href="javascript:;" onclick="vieworiginal(this, 'original_content_$feed[feedid]');return false;" class="flw_readfull y xw0 xs1 xi2">+ {lang follow_open_feed}</a>
 				<!--{/if}-->
+				<!--{if $thread[fid] != $_G[setting][followforumid]}-->
 				<a href="forum.php?mod=viewthread&tid=$content['tid']&extra=page%3D1" target="_blank">$thread['subject']</a>
+				<!--{/if}-->
 			</h2>
 
 			<div class="pbm c cl" id="original_content_$feed[feedid]" {if isset($carray[$feed['cid']])} style="display: none"{/if}>
 				$content['content']
-				<!--{if $thread['special']}-->
+				<!--{if $thread['special'] && $thread[fid] != $_G[setting][followforumid]}-->
 				<br/>
-				<a href="forum.php?mod=viewthread&tid=$content['tid']&extra=page%3D1" target="_blank">这是一个特殊主题，点这里可以回原帖查看详细内容</a>
+				<a href="forum.php?mod=viewthread&tid=$content['tid']&extra=page%3D1" target="_blank">{lang follow_special_thread_tip}</a>
 				<!--{/if}-->
 			</div>
 			<div class="xg1 cl">
 				<span class="y">
-				<a href="javascript:;" id="relay_$feed[feedid]" onclick="quickrelay($feed['feedid'], $thread['tid']);">转播($content['relay'])</a>&nbsp; 
-				<a href="javascript:;" onclick="quickreply($thread['fid'], $thread['tid'], $feed['feedid'])">回复($thread['replies'])</a>
+				<!--{if helper_access::check_module('follow')}-->
+				<a href="javascript:;" id="relay_$feed[feedid]" onclick="quickrelay($feed['feedid'], $thread['tid']);">{lang follow_reply}($content['relay'])</a>&nbsp;
+				<!--{/if}--> 
+				<a href="javascript:;" onclick="quickreply($thread['fid'], $thread['tid'], $feed['feedid'])">{lang reply}($thread['replies'])</a>
 				</span>
-				<!--{if $feed['note']}--><a href="home.php?mod=space&uid=$feed[uid]{$hrefsuffix}">$thread['author']</a> 发表于 <!--{date($thread['dateline'])}-->&nbsp;<!--{/if}--><!--{if $_G['cache']['forums'][$thread['fid']]['name']}-->#<a href="forum.php?mod=forumdisplay&fid=$thread['fid']">$_G['cache']['forums'][$thread['fid']]['name']</a><!--{/if}-->
+				<!--{if $feed['note']}--><a href="home.php?mod=space&uid=$feed[uid]">$thread['author']</a> {lang follow_post_by_time} <!--{date($thread['dateline'])}-->&nbsp;<!--{/if}-->
+				<!--{if $thread[fid] != $_G[setting][followforumid] && $_G['cache']['forums'][$thread['fid']]['name']}-->#<a href="forum.php?mod=forumdisplay&fid=$thread['fid']">$_G['cache']['forums'][$thread['fid']]['name']</a><!--{/if}-->
 			</div>
 			<!--{else}-->
 			<div class="pbm c cl" id="original_content_$feed[feedid]" {if isset($carray[$feed['cid']])} style="display: none"{/if}>
-			该主题已被删除
+			{lang follow_thread_deleted}
 			</div>
 			<!--{/if}-->
 			<!--{if $feed['note']}--></div><!--{/if}-->

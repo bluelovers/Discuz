@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: member_regverify.php 25246 2011-11-02 03:34:53Z zhangguosheng $
+ *      $Id: member_regverify.php 28003 2012-02-20 09:55:39Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -18,7 +18,7 @@ if($_G['setting']['regverify'] == 2 && $_G['groupid'] == 8 && submitcheck('verif
 	if(($verify_member = C::t('common_member_validate')->fetch($_G['uid'])) && $verify_member['status'] == 1) {
 		C::t('common_member_validate')->update($_G['uid'], array(
 			'submittimes' => $verify_member['submittimes']+1,
-			'submitdate' => $_G[timestamp],
+			'submitdate' => $_G['timestamp'],
 			'status' => '0',
 			'message' => dhtmlspecialchars($_GET['regmessagenew'])
 		));

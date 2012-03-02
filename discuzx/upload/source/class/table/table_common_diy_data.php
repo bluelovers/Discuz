@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_diy_data.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_common_diy_data.php 27827 2012-02-15 07:03:43Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -22,7 +22,7 @@ class table_common_diy_data extends discuz_table
 	}
 
 	public function fetch($targettplname, $tpldirectory) {
-		return DB::fetch_first('SELECT * FROM '.DB::table($this->_table).' WHERE '.DB::field('targettplname', $targettplname).' AND '.DB::field('tpldirectory', $tpldirectory));
+		return !empty($targettplname) ? DB::fetch_first('SELECT * FROM '.DB::table($this->_table).' WHERE '.DB::field('targettplname', $targettplname).' AND '.DB::field('tpldirectory', $tpldirectory)) : array();
 	}
 
 	public function delete($targettplname, $tpldirectory = null) {
@@ -36,11 +36,14 @@ class table_common_diy_data extends discuz_table
 	}
 
 	public function update($targettplname, $tpldirectory, $data) {
-		return DB::update($this->_table, $data, DB::field('targettplname', $targettplname).' AND '.DB::field('tpldirectory', $tpldirectory));
+		if(!empty($targettplname) && !empty($data) && is_array($data)) {
+			return DB::update($this->_table, $data, DB::field('targettplname', $targettplname).' AND '.DB::field('tpldirectory', $tpldirectory));
+		}
+		return false;
 	}
 
 	public function fetch_all($targettplname, $tpldirectory = null) {
-		return DB::fetch_all($this->_table, DB::field('targettplname', $targettplname).($tpldirectory !== null ? ' AND '.DB::field('tpldirectory', $tpldirectory) : ''));
+		return !empty($targettplname) ? DB::fetch_all('SELECT * FROM '.DB::table($this->_table).' WHERE '.DB::field('targettplname', $targettplname).($tpldirectory !== null ? ' AND '.DB::field('tpldirectory', $tpldirectory) : '')) : array();
 	}
 
 	public function count_by_where($wheresql) {

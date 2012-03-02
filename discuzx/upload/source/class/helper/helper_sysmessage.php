@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: helper_sysmessage.php 27605 2012-02-07 05:24:04Z chenmengshu $
+ *      $Id: helper_sysmessage.php 27823 2012-02-15 06:40:26Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -35,14 +35,14 @@ class helper_sysmessage {
 <meta http-equiv="MSThemeCompatible" content="Yes" />
 </head>
 <body bgcolor="#FFFFFF">
-<table cellpadding="0" cellspacing="0" border="0" width="700" align="center" height="85%">
+<table cellpadding="0" cellspacing="0" border="0" width="850" align="center" height="85%">
 <tr align="center" valign="middle">
 	<td>
 	<table cellpadding="20" cellspacing="0" border="0" width="80%" align="center" style="font-family: Verdana, Tahoma; color: #666666; font-size: 12px">
 	<tr>
 	<td valign="middle" align="center" bgcolor="#EBEBEB">
 		<b style="font-size: 16px">$title</b>
-		<br /><br />$message
+		<br /><br /><p style="text-align:left;">$message</p>
 		<br /><br />
 	</td>
 	</tr>

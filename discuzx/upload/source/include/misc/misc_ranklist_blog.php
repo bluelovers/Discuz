@@ -7,7 +7,7 @@ loadcache('click');
 $clicks = empty($_G['cache']['click']['blogid'])?array():$_G['cache']['click']['blogid'];
 
 $bloglist = '';
-$orderby = $_GET['orderby'];
+$orderby = in_array($_GET['orderby'], array('thisweek', 'thismonth', 'today', 'all')) ? $_GET['orderby'] : '';
 $navname = $_G['setting']['navs'][8]['navname'] . ' - ' . $_G['setting']['bbname'];
 switch($_GET['view']) {
 	case 'heats':

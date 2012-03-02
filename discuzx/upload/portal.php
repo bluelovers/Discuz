@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portal.php 24376 2011-09-15 10:27:08Z zhangguosheng $
+ *      $Id: portal.php 28297 2012-02-27 08:35:59Z monkey $
  */
 
 define('APPTYPEID', 4);
@@ -22,14 +22,12 @@ require DISCUZ_ROOT.'./source/function/function_portal.php';
 
 if(empty($_GET['mod']) || !in_array($_GET['mod'], array('list', 'view', 'comment', 'portalcp', 'topic', 'attachment', 'rss', 'block'))) $_GET['mod'] = 'index';
 
-if($_GET['mod'] != 'portalcp' && !$_G['setting']['portalstatus']) {
-	showmessage('portal_status_off');
-}
 
 define('CURMODULE', $_GET['mod']);
 runhooks();
 
 $navtitle = str_replace('{bbname}', $_G['setting']['bbname'], $_G['setting']['seotitle']['portal']);
+$_G['disabledwidthauto'] = 1;
 
 require_once libfile('portal/'.$_GET['mod'], 'module');
 

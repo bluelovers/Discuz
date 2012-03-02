@@ -2,7 +2,7 @@
 <!--{if $_GET['action'] == 'quickclear'}-->
 	<div class="tm_c">
 		<h3 class="flb">
-			<em id="return_$_GET['handlekey']">快速清理</em>
+			<em id="return_$_GET['handlekey']">{lang quickclear}</em>
 			<span>
 				<a href="javascript:;" class="flbc" onclick="hideWindow('$_GET['handlekey']')" title="{lang close}">{lang close}</a>
 			</span>
@@ -17,9 +17,9 @@
 			<div class="c">
 
 				<ul>
-					<li><label><input type="checkbox" name="operations[]" class="pc" value="avatar" />清除头像</label></li>
-					<li><label><input type="checkbox" name="operations[]" class="pc" value="sightml" />清除签名</label></li>
-					<li><label><input type="checkbox" name="operations[]" class="pc" value="customstatus" />清除自定义头衔</label></li>
+					<li><label><input type="checkbox" name="operations[]" class="pc" value="avatar" />{lang quickclear_avatar}</label></li>
+					<li><label><input type="checkbox" name="operations[]" class="pc" value="sightml" />{lang quickclear_sightml}</label></li>
+					<li><label><input type="checkbox" name="operations[]" class="pc" value="customstatus" />{lang quickclear_customstatus}</label></li>
 				</ul>
 				<br />
 				<!--{if $crimenum_avatar > 0}-->
@@ -43,6 +43,36 @@
 			<p class="o">
 				<label for="sendreasonpm"><input type="checkbox" name="sendreasonpm" id="sendreasonpm" class="pc"{if $_G['group']['reasonpm'] == 2 || $_G['group']['reasonpm'] == 3} checked="checked" disabled="disabled"{/if} />{lang admin_pm}</label>
 				<button type="submit" name="modsubmit" id="modsubmit" class="pn pnc" value="true" tabindex="2"><strong>{lang submit}</strong></button>
+			</p>
+		</form>
+	</div>
+<!--{elseif $_GET['action'] == 'setnav'}-->
+	<div class="tm_c">
+		<h3 class="flb">
+			<em id="return_$_GET['handlekey']">$navtitle</em>
+			<span>
+				<a href="javascript:;" class="flbc" onclick="hideWindow('$_GET['handlekey']')" title="{lang close}">{lang close}</a>
+			</span>
+		</h3>
+		<form id="setnav" method="post" autocomplete="off" action="forum.php?mod=ajax&action=setnav&type=portal&do=$do" onsubmit="ajaxpost(this.id, 'return_$_GET['handlekey']', 'return_$_GET['handlekey']');return false;">
+			<input type="hidden" name="formhash" value="{FORMHASH}" />
+			<input type="hidden" name="type" value="$type" />
+			<input type="hidden" name="funcsubmit" value="1" />
+			<input type="hidden" name="handlekey" value="$_GET['handlekey']" />
+			<div class="c">
+				<!--{if $do == 'open'}-->
+				<ul>
+					<!--{if $type != 'wall'}-->
+					<li><label><input type="checkbox" name="location[header]" class="pc" value="1" />{lang main_nav}</label></li>
+					<!--{/if}-->
+					<li><label><input type="checkbox" name="location[quick]" class="pc" value="1" />{lang quick_nav}</label></li>
+				</ul>
+				<!--{else}-->
+				$closeprompt
+				<!--{/if}-->
+			</div>
+			<p class="o pns">
+				<button type="submit" name="funcsubmit_btn" class="pn pnc" value="true"><strong>{lang confirms}</strong></button>
 			</p>
 		</form>
 	</div>

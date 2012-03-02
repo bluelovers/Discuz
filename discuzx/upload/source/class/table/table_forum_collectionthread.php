@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_forum_collectionthread.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_forum_collectionthread.php 27785 2012-02-14 07:49:59Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -22,6 +22,9 @@ class table_forum_collectionthread extends discuz_table
 	}
 
 	public function fetch_all_by_ctid($ctid, $start = 0, $limit = 0, $distinct = 0) {
+		if(!$ctid) {
+			return null;
+		}
 		if($distinct == 1) {
 			$sql = " GROUP BY tid";
 		}
@@ -30,10 +33,13 @@ class table_forum_collectionthread extends discuz_table
 
 	public function fetch_by_ctid_dateline($ctid) {
 		$data = $this->fetch_all_by_ctid($ctid, 0, 1);
-		return current($data);
+		return $data ? current($data) : null;
 	}
 
 	public function fetch_all_by_tids($tids) {
+		if(!$tids) {
+			return null;
+		}
 		return DB::fetch_all('SELECT * FROM %t WHERE '.DB::field('tid', $tids), array($this->_table), 'ctid');
 	}
 
@@ -42,14 +48,24 @@ class table_forum_collectionthread extends discuz_table
 	}
 
 	public function fetch_all_by_ctid_tid($ctid, $tids) {
+		if(!$ctid || !$tids) {
+			return null;
+		}
 		return DB::fetch_all('SELECT * FROM %t WHERE ctid=%d AND tid IN(%n)', array($this->_table, $ctid, $tids), 'tid');
 	}
 
 	public function delete_by_ctid($ctid) {
+		if(!$ctid) {
+			return false;
+		}
 		return DB::delete($this->_table, DB::field('ctid', $ctid));
 	}
 
 	public function delete_by_ctid_tid($ctid, $tid) {
+		if(!$ctid && !$uid) {
+			return false;
+		}
+
 		$condition = array();
 
 		if($ctid) {

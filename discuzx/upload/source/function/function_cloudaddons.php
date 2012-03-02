@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_cloudaddons.php 27542 2012-02-03 08:40:44Z monkey $
+ *      $Id: function_cloudaddons.php 28363 2012-02-28 07:28:58Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -26,11 +26,28 @@ function cloudaddons_url($extra) {
 
 	require_once DISCUZ_ROOT.'./source/discuz_version.php';
 
-	$uniqueid = C::t('common_setting')->fetch('siteuniqueid');
+	$uniqueid = $_G['setting']['siteuniqueid'] ? $_G['setting']['siteuniqueid'] : C::t('common_setting')->fetch('siteuniqueid');
 	$data = 'siteuniqueid='.rawurlencode($uniqueid).'&siteurl='.rawurlencode($_G['siteurl']).'&sitever='.DISCUZ_VERSION.'/'.DISCUZ_RELEASE.'&sitecharset='.CHARSET.'&mysiteid='.$_G['setting']['my_siteid'];
 	$param = 'data='.rawurlencode(base64_encode($data));
 	$param .= '&md5hash='.substr(md5($data.TIMESTAMP), 8, 8).'&timestamp='.TIMESTAMP;
 	return CLOUDADDONS_DOWNLOAD_URL.'?'.$param.$extra;
+}
+
+function cloudaddons_check() {
+	if(dfsockopen(CLOUDADDONS_WEBSITE_URL.'/image/logo.png', 4) !== chr(0x89).'PNG') {
+		cpmsg('cloudaddons_check_url_fopen_error', '', 'error');
+	}
+	$tmpdir = DISCUZ_ROOT.'./data/download/'.random(5);
+	$tmpfile = $tmpdir.'/index.html';
+	dmkdir($tmpdir, 0777);
+	if(!is_dir($tmpdir) || !file_exists($tmpfile)) {
+		cpmsg('cloudaddons_check_write_error', '', 'error');
+	}
+	@unlink($tmpfile);
+	@rmdir($tmpdir);
+	if(is_dir($tmpdir) || file_exists($tmpfile)) {
+		cpmsg('cloudaddons_check_write_error', '', 'error');
+	}
 }
 
 function cloudaddons_open($extra, $post = '') {

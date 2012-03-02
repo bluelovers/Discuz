@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_rss.php 25442 2011-11-09 09:40:15Z chenmengshu $
+ *      $Id: forum_rss.php 28366 2012-02-28 07:38:23Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -154,7 +154,7 @@ function updatersscache($num) {
 					'author'=>$thread['author'],
 					'subject'=>$thread['subject'],
 					'description'=>$thread['description']
-				));
+				), false, true);
 			}
 		}
 	}

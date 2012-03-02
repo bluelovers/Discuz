@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_connect.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: lang_connect.php 27998 2012-02-20 09:33:38Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -49,7 +49,7 @@ $lang = array
 	'connect_errlog_sig_incorrect' => 'URL签名不正确',
 
 	'connect_tthread_broadcast' => '转播微博',
-	'connect_tthread_message' => "\r\n\r\n".'[img]static/image/common/weibo.png[/img][url=http://t.qq.com/{username}]来自 {nick} 的腾讯微博[/url]',
+	'connect_tthread_message' => '<br><br><img class="vm" src="static/image/common/weibo.png">&nbsp;<a href="http://t.qq.com/{username}" target="_blank">来自 {nick} 的腾讯微博</a>',
 	'connect_tthread_comment' => '微博评论',
 );
 

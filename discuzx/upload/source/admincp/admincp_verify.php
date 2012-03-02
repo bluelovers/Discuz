@@ -3,7 +3,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_verify.php 26849 2011-12-26 06:56:10Z zhengqingpeng $
+ *      $Id: admincp_verify.php 28429 2012-02-29 09:44:21Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -248,7 +248,11 @@ EOF;
 							continue;
 						}
 						if($_G['cache']['profilesetting'][$key]['formtype'] == 'file') {
-							$field = '<a href="'.(getglobal('setting/attachurl').'./profile/'.$field).'" target="_blank"><img src="'.(getglobal('setting/attachurl').'./profile/'.$field).'" class="verifyimg" /></a>';
+							if($field) {
+								$field = '<a href="'.(getglobal('setting/attachurl').'./profile/'.$field).'" target="_blank"><img src="'.(getglobal('setting/attachurl').'./profile/'.$field).'" class="verifyimg" /></a>';
+							} else {
+								$field = cplang('members_verify_pic_removed');
+							}
 						} elseif(in_array($key, array('gender', 'birthday', 'birthcity', 'residecity'))) {
 							$field = profile_show($key, $fields);
 						}
@@ -279,7 +283,11 @@ EOF;
 								$value[$field] = profile_show($key, $value);
 							}
 							if($_G['cache']['profilesetting'][$key]['formtype'] == 'file') {
-								$value[$field] = '<a href="'.(getglobal('setting/attachurl').'./profile/'.$value[$field]).'" target="_blank"><img src="'.(getglobal('setting/attachurl').'./profile/'.$value[$field]).'" class="verifyimg" /></a>';
+								if($value[$field]) {
+									$value[$field] = '<a href="'.(getglobal('setting/attachurl').'./profile/'.$value[$field]).'" target="_blank"><img src="'.(getglobal('setting/attachurl').'./profile/'.$value[$field]).'" class="verifyimg" /></a>';
+								} else {
+									$value[$field] = cplang('members_verify_pic_removed');
+								}
 							}
 							$fieldstr .= '<tr><td width="100">'.$_G['cache']['profilesetting'][$key]['title'].':</td><td>'.$value[$field].'</td></tr>';
 						}
@@ -559,6 +567,9 @@ EOF;
 			$_G['setting']['verify'][$key]['icon'] = str_replace($_G['setting']['attachurl'].'common/', '', $value['icon']);
 		}
 		$verifynew = getgpc('verify');
+		if($vid == 6 || $vid == 7) {
+			$verifynew['title'] = $_G['setting']['verify'][$vid]['title'];
+		}
 		if($verifynew['available'] == 1 && !trim($verifynew['title'])) {
 			cpmsg('members_verify_update_title_error', '', 'error');
 		}

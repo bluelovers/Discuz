@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_collection.php 27582 2012-02-07 02:10:14Z chenmengshu $
+ *      $Id: function_collection.php 28314 2012-02-28 02:18:56Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -36,10 +36,12 @@ function checkcollectionperm($collection, $uid, $allowteamworker = false) {
 	return false;
 }
 
-function processCollectionData($collection, $tf = array()) {
+function processCollectionData($collection, $tf = array(), $orderby = '') {
 	if(count($collection) <= 0) {
 		return array();
 	}
+	require_once libfile('function/discuzcode');
+
 	foreach($collection as $ctid=>&$curvalue) {
 		$curvalue['updated'] = ($curvalue['lastupdate'] > $tf[$ctid]['lastvisit']) ? 1 : 0;
 		$curvalue['tflastvisit'] = $tf[$ctid]['lastvisit'];
@@ -49,6 +51,22 @@ function processCollectionData($collection, $tf = array()) {
 		$curvalue['avgrate'] = number_format($curvalue['rate'], 1);
 		$curvalue['star'] = imgdisplayrate($curvalue['rate']);
 		$curvalue['lastposterhtml'] = rawurlencode($curvalue['lastposter']);
+		$curvalue['shortdesc'] = cutstr(strip_tags(discuzcode($curvalue['desc'])), 50);
+
+		$curvalue['arraykeyword'] = parse_keyword($curvalue['keyword'], false, false);
+		if($curvalue['arraykeyword']) {
+			foreach ($curvalue['arraykeyword'] as $kid=>$s_keyword) {
+				$curvalue['urlkeyword'][$kid] = rawurlencode($s_keyword);
+			}
+		}
+
+		if($orderby == 'commentnum') {
+			$curvalue['displaynum'] = $curvalue['commentnum'];
+		} elseif($orderby == 'follownum') {
+			$curvalue['displaynum'] = $curvalue['follownum'];
+		} else {
+			$curvalue['displaynum'] = $curvalue['threadnum'];
+		}
 	}
 	return $collection;
 }
@@ -74,7 +92,7 @@ function collectionThread(&$threadlist, $foruminfo = false, $lastvisit = null, &
 		$curvalue['istoday'] = $curvalue['dateline'] > $todaytime ? 1 : 0;
 		$curvalue['dbdateline'] = $curvalue['dateline'];
 		$curvalue['htmlsubject'] = htmlspecialchars($curvalue['subject']);
-		$curvalue['cutsubject'] = cutstr($curvalue['subject'], 38);
+		$curvalue['cutsubject'] = $curvalue['subject'];
 		$curvalue['dateline'] = dgmdate($curvalue['dateline'], 'u', '9999', getglobal('setting/dateformat'));
 		$curvalue['dblastpost'] = $curvalue['lastpost'];
 		$curvalue['lastpost'] = dgmdate($curvalue['lastpost'], 'u');

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_profile.php 27348 2012-01-17 07:34:00Z svn_project_zhangjie $
+ *      $Id: spacecp_profile.php 28520 2012-03-02 03:25:45Z houdelei $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -50,8 +50,10 @@ if($_G['setting']['regverify'] == 2 && $_G['groupid'] == 8) {
 	}
 }
 
-$connect = C::t('#qqconnect#common_member_connect')->fetch($_G['uid']);
-$conisregister = $operation == 'password' && $_G['setting']['connect']['allow'] && $connect['conisregister'];
+if($_G['setting']['connect']['allow']) {
+	$connect = C::t('#qqconnect#common_member_connect')->fetch($_G['uid']);
+	$conisregister = $operation == 'password' && $_G['setting']['connect']['allow'] && $connect['conisregister'];
+}
 
 if(submitcheck('profilesubmit')) {
 
@@ -179,7 +181,7 @@ if(submitcheck('profilesubmit')) {
 			if(!profile_check($key, $value, $space)) {
 				profile_showerror($key);
 			} elseif($field['size'] && $field['size']*1024 < $file['size']) {
-				profile_showerror($key, '文件大小应该小于'.$field['size'].'KB');
+				profile_showerror($key, lang('spacecp', 'filesize_lessthan').$field['size'].'KB');
 			}
 			$upload->init($file, 'profile');
 			$attach = $upload->attach;
@@ -282,12 +284,14 @@ if(submitcheck('profilesubmit')) {
 	$setarr = array();
 	$emailnew = dhtmlspecialchars($_GET['emailnew']);
 	$ignorepassword = 0;
-	$connect = C::t('#qqconnect#common_member_connect')->fetch($_G['uid']);
-	if($_G['setting']['connect']['allow'] && $connect['conisregister']) {
-		$_GET['oldpassword'] = '';
-		$ignorepassword = 1;
-		if(empty($_GET['newpassword'])) {
-			showmessage('profile_passwd_empty');
+	if($_G['setting']['connect']['allow']) {
+		$connect = C::t('#qqconnect#common_member_connect')->fetch($_G['uid']);
+		if($connect['conisregister']) {
+			$_GET['oldpassword'] = '';
+			$ignorepassword = 1;
+			if(empty($_GET['newpassword'])) {
+				showmessage('profile_passwd_empty');
+			}
 		}
 	}
 
@@ -297,6 +301,24 @@ if(submitcheck('profilesubmit')) {
 		$secquesnew = $_GET['questionidnew'] > 0 ? random(8) : '';
 	}
 
+	if($_G['setting']['strongpw']) {
+		$strongpw_str = array();
+		if(in_array(1, $_G['setting']['strongpw']) && !preg_match("/\d+/", $_GET['newpassword'])) {
+			$strongpw_str[] = lang('member/template', 'strongpw_1');
+		}
+		if(in_array(2, $_G['setting']['strongpw']) && !preg_match("/[a-z]+/", $_GET['newpassword'])) {
+			$strongpw_str[] = lang('member/template', 'strongpw_2');
+		}
+		if(in_array(3, $_G['setting']['strongpw']) && !preg_match("/[A-Z]+/", $_GET['newpassword'])) {
+			$strongpw_str[] = lang('member/template', 'strongpw_3');
+		}
+		if(in_array(4, $_G['setting']['strongpw']) && !preg_match("/[^a-zA-z0-9]+/", $_GET['newpassword'])) {
+			$strongpw_str[] = lang('member/template', 'strongpw_4');
+		}
+		if($strongpw_str) {
+			showmessage(lang('member/template', 'password_weak').implode(',', $strongpw_str));
+		}
+	}
 	if(!empty($_GET['newpassword']) && $_GET['newpassword'] != addslashes($_GET['newpassword'])) {
 		showmessage('profile_passwd_illegal', '', array(), array('return' => true));
 	}

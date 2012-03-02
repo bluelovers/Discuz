@@ -16,6 +16,11 @@
 </style>
 <script type='text/javascript'>
 	appendscript('http://x.soso.com/js/xf/xflib.js','','','utf-8');
+    try {
+        changeOrigin();
+    } catch(e) {
+
+    }
 
 	function updateDownload(aidEncode, obj) {
 		date = new Date();
@@ -23,6 +28,11 @@
 		imgCode = '<img width="0" height="0" src="' + imgLink + '" />';
 		$('ft').innerHTML = $('ft').innerHTML + imgCode;
 		setTimeout(function() {OnDownloadClick_Simple(obj, event, 21504);}, 100);
+	}
+
+	function changeOrigin() {
+		$('e_btn_attachlist').getElementsByTagName('a')[0].innerText = '{lang xf_storage:attachlist}';
+		$('e_attachlist').getElementsByTagName('div')[0].parentNode.removeChild($('e_attachlist').getElementsByTagName('div')[0]);
 	}
 </script>
 <!--{/block}-->

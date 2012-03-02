@@ -4,7 +4,7 @@ if(!defined('IN_DISCUZ')) {
 }
 
 $polllist = '';
-$orderby = $_GET['orderby'];
+$orderby = in_array($_GET['orderby'], array('thisweek', 'thismonth', 'today', 'all')) ? $_GET['orderby'] : '';
 $navname = $_G['setting']['navs'][8]['navname'];
 switch($_GET['view']) {
 	case 'heats':

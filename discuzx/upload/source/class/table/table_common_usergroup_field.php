@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_usergroup_field.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_common_usergroup_field.php 28041 2012-02-21 07:33:55Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -26,10 +26,13 @@ class table_common_usergroup_field extends discuz_table
 	}
 
 	public function fetch_all_fields($gid, $fields) {
-		if(!$fields) {
+		if(!is_array($fields) || !$fields) {
 			return null;
 		}
-		$fieldssql = implode(',', daddslashes($fields));
+		foreach($fields as &$field) {
+			$field = DB::quote_field($field);
+		}
+		$fieldssql = implode(',', $fields);
 		return DB::fetch_all('SELECT %i FROM %t %i', array($fieldssql, $this->_table, ($gid ? 'WHERE '.DB::field('groupid', $gid) : '')), $this->_pk);
 	}
 

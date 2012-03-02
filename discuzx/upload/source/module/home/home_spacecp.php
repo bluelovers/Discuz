@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: home_spacecp.php 27347 2012-01-17 06:48:20Z zhengqingpeng $
+ *      $Id: home_spacecp.php 28214 2012-02-24 06:38:56Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -19,15 +19,10 @@ $acs = array('space', 'doing', 'upload', 'comment', 'blog', 'album', 'relatekw',
 	'avatar', 'profile', 'theme', 'feed', 'privacy', 'pm', 'share', 'invite','sendmail',
 	'credit', 'usergroup', 'domain', 'click','magic', 'top', 'videophoto', 'index', 'plugin', 'search', 'promotion');
 
-$ac = (empty($_GET['ac']) || !in_array($_GET['ac'], $acs))?'profile':$_GET['ac'];
+$_GET['ac'] = $ac = (empty($_GET['ac']) || !in_array($_GET['ac'], $acs))?'profile':$_GET['ac'];
 $op = empty($_GET['op'])?'':$_GET['op'];
 $_G['mnid'] = 'mn_common';
 
-if(in_array($ac, array('privacy', 'doing', 'upload', 'blog', 'album'))) {
-	if(!$_G['setting']['homestatus']) {
-		showmessage('home_status_off');
-	}
-}
 
 if(empty($_G['uid'])) {
 	if($_SERVER['REQUEST_METHOD'] == 'GET') {

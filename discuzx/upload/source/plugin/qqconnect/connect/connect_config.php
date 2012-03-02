@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: connect_config.php 26770 2011-12-22 10:10:52Z zhouxiaobo $
+ *      $Id: connect_config.php 27941 2012-02-17 03:25:15Z zhouxiaobo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -39,6 +39,24 @@ if(submitcheck('connectsubmit')) {
 		if ($connect_member['conuinsecret']) {
 
 			if($_G['member']['conisregister']) {
+				if($_G['setting']['strongpw']) {
+					$strongpw_str = array();
+					if(in_array(1, $_G['setting']['strongpw']) && !preg_match("/\d+/", $_GET['newpassword1'])) {
+						$strongpw_str[] = lang('member/template', 'strongpw_1');
+					}
+					if(in_array(2, $_G['setting']['strongpw']) && !preg_match("/[a-z]+/", $_GET['newpassword1'])) {
+						$strongpw_str[] = lang('member/template', 'strongpw_2');
+					}
+					if(in_array(3, $_G['setting']['strongpw']) && !preg_match("/[A-Z]+/", $_GET['newpassword1'])) {
+						$strongpw_str[] = lang('member/template', 'strongpw_3');
+					}
+					if(in_array(4, $_G['setting']['strongpw']) && !preg_match("/[^a-zA-z0-9]+/", $_GET['newpassword1'])) {
+						$strongpw_str[] = lang('member/template', 'strongpw_4');
+					}
+					if($strongpw_str) {
+						showmessage(lang('member/template', 'password_weak').implode(',', $strongpw_str));
+					}
+				}
 				if($_GET['newpassword1'] !== $_GET['newpassword2']) {
 					showmessage('profile_passwd_notmatch', $referer);
 				}
@@ -61,7 +79,7 @@ if(submitcheck('connectsubmit')) {
 			}
 		}
 
-		DB::query("UPDATE ".DB::table('common_member_connect')." SET conuin='', conuinsecret='', conopenid='', conispublishfeed='0', conispublisht='0', conisregister='0', conisqzoneavatar='0', conisfeed='0' WHERE uid='$_G[uid]'");
+		C::t('#qqconnect#common_member_connect')->delete($_G['uid']);
 
 		C::t('common_member')->update($_G['uid'], array('conisbind' => 0));
 		DB::query("INSERT INTO ".DB::table('connect_memberbindlog')." (uid, uin, type, dateline) VALUES ('$_G[uid]', '{$_G[member][conopenid]}', '2', '$_G[timestamp]')");

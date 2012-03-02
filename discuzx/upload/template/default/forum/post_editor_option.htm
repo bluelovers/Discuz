@@ -33,7 +33,7 @@
 		<!--{if ($_GET[action] == 'newthread' || $_GET[action] == 'edit' && $isfirstpost)}-->
 			<p class="mbn"><input type="checkbox" name="allownoticeauthor" id="allownoticeauthor" class="pc" value="1"{if $allownoticeauthor} checked="checked"{/if} /><label for="allownoticeauthor">{lang post_noticeauthor}</label></p>
 		<!--{/if}-->
-		<!--{if $_GET[action] != 'edit' && $_G['forum']['allowfeed']}-->
+		<!--{if $_GET[action] != 'edit' && helper_access::check_module('feed') && $_G['forum']['allowfeed']}-->
 			<p class="mbn"><input type="checkbox" name="addfeed" id="addfeed" class="pc" value="1" $addfeedcheck><label for="addfeed">{lang addfeed}</label></p>
 		<!--{/if}-->
 

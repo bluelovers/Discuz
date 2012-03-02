@@ -4,7 +4,7 @@
  *	  [Discuz! X] (C)2001-2099 Comsenz Inc.
  *	  This is NOT a freeware, use is subject to license terms
  *
- *	  $Id: spacecp.inc.php 27608 2012-02-07 05:45:43Z svn_project_zhangjie $
+ *	  $Id: spacecp.inc.php 28020 2012-02-21 02:13:11Z zhouxiaobo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -90,6 +90,7 @@ if ($pluginop == 'config') {
 			'comment' => $_POST['reason'],
 			'summary' => $summary,
 			'images' => $_POST['attach_image'],
+			'nswb' => '1',
 		);
 
 		try {
@@ -158,10 +159,10 @@ if ($pluginop == 'config') {
 			}
 		} else {
 			$thread = C::t('forum_thread')->fetch($tid);
-			if($response['id'] && $_G['setting']['connect']['t']['reply'] && $thread['tid'] && !$thread['closed'] && !getstatus($thread['status'], 3)) {
+			if($response['data']['id'] && $_G['setting']['connect']['t']['reply'] && $thread['tid'] && !$thread['closed'] && !getstatus($thread['status'], 3)) {
 
-				DB::insert('connect_tthreadlog', array(
-					'twid' => $response['id'],
+				C::t('#qqconnect#connect_tthreadlog')->insert(array(
+					'twid' => $response['data']['id'],
 					'tid' => $tid,
 					'conopenid' => $_G['member']['conopenid'],
 					'pagetime' => 0,
@@ -170,6 +171,9 @@ if ($pluginop == 'config') {
 					'updatetime' => 0,
 					'dateline' => $_G['timestamp'],
 				));
+			}
+			if(!getstatus($thread['status'], 8)) {
+				C::t('forum_thread')->update($tid, array('status' => setstatus(8, 1, $thread['status'])));
 			}
 			$code = $response['ret'];
 			$message = lang('connect', 'broadcast_success');
@@ -190,33 +194,34 @@ if ($pluginop == 'config') {
 		exit;
 	}
 
-	$updatetime = DB::result_first("SELECT updatetime FROM ".DB::table('connect_tthreadlog')." WHERE tid='$tid' ORDER BY updatetime DESC LIMIT 1");
-	if($_G['timestamp'] < $updatetime + 30 * 60) {
+	$updatetime = C::t('#qqconnect#connect_tthreadlog')->fetch_max_updatetime_by_tid($tid);
+	if($_G['timestamp'] < $updatetime + 10 * 60) {
 		discuz_process::unlock($processname);
 		exit;
 	}
-	$tthread = DB::fetch_first("SELECT * FROM ".DB::table('connect_tthreadlog')." WHERE tid='$tid' ORDER BY nexttime ASC LIMIT 1");
+	$tthread = C::t('#qqconnect#connect_tthreadlog')->fetch_min_nexttime_by_tid($tid);
 	if(empty($tthread)) {
 		discuz_process::unlock($processname);
 		exit;
 	}
-	$api_url = $_G['connect']['api_url'] . '/connect/mblog/list';
 
+	$connectOAuthClient = Cloud::loadClass('Service_Client_ConnectOAuth');
+	$connectmember = C::t('#qqconnect#common_member_connect')->fetch_fields_by_openid($tthread['conopenid']);
 	$param = array();
-	$param['oauth_consumer_key'] = $_G['setting']['connectappid'];
-	$param['openid'] = $tthread['conopenid'];
-	$param['thread_id'] = $tid;
-	$param['root_id'] = $tthread['twid'];
-	$param['page_flag'] = 2;
-	$param['page_time'] = $tthread['pagetime'];
-	$param['req_num'] = 20;
-	$param['twitter_id'] = $tthread['lasttwid'];
-	$param['sig'] = $connectService->connectGetSig($param, $connectService->connectGetSigKey());
+	$param['format'] = 'xml';
+	$param['flag'] = '2';
+	$param['rootid'] = $tthread['twid'];
+	$param['pageflag'] = 2;
+	$param['pagetime'] = $tthread['pagetime'];
+	$param['reqnum'] = 20;
+	$param['twitterid'] = $tthread['lasttwid'];
 
-	$setarr = array();
-	$utilService = Cloud::loadClass('Service_Util');
-	$response = $connectService->connectOutputPhp($api_url . '?', $utilService->httpBuildQuery($param, '', '&'));
-	if($response && $response['status'] == 0 && $response['result']) {
+	try {
+		$response = $connectOAuthClient->connectGetRepostList($tthread['conopenid'], $connectmember['conuin'], $connectmember['conuinsecret'], $param);
+	} catch(Exception $e) {
+		showmessage($e->getMessage());
+	}
+	if($response && $response['ret'] == 0 && $response['data']['info']) {
 
 		include_once libfile('function/forum');
 		$forum = C::t('forum_forum')->fetch($thread['fid']);
@@ -224,11 +229,19 @@ if ($pluginop == 'config') {
 
 		$pids = array();
 		$i = 0;
-		foreach($response['result'] as $post) {
-			$message = diconv(trim($post['content']), 'UTF-8');
-			$post['username'] = diconv(trim($post['username']), 'UTF-8');
-			$post['nick'] = diconv(trim($post['nick']), 'UTF-8');
+		$responseinfo = array();
+		if(!isset($response['data']['info'][0])) {
+			$responseinfo[] = $response['data']['info'];
+		} else {
+			$responseinfo = $response['data']['info'];
+			krsort($responseinfo);
+		}
+		foreach($responseinfo as $post) {
+			$message = trim($post['text']);
+			$post['username'] = trim($post['name']);
+			$post['nick'] = trim($post['nick']);
 			$message = preg_replace("/((https?|ftp|gopher|news|telnet|rtsp|mms|callto):\/\/|www\.)([a-z0-9\/\-_+=.~!%@?#%&;:$\\()|]+\s*)/i", '', $message);
+			$message = str_replace(explode(' ', lang('plugin/qqconnect', 'connect_reply_filter_smiley')), '', $message);
 			if($message) {
 				$newmessage = censor($message, null, true);
 				if($message != $newmessage) {
@@ -238,7 +251,7 @@ if ($pluginop == 'config') {
 				$message = lang('connect', 'connect_tthread_broadcast');
 			}
 			if($_G['setting']['connect']['t']['reply_showauthor']) {
-				$message .= lang('connect', 'connect_tthread_message', array('username' => $post['username'], 'nick' => $post['nick']));
+				$message .= '[tthread='.$post['username'].', '.$post['nick'].']'.$post['head'].'[/tthread]';
 			}
 
 			$pid = insertpost(array(
@@ -279,6 +292,8 @@ if ($pluginop == 'config') {
 				$fieldarr['lastpost'] = array($_G['timestamp']);
 			}
 			C::t('forum_thread')->increase($tid, $fieldarr);
+			$postionid = C::t('forum_post')->fetch_maxposition_by_tid($thread['posttableid'], $tid);
+			C::t('forum_thread')->update($tid, array('maxposition' => $postionid));
 
 			$lastpost = "$thread[tid]\t$thread[subject]\t$_G[timestamp]\t".'';
 			C::t('forum_forum')->update($thread['fid'], array('lastpost' => $lastpost));
@@ -288,9 +303,9 @@ if ($pluginop == 'config') {
 			}
 		}
 
-		$setarr['pagetime'] = $post['time'];
-		$setarr['lasttwid'] = $post['twitterId'];
-		if(count($response['result']) < $param['req_num']) {
+		$setarr['pagetime'] = $post['timestamp'];
+		$setarr['lasttwid'] = $post['id'];
+		if(count($responseinfo) < $param['reqnum']) {
 			$setarr['nexttime'] = $_G['timestamp'] + 2 * 3600;
 		} else {
 			$setarr['nexttime'] = $_G['timestamp'] + 30 * 60;
@@ -299,7 +314,7 @@ if ($pluginop == 'config') {
 		$setarr['nexttime'] = $_G['timestamp'] + 3 * 3600;
 	}
 	$setarr['updatetime'] = $_G['timestamp'];
-	DB::update('connect_tthreadlog', $setarr, array('twid' => $tthread['twid']));
+	C::t('#qqconnect#connect_tthreadlog')->update($tthread['twid'], $setarr);
 
 	discuz_process::unlock($processname);
 	exit;

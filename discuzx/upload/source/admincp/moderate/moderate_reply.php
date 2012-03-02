@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: moderate_reply.php 26399 2011-12-12 08:54:05Z svn_project_zhangjie $
+ *      $Id: moderate_reply.php 28113 2012-02-22 09:25:55Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -94,7 +94,7 @@ if(!submitcheck('modsubmit') && !$_GET['fast']) {
 	foreach($postarr as $post) {
 		if(getstatus($post['status'], 5)) {
 			$post['authorid'] = 0;
-			$post['author'] = 'Î¢²©ÆÀÂÛ';
+			$post['author'] = cplang('moderate_t_comment');
 		}
 		$post['dateline'] = dgmdate($post['dateline']);
 		$post['subject'] = $post['subject'] ? '<b>'.$post['subject'].'</b>' : '<i>'.$lang['nosubject'].'</i>';

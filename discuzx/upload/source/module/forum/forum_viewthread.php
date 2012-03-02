@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_viewthread.php 27478 2012-02-02 03:54:35Z monkey $
+ *      $Id: forum_viewthread.php 28534 2012-03-02 05:25:14Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -69,8 +69,6 @@ if(!empty($_GET['extra'])) {
 
 $aimgs = array();
 $skipaids = array();
-
-$oldthreads = viewthread_oldtopics(!$archiveid ? $_G['tid'] : 0);
 
 $thread['subjectenc'] = rawurlencode($_G['forum_thread']['subject']);
 $thread['short_subject'] = cutstr($_G['forum_thread']['subject'], 52);
@@ -221,7 +219,7 @@ if($rushreply) {
 	}
 	$rushresult['starttimefrom'] = $rushresult['starttimefrom'] ? dgmdate($rushresult['starttimefrom']) : '';
 	$rushresult['starttimeto'] = $rushresult['starttimeto'] ? dgmdate($rushresult['starttimeto']) : '';
-	$rushresult['creditlimit_title'] = $_G['setting']['creditstransextra'][11] ? $_G['setting']['extcredits'][$_G['setting']['creditstransextra'][11]]['title'] : '×Ü»ý·Ö';
+	$rushresult['creditlimit_title'] = $_G['setting']['creditstransextra'][11] ? $_G['setting']['extcredits'][$_G['setting']['creditstransextra'][11]]['title'] : lang('forum/misc', 'credit_total');
 }
 
 if($_G['forum_thread']['replycredit'] > 0) {
@@ -256,7 +254,7 @@ $secqaacheck = $_G['setting']['secqaa']['status'] & 2 && (!$_G['setting']['secqa
 
 $postlist = $_G['forum_attachtags'] = $attachlist = $_G['forum_threadstamp'] = array();
 $aimgcount = 0;
-$_G['forum_attachpids'] = -1;
+$_G['forum_attachpids'] = array();
 
 if(!empty($_GET['action']) && $_GET['action'] == 'printable' && $_G['tid']) {
 	require_once libfile('thread/printable', 'include');
@@ -303,7 +301,7 @@ if($_G['group']['allowpost']) {
 
 $_G['forum']['threadplugin'] = $_G['group']['allowpost'] && $_G['setting']['threadplugins'] ? is_array($_G['forum']['threadplugin']) ? $_G['forum']['threadplugin'] : dunserialize($_G['forum']['threadplugin']) : array();
 
-$_G['setting']['visitedforums'] = $_G['setting']['visitedforums'] ? visitedforums() : '';
+$_G['setting']['visitedforums'] = $_G['setting']['visitedforums'] && $_G['forum']['status'] != 3 ? visitedforums() : '';
 
 
 
@@ -352,12 +350,12 @@ $onlyauthoradd = $threadplughtml = '';
 
 $maxposition = 0;
 if(empty($_GET['viewpid'])) {
-	if(!in_array($_G['forum_thread']['special'], array(2,3,5))) {
+	$disablepos = C::t('forum_threaddisablepos')->fetch($_G['tid']) && !$rushreply ? 1 : 0;
+	if(!$disablepos && !in_array($_G['forum_thread']['special'], array(2,3,5))) {
 		if($_G['forum_thread']['maxposition']) {
 			$maxposition = $_G['forum_thread']['maxposition'];
 		} else {
 			$maxposition = C::t('forum_post')->fetch_maxposition_by_tid($posttableid, $_G['tid']);
-			C::t('forum_thread')->update($_G['tid'], array('maxposition' => $maxposition));
 		}
 	}
 
@@ -436,7 +434,7 @@ if(empty($_GET['viewpid'])) {
 	$_G['ppp'] = $_G['forum']['threadcaches'] && !$_G['uid'] ? $_G['setting']['postperpage'] : $_G['ppp'];
 	$totalpage = ceil(($_G['forum_thread']['replies'] + 1) / $_G['ppp']);
 	$page > $totalpage && $page = $totalpage;
-	$_G['forum_pagebydesc'] = $page > 50 && $page > ($totalpage / 2) ? TRUE : FALSE;
+	$_G['forum_pagebydesc'] = !$maxposition && $page > 2 && $page > ($totalpage / 2) ? TRUE : FALSE;
 
 	if($_G['forum_pagebydesc']) {
 		$firstpagesize = ($_G['forum_thread']['replies'] + 1) % $_G['ppp'];
@@ -511,9 +509,9 @@ if($maxposition) {
 		for($i = $start; $i < $end; $i ++) {
 			if(!empty($cachepids[$i])) {
 				$k = $cachepids[$i];
-				$isdel_post[$k] = array('pid' => $k, 'message' => lang('forum/misc', 'post_deleted'), 'position' => $i);
+				$isdel_post[$k] = array('deleted' => 1, 'pid' => $k, 'message' => '', 'position' => $i);
 			} elseif($i < $maxposition || ($lastposition && $i < $lastposition)) {
-				$isdel_post[$k] = array('pid' => $k, 'message' => lang('forum/misc', 'post_deleted'), 'position' => $i);
+				$isdel_post[$k] = array('deleted' => 1, 'pid' => $k, 'message' => '', 'position' => $i);
 			}
 			$k ++;
 		}
@@ -563,11 +561,16 @@ if(!$maxposition && empty($postarr)) {
 
 }
 if(!empty($isdel_post)) {
+	$updatedisablepos = false;
 	foreach($isdel_post as $id => $post) {
 		if(isset($postarr[$id]['invisible']) && ($postarr[$id]['invisible'] == 0 || $postarr[$id]['invisible'] == -3 || $visibleallflag)) {
 			continue;
 		}
 		$postarr[$id] = $post;
+		$updatedisablepos = true;
+	}
+	if($updatedisablepos) {
+		C::t('forum_threaddisablepos')->insert(array('tid' => $_G['tid']), false, true);
 	}
 	$ordertype != 1 ? ksort($postarr) : krsort($postarr);
 }
@@ -615,12 +618,6 @@ foreach($postarr as $post) {
 				}
 			}
 		}
-		if(getstatus($post['status'], 5)) {
-			$post['authorid'] = 0;
-			$post['author'] = lang('connect', 'connect_tthread_comment');
-			$post['avatar'] = '<img src="'.$_G['siteurl'].'/static/image/common/tavatar.gif">';
-			$post['groupid'] = '7';
-		}
 		$postlist[$post['pid']] = $post;
 	}
 }
@@ -661,13 +658,11 @@ if($postusers) {
 	$member_count = C::t('common_member_count')->fetch_all($uids);
 	$member_profile = C::t('common_member_profile')->fetch_all($uids);
 	$member_field_home = C::t('common_member_field_home')->fetch_all($uids);
-	$member_followed = C::t('home_follow')->fetch_all_by_uid_followuid($_G['uid'], $uids);
 	foreach(C::t('common_member')->fetch_all($uids) as $uid => $postuser) {
 		$member_field_home[$uid]['privacy'] = empty($member_field_home[$uid]['privacy']) ? array() : dunserialize($member_field_home[$uid]['privacy']);
 		$postuser['memberstatus'] = $postuser['status'];
 		$postuser['authorinvisible'] = $member_status[$uid]['invisible'];
 		$postuser['signature'] = $member_field_forum[$uid]['sightml'];
-		$postuser['followed'] = !empty($member_followed[$uid]) ? 1 : 0;
 		unset($member_field_home[$uid]['privacy']['feed'], $member_field_home[$uid]['privacy']['view'], $postuser['status'], $member_status[$uid]['invisible'], $member_field_forum[$uid]['sightml']);
 		$postusers[$uid] = array_merge((array)$member_verify[$uid], (array)$member_field_home[$uid], (array)$member_profile[$uid], (array)$member_count[$uid], (array)$member_status[$uid], (array)$member_field_forum[$uid], $postuser);
 		if($postusers[$uid]['regdate'] + $postusers[$uid]['oltime'] * 3600 > TIMESTAMP) {
@@ -752,7 +747,6 @@ if($_G['setting']['vtonlinestatus'] == 2 && $_G['forum_onlineauthors']) {
 } else {
 	$_G['forum_onlineauthors'] = array();
 }
-
 $ratelogs = $comments = $commentcount = $totalcomment = array();
 if($_G['forum_cachepid']) {
 	foreach(C::t('forum_postcache')->fetch_all($_G['forum_cachepid']) as $postcache) {
@@ -789,7 +783,7 @@ if($_G['forum_cachepid']) {
 	}
 }
 
-if($_G['forum_attachpids'] != '-1' && !defined('IN_ARCHIVER')) {
+if($_G['forum_attachpids'] && !defined('IN_ARCHIVER')) {
 	require_once libfile('function/attachment');
 	if(is_array($threadsortshow) && !empty($threadsortshow['sortaids'])) {
 		$skipaids = $threadsortshow['sortaids'];
@@ -856,11 +850,10 @@ if($_G['forum_thread']['replies'] > $_G['forum_thread']['views']) {
 	$_G['forum_thread']['views'] = $_G['forum_thread']['replies'];
 }
 
-$my_search_se_url = cloud_referer_related();
-
 require_once libfile('function/upload');
 $swfconfig = getuploadconfig($_G['uid'], $_G['fid']);
 $_G['forum_thread']['relay'] = 0;
+
 if(getstatus($_G['forum_thread']['status'], 10)) {
 	$preview = C::t('forum_threadpreview')->fetch($_G['tid']);
 	$_G['forum_thread']['relay'] = $preview['relay'];
@@ -963,7 +956,7 @@ function viewthread_procpost($post, $lastvisit, $ordertype, $maxposition = 0) {
 
 	if($post['username']) {
 
-		$_G['forum_onlineauthors'][$post['authorid']] = $post['authorid'];
+		$_G['forum_onlineauthors'][] = $post['authorid'];
 		$post['usernameenc'] = rawurlencode($post['username']);
 		$post['readaccess'] = $_G['cache']['usergroups'][$post['groupid']]['readaccess'];
 		if($_G['cache']['usergroups'][$post['groupid']]['userstatusby'] == 1) {
@@ -1010,7 +1003,7 @@ function viewthread_procpost($post, $lastvisit, $ordertype, $maxposition = 0) {
 
 	if($post['attachment']) {
 		if($_G['group']['allowgetattach'] || $_G['group']['allowgetimage']) {
-			$_G['forum_attachpids'] .= ",$post[pid]";
+			$_G['forum_attachpids'][] = $post['pid'];
 			$post['attachment'] = 0;
 			if(preg_match_all("/\[attach\](\d+)\[\/attach\]/i", $post['message'], $matchaids)) {
 				$_G['forum_attachtags'][$post['pid']] = $matchaids[1];
@@ -1251,35 +1244,6 @@ function getrelateitem($tagarray, $tid, $relatenum, $relatetime, $relatecache = 
 		}
 	}
 	return $relateitem;
-}
-
-function viewthread_oldtopics($tid = 0) {
-	global $_G;
-
-	$oldthreads = array();
-
-	$oldtopics = isset($_G['cookie']['oldtopics']) ? $_G['cookie']['oldtopics'] : 'D';
-
-	if($_G['setting']['visitedthreads']) {
-		$oldtids = array_slice(explode('D', $oldtopics), 0, $_G['setting']['visitedthreads']);
-		$oldtidsnew = array();
-		foreach($oldtids as $oldtid) {
-			$oldtid && $oldtidsnew[] = $oldtid;
-		}
-		if($oldtidsnew) {
-			foreach(C::t('forum_thread')->fetch_all_by_tid($oldtidsnew) as $oldthread) {
-				$oldthreads[$oldthread['tid']] = $oldthread['subject'];
-			}
-		}
-		array_unshift($oldtidsnew, $tid);
-		dsetcookie('oldtopics', implode('D', array_slice($oldtidsnew, 0, $_G['setting']['visitedthreads'])), 3600);		;
-	}
-
-	if($_G['member']['lastvisit'] < $_G['forum_thread']['lastpost'] && (!isset($_G['cookie']['fid'.$_G['fid']]) || $_G['forum_thread']['lastpost'] > $_G['cookie']['fid'.$_G['fid']])) {
-		dsetcookie('fid'.$_G['fid'], $_G['forum_thread']['lastpost'], 3600);
-	}
-
-	return $oldthreads;
 }
 
 function rushreply_rule () {

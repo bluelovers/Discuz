@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_forums.php 27342 2012-01-17 02:42:25Z svn_project_zhangjie $
+ *      $Id: admincp_forums.php 28372 2012-02-28 08:15:06Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -134,7 +134,7 @@ var rowtypedata = [
 
 				foreach($forums as $key => $forumname) {
 
-					if(empty($forumname)) continue;
+					if(empty($forumname) || strlen($forumname) > 50) continue;
 
 					$forum = $forumfields = array();
 					$inheritedid = !empty($_GET['inherited'][$fup]) ? $fup : (!empty($_GET['newinherited'][$fup][$key]) ? $_GET['newinherited'][$fup][$key] : '');
@@ -1326,7 +1326,7 @@ EOT;
 				$newstyleid = intval($_GET['styleidnew']);
 				$forumcolumnsnew = $_GET['forumcolumnsnew'] > 1 ? intval($_GET['forumcolumnsnew']) : 0;
 				$catforumcolumnsnew = $_GET['catforumcolumnsnew'] > 1 ? intval($_GET['catforumcolumnsnew']) : 0;
-				$descriptionnew = addslashes(preg_replace('/on(mousewheel|mouseover|click|load|onload|submit|focus|blur)="[^"]*"/i', '', discuzcode($_GET['descriptionnew'], 1, 0, 0, 0, 1, 1, 0, 0, 1)));
+				$descriptionnew = preg_replace('/on(mousewheel|mouseover|click|load|onload|submit|focus|blur)="[^"]*"/i', '', discuzcode($_GET['descriptionnew'], 1, 0, 0, 0, 1, 1, 0, 0, 1));
 				if(!empty($_G['setting']['domain']['root']['forum'])) {
 					deletedomain($fid, 'subarea');
 					if(!empty($domain)) {
@@ -1664,8 +1664,8 @@ EOT;
 			$modrecommendnew['imagenum'] = $modrecommendnew['imagenum'] ? intval($modrecommendnew['imagenum']) : 0;
 			$modrecommendnew['imagewidth'] = $modrecommendnew['imagewidth'] ? intval($modrecommendnew['imagewidth']) : 300;
 			$modrecommendnew['imageheight'] = $modrecommendnew['imageheight'] ? intval($modrecommendnew['imageheight']): 250;
-			$descriptionnew = addslashes(preg_replace('/on(mousewheel|mouseover|click|load|onload|submit|focus|blur)="[^"]*"/i', '', discuzcode($_GET['descriptionnew'], 1, 0, 0, 0, 1, 1, 0, 0, 1)));
-			$rulesnew = addslashes(preg_replace('/on(mousewheel|mouseover|click|load|onload|submit|focus|blur)="[^"]*"/i', '', discuzcode($_GET['rulesnew'], 1, 0, 0, 0, 1, 1, 0, 0, 1)));
+			$descriptionnew = preg_replace('/on(mousewheel|mouseover|click|load|onload|submit|focus|blur)="[^"]*"/i', '', discuzcode($_GET['descriptionnew'], 1, 0, 0, 0, 1, 1, 0, 0, 1));
+			$rulesnew = preg_replace('/on(mousewheel|mouseover|click|load|onload|submit|focus|blur)="[^"]*"/i', '', discuzcode($_GET['rulesnew'], 1, 0, 0, 0, 1, 1, 0, 0, 1));
 			$extranew = is_array($_GET['extranew']) ? $_GET['extranew'] : array();
 			$forum['extra'] = dunserialize($forum['extra']);
 			$forum['extra']['namecolor'] = $extranew['namecolor'];
@@ -1779,7 +1779,7 @@ EOT;
 			set_pluginsetting($pluginvars);
 		}
 
-		updatecache(array('forums', 'setting', 'creditrule'));
+		updatecache(array('forums', 'setting', 'creditrule', 'attachtype'));
 		cpmsg('forums_edit_succeed', "mod=forum&action=forums&operation=edit&".($multiset ? 'multi='.implode(',', $_GET['multi']) : "fid=$fid").($_GET['anchor'] ? "&anchor={$_GET['anchor']}" : ''), 'succeed');
 
 	}
@@ -1953,7 +1953,7 @@ EOT;
 		foreach(array('forum_forum', 'forum_forumfield') as $table) {
 			if(is_array($forumoptions[$table]) && !empty($forumoptions[$table])) {
 				$sourceforum = C::t($table)->fetch($source);
-				foreach($sourceforum as $key) {
+				foreach($sourceforum as $key=>$value) {
 					if(!in_array($key, $forumoptions[$table])) {
 						unset($sourceforum[$key]);
 					}

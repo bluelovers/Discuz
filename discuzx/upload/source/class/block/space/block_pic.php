@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: block_pic.php 25525 2011-11-14 04:39:11Z zhangguosheng $
+ *      $Id: block_pic.php 28299 2012-02-27 08:48:36Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -119,20 +119,20 @@ class block_pic extends discuz_block {
 		$list = array();
 		$wheres = array();
 		if($picids) {
-			$wheres[] = 'p.picid IN ('.dimplode($picids).')';
+			$wheres[] = 'p.'.DB::field('picid', $picids);
 		}
 		if($uids) {
-			$wheres[] = 'p.uid IN ('.dimplode($uids).')';
+			$wheres[] = 'p.'.DB::field('uid', $uids);
 		}
 		if($aids) {
-			$wheres[] = 'p.albumid IN ('.dimplode($aids).')';
+			$wheres[] = 'p.'.DB::field('albumid', $aids);
 		}
 		if($hours) {
 			$timestamp = TIMESTAMP - 3600 * $hours;
-			$wheres[] = "p.dateline >= '$timestamp'";
+			$wheres[] = 'p.'.DB::field('dateline', $timestamp, '>=');
 		}
 		if($bannedids) {
-			$wheres[] = 'p.picid NOT IN ('.dimplode($bannedids).')';
+			$wheres[] = 'p.'.DB::field('picid', $bannedids, 'notin');
 		}
 		$wheresql = $wheres ? implode(' AND ', $wheres) : '1';
 		$query = C::t('home_pic')->fetch_all_by_sql($wheresql." AND a.friend='0'", 'p.'.$orderby.' DESC');

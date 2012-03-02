@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_home_follow_feed.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_home_follow_feed.php 28364 2012-02-28 07:31:23Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -32,7 +32,8 @@ class table_home_follow_feed extends discuz_table
 		$parameter = array($archiver ? $this->_archiver_table : $this->_table);
 		$wherearr = array();
 		if(!empty($uids)) {
-			$wherearr[] = is_array($uids) ? 'uid IN(%n)' : 'uid=%d';
+			$uids = dintval($uids, true);
+			$wherearr[] = is_array($uids) && $uids ? 'uid IN(%n)' : 'uid=%d';
 			$parameter[] = $uids;
 		}
 		$wheresql = !empty($wherearr) ? ' WHERE '.implode(' AND ', $wherearr) : '';
@@ -46,6 +47,7 @@ class table_home_follow_feed extends discuz_table
 	}
 
 	public function fetch_all_by_dateline($dateline, $glue = '>=') {
+		$glue = helper_util::check_glue($glue);
 		return DB::fetch_all("SELECT * FROM %t WHERE dateline{$glue}%d ORDER BY dateline", array($this->_table, $dateline), $this->_pk);
 	}
 
@@ -53,12 +55,17 @@ class table_home_follow_feed extends discuz_table
 		return DB::fetch_first("SELECT * FROM %t WHERE feedid=%d", array($archiver ? $this->_archiver_table : $this->_table, $feedid));
 	}
 
+	public function count_by_uid_tid($uid, $tid, $archiver = false) {
+		return DB::result_first('SELECT COUNT(*) FROM %t WHERE uid=%d AND tid=%d', array($archiver ? $this->_archiver_table : $this->_table, $uid, $tid));
+	}
+
 	public function count_by_uid_dateline($uids = array(), $dateline = 0, $archiver = 0) {
 		$count = 0;
 		$parameter = array($archiver ? $this->_archiver_table : $this->_table);
 		$wherearr = array();
 		if(!empty($uids)) {
-			$wherearr[] = is_array($uids) ? 'uid IN(%n)' : 'uid=%d';
+			$uids = dintval($uids, true);
+			$wherearr[] = is_array($uids) && $uids ? 'uid IN(%n)' : 'uid=%d';
 			$parameter[] = $uids;
 		}
 		if($dateline) {
@@ -70,16 +77,29 @@ class table_home_follow_feed extends discuz_table
 		return $count;
 	}
 
-	public function count_by_uid_cid($uid, $cid) {
-		return DB::result_first("SELECT COUNT(*) FROM %t WHERE uid=%d AND cid=%d", array($this->_table, $uid, $cid));
-	}
-
 	public function insert_archiver($data) {
-		return DB::insert($this->_archiver_table, $data, false, true);
+		if(!empty($data) && is_array($data)) {
+			return DB::insert($this->_archiver_table, $data, false, true);
+		}
+		return 0;
 	}
 
 	public function delete_by_feedid($feedid, $archiver = false) {
-		return DB::delete($archiver ? $this->_archiver_table : $this->_table, array('feedid'=>$feedid));
+		$feedid = dintval($feedid, true);
+		if($feedid) {
+			return DB::delete($archiver ? $this->_archiver_table : $this->_table, DB::field('feedid', $feedid));
+		}
+		return 0;
+	}
+
+	public function delete_by_uid($uids) {
+		$uids = dintval($uids, true);
+		$delnum = 0;
+		if($uids) {
+			$delnum = DB::delete($this->_table, DB::field('uid', $uids));
+			$delnum += DB::delete($this->_archiver_table, DB::field('uid', $uids));
+		}
+		return $delnum;
 	}
 
 	public function get_ids() {

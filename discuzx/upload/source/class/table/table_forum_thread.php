@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_forum_thread.php 27552 2012-02-06 02:42:38Z liulanbo $
+ *      $Id: table_forum_thread.php 28475 2012-03-01 08:16:46Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -48,22 +48,27 @@ class table_forum_thread extends discuz_table
 		$fid = intval($fid);
 		if(!empty($fid)) {
 			$parameter = array($this->get_table_name(), $fid,  $displayorder);
-			return DB::fetch_first("SELECT * FROM %t WHERE fid=%d AND displayorder{$glue}%d  ORDER BY $order $sort".DB::limit(0, 1), $parameter);
-		} else {
-			return array();
+			$glue = helper_util::check_glue($glue);
+			$ordersql = !empty($order) ? ' ORDER BY '.DB::order($order, $sort) : '';
+			return DB::fetch_first("SELECT * FROM %t WHERE fid=%d AND displayorder{$glue}%d $ordersql ".DB::limit(0, 1), $parameter);
 		}
+		return array();
 	}
 	public function fetch_next_tid_by_fid_lastpost($fid, $lastpost, $glue = '>', $sort = 'DESC', $tableid = 0) {
-		return DB::result_first("SELECT tid FROM %t WHERE fid=%d AND displayorder>=0 AND closed=0 AND lastpost{$glue}%d  ORDER BY lastpost $sort LIMIT 1", array($this->get_table_name($tableid), $fid, $lastpost));
+		$glue = helper_util::check_glue($glue);
+		return DB::result_first("SELECT tid FROM %t WHERE fid=%d AND displayorder>=0 AND closed=0 AND lastpost{$glue}%d  ORDER BY ".DB::order('lastpost', $sort).DB::limit(1), array($this->get_table_name($tableid), $fid, $lastpost));
 	}
 	public function fetch_by_tid_fid_displayorder($tid, $fid, $displayorder = null, $tableid = 0, $glue = '>=') {
-		$data = $this->fetch($tid, $tableid);
-		if(!empty($data)) {
-			if(($data['fid'] != $fid) || ($displayorder !== null && !($this->compare_number($data['displayorder'], $displayorder, $glue)))) {
-				$data = array();
+		if($tid) {
+			$data = $this->fetch($tid, $tableid);
+			if(!empty($data)) {
+				if(($data['fid'] != $fid) || ($displayorder !== null && !($this->compare_number($data['displayorder'], $displayorder, $glue)))) {
+					$data = array();
+				}
 			}
+			return $data;
 		}
-		return $data;
+		return array();
 	}
 	public function fetch_thread_table_ids() {
 		$threadtableids = array('0' => 0);
@@ -82,7 +87,9 @@ class table_forum_thread extends discuz_table
 
 	public function fetch_all_by_digest_displayorder($digest, $digestglue = '=', $displayorder = 0, $glue = '>=', $start = 0, $limit = 0, $tableid = 0) {
 		$parameter = array($this->get_table_name($tableid), $digest, $displayorder);
-		return DB::fetch_all("SELECT * FROM %t WHERE digest{$digestglue}%d AND displayorder{$glue}$displayorder".DB::limit($start, $limit), $parameter, $this->_pk);
+		$digestglue = helper_util::check_glue($digestglue);
+		$glue = helper_util::check_glue($glue);
+		return DB::fetch_all("SELECT * FROM %t WHERE digest{$digestglue}%d AND displayorder{$glue}%d".DB::limit($start, $limit), $parameter, $this->_pk);
 	}
 
 	public function fetch_all_by_fid_typeid_displayorder($fid, $typeid = null, $displayorder = null, $glue = '=', $start = 0, $limit = 0) {
@@ -97,6 +104,7 @@ class table_forum_thread extends discuz_table
 		}
 		if($displayorder !== null) {
 			$parameter[] = $displayorder;
+			$glue = helper_util::check_glue($glue);
 			$wherearr[] = "displayorder{$glue}%d";
 		}
 		$wheresql = !empty($wherearr) && is_array($wherearr) ? ' WHERE '.implode(' AND ', $wherearr) : '';
@@ -124,15 +132,22 @@ class table_forum_thread extends discuz_table
 		$parameter = array($this->get_table_name($tableid));
 		$wherearr = array();
 		if(!empty($authorid)) {
+			$authorid = dintval($authorid, true);
 			$parameter[] = $authorid;
-			$wherearr[] = is_array($authorid) ? 'authorid IN(%n)' : 'authorid=%d';
+			$wherearr[] = is_array($authorid) && $authorid ? 'authorid IN(%n)' : 'authorid=%d';
 		}
 		if($fid !== null) {
+			$fid = dintval($fid, true);
 			$parameter[] = $fid;
-			$wherearr[] = is_array($fid) ? 'fid IN(%n)' : 'fid=%d';
+			$wherearr[] = is_array($fid) && $fid ? 'fid IN(%n)' : 'fid=%d';
+		}
+		if(getglobal('setting/followforumid')) {
+			$parameter[] = getglobal('setting/followforumid');
+			$wherearr[] = 'fid<>%d';
 		}
 		if($displayorder !== null) {
 			$parameter[] = $displayorder;
+			$dglue = helper_util::check_glue($dglue);
 			$wherearr[] = "displayorder{$dglue}%d";
 		}
 		if($closed !== null) {
@@ -141,6 +156,7 @@ class table_forum_thread extends discuz_table
 		}
 		if($replies !== null) {
 			$parameter[] = $replies;
+			$rglue = helper_util::check_glue($rglue);
 			$wherearr[] = "replies{$rglue}%d";
 		}
 		if(!empty($subject)) {
@@ -192,24 +208,27 @@ class table_forum_thread extends discuz_table
 		$parameter = array($this->get_table_name($tableid));
 		$wherearr = array();
 		if(!empty($tids)) {
+			$tids = dintval($tids, true);
 			$parameter[] = $tids;
-			$wherearr[] = is_array($tids) ? 'tid IN(%n)' : 'tid=%d';
+			$wherearr[] = is_array($tids) && $tids ? 'tid IN(%n)' : 'tid=%d';
 		}
 		if(!empty($fids)) {
+			$fids = dintval($fids, true);
 			$parameter[] = $fids;
-			$wherearr[] = is_array($fids) ? 'fid IN(%n)' : 'fid=%d';
+			$wherearr[] = is_array($fids) && $fids ? 'fid IN(%n)' : 'fid=%d';
 		}
 
 		if($displayorder !== null) {
 			$parameter[] = $displayorder;
+			$glue = helper_util::check_glue($glue);
 			$wherearr[] = "displayorder{$glue}%d";
 		}
 		if($order) {
-			$order = 'ORDER BY '.$order;
+			$order = 'ORDER BY '.DB::order($order, $sort);
 		}
 		if(!empty($wherearr)) {
 			$wheresql = !empty($wherearr) && is_array($wherearr) ? ' WHERE '.implode(' AND ', $wherearr) : '';
-			return DB::fetch_all("SELECT * FROM %t $wheresql $order $sort ".DB::limit($start, $limit), $parameter, $this->_pk);
+			return DB::fetch_all("SELECT * FROM %t $wheresql $order ".DB::limit($start, $limit), $parameter, $this->_pk);
 		} else {
 			return array();
 		}
@@ -219,41 +238,45 @@ class table_forum_thread extends discuz_table
 		$parameter = array($this->get_table_name(), $fid);
 		$forumstickytids = '';
 		if(!empty($tids)) {
+			$tids = dintval($tids, true);
 			$parameter[] = $tids;
-			$forumstickytids = ' OR '.(is_array($tids) ? 'tid IN(%n)' : 'tid=%d');
+			$forumstickytids = ' OR '.(is_array($tids) && $tids ? 'tid IN(%n)' : 'tid=%d');
 		}
 		return DB::fetch_all("SELECT * FROM %t WHERE fid=%d AND displayorder=1 $forumstickytids ORDER BY lastpost DESC", $parameter);
 	}
 
 	public function fetch_all_by_displayorder($displayorder = 0, $glue = '>=', $start = 0, $limit = 0, $tableid = 0) {
+		$glue = helper_util::check_glue($glue);
+		$displayorder = dintval($displayorder);
 		return DB::fetch_all('SELECT * FROM %t WHERE %i '.DB::limit($start, $limit), array($this->get_table_name($tableid), DB::field('displayorder', $displayorder, $glue)));
 	}
 
 	public function fetch_all_by_authorid($authorid, $start = 0, $limit = 0, $tableid = 0) {
+		$authorid = dintval($authorid, true);
 		return DB::fetch_all("SELECT * FROM %t WHERE %i ORDER BY dateline DESC ".DB::limit($start, $limit), array($this->get_table_name($tableid), DB::field('authorid', $authorid)), $this->_pk);
 	}
 
 	public function fetch_all_by_dateline($starttime, $start = 0, $limit = 0, $order = 'dateline', $sort = 'DESC') {
 		if($starttime) {
-			$sort = in_array($sort, array('ASC', 'DESC')) ? $sort : 'DESC';
 			$orderby = '';
 			if(!empty($order)) {
-				$orderby = "ORDER BY $order $sort";
+				$orderby = "ORDER BY ".DB::order($order, $sort);
 			}
 			$parameter = array($this->get_table_name(), $starttime);
 			return DB::fetch_all("SELECT * FROM %t WHERE dateline>=%d AND displayorder>'-1' $orderby ".DB::limit($start, $limit), $parameter, $this->_pk);
-		} else {
-			return array();
 		}
+		return array();
 	}
 
 	public function fetch_all_by_fid_displayorder($fids, $displayorder = null, $dateline = null, $recommends = null, $start = 0, $limit = 0, $order = 'dateline', $sort = 'DESC', $dglue = '>=') {
 		$parameter = array($this->get_table_name());
 		$wherearr = array();
+		$fids = dintval($fids, true);
 		$parameter[] = $fids;
-		$wherearr[] = is_array($fids) ? 'fid IN(%n)' : 'fid=%d';
+		$wherearr[] = is_array($fids) && $fids ? 'fid IN(%n)' : 'fid=%d';
 		if($displayorder !== null) {
 			$parameter[] = $displayorder;
+			$dglue = helper_util::check_glue($dglue);
 			$wherearr[] = "displayorder{$dglue}%d";
 		}
 		if($dateline !== null) {
@@ -264,20 +287,23 @@ class table_forum_thread extends discuz_table
 			$parameter[] = $recommends;
 			$wherearr[] = "recommends>%d";
 		}
-
+		$ordersql = !empty($order) ? ' ORDER BY '.DB::order($order, $sort) : '';
 		$wheresql = !empty($wherearr) && is_array($wherearr) ? ' WHERE '.implode(' AND ', $wherearr) : '';
-		return DB::fetch_all("SELECT * FROM %t $wheresql ORDER BY $order $sort ".DB::limit($start, $limit), $parameter, $this->_pk);
+		return DB::fetch_all("SELECT * FROM %t $wheresql $ordersql ".DB::limit($start, $limit), $parameter, $this->_pk);
 	}
 
 	public function fetch_all_new_thread_by_tid($tid = 0, $start = 0, $limit = 0, $tableid = 0, $glue = '>', $sort = 'ASC') {
-		return DB::fetch_all("SELECT * FROM %t WHERE tid{$glue}%d ORDER BY tid $sort".DB::limit($start, $limit), array($this->get_table_name($tableid), $tid), $this->_pk);
+		$glue = helper_util::check_glue($glue);
+		return DB::fetch_all("SELECT * FROM %t WHERE tid{$glue}%d ORDER BY ".DB::order('tid', $sort).DB::limit($start, $limit), array($this->get_table_name($tableid), $tid), $this->_pk);
 	}
 	public function fetch_all_group_thread_by_fid_displayorder($fids, $displayorder = null, $dateline = null, $lastpost = null, $digest = null, $order = 'dateline', $start = 0, $limit = 0, $dglue = '>=') {
+		$fids = dintval($fids, true);
 		$parameter = array($this->get_table_name(), $fids);
 		$wherearr = array();
-		$wherearr[] = is_array($fids) ? 'fid IN(%n)' : 'fid=%d';
+		$wherearr[] = is_array($fids) && $fids ? 'fid IN(%n)' : 'fid=%d';
 		if($displayorder !== null) {
 			$parameter[] = $displayorder;
+			$dglue = helper_util::check_glue($dglue);
 			$wherearr[] = "displayorder{$dglue}%d";
 		}
 		if($dateline !== null) {
@@ -292,18 +318,20 @@ class table_forum_thread extends discuz_table
 			$parameter[] = $digest;
 			$wherearr[] = "$digest>%d";
 		}
-
+		$ordersql = !empty($order) ? 'ORDER BY'.DB::order($order, 'DESC') : '';
 		$wheresql = !empty($wherearr) && is_array($wherearr) ? ' WHERE '.implode(' AND ', $wherearr) : '';
-		return DB::fetch_all("SELECT * FROM %t $wheresql  ORDER BY $order DESC ".DB::limit($start, $limit), $parameter, $this->_pk);
+		return DB::fetch_all("SELECT * FROM %t $wheresql $ordersql ".DB::limit($start, $limit), $parameter, $this->_pk);
 	}
 
 	public function fetch_all_by_fid_authorid_displayorder($fids, $authorid, $displayorder = null, $lastpost = 0, $start = 0, $limit = 0) {
 		$parameter = array($this->get_table_name());
 		$wherearr = array();
 		if($authorid) {
+			$authorid = dintval($authorid, true);
 			$parameter[] = $authorid;
 			$wherearr[] = is_array($authorid) ? 'authorid IN(%n)' : 'authorid=%d';
 		}
+		$fids = dintval($fids, true);
 		$parameter[] = $fids;
 		$wherearr[] = is_array($fids) ? 'fid IN(%n)' : 'fid=%d';
 		if($displayorder !== null) {
@@ -315,7 +343,7 @@ class table_forum_thread extends discuz_table
 			$wherearr[] = "lastpost>%d";
 		}
 		$wheresql = ' WHERE '.implode(' AND ', $wherearr);
-		return DB::fetch_all("SELECT * FROM %t $wheresql  ORDER BY lastpost DESC ".DB::limit($start, $limit), $parameter, $this->_pk);
+		return DB::fetch_all("SELECT * FROM %t $wheresql ORDER BY lastpost DESC ".DB::limit($start, $limit), $parameter, $this->_pk);
 	}
 
 	public function fetch_all_by_tid_fid($tids, $fids = array(), $isgroup = -1, $auther = '', $subject = '', $start = 0, $limit = 0) {
@@ -330,11 +358,20 @@ class table_forum_thread extends discuz_table
 	}
 
 	public function fetch_all_by_fid($fids, $start = 0, $limit = 0, $tableid = 0) {
-		return DB::fetch_all("SELECT * FROM %t WHERE fid IN(%n) ".DB::limit($start, $limit), array($this->get_table_name($tableid), (array)$fids));
+		$fids = dintval($fids, true);
+		if($fids) {
+			return DB::fetch_all("SELECT * FROM %t WHERE fid IN(%n) ".DB::limit($start, $limit), array($this->get_table_name($tableid), (array)$fids));
+		}
+		return array();
 	}
 
 	public function fetch_all_by_replies($number, $start = 0, $limit = 0, $glue = '>', $tableid = 0) {
-		return DB::fetch_all("SELECT * FROM %t WHERE replies{$glue}%d ".DB::limit($start, $limit), array($this->get_table_name($tableid), $number));
+		$number = dintval($number);
+		if($number) {
+			$glue = helper_util::check_glue($glue);
+			return DB::fetch_all("SELECT * FROM %t WHERE replies{$glue}%d ".DB::limit($start, $limit), array($this->get_table_name($tableid), $number));
+		}
+		return array();
 	}
 
 	public function fetch_all_rank_thread($dateline, $notfid, $order = 'dateline', $start = 0, $limit = 0) {
@@ -350,7 +387,8 @@ class table_forum_thread extends discuz_table
 			$wherearr[] = 'fid NOT IN(%n)';
 		}
 		$wheresql = ' WHERE '.implode(' AND ', $wherearr);
-		$query = DB::query("SELECT tid, fid, author, authorid, subject, dateline, views, replies, favtimes, sharetimes, heats FROM %t $wheresql  ORDER BY $order DESC ".DB::limit($start, $limit), $parameter);
+		$ordersql = !empty($order) ? ' ORDER BY '.DB::order($order, 'DESC') : '';
+		$query = DB::query("SELECT tid, fid, author, authorid, subject, dateline, views, replies, favtimes, sharetimes, heats FROM %t $wheresql $ordersql ".DB::limit($start, $limit), $parameter);
 		while($value = DB::fetch($query)) {
 			$data[$value['tid']] = $value;
 			$fids[$value['fid']][$value['tid']] = $value['tid'];
@@ -377,7 +415,8 @@ class table_forum_thread extends discuz_table
 			$wherearr[] = 't.fid NOT IN(%n)';
 		}
 		$wheresql = ' WHERE '.implode(' AND ', $wherearr);
-		return DB::fetch_all("SELECT t.tid, t.fid, t.author, t.authorid, t.subject, t.dateline, t.favtimes, t.sharetimes, t.heats,  p.pollpreview, p.voters FROM %t t LEFT JOIN %t p ON p.tid=t.tid $wheresql  ORDER BY $order DESC ".DB::limit($start, $limit), $parameter, $this->_pk);
+		$ordersql = !empty($order) ? ' ORDER BY '.DB::order($order, 'DESC') : '';
+		return DB::fetch_all("SELECT t.tid, t.fid, t.author, t.authorid, t.subject, t.dateline, t.favtimes, t.sharetimes, t.heats,  p.pollpreview, p.voters FROM %t t LEFT JOIN %t p ON p.tid=t.tid $wheresql $ordersql ".DB::limit($start, $limit), $parameter, $this->_pk);
 	}
 	public function fetch_all_rank_activity($dateline, $notfid, $order = 'dateline', $start = 0, $limit = 0) {
 		$parameter = array($this->get_table_name(), 'forum_activity');
@@ -392,7 +431,8 @@ class table_forum_thread extends discuz_table
 			$wherearr[] = 't.fid NOT IN(%n)';
 		}
 		$wheresql = ' WHERE '.implode(' AND ', $wherearr);
-		return DB::fetch_all("SELECT t.tid, t.subject, t.views, t.author, t.authorid, t.replies, t.heats, t.sharetimes, t.favtimes, act.aid, act.starttimefrom, act.starttimeto, act.place, act.class, act.applynumber, act.expiration FROM %t t LEFT JOIN %t act ON act.tid=t.tid $wheresql  ORDER BY $order DESC ".DB::limit($start, $limit), $parameter, $this->_pk);
+		$ordersql = !empty($order) ? ' ORDER BY '.DB::order($order, 'DESC') : '';
+		return DB::fetch_all("SELECT t.tid, t.subject, t.views, t.author, t.authorid, t.replies, t.heats, t.sharetimes, t.favtimes, act.aid, act.starttimefrom, act.starttimeto, act.place, act.class, act.applynumber, act.expiration FROM %t t LEFT JOIN %t act ON act.tid=t.tid $wheresql $ordersql ".DB::limit($start, $limit), $parameter, $this->_pk);
 	}
 
 	public function fetch_all_by_recyclebine($fid = 0, $isgroup = 0, $author = array(), $username = array(), $pstarttime = 0, $pendtime = 0, $mstarttime = 0, $mendtime = 0, $keywords = '', $start = 0, $limit = 0) {
@@ -494,12 +534,13 @@ class table_forum_thread extends discuz_table
 
 	public function fetch_all_by_special($special, $authorid = 0, $replies = 0, $displayorder = null, $subject = '', $join = 0, $start = 0, $limit = 0, $order = 't.dateline', $sort = 'DESC') {
 		$condition = $this->make_special_condition($special, $authorid, $replies, $displayorder, $subject, $join, 0);
-		return DB::fetch_all("SELECT t.* FROM %t t $condition[jointable] ".$condition['where']." ORDER BY $order $sort ".DB::limit($start, $limit), $condition['parameter'], $this->_pk);
+		$ordersql = !empty($order) ? ' ORDER BY '.DB::order($order, $sort) : '';
+		return DB::fetch_all("SELECT t.* FROM %t t $condition[jointable] ".$condition['where'].$ordersql.DB::limit($start, $limit), $condition['parameter'], $this->_pk);
 	}
 	public function fetch_all_heats() {
 		$heatdateline = getglobal('timestamp') - 86400 * getglobal('setting/indexhot/days');
 		$addtablesql = $addsql = '';
-		if(!getglobal('setting/groupstatus')) {
+		if(!helper_access::check_module('group')) {
 			$addtablesql = " LEFT JOIN ".DB::table('forum_forum')." f ON f.fid = t.fid ";
 			$addsql = " AND f.status IN ('0', '1') ";
 		}
@@ -513,10 +554,12 @@ class table_forum_thread extends discuz_table
 		$parameter = array($this->get_table_name());
 		$wherearr = array();
 		if(!empty($tids)) {
+			$tids = dintval($tids, true);
 			$parameter[] = $tids;
 			$wherearr[] = is_array($tids) ? 'tid IN(%n)' : 'tid=%d';
 		}
 		if(!empty($fids)) {
+			$fids = dintval($fids, true);
 			$parameter[] = $fids;
 			$wherearr[] = is_array($fids) ? 'fid IN(%n)' : 'fid=%d';
 		}
@@ -553,8 +596,9 @@ class table_forum_thread extends discuz_table
 		$wherearr = $condition = array();
 		$parameter = array($this->get_table_name($tableid));
 		if($authorid && !$join) {
+			$authorid = dintval($authorid, true);
 			$parameter[] = $authorid;
-			$wherearr[] = is_array($authorid) ? 't.authorid IN(%n)' : 't.authorid=%d';
+			$wherearr[] = is_array($authorid) && $authorid ? 't.authorid IN(%n)' : 't.authorid=%d';
 		}
 		$parameter[] = $special;
 		$wherearr[] = 't.special=%d';
@@ -589,14 +633,15 @@ class table_forum_thread extends discuz_table
 		$condition['where'] = ' WHERE '.implode(' AND ', $wherearr);
 		return $condition;
 	}
-	public function count_search($conditions, $tableid = 0, $prefix = '') {
-		return DB::result_first("SELECT count(*) FROM %t $prefix ".$this->search_condition($conditions, $prefix), array($this->get_table_name($tableid)));
+	public function count_search($conditions, $tableid = 0, $prefix = false) {
+		$prefix = $prefix ? '' : 't';
+		return DB::result_first("SELECT COUNT(*) FROM %t $prefix %i", array($this->get_table_name($tableid), $this->search_condition($conditions, $prefix)));
 	}
 
-	public function search_condition($conditions, $prefix = '') {
+	public function search_condition($conditions, $prefix = false) {
 		$this->_urlparam = $wherearr = array();
 		if($prefix) {
-			$prefix .= '.';
+			$prefix = 't.';
 		}
 		if($conditions['sourcetableid'] != '') {
 			$this->_urlparam[] = "sourcetableid={$conditions['sourcetableid']}";
@@ -787,52 +832,87 @@ class table_forum_thread extends discuz_table
 	}
 
 	public function update_displayorder_by_tid_displayorder($tids, $olddisplayorder, $newdisplayorder) {
-		$tids = is_array($tids) ? $tids : array(intval($tids));
-		return DB::query('UPDATE %t SET displayorder=%d WHERE tid IN (%n) AND displayorder=%d', array($this->get_table_name(), $newdisplayorder, $tids, $olddisplayorder));
+		$tids = dintval((array)$tids, true);
+		if($tids) {
+			return DB::query('UPDATE %t SET displayorder=%d WHERE tid IN (%n) AND displayorder=%d', array($this->get_table_name(), $newdisplayorder, $tids, $olddisplayorder));
+		}
+		return 0;
 	}
 
-	public function update($tid, $data, $unbuffered = false, $low_priority = false, $tableid = 0) {
-		$num = DB::update($this->get_table_name($tableid), $data, DB::field('tid', $tid), $unbuffered, $low_priority);
-		if($data['displayorder'] > 1) {
-			$this->clear_cache('globalstick');
+	public function update($tid, $data, $unbuffered = false, $low_priority = false, $tableid = 0, $realdata = false) {
+		$tid = dintval($tid, true);
+		if($data && is_array($data) && $tid) {
+			if(!$realdata) {
+				$num = DB::update($this->get_table_name($tableid), $data, DB::field('tid', $tid), $unbuffered, $low_priority);
+				if($data['displayorder'] > 1) {
+					$this->clear_cache('globalstick');
+				}
+				$this->update_batch_cache((array)$tid, $data);
+			} else {
+				$num = DB::query('UPDATE '.DB::table($this->get_table_name($tableid))." SET ".implode(',', $data)." WHERE ".DB::field('tid', $tid), 'UNBUFFERED');
+				$this->clear_cache($tid);
+			}
+			return $num;
 		}
-		$this->update_batch_cache((array)$tid, $data);
-		return $num;
+		return !$unbuffered ? 0 : false;
 	}
 
 	public function update_by_fid($fid, $data, $tableid = 0) {
-		return DB::update($this->get_table_name($tableid), $data, DB::field('fid', $fid));
+		$fid = dintval($fid, true);
+		if($data && is_array($data) && $fid) {
+			return DB::update($this->get_table_name($tableid), $data, DB::field('fid', $fid));
+		}
+		return array();
 	}
 	public function update_by_tid_displayorder($tid, $displayorder, $data, $fid = 0, $tableid = 0) {
 		$condition = array();
+		$tid = dintval($tid, true);
 		$condition[] = DB::field('tid', $tid);
 		if($fid) {
+			$fid = dintval($fid, true);
 			$condition[] = DB::field('fid', $fid);
 		}
 		$condition[] = DB::field('displayorder', $displayorder);
-		return DB::update($this->get_table_name($tableid), $data, implode(' AND ', $condition));
+		if($data && is_array($data) && $tid) {
+			return DB::update($this->get_table_name($tableid), $data, implode(' AND ', $condition));
+		}
+		return 0;
 	}
 	public function update_by_closed($tids, $data, $tableid = 0) {
-		$num = DB::update($this->get_table_name($tableid), $data, DB::field('closed', $tids), true);
-		if($num) {
-			foreach((array)$tids as $tid) {
-				$this->update_cache($tid, $data, $this->_cache_ttl);
+		$tids = dintval($tids, true);
+		if(!empty($data) && is_array($data)) {
+			$num = DB::update($this->get_table_name($tableid), $data, DB::field('closed', $tids), true);
+			if($num) {
+				foreach((array)$tids as $tid) {
+					$this->update_cache($tid, $data, $this->_cache_ttl);
+				}
 			}
+			return $num;
 		}
-		return $num;
+		return 0;
 	}
 
 	public function update_status_by_tid($tids, $value, $glue = '|') {
-		$this->clear_cache((array)$tids);
-		return DB::query("UPDATE %t SET status=status{$glue}%s WHERE tid IN(%n)", array($this->get_table_name(), $value, (array)$tids));
+		$tids = dintval($tids, true);
+		if($tids) {
+			$this->clear_cache((array)$tids);
+			$glue = helper_util::check_glue($glue);
+			return DB::query("UPDATE %t SET status=status{$glue}%s WHERE tid IN(%n)", array($this->get_table_name(), $value, (array)$tids));
+		}
+		return 0;
 	}
 
 	public function update_sortid_by_sortid($sortid, $oldsortid) {
-		return DB::query("UPDATE %t SET sortid=%d WHERE sortid IN (%n)", array($this->get_table_name(), $sortid, $oldsortid));
+		$sortid = dintval($sortid);
+		$oldsortid = dintval($oldsortid, true);
+		if($oldsortid) {
+			return DB::query("UPDATE %t SET sortid=%d WHERE sortid IN (%n)", array($this->get_table_name(), $sortid, $oldsortid));
+		}
+		return 0;
 	}
 
-	public function increase($tids, $fieldarr, $low_priority = false, $tableid = 0) {
-		$tids = array_map('dintval', (array)$tids);
+	public function increase($tids, $fieldarr, $low_priority = false, $tableid = 0, $getsetarr = false) {
+		$tids = dintval((array)$tids, true);
 		$sql = array();
 		$num = 0;
 		$allowkey = array('views', 'replies', 'recommends', 'recommend_add', 'recommend_sub', 'favtimes', 'sharetimes', 'moderated', 'heats', 'lastposter', 'lastpost');
@@ -841,11 +921,15 @@ class table_forum_thread extends discuz_table
 				if(is_array($value)) {
 					$sql[] = DB::field($key, $value[0]);
 				} else {
+					$value = dintval($value);
 					$sql[] = "`$key`=`$key`+'$value'";
 				}
 			} else {
 				unset($fieldarr[$key]);
 			}
+		}
+		if($getsetarr) {
+			return $sql;
 		}
 		if(!empty($sql)){
 			$cmd = "UPDATE " . ($low_priority ? 'LOW_PRIORITY ' : '');
@@ -856,13 +940,17 @@ class table_forum_thread extends discuz_table
 	}
 
 	public function insert($data, $return_insert_id = false, $replace = false, $silent = false) {
-		$this->clear_cache($data['fid'], 'forumdisplay_');
-		return DB::insert($this->_table, $data, $return_insert_id, $replace, $silent);
+		if($data && is_array($data)) {
+			$this->clear_cache($data['fid'], 'forumdisplay_');
+			return DB::insert($this->_table, $data, $return_insert_id, $replace, $silent);
+		}
+		return 0;
 	}
 
 	public function insert_thread_copy_by_tid($tids, $origin = 0, $target = 0) {
+		$tids = dintval($tids, true);
 		if($tids) {
-			$wheresql = is_array($tids) ? 'tid IN(%n)' : 'tid=%d';
+			$wheresql = is_array($tids) && $tids ? 'tid IN(%n)' : 'tid=%d';
 			DB::query("INSERT INTO %t SELECT * FROM %t WHERE $wheresql", array($this->get_table_name($origin), $this->get_table_name($target), $tids));
 		}
 	}
@@ -880,6 +968,7 @@ class table_forum_thread extends discuz_table
 	}
 
 	public function count_by_replies($number, $glue = '>') {
+		$glue = helper_util::check_glue($glue);
 		return DB::result_first("SELECT COUNT(*) FROM %t WHERE replies{$glue}%d", array($this->get_table_name(), $number));
 	}
 
@@ -887,6 +976,7 @@ class table_forum_thread extends discuz_table
 
 		$parameter = array($this->get_table_name(), $fid);
 		$wherearr = array();
+		$fid = dintval($fid, true);
 		$wherearr[] = is_array($fid) ? 'fid IN(%n)' : 'fid=%d';
 
 		if($typeid) {
@@ -895,6 +985,7 @@ class table_forum_thread extends discuz_table
 		}
 		if($displayorder !== null) {
 			$parameter[] = $displayorder;
+			$glue = helper_util::check_glue($glue);
 			$wherearr[] = "displayorder{$glue}%d";
 		}
 		$wheresql = !empty($wherearr) && is_array($wherearr) ? ' WHERE '.implode(' AND ', $wherearr) : '';
@@ -965,14 +1056,22 @@ class table_forum_thread extends discuz_table
 	}
 
 	public function delete_by_tid($tids, $unbuffered = false, $tableid = 0, $limit = 0) {
-		$this->clear_cache($tids);
-		return DB::delete($this->get_table_name($tableid), DB::field('tid', $tids), $limit, $unbuffered);
+		$tids = dintval($tids, true);
+		if($tids) {
+			$this->clear_cache($tids);
+			return DB::delete($this->get_table_name($tableid), DB::field('tid', $tids), $limit, $unbuffered);
+		}
+		return !$unbuffered ? 0 : false;
 	}
 	public function delete_by_fid($fid, $unbuffered = false, $tableid = 0, $limit = 0) {
-		foreach((array)$fid as $delfid) {
-			$this->clear_cache($delfid, 'forumdisplay_');
+		$fid = dintval($fid, true);
+		if($fid) {
+			foreach((array)$fid as $delfid) {
+				$this->clear_cache($delfid, 'forumdisplay_');
+			}
+			return DB::delete($this->get_table_name($tableid), DB::field('fid', $fid), $limit, $unbuffered);
 		}
-		return DB::delete($this->get_table_name($tableid), DB::field('fid', $fid), $limit, $unbuffered);
+		return 0;
 	}
 	public function get_table_name($tableid = 0){
 		$tableid = intval($tableid);
@@ -989,8 +1088,12 @@ class table_forum_thread extends discuz_table
 			default :
 				$addsql = '';
 		}
+		if(getglobal('setting/followforumid')) {
+			$addsql .= ' AND '.DB::field('fid', getglobal('setting/followforumid'), '<>');
+		}
 		$tidsql = '';
 		if($tids) {
+			$tids = dintval($tids, true);
 			$tidsql = DB::field('tid', $tids);
 		} else {
 			$tidsql = 'tid>'.intval($limittid);
@@ -1039,6 +1142,7 @@ class table_forum_thread extends discuz_table
 		$parameter = array();
 		$wherearr = array('t.displayorder=-1', 'tm.action=\'DEL\'');
 		if($fid) {
+			$fid = dintval($fid, true);
 			$parameter[] = $fid;
 			$wherearr[] = is_array($fid) ? 't.fid IN(%n)' : 't.fid=%d';
 		}
@@ -1047,11 +1151,11 @@ class table_forum_thread extends discuz_table
 		}
 		if(!empty($authors)) {
 			$parameter[] = $authors;
-			$wherearr[] = is_array($authors) ? 't.author IN(%n)' : 't.author=%s';
+			$wherearr[] = is_array($authors) && $authors ? 't.author IN(%n)' : 't.author=%s';
 		}
 		if(!empty($username)) {
 			$parameter[] = $username;
-			$wherearr[] = is_array($username) ? 'tm.username IN(%n)' : 'tm.username=%s';
+			$wherearr[] = is_array($username) && $username ? 'tm.username IN(%n)' : 'tm.username=%s';
 		}
 		if($pstarttime) {
 			$parameter[] = $pstarttime;
@@ -1098,6 +1202,7 @@ class table_forum_thread extends discuz_table
 		}
 	}
 	public function drop_table($tableid) {
+		$tableid = intval($tableid);
 		if($tableid) {
 			DB::query("DROP TABLE %t", array($this->get_table_name($tableid)), true);
 			return true;

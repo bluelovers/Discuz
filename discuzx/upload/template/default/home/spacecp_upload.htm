@@ -1,13 +1,14 @@
 <!--{template common/header}-->
 
 <div id="pt" class="bm cl">
-	<div class="z"><a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em> <a href="home.php">$_G[setting][navs][4][navname]</a> <em>&rsaquo;</em> <a href="home.php?mod=space&do=album">{lang album}</a> <em>&rsaquo;</em> {lang upload_pic}</div>
+	<div class="z"><a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em> <a href="home.php?mod=space&do=album">{lang album}</a> <em>&rsaquo;</em> {lang upload_pic}</div>
 </div>
 
-<div id="ct" class="ct2_a wp cl">
+<div id="ct" class="wp cl">
 	<div class="mn">
-		<div class="bm bw0">
-			<h1 class="mt"><img alt="album" src="{STATICURL}image/feed/album.gif" class="vm" /> {lang album}</h1>
+		<div class="bm">
+			<div class="bm_h"><h1>{lang upload_pic}</h1></div>
+			<div class="bm_c">
 			<ul class="tb cl">
 			<!--{if $albumid}-->
 				<li><a href="home.php?mod=spacecp&ac=album&op=edit&albumid=$albumid">{lang edit_album_information}</a></li>
@@ -39,111 +40,10 @@
 			<div class="xg1">{lang upload_pic_tips}</div>
 			<div class="uploadform mtn ptm pbw">
 
-<style type="text/css">
-				
-.progressWrapper {
-	width: 100%;
-	overflow: hidden;
-}
-
-.progressContainer {
-	margin: 5px;
-	padding: 4px;
-	border: solid 1px #E8E8E8;
-	background-color: #F7F7F7;
-	overflow: hidden;
-}
-/* Message */
-.message {
-	margin: 1em 0;
-	padding: 10px 20px;
-	border: solid 1px #FFDD99;
-	background-color: #FFFFCC;
-	overflow: hidden;
-}
-/* Error */
-.red {
-	border: solid 1px #B50000;
-	background-color: #FFEBEB;
-}
-
-/* Current */
-.green {
-	border: solid 1px #DDF0DD;
-	background-color: #EBFFEB;
-}
-
-/* Complete */
-.blue {
-	border: solid 1px #CEE2F2;
-	background-color: #F0F5FF;
-}
-
-.progressName {
-	font-size: 8pt;
-	font-weight: 700;
-	color: #555;
-	width: 323px;
-	height: 14px;
-	text-align: left;
-	white-space: nowrap;
-	overflow: hidden;
-}
-
-.progressBarInProgress,
-.progressBarComplete,
-.progressBarError {
-	font-size: 0;
-	width: 0%;
-	height: 2px;
-	background-color: blue;
-	margin-top: 2px;
-}
-
-.progressBarComplete {
-	width: 100%;
-	background-color: green;
-	visibility: hidden;
-}
-
-.progressBarError {
-	width: 100%;
-	background-color: red;
-	visibility: hidden;
-}
-
-.progressBarStatus {
-	margin-top: 2px;
-	width: 337px;
-	font-size: 7pt;
-	font-family: Arial;
-	text-align: left;
-	white-space: nowrap;
-}
-
-a.progressCancel {
-	font-size: 0;
-	display: block;
-	height: 14px;
-	width: 14px;
-	background-image: url({IMGDIR}/cancelbutton.gif);
-	background-repeat: no-repeat;
-	background-position: -14px 0px;
-	float: right;
-}
-
-a.progressCancel:hover {
-	background-position: 0px 0px;
-}
-.swfupload {
-	vertical-align: top;
-}
-
-</style>
-<script type="text/javascript" src="{$_G[setting][jspath]}swfupload.js?{VERHASH}"></script>
-<script type="text/javascript" src="{$_G[setting][jspath]}swfupload.queue.js?{VERHASH}"></script>
-<script type="text/javascript" src="{$_G[setting][jspath]}handlers.js?{VERHASH}"></script>
-<script type="text/javascript" src="{$_G[setting][jspath]}fileprogress.js?{VERHASH}"></script>
+				<script type="text/javascript" src="{$_G[setting][jspath]}swfupload.js?{VERHASH}"></script>
+				<script type="text/javascript" src="{$_G[setting][jspath]}swfupload.queue.js?{VERHASH}"></script>
+				<script type="text/javascript" src="{$_G[setting][jspath]}handlers.js?{VERHASH}"></script>
+				<script type="text/javascript" src="{$_G[setting][jspath]}fileprogress.js?{VERHASH}"></script>
 
 				<table cellspacing="0" cellpadding="0" class="tfm up_row mbm">
 					<tbody id="attachbody"></tbody>
@@ -363,8 +263,6 @@ a.progressCancel:hover {
 
 		</div>
 	</div>
-	<div class="appl">
-		<!--{subtemplate common/userabout}-->
 	</div>
 </div>
 

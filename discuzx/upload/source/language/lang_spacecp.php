@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_spacecp.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: lang_spacecp.php 28195 2012-02-24 02:59:57Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -301,6 +301,27 @@ $lang = array(
 	'district_level_3' => '-州县-',
 	'district_level_4' => '-乡镇-',
 	'invite_you_to_visit' => '{user}邀请您访问{bbname}',
+
+	'portal' => '门户',
+	'group' => '群组',
+	'follow' => '广播',
+	'collection' => '淘帖',
+	'guide' => '导读',
+	'feed' => '动态',
+	'blog' => '日志',
+	'doing' => '记录',
+	'wall' => '留言板',
+	'homepage' => '个人主页',
+	'ranklist' => '排行榜',
+	'select_the_navigation_position' => '选择{type}导航位置',
+	'close_module' => '关闭{type}功能',
+
+	'follow_add_remark' => '添加备注',
+	'follow_modify_remark' => '修改备注',
+	'follow_specified_group' => '广播专区',
+	'follow_specified_forum' => '广播专版',
+
+	'filesize_lessthan' => '文件大小应该小于',
 
 	'spacecp_message_prompt' => '(支持 {msg} 代码,最大 1000 字)',
 	'card_update_doing' => ' <a class="xi2" href="###">[更新记录]</a>',

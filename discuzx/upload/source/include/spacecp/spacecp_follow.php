@@ -3,20 +3,23 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_follow.php 27308 2012-01-13 08:33:43Z zhengqingpeng $
+ *      $Id: spacecp_follow.php 28476 2012-03-01 08:29:44Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
-$ops = array('add', 'del', 'bkname', 'checkfeed', 'relay', 'getfeed', 'delete');
+$ops = array('add', 'del', 'bkname', 'checkfeed', 'relay', 'getfeed', 'delete', 'newthread');
 $op = in_array($_GET['op'], $ops) ? $_GET['op'] : '';
 
 if($op == 'add') {
 	$_GET['handlekey'] = $_GET['handlekey'] ? $_GET['handlekey'] : 'followmod';
 	$followuid = intval($_GET['fuid']);
+	if($_GET['hash'] != FORMHASH || empty($followuid)) {
+		exit('Access Denied');
+	}
 	if($_G['uid'] == $followuid) {
-		showmessage('不能关注自己');
+		showmessage('follow_not_follow_self');
 	}
 	$special = intval($_GET['special']) ? intval($_GET['special']) : 0;
 	$followuser = getuserbyuid($followuid);
@@ -24,7 +27,7 @@ if($op == 'add') {
 	$followed = C::t('home_follow')->fetch_by_uid_followuid($followuid, $_G['uid']);
 	if(!empty($followed)) {
 		if($followed['status'] == '-1') {
-			showmessage('对方不允许您关注TA');
+			showmessage('follow_other_unfollow');
 		}
 		$mutual = 1;
 		C::t('home_follow')->update_by_uid_followuid($followuid, $_G['uid'], array('mutual'=>1));
@@ -54,6 +57,9 @@ if($op == 'add') {
 } elseif($op == 'del') {
 	$_GET['handlekey'] = $_GET['handlekey'] ? $_GET['handlekey'] : 'followmod';
 	$delfollowuid = intval($_GET['fuid']);
+	if(empty($delfollowuid)) {
+		exit('Access Denied');
+	}
 	$affectedrows = C::t('home_follow')->delete_by_uid_followuid($_G['uid'], $delfollowuid);
 	if($affectedrows) {
 		C::t('home_follow')->update_by_uid_followuid($delfollowuid, $_G['uid'], array('mutual'=>0));
@@ -70,35 +76,111 @@ if($op == 'add') {
 	if(submitcheck('editbkname')) {
 		$bkname = cutstr(strip_tags($_GET['bkname']), 30, '');
 		C::t('home_follow')->update_by_uid_followuid($_G['uid'], $followuid, array('bkname'=>$bkname));
-		showmessage('follow_remark_succeed', dreferer(), array('bkname' => $bkname, 'btnstr' => empty($bkname) ? '添加备注' : '修改备注'), array('showdialog'=>true, 'closetime' => true));
+		showmessage('follow_remark_succeed', dreferer(), array('bkname' => $bkname, 'btnstr' => empty($bkname) ? lang('spacecp', 'follow_add_remark') : lang('spacecp', 'follow_modify_remark')), array('showdialog'=>true, 'closetime' => true));
+	}
+} elseif($op == 'newthread') {
+
+	if(!helper_access::check_module('follow')) {
+		showmessage('quickclear_noperm');
+	}
+
+	if(submitcheck('topicsubmit')) {
+		$_G['setting']['seccodestatus'] = 0;
+		$_G['setting']['secqaa']['status'] = 0;
+
+		if(empty($_GET['syncbbs'])) {
+			$fid = intval($_G['setting']['followforumid']);
+			if(!($fid && C::t('forum_forum')->fetch($fid))) {
+				$fid = 0;
+			}
+			if(!$fid) {
+				$gid = C::t('forum_forum')->fetch_fid_by_name(lang('spacecp', 'follow_specified_group'));
+				if(!$gid) {
+					$gid = C::t('forum_forum')->insert(array('type' => 'group', 'name' => lang('spacecp', 'follow_specified_group'), 'status' => 0), true);
+					C::t('forum_forumfield')->insert(array('fid' => $gid));
+				}
+				$forumarr = array(
+						'fup' => $gid,
+						'type' => 'forum',
+						'name' => lang('spacecp', 'follow_specified_forum'),
+						'status' => 1,
+						'allowsmilies' => 1,
+						'allowbbcode' => 1,
+						'allowimgcode' => 1
+				);
+				$fid = C::t('forum_forum')->insert($forumarr, true);
+				C::t('forum_forumfield')->insert(array('fid' => $fid));
+				C::t('common_setting')->update('followforumid', $fid);
+				include libfile('function/cache');
+				updatecache('setting');
+			}
+
+		} else {
+			$fid = intval($_GET['fid']);
+		}
+		$_POST['replysubmit'] = true;
+		$_GET['fid'] = $fid;
+		$_GET['action'] = 'newthread';
+		include_once libfile('function/forum');
+		require_once libfile('function/post');
+		loadforum();
+
+		$skipmsg = 1;
+		include_once libfile('forum/post', 'module');
 	}
 } elseif($op == 'relay') {
 
+	if(!helper_access::check_module('follow')) {
+		showmessage('quickclear_noperm');
+	}
 	$tid = intval($_GET['tid']);
 	$preview = $post = array();
 	$preview = C::t('forum_threadpreview')->fetch($tid);
 	if(empty($preview)) {
 		$post = C::t('forum_post')->fetch_threadpost_by_tid_invisible($tid);
 		if($post['anonymous']) {
-			showmessage('匿名帖子不允许被转播');
+			showmessage('follow_anonymous_unfollow');
 		}
 	}
 	if(empty($post) && empty($preview)) {
-		showmessage('转播的内容不存在');
+		showmessage('follow_content_not_exist');
 	}
-	if(!submitcheck('relaysubmit')) {
-		$user = getuserbyuid($feed['uid']);
-	} else {
 
+	if(submitcheck('relaysubmit')) {
 		if(strlen($_GET['note'])>140) {
-			showmessage('您输入的转播理由超过140个字');
+			showmessage('follow_input_word_limit');
+		}
+		$count = C::t('home_follow_feed')->count_by_uid_tid($_G['uid'], $tid);
+		if(!$count) {
+			$count = C::t('home_follow_feed')->count_by_uid_tid($_G['uid'], $tid);
+		}
+		if($count && empty($_GET['addnewreply'])) {
+			showmessage('follow_only_allow_the_relay_time');
 		}
 
+		if($_GET['addnewreply']) {
+
+			$_G['setting']['seccodestatus'] = 0;
+			$_G['setting']['secqaa']['status'] = 0;
+
+			$_POST['replysubmit'] = true;
+			$_GET['tid'] = $tid;
+			$_GET['action'] = 'reply';
+			$_GET['message'] = $_GET['note'];
+			include_once libfile('function/forum');
+			require_once libfile('function/post');
+			loadforum();
+
+			$inspacecpshare = 1;
+			include_once libfile('forum/post', 'module');
+		}
+		require_once libfile('function/discuzcode');
+		require_once libfile('function/followcode');
 		$followfeed = array(
 			'uid' => $_G['uid'],
 			'username' => $_G['username'],
 			'tid' => $tid,
-			'note' => dhtmlspecialchars($_GET['note']),
+			'note' => cutstr(followcode(dhtmlspecialchars($_GET['note']), 0, 0, 0, false), 140),
 			'dateline' => TIMESTAMP
 		);
 		C::t('home_follow_feed')->insert($followfeed);
@@ -115,25 +197,7 @@ if($op == 'add') {
 		} else {
 			C::t('forum_threadpreview')->update_relay_by_tid($tid, 1);
 		}
-		$param = array();
-		if($_GET['addnewreply']) {
-
-			$_G['setting']['seccodestatus'] = 0;
-			$_G['setting']['secqaa']['status'] = 0;
-
-			$_POST['replysubmit'] = true;
-			$_GET['tid'] = $msg['id'];
-			$_GET['action'] = 'reply';
-			$_GET['message'] = $_GET['note'];
-			include_once libfile('function/forum');
-			require_once libfile('function/post');
-			loadforum();
-
-			$inspacecpshare = 1;
-			include_once libfile('forum/post', 'module');
-		}
-
-		showmessage('relay_feed_success', dreferer(), $param, array('showdialog'=>true, 'closetime' => true));
+		showmessage('relay_feed_success', dreferer(), array(), array('showdialog'=>true, 'closetime' => true));
 	}
 } elseif($op == 'checkfeed') {
 	require_once libfile("function/member");
@@ -166,14 +230,15 @@ if($op == 'add') {
 		$archiver = true;
 	}
 	if(empty($feed)) {
-		showmessage('指定的广播记录不存在', '', array(), array('return' => true));
+		showmessage('follow_specify_follow_not_exist', '', array(), array('return' => true));
 	} elseif($feed['uid'] != $_G['uid'] && $_G['adminid'] != 1) {
-		showmessage('您没有权限进行此操作', '', array(), array('return' => true));
+		showmessage('quickclear_noperm', '', array(), array('return' => true));
 	}
 
 	if(submitcheck('deletesubmit')) {
 		if(C::t('home_follow_feed')->delete_by_feedid($_GET['feedid'], $archiver)) {
 			C::t('common_member_count')->increase($feed['uid'], array('feeds'=>-1));
+			C::t('forum_threadpreview')->update_relay_by_tid($feed['tid'], -1);
 			showmessage('do_success', dreferer(), array('feedid' => $_GET['feedid']), array('showdialog'=>1, 'showmsg' => true, 'closetime' => true));
 		} else {
 			showmessage('failed_to_delete_operation');

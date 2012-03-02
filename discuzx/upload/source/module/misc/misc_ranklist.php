@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_ranklist.php 27092 2012-01-05 03:00:10Z zhangguosheng $
+ *      $Id: misc_ranklist.php 28362 2012-02-28 07:17:05Z monkey $
  */
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
@@ -12,6 +12,8 @@ if(!defined('IN_DISCUZ')) {
 
 $page = $_G['page'];
 $type = $_GET['type'];
+
+$_G['disabledwidthauto'] = 1;
 
 if(!in_array($type, array('index', 'member', 'thread', 'blog', 'poll', 'picture', 'activity', 'forum', 'group'))) {
 	$type = 'index';
@@ -120,20 +122,19 @@ function getranklist_activity($num = 20, $view = 'heats', $orderby = 'all') {
 }
 
 function getranklist_picture($num = 20, $view = 'hot', $orderby = 'all') {
-	$dateline = $timestamp = '';
-	if($orderby == 'today') {
-		$timestamp = TIMESTAMP - 86400;
-		$dateline = "p.dateline>='$timestamp'";
-	} elseif($orderby == 'thisweek') {
+	$timestamp = TIMESTAMP - 86400;
+	$dateline = 'p.'.DB::field('dateline', $timestamp, '>=');
+
+	if($orderby == 'thisweek') {
 		$timestamp = TIMESTAMP - 604800;
-		$dateline = "p.dateline>='$timestamp'";
+		$dateline = 'p.'.DB::field('dateline', $timestamp, '>=');
 	} elseif($orderby == 'thismonth') {
 		$timestamp = TIMESTAMP - 2592000;
-		$dateline = "p.dateline>='$timestamp'";
+		$dateline = 'p.'.DB::field('dateline', $timestamp, '>=');
 	}
 
 	$data = array();
-	$query = C::t('home_pic')->fetch_all_by_sql($dateline, 'p.'.$view.' DESC', 0, $num);
+	$query = C::t('home_pic')->fetch_all_by_sql($dateline, 'p.'.DB::order($view, 'DESC'), 0, $num);
 
 	require_once libfile('function/home');
 	$rank = 0;

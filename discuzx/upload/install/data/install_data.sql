@@ -141,29 +141,35 @@ INSERT INTO pre_common_member_profile_setting VALUES('field8', 0, 1, 0, '◊‘∂®“Â◊
 
 -- [update_nav]
 
-INSERT INTO pre_common_nav VALUES ('','0','√≈ªß','Portal','portal.php','1','0','0','1','1','0','0','0', 0, '', '', '', 0, '');
+INSERT INTO pre_common_nav VALUES ('','0','√≈ªß','Portal','portal.php','1','0','0','-1','1','0','0','0', 0, '', '', '', 0, '');
 INSERT INTO pre_common_nav VALUES ('','0','¬€Ã≥','BBS','forum.php','2','0','0','1','2','0','0','0', 0, '', '', '', 0, '');
-INSERT INTO pre_common_nav VALUES ('','0','µº∂¡','Guide','forum.php?mod=guide','10','0','0','1','3','0','0','0',  0, '', '', '', 0, '');
-INSERT INTO pre_common_nav VALUES ('','0','Ã‘Ã˚','Collection','forum.php?mod=collection','11','0','0','1','4','0','0','0',  0, '', '', '', 0, '');
-INSERT INTO pre_common_nav VALUES ('','0','π„≤•','Follow','home.php?mod=follow','9','0','0','1','5','0','0','0',  0, '', '', '', 0, '');
-INSERT INTO pre_common_nav VALUES ('','0','”¶”√','Manyou','userapp.php','5','0','0','1','6','0','0','0', 0, '', '', '', 0, '');
-INSERT INTO pre_common_nav VALUES ('','0','»∫◊È','Group','group.php','3','0','0','1','7','0','0','0', 0, '', '', '', 0, '');
-INSERT INTO pre_common_nav VALUES ('','0','º“‘∞','Space','home.php','4','0','0','1','8','0','0','0', 0, '', '', '', 0, '');
+INSERT INTO pre_common_nav VALUES ('','0','»∫◊È','Group','group.php','3','0','0','-1','7','0','0','0', 0, '', '', '', 0, '');
+INSERT INTO pre_common_nav VALUES ('','0','∂ØÃ¨','Space','home.php','4','0','0','-1','8','0','0','0', 0, '', '', '', 0, '');
+INSERT INTO pre_common_nav VALUES ('','0','”¶”√','Manyou','userapp.php','5','0','0','-1','6','0','0','0', 0, '', '', '', 0, '');
 INSERT INTO pre_common_nav VALUES ('','0','≤Âº˛','Plugin','#','6','0','0','1','9','0','0','0', 0, '', '', '', 0, '');
 INSERT INTO pre_common_nav VALUES ('','0','∞Ô÷˙','Help','misc.php?mod=faq','7','0','0','0','10','0','0','0', 0, '', '', '', 0, '');
+INSERT INTO pre_common_nav VALUES ('','0','≈≈––∞Ò','Ranklist','misc.php?mod=ranklist','8','0','0','-1','16','0','0','0',  0, '', '', '', 0, '');
+INSERT INTO pre_common_nav VALUES ('','0','π„≤•','Follow','home.php?mod=follow','9','0','0','-1','5','0','0','0',  0, '', '', '', 0, '');
+INSERT INTO pre_common_nav VALUES ('','0','µº∂¡','Guide','forum.php?mod=guide','10','0','0','-1','3','0','0','0',  0, '', '', '', 0, '');
+INSERT INTO pre_common_nav VALUES ('','0','Ã‘Ã˚','Collection','forum.php?mod=collection','11','0','0','-1','11','0','0','0',  0, '', '', '', 0, '');
+INSERT INTO pre_common_nav VALUES ('','0','»’÷æ','Blog','home.php?mod=space&do=blog','12','0','0','-1','12','0','0','0',  0, '', '', '', 0, '');
+INSERT INTO pre_common_nav VALUES ('','0','œ‡≤·','Album','home.php?mod=space&do=album','13','0','0','-1','13','0','0','0',  0, '', '', '', 0, '');
+INSERT INTO pre_common_nav VALUES ('','0','∑÷œÌ','Share','home.php?mod=space&do=share','14','0','0','-1','14','0','0','0',  0, '', '', '', 0, '');
+INSERT INTO pre_common_nav VALUES ('','0','º«¬º','Doing','home.php?mod=space&do=doing','15','0','0','-1','15','0','0','0',  0, '', '', '', 0, '');
 
 INSERT INTO pre_common_nav VALUES ('', '0', '’æµ„Õ≥º∆', '', 'misc.php?mod=stat', 'stat', 0, 0, 1, 1, 0, 0, 0, 0, '', '', '', 1, '');
 INSERT INTO pre_common_nav VALUES ('', '0', 'æŸ±®', '', '#', 'report', 0, 0, 1, 2, 0, 0, 0, 0, '', '', '', 1, '');
 INSERT INTO pre_common_nav VALUES ('', '0', 'Archiver', '', 'archiver/', 'archiver', 0, 0, 1, 3, 0, 0, 0, 0, '', '', '', 1, '');
 INSERT INTO pre_common_nav VALUES ('', '0', ' ÷ª˙∞Ê', '', 'forum.php?mobile=yes', 'mobile', 0, 0, 1, 3, 0, 0, 0, 0, '', '', '', 1, '');
 
-INSERT INTO pre_common_nav VALUES ('', '0', '»’÷æ', '', 'home.php?mod=space&do=blog', 'blog', 0, 0, 1, 2, 0, 0, 0, 0, '{STATICURL}image/feed/blog.gif', '∑¢≤º', 'home.php?mod=spacecp&ac=blog', 2, '');
-INSERT INTO pre_common_nav VALUES ('', '0', 'œ‡≤·', '', 'home.php?mod=space&do=album', 'album', 0, 0, 1, 3, 0, 0, 0, 0, '{STATICURL}image/feed/album.gif', '…œ¥´', 'home.php?mod=spacecp&ac=upload', 2, '');
-INSERT INTO pre_common_nav VALUES ('', '0', '∑÷œÌ', '', 'home.php?mod=space&do=share', 'share', 0, 0, 1, 4, 0, 0, 0, 0, '{STATICURL}image/feed/share.gif', 'ÃÌº”', 'home.php?mod=spacecp&ac=share', 2, '');
-INSERT INTO pre_common_nav VALUES ('', '0', 'º«¬º', '', 'home.php?mod=space&do=doing', 'doing', 0, 0, 1, 5, 0, 0, 0, 0, '{STATICURL}image/feed/doing.gif', '', '', 2, '');
-INSERT INTO pre_common_nav VALUES ('', '0', '{userpanelarea1}', '', '', '', 0, 0, 1, 6, 0, 0, 0, 0, '', '', '', 2, '');
-INSERT INTO pre_common_nav VALUES ('', '0', '{hr}', '', '', '', 0, 1, 1, 7, 0, 0, 0, 0, '', '', '', 2, '');
-INSERT INTO pre_common_nav VALUES ('', '0', '{userpanelarea2}', '', '', '', 0, 0, 1, 8, 0, 0, 0, 0, '', '', '', 2, '');
+INSERT INTO pre_common_nav VALUES ('', '0', '»’÷æ', '', 'home.php?mod=space&do=blog', 'blog', 0, 0, -1, 2, 0, 0, 0, 0, '{STATICURL}image/feed/blog.gif', '∑¢≤º', 'home.php?mod=spacecp&ac=blog', 2, '');
+INSERT INTO pre_common_nav VALUES ('', '0', 'œ‡≤·', '', 'home.php?mod=space&do=album', 'album', 0, 0, -1, 3, 0, 0, 0, 0, '{STATICURL}image/feed/album.gif', '…œ¥´', 'home.php?mod=spacecp&ac=upload', 2, '');
+INSERT INTO pre_common_nav VALUES ('', '0', '∑÷œÌ', '', 'home.php?mod=space&do=share', 'share', 0, 0, -1, 4, 0, 0, 0, 0, '{STATICURL}image/feed/share.gif', 'ÃÌº”', 'home.php?mod=spacecp&ac=share', 2, '');
+INSERT INTO pre_common_nav VALUES ('', '0', 'º«¬º', '', 'home.php?mod=space&do=doing', 'doing', 0, 0, -1, 5, 0, 0, 0, 0, '{STATICURL}image/feed/doing.gif', '', '', 2, '');
+INSERT INTO pre_common_nav VALUES ('', '0', 'π„≤•', '', 'home.php?mod=follow', 'follow', 0, 0, -1, 6, 0, 0, 0, 0, '{STATICURL}image/feed/follow.gif', '', '', 2, '');
+INSERT INTO pre_common_nav VALUES ('', '0', '{userpanelarea1}', '', '', '', 0, 0, 1, 7, 0, 0, 0, 0, '', '', '', 2, '');
+INSERT INTO pre_common_nav VALUES ('', '0', '{hr}', '', '', '', 0, 1, 1, 8, 0, 0, 0, 0, '', '', '', 2, '');
+INSERT INTO pre_common_nav VALUES ('', '0', '{userpanelarea2}', '', '', '', 0, 0, 1, 9, 0, 0, 0, 0, '', '', '', 2, '');
 
 INSERT INTO pre_common_nav VALUES ('', '0', '∫√”—', '', 'home.php?mod=space&do=friend', 'friend', 0, 0, 1, 1, 0, 0, 0, 0, '{STATICURL}image/feed/friend_b.png', '', '', 3, '');
 INSERT INTO pre_common_nav VALUES ('', '0', 'Ã˚◊”', '', 'forum.php?mod=guide&view=my', 'thread', 0, 0, 1, 2, 0, 0, 0, 0, '{STATICURL}image/feed/thread_b.png', '', '', 3, '');
@@ -171,7 +177,19 @@ INSERT INTO pre_common_nav VALUES ('', '0', ' ’≤ÿ', '', 'home.php?mod=space&do=f
 INSERT INTO pre_common_nav VALUES ('', '0', 'µ¿æﬂ', '', 'home.php?mod=magic', 'magic', 0, 0, 1, 4, 0, 0, 0, 0, '{STATICURL}image/feed/magic_b.png', '', '', 3, '');
 INSERT INTO pre_common_nav VALUES ('', '0', '—´’¬', '', 'home.php?mod=medal', 'medal', 0, 0, 1, 5, 0, 0, 0, 0, '{STATICURL}image/feed/medal_b.png', '', '', 3, '');
 INSERT INTO pre_common_nav VALUES ('', '0', '»ŒŒÒ', '', 'home.php?mod=task', 'task', 0, 0, 1, 6, 0, 0, 0, 0, '{STATICURL}image/feed/task_b.png', '', '', 3, '');
-INSERT INTO pre_common_nav VALUES ('', '0', 'Ã‘Ã˚', '', 'forum.php?mod=collection&op=my', 'collection', 0, 0, 1, 7, 0, 0, 0, 0, '{STATICURL}image/feed/collection_b.png', '', '', 3, '');
+INSERT INTO pre_common_nav VALUES ('', '0', 'Ã‘Ã˚', '', 'forum.php?mod=collection&op=my', 'collection', 0, 0, -1, 7, 0, 0, 0, 0, '{STATICURL}image/feed/collection_b.png', '', '', 3, '');
+INSERT INTO pre_common_nav VALUES ('', '0', '∂ØÃ¨', '', 'home.php', 'feed', 0, 0, -1, 8, 0, 0, 0, 0, '{STATICURL}image/feed/feed_b.png', '', '', 3, '');
+INSERT INTO pre_common_nav VALUES ('', '0', '»’÷æ', '', 'home.php?mod=space&do=blog', 'blog', 0, 0, -1, 9, 0, 0, 0, 0, '{STATICURL}image/feed/blog_b.png', '', '', 3, '');
+INSERT INTO pre_common_nav VALUES ('', '0', 'œ‡≤·', '', 'home.php?mod=space&do=album', 'album', 0, 0, -1, 10, 0, 0, 0, 0, '{STATICURL}image/feed/album_b.png', '', '', 3, '');
+INSERT INTO pre_common_nav VALUES ('', '0', '∑÷œÌ', '', 'home.php?mod=space&do=share', 'share', 0, 0, -1, 11, 0, 0, 0, 0, '{STATICURL}image/feed/share_b.png', '', '', 3, '');
+INSERT INTO pre_common_nav VALUES ('', '0', 'º«¬º', '', 'home.php?mod=space&do=doing', 'doing', 0, 0, -1, 12, 0, 0, 0, 0, '{STATICURL}image/feed/doing_b.png', '', '', 3, '');
+INSERT INTO pre_common_nav VALUES ('', '0', '¡Ù—‘∞Â', '', 'home.php?mod=space&do=wall', 'wall', 0, 0, -1, 13, 0, 0, 0, 0, '{STATICURL}image/feed/wall_b.png', '', '', 3, '');
+INSERT INTO pre_common_nav VALUES ('', '0', 'π„≤•', '', 'home.php?mod=follow', 'follow', 0, 0, -1, 14, 0, 0, 0, 0, '{STATICURL}image/feed/follow_b.png', '', '', 3, '');
+INSERT INTO pre_common_nav VALUES ('', '0', '»∫◊È', '', 'group.php', 'group', 0, 0, -1, 15, 0, 0, 0, 0, '{STATICURL}image/feed/group_b.png', '', '', 3, '');
+INSERT INTO pre_common_nav VALUES ('', '0', '√≈ªß', '', 'portal.php', 'portal', 0, 0, -1, 16, 0, 0, 0, 0, '{STATICURL}image/feed/portal_b.png', '', '', 3, '');
+INSERT INTO pre_common_nav VALUES ('', '0', 'µº∂¡', '', 'forum.php?mod=guide', 'guide', 0, 0, -1, 17, 0, 0, 0, 0, '{STATICURL}image/feed/guide_b.png', '', '', 3, '');
+INSERT INTO pre_common_nav VALUES ('', '0', '≈≈––∞Ò', '', 'misc.php?mod=ranklist', 'ranklist', 0, 0, -1, 18, 0, 0, 0, 0, '{STATICURL}image/feed/ranklist_b.png', '', '', 3, '');
+
 
 INSERT INTO pre_common_nav VALUES ('', '0', '…ËŒ™ ◊“≥', '', '#', 'sethomepage', 0, 0, 1, 1, 0, 0, 0, 0, '', '', '', 4, '');
 INSERT INTO pre_common_nav VALUES ('', '0', ' ’≤ÿ±æ’æ', '', '#', 'setfavorite', 0, 0, 1, 2, 0, 0, 0, 0, '', '', '', 4, '');
@@ -289,9 +307,21 @@ INSERT INTO pre_common_setting VALUES ('ftp','a:10:{s:2:\"on\";s:1:\"0\";s:3:\"s
 INSERT INTO pre_common_setting VALUES ('globalstick','1');
 INSERT INTO pre_common_setting VALUES ('targetblank','0');
 INSERT INTO pre_common_setting VALUES ('google','1');
-INSERT INTO pre_common_setting VALUES ('groupstatus','1');
-INSERT INTO pre_common_setting VALUES ('portalstatus','1');
-INSERT INTO pre_common_setting VALUES ('homestatus','1');
+INSERT INTO pre_common_setting VALUES ('groupstatus','0');
+INSERT INTO pre_common_setting VALUES ('portalstatus','0');
+INSERT INTO pre_common_setting VALUES ('followstatus','0');
+INSERT INTO pre_common_setting VALUES ('collectionstatus','0');
+INSERT INTO pre_common_setting VALUES ('guidestatus','0');
+INSERT INTO pre_common_setting VALUES ('feedstatus','0');
+INSERT INTO pre_common_setting VALUES ('blogstatus','0');
+INSERT INTO pre_common_setting VALUES ('doingstatus','0');
+INSERT INTO pre_common_setting VALUES ('albumstatus','0');
+INSERT INTO pre_common_setting VALUES ('sharestatus','0');
+INSERT INTO pre_common_setting VALUES ('wallstatus','0');
+INSERT INTO pre_common_setting VALUES ('rankliststatus','0');
+INSERT INTO pre_common_setting VALUES ('homestyle','0');
+INSERT INTO pre_common_setting VALUES ('homepagestyle','0');
+
 INSERT INTO pre_common_setting VALUES ('group_allowfeed','1');
 INSERT INTO pre_common_setting VALUES ('group_admingroupids','a:1:{i:1;s:1:\"1\";}');
 INSERT INTO pre_common_setting VALUES ('group_imgsizelimit','512');
@@ -313,7 +343,7 @@ INSERT INTO pre_common_setting VALUES ('watermarkstatus', 'a:3:{s:6:\"portal\";s
 INSERT INTO pre_common_setting VALUES ('watermarktext', 'a:12:{s:4:\"text\";a:3:{s:6:\"portal\";s:0:\"\";s:5:\"forum\";s:0:\"\";s:5:\"album\";s:0:\"\";}s:8:\"fontpath\";a:3:{s:6:\"portal\";s:21:\"FetteSteinschrift.ttf\";s:5:\"forum\";s:21:\"FetteSteinschrift.ttf\";s:5:\"album\";s:21:\"FetteSteinschrift.ttf\";}s:4:\"size\";a:3:{s:6:\"portal\";s:0:\"\";s:5:\"forum\";s:0:\"\";s:5:\"album\";s:0:\"\";}s:5:\"angle\";a:3:{s:6:\"portal\";s:0:\"\";s:5:\"forum\";s:0:\"\";s:5:\"album\";s:0:\"\";}s:5:\"color\";a:3:{s:6:\"portal\";s:0:\"\";s:5:\"forum\";s:0:\"\";s:5:\"album\";s:0:\"\";}s:7:\"shadowx\";a:3:{s:6:\"portal\";s:0:\"\";s:5:\"forum\";s:0:\"\";s:5:\"album\";s:0:\"\";}s:7:\"shadowy\";a:3:{s:6:\"portal\";s:0:\"\";s:5:\"forum\";s:0:\"\";s:5:\"album\";s:0:\"\";}s:11:\"shadowcolor\";a:3:{s:6:\"portal\";s:0:\"\";s:5:\"forum\";s:0:\"\";s:5:\"album\";s:0:\"\";}s:10:\"translatex\";a:3:{s:6:\"portal\";s:0:\"\";s:5:\"forum\";s:0:\"\";s:5:\"album\";s:0:\"\";}s:10:\"translatey\";a:3:{s:6:\"portal\";s:0:\"\";s:5:\"forum\";s:0:\"\";s:5:\"album\";s:0:\"\";}s:5:\"skewx\";a:3:{s:6:\"portal\";s:0:\"\";s:5:\"forum\";s:0:\"\";s:5:\"album\";s:0:\"\";}s:5:\"skewy\";a:3:{s:6:\"portal\";s:0:\"\";s:5:\"forum\";s:0:\"\";s:5:\"album\";s:0:\"\";}}');
 INSERT INTO pre_common_setting VALUES ('watermarktrans', 'a:3:{s:6:\"portal\";s:2:\"50\";s:5:\"forum\";i:50;s:5:\"album\";i:50;}');
 INSERT INTO pre_common_setting VALUES ('watermarktype', 'a:3:{s:6:\"portal\";s:3:\"png\";s:5:\"forum\";s:3:\"png\";s:5:\"album\";s:3:\"png\";}');
-INSERT INTO pre_common_setting VALUES ('indexhot','a:7:{s:6:\"status\";s:1:\"1\";s:5:\"limit\";s:2:\"10\";s:4:\"days\";s:1:\"7\";s:10:\"expiration\";s:3:\"900\";s:10:\"messagecut\";s:3:\"200\";s:5:\"width\";i:100;s:6:\"height\";i:70;}');
+INSERT INTO pre_common_setting VALUES ('indexhot','a:7:{s:6:\"status\";s:1:\"0\";s:5:\"limit\";s:2:\"10\";s:4:\"days\";s:1:\"7\";s:10:\"expiration\";s:3:\"900\";s:10:\"messagecut\";s:3:\"200\";s:5:\"width\";i:100;s:6:\"height\";i:70;}');
 INSERT INTO pre_common_setting VALUES ('indextype','classics');
 INSERT INTO pre_common_setting VALUES ('infosidestatus','0');
 INSERT INTO pre_common_setting VALUES ('initcredits','0,0,0,0,0,0,0,0,0');
@@ -351,7 +381,7 @@ INSERT INTO pre_common_setting VALUES ('maxsmilies','10');
 INSERT INTO pre_common_setting VALUES ('membermaxpages','100');
 INSERT INTO pre_common_setting VALUES ('memberperpage','25');
 INSERT INTO pre_common_setting VALUES ('memliststatus','1');
-INSERT INTO pre_common_setting VALUES ('memory', 'a:15:{s:13:"common_member";i:0;s:19:"common_member_count";i:0;s:20:"common_member_status";i:0;s:21:"common_member_profile";i:0;s:24:"common_member_field_home";i:0;s:25:"common_member_field_forum";i:0;s:10:"forum_post";i:1800;s:12:"forum_thread";i:172800;s:25:"forum_thread_forumdisplay";i:300;s:23:"forum_collectionrelated";i:0;s:16:"forum_collection";i:300;s:11:"home_follow";i:86400;s:10:"forumindex";i:30;s:8:"diyblock";i:300;s:14:"diyblockoutput";i:30;}');
+INSERT INTO pre_common_setting VALUES ('memory', 'a:16:{s:13:"common_member";i:0;s:19:"common_member_count";i:0;s:20:"common_member_status";i:0;s:21:"common_member_profile";i:0;s:24:"common_member_field_home";i:0;s:25:"common_member_field_forum";i:0;s:20:"common_member_verify";i:0;s:12:"forum_thread";i:172800;s:25:"forum_thread_forumdisplay";i:300;s:23:"forum_collectionrelated";i:0;s:15:"forum_postcache";i:300;s:16:"forum_collection";i:300;s:11:"home_follow";i:86400;s:10:"forumindex";i:30;s:8:"diyblock";i:300;s:14:"diyblockoutput";i:30;}');
 INSERT INTO pre_common_setting VALUES ('minpostsize','10');
 INSERT INTO pre_common_setting VALUES ('mobile','a:10:{s:11:\"allowmobile\";i:0;s:13:\"mobileforward\";i:1;s:14:\"mobileregister\";i:0;s:13:\"mobilecharset\";s:5:\"utf-8\";s:16:\"mobilesimpletype\";i:0;s:18:\"mobiletopicperpage\";i:10;s:17:\"mobilepostperpage\";i:5;s:15:\"mobilecachetime\";i:0;s:15:\"mobileforumview\";i:0;s:13:\"mobilepreview\";i:1;}');
 INSERT INTO pre_common_setting VALUES ('moddisplay','flat');
@@ -539,11 +569,11 @@ INSERT INTO pre_common_setting VALUES ('card', 'a:1:{s:4:"open";s:1:"0";}');
 INSERT INTO pre_common_setting VALUES ('report_receive', 'a:2:{s:9:"adminuser";a:1:{i:0;s:1:"1";}s:12:"supmoderator";N;}');
 INSERT INTO pre_common_setting VALUES ('leftsideopen', '0');
 INSERT INTO pre_common_setting VALUES ('showexif', '0');
-INSERT INTO pre_common_setting VALUES ('followreferer', '1');
 INSERT INTO pre_common_setting VALUES ('followretainday', '7');
 INSERT INTO pre_common_setting VALUES ('newbie', '20');
 INSERT INTO pre_common_setting VALUES ('collectionteamworkernum', '3');
 INSERT INTO pre_common_setting VALUES ('collectionnum', '10');
+INSERT INTO pre_common_setting VALUES ('blockmaxaggregationitem','20000');
 
 INSERT INTO pre_common_smiley VALUES ('1','1','1','smiley',':)','smile.gif');
 INSERT INTO pre_common_smiley VALUES ('2','1','2','smiley',':(','sad.gif');

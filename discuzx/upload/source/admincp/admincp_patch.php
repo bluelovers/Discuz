@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_patch.php 25826 2011-11-23 09:13:24Z monkey $
+ *      $Id: admincp_patch.php 28113 2012-02-22 09:25:55Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -151,7 +151,7 @@ if($operation == 'patchsetting') {
 		if($failed) {
 			$failstr = '';
 			foreach($failed as $v) {
-				$failstr .= '安全补丁'.$v['serial'].'&nbsp;&nbsp;&nbsp;&nbsp;失败原因: '.$v['reason']."<br>\r\n";
+				$failstr .= $lang['founder_patch_fixpatch'].$v['serial'].'&nbsp;&nbsp;&nbsp;&nbsp;'.$lang['founder_patch_failedreason'].': '.$v['reason']."<br>\r\n";
 			}
 			cpmsg('patch_updatesetting_failed', 'action=patch&operation='.$operation, 'error', array('list' => $failstr));
 		} else {

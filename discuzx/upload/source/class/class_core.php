@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_core.php 27245 2012-01-12 04:07:04Z zhangguosheng $
+ *      $Id: class_core.php 27823 2012-02-15 06:40:26Z zhangguosheng $
  */
 
 error_reporting(E_ALL);

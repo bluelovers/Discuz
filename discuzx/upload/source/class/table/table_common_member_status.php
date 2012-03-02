@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_member_status.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_common_member_status.php 28405 2012-02-29 03:47:50Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -18,13 +18,12 @@ class table_common_member_status extends discuz_table_archive
 		$this->_table = 'common_member_status';
 		$this->_pk    = 'uid';
 		$this->_pre_cache_key = 'common_member_status_';
-		$this->_cache_ttl = 0;
 
 		parent::__construct();
 	}
 
 	public function increase($uids, $setarr) {
-		$uids = array_map('dintval', (array)$uids);
+		$uids = array_map('intval', (array)$uids);
 		$sql = array();
 		$allowkey = array('buyercredit', 'sellercredit', 'favtimes', 'sharetimes');
 		foreach($setarr as $key => $value) {
@@ -51,7 +50,11 @@ class table_common_member_status extends discuz_table_archive
 	}
 
 	public function fetch_all_orderby_lastpost($uids, $start, $limit) {
-		return DB::fetch_all('SELECT * FROM %t WHERE uid IN(%n) ORDER BY lastpost DESC '.DB::limit($start, $limit), array($this->_table, $uids), $this->_pk);
+		$uids = dintval($uids, true);
+		if($uids) {
+			return DB::fetch_all('SELECT * FROM %t WHERE uid IN(%n) ORDER BY lastpost DESC '.DB::limit($start, $limit), array($this->_table, $uids), $this->_pk);
+		}
+		return array();
 	}
 
 	public function count_by_lastactivity_invisible($timestamp, $invisible = 0) {
@@ -81,6 +84,7 @@ class table_common_member_status extends discuz_table_archive
 
 	public function fetch_all_onlines($uids, $lastactivity, $start = 0, $limit = 0) {
 		$data = array();
+		$uids = dintval($uids, true);
 		if(!empty($uids)) {
 			$ppp = ($ppp = getglobal('ppp')) ? $ppp + 30 : 100;
 			if(count($uids) > $ppp) {

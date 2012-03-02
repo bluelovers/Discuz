@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_forum_optionvalue.php 27524 2012-02-03 04:18:28Z svn_project_zhangjie $
+ *      $Id: table_forum_optionvalue.php 27738 2012-02-13 10:02:53Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -22,6 +22,10 @@ class table_forum_optionvalue extends discuz_table
 	}
 
 	public function create($sortid, $fields, $dbcharset) {
+		if(!$sortid || !$fields || !$dbcharset) {
+			return;
+		}
+		$sortid = intval($sortid);
 		$this->_table = 'forum_optionvalue'.$sortid;
 		$query = DB::query("SHOW TABLES LIKE '%t'", array($this->_table));
 		if(DB::num_rows($query) != 1) {
@@ -33,11 +37,19 @@ class table_forum_optionvalue extends discuz_table
 	}
 
 	public function truncate($sortid) {
+		if(!$sortid) {
+			return;
+		}
+		$sortid = intval($sortid);
 		$this->_table = 'forum_optionvalue'.$sortid;
 		DB::query("TRUNCATE %t", array($this->_table));
 	}
 
 	public function showcolumns($sortid) {
+		if(!$sortid) {
+			return;
+		}
+		$sortid = intval($sortid);
 		$this->_table = 'forum_optionvalue'.$sortid;
 		$db = DB::object();
 		if($db->version() > '4.1') {
@@ -53,11 +65,19 @@ class table_forum_optionvalue extends discuz_table
 	}
 
 	public function alter($sortid, $sql) {
+		if(!$sortid) {
+			return;
+		}
+		$sortid = intval($sortid);
 		$this->_table = 'forum_optionvalue'.$sortid;
 		DB::query("ALTER TABLE %t %i", array($this->_table, $sql));
 	}
 
 	public function drop($sortid) {
+		if(!$sortid) {
+			return;
+		}
+		$sortid = intval($sortid);
 		$this->_table = 'forum_optionvalue'.$sortid;
 		DB::query("DROP TABLE IF EXISTS %t", array($this->_table));
 	}
@@ -84,6 +104,10 @@ class table_forum_optionvalue extends discuz_table
 	}
 
 	public function fetch_all_tid($sortid, $where) {
+		if(!$sortid) {
+			return;
+		}
+		$sortid = intval($sortid);
 		$this->_table = 'forum_optionvalue'.$sortid;
 		$query = DB::query("SELECT tid FROM %t %i", array($this->_table, $where));
 		$return = array();
@@ -94,11 +118,19 @@ class table_forum_optionvalue extends discuz_table
 	}
 
 	public function update($sortid, $tid, $fid, $fields) {
+		if(!$sortid || !$fields) {
+			return;
+		}
+		$sortid = intval($sortid);
 		$this->_table = 'forum_optionvalue'.$sortid;
 		DB::query("UPDATE %t SET %i WHERE tid=%d AND fid=%d", array($this->_table, $fields, $tid, $fid));
 	}
 
 	public function insert($sortid, $fields, $replace = false) {
+		if(!$sortid || !$fields) {
+			return;
+		}
+		$sortid = intval($sortid);
 		$this->_table = 'forum_optionvalue'.$sortid;
 		DB::query("%i INTO %t %i", array(!$replace ? 'INSERT' : 'REPLACE', $this->_table, $fields));
 	}

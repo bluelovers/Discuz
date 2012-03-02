@@ -4,14 +4,12 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_blog.php 26636 2011-12-19 02:26:51Z monkey $
+ *      $Id: spacecp_blog.php 28297 2012-02-27 08:35:59Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
-
-$_G['disabledwidthauto'] = 1;
 
 $blogid = empty($_GET['blogid'])?0:intval($_GET['blogid']);
 $op = empty($_GET['op'])?'':$_GET['op'];
@@ -38,7 +36,7 @@ if($blogid) {
 }
 
 if(empty($blog)) {
-	if(!checkperm('allowblog')) {
+	if(!helper_access::check_module('blog') || !checkperm('allowblog')) {
 		showmessage('no_authority_to_add_log', '', array(), array('return' => true));
 	}
 
@@ -59,7 +57,7 @@ if(empty($blog)) {
 	}
 }
 
-if(submitcheck('blogsubmit', 0, $seccodecheck, $secqaacheck)) {
+if(submitcheck('blogsubmit', 0, $seccodecheck, $secqaacheck) && helper_access::check_module('blog')) {
 
 	if(empty($blog['blogid'])) {
 		$blog = array();

@@ -37,7 +37,7 @@
 					</td>
 				</tr>
 				<tr class="tbmu">
-					<th>$_G[setting][navs][3][navname]:</th>
+					<th>{lang tgroup}:</th>
 					<td>
 						<!--{loop $cols['tgroup'] $value}-->
 						<label $actives[$value]><input type="checkbox" name="types[]" value="$value" class="pc" {if in_array($value, $_GET[types])} checked="checked"{/if} /><!--{eval echo lang('spacecp', "do_stat_$value");}--></label> &nbsp;
@@ -45,7 +45,7 @@
 					</td>
 				</tr>
 				<tr class="tbmu">
-					<th>$_G[setting][navs][4][navname]:</th>
+					<th>{lang home}:</th>
 					<td>
 						<!--{loop $cols['home'] $value}-->
 						<label$actives[$value]><input type="checkbox" name="types[]" value="$value" class="pc" {if in_array($value, $_GET[types])} checked="checked"{/if} /><!--{eval echo lang('spacecp', "do_stat_$value");}--></label> &nbsp;

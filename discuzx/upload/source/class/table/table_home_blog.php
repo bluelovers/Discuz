@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_home_blog.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_home_blog.php 28045 2012-02-21 08:13:46Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -21,31 +21,41 @@ class table_home_blog extends discuz_table
 		parent::__construct();
 	}
 
-	public function fetch_by_id_idtype($id, $idtype) {
-		return DB::fetch_first('SELECT * FROM %t WHERE %i', array($this->_table, DB::field($idtype, $id)));
+	public function fetch_by_id_idtype($id) {
+		if(!$id) {
+			return null;
+		}
+		return DB::fetch_first('SELECT * FROM %t WHERE %i', array($this->_table, DB::field('blogid', $id)));
 	}
 	public function update_dateline_by_id_idtype_uid($id, $idtype, $dateline, $uid) {
 		return DB::update($this->_table, array('dateline' => $dateline), DB::field($idtype, $id).' AND '.DB::field('uid', $uid));
 	}
 	public function range($start = 0, $limit = 0, $ordersc = 'DESC', $orderby = 'dateline', $friend = null, $status = null, $uid = null, $dateline = null) {
 		$wheresql = '1';
-		$wheresql .= $friend !== null ? ' AND '.DB::field('friend', $friend) : '';
+		$wheresql .= $friend ? ' AND '.DB::field('friend', $friend) : '';
 		$wheresql .= $uid ? ' AND '.DB::field('uid', $uid) : '';
-		$wheresql .= $status !== null ? ' AND '.DB::field('status', $status) : '';
+		$wheresql .= $status ? ' AND '.DB::field('status', $status) : '';
 		$wheresql .= $dateline ? ' AND '.DB::field('dateline', $dateline, '>=') : '';
-		$wheresql .= ' ORDER BY '.DB::order($orderby, $ordersc);
+		if(in_array($orderby, array('hot', 'dateline'))) {
+			$wheresql .= ' ORDER BY '.DB::order($orderby, $ordersc);
+		}
 		$wheresql .= ' '.DB::limit($start, $limit);
 
 		return DB::fetch_all('SELECT * FROM %t WHERE %i', array($this->_table, $wheresql), $this->_pk);
 	}
 
 	public function fetch_all($blogid, $orderby = '', $ordersc = '', $start = 0, $limit = 0) {
-		$wheresql = DB::field('blogid', $blogid);
-		if($orderby && $ordersc) {
-			$wheresql .= ' ORDER BY '.DB::order($orderby, $ordersc);
+		if(!$blogid) {
+			return null;
 		}
-		if($limit) {
-			$wheresql .= ' '.DB::limit($start, $limit);
+
+		$wheresql = DB::field('blogid', $blogid);
+
+		if($orderby = DB::order($orderby, $ordersc)) {
+			$wheresql .= ' ORDER BY '.$orderby;
+		}
+		if($limit = DB::limit($start, $limit)) {
+			$wheresql .= ' '.$limit;
 		}
 		return DB::fetch_all('SELECT * FROM %t WHERE %i', array($this->_table, $wheresql), $this->_pk);
 	}
@@ -69,6 +79,9 @@ class table_home_blog extends discuz_table
 
 	public function update_click($blogid, $clickid, $incclick) {
 		$clickid = intval($clickid);
+		if($clickid < 1 || $clickid > 8) {
+			return null;
+		}
 		return DB::query('UPDATE %t SET click'.$clickid.' = click'.$clickid.'+\'%d\' WHERE blogid = %d', array($this->_table, $incclick, $blogid));
 	}
 
@@ -87,7 +100,7 @@ class table_home_blog extends discuz_table
 			$keywordsrch = '0';
 			$keyword = preg_replace("/( OR |\|)/is", "+", $keyword);
 		}
-		$keyword = str_replace('*', '%', addcslashes($keyword, '%_'));
+		$keyword = str_replace('*', '%', addcslashes(daddslashes($keyword), '%_'));
 		foreach(explode('+', $keyword) as $text) {
 			$text = trim($text);
 			if($text) {
@@ -105,15 +118,30 @@ class table_home_blog extends discuz_table
 	}
 
 	public function fetch_blogid_by_uid($uid, $start = 0, $limit = 0) {
+		if(!$uid) {
+			return null;
+		}
 		return DB::fetch_all('SELECT blogid FROM %t WHERE uid IN (%n) %i', array($this->_table, $uid, DB::limit($start, $limit)), $this->_pk);
 	}
 
 	public function fetch_all_by_uid($uid, $orderby = 'dateline', $start = 0, $limit = 0) {
-		return DB::fetch_all('SELECT * FROM %t WHERE uid IN (%n) ORDER BY %i', array($this->_table, $uid, DB::order($orderby, 'DESC').' '.DB::limit($start, $limit)), $this->_pk);
+		if(!$uid) {
+			return null;
+		}
+		if($orderby = DB::order($orderby, 'DESC')) {
+			$order = 'ORDER BY '.$orderby;
+		}
+		return DB::fetch_all('SELECT * FROM %t WHERE uid IN (%n) %i', array($this->_table, $uid, $order.' '.DB::limit($start, $limit)), $this->_pk);
 	}
 
 	public function fetch_all_by_hot($hot, $orderby = 'dateline', $start = 0, $limit = 0) {
-		return DB::fetch_all('SELECT * FROM %t WHERE hot>=%d ORDER BY %i', array($this->_table, $hot, DB::order($orderby, 'DESC').' '.DB::limit($start, $limit)), $this->_pk);
+		if(!$uid) {
+			return null;
+		}
+		if($orderby = DB::order($orderby, 'DESC')) {
+			$order = 'ORDER BY '.$orderby;
+		}
+		return DB::fetch_all('SELECT * FROM %t WHERE hot>=%d %i', array($this->_table, $hot, $order.' '.DB::limit($start, $limit)), $this->_pk);
 	}
 
 	public function count_by_catid($catid) {
@@ -125,19 +153,31 @@ class table_home_blog extends discuz_table
 	}
 
 	public function delete_by_catid($catid) {
+		if(!$catid) {
+			return null;
+		}
 		return DB::delete($this->_table, DB::field('catid', $catid));
 	}
 
 	public function delete_by_uid($uids) {
+		if(!$uids) {
+			return null;
+		}
 		return DB::delete($this->_table, DB::field('uid', $uids));
 	}
 
 	public function update_by_catid($catid, $data) {
+		if(empty($data) || !is_array($data) || !$catid) {
+			return null;
+		}
 		return DB::update($this->_table, $data, DB::field('catid', $catid));
 	}
 
 	public function count_uid_by_blogid($blogid) {
-		return DB::fetch_all('SELECT uid, COUNT(blogid) AS count %t WHERE blogid IN (%n) GROUP BY uid', array($this->_table, $blogid));
+		if(!is_array($blogid) || !$blogid) {
+			return null;
+		}
+		return DB::fetch_all('SELECT uid, COUNT(blogid) AS count FROM %t WHERE blogid IN (%n) GROUP BY uid', array($this->_table, $blogid));
 	}
 
 	public function count_all_by_search($blogid = null, $uids = null, $starttime = null, $endtime = null, $hot1 = null, $hot2 = null, $viewnum1 = null, $viewnum2 = null, $replynum1 = null, $replynum2 = null, $friend = null, $ip = null, $keywords = null, $lengthlimit = null, $classid = null, $catid = null, $subject = null, $countwithoutjoin = false) {
@@ -161,17 +201,20 @@ class table_home_blog extends discuz_table
 		$sql .= $friend ? ' AND b.'.DB::field('friend', $friend) : '';
 
 		$ip = str_replace('*', '', $ip);
-		$sql .= $ip ? ' AND bf.'.DB::field('postip', "%$ip%", 'like') : '';
+		if($fetchtype == 1) {
+			$sql .= $ip ? ' AND bf.'.DB::field('postip', "%$ip%", 'like') : '';
+		}
 
 		$orderby = $orderby ? $orderby : 'dateline';
 		$ordersc = $ordersc ? $ordersc : 'DESC';
 
-		if($keywords != '') {
+		if($fetchtype == 1 && $keywords != '' && !is_array($keywords)) {
 			$sqlkeywords = '';
 			$or = '';
 			$keywords = explode(',', str_replace(' ', '', $keywords));
 
 			for($i = 0; $i < count($keywords); $i++) {
+				$keywords[$i] = daddslashes($keywords[$i]);
 				if(preg_match("/\{(\d+)\}/", $keywords[$i])) {
 					$keywords[$i] = preg_replace("/\\\{(\d+)\\\}/", ".{0,\\1}", preg_quote($keywords[$i], '/'));
 					$sqlkeywords .= " $or b.subject REGEXP '".$keywords[$i]."' OR bf.message REGEXP '".$keywords[$i]."'";
@@ -180,12 +223,16 @@ class table_home_blog extends discuz_table
 				}
 				$or = 'OR';
 			}
-			$sql .= " AND ($sqlkeywords)";
+			if($sqlkeywords) {
+				$sql .= " AND ($sqlkeywords)";
+			}
 		}
 
 		$sql .= $subject ? ' AND b.'.DB::field('subject', "%$subject%", 'like') : '';
 		$sql .= $catid ? ' AND b.'.DB::field('catid', $catid) : '';
-		$sql .= $lengthlimit ? ' AND LENGTH(bf.message) > '.intval($lengthlimit) : '';
+		if($fetchtype == 1) {
+			$sql .= $lengthlimit ? ' AND LENGTH(bf.message) > '.intval($lengthlimit) : '';
+		}
 
 
 		if($fetchtype == 3) {
@@ -197,15 +244,22 @@ class table_home_blog extends discuz_table
 		}
 
 		if($findex) {
-			$findex = 'USE INDEX('.$findex.')';
+			$findex = 'USE INDEX(dateline)';
+		} else {
+			$findex = '';
 		}
 
 		if($fetchtype == 3) {
 			return DB::result_first("SELECT $selectfield FROM %t b ".(($countwithoutjoin === false) ? 'LEFT JOIN %t bf USING(blogid)  ' : '').
 				"WHERE 1 %i", ($countwithoutjoin === false) ? array($this->_table, 'home_blogfield', $sql) : array($this->_table, $sql));
 		} else {
+			if($order = DB::order($orderby, $ordersc)) {
+				$order = 'ORDER BY b.'.$order;
+			} else {
+				$order = '';
+			}
 			return DB::fetch_all("SELECT $selectfield FROM %t b {$findex} LEFT JOIN %t bf USING(blogid) " .
-				"WHERE 1 %i", array($this->_table, 'home_blogfield', $sql.' ORDER BY b.'.DB::order($orderby, $ordersc).' '.DB::limit($start, $limit)));
+				"WHERE 1 %i", array($this->_table, 'home_blogfield', $sql.' '.$order.' '.DB::limit($start, $limit)));
 		}
 
 	}

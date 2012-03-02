@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_forum_debatepost.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_forum_debatepost.php 27745 2012-02-14 01:43:38Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -30,6 +30,9 @@ class table_forum_debatepost extends discuz_table
 	}
 
 	public function get_stand_by_bestuid($tid, $bestuid, $excludeuids) {
+		if(!$excludeuids) {
+			return;
+		}
 		return DB::result_first("SELECT stand FROM %t WHERE tid=%d AND uid=%d AND stand>'0' AND %i LIMIT 1", array($this->_table, $tid, $bestuid, DB::field('uid', $excludeuids)));
 	}
 
@@ -46,6 +49,9 @@ class table_forum_debatepost extends discuz_table
 		return DB::result_first("SELECT stand FROM %t WHERE tid=%d AND uid=%d AND stand>'0' ORDER BY dateline LIMIT 1", array($this->_table, $tid, $uid));
 	}
 	public function delete_by_tid($tids) {
+		if(!$tids) {
+			return;
+		}
 		return DB::delete($this->_table, DB::field('tid', $tids));
 	}
 

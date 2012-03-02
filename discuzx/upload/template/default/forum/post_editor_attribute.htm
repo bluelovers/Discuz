@@ -24,7 +24,7 @@
 			<label id="extra_tag_b" onclick="showExtra('extra_tag')"><span id="extra_tag_chk">{lang posttag}</span></label>
 		<!--{/if}-->
 		<!--{if $_G['group']['allowsetpublishdate'] && ($_GET[action] == 'newthread' || ($_GET[action] == 'edit' && $isfirstpost && $thread['displayorder'] == -4))}-->
-			<label id="extra_pubdate_b" onclick="showExtra('extra_pubdate')"><span id="extra_pubdate_chk">定时发布</span></label>
+			<label id="extra_pubdate_b" onclick="showExtra('extra_pubdate')"><span id="extra_pubdate_chk">{lang post_timer}</span></label>
 		<!--{/if}-->
 	</div>
 
@@ -133,10 +133,10 @@
 						<dd>
 							<input type="text" name="stopfloor" id="stopfloor" class="px" autocomplete="off" value="$postinfo[rush][stopfloor]" onkeyup="$('rushreply').checked = true;" />
 						</dd>
-						<dt><label for="creditlimit"><!--{if $_G['setting']['creditstransextra'][11]}-->{$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][11]][title]}<!--{else}-->积分<!--{/if}-->下限:</label></dt>
+						<dt><label for="creditlimit"><!--{if $_G['setting']['creditstransextra'][11]}-->{$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][11]][title]}<!--{else}-->{lang credits}<!--{/if}-->{lang min_limit}:</label></dt>
 						<dd>
 							<input type="text" name="creditlimit" id="creditlimit" class="px" autocomplete="off" value="$postinfo[rush][creditlimit]" onkeyup="$('rushreply').checked = true;" />
-							<p class="xg1"><!--{if $_G['setting']['creditstransextra'][11]}-->({$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][11]][title]})<!--{else}-->总积分<!--{/if}-->大于此设置才能参与抢楼，可不填</p>
+							<p class="xg1"><!--{if $_G['setting']['creditstransextra'][11]}-->({$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][11]][title]})<!--{else}-->{lang total_credits}<!--{/if}-->{lang post_rushreply_credit}</p>
 						</dd>
 					</dl>
 				</div>
@@ -144,7 +144,7 @@
 		<!--{/if}-->
 		<!--{if $_G['group']['allowsetpublishdate'] && ($_GET[action] == 'newthread' || ($_GET[action] == 'edit' && $isfirstpost && $thread['displayorder'] == -4))}-->
 			<div class="exfm cl" id="extra_pubdate_c" style="display: none;">
-				<label><input type="checkbox" name="cronpublish" onclick="if(this.checked) {$('cronpublishdate').click();doane(event,false);};extraCheck(5)" id="cronpublish" value="true" class="pc"{if $cronpublish} checked="checked"{/if} />定时发布</label>
+				<label><input type="checkbox" name="cronpublish" onclick="if(this.checked) {$('cronpublishdate').click();doane(event,false);};extraCheck(5);hidenFollowBtn(this.checked);" id="cronpublish" value="true" class="pc"{if $cronpublish} checked="checked"{/if} />{lang post_timer}</label>
 				<input type="text" name="cronpublishdate" id="cronpublishdate" class="px" onclick="showcalendar(event, this, true, false, false, true);" autocomplete="off" value="{$cronpublishdate}" onchange="if(this.value) $('cronpublish').checked = true;">
 			</div>
 		<!--{/if}-->

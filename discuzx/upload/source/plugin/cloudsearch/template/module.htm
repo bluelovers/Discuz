@@ -29,9 +29,9 @@ $recwords[$k+1] = $v;
 						<ul class="cl">
 						<!--{loop $recwords $key $recword}-->
 					    <!--{if empty($recword[inc_num])}-->
-						    <li><a href="$searchparams[url]?q=$recword[word]&source=word.hotopicf.{$key}{$srchotquery}&num=$recword[result_num]" target="_blank">$recword[word]<span class="number">($recword[result_num])</span></a></li>
+						    <li><a href="$searchparams[url]?q=$recword[word]&source=word.hotopicf.$key$srchotquery&num=$recword[result_num]" target="_blank">$recword[word]<span class="number">($recword[result_num])</span></a></li>
 					    <!--{else}-->
-						    <li class="clewcolor"><a href="$searchparams[url]?q=$recword[word]&source=word.hotopicf.{$key}{$srchotquery}&num=$recword[result_num]" target="_blank">$recword[word]<span class="number">($recword[result_num])</span></a></li>
+						    <li class="clewcolor"><a href="$searchparams[url]?q=$recword[word]&source=word.hotopicf.$key$srchotquery&num=$recword[result_num]" target="_blank">$recword[word]<span class="number">($recword[result_num])</span></a></li>
 					    <!--{/if}-->
 						<!--{/loop}-->
 						</ul>
@@ -329,6 +329,8 @@ $rel_title = urlencode($_G['forum_thread']['subject']);
 	var rel_prepos = "$_GET[pre_pos]";
 	var my_siteid = "$_G['setting']['my_siteid']";
 	var rel_uid = "$_G['uid']";
+	var rel_views = "$_G['forum_thread']['views']";
+	var rel_replies = "$_G['forum_thread']['replies']";
 	</script>
 	<script type="text/javascript" type="text/javascript" src="http://cache.soso.com/30d/js/discuz/relate_subject.js"></script>
 	<!--{/if}-->

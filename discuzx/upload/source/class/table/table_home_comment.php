@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_home_comment.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_home_comment.php 27895 2012-02-16 07:26:42Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -29,10 +29,16 @@ class table_home_comment extends discuz_table
 	}
 
 	public function delete_by_uid_idtype($uid) {
+		if(!$uid){
+			return null;
+		}
 		DB::delete($this->_table, DB::field('uid', $uid).' OR '.DB::field('authorid', $uid).' OR ('.DB::field('id', $uid).' AND idtype=\'uid\')');
 	}
 
 	public function delete_by_uid($uids) {
+		if(!$uids){
+			return null;
+		}
 		DB::delete($this->_table, DB::field('uid', $uids).' OR ('.DB::field('id', $uids).' AND idtype=\'uid\')');
 	}
 
@@ -64,7 +70,7 @@ class table_home_comment extends discuz_table
 			$condition[] = DB::field('authorid', $authorid);
 		}
 
-		if(!count($condition)) {
+		if(empty($data) || !is_array($data) || !count($condition)) {
 			return null;
 		}
 
@@ -100,6 +106,9 @@ class table_home_comment extends discuz_table
 	}
 
 	public function fetch($cid, $authorid = '') {
+		if(!$cid) {
+			return null;
+		}
 		$wherearr = array();
 		$wherearr[] = DB::field('cid', $cid);
 		if($authorid) {
@@ -111,7 +120,7 @@ class table_home_comment extends discuz_table
 		return DB::fetch_first('SELECT * FROM '.DB::table($this->_table).' '.$wheresql);
 	}
 
-	public function fetch_all_search($fetchtype, $ids, $authorid, $uids, $useip, $keywords, $idtype, $starttime, $endtime, $start, $limit, $basickeywords = 0, $findex = '') {
+	public function fetch_all_search($fetchtype, $ids, $authorid, $uids, $useip, $keywords, $idtype, $starttime, $endtime, $start, $limit, $basickeywords = 0) {
 		$parameter = array($this->_table);
 		$wherearr = array();
 		if($ids) {
@@ -127,11 +136,11 @@ class table_home_comment extends discuz_table
 			$wherearr[] = 'idtype=%s';
 		}
 		if($starttime) {
-			$parameter[] = strtotime($starttime);
+			$parameter[] = is_numeric($starttime) ? $starttime : strtotime($starttime);
 			$wherearr[] = 'dateline>%d';
 		}
 		if($endtime) {
-			$parameter[] = $endtime;
+			$parameter[] = is_numeric($endtime) ? $endtime : strtotime($endtime);
 			$wherearr[] = 'dateline<%d';
 		}
 		if($uids) {
@@ -173,9 +182,6 @@ class table_home_comment extends discuz_table
 			$parameter[] = DB::limit($start, $limit);
 			$ordersql = ' ORDER BY dateline DESC %i';
 		}
-		if($findex) {
-			$findex = 'USE INDEX('.$findex.')';
-		}
 		$wheresql = !empty($wherearr) && is_array($wherearr) ? ' WHERE '.implode(' AND ', $wherearr) : '';
 		if(empty($wheresql)) {
 			return null;
@@ -183,7 +189,7 @@ class table_home_comment extends discuz_table
 		if($fetchtype == 3) {
 			return DB::result_first("SELECT $selectfield FROM %t $wheresql", $parameter);
 		} else {
-			return DB::fetch_all("SELECT $selectfield FROM %t {$findex} $wheresql $ordersql", $parameter);
+			return DB::fetch_all("SELECT $selectfield FROM %t $wheresql $ordersql", $parameter);
 		}
 	}
 

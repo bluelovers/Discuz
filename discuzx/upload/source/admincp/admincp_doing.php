@@ -4,14 +4,14 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_doing.php 26766 2011-12-22 09:39:52Z chenmengshu $
+ *      $Id: admincp_doing.php 27696 2012-02-10 03:39:50Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
 }
 
-$detail = !empty($_GET['users']) ? true : $_GET['detail'];
+$detail = $_GET['detail'];
 $users = $_GET['users'];
 $userip = $_GET['userip'];
 $keywords = $_GET['keywords'];

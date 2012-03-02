@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_favorite.php 26754 2011-12-22 08:14:22Z zhengqingpeng $
+ *      $Id: spacecp_favorite.php 28511 2012-03-02 01:47:11Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -16,6 +16,10 @@ if($_GET['op'] == 'delete') {
 	if($_GET['checkall']) {
 		if($_GET['favorite']) {
 			C::t('home_favorite')->delete($_GET['favorite'], false, $_G['uid']);
+			if($_G['setting']['cloud_status'] &&  $_G['setting']['connect']['allow'] && $_G['member']['conisbind']) {
+				$favoriteService = Cloud::loadClass('Service_Client_Favorite');
+				$favoriteService->remove($_G['uid'], $_GET['favorite'], TIMESTAMP);
+			}
 		}
 		showmessage('favorite_delete_succeed', 'home.php?mod=space&uid='.$_G['uid'].'&do=favorite&view=me&type='.$_GET['type'].'&quickforward=1');
 	} else {
@@ -27,6 +31,10 @@ if($_GET['op'] == 'delete') {
 
 		if(submitcheck('deletesubmit')) {
 			C::t('home_favorite')->delete($favid);
+			if($_G['setting']['cloud_status'] &&  $_G['setting']['connect']['allow']) {
+				$favoriteService = Cloud::loadClass('Service_Client_Favorite');
+				$favoriteService->remove($_G['uid'], $favid);
+			}
 			showmessage('do_success', 'home.php?mod=space&uid='.$_G['uid'].'&do=favorite&view=me&type='.$_GET['type'].'&quickforward=1', array('favid' => $favid, 'id' => $thevalue['id']), array('showdialog'=>1, 'showmsg' => true, 'closetime' => true, 'locationtime' => 3));
 		}
 	}
@@ -89,8 +97,8 @@ if($_GET['op'] == 'delete') {
 		showmessage('favorite_cannot_favorite');
 	}
 
-	$fav = C::t('home_favorite')->fetch_by_id_idtype($id, $idtype);
-	if($fav && $fav['uid'] == $_G['uid']) {
+	$fav = C::t('home_favorite')->fetch_by_id_idtype($id, $idtype, $_G['uid']);
+	if($fav) {
 		showmessage('favorite_repeat');
 	}
 	$description = '';
@@ -107,17 +115,20 @@ if($_GET['op'] == 'delete') {
 			'description' => getstr($_POST['description'], '', 0, 0, 1),
 			'dateline' => TIMESTAMP
 		);
-		C::t('home_favorite')->insert($arr);
+		$favid = C::t('home_favorite')->insert($arr, true);
+		if($_G['setting']['cloud_status'] &&  $_G['setting']['connect']['allow'] && $_G['member']['conisbind']) {
+			$favoriteService = Cloud::loadClass('Service_Client_Favorite');
+			$favoriteService->add($arr['uid'], $favid, $arr['id'], $arr['idtype'], $arr['title'], $arr['description'], TIMESTAMP);
+		}
 		switch($type) {
 			case 'thread':
 				C::t('forum_thread')->increase($id, array('favtimes'=>1));
-				if($_G['setting']['heatthread']['type'] == 2) {
-					require_once libfile('function/forum');
-					update_threadpartake($id);
-				}
+				require_once libfile('function/forum');
+				update_threadpartake($id);
 				break;
 			case 'forum':
 				C::t('forum_forum')->update_forum_counter($id, 0, 0, 0, 0, 1);
+				dsetcookie('nofavfid', '', -1);
 				break;
 			case 'blog':
 				C::t('home_blog')->increase($id, $spaceuid, array('favtimes' => 1));

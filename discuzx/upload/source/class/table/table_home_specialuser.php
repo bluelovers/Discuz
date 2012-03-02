@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_home_specialuser.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_home_specialuser.php 27846 2012-02-15 09:04:33Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -31,15 +31,18 @@ class table_home_specialuser extends discuz_table
 	}
 
 	public function update_by_uid_status($uid, $status, $data) {
-		return DB::update($this->_table, $data, array('uid' => dintval($uid), 'status' => dintval($status)));
+		if(!empty($data) && is_array($data) && ($uid = dintval($uid))) {
+			return DB::update($this->_table, $data, array('uid' => $uid, 'status' => dintval($status)));
+		}
+		return 0;
 	}
 
 	public function delete_by_uid_status($uid, $status) {
-		return DB::delete($this->_table, DB::field('uid', $uid).' AND '.DB::field('status', $status));
+		return ($uid = dintval($uid)) ? DB::delete($this->_table, DB::field('uid', $uid).' AND '.DB::field('status', dintval($status))) : false;
 	}
 
 	public function fetch_by_uid_status($uid, $status) {
-		return $uid ? DB::fetch_first('SELECT * FROM %t WHERE uid=%d AND status=%d', array($this->_table, $uid, $status)) : array();
+		return ($uid = dintval($uid)) ? DB::fetch_first('SELECT * FROM %t WHERE uid=%d AND status=%d', array($this->_table, $uid, $status)) : array();
 	}
 }
 

@@ -27,7 +27,6 @@
 			<ul class="tb cl">
 				<li$actives[we]><a href="home.php?mod=space&do=debate&view=we">{lang friend_debate}</a></li>
 				<li$actives[me]><a href="home.php?mod=space&do=debate&view=me">{lang my_debate}</a></li>
-				<!--{if $_G['setting']['homestatus']}--><li$actives[all]><a href="home.php?mod=space&do=debate&view=all">{lang view_all}</a></li><!--{/if}-->
 				<!--{if $_G[group][allowpostdebate]}-->
 					<li class="o">
 						<!--{if $_G[setting][debateforumid]}-->
@@ -46,11 +45,6 @@
 			<p class="tbmu">
 				<a href="home.php?mod=space&do=debate&view=me"$typeactives[orig]>{lang my_create_debate}</a><span class="pipe">|</span>
 				<a href="home.php?mod=space&do=debate&view=me&type=reply"$typeactives[reply]>{lang my_join_debate}</a>
-			</p>
-		<!--{elseif $_GET[view] == 'all'}-->
-			<p class="tbmu">
-				<a href="home.php?mod=space&do=debate&view=all"$orderactives[dateline]>{lang newest_debate}</a><span class="pipe">|</span>
-				<a href="home.php?mod=space&do=debate&view=all&order=hot"$orderactives[hot]>{lang top_debate}</a>
 			</p>
 		<!--{/if}-->
 

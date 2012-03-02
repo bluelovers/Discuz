@@ -4,7 +4,7 @@
  *      [Discuz! X] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: soso.class.php 27610 2012-02-07 05:56:05Z monkey $
+ *      $Id: soso.class.php 28073 2012-02-22 04:59:14Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -48,7 +48,7 @@ class plugin_soso_smilies_base {
 		if($imgcode) {
 			return "[img]{$imgsrc}[/img]";
 		} else {
-			return "<img src=\"{$imgsrc}\" smilieid=\"{$imgid}\" border=\"0\" alt=\"\" />";
+			return "<img class=\"s\" src=\"{$imgsrc}\" smilieid=\"{$imgid}\" border=\"0\" alt=\"\" />";
 		}
 	}
 }
@@ -78,7 +78,7 @@ class plugin_soso_smilies extends plugin_soso_smilies_base {
 			$allowsmilies = $param['param'][4];
 			$pid = $param['param'][12];
 			if(!$smileyoff && $allowsmilies && strpos($_G['discuzcodemessage'], '{:soso_') !== false) {
-				$_G['discuzcodemessage'] = preg_replace("/\{\:soso_((e\d+)|(_\d+_\d))\:\}/e", '$this->_soso_smiles("\\1", "'.$_G['setting']['maxsmilies'].'", "'.$pid.'")', $_G['discuzcodemessage']);
+				$_G['discuzcodemessage'] = preg_replace("/\{\:soso_((e\d+)|(_\d+_\d))\:\}/e", '$this->_soso_smiles("\\1", "'.$_G['setting']['maxsmilies'].'", "'.$pid.'")', $_G['discuzcodemessage'], $_G['setting']['maxsmilies']);
 			}
 		} else {
 			$_G['discuzcodemessage'] = preg_replace("/\{\:soso_((e\d+)|(_\d+_\d))\:\}/", '', $_G['discuzcodemessage']);
@@ -137,40 +137,43 @@ class plugin_soso_smilies_home extends plugin_soso_smilies {
 	function spacecp_profile_sightml() {
 		global $_G;
 		if($_GET['ac'] == 'profile' && submitcheck('profilesubmitbtn') && !empty($_POST['sightml'])) {
-			$_POST['sightml'] = preg_replace("/\{\:soso_((e\d+)|(_\d+_\d))\:\}/e", '$this->_soso_smiles("\\1", -1, 0, 1)', $_POST['sightml']);;
+			$_POST['sightml'] = preg_replace("/\{\:soso_((e\d+)|(_\d+_\d))\:\}/e", '$this->_soso_smiles("\\1", -1, 0, 1)', $_POST['sightml'], $_G['setting']['maxsmilies']);
 		}
 	}
 
 	function spacecp_pm_output() {
+		global $_G;
 		if(!empty($GLOBALS['msglist'])) {
 			foreach($GLOBALS['msglist'] as $day => $result) {
 				foreach($result as $key => $value) {
-					$GLOBALS['msglist'][$day][$key]['message'] = preg_replace("/\{\:soso_((e\d+)|(_\d+_\d))\:\}/e", '$this->_soso_smiles("\\1", -1, 0, 0)', $GLOBALS['msglist'][$day][$key]['message']);
+					$GLOBALS['msglist'][$day][$key]['message'] = preg_replace("/\{\:soso_((e\d+)|(_\d+_\d))\:\}/e", '$this->_soso_smiles("\\1", -1, 0, 0)', $GLOBALS['msglist'][$day][$key]['message'], $_G['setting']['maxsmilies']);
 				}
 			}
 		} elseif($_GET['op'] == 'showchatmsg' && $GLOBALS['list']) {
 			foreach($GLOBALS['list'] as $key => $value) {
-				$GLOBALS['list'][$key]['message'] = preg_replace("/\{\:soso_((e\d+)|(_\d+_\d))\:\}/e", '$this->_soso_smiles("\\1", -1, 0, 0)', $GLOBALS['list'][$key]['message']);
+				$GLOBALS['list'][$key]['message'] = preg_replace("/\{\:soso_((e\d+)|(_\d+_\d))\:\}/e", '$this->_soso_smiles("\\1", -1, 0, 0)', $GLOBALS['list'][$key]['message'], $_G['setting']['maxsmilies']);
 			}
 		}
 	}
 
 	function space_pm_output() {
+		global $_G;
 		if(!empty($GLOBALS['list'])) {
 			foreach($GLOBALS['list'] as $key => $value) {
 				if(!empty($_GET['subop'])) {
-					$GLOBALS['list'][$key] = preg_replace("/\{\:soso_((e\d+)|(_\d+_\d))\:\}/e", '$this->_soso_smiles("\\1", -1, 0, 0)', $GLOBALS['list'][$key]);
+					$GLOBALS['list'][$key] = preg_replace("/\{\:soso_((e\d+)|(_\d+_\d))\:\}/e", '$this->_soso_smiles("\\1", -1, 0, 0)', $GLOBALS['list'][$key], $_G['setting']['maxsmilies']);
 				} else {
-					$GLOBALS['list'][$key] = preg_replace("/\{\:soso_((e\d+)|(_\d+_\d))\:\}/", '', $GLOBALS['list'][$key]);
+					$GLOBALS['list'][$key] = preg_replace("/\{\:soso_((e\d+)|(_\d+_\d))\:\}/", '', $GLOBALS['list'][$key], $_G['setting']['maxsmilies']);
 				}
 			}
 		}
 	}
 
 	function follow_soso_output() {
+		global $_G;
 		if(!empty($GLOBALS['list']['content'])) {
 			foreach($GLOBALS['list']['content'] as $key => $value) {
-				$GLOBALS['list']['content'][$key]['content'] = preg_replace("/\{\:soso_((e\d+)|(_\d+_\d))\:\}/e", '$this->_soso_smiles("\\1", -1, 0, 0)', $GLOBALS['list']['content'][$key]['content']);
+				$GLOBALS['list']['content'][$key]['content'] = preg_replace("/\{\:soso_((e\d+)|(_\d+_\d))\:\}/e", '$this->_soso_smiles("\\1", -1, 0, 0)', $GLOBALS['list']['content'][$key]['content'], $_G['setting']['maxsmilies']);
 			}
 		}
 	}

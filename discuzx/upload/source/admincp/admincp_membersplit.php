@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_membersplit.php 26623 2011-12-16 09:44:55Z zhangguosheng $
+ *      $Id: admincp_membersplit.php 28308 2012-02-28 01:51:52Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -15,8 +15,7 @@ cpheader();
 
 
 
-loadcache(array('membersplitstep', 'membersplitdata'));
-
+loadcache('membersplitdata');
 if(!empty($_G['cache']['membersplitstep'])) {
 	cpmsg('membersplit_split_in_backstage', 'action=membersplit&operation=manage', 'loadingform');
 }

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_forum_faq.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_forum_faq.php 27745 2012-02-14 01:43:38Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -23,11 +23,11 @@ class table_forum_faq extends discuz_table
 
 	public function fetch_all_by_fpid($fpid = '', $srchkw = '') {
 		$sql = array();
-		if($fpid !== '') {
+		if($fpid !== '' && $fpid) {
 			$sql[] = DB::field('fpid', $fpid);
 		}
 		if($srchkw) {
-			$sql[] = "title LIKE '%$srchkw%' OR message LIKE '%$srchkw%'";
+			$sql[] = DB::field('title', '%'.$srchkw.'%', 'like').' OR '.DB::field('message', '%'.$srchkw.'%', 'like');
 		}
 		$sql = implode(' AND ', $sql);
 		if($sql) {

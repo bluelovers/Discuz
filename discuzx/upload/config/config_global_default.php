@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: config_global_default.php 26118 2011-12-02 04:17:58Z monkey $
+ *      $Id: config_global_default.php 27685 2012-02-09 09:10:16Z zhangguosheng $
  */
 
 $_config = array();
@@ -87,14 +87,29 @@ $_config['db']['common']['slave_except_table'] = '';
 //内存变量前缀, 可更改,避免同服务器中的程序引用错乱
 $_config['memory']['prefix'] = 'discuz_';
 
-$_config['memory']['eaccelerator'] = 1;					// 启动对 eaccelerator 的支持
-$_config['memory']['apc'] = 1;							// 启动对 apc 的支持
-$_config['memory']['xcache'] = 1;						// 启动对 xcache 的支持
+/* reids设置, 需要PHP扩展组件支持, timeout参数的作用没有查证 */
+$_config['memory']['redis']['server'] = '';
+$_config['memory']['redis']['port'] = 6379;
+$_config['memory']['redis']['pconnect'] = 1;
+$_config['memory']['redis']['timeout'] = 0;
+/**
+ * 是否使用 Redis::SERIALIZER_IGBINARY选项,需要igbinary支持,windows下测试时请关闭，否则会出>现错误Reading from client: Connection reset by peer
+ * 支持以下选项，默认使用PHP的serializer
+ * [重要] 该选项已经取代原来的 $_config['memory']['redis']['igbinary'] 选项
+ * Redis::SERIALIZER_IGBINARY =2
+ * Redis::SERIALIZER_PHP =1
+ * Redis::SERIALIZER_NONE =0 //则不使用serialize,即无法保存array
+ */
+$_config['memory']['redis']['serializer'] = 1;
+
 $_config['memory']['memcache']['server'] = '';			// memcache 服务器地址
 $_config['memory']['memcache']['port'] = 11211;			// memcache 服务器端口
 $_config['memory']['memcache']['pconnect'] = 1;			// memcache 是否长久连接
 $_config['memory']['memcache']['timeout'] = 1;			// memcache 服务器连接超时
 
+$_config['memory']['apc'] = 1;							// 启动对 apc 的支持
+$_config['memory']['xcache'] = 1;						// 启动对 xcache 的支持
+$_config['memory']['eaccelerator'] = 1;					// 启动对 eaccelerator 的支持
 // 服务器相关设置
 $_config['server']['id']		= 1;			// 服务器编号，多webserver的时候，用于标识当前服务器的ID
 

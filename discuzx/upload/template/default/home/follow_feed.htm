@@ -1,923 +1,599 @@
-<!--{subtemplate common/header}-->
-
-<!--{if $showguide && $do == 'feed'}-->
-<div id="nv_menu" style="display:none;width: 95%;">
-	<div style="position: absolute;left: 50%;margin-left: -472px;width:944px;">
-		<img src="{IMGDIR}/flw_guide.png" alt="" />
-		<button class="pn pnc" style="margin: -50px 0 20px 430px;" onclick="hideMenu()"><span>我知道了</span></button>
+<!--{if $do == 'feed'}-->
+	<!--{template common/header}-->
+	<div id="pt" class="bm cl">
+		<div class="z">
+			<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
+			<a href="home.php?mod=follow">{lang follow}</a>
+		</div>
 	</div>
-</div>
-<script type="text/javascript">
-	showMenu({'ctrlid':'nv','pos':'13','cover':'1'});
-</script>
+	<style id="diy_style" type="text/css"></style>
+	<div class="wp">
+		<!--[diy=diy1]--><div id="diy1" class="area"></div><!--[/diy]-->
+	</div>
+	<div id="ct" class="ct2_a wp cl">
+		<!--{if $_G[setting][homestyle]}-->
+			<div class="appl">
+				<!--{subtemplate common/userabout}-->
+			</div>
+		<!--{else}-->
+		<div class="appl">
+			<div class="tbn">
+				<h2 class="mt bbda">{lang follow}</h2>
+				<ul>
+					<li$actives[follow]><a href="home.php?mod=follow&view=follow">{lang follow_following}</a></li>
+					<li$actives[special]><a href="home.php?mod=follow&view=special">{lang follow_special_following}</a></li>
+					<li$actives[other]><a href="home.php?mod=follow&view=other">{lang follow_hall}</a></li>
+					<!--{hook/follow_nav_extra}-->
+				</ul>
+			</div>
+		</div>
+		<!--{/if}-->
+		<div class="mn">
+		<!--[diy=diycontenttop]--><div id="diycontenttop" class="area"></div><!--[/diy]-->
+<!--{else}-->
+	<!--{if $_G[setting][homepagestyle]}-->
+		<!--{subtemplate home/space_header}-->
+		<div id="ct" class="ct2 wp cl">
+			<div class="mn">
+				<div class="bm">
+					<div class="bm_h">
+						<h1 class="mt">{lang follow}</h1>
+					</div>
+				<div class="bm_c">
+	<!--{else}-->
+		<!--{template common/header}-->
+		<div id="pt" class="bm cl">
+			<div class="z">
+				<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
+				<a href="home.php?mod=space&uid=$space[uid]">{$space[username]}</a> <em>&rsaquo;</em>
+				<a href="home.php?mod=follow&uid=$space[uid]&do=view&from=space">{lang follow}</a>
+			</div>
+		</div>
+		<style id="diy_style" type="text/css"></style>
+		<div class="wp">
+			<!--[diy=diy1]--><div id="diy1" class="area"></div><!--[/diy]-->
+		</div>
+		<!--{template home/space_menu}-->
+		<div id="ct" class="ct1 wp cl">
+			<div class="mn">
+				<!--[diy=diycontenttop]--><div id="diycontenttop" class="area"></div><!--[/diy]-->
+				<div class="bm bw0">
+					<div class="bm_c">
+	<!--{/if}-->
 <!--{/if}-->
 
-<div id="pt" class="bm cl">
-	<div class="z">
-		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
-		<a href="home.php?mod=follow">$_G[setting][navs][9][navname]</a>
-		$navigation
-	</div>
+		<!--{hook/follow_top}-->
 
-</div>
+		<!--{if in_array($do, array('feed', 'view'))}-->
+			<!--{if helper_access::check_module('follow') && ( $do == 'feed' || ( $do == 'view' && $viewself))}-->
+				<div id="flw_header" class="mbw bbs cl">
+					<!--{if $do == 'feed'}-->
+					<div class="my_flw_stats y">
+						<ul>
+							<li><span class="xg1">{lang follow}</span><a href="home.php?mod=space&uid=$uid"><strong class="xi2">$space['feeds']</strong></a></li>
+							<li><span class="xg1">{lang follow_add}</span><a href="home.php?mod=follow&do=following&uid=$uid"><strong class="xi2">$space['following']</strong></a></li>
+							<li><span class="xg1">{lang follow_follower}</span><a href="home.php?mod=follow&do=follower&uid=$uid"><strong class="xi2">$space['follower']</strong></a></li>
+						</ul>
+					</div>
+					<!--{/if}-->
 
-<style type="text/css">
-	/* 广播头像通用样式 */
-	.flw_avt { width: 80px; }
-		.flw_avt img { float: left; width: 48px; box-shadow: 0 1px 0 rgba(0, 0, 0, 0.7); border-radius: 4px; }
-		.flw_avt .cnr { position: relative; float: right; overflow: hidden; display: inline; margin: 20px -1px 0 12px; width: 10px; height: 20px; background: transparent url({IMGDIR}/flw_cnr_l.png) no-repeat 0 0; }
-	/* 广播区域样式 */
-	.flw_article { margin: 0 0 20px 80px; padding: 15px 20px; box-shadow: 0 1px 0 rgba(0,0,0,0.05); border: solid #DBDBDB; border-width: 0 1px 1px; border-radius: 5px; background: #F4F7F9; }
-		.flw_thread .flw_article { margin-left: 0; }
-		.flw_article h2 { font-size: 16px; }
-			.flw_article h2 img { vertical-align: middle; }
-		.flw_reply { margin-left: 20px; }
-	.flw_author, .flw_author a { color: #79869E; }
-	.flw_article .c { font-size: 14px; line-height: 1.8; }
-		.flw_article .c img { display: block; margin: 10px 0; max-width: 600px; }
-			.ie6 .flw_article .c img { width: expression(this.width > 600 ? 600 : true); }
-		.flw_article .c .s { display: inline; margin: 0; }
-	.flw_image { margin-bottom: 10px; height: 120px; }
-		.flw_image li { float: left; width: 120px; height: 120px; background: #FFF; }
-			.flw_image li img { margin: 0 !important; width: 120px; height: 120px; }
-		.flw_image_1 { float: left; margin: 0 15px 10px 0; }
-			.flw_image_1 img { margin: 0 !important; }
-	.flw_attach { margin-top: 10px; clear: both; }
-		.flw_attach li { width: 300px; margin-bottom: 5px; height: 31px; line-height: 31px; font-size: 12px; border: 1px solid #DBDBDB; border-radius: 3px; background: url({IMGDIR}/flw_attach_bg.png) repeat-x 0 -31px; box-shadow: 0 1px 0 #FFF; }
-			.flw_attach a { display: block; padding: 0 10px 0 32px; height: 31px; background: url({IMGDIR}/flw_attach_bg.png) no-repeat 10px 8px; color: #369; }
-				.flw_attach a.flw_attach_price { background-image: url({IMGDIR}/viewpay.gif); }
-				.flw_attach a:hover { text-decoration: none; background-color: #EDF1F4; }
-				.flw_attach strong { float: left; width: 160px; font-weight: normal; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
-				.flw_attach span { float: right; width: 90px; color: #999; text-align: right; overflow: hidden; }
-	.flw_video, .flw_music { margin: 10px 0; }
-		.flw_article .flw_video img { display: inline; }
-	.flw_quote { margin-left: 10px; padding-left: 15px; border-left: 3px solid #B1CCD8; }
-	.flw_readfull { padding: 3px 5px; border: 1px solid #DDD; border-radius: 3px; background: #FFF; }
-		.flw_readfull:hover { border-color: #9EB4C2; text-decoration: none; }
-	.flw_delete { visibility: hidden; float: right; width: 20px; height: 20px; background: url({IMGDIR}/cls.gif) no-repeat 0 0; text-indent: -9999px; overflow: hidden; }
-		.flw_delete:hover { background-position: 0 100%; }
-		.flw_feed_hover .flw_delete { visibility: visible; }
-	.flw_loading { margin: 0 0 10px 80px; padding: 10px; box-shadow: 0 1px 0 rgba(0,0,0,0.05); border: 1px solid #DBDBDB; border-radius: 4px; background: #F4F7F9; }
-	.flw_more { margin: 0 0 10px 80px; }
-		.flw_more a { display: block; padding: 10px; box-shadow: 0 1px 0 rgba(0,0,0,0.05); border: 1px solid #DBDBDB; border-radius: 4px; background: #F4F7F9; text-align: center; }
-			.flw_more a:hover { border-color: #9EB4C2; text-decoration: none; }
+					<script type="text/javascript" src="{$_G[setting][jspath]}forum.js?{VERHASH}"></script>
+					<script type="text/javascript" src="{$_G[setting][jspath]}forum_moderate.js?{VERHASH}"></script>
+					<script type="text/javascript">
+						var postminchars = parseInt('$_G['setting']['minpostsize']');
+						var postmaxchars = parseInt('$_G['setting']['maxpostsize']');
+						var disablepostctrl = parseInt('{$_G['group']['disablepostctrl']}');
+					</script>
+					<!--{eval $dmfid = $_G['setting']['followforumid'] && !empty($defaultforum) ? $_G['setting']['followforumid'] : 0;}-->
+					<form method="post" autocomplete="off" id="fastpostform" action="home.php?mod=spacecp&ac=follow&op=newthread&topicsubmit=yes&infloat=yes&handlekey=fastnewpost&inajax=1" onsubmit="return fastpostvalidate(this);" style="float: left;width: 400px;">
+						<div id="fastpostreturn" style="margin:-5px 0 5px"></div>
+						<div id="flw_post_subject" style="display:none;">
+							<span id="flw_checklen" class="y"><span id="checklen" class="xg1">80</span></span>
+							<input type="text" id="subject" name="subject" onkeyup="strLenCalc(this, 'checklen', 80);" tabindex="11" />
+						</div>
 
-	/* 收听按钮通用样式 */
-	.flw_btn_fo, .flw_btn_unfo { float: right; width: 70px; height: 21px; background: url({IMGDIR}/flw_btn_s.png) no-repeat 0 0; text-indent: -9999px; overflow: hidden; }
-		.flw_btn_unfo { background-image: url({IMGDIR}/flw_btn_unfo_s.png); }
-		.flw_uheader .flw_btn_fo, .flw_uheader .flw_btn_unfo { float: left; }
-
-	/* 发广播 */
-	#flw_header { margin-bottom: 20px; padding: 10px 20px 0 80px; border-radius: 5px; background: #F2F2F2 url({IMGDIR}/flw_post.jpg) no-repeat 0 -123px; }
-	#flw_post_subject { width: 628px; height: 30px; line-height: 30px; border: 1px solid #9EB4C2; border-radius: 4px; background: #FFF url({IMGDIR}/input_shadow.png) repeat-x 0 0; }
-	#flw_header #subject { margin: 5px; width: 580px; height: 20px; border: none; outline: none; background: transparent; line-height: 20px; }
-	#flw_checklen { padding-right: 10px; }
-	#flw_post_extra { width: 629px; }
-	.tedt { width: auto; border: 1px solid #9EB4C2; border-radius: 4px; overflow: hidden; }
-	#flw_header .bar { padding-left: 10px; border-top: 1px solid #EFEFEF; border-bottom: none; background: #F9FBFC; border-radius: 0 0 4px 4px; }
-	#flw_header .area { background: #FFF url({IMGDIR}/input_shadow.png) repeat-x 0 0; border-radius: 4px 4px 0 0; }
-		#flw_header .area .pt { height: 4em; }
-	#flw_header .ftid { margin-left: 5px; }
-	#fastpostsubmit { margin-right: 0; width: 77px; height: 33px; border: none; background: transparent url({IMGDIR}/flw_post.png) no-repeat 0 0; text-indent: -9999px; }
-	#flw_header .tb { padding-left: 0; height: 32px; border-bottom: none; line-height: 32px; }
-		#flw_header .tb a { padding: 0 15px; border: none; background: transparent none; color: #369; }
-			#flw_header .tb .a a { box-shadow: 0 -1px 0 rgba(0,0,0,0.15); border-radius: 4px 4px 0 0; background: #FFF; color: #333; }
-
-	.flw_tab { padding-top: 0; border-bottom: none; }
-
-	.sd { border-radius: 5px; background: #F4F7F9; }
-
-	/* 侧边和主区域头像及统计信息 */
-	#flw_avt { padding: 20px; }
-		#flw_avt img { margin: 0 auto 10px; border: 6px solid #FFF; }
-			.sd #flw_avt img { display: block; }
-
-		.flw_user_info { margin: 10px 0; padding: 10px; box-shadow: 0 1px 0 #FFF, 0 -1px 0 #D7DBDF; border-radius: 5px; background: #E9EEF2; }
-			.flw_linktohome { padding: 2px 0 2px 20px; background: url({IMGDIR}/homelink.gif) no-repeat 0 2px; }
-		/* 主区域头像 */
-		.flw_uheader { padding-right: 0; padding-left: 0; }
-
-			.flw_stat_mn { margin-left: 20px; width: 490px; }
-	.pg_follow .sd .bm { border-width: 1px 0 0; border-color: #E8EAEB; background: transparent; }
-		.pg_follow .sd .bm_h { padding-left: 20px; border-width: 1px 0 0; border-color: #FFF; background: transparent; }
-		.pg_follow .avt img { padding: 0; border-width: 0; border-radius: 4px; background: transparent; }
-
-	/* 用户单页顶部 */
-	#flw_header.flw_uheader { padding-top: 20px; border-bottom: 1px solid rgba(0,0,0,0.15); background: #F4F7F9 none !important; }
-		.flw_uheader .tb { margin-bottom: -1px; }
-		.flw_uheader h1 { font-size: 16px; }
-		.flw_uheader .tns { margin-left: -10px; padding: 0; width: 240px; }
-			.flw_uheader .tns th, .flw_uheader .tns td { padding-left: 10px; text-align: left; }
-		.flw_uheader .o { line-height: 21px; }
-		.flw_status_1, .flw_status_2 { padding: 0 10px 0 20px; background: url({IMGDIR}/flw_statusico.png) no-repeat 0 4px; }
-			.flw_status_2 { background-position: 0 -35px; }
-	.flw_specialfo, .flw_specialunfo { float: right; margin-right: 9px; width: 14px; height: 21px; background: url({IMGDIR}/flw_btn_specialfo.png) no-repeat 0 4px; text-indent: -9999px; overflow: hidden; }
-		.flw_specialunfo { background-position: 0 -26px; }
-		#specialflag_2_menu { width: 80px; }
-		.flw_uheader .flw_linktohome { padding: 0 0 0 20px; background-position: 0 3px; }
-
-	/* 回复区域 */
-	.flw_replybox { margin: -30px 0 20px 80px; padding: 15px 20px; box-shadow: 0 1px 0 rgba(0,0,0,0.05); border: 1px solid #DBDBDB; border-radius: 0 0 5px 5px; background: #F4F7F9; background: #E9EEF1; }
-		.flw_replybox li { padding: 10px 80px 10px 0; border-top: 1px solid #DBE2E6; }
-			.flw_replybox li .d { margin-right: 10px; }
-		.flw_replybox .px, .flw_autopt { border: 1px solid #CCDBE5; border-radius: 4px; background: #FFF url({IMGDIR}/input_shadow.png) repeat-x 0 0; }
-			.flw_autopt { display: inline-block; vertical-align: top; margin: 0 5px 0 0; padding: 5px; width: 420px; }
-				td.flw_autopt { margin-right: 0; }
-				.flw_autopt .pts { padding: 0; width: 100%; height: 19px; min-height: 19px; border: 0; }
-				.ie8 .flw_autopt .pts, .ie9 .flw_autopt .pts { min-height: 21px; }
-		.flw_replybox .pnc { width: 77px; height: 33px; border: none; background: transparent url({IMGDIR}/pn_reply.png) no-repeat 0 0; }
-			.flw_replybox .pnc span { line-height: 99px; }
-			.flw_replybox table .pnc { background-image: url({IMGDIR}/pn_rt.png); }
-		/* 回复并转播选项 */
-		.flw_rert { display: inline-block; padding-right: 5px; width: 95px; text-align: right; }
-		.flw_replybox .cnr { position: relative; float: right; overflow: hidden; display: inline; margin: -22px 16px 0 0; width: 11px; height: 7px; background: transparent url({IMGDIR}/flw_cnr_t.png) no-repeat 0 0; }
-
-	/* 侧边切换 */
-	#flw_side_tab { margin: 10px 0; }
-		#flw_side_tab li { line-height: 32px; }
-		#flw_side_tab a { display: block; height: 32px; padding-left: 20px; background: url({IMGDIR}/flw_side_tab.png) repeat-x 0 0; }
-			#flw_side_tab li.a a { background-position: 0 -32px; }
-			#flw_side_tab a img { float: left; margin: 8px 10px 0 0; }
-
-	/* 侧边用户列表 */
-	.flw_side_promote {  }
-		.flw_side_promote .xlda dl { margin-bottom: 8px; }
-		.flw_side_promote .xlda .m { margin: 0 0 8px -55px; }
-		.flw_side_promote .xlda dt { padding-top: 0; }
-		.flw_side_promote .flw_btn_fo { float: left; }
-
-	/* 类似听众页面的用户列表 */
-	.flw_ulist {}
-		.flw_ulist li { padding: 10px 0 10px 100px; border-bottom: 1px solid #DBDBDB; }
-		.flw_ulist .flw_avt { float: left; margin: 0 0 0 -80px; }
-
-	/*.attswf p { width: 30px; height: 30px; overflow: hidden; }
-	.attswf p a { position: absolute; display: block; margin-top: -32px; width: 32px; height: 32px; text-indent: -9999px; overflow: hidden; }
-	*/
-
-/*	.progressWrapper { float: left; width: auto; }
-	.progressWrapper table { float: left; margin: 5px 8px 0 0; width: 200px; border:  1px solid #C3DCEA; border-radius: 4px; background: #FFF; }
-	.progressWrapper td { padding: 5px 0; border-bottom: 1px solid #C3DCEA; border-radius: 4px; }
-		.attswf p { padding-left: 5px; width: 170px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-		.attswf p img { width: 16px; height: 16px; }
-		.attc { padding-top: 3px; width: 20px; }
-			.attc .d { background-position-y: 0 !important; }*/
-
-	.ie6 .tb .a { position: static; }
-	#flw_bar .fpd { position: relative; }
-	.ie6 #flw_bar object { position: absolute; }
-</style>
-
-
-<div id="ct" class="ct2 wp cl">
-	<div class="mn">
-		<div class="bm bw0">
-			<!--{if in_array($do, array('feed', 'view'))}-->
-
-				<div id="flw_header" {if $do == 'view' && !$viewself}class="flw_uheader"{/if}>
-					<!--{if $do == 'feed' || ( $do == 'view' && $viewself)}-->
-						<script type="text/javascript" src="{$_G[setting][jspath]}forum.js?{VERHASH}"></script>
-						<script type="text/javascript" src="{$_G[setting][jspath]}forum_moderate.js?{VERHASH}"></script>
-						<script type="text/javascript">
-							var postminchars = parseInt('$_G['setting']['minpostsize']');
-							var postmaxchars = parseInt('$_G['setting']['maxpostsize']');
-							var disablepostctrl = parseInt('{$_G['group']['disablepostctrl']}');
-						</script>
-						<!--{eval $dmfid = $_G['setting']['followforumid'] && !empty($defaultforum) ? $_G['setting']['followforumid'] : 0;}-->
-						<form method="post" autocomplete="off" id="fastpostform" action="forum.php?mod=post&action=newthread&fid={$dmfid}&topicsubmit=yes&infloat=yes&handlekey=fastnewpost&inajax=1" onsubmit="return fastpostvalidate(this);">
-							<div id="fastpostreturn" style="margin:-5px 0 5px"></div>
-							<div id="flw_post_subject">
-								<span id="flw_checklen" class="y"><span id="checklen" class="xg1">80</span></span>
-								<input type="text" id="subject" name="subject" onkeyup="strLenCalc(this, 'checklen', 80);" tabindex="11" />
-							</div>
-
-							<div id="flw_post_extra" class="mtn cl">
-								<div{if $_G[setting][fastsmilies]} class="hasfsl"{/if} id="fastposteditor">
-									<div class="tedt">
-										<div class="area">
-											<textarea rows="5" cols="80" name="message" id="fastpostmessage" onKeyDown="seditor_ctlent(event, '$(\'fastpostsubmit\').click()');" tabindex="12" class="pt xs2"></textarea>
-										</div>
-										<div id="flw_bar" class="bar">
-											<!--{eval $seditor = array('fastpost', array('smilies', 'at'), 0, '<span id="spanButtonPlaceholder">上传</span>');}-->
-											<!--{subtemplate common/seditor}-->
-										</div>
+						<div id="flw_post_extra" class="mtn cl">
+							<div{if $_G[setting][fastsmilies]} class="hasfsl"{/if} id="fastposteditor">
+								<div class="tedt">
+									<div class="area">
+										<textarea rows="5" cols="80" name="message" id="fastpostmessage" onKeyDown="seditor_ctlent(event, '$(\'fastpostsubmit\').click()');" tabindex="12" class="pt xs2"></textarea>
+									</div>
+									<div id="flw_bar" class="bar">
+										<!--{eval $seditor = array('fastpost', array('smilies', 'at'), 0, '<span id="spanButtonPlaceholder">{lang upload}</span>');}-->
+										<!--{subtemplate common/seditor}-->
 									</div>
 								</div>
-<script type="text/javascript">
-var editorid = '';
-var ATTACHNUM = {'imageused':0,'imageunused':0,'attachused':0,'attachunused':0}, ATTACHUNUSEDAID = new Array(), IMGUNUSEDAID = new Array();
-</script>
+							</div>
+							<script type="text/javascript">
+							var editorid = '';
+							var ATTACHNUM = {'imageused':0,'imageunused':0,'attachused':0,'attachunused':0}, ATTACHUNUSEDAID = new Array(), IMGUNUSEDAID = new Array();
+							</script>
+							<script type="text/javascript" src="{$_G[setting][jspath]}swfupload.js?{VERHASH}"></script>
+							<script type="text/javascript" src="{$_G[setting][jspath]}swfupload.queue.js?{VERHASH}"></script>
+							<script type="text/javascript" src="{$_G[setting][jspath]}handlers.js?{VERHASH}"></script>
+							<script type="text/javascript" src="{$_G[setting][jspath]}fileprogress.js?{VERHASH}"></script>
 
+							<div class="upfl{if empty($_GET[from]) && $_G[setting][fastsmilies]} hasfsl{/if}">
+								<div id="attachlist" class="fieldset flash cl"><span style="font-size:0"></span></div>
 
-<style type="text/css">
-
-.progressWrapper {
-	float: left;
-	width: auto;
-	overflow: hidden;
-}
-
-.progressWrapper table {
-	float: left; margin: 5px 1px 0 0; width: 209px; border:  1px solid #C3DCEA; border-radius: 4px; background: #FFF;
-}
-.progressWrapper td {
-	border-radius: 4px;
-}
-.attswf p { padding-left: 5px; width: 170px; height: 26px; line-height: 26px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.attswf p img { width: 16px; height: 16px; }
-.attc { padding-top: 3px; width: 20px; }
-	.attc .d { background-position-y: 0 !important; }
-
-.progressContainer {
-	margin-top: 5px;
-	padding: 5px;
-	width: 620px;
-	border: 1px dashed #9EB4C2;
-	overflow: hidden;
-}
-/* Message */
-.message {
-	margin: 1em 0;
-	padding: 10px 20px;
-	border: solid 1px #FFDD99;
-	background-color: #FFFFCC;
-	overflow: hidden;
-}
-/* Error */
-.red {
-	color: red;
-}
-
-/* Current */
-.green {
-	border: solid 1px #DDF0DD;
-	background-color: #EBFFEB;
-}
-
-/* Complete */
-.blue {
-	border: solid 1px #CEE2F2;
-	background-color: #F0F5FF;
-}
-
-.progressName {
-	font-size: 8pt;
-	font-weight: 700;
-	color: #555;
-	width: 323px;
-	height: 14px;
-	text-align: left;
-	white-space: nowrap;
-	overflow: hidden;
-}
-
-.progressBarInProgress,
-.progressBarComplete,
-.progressBarError {
-	clear: both;
-	font-size: 0;
-	width: 0%;
-	height: 2px;
-	background-color: blue;
-	margin-top: 2px;
-}
-
-.progressBarComplete {
-	width: 100%;
-	background-color: green;
-	visibility: hidden;
-}
-
-.progressBarError {
-	width: 100%;
-	background-color: red;
-	visibility: hidden;
-}
-
-.progressBarStatus {
-	margin-top: 2px;
-	width: 337px;
-	font-family: Arial;
-	text-align: left;
-	white-space: nowrap;
-}
-
-a.progressCancel {
-	font-size: 0;
-	display: block;
-	height: 14px;
-	width: 14px;
-	background-image: url({IMGDIR}/cancelbutton.gif);
-	background-repeat: no-repeat;
-	background-position: -14px 0px;
-	float: right;
-}
-
-a.progressCancel:hover {
-	background-position: 0px 0px;
-}
-.swfupload {
-	vertical-align: top;
-}
-
-</style>
-<script type="text/javascript" src="{$_G[setting][jspath]}swfupload.js?{VERHASH}"></script>
-<script type="text/javascript" src="{$_G[setting][jspath]}swfupload.queue.js?{VERHASH}"></script>
-<script type="text/javascript" src="{$_G[setting][jspath]}handlers.js?{VERHASH}"></script>
-<script type="text/javascript" src="{$_G[setting][jspath]}fileprogress.js?{VERHASH}"></script>
-
-				<div class="upfl{if empty($_GET[from]) && $_G[setting][fastsmilies]} hasfsl{/if}">
-					<div id="attachlist" class="fieldset flash cl"><span style="font-size:0"></span></div>
-
-				<script type="text/javascript">
-					var fid = {if $_G['setting']['followforumid']}$_G['setting']['followforumid']{else}0{/if};
-					var resulttype = 'follow';
-					var upload = new SWFUpload({
-						// Backend Settings
-						upload_url: "{$_G[siteroot]}misc.php?mod=swfupload&action=swfupload&operation=upload&fid={$dmfid}",
-						post_params: {"uid" : "$_G[uid]", "hash":"$swfconfig[hash]"},
-
-						// File Upload Settings
-						file_size_limit : "$swfconfig[max]",	// 100MB
-						file_types : "$swfconfig[attachexts][ext]",
-						file_types_description : "$swfconfig[attachexts][depict]",
-						file_upload_limit : $swfconfig['limit'],
-						file_queue_limit : 0,
-
-						// Event Handler Settings (all my handlers are in the Handler.js file)
-						swfupload_preload_handler : preLoad,
-						swfupload_load_failed_handler : loadFailed,
-						file_dialog_start_handler : fileDialogStart,
-						file_queued_handler : fileQueued,
-						file_queue_error_handler : fileQueueError,
-						file_dialog_complete_handler : fileDialogComplete,
-						upload_start_handler : uploadStart,
-						upload_progress_handler : uploadProgress,
-						upload_error_handler : uploadError,
-						upload_success_handler : uploadSuccess,
-						upload_complete_handler : uploadComplete,
-
-						// Button Settings
-						button_image_url : IMGDIR+"/flw_post_attach.png",
-						button_placeholder_id : "spanButtonPlaceholder",
-						button_width: 18,
-						button_height: 25,
-						button_cursor:SWFUpload.CURSOR.HAND,
-						button_text_left_padding: 0,
-						button_text_style: '.button { vertical-align: middle; overflow: hidden; }',
-						//button_text: '<span class="button">上传</span>',
-						button_text: '',
-						button_window_mode: "transparent",
-
-						// Flash Settings
-						flash_url : IMGDIR+"/swfupload.swf",
-						flash9_url : IMGDIR+"/swfupload_fp9.swf",
-
-						custom_settings : {
-							progressTarget : "attachlist",
-							uploadSource: 'forum',
-							uploadType: 'attach',
-							<!--{if $swfconfig['maxsizeperday']}-->
-							maxSizePerDay: $swfconfig['maxsizeperday'],
-							<!--{/if}-->
-							<!--{if $swfconfig['maxattachnum']}-->
-							maxAttachNum: $swfconfig['maxattachnum'],
-							<!--{/if}-->
-							uploadFrom: 'fastpost'
-						},
-
-						// Debug Settings
-						debug: false
-					});
-
-					var attachBtn = $('flw_bar').getElementsByTagName('object')[0];
-					var flwbarBtn = $('flw_bar').getElementsByTagName('a');
-					if(BROWSER.ie && BROWSER.ie < 7 && attachBtn) {
-						attachBtn.style.left = flwbarBtn ? flwbarBtn.length * 25 : 0;
-					}
-
-				</script>
-
-				</div>
-
-								<!--{if checkperm('seccode') && ($secqaacheck || $seccodecheck)}-->
-									<!--{block sectpl}--><sec> <span id="sec<hash>" onclick="showMenu(this.id)"><sec></span><div id="sec<hash>_menu" class="p_pop p_opt" style="display:none"><sec></div><!--{/block}-->
-									<div class="mtm sec"><!--{subtemplate common/seccheck}--></div>
-								<!--{/if}-->
-
-								<input type="hidden" name="formhash" value="{FORMHASH}" />
-								<input type="hidden" name="usesig" value="$usesigcheck" />
-								<input type="hidden" name="adddynamic" value="1" />
-								<input type="hidden" name="addfeed" value="1" />
-								<input type="hidden" name="topicsubmit" value="true" />
-								<input type="hidden" name="referer" value="{echo dreferer()}" />
-
-								<div class="cl">
-									<div class="z ptm">
-										<select name="defaultforum" id="fid" class="ps z" onchange="modifyformurl(this.value);">
-											<option value="0">浏览其它版块</option>
-											<!--{if $_G['setting']['followforumid'] && !empty($defaultforum)}-->
-											<option value="$defaultforum['fid']" selected="selected">$defaultforum['name']</option>
+								<script type="text/javascript">
+									var fid = <!--{if $_G['setting']['followforumid']}-->$_G['setting']['followforumid']<!--{else}-->0<!--{/if}-->;
+									var resulttype = 'follow';
+									var upload = new SWFUpload({
+										// Backend Settings
+										upload_url: "{$_G[siteroot]}misc.php?mod=swfupload&action=swfupload&operation=upload&fid={$dmfid}",
+										post_params: {"uid" : "$_G[uid]", "hash":"$swfconfig[hash]"},
+		
+										// File Upload Settings
+										file_size_limit : "$swfconfig[max]",	// 100MB
+										file_types : "$swfconfig[attachexts][ext]",
+										file_types_description : "$swfconfig[attachexts][depict]",
+										file_upload_limit : $swfconfig['limit'],
+										file_queue_limit : 0,
+		
+										// Event Handler Settings (all my handlers are in the Handler.js file)
+										swfupload_preload_handler : preLoad,
+										swfupload_load_failed_handler : loadFailed,
+										file_dialog_start_handler : fileDialogStart,
+										file_queued_handler : fileQueued,
+										file_queue_error_handler : fileQueueError,
+										file_dialog_complete_handler : fileDialogComplete,
+										upload_start_handler : uploadStart,
+										upload_progress_handler : uploadProgress,
+										upload_error_handler : uploadError,
+										upload_success_handler : uploadSuccess,
+										upload_complete_handler : uploadComplete,
+		
+										// Button Settings
+										button_image_url : IMGDIR+"/flw_post_attach.png",
+										button_placeholder_id : "spanButtonPlaceholder",
+										button_width: 18,
+										button_height: 25,
+										button_cursor:SWFUpload.CURSOR.HAND,
+										button_text_left_padding: 0,
+										button_text_style: '.button { vertical-align: middle; overflow: hidden; }',
+										//button_text: '<span class="button">{lang upload}</span>',
+										button_text: '',
+										button_window_mode: "transparent",
+		
+										// Flash Settings
+										flash_url : IMGDIR+"/swfupload.swf",
+										flash9_url : IMGDIR+"/swfupload_fp9.swf",
+		
+										custom_settings : {
+											progressTarget : "attachlist",
+											uploadSource: 'forum',
+											uploadType: 'attach',
+											<!--{if $swfconfig['maxsizeperday']}-->
+											maxSizePerDay: $swfconfig['maxsizeperday'],
 											<!--{/if}-->
-										</select>
-										<select name="forumlist" id="forumlist" class="ps z" onchange="addforumlist(this);" style="display: none;">
-											<option value="0">选择版块</option>
-											$forumlist
-										</select>
+											<!--{if $swfconfig['maxattachnum']}-->
+											maxAttachNum: $swfconfig['maxattachnum'],
+											<!--{/if}-->
+											uploadFrom: 'fastpost'
+										},
+		
+										// Debug Settings
+										debug: false
+									});
+		
+									var attachBtn = $('flw_bar').getElementsByTagName('object')[0];
+									var flwbarBtn = $('flw_bar').getElementsByTagName('a');
+									if(BROWSER.ie && BROWSER.ie < 7 && attachBtn) {
+										attachBtn.style.left = flwbarBtn ? flwbarBtn.length * 25 : 0;
+									}
+		
+								</script>
+							</div>
 
-										<div class="ftid">
-											<span class="ftid" id="threadclass"></span>
-										</div>
-									</div>
-									<div class="y">
-										<p class="ptm pnpost">
-											<a href="javascript:;" onclick="display('flw_post_subject');cleartitle(this);" class="xg1">自动截取标题</a>&nbsp;
-											<button {if $_G['uid']}type="submit" {else}type="button" onclick="showWindow('login', 'member.php?mod=logging&action=login&guestmessage=yes')" {/if}name="topicsubmit_btn" id="fastpostsubmit" value="topicsubmitbtn" tabindex="13" class="pn pnc"><strong>发表帖子</strong></button>
-										</p>
+							<!--{if checkperm('seccode') && ($secqaacheck || $seccodecheck)}-->
+								<!--{block sectpl}--><sec> <span id="sec<hash>" onclick="showMenu(this.id)"><sec></span><div id="sec<hash>_menu" class="p_pop p_opt" style="display:none"><sec></div><!--{/block}-->
+								<div class="mtm sec"><!--{subtemplate common/seccheck}--></div>
+							<!--{/if}-->
+
+							<input type="hidden" name="formhash" value="{FORMHASH}" />
+							<input type="hidden" name="usesig" value="$usesigcheck" />
+							<input type="hidden" name="adddynamic" value="1" />
+							<input type="hidden" name="addfeed" value="1" />
+							<input type="hidden" name="topicsubmit" value="true" />
+							<input type="hidden" name="referer" value="{echo dreferer()}" />
+
+							<div class="cl">
+								<div class="z ptm" id="forumlistdev" style="display: none;">
+									<select name="defaultforum" id="fid" class="ps z" onchange="modifyformurl(this.value);">
+										<option value="0">{lang follow_other_forum}</option>
+									</select>
+									<select name="forumlist" id="forumlist" class="ps z" onchange="addforumlist(this);" style="display: none;">
+										<option value="0">{lang follow_select_forum}</option>
+										$forumlist
+									</select>
+
+									<div class="ftid">
+										<span class="ftid" id="threadclass"></span>
 									</div>
 								</div>
+								<div class="y">
+									<p class="ptm pnpost">
+										<label><input type="checkbox" name="syncbbs" id="syncbbs" value="1" onclick="showSyncInfo(this.checked)" />{lang follow_sync_forum}</label>&nbsp;
+										<button {if $_G['uid']}type="submit" {else}type="button" onclick="showWindow('login', 'member.php?mod=logging&action=login&guestmessage=yes')" {/if}name="topicsubmit_btn" id="fastpostsubmit" value="topicsubmitbtn" tabindex="13" class="pn pnc"><strong>{lang follow_new_thread}</strong></button>
+									</p>
+								</div>
 							</div>
-						</form>
-						<script type="text/javascript">
-						var nofollowfeed = <!--{if !empty($list['feed'])}-->0<!--{else}-->1<!--{/if}-->;
-						var userdatakey = cookiepre+'fastpost{$_G[uid]}';
-						function backupContent() {
-							var obj = $('fastpostform');
-							if(!obj) return;
-							var data = subject = message = '';
-							saveUserdata(userdatakey, data);
-							for(var i = 0; i < obj.elements.length; i++) {
-								var el = obj.elements[i];
-								if(el.name != '' && el.tagName == 'SELECT') {
-									var elvalue = el.value;
-									if(trim(elvalue)) {
-										data += el.name + String.fromCharCode(9) + el.tagName + String.fromCharCode(9) + el.type + String.fromCharCode(9) + elvalue + String.fromCharCode(9, 9);
-										if(el.tagName == 'SELECT' && el.name == 'defaultforum') {
-											var values = {};
-											for(var j = 0; j < el.options.length; j++) {
-												var option = el.options[j];
-												var ov = parseInt(option.value);
-												if(typeof values[option.value] == 'undefined' && !isNaN(ov) && option.innerText != '' && option.innerText != 'undefined') {
-													data += el.name + String.fromCharCode(9) + option.tagName + String.fromCharCode(9) + option.value + String.fromCharCode(9) + option.text + String.fromCharCode(9, 9);
-													values[option.value] = option.value;
-												}
+						</div>
+					</form>
+
+					<script type="text/javascript">
+					var nofollowfeed = <!--{if !empty($list['feed'])}-->0<!--{else}-->1<!--{/if}-->;
+					var userdatakey = cookiepre+'fastpost{$_G[uid]}';
+					function showSyncInfo(flag) {
+						display('flw_post_subject');
+						display('forumlistdev');
+						var sObj = $('subject');
+						sObj.value = '';
+						strLenCalc(sObj, 'checklen', 80);
+					}
+					function fastpostvalidateextra() {
+						var sObj = $('subject');
+						if(!$('syncbbs').checked) {
+							$('subject').value = '  ';
+						}
+						return true;
+					}
+					function backupContent() {
+						var obj = $('fastpostform');
+						if(!obj) return;
+						var data = subject = message = '';
+						saveUserdata(userdatakey, data);
+						for(var i = 0; i < obj.elements.length; i++) {
+							var el = obj.elements[i];
+							if(el.name != '' && el.tagName == 'SELECT') {
+								var elvalue = el.value;
+								if(trim(elvalue)) {
+									data += el.name + String.fromCharCode(9) + el.tagName + String.fromCharCode(9) + el.type + String.fromCharCode(9) + elvalue + String.fromCharCode(9, 9);
+									if(el.tagName == 'SELECT' && el.name == 'defaultforum') {
+										var values = {};
+										for(var j = 0; j < el.options.length; j++) {
+											var option = el.options[j];
+											var ov = parseInt(option.value);
+											if(typeof values[option.value] == 'undefined' && !isNaN(ov) && option.innerText != '' && option.innerText != 'undefined') {
+												data += el.name + String.fromCharCode(9) + option.tagName + String.fromCharCode(9) + option.value + String.fromCharCode(9) + option.text + String.fromCharCode(9, 9);
+												values[option.value] = option.value;
 											}
 										}
 									}
 								}
 							}
-							saveUserdata(userdatakey, data);
 						}
-						function addforumlist(listObj) {
-							var fid = listObj.value;
-							if(fid) {
-								var dforum = $('fid');
-								//判断是否已经在列表中
-								var haveoption = false;
-								for(var i = 0; i < dforum.options.length; i++) {
-									if(dforum.options[i].value == fid) {
-										dforum.selectedIndex = i;
-										haveoption = true;
-										break;
-									}
+						saveUserdata(userdatakey, data);
+					}
+					function addforumlist(listObj) {
+						var fid = listObj.value;
+						if(fid) {
+							var dforum = $('fid');
+							//判断是否已经在列表中
+							var haveoption = false;
+							for(var i = 0; i < dforum.options.length; i++) {
+								if(dforum.options[i].value == fid) {
+									dforum.selectedIndex = i;
+									haveoption = true;
+									break;
 								}
-								if(!haveoption) {
-									var option = listObj.options[listObj.selectedIndex];
-									var oOption = document.createElement("OPTION");
-									oOption.text = trim(option.text);
-									oOption.value = option.value;
-									dforum.options.add(oOption);
-									dforum.selectedIndex = dforum.options.length-1;
-								}
-
-								modifyformurl(fid);
 							}
-							dforum.style.display = '';
-							listObj.style.display = 'none';
-						}
-						function modifyformurl(mfid) {
-							if(parseInt(mfid)) {
-								backupContent();
-								//noteX 修改表单中的两个固定地址
-								$('fastpostform').action = 'forum.php?mod=post&action=newthread&topicsubmit=yes&infloat=yes&handlekey=fastnewpost&inajax=1&fid='+mfid;
-								if(upload) {
-									fid = mfid;
-									var uploadurl = '{$_G[siteroot]}misc.php?mod=swfupload&action=swfupload&operation=upload&fid='+mfid;
-									upload.setUploadURL(uploadurl);
-								}
-								getthreadclass();
-							} else {
-								var flist = $('forumlist');
-								var dforum = $('fid');
-								dforum.style.display = 'none';
-								flist.style.display = '';
+							if(!haveoption) {
+								var option = listObj.options[listObj.selectedIndex];
+								var oOption = document.createElement("OPTION");
+								oOption.text = trim(option.text);
+								oOption.value = option.value;
+								dforum.options.add(oOption);
+								dforum.selectedIndex = dforum.options.length-1;
 							}
 
+							modifyformurl(fid);
+						}
+						dforum.style.display = '';
+						listObj.style.display = 'none';
+					}
+					function modifyformurl(mfid) {
+						if(parseInt(mfid)) {
+							backupContent();
+							//noteX 修改表单中的两个固定地址
+							$('fastpostform').action = 'home.php?mod=spacecp&ac=follow&op=newthread&topicsubmit=yes&infloat=yes&handlekey=fastnewpost&inajax=1&fid='+mfid;
+							if(upload) {
+								fid = mfid;
+								var uploadurl = '{$_G[siteroot]}misc.php?mod=swfupload&action=swfupload&operation=upload&fid='+mfid;
+								upload.setUploadURL(uploadurl);
+							}
+							getthreadclass();
+						} else {
+							var flist = $('forumlist');
+							var dforum = $('fid');
+							dforum.style.display = 'none';
+							flist.style.display = '';
 						}
 
-						function resumeContent() {
-							var data = loadUserdata(userdatakey);
-							if(in_array((data = trim(data)), ['', 'null', 'false', null, false])) {
-								modifyformurl($dmfid);
-								return false;
-							}
-							var data = data.split(/\x09\x09/);
-							var formObj = $('fastpostform');
-							var sValue = 0;
-							for(var i = 0; i < formObj.elements.length; i++) {
-								var el = formObj.elements[i];
-								if(el.name != '' && el.tagName == 'SELECT') {
-									for(var j = 0; j < data.length; j++) {
-										var ele = data[j].split(/\x09/);
-										if(ele[0] == el.name) {
-											elvalue = !isUndefined(ele[3]) ? ele[3] : '';
-											if(ele[1] == 'SELECT') {
-												//添加选项
-												var values = {0:0{if $_G['setting']['followforumid']},$_G['setting']['followforumid']:$_G['setting']['followforumid']{/if}};
-												for(var oi = 0; oi < data.length; oi++) {
-													var oObj = data[oi].split(/\x09/);
-													if(oObj[0] == el.name && oObj[1] == 'OPTION' && typeof values[oObj[2]] == 'undefined') {
-														var oOption = document.createElement("OPTION");
-														el.options.add(oOption);
-														oOption.text = oObj[3];
-														values[oObj[2]] = oOption.value = oObj[2];
-														if(elvalue == oObj[2]) {
-															el.selectedIndex = el.options.length-1;
-															modifyformurl(elvalue);
-														}
+					}
+
+					function resumeContent() {
+						var data = loadUserdata(userdatakey);
+						if(in_array((data = trim(data)), ['', 'null', 'false', null, false])) {
+							modifyformurl($dmfid);
+							return false;
+						}
+						var data = data.split(/\x09\x09/);
+						var formObj = $('fastpostform');
+						var sValue = 0;
+						for(var i = 0; i < formObj.elements.length; i++) {
+							var el = formObj.elements[i];
+							if(el.name != '' && el.tagName == 'SELECT') {
+								for(var j = 0; j < data.length; j++) {
+									var ele = data[j].split(/\x09/);
+									if(ele[0] == el.name) {
+										elvalue = !isUndefined(ele[3]) ? ele[3] : '';
+										if(ele[1] == 'SELECT') {
+											//添加选项
+											var values = {0:0<!--{if $_G['setting']['followforumid']}-->,$_G['setting']['followforumid']:$_G['setting']['followforumid']<!--{/if}-->};
+											for(var oi = 0; oi < data.length; oi++) {
+												var oObj = data[oi].split(/\x09/);
+												if(oObj[0] == el.name && oObj[1] == 'OPTION' && typeof values[oObj[2]] == 'undefined') {
+													var oOption = document.createElement("OPTION");
+													el.options.add(oOption);
+													oOption.text = oObj[3];
+													values[oObj[2]] = oOption.value = oObj[2];
+													if(elvalue == oObj[2]) {
+														el.selectedIndex = el.options.length-1;
+														modifyformurl(elvalue);
 													}
 												}
-												if(el.options.length < 2) {
-													modifyformurl(0);
-												}
-
 											}
-											break
+											if(el.options.length < 2) {
+												modifyformurl(0);
+											}
+
 										}
+										break
 									}
 								}
 							}
 						}
-						function succeedhandle_fastnewpost(url, msg, values) {
-							if(nofollowfeed) {
-								window.location.reload();
-							} else {
+					}
+					function succeedhandle_fastnewpost(url, msg, values) {
+						if(nofollowfeed) {
+							window.location.reload();
+						} else {
+							if(parseInt(values.feedid)) {
 								getNewFollowFeed(values.tid, values.fid, values.pid, values.feedid);
-								//清空上次的输入
-								var sObj = $('subject');
-								$('fsUploadProgress').innerHTML = $('fastpostmessage').value = sObj.value = '';
-								strLenCalc(sObj, 'checklen', 80);
-								//var msg = '您的主题已发布，<a href="'+url+'" class="xi2">点击这里查看主题</a>'
-								//showDialog(msg, 'notice', null, null, 0, null, null, null, null, 3);
-							}
-
-						}
-						function getNewFollowFeed(tid, fid, pid, feedid) {
-							var x = new Ajax();
-							x.get('forum.php?mod=ajax&action=getpostfeed&inajax=1&tid='+tid+'&fid='+fid+'&pid='+pid+'&feedid='+feedid, function(s){
-								newli = document.createElement("li");
-								newli.innerHTML = s;
-								var listObj = $('followlist');
-
-								listObj.insertBefore(newli, listObj.firstChild);
-							});
-						}
-
-						resumeContent();
-
-						function cleartitle(obj) {
-							if($('flw_post_subject').style.display== 'none') {
-								var sObj = $('subject');
-								sObj.value = '';
-								strLenCalc(sObj, 'checklen', 80);
-								obj.innerHTML = '添加标题';
 							} else {
-								obj.innerHTML = '自动截取标题';
+								showDialog(msg, 'notice', null, null, 0, null, null, null, null, 3);
 							}
+							//清空上次的输入
+							var sObj = $('subject');
+							$('attachlist').innerHTML = $('fastpostmessage').value = sObj.value = '';
+							strLenCalc(sObj, 'checklen', 80);
+							//var msg = '您的主题已发布，<a href="'+url+'" class="xi2">点击这里查看主题</a>'
+							//showDialog(msg, 'notice', null, null, 0, null, null, null, null, 3);
 						}
-						</script>
 
-						<!--{if $do == 'feed'}-->
-						<ul class="tb cl">
-							<li$actives[follow]><a href="home.php?mod=follow&view=follow">我收听的</a></li>
-							<li$actives[special]><a href="home.php?mod=follow&view=special">特别收听</a></li>
-							<li$actives[other]><a href="home.php?mod=follow&view=other">广播大厅</a></li>
-							<!--{hook/follow_nav_extra}-->
+					}
+					function getNewFollowFeed(tid, fid, pid, feedid) {
+						var x = new Ajax();
+						x.get('forum.php?mod=ajax&action=getpostfeed&inajax=1&tid='+tid+'&fid='+fid+'&pid='+pid+'&feedid='+feedid, function(s){
+							newli = document.createElement("li");
+							newli.innerHTML = s;
+							var listObj = $('followlist');
+
+							listObj.insertBefore(newli, listObj.firstChild);
+						});
+					}
+
+					resumeContent();
+
+					function cleartitle(obj) {
+						if($('flw_post_subject').style.display== 'none') {
+							var sObj = $('subject');
+							sObj.value = '';
+							strLenCalc(sObj, 'checklen', 80);
+							obj.innerHTML = '{lang follow_add_title}';
+						} else {
+							obj.innerHTML = '{lang follow_auto_title}';
+						}
+					}
+					</script>
+				
+			</div>
+			<!--{/if}-->
+
+			<!--{if in_array($do, array('feed', 'view'))}-->
+				<!--{if $do == 'feed' && $_G[setting][homestyle]}-->
+				<ul class="mbw tb cl">
+					<li$actives[follow]><a href="home.php?mod=follow&view=follow">{lang follow_following}</a></li>
+					<li$actives[special]><a href="home.php?mod=follow&view=special">{lang follow_special_following}</a></li>
+					<li$actives[other]><a href="home.php?mod=follow&view=other">{lang follow_hall}</a></li>
+					<!--{hook/follow_nav_extra}-->
+				</ul>
+				<!--{/if}-->
+				<!--{if !empty($list['feed'])}-->
+					<div class="flw_feed">
+						<ul id="followlist">
+							<!--{subtemplate home/follow_feed_li}-->
 						</ul>
+						
+						<!--{if count($list['feed']) > 19 && ($archiver || $primary)}-->
+						<div id="loadingfeed" class="flw_more"><a href="javascript:;" onclick="loadmore();return false;" class="xi2">{lang follow_more} &raquo;</a></div>
 						<!--{else}-->
-						<ul class="tb cl">
-							<li$actives[feed]><a href="home.php?mod=space&uid=$uid{$hrefsuffix}">广播</a></li>
-							<li$actives[thread]><a href="home.php?mod=space&uid=$uid&view=thread{$hrefsuffix}">帖子</a></li>
-							<li$actives[profile]><a href="home.php?mod=space&uid=$uid&view=profile{$hrefsuffix}">个人资料</a></li>
-							<!--{hook/follow_nav_extra}-->
-						</ul>
+						<div id="loadingfeed"></div>
+						<!--{/if}-->
+						<iframe id="downloadframe" name="downloadframe" width="0" height="0" marginwidth="0" frameborder="0" src="about:blank"></iframe>
+						<script type="text/javascript">
+							function succeedhandle_attachpay(url, msg, values) {
+								hideWindow('attachpay');
+								window.location.href = url;
+								//$('downloadframe').src = url;
+							}
+						</script>
+					</div>
+				<!--{else}-->
+					<div class="emp">
+						<h2 class="mbw xg1 xs2 hm"><!--{if $viewself}-->{lang follow_following_null}<!--{else}-->{lang follow_no_content}<!--{/if}--></h2>
+						<!--{if $do == 'feed' && $view == 'special'}-->
+						<div class="mtw hm xg1">
+							{lang follow_add_special_tip}<a href="home.php?mod=follow&do=following&uid=$uid" class="xi2">{lang follow_add_special_following}</a>
+						</div>
 						<!--{/if}-->
 
-					<!--{else}-->
-
-						<!--{subtemplate home/follow_user_header}-->
-
-						<ul class="{if !$viewself}mtw{/if} tb cl">
-							<li$actives[feed]><a href="home.php?mod=space&uid=$uid{$hrefsuffix}">广播</a></li>
-							<li$actives[thread]><a href="home.php?mod=space&uid=$uid&view=thread{$hrefsuffix}">帖子</a></li>
-							<li$actives[profile]><a href="home.php?mod=space&uid=$uid&view=profile{$hrefsuffix}">个人资料</a></li>
-							<!--{hook/follow_nav_extra}-->
-						</ul>
-					<!--{/if}-->
-				</div>
-
-				<!--{hook/follow_top}-->
-				<!--{if $do == 'feed' || $do == 'view' && $type == 'feed'}-->
-					<!--{if !empty($list['feed'])}-->
-						<div class="flw_feed">
-							<ul id="followlist">
-								<!--{subtemplate home/follow_feed_li}-->
-							</ul>
-							<div id="loadingfeed"></div>
-							<iframe id="downloadframe" name="downloadframe" width="0" height="0" marginwidth="0" frameborder="0" src="about:blank"></iframe>
-							<script type="text/javascript">
-								function succeedhandle_attachpay(url, msg, values) {
-									hideWindow('attachpay');
-									window.location.href = url;
-									//$('downloadframe').src = url;
-								}
-							</script>
-						</div>
-					<!--{else}-->
-						<div id="nofollowmsg">
-							<div class="flw_thread">
-								<ul id="followlist">
-									<li class="flw_article">
-										<div class="emp">
-											<h2 class="mbw xg1 xs2 hm">还没有关注的内容</h2>
-											<!--{if $do == 'feed' && $view == 'special'}-->
-											<div class="mtw hm xg1">
-												您可以将指定的用户加入到“特别收听”列表，然后通过页面筛选阅读他们广播, <a href="home.php?mod=follow&do=following&uid=$uid" class="xi2">添加特别收听</a>
-											</div>
-											<!--{/if}-->
-
-											<!--{if !empty($recommend) && $showrecommend && $view != 'special'}-->
-											<!--{eval $showrecommend = false;}-->
-											<div class="flw_user_list mbm">
-												<h3 class="xi2 xs2 mbw ptm pbm bbda">推荐收听</h3>
-												<ul class="ml mls cl">
-												<!--{loop $recommend $ruid $rusername}-->
-													<li>
-														<a href="home.php?mod=space&uid=$ruid{$hrefsuffix}" class="avt" c="1" shref="home.php?mod=space&uid=$ruid"><!--{avatar($ruid,small)}--></a>
-														<p><a href="home.php?mod=space&uid=$ruid{$hrefsuffix}" style="text-decoration: none !important;">$rusername</a></p>
-														<span><a id="a_followmod_{$ruid}" href="home.php?mod=spacecp&ac=follow&op=add&fuid=$ruid&from=block" onclick="ajaxget(this.href);doane(event);" style="text-decoration: none !important;">收听</a></span>
-													</li>
-												<!--{/loop}-->
-												</ul>
-											</div>
-											<!--{/if}-->
-										</div>
-									</li>
-								</ul>
-							</div>
-						</div>
-					<!--{/if}-->
-					<!--{if $archiver || $primary}-->
-						<script type="text/javascript">
-							var scrollY = 0;
-							var page = 2;
-							var feedInfo = {scrollY: 0, archiver: $archiver, primary: $primary, query: true, scrollNum:1};
-							var loadingfeed = $('loadingfeed');
-
-							function loadmore() {
-								var currentScroll = document.documentElement.scrollTop || document.body.scrollTop;
-								var sHeight = document.documentElement.scrollHeight;
-								if(currentScroll >= scrollY && currentScroll > (sHeight/5-5) && (feedInfo.primary ||feedInfo.archiver) && feedInfo.query) {
-									if(feedInfo.scrollNum) {
-										loadingfeed.className="flw_loading hm vm";
-										loadingfeed.innerHTML = "<img src=\"{IMGDIR}/loading.gif\" class=\"vm\" /> 加载中...";
-									}
-									feedInfo.query = false;
-									var archiver = 0;
-									if(feedInfo.primary) {
-										archiver = 0;
-									} else if(feedInfo.archiver) {
-										archiver = 1;
-									}
-									var url = 'home.php?mod=spacecp&ac=follow&op=getfeed&archiver='+archiver+'&page='+page+'&inajax=1'{if $do == 'feed'}+'&viewtype=$view'{elseif $do == 'view'}+'&uid=$uid'{/if};
-									var x = new Ajax();
-									x.get(url, function(s) {
-										if(trim(s) == 'false') {
-											if(!archiver) {
-												feedInfo.primary = false;
-												loadmore();
-												page = 1;
-											} else {
-												feedInfo.archiver = false;
-												page = 1;
-											}
-										} else {
-											$('followlist').innerHTML = $('followlist').innerHTML + s;
-										}
-										if(!feedInfo.scrollNum && (feedInfo.primary || feedInfo.archiver)) {
-											loadingfeed.className="flw_more";
-											loadingfeed.innerHTML = "<a href=\"javascript:;\" onclick=\"loadmore();return false;\" class=\"xi2\">更多 &raquo;</a>";
-										} else {
-											loadingfeed.className = "";
-											loadingfeed.innerHTML = "";
-										}
-										//$('loadingfeed').innerHTML = !feedInfo.scrollNum && (feedInfo.primary || feedInfo.archiver) ? '<span onclick="loadmore();">更多>></span>' : '';
-										feedInfo.query = true;
-									});
-									page++;
-									if(feedInfo.scrollNum) {
-										feedInfo.scrollNum--;
-									} else if(!feedInfo.scrollNum) {
-										window.onscroll = null;
-									}
-
-								}
-								scrollY = currentScroll;
-							}
-
-							window.onload = function() {
-								scrollY =  document.documentElement.scrollTop || document.body.scrollTop;
-								window.onscroll = loadmore;
-							}
-						</script>
-					<!--{/if}-->
-				<!--{/if}-->
-
-				<!--{if $do == 'view'}-->
-					<!--{if $type == 'thread'}-->
-					<div class="tl bm">
-						<div class="tb tb_h cl">
-							<ul>
-								<li$viewactives[thread]><a href="home.php?mod=space&uid=$uid&view=thread{$hrefsuffix}">主题</a></li>
-								<li$viewactives[reply]><a href="home.php?mod=space&uid=$uid&view=thread&type=reply{$hrefsuffix}">回复</a></li>
-							</ul>
-						</div>
-						<div class="bm_c">
-							<!--{if !empty($threads) || $hiddennum}-->
-							<table cellspacing="0" cellpadding="0">
-								<!--{loop $threads $tid $thread}-->
-								<tbody>
-									<tr>
-										<td class="icn">
-											<!--{if $thread[folder] == 'lock'}-->
-												<img src="{IMGDIR}/folder_lock.gif" />
-											<!--{elseif $thread['special'] == 1}-->
-												<img src="{IMGDIR}/pollsmall.gif" alt="{lang poll}" />
-											<!--{elseif $thread['special'] == 2}-->
-												<img src="{IMGDIR}/tradesmall.gif" alt="{lang trade}" />
-											<!--{elseif $thread['special'] == 3}-->
-												<img src="{IMGDIR}/rewardsmall.gif" alt="{lang reward}" />
-											<!--{elseif $thread['special'] == 4}-->
-												<img src="{IMGDIR}/activitysmall.gif" alt="{lang activity}" />
-											<!--{elseif $thread['special'] == 5}-->
-												<img src="{IMGDIR}/debatesmall.gif" alt="{lang debate}" />
-											<!--{elseif in_array($thread['displayorder'], array(1, 2, 3, 4))}-->
-												<img src="{IMGDIR}/pin_$thread[displayorder].gif" alt="$_G[setting][threadsticky][3-$thread[displayorder]]" />
-											<!--{else}-->
-												<img src="{IMGDIR}/folder_$thread[folder].gif" />
-											<!--{/if}-->
-										</td>
-										<th class="common">
-											<a href="forum.php?mod=viewthread&tid=$thread[tid]" target="_blank" {if $thread['displayorder'] == -1}class="recy"{/if}>$thread[subject]</a>
-											<!--{if $thread['digest'] > 0}-->
-												<img src="{IMGDIR}/digest_$thread[digest].gif" alt="{lang digest} $thread[digest]" align="absmiddle" />
-											<!--{/if}-->
-											<!--{if $thread['attachment'] == 2}-->
-												<img src="{STATICURL}image/filetype/image_s.gif" alt="{lang photo_accessories}" align="absmiddle" />
-											<!--{elseif $thread['attachment'] == 1}-->
-												<img src="{STATICURL}image/filetype/common.gif" alt="{lang accessory}" align="absmiddle" />
-											<!--{/if}-->
-											<!--{if $thread[multipage]}--><span class="tps">$thread[multipage]</span><!--{/if}-->
-											<!--{if !$_GET['filter']}-->
-												<!--{if $thread[$statusfield] == -1}--><span class="xg1">$filter[recyclebin]</span>
-												<!--{elseif $thread[$statusfield] == -2}--><span class="xg1">$filter[aduit]</span>
-												<!--{elseif $thread[$statusfield] == -3 && $thread[displayorder] != -4}--><span class="xg1">$filter[ignored]</span>
-												<!--{elseif $thread[displayorder] == -4}--><span class="xg1">$filter[save]</span>
-												<!--{elseif $thread['closed'] == 1}--><span class="xg1">$filter[close]</span>
-												<!--{/if}-->
-											<!--{/if}-->
-										</th>
-										<td class="by">
-											<a href="forum.php?mod=forumdisplay&fid=$thread[fid]" class="xg1" target="_blank">$thread['forumname']</a>
-										</td>
-										<td class="num">
-											<a href="forum.php?mod=viewthread&tid=$thread[tid]" target="_blank">$thread[replies]</a>
-											<em>$thread[views]</em>
-										</td>
-										<td class="by">
-											<cite><a href="home.php?mod=space&username=$thread[lastposterenc]" target="_blank">$thread[lastposter]</a></cite> <em><a href="forum.php?mod=redirect&tid=$thread[tid]&goto=lastpost#lastpost" target="_blank">$thread[lastpost]</a></em>
-										</td>
-									</tr>
-									<!--{if $viewtype=='reply'}-->
-									<tr>
-										<td class="icn"></td>
-										<td colspan="4">
-											<!--{loop $tids[$tid] $pid}-->
-												<!--{eval $post = $posts[$pid];}-->
-												<div class="tl_reply pbm xg1">
-													<a href="forum.php?mod=redirect&goto=findpost&ptid=$thread[tid]&pid=$pid" target="_blank"><!--{if $post[message]}-->{$post[message]}<!--{else}-->没有预览内容<!--{/if}--></a>
-												</div>
-											<!--{/loop}-->
-										</td>
-									</tr>
+						<!--{if !empty($recommend) && $showrecommend && $view != 'special'}-->
+						<!--{eval $showrecommend = false;}-->
+						<div class="flw_user_list mbm">
+							<h3 class="xi2 xs2 mbw ptm pbm bbda">{lang follow_recommend}</h3>
+							<ul class="ml mls cl">
+							<!--{loop $recommend $ruid $rusername}-->
+								<li>
+									<a href="home.php?mod=space&uid=$ruid" class="avt" c="1" shref="home.php?mod=space&uid=$ruid"><!--{avatar($ruid,small)}--></a>
+									<p><a href="home.php?mod=space&uid=$ruid" style="text-decoration: none !important;">$rusername</a></p>
+									<!--{if helper_access::check_module('follow')}-->
+									<span><a id="a_followmod_{$ruid}" href="home.php?mod=spacecp&ac=follow&op=add&hash={FORMHASH}&fuid=$ruid&from=block" onclick="ajaxget(this.href);doane(event);" style="text-decoration: none !important;">{lang follow_add}</a></span>
 									<!--{/if}-->
-								</tbody>
-								<!--{/loop}-->
-							</table>
-							<!--{if $hiddennum}-->
-								<div class="notice">有 {$hiddennum} 条记录涉及隐私被隐藏</div>
-							<!--{/if}-->
-							<!--{else}-->
-								<div class="emp">没有相关主题</div>
-							<!--{/if}-->
+								</li>
+							<!--{/loop}-->
+							</ul>
 						</div>
+						<!--{/if}-->
 					</div>
-					<!--{if !empty($multi)}--><div class="cl">$multi</div><!--{/if}-->
-					<!--{elseif $type == 'profile'}-->
-						<div id="pprl"><!--{subtemplate home/space_profile_body}--></div>
-					<!--{/if}-->
 				<!--{/if}-->
+				<!--{if count($list['feed']) > 19 && ($archiver || $primary)}-->
+					<script type="text/javascript">
+						var scrollY = 0;
+						var page = 2;
+						var feedInfo = {scrollY: 0, archiver: $archiver, primary: $primary, query: true, scrollNum:1};
+						var loadingfeed = $('loadingfeed');
 
-				<script type="text/javascript">
-					var boxflag = {};
-					function quickreply(fid, tid, feedid) {
-						$('relaybox_'+feedid).style.display = 'none';
-						var replyboxid = 'replybox_'+feedid;
-						if($(replyboxid).style.display == '' && boxflag[replyboxid]) {
-							$(replyboxid).style.display = 'none';
-						} else {
-							boxflag[replyboxid] = true;
-							ajaxget('forum.php?mod=ajax&action=quickreply&tid='+tid+'&fid='+fid+'&handlekey=qreply_'+feedid+'&feedid='+feedid, replyboxid);
-							$(replyboxid).style.display = '';
+						function loadmore() {
+							var currentScroll = document.documentElement.scrollTop || document.body.scrollTop;
+							var sHeight = document.documentElement.scrollHeight;
+							if(currentScroll >= scrollY && currentScroll > (sHeight/5-5) && (feedInfo.primary ||feedInfo.archiver) && feedInfo.query) {
+								/*
+								if(feedInfo.scrollNum) {
+									loadingfeed.className="flw_loading hm vm";
+									loadingfeed.innerHTML = "<img src=\"{IMGDIR}/loading.gif\" class=\"vm\" /> {lang follow_loading}";
+								}
+								*/
+								feedInfo.query = false;
+								var archiver = 0;
+								if(feedInfo.primary) {
+									archiver = 0;
+								} else if(feedInfo.archiver) {
+									archiver = 1;
+								}
+								var url = 'home.php?mod=spacecp&ac=follow&op=getfeed&archiver='+archiver+'&page='+page+'&inajax=1'<!--{if $do == 'feed'}-->+'&viewtype=$view'<!--{elseif $do == 'view'}-->+'&uid=$uid&banavatar=1'<!--{/if}-->;
+								var x = new Ajax();
+								x.get(url, function(s) {
+									if(trim(s) == 'false') {
+										if(!archiver) {
+											feedInfo.primary = false;
+											loadmore();
+											page = 1;
+										} else {
+											feedInfo.archiver = false;
+											page = 1;
+										}
+									} else {
+										$('followlist').innerHTML = $('followlist').innerHTML + s;
+									}
+									if(!feedInfo.primary && !feedInfo.archiver) {
+										loadingfeed.className = "";
+										loadingfeed.innerHTML = "";
+									}
+									feedInfo.query = true;
+								});
+								page++;
+								if(feedInfo.scrollNum) {
+									feedInfo.scrollNum--;
+								} else if(!feedInfo.scrollNum) {
+									window.onscroll = null;
+								}
+
+							}
+							scrollY = currentScroll;
 						}
-					}
-					function quickrelay(feedid, tid) {
-						$('replybox_'+feedid).style.display = 'none';
-						var replyboxid = 'relaybox_'+feedid;
-						if($(replyboxid).style.display == '') {
-							$(replyboxid).style.display = 'none';
-						} else {
-							ajaxget('home.php?mod=spacecp&ac=follow&op=relay&feedid='+feedid+'&tid='+tid+'&handlekey=qrelay_'+feedid, replyboxid);
-							$(replyboxid).style.display = '';
+
+						window.onload = function() {
+							scrollY =  document.documentElement.scrollTop || document.body.scrollTop;
+							window.onscroll = loadmore;
 						}
+					</script>
+				<!--{/if}-->
+			<!--{/if}-->
+
+			<script type="text/javascript">
+				var boxflag = {};
+				function quickreply(fid, tid, feedid) {
+					$('relaybox_'+feedid).style.display = 'none';
+					var replyboxid = 'replybox_'+feedid;
+					if($(replyboxid).style.display == '' && boxflag[replyboxid]) {
+						$(replyboxid).style.display = 'none';
+					} else {
+						boxflag[replyboxid] = true;
+						ajaxget('forum.php?mod=ajax&action=quickreply&tid='+tid+'&fid='+fid+'&handlekey=qreply_'+feedid+'&feedid='+feedid, replyboxid);
+						$(replyboxid).style.display = '';
 					}
-				</script>
+				}
+				function quickrelay(feedid, tid) {
+					$('replybox_'+feedid).style.display = 'none';
+					var replyboxid = 'relaybox_'+feedid;
+					if($(replyboxid).style.display == '') {
+						$(replyboxid).style.display = 'none';
+					} else {
+						ajaxget('home.php?mod=spacecp&ac=follow&op=relay&feedid='+feedid+'&tid='+tid+'&handlekey=qrelay_'+feedid, replyboxid);
+						$(replyboxid).style.display = '';
+					}
+				}
+			</script>
 
 			<!--{elseif in_array($do, array('following', 'follower'))}-->
-				<div id="flw_header" {if !$viewself}class="flw_uheader"{/if}>
-
-					<!--{subtemplate home/follow_user_header}-->
-
-					<div class="{if !$viewself}mtw{/if} tb cl">
-						<ul>
-							<li$navactives[following]><a href="home.php?mod=follow&do=following&uid=$uid"><!--{if $viewself}-->我收听的<!--{else}-->收听的人<!--{/if}--></a></li>
-							<li$navactives[follower]><a href="home.php?mod=follow&do=follower&uid=$uid"><!--{if $viewself}-->我的听众<!--{else}-->听众<!--{/if}--></a></li>
-						</ul>
-					</div>
-				</div>
 				<!--{if $list}-->
 					<ul class="flw_ulist">
 					<!--{loop $list $fuid $fuser}-->
 						<li class="cl">
 						<!--{if $do=='following'}-->
-							<a href="home.php?mod=space&uid=$fuser['followuid']{$hrefsuffix}" title="$fuser['fusername']" id="edit_avt" class="flw_avt" c="1" shref="home.php?mod=space&uid=$fuser['followuid']"><!--{avatar($fuser['followuid'],small)}--></a>
+							<a href="home.php?mod=space&uid=$fuser['followuid']" title="$fuser['fusername']" id="edit_avt" class="flw_avt" c="1" shref="home.php?mod=space&uid=$fuser['followuid']"><!--{avatar($fuser['followuid'],small)}--></a>
 							<!--{if $viewself}-->
-								<a id="a_followmod_{$fuser['followuid']}" href="home.php?mod=spacecp&ac=follow&op=del&fuid=$fuser['followuid']" onclick="ajaxget(this.href);doane(event);" class="flw_btn_unfo">取消收听</a>
+								<a id="a_followmod_{$fuser['followuid']}" href="home.php?mod=spacecp&ac=follow&op=del&fuid=$fuser['followuid']" onclick="ajaxget(this.href);doane(event);" class="flw_btn_unfo">{lang follow_del}</a>
 							<!--{elseif $fuser[followuid] != $_G[uid]}-->
 								<!--{if $fuser['mutual']}-->
-									<a id="a_followmod_{$fuser['followuid']}" href="home.php?mod=spacecp&ac=follow&op=del&fuid=$fuser['followuid']"  onclick="ajaxget(this.href);doane(event);" class="flw_btn_unfo">取消收听</a>
-								<!--{else}-->
-									<a id="a_followmod_{$fuser['followuid']}" href="home.php?mod=spacecp&ac=follow&op=add&fuid=$fuser['followuid']" onclick="ajaxget(this.href);doane(event);" class="flw_btn_fo">收听</a>
+									<!--{if $fuser['mutual'] > 0}--><span class="z flw_status_2">{lang follow_follower_mutual}</span><!--{else}--><span class="z flw_status_1">{lang did_not_follow_to_me}</span><!--{/if}--><a id="a_followmod_{$fuser['followuid']}" href="home.php?mod=spacecp&ac=follow&op=del&fuid=$fuser['followuid']"  onclick="ajaxget(this.href);doane(event);" class="flw_btn_unfo">{lang follow_del}</a>
+								<!--{elseif helper_access::check_module('follow')}-->
+									<a id="a_followmod_{$fuser['followuid']}" href="home.php?mod=spacecp&ac=follow&op=add&hash={FORMHASH}&fuid=$fuser['followuid']" onclick="ajaxget(this.href);doane(event);" class="flw_btn_fo">{lang follow_add}</a>
 								<!--{/if}-->
 							<!--{/if}-->
-							<h6 class="pbn xs2"><a href="home.php?mod=space&uid=$fuser['followuid']{$hrefsuffix}" title="$fuser['fusername']" class="xi2" c="1" shref="home.php?mod=space&uid=$fuser['followuid']">$fuser['fusername']</a>&nbsp;<span id="followbkame_{$fuser['followuid']}" class="xg1 xs1 xw0"><!--{if $fuser['bkname']}-->$fuser[bkname]<!--{/if}--></span></h6>
-							<!--{if !empty($fuser['recentnote'])}--><p><span class="xg1">最近动作：</span>$fuser[recentnote]</p><!--{/if}-->
+							<h6 class="pbn xs2"><a href="home.php?mod=space&uid=$fuser['followuid']" title="$fuser['fusername']" class="xi2" c="1" shref="home.php?mod=space&uid=$fuser['followuid']">$fuser['fusername']</a>&nbsp;<span id="followbkame_{$fuser['followuid']}" class="xg1 xs1 xw0"><!--{if $fuser['bkname']}-->$fuser[bkname]<!--{/if}--></span></h6>
+							<!--{if !empty($fuser['recentnote'])}--><p><span class="xg1">{lang follow_recent_note}：</span>$fuser[recentnote]</p><!--{/if}-->
 							<p class="ptm xg1">
-								<!--{if $memberprofile[$fuid]['resideprovince'] || $memberprofile[$fuid]['residecity']}-->来自：$memberprofile[$fuid]['resideprovince'] $memberprofile[$fuid]['residecity'] &nbsp;<!--{/if}-->
-								听众: <a href="home.php?mod=follow&do=follower&uid=$fuser['followuid']"><strong class="xi2" id="followernum_$fuser['followuid']">$memberinfo[$fuid]['follower']</strong></a>人 &nbsp;
-								收听: <a href="home.php?mod=follow&do=following&uid=$fuser['followuid']"><strong class="xi2">$memberinfo[$fuid]['following']</strong></a>人 &nbsp;
+								<!--{if $memberprofile[$fuid]['resideprovince'] || $memberprofile[$fuid]['residecity']}-->{lang comefrom}：$memberprofile[$fuid]['resideprovince'] $memberprofile[$fuid]['residecity'] &nbsp;<!--{/if}-->
+								{lang follow_follower}: <a href="home.php?mod=follow&do=follower&uid=$fuser['followuid']"><strong class="xi2" id="followernum_$fuser['followuid']">$memberinfo[$fuid]['follower']</strong></a>{lang person} &nbsp;
+								{lang follow_add}: <a href="home.php?mod=follow&do=following&uid=$fuser['followuid']"><strong class="xi2">$memberinfo[$fuid]['following']</strong></a>{lang person} &nbsp;
 								<!--{if $viewself && $fuser[followuid] != $_G[uid]}-->
 								<span class="pipe">|</span>
-								<a href="home.php?mod=spacecp&ac=follow&op=bkname&fuid=$fuser['followuid']&handlekey=followbkame_$fuser['followuid']" id="fbkname_$fuser['followuid']" onclick="showWindow('followbkame_{$fuser['followuid']}', this.href, 'get', 0);"><!--{if $fuser['bkname']}-->修改备注<!--{else}-->添加备注<!--{/if}--></a>
+								<a href="home.php?mod=spacecp&ac=follow&op=bkname&fuid=$fuser['followuid']&handlekey=followbkame_$fuser['followuid']" id="fbkname_$fuser['followuid']" onclick="showWindow('followbkame_{$fuser['followuid']}', this.href, 'get', 0);"><!--{if $fuser['bkname']}-->{lang follow_mod_bkname}<!--{else}-->{lang follow_add_bkname}<!--{/if}--></a>
+								<!--{if helper_access::check_module('follow')}-->
 								<span class="pipe">|</span>
-								<a id="a_specialfollow_{$fuser['followuid']}" href="home.php?mod=spacecp&ac=follow&op=add&special={if $fuser['status'] == 1}2{else}1{/if}&fuid=$fuser['followuid']" onclick="ajaxget(this.href);doane(event);">{if $fuser['status'] == 1}取消特别收听{else}加入特别收听{/if}</a>
+								<a id="a_specialfollow_{$fuser['followuid']}" href="home.php?mod=spacecp&ac=follow&op=add&hash={FORMHASH}&special={if $fuser['status'] == 1}2{else}1{/if}&fuid=$fuser['followuid']" onclick="ajaxget(this.href);doane(event);"><!--{if $fuser['status'] == 1}-->{lang follow_del_special_following}<!--{else}-->{lang follow_add_special_following}<!--{/if}--></a>
+								<!--{/if}-->
 								<!--{/if}-->
 							</p>
 						<!--{else}-->
-							<a href="home.php?mod=space&uid=$fuser['uid']{$hrefsuffix}" title="$fuser['username']" id="edit_avt" class="flw_avt" c="1" shref="home.php?mod=space&uid=$fuser['uid']"><!--{avatar($fuser['uid'],small)}--></a>
+							<a href="home.php?mod=space&uid=$fuser['uid']" title="$fuser['username']" id="edit_avt" class="flw_avt" c="1" shref="home.php?mod=space&uid=$fuser['uid']"><!--{avatar($fuser['uid'],small)}--></a>
 							<!--{if $fuser[uid] != $_G[uid]}-->
 								<!--{if $fuser['mutual']}-->
-									<a id="a_followmod_{$fuser['uid']}" href="home.php?mod=spacecp&ac=follow&op=del&fuid=$fuser['uid']"  onclick="ajaxget(this.href);doane(event);" class="flw_btn_unfo">取消收听</a>
-								<!--{else}-->
-									<a id="a_followmod_{$fuser['uid']}" href="home.php?mod=spacecp&ac=follow&op=add&fuid=$fuser['uid']" onclick="ajaxget(this.href);doane(event);" class="flw_btn_fo">收听</a>
+									<!--{if $fuser['mutual'] > 0}--><span class="z flw_status_2">{lang follow_follower_mutual}</span><!--{else}--><span class="z flw_status_1">{lang did_not_follow_to_me}</span><!--{/if}--><a id="a_followmod_{$fuser['uid']}" href="home.php?mod=spacecp&ac=follow&op=del&fuid=$fuser['uid']"  onclick="ajaxget(this.href);doane(event);" class="flw_btn_unfo">{lang follow_del}</a>
+								<!--{elseif helper_access::check_module('follow')}-->
+									<a id="a_followmod_{$fuser['uid']}" href="home.php?mod=spacecp&ac=follow&op=add&hash={FORMHASH}&fuid=$fuser['uid']" onclick="ajaxget(this.href);doane(event);" class="flw_btn_fo">{lang follow_add}</a>
 								<!--{/if}-->
 							<!--{/if}-->
-							<h6 class="pbn xs2"><a href="home.php?mod=space&uid=$fuser['uid']{$hrefsuffix}" title="$fuser['username']" class="xi2" c="1" shref="home.php?mod=space&uid=$fuser['uid']">$fuser['username']</a></h6>
-							<p><span class="xg1">最近动作：</span>$fuser[recentnote]</p>
+							<h6 class="pbn xs2"><a href="home.php?mod=space&uid=$fuser['uid']" title="$fuser['username']" class="xi2" c="1" shref="home.php?mod=space&uid=$fuser['uid']">$fuser['username']</a></h6>
+							<p><span class="xg1">{lang follow_recent_note}：</span>$fuser[recentnote]</p>
 							<p class="ptm xg1">
-								<!--{if $memberprofile[$fuid]['resideprovince'] || $memberprofile[$fuid]['residecity']}-->来自：$memberprofile[$fuid]['resideprovince'] $memberprofile[$fuid]['residecity'] &nbsp;<!--{/if}-->
-								听众: <a href="home.php?mod=follow&do=follower&uid=$fuser['uid']"><strong class="xi2" id="followernum_$fuser['uid']">$memberinfo[$fuid]['follower']</strong></a>人 &nbsp;
-								收听: <a href="home.php?mod=follow&do=following&uid=$fuser['uid']"><strong class="xi2">$memberinfo[$fuid]['following']</strong></a>人
+								<!--{if $memberprofile[$fuid]['resideprovince'] || $memberprofile[$fuid]['residecity']}-->{lang comefrom}：$memberprofile[$fuid]['resideprovince'] $memberprofile[$fuid]['residecity'] &nbsp;<!--{/if}-->
+								{lang follow_follower}: <a href="home.php?mod=follow&do=follower&uid=$fuser['uid']"><strong class="xi2" id="followernum_$fuser['uid']">$memberinfo[$fuid]['follower']</strong></a>{lang person} &nbsp;
+								{lang follow_add}: <a href="home.php?mod=follow&do=following&uid=$fuser['uid']"><strong class="xi2">$memberinfo[$fuid]['following']</strong></a>{lang person}
 							</p>
 						<!--{/if}-->
 						</li>
@@ -933,15 +609,15 @@ a.progressCancel:hover {
 										<h2 class="xg1 xs2 hm">
 											<!--{if $viewself}-->
 												<!--{if $do=='following'}-->
-													您还没有收听任何人，您可以先到<a href="home.php?mod=follow&view=other" class="xi2">广播大厅</a>寻找感兴趣的人并收听他
+													{lang follow_you_following_none}<a href="home.php?mod=follow&view=other" class="xi2">{lang follow_hall}</a>{lang follow_fetch_interested_user}
 												<!--{else}-->
-													还没有人收听您，多<a href="home.php?mod=follow" class="xi2">发广播</a>多互动别人才会收听您 :)
+													{lang follow_you_follower_none1}<a href="home.php?mod=follow" class="xi2">{lang follow_add_feed}</a>{lang follow_you_follower_none2}
 												<!--{/if}-->
 											<!--{else}-->
 												<!--{if $do=='following'}-->
-													TA还没有收听任何人
+													{lang follow_user_following_none}
 												<!--{else}-->
-													还没有人收听TA
+													{lang follow_user_follower_none}
 												<!--{/if}-->
 
 											<!--{/if}-->
@@ -953,147 +629,42 @@ a.progressCancel:hover {
 					</div>
 				<!--{/if}-->
 			<!--{/if}-->
+
+		<!--{if !$_G[setting][homepagestyle]}--><!--[diy=diycontentbottom]--><div id="diycontentbottom" class="area"></div><!--[/diy]--><!--{/if}-->
+
+		<!--{if $do != 'feed'}-->
+					</div>
+				</div>
+			<!--{if $_G[setting][homepagestyle]}-->
+			</div>
+			<div class="sd">
+				<!--{subtemplate home/space_userabout}-->
+			<!--{/if}-->
+		<!--{/if}-->
 		</div>
 	</div>
 
-	<div class="sd">
-		<!--{if $viewself}-->
-			<div id="flw_avt">
-				<p><a href="home.php?mod=space&uid=$uid{$hrefsuffix}"><!--{avatar($uid)}--></a></p>
-				<div class="tns">
-					<table cellspacing="0" cellpadding="0">
-						<tr>
-							<th$navactives[feed]>
-								<p><a href="home.php?mod=space&uid=$uid{$hrefsuffix}" class="xi2">$space['feeds']</a></p>
-								<a href="home.php?mod=space&uid=$uid{$hrefsuffix}" class="xg1">广播</a>
-							</th>
-							<th$navactives[following]>
-								<p><a href="home.php?mod=follow&do=following&uid=$uid" class="xi2">$space['following']</a></p>
-								<a href="home.php?mod=follow&do=following&uid=$uid" class="xg1">收听</a>
-							</th>
-							<td$navactives[follower]>
-								<p><a href="home.php?mod=follow&do=follower&uid=$uid" class="xi2">$space['follower']</a></p>
-								<a href="home.php?mod=follow&do=follower&uid=$uid" class="xg1">听众</a>
-							</td>
-						</tr>
-					</table>
-				</div>
-				<!--{if $space[bio] || $_G['setting']['homestatus']}-->
-				<div class="flw_user_info">
-					<!--{if $space[bio]}--><p class="pbn">$space[bio]</p><!--{/if}-->
-					<!--{if $_G['setting']['homestatus']}-->
-					<a href="home.php?mod=space&uid=$uid&do=index" class="flw_linktohome xi2">查看空间</a>
-					<!--{/if}-->
-				</div>
-				<!--{/if}-->
-				<!--{hook/follow_side_user}-->
-			</div>
+<!--{if !$_G[setting][homepagestyle]}-->
+	<div class="wp mtn">
+		<!--[diy=diy3]--><div id="diy3" class="area"></div><!--[/diy]-->
+	</div>
+<!--{/if}-->
 
-			<div id="flw_side_tab">
-				<ul>
-					<li$actives[follow]><a href="home.php?mod=follow&view=follow"><img src="{IMGDIR}/flw_following.png" alt="" />我收听的</a></li>
-					<li$actives[feed]><a href="home.php?mod=space&uid=$uid{$hrefsuffix}"><img src="{IMGDIR}/flw_feed.png" alt="" />我的广播</a></li>
-					<li$actives[other]><a href="home.php?mod=follow&view=other"><img src="{IMGDIR}/flw_allfeed.png" alt="" />广播大厅</a></li>
-					<!--{hook/follow_side_extra}-->
-				</ul>
-			</div>
-
-			<!--{if !empty($recommend) && $showrecommend}-->
-				<!--{eval $showrecommend = false;}-->
-				<div id="flw_side_promote" class="bm flw_side_promote">
-					<div class="bm_h">
-						<h2>推荐收听</h2>
-					</div>
-					<div class="bm_c xld xlda">
-						<!--{loop $recommend $ruid $rusername}-->
-						<dl class="bbda cl">
-							<dd class="m">
-								<a href="home.php?mod=space&uid=$ruid{$hrefsuffix}" class="avt" c="1" shref="home.php?mod=space&uid=$ruid"><!--{avatar($ruid,small)}--></a>
-							</dd>
-							<dt><a href="home.php?mod=space&uid=$ruid{$hrefsuffix}">$rusername</a></dt>
-							<dd><a id="a_followmod_{$ruid}" href="home.php?mod=spacecp&ac=follow&op=add&fuid=$ruid&from=block" onclick="ajaxget(this.href);doane(event);">收听</a></dd>
-						</dl>
-						<!--{/loop}-->
-					</div>
-				</div>
-			<!--{/if}-->
-		<!--{else}-->
-			<div id="flw_avt">
-				<h3 class="xs2 mbm">$space[username] 的资料</h3>
-				<ul class="xl">
-					<li>UID: {$space[uid]}</li>
-					<li>{lang regdate}: <!--{if $_GET['view'] == 'profile'}-->$space['regdate']<!--{else}--><!--{date($space['regdate'])}--><!--{/if}--></li>
-					<li>主题数: <a href="home.php?mod=space&uid=$space[uid]&view=thread">$space[threads]</a></li>
-					<li>帖子数: <a href="home.php?mod=space&uid=$space[uid]&view=thread&type=reply">$space[posts]</a></li>
-					<li>广播数: $space[feeds]</li>
-					<!--{if $space['resideprovince']}--><li>来自: $space['resideprovince'] $space['residecity']</li><!--{/if}-->
-					<li>积分: $space[credits]</li>
-				</ul>
-			</div>
-
-			<!--{if $specialfollow}-->
-			<div class="bm">
-				<div class="bm_h"><h3>$space[username] 特别收听的人</h3></div>
-				<div class="bm_c">
-					<ul class="ml mls cl">
-						<!--{loop $specialfollow $user}-->
-						<li>
-							<a href="home.php?mod=space&uid=$user['followuid']{$hrefsuffix}" class="avt" title="$user['fusername']" c="1" shref="home.php?mod=space&uid=$user['followuid']"><!--{avatar($user['followuid'],small)}--></a>
-							<p>
-								<a href="home.php?mod=space&uid=$user['followuid']{$hrefsuffix}" c="1" shref="home.php?mod=space&uid=$user['followuid']">$user['fusername']</a>
-								<a id="a_followmod_{$user['followuid']}" href="home.php?mod=spacecp&ac=follow&op=add&fuid=$user['followuid']" onclick="ajaxget(this.href);doane(event);" class="flw_btn_fo">收听</a>
-							</p>
-						</li>
-						<!--{/loop}-->
-					</ul>
-				</div>
-			</div>
-			<!--{/if}-->
-
-			<!--{if $do=='following'}-->
-
-				<!--{if $followerlist}-->
-					<div class="bm">
-						<div class="bm_h"><h3>$space[username] 的的听众</h3></div>
-						<div class="bm_c">
-							<ul class="ml mls cl">
-								<!--{loop $followerlist $user}-->
-								<li>
-									<a href="home.php?mod=space&uid=$user['uid']{$hrefsuffix}" class="avt" title="$user['username']" c="1" shref="home.php?mod=space&uid=$user['uid']"><!--{avatar($user['uid'],small)}--></a>
-									<p>
-										<a href="home.php?mod=space&uid=$user['uid']{$hrefsuffix}">$user['username']</a>
-									</p>
-								</li>
-								<!--{/loop}-->
-							</ul>
-						</div>
-					</div>
-					<!--{/if}-->
-
-				<!--{elseif !empty($followerlist)}-->
-					<div class="bm">
-						<div class="bm_h"><h3>$space[username] 收听的人</h3></div>
-						<div class="bm_c">
-							<ul class="ml mls cl">
-								<!--{loop $followerlist $user}-->
-								<li>
-									<a href="home.php?mod=space&uid=$user['followuid']{$hrefsuffix}" class="avt" title="$user['fusername']" c="1" shref="home.php?mod=space&uid=$user['followuid']"><!--{avatar($user['followuid'],small)}--></a>
-									<p>
-										<a href="home.php?mod=space&uid=$user['followuid']{$hrefsuffix}">$user['fusername']</a>
-									</p>
-								</li>
-								<!--{/loop}-->
-							</ul>
-						</div>
-					</div>
-				<!--{/if}-->
-
-			<!--{/if}-->
-
-			<!--{hook/follow_side_bottom}-->
-
+<!--{if $showguide && $do == 'feed'}-->
+<style type="text/css">
+	.widthauto #nv_menu { width: 95%; }
+	.widthauto #nv_menu div { position: absolute;left: 50%;margin-left: -472px;width:944px; }
+</style>
+<div id="nv_menu" style="display:none;">
+	<div>
+		<img src="{IMGDIR}/flw_guide.png" alt="" />
+		<button class="pn pnc" style="margin: -50px 0 20px 430px;" onclick="hideMenu()"><span>{lang follow_i_know}</span></button>
 	</div>
 </div>
+<script type="text/javascript">
+	showMenu({'ctrlid':'nv','pos':'13','cover':'1'});
+</script>
+<!--{/if}-->
 
 <script type="text/javascript" reload="1">
 	function succeedhandle_followmod(url, msg, values) {
@@ -1101,15 +672,17 @@ a.progressCancel:hover {
 		if(numObj) {followernum = parseInt(numObj.innerHTML);}
 		if(values['type'] == 'add') {
 			if(values['from'] == 'head') {
-				$('followflag').style.display = '';
-				$('unfollowflag').style.display = 'none';
-				$('fbkname_'+values['fuid']).style.display = '';
-			} else {
-				$('a_followmod_'+values['fuid']).innerHTML = '取消收听';
+				if($('followflag')) $('followflag').style.display = '';
+				if($('unfollowflag')) $('unfollowflag').style.display = 'none';
+				if($('fbkname_'+values['fuid'])) $('fbkname_'+values['fuid']).style.display = '';
+			} else if($('a_followmod_'+values['fuid'])) {
+								
+				$('a_followmod_'+values['fuid']).innerHTML = '{lang follow_del}';
 				if(values['from'] != 'block') {
 					$('a_followmod_'+values['fuid']).className = 'flw_btn_unfo';
 				}
 				$('a_followmod_'+values['fuid']).href = 'home.php?mod=spacecp&ac=follow&op=del&fuid='+values['fuid']+(values['from'] == 'block' ? '&from=block' : '');
+				
 			}
 			if(numObj) {
 				numObj.innerHTML = followernum + 1;
@@ -1117,17 +690,19 @@ a.progressCancel:hover {
 
 		} else if(values['type'] == 'del') {
 			if(values['from'] == 'head') {
-				$('followflag').style.display = 'none';
-				$('unfollowflag').style.display = '';
-				$('followbkame_'+values['fuid']).innerHTML = '';
-				$('fbkname_'+values['fuid']).innerHTML = '[添加备注]';
-				$('fbkname_'+values['fuid']).style.display = 'none';
-			} else {
-				$('a_followmod_'+values['fuid']).innerHTML = '收听';
+				if($('followflag')) $('followflag').style.display = 'none';
+				if($('unfollowflag')) $('unfollowflag').style.display = '';
+				if($('followbkame_'+values['fuid'])) $('followbkame_'+values['fuid']).innerHTML = '';
+				if($('fbkname_'+values['fuid'])) {
+					$('fbkname_'+values['fuid']).innerHTML = '[{lang follow_add_bkname}]';
+					$('fbkname_'+values['fuid']).style.display = 'none';
+				}
+			} else if($('a_followmod_'+values['fuid']))  {
+				$('a_followmod_'+values['fuid']).innerHTML = '{lang follow_add}';
 				if(values['from'] != 'block') {
 					$('a_followmod_'+values['fuid']).className = 'flw_btn_fo';
 				}
-				$('a_followmod_'+values['fuid']).href = 'home.php?mod=spacecp&ac=follow&op=add&fuid='+values['fuid']+(values['from'] == 'block' ? '&from=block' : '');
+				$('a_followmod_'+values['fuid']).href = 'home.php?mod=spacecp&ac=follow&op=add&hash={FORMHASH}&fuid='+values['fuid']+(values['from'] == 'block' ? '&from=block' : '');
 			}
 			if(numObj) {
 				numObj.innerHTML = followernum - 1;
@@ -1137,17 +712,16 @@ a.progressCancel:hover {
 				var specialObj = $('specialflag_'+values['fuid']);
 				if(values['special'] == 1) {
 					specialObj.className = 'flw_specialfo';
-					specialObj.innerHTML = '加入特别收听';
+					specialObj.innerHTML = '{lang follow_add_special_following}';
 				} else {
 					specialObj.className = 'flw_specialunfo';
-					specialObj.innerHTML = '取消特别收听';
+					specialObj.innerHTML = '{lang follow_del_special_following}';
 				}
-				specialObj.setAttribute("tip", specialObj.innerHTML);
-				$('append_parent').removeChild($('specialflag_' + values['fuid'] + '_menu'));
-				specialObj.href = 'home.php?mod=spacecp&ac=follow&op=add&special='+values['special']+'&fuid='+values['fuid']+'&from=head';
+				specialObj.title = specialObj.innerHTML;
+				specialObj.href = 'home.php?mod=spacecp&ac=follow&op=add&hash={FORMHASH}&special='+values['special']+'&fuid='+values['fuid']+'&from=head';
 			} else {
-				$('a_specialfollow_'+values['fuid']).innerHTML = values['special'] == 1 ? '加入特别收听' : '取消特别收听';
-				$('a_specialfollow_'+values['fuid']).href = 'home.php?mod=spacecp&ac=follow&op=add&special='+values['special']+'&fuid='+values['fuid'];
+				$('a_specialfollow_'+values['fuid']).innerHTML = values['special'] == 1 ? '{lang follow_add_special_following}' : '{lang follow_del_special_following}';
+				$('a_specialfollow_'+values['fuid']).href = 'home.php?mod=spacecp&ac=follow&op=add&hash={FORMHASH}&special='+values['special']+'&fuid='+values['fuid'];
 			}
 		}
 	}
@@ -1169,10 +743,10 @@ a.progressCancel:hover {
 		var obj = $(id);
 		if(obj.style.display == 'none') {
 			obj.style.display =  '';
-			clickobj.innerHTML = '- 收起';
+			clickobj.innerHTML = '- {lang pack_up}';
 		} else {
 			obj.style.display =  'none';
-			clickobj.innerHTML = '+ 展开全文';
+			clickobj.innerHTML = '+ {lang follow_open_feed}';
 		}
 	}
 </script>

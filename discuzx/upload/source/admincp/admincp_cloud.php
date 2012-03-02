@@ -4,7 +4,7 @@
  *	  [Discuz!] (C)2001-2099 Comsenz Inc.
  *	  This is NOT a freeware, use is subject to license terms
  *
- *	  $Id: admincp_cloud.php 26016 2011-11-29 07:53:19Z monkey $
+ *	  $Id: admincp_cloud.php 28113 2012-02-22 09:25:55Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -92,7 +92,7 @@ if(!$operation || $operation == 'open') {
 				</td>
 				</tr>';
 
-			showsubmit('submit', 'cloud_will_open', '', '<script type="text/javascript">$(\'submit_submit\').disabled = true; $(\'submit_submit\').style.color = \'#aaa\';</script><span id="cloud_doctor_site_test_result_div"><img src="' . $_G['style']['imgdir'] . '/loading.gif" class="vm"> «Î…‘∫Ú...</span>');
+			showsubmit('submit', 'cloud_will_open', '', '<script type="text/javascript">$(\'submit_submit\').disabled = true; $(\'submit_submit\').style.color = \'#aaa\';</script><span id="cloud_doctor_site_test_result_div"><img src="' . $_G['style']['imgdir'] . '/loading.gif" class="vm"> '.cplang('cloud_waiting').'</span>');
 			showtablefooter();
 			showformfooter();
 
@@ -237,7 +237,7 @@ EOT;
 
 	require libfile("cloud/$operation", 'admincp');
 
-} elseif(in_array($operation, array('manyou', 'connect', 'security', 'stats', 'search', 'smilies', 'qqgroup', 'union'))) {
+} elseif(in_array($operation, array('manyou', 'connect', 'security', 'stats', 'search', 'smilies', 'qqgroup', 'union', 'storage'))) {
 	if($cloudstatus != 'cloud') {
 		cpmsg('cloud_open_first', '', 'succeed', array(), '<p class="marginbot"><a href="###" onclick="top.location = \''.ADMINSCRIPT.'?frames=yes&action=cloud&operation=open\'" class="lightlink">'.cplang('message_redirect').'</a></p><script type="text/JavaScript">setTimeout("top.location = \''.ADMINSCRIPT.'?frames=yes&action=cloud&operation=open\'", 3000);</script>');
 	}

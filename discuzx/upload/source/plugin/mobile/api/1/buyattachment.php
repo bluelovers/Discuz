@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: buyattachment.php 27451 2012-02-01 05:48:47Z monkey $
+ *      $Id: buyattachment.php 28205 2012-02-24 04:51:47Z monkey $
  */
 
 if(!defined('IN_MOBILE_API')) {
@@ -28,6 +28,7 @@ class mobile_api {
 		    'authorid' => $GLOBALS['attach']['uid'],
 		    'author' => $GLOBALS['attach']['author'],
 		    'price' => $GLOBALS['attach']['price'],
+		    'balance' => $GLOBALS['balance'],
 		    'credit' => mobile_core::getvalues($_G['setting']['extcredits'][$_G['setting']['creditstransextra'][1]], array('title', 'unit')),
 		);
 		mobile_core::result(mobile_core::variable($variable));

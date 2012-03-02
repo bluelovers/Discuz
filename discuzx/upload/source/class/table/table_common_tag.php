@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_tag.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_common_tag.php 27769 2012-02-14 06:29:36Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -76,7 +76,7 @@ class table_common_tag extends discuz_table
 			$sqlglue = ' AND ';
 		}
 		if($tagname) {
-			$addsql .= $sqlglue." tagname='$tagname'";
+			$addsql .= $sqlglue.' '.DB::field('tagname', $tagname);
 		}
 		return DB::fetch_first("SELECT tagid,tagname,status FROM ".DB::table('common_tag')." WHERE $addsql");
 	}

@@ -185,7 +185,7 @@
 					<!--{if !$_GET['archiveid']}--><a href="javascript:;" id="newspecial" onmouseover="$('newspecial').id = 'newspecialtmp';this.id = 'newspecial';showMenu({'ctrlid':this.id})"{if !$_G['forum']['allowspecialonly'] && empty($_G['forum']['picstyle']) && !$_G['forum']['threadsorts']['required']} onclick="showWindow('newthread', 'forum.php?mod=post&action=newthread&fid=$_G[fid]')"{else} onclick="location.href='forum.php?mod=post&action=newthread&fid=$_G[fid]';return false;"{/if} title="{lang send_posts}"><img src="{IMGDIR}/pn_post.png" alt="{lang send_posts}" /></a><!--{/if}-->
 					<!--{hook/forumdisplay_postbutton_top}-->
 				</div>
-				<!--{if ($_G['forum']['threadtypes'] && $_G['forum']['threadtypes']['listable']) || count($_G['forum']['threadsorts']['types']) > 1}-->
+				<!--{if ($_G['forum']['threadtypes'] && $_G['forum']['threadtypes']['listable']) || count($_G['forum']['threadsorts']['types']) > 0}-->
 					<ul id="thread_types" class="ttp bm cl">
 						<!--{hook/forumdisplay_threadtype_inner}-->
 						<li id="ttp_all" {if !$_GET['typeid'] && !$_GET['sortid']}class="xw1 a"{/if}><a href="forum.php?mod=forumdisplay&fid=$_G[fid]{if $_G['forum']['threadsorts']['defaultshow']}&filter=sortall&sortall=1{/if}{if $_GET['archiveid']}&archiveid={$_GET['archiveid']}{/if}">{lang forum_viewall}</a></li>
@@ -330,28 +330,16 @@
 	</ul>
 <!--{/if}-->
 
-<!--{if $_G['setting']['visitedforums'] || $oldthreads}-->
-	<div id="visitedforums_menu" class="{if $oldthreads}visited_w {/if}p_pop blk cl" style="display: none;">
+<!--{if $_G['setting']['visitedforums'] && $_G['forum']['status'] != 3}-->
+	<div id="visitedforums_menu" class="p_pop blk cl" style="display: none;">
 		<table cellspacing="0" cellpadding="0">
 			<tr>
-				<!--{if $oldthreads}-->
-					<td id="v_threads">
-						<h3 class="mbn pbn bbda xg1">{lang viewd_threads}</h3>
-						<ul class="xl xl1">
-						<!--{loop $oldthreads $oldtid $oldsubject}-->
-							<li><a href="forum.php?mod=viewthread&tid=$oldtid">$oldsubject</a></li>
-						<!--{/loop}-->
-						</ul>
-					</td>
-				<!--{/if}-->
-				<!--{if $_G['setting']['visitedforums']}-->
-					<td id="v_forums">
-						<h3 class="mbn pbn bbda xg1">{lang viewed_forums}</h3>
-						<ul class="xl xl1">
-							$_G['setting']['visitedforums']
-						</ul>
-					</td>
-				<!--{/if}-->
+				<td id="v_forums">
+					<h3 class="mbn pbn bbda xg1">{lang viewed_forums}</h3>
+					<ul class="xl xl1">
+						$_G['setting']['visitedforums']
+					</ul>
+				</td>
 			</tr>
 		</table>
 	</div>
@@ -362,10 +350,6 @@
 
 <!--{if empty($_G['forum']['picstyle']) && $_GET['orderby'] == 'lastpost' && empty($_GET['filter']) }-->
 	<script type="text/javascript">checkForumnew_handle = setTimeout(function () {checkForumnew($_G[fid], lasttime);}, checkForumtimeout);</script>
-<!--{/if}-->
-
-<!--{if $my_search_se_url}-->
-<script type="text/javascript" language="utf-8" src="$my_search_se_url"></script>
 <!--{/if}-->
 
 <div class="wp mtn">
