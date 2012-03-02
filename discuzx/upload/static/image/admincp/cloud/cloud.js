@@ -100,11 +100,11 @@ function ajaxShowAPIStatus(apiType, ips) {
 		var apiTdFirst = document.createElement('td');
 		apiTdFirst.className = 'td24';
 		if (!apiType || apiType == 1) {
-			apiTdFirst.innerHTML = '<strong>雲平台其他接口測試</strong>';
+			apiTdFirst.innerHTML = '<strong>云平台其他接口测试</strong>';
 		} else if (apiType == 2) {
-			apiTdFirst.innerHTML = '<strong>漫遊其他接口測試</strong>';
+			apiTdFirst.innerHTML = '<strong>漫游其他接口测试</strong>';
 		} else if (apiType == 3) {
-			apiTdFirst.innerHTML = '<strong>QQ互聯接口測試</strong>';
+			apiTdFirst.innerHTML = '<strong>QQ互联接口测试</strong>';
 		}
 
 		var apiTdSecond = document.createElement('td');
@@ -141,7 +141,7 @@ function siteTestApiCallback(returnInfo, siteTestPosition) {
 	}
 
 	if (typeof returnInfo == 'undefined' || !returnInfo) {
-		$('cloud_doctor_site_test_result_div').innerHTML = '<img align="absmiddle" src="static/image/admincp/cloud/wrong.gif" /> 服務器繁忙，請稍後再試';
+		$('cloud_doctor_site_test_result_div').innerHTML = '<img align="absmiddle" src="static/image/admincp/cloud/wrong.gif" /> 服务器繁忙，请稍后再试';
 		return false;
 	}
 
@@ -152,7 +152,7 @@ function siteTestApiCallback(returnInfo, siteTestPosition) {
 		return false;
 	}
 
-	$('cloud_doctor_site_test_result_div').innerHTML = '<img align="absmiddle" src="static/image/admincp/cloud/right.gif" /> 測試成功，耗時 ' + returnInfo.result.timeUsed + ' 秒';
+	$('cloud_doctor_site_test_result_div').innerHTML = '<img align="absmiddle" src="static/image/admincp/cloud/right.gif" /> 测试成功，耗时 ' + returnInfo.result.timeUsed + ' 秒';
 	if (siteTestPosition == 'open') {
 		$('submit_submit').style.color = '#000';
 		$('submit_submit').disabled = false;

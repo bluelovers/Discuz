@@ -54,7 +54,7 @@ foreach ($arr as $rs) {
 }
 
 if($nextid) {
-	showmessage("繼續轉換數據表 ".$table_source." catid> $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
+	showmessage("继续转换数据表 ".$table_source." catid> $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
 }
 
 ?>

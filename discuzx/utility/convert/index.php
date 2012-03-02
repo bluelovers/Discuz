@@ -37,7 +37,7 @@ if($action == 'source') {
 } elseif($action == 'finish') {
 	require DISCUZ_ROOT.'./include/do_finish.inc.php';
 } else {
-	showmessage('非法請求');
+	showmessage('非法请求');
 }
 
 showfooter();

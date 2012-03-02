@@ -14,17 +14,17 @@ if(!defined('IN_DISCUZ')) {
 $lang = array
 (
 	'close_name' => '沉默卡',
-	'close_desc' => '可以將主題關閉，禁止回復',
-	'close_expiration' => '關閉有效期',
-	'close_expiration_comment' => '設置主題可以被關閉多長時間，默認 24 小時',
-	'close_forum' => '允許使用本道具的版塊',
-	'close_info' => '關閉指定的主題 {expiration} 小時，請輸入主題的 ID',
-	'close_info_nonexistence' => '請指定要關閉的主題',
-	'close_succeed' => '您操作的主題已關閉',
-	'close_info_noperm' => '對不起，主題所在版塊不允許使用本道具',
-	'close_info_user_noperm' => '對不起，您不能對此人使用本道具',
+	'close_desc' => '可以将主题关闭，禁止回复',
+	'close_expiration' => '关闭有效期',
+	'close_expiration_comment' => '设置主题可以被关闭多长时间，默认 24 小时',
+	'close_forum' => '允许使用本道具的版块',
+	'close_info' => '关闭指定的主题 {expiration} 小时，请输入主题的 ID',
+	'close_info_nonexistence' => '请指定要关闭的主题',
+	'close_succeed' => '您操作的主题已关闭',
+	'close_info_noperm' => '对不起，主题所在版块不允许使用本道具',
+	'close_info_user_noperm' => '对不起，您不能对此人使用本道具',
 
-	'close_notification' => '您的主題 {subject} 被 {actor} 使用了{magicname}，<a href="forum.php?mod=viewthread&tid={tid}">快去看看吧！</a>',
+	'close_notification' => '您的主题 {subject} 被 {actor} 使用了{magicname}，<a href="forum.php?mod=viewthread&tid={tid}">快去看看吧！</a>',
 );
 
 ?>

@@ -147,7 +147,7 @@ if($op == 'init') {
 			}
 			DB::query("UPDATE ".DB::table('common_member_connect')." SET conuin='$conuin', conuinsecret='$conuinsecret', conopenid='$conopenid', conisregister='0', conisfeed='1', conisqqshow='$isqqshow' WHERE uid='$_G[uid]'");
 
-		} else { // debug 當前登錄的論壇賬號並沒有綁定任何QQ號，則可以綁定當前的這個QQ號
+		} else { // debug 当前登录的论坛账号并没有绑定任何QQ号，则可以绑定当前的这个QQ号
 			if(empty($current_connect_member)) {
 				DB::query("INSERT INTO ".DB::table('common_member_connect')." (uid, conuin, conuinsecret, conopenid, conispublishfeed, conispublisht, conisregister, conisfeed, conisqqshow) VALUES ('$_G[uid]', '$conuin', '$conuinsecret', '$conopenid', '1', '1', '0', '1', '$isqqshow')");
 			} else {
@@ -174,7 +174,7 @@ if($op == 'init') {
 
 	} else {
 
-		if($connect_member) { // debug 此分支是用戶直接點擊QQ登錄，並且這個QQ號已經綁好一個論壇賬號了，將直接登進論壇了
+		if($connect_member) { // debug 此分支是用户直接点击QQ登录，并且这个QQ号已经绑好一个论坛账号了，将直接登进论坛了
 			DB::query("UPDATE ".DB::table('common_member_connect')." SET conuin='$conuin', conuinsecret='$conuinsecret', conopenid='$conopenid', conisfeed='1' WHERE uid='$connect_member[uid]'");
 
 			$params['mod'] = 'login';
@@ -194,7 +194,7 @@ if($op == 'init') {
 			dsetcookie('stats_qc_login', 3, 86400);
 			showmessage('login_succeed', $referer, $param, array('extrajs' => $ucsynlogin));
 
-		} else { // debug 此分支是用戶直接點擊QQ登錄，並且這個QQ號還未綁定任何論壇賬號，將將跳轉到一個新頁引導用戶註冊個新論壇賬號或綁一個已有的論壇賬號
+		} else { // debug 此分支是用户直接点击QQ登录，并且这个QQ号还未绑定任何论坛账号，将将跳转到一个新页引导用户注册个新论坛账号或绑一个已有的论坛账号
 
 			$encode[] = authcode($conuin, 'ENCODE');
 			$encode[] = authcode($conuinsecret, 'ENCODE');

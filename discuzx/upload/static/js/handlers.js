@@ -71,7 +71,7 @@ function fileQueued(file) {
 
 		}
 		if(createQueue) {
-			progress.setStatus("等待上傳...");
+			progress.setStatus("等待上传...");
 		} else {
 			this.cancelUpload(file.id);
 			progress.setCancelled();
@@ -89,7 +89,7 @@ function fileQueueError(file, errorCode, message) {
 	try {
 		if (errorCode === SWFUpload.QUEUE_ERROR.QUEUE_LIMIT_EXCEEDED) {
 			message = parseInt(message);
-			showDialog("您選擇的文件個數超過限制。\n"+(message === 0 ? "您已達到上傳文件的上限了。" : "您還可以選擇 " + message + " 個文件"), 'notice', null, null, 0, null, null, null, null, sdCloseTime);
+			showDialog("您选择的文件个数超过限制。\n"+(message === 0 ? "您已达到上传文件的上限了。" : "您还可以选择 " + message + " 个文件"), 'notice', null, null, 0, null, null, null, null, sdCloseTime);
 			return;
 		}
 
@@ -103,11 +103,11 @@ function fileQueueError(file, errorCode, message) {
 				this.debug("Error Code: File too big, File name: " + file.name + ", File size: " + file.size + ", Message: " + message);
 				break;
 			case SWFUpload.QUEUE_ERROR.ZERO_BYTE_FILE:
-				progress.setStatus("不能上傳零字節文件.");
+				progress.setStatus("不能上传零字节文件.");
 				this.debug("Error Code: Zero byte file, File name: " + file.name + ", File size: " + file.size + ", Message: " + message);
 				break;
 			case SWFUpload.QUEUE_ERROR.INVALID_FILETYPE:
-				progress.setStatus("禁止上傳該類型的文件.");
+				progress.setStatus("禁止上传该类型的文件.");
 				this.debug("Error Code: Invalid File Type, File name: " + file.name + ", File size: " + file.size + ", Message: " + message);
 				break;
 			case SWFUpload.QUEUE_ERROR.QUEUE_LIMIT_EXCEEDED:
@@ -168,7 +168,7 @@ function uploadStart(file) {
 	try {
 		this.addPostParam('filetype', file.type);
 		var progress = new FileProgress(file, this.customSettings.progressTarget);
-		progress.setStatus("上傳中...");
+		progress.setStatus("上传中...");
 		progress.toggleCancel(true, this);
 		if(this.customSettings.uploadSource == 'forum') {
 			var objId = this.customSettings.uploadType == 'attach' ? 'attachlist' : 'imgattachlist';
@@ -187,7 +187,7 @@ function uploadProgress(file, bytesLoaded, bytesTotal) {
 		var percent = Math.ceil((bytesLoaded / bytesTotal) * 100);
 
 		var progress = new FileProgress(file, this.customSettings.progressTarget);
-		progress.setStatus("正在上傳("+percent+"%)...");
+		progress.setStatus("正在上传("+percent+"%)...");
 
 	} catch (ex) {
 		this.debug(ex);
@@ -213,7 +213,7 @@ function uploadSuccess(file, serverData) {
 					progress.setStatus(STATUSMSG[aid]);
 					showDialog(STATUSMSG[aid], 'notice', null, null, 0, null, null, null, null, sdCloseTime);
 				} else {
-					progress.setStatus("取消上傳");
+					progress.setStatus("取消上传");
 				}
 				this.cancelUpload(file.id);
 				progress.setCancelled();
@@ -238,7 +238,7 @@ function uploadSuccess(file, serverData) {
 			newTr.appendChild(newTd);
 			newTd = document.createElement("TD");
 			newTd.className = 'd';
-			newTd.innerHTML = '圖片描述<br/><textarea name="title['+data.picid+']" cols="40" rows="2" class="pt"></textarea>';
+			newTd.innerHTML = '图片描述<br/><textarea name="title['+data.picid+']" cols="40" rows="2" class="pt"></textarea>';
 			newTr.appendChild(newTd);
 			this.customSettings.imgBoxObj.appendChild(newTr);
 			$(file.id).style.display = 'none';
@@ -259,7 +259,7 @@ function uploadSuccess(file, serverData) {
 				inputObj.value= data.picid;
 				tdObj.appendChild(inputObj);
 			} else {
-				showDialog('圖片上傳失敗', 'notice', null, null, 0, null, null, null, null, sdCloseTime);
+				showDialog('图片上传失败', 'notice', null, null, 0, null, null, null, null, sdCloseTime);
 			}
 			$(file.id).style.display = 'none';
 		} else if(this.customSettings.uploadSource == 'portal') {
@@ -276,7 +276,7 @@ function uploadSuccess(file, serverData) {
 					$(file.id).style.display = 'none';
 				}
 			} else {
-				showDialog('上傳失敗', 'notice', null, null, 0, null, null, null, null, sdCloseTime);
+				showDialog('上传失败', 'notice', null, null, 0, null, null, null, null, sdCloseTime);
 				progress.setStatus("Cancelled");
 				this.cancelUpload(file.id);
 				progress.setCancelled();
@@ -284,7 +284,7 @@ function uploadSuccess(file, serverData) {
 			}
 		} else {
 			progress.setComplete();
-			progress.setStatus("上傳完成.");
+			progress.setStatus("上传完成.");
 			progress.toggleCancel(false);
 		}
 	} catch (ex) {

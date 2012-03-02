@@ -84,12 +84,12 @@ if($op=='magic') {
 		$creditstran = $creditstranssi[3] ? $creditstranssi[3] : $creditstranssi[0];
 		$db_target->query("UPDATE ".$db_target->table('common_magic')." SET credit='$creditstran'");
 	}
-	$db_target->query("UPDATE ".$db_target->table('common_magic')." SET name='變色卡', description='可以將帖子或日誌的標題高亮，變更顏色' WHERE identifier='highlight'");
-	$db_target->query("UPDATE ".$db_target->table('common_magic')." SET name='顯身卡', description='可以查看一次匿名用戶的真實身份。' WHERE identifier='namepost'");
-	$db_target->query("UPDATE ".$db_target->table('common_magic')." SET name='匿名卡', description='在指定的地方，讓自己的名字顯示為匿名。' WHERE identifier='anonymouspost'");
+	$db_target->query("UPDATE ".$db_target->table('common_magic')." SET name='变色卡', description='可以将帖子或日志的标题高亮，变更颜色' WHERE identifier='highlight'");
+	$db_target->query("UPDATE ".$db_target->table('common_magic')." SET name='显身卡', description='可以查看一次匿名用户的真实身份。' WHERE identifier='namepost'");
+	$db_target->query("UPDATE ".$db_target->table('common_magic')." SET name='匿名卡', description='在指定的地方，让自己的名字显示为匿名。' WHERE identifier='anonymouspost'");
 
 	$table_source = $db_source->tablepre.'magic';
-	showmessage("繼續轉換數據表 ".$table_source." 用戶道具", "index.php?a=$action&source=$source&prg=$curprg&op=usermagic&start=0");
+	showmessage("继续转换数据表 ".$table_source." 用户道具", "index.php?a=$action&source=$source&prg=$curprg&op=usermagic&start=0");
 
 } elseif($op == 'usermagic') {
 
@@ -129,9 +129,9 @@ if($op=='magic') {
 
 	$table_source = $db_source->tablepre.'usermagic';
 	if($done == false) {
-		showmessage("繼續轉換數據表 ".$table_source." 用戶道具-> $nextid", "index.php?a=$action&source=$source&prg=$curprg&op=usermagic&start=$nextid");
+		showmessage("继续转换数据表 ".$table_source." 用户道具-> $nextid", "index.php?a=$action&source=$source&prg=$curprg&op=usermagic&start=$nextid");
 	} else {
-		showmessage("繼續轉換數據表 ".$table_source." 道具收入記錄->0", "index.php?a=$action&source=$source&prg=$curprg&op=magicinlog&start=0");
+		showmessage("继续转换数据表 ".$table_source." 道具收入记录->0", "index.php?a=$action&source=$source&prg=$curprg&op=magicinlog&start=0");
 	}
 
 } elseif($op == 'magicinlog') {
@@ -160,9 +160,9 @@ if($op=='magic') {
 
 	$table_source = $db_source->tablepre.'magicinlog';
 	if($done == false) {
-		showmessage("繼續轉換數據表 ".$table_source." 道具收入記錄-> $nextid", "index.php?a=$action&source=$source&prg=$curprg&op=magicinlog&start=$nextid");
+		showmessage("继续转换数据表 ".$table_source." 道具收入记录-> $nextid", "index.php?a=$action&source=$source&prg=$curprg&op=magicinlog&start=$nextid");
 	} else {
-		showmessage("繼續轉換數據表 ".$table_source." 道具使用記錄->0", "index.php?a=$action&source=$source&prg=$curprg&op=magicuselog&start=0");
+		showmessage("继续转换数据表 ".$table_source." 道具使用记录->0", "index.php?a=$action&source=$source&prg=$curprg&op=magicuselog&start=0");
 	}
 
 } elseif($op == 'magicuselog') {
@@ -187,7 +187,7 @@ if($op=='magic') {
 
 	$table_source = $db_source->tablepre.'magicuselog';
 	if($done == false) {
-		showmessage("繼續轉換數據表 ".$table_source." 道具使用記錄-> $nextid", "index.php?a=$action&source=$source&prg=$curprg&op=magicuselog&start=$nextid");
+		showmessage("继续转换数据表 ".$table_source." 道具使用记录-> $nextid", "index.php?a=$action&source=$source&prg=$curprg&op=magicuselog&start=$nextid");
 	}
 }
 

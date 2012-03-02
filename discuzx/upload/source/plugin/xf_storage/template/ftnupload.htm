@@ -27,7 +27,7 @@
 	});
 
 
-	if(BROWSER.firefox && window.HTMLElement) {   //為 firefox 增加 innerText 方法
+	if(BROWSER.firefox && window.HTMLElement) {   //为 firefox 增加 innerText 方法
 		HTMLElement.prototype.__defineGetter__("innerText", function(){
 			var anyString = "";
 			var childS = this.childNodes;
@@ -99,7 +99,7 @@
 				},time);
 			}
 		}
-		// 頁面超時監控,僅IE有效
+		// 页面超时监控,仅IE有效
 		// if (BROWSER.ie) {
 		// 	var linster = setTimeout(function() {
 		//		if(iframe.readyState != 'complete' && swfupload == 1){

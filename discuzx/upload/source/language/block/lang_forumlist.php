@@ -13,20 +13,20 @@ if(!defined('IN_DISCUZ')) {
 
 $lang = array
 (
-	'forumlist_fids' => '指定版塊',
-	'forumlist_fids_comment' => '填入指定版塊的ID(fid)，多個版塊之間用逗號(,)分隔',
-	'forumlist_fups' => '上級版塊',
-	'forumlist_fups_comment' => '設置顯示某些分類或版塊下屬的版塊',
-	'forumlist_titlelength' => '名稱長度',
-	'forumlist_titlelength_comment' => '設置版塊名稱顯示的最大長度',
-	'forumlist_summarylength' => '介紹長度',
-	'forumlist_summarylength_comment' => '設置版塊介紹顯示的最大長度',
-	'forumlist_orderby' => '版塊排序方式',
-	'forumlist_orderby_comment' => '設置以哪一字段或方式對版塊進行排序',
-	'forumlist_orderby_displayorder' => '按顯示順序順序排序',
-	'forumlist_orderby_threads' => '按主題數倒序排序',
-	'forumlist_orderby_todayposts' => '按今日發帖數倒序排序',
-	'forumlist_orderby_posts' => '按帖子數倒序排序',
+	'forumlist_fids' => '指定版块',
+	'forumlist_fids_comment' => '填入指定版块的ID(fid)，多个版块之间用逗号(,)分隔',
+	'forumlist_fups' => '上级版块',
+	'forumlist_fups_comment' => '设置显示某些分类或版块下属的版块',
+	'forumlist_titlelength' => '名称长度',
+	'forumlist_titlelength_comment' => '设置版块名称显示的最大长度',
+	'forumlist_summarylength' => '介绍长度',
+	'forumlist_summarylength_comment' => '设置版块介绍显示的最大长度',
+	'forumlist_orderby' => '版块排序方式',
+	'forumlist_orderby_comment' => '设置以哪一字段或方式对版块进行排序',
+	'forumlist_orderby_displayorder' => '按显示顺序顺序排序',
+	'forumlist_orderby_threads' => '按主题数倒序排序',
+	'forumlist_orderby_todayposts' => '按今日发帖数倒序排序',
+	'forumlist_orderby_posts' => '按帖子数倒序排序',
 );
 
 ?>

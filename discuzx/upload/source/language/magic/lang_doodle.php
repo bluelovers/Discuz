@@ -13,9 +13,9 @@ if(!defined('IN_DISCUZ')) {
 
 $lang = array
 (
-	'doodle_name' => '塗鴉板',
-	'doodle_desc' => '在日誌、帖子中使用塗鴉板',
-	'doodle_info' => '在日誌、帖子中使用塗鴉板',
+	'doodle_name' => '涂鸦板',
+	'doodle_desc' => '在日志、帖子中使用涂鸦板',
+	'doodle_info' => '在日志、帖子中使用涂鸦板',
 );
 
 ?>

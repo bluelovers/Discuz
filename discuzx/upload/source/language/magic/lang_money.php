@@ -13,9 +13,9 @@ if(!defined('IN_DISCUZ')) {
 
 $lang = array
 (
-	'money_name' => '金錢卡',
-	'money_desc' => '可以隨機獲得特定積分',
-	'money_info' => '獲得的錢幣數目規則：大於1且小於購買價格150%的隨機數',
+	'money_name' => '金钱卡',
+	'money_desc' => '可以随机获得特定积分',
+	'money_info' => '获得的钱币数目规则：大于1且小于购买价格150%的随机数',
 );
 
 ?>

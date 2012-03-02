@@ -13,6 +13,6 @@ if(!defined('IN_DISCUZ')) {
 
 $lang = array
 (
-	'blank_content' => 'HTML代碼',
+	'blank_content' => 'HTML代码',
 );
 ?>

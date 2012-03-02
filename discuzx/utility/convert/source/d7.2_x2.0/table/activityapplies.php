@@ -25,7 +25,7 @@ while ($row = $db_source->fetch_array($query)) {
 
 	$nextid = $row['applyid'];
 
-	!empty($row['contact']) && $row['message'] = $row['message'].' 聯繫方式:'.$row['contact'];
+	!empty($row['contact']) && $row['message'] = $row['message'].' 联系方式:'.$row['contact'];
 	$row  = daddslashes($row, 1);
 
 	$data = implode_field_value($row, ',', db_table_fields($db_target, $table_target));
@@ -34,7 +34,7 @@ while ($row = $db_source->fetch_array($query)) {
 }
 
 if($nextid) {
-	showmessage("繼續轉換數據表 ".$table_source." applyid > $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
+	showmessage("继续转换数据表 ".$table_source." applyid > $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
 }
 
 ?>

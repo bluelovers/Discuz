@@ -17,7 +17,7 @@ $start = intval(getgpc('start'));
 $home = load_process('home');
 $fid = intval(getgpc('fid')) ? intval(getgpc('fid')) : intval($home['forum']['poll']) ? intval($home['forum']['poll']) : 0;
 if(!$fid) {
-	$forumname = 'UCHome投票數據';
+	$forumname = 'UCHome投票数据';
 
 	$value = $db_target->fetch_first('SELECT fid FROM '.$db_target->table_name('forum_forum')." WHERE status IN('1','2') AND type='forum' AND `name`='$forumname'");
 	if(!empty($value)) {
@@ -46,7 +46,7 @@ if(!$fid) {
 		$fid = $db_target->insert('forum_forum', $forum, true);
 		$forumfield = array(
 			'fid' => $fid,
-			'description' => '從 UCenter Home 轉移過來的投票內容'
+			'description' => '从 UCenter Home 转移过来的投票内容'
 		);
 		$db_target->insert('forum_forumfield', $forumfield);
 	}
@@ -196,7 +196,7 @@ while($value = $db_source->fetch_array($pollquery)) {
 }
 
 if($nextid) {
-	showmessage("繼續轉換數據表 ".$table_source." pid > $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid&fid=$fid");
+	showmessage("继续转换数据表 ".$table_source." pid > $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid&fid=$fid");
 }
 
 $maxpid = $db_target->result_first("SELECT MAX(pid) FROM ".$db_target->table('forum_post'));

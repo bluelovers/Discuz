@@ -12,7 +12,7 @@ if(!defined('IN_DISCUZ')) {
 $lang = array
 (
 	'flicker_name' => '彩虹炫',
-	'flicker_desc' => '在日誌、相冊評論中使用彩虹炫',
-	'flicker_info' => '在日誌、相冊評論中使用彩虹炫',
+	'flicker_desc' => '在日志、相册评论中使用彩虹炫',
+	'flicker_info' => '在日志、相册评论中使用彩虹炫',
 	'flicker_succeed' => '彩虹炫使用成功。',
 );

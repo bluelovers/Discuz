@@ -13,23 +13,23 @@ if(!defined('IN_DISCUZ')) {
 
 $lang = array
 (
-	'highlight_name' => '變色卡',
-	'highlight_desc' => '可以將帖子或日誌的標題高亮，變更顏色',
+	'highlight_name' => '变色卡',
+	'highlight_desc' => '可以将帖子或日志的标题高亮，变更颜色',
 	'highlight_expiration' => '高亮有效期',
-	'highlight_expiration_comment' => '設置標題可以被高亮多長時間，默認 24 小時。作用於日誌時無有效期。',
-	'highlight_forum' => '允許使用本道具的版塊',
-	'highlight_info_tid' => '高亮主題的標題 {expiration} 小時',
-	'highlight_info_blogid' => '可以將日誌或帖子的標題高亮，變更顏色',
-	'highlight_color' => '顏色',
-	'highlight_info_nonexistence_tid' => '請指定要高亮的帖子',
-	'highlight_info_nonexistence_blogid' => '請指定要高亮的日誌',
+	'highlight_expiration_comment' => '设置标题可以被高亮多长时间，默认 24 小时。作用于日志时无有效期。',
+	'highlight_forum' => '允许使用本道具的版块',
+	'highlight_info_tid' => '高亮主题的标题 {expiration} 小时',
+	'highlight_info_blogid' => '可以将日志或帖子的标题高亮，变更颜色',
+	'highlight_color' => '颜色',
+	'highlight_info_nonexistence_tid' => '请指定要高亮的帖子',
+	'highlight_info_nonexistence_blogid' => '请指定要高亮的日志',
 	'highlight_succeed_tid' => '您操作的帖子已高亮',
-	'highlight_succeed_blogid' => '您操作的日誌已高亮',
-	'highlight_info_noperm' => '對不起，主題所在版塊不允許使用本道具',
-	'highlight_info_notype' => '參數錯誤，沒有指定操作類型。',
+	'highlight_succeed_blogid' => '您操作的日志已高亮',
+	'highlight_info_noperm' => '对不起，主题所在版块不允许使用本道具',
+	'highlight_info_notype' => '参数错误，没有指定操作类型。',
 
-	'highlight_notification' => '您的主題 {subject} 被 {actor} 使用了{magicname}，<a href="forum.php?mod=viewthread&tid={tid}">快去看看吧！</a>',
-	'highlight_notification_blogid' => '您的日誌 {subject} 被 {actor} 使用了{magicname}，<a href="home.php?mod=space&do=blog&id={blogid}">快去看看吧！</a>',
+	'highlight_notification' => '您的主题 {subject} 被 {actor} 使用了{magicname}，<a href="forum.php?mod=viewthread&tid={tid}">快去看看吧！</a>',
+	'highlight_notification_blogid' => '您的日志 {subject} 被 {actor} 使用了{magicname}，<a href="home.php?mod=space&do=blog&id={blogid}">快去看看吧！</a>',
 );
 
 ?>

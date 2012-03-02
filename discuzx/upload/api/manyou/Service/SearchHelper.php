@@ -684,7 +684,7 @@ class Cloud_Service_SearchHelper {
 				    'f_id' => $fid,
 					'need_random' => false,
 					'need_num' => $needNum,
-				    'version' => $format == 'num' ? 1 : 2, // 1：返回數字下標的結果集、2：返回關聯數組形式的結果集
+				    'version' => $format == 'num' ? 1 : 2, // 1：返回数字下标的结果集、2：返回关联数组形式的结果集
 				);
 
 				$utilService = Cloud::loadClass('Service_Util');

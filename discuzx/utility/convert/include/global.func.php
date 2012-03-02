@@ -73,7 +73,7 @@ function cutstr($string, $length, $dot = '') {
 	return $strcut.$dot;
 }
 
-function parseqqicq($qqicq, $minlen = 5, $maxlen = 12) {// qq 轉換
+function parseqqicq($qqicq, $minlen = 5, $maxlen = 12) {// qq 转换
 	return $qqicq ? (preg_match("/^([0-9]+)$/", $qqicq) && strlen($qqicq) >= $minlen && strlen($qqicq) <= $maxlen ? $qqicq : '') : '';
 }
 
@@ -133,7 +133,7 @@ function parsesign($sign) {
 	return daddslashes(str_replace($searcharray, $replacearray, preg_replace($pregfind, $pregreplace, $sign)));
 }
 
-function bbcodeurl($url, $tags) {//url 轉換
+function bbcodeurl($url, $tags) {//url 转换
 	if(!preg_match("/<.+?>/s", $url)) {
 		if(!in_array(strtolower(substr($url, 0, 6)), array('http:/', 'ftp://', 'rtsp:/', 'mms://'))) {
 			$url = 'http://'.$url;
@@ -227,7 +227,7 @@ function showmessage($message, $url_forward = '', $vars = array(), $timeout = 1)
 
 	echo <<<EOT
 <table class="showtable">
-	<tbody><tr class="title"><td style="color: white">系統提示</td></tr>
+	<tbody><tr class="title"><td style="color: white">系统提示</td></tr>
 		<tr><td style="padding: 10px; background-color: #fefefe;font-size: 14px "><br>$message<br><br></td></tr>
 		<tr><td>$messageadd</td></tr>
 	</tbody>
@@ -249,7 +249,7 @@ echo <<<EOT
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Discuz! X 系列產品升級轉換</title>
+<title>Discuz! X 系列产品升级转换</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <style type="text/css">
 body,td { font-family: Tahoma; font-size: 12px; line-height: 150%;}
@@ -327,15 +327,15 @@ function checkAll(type, form, value, checkall, changestyle) {
 </head>
 <body style="table-layout:fixed; word-break:break-all; margin-top: 4px;">
 <div class="main">
-<h1>Discuz! X 系列產品升級/轉換 嚮導 $titleadd</h1>
+<h1>Discuz! X 系列产品升级/转换 向导 $titleadd</h1>
 <div class="content">
 <table id="menu">
 	<tr>
-	<td $class[source]>1.選擇產品轉換程序 </td>
-	<td $class[config]>2.設置服務器信息 </td>
-	<td $class[select]>3.配置轉換過程 </td>
-	<td $class[convert]>4.執行數據轉換 </td>
-	<td $class[finish]>5.轉換完成 </td>
+	<td $class[source]>1.选择产品转换程序 </td>
+	<td $class[config]>2.设置服务器信息 </td>
+	<td $class[select]>3.配置转换过程 </td>
+	<td $class[convert]>4.执行数据转换 </td>
+	<td $class[finish]>5.转换完成 </td>
 	</tr>
 </table>
 

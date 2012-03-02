@@ -13,19 +13,19 @@ if(!defined('IN_DISCUZ')) {
 
 $lang = array
 (
-	'friendlink_content' => '展示樣式',
+	'friendlink_content' => '展示样式',
 	'friendlink_content_both' => 'logo和文字',
-	'friendlink_content_logo' => '僅logo',
-	'friendlink_content_text' => '僅文字',
-	'friendlink_type' => '鏈接分組',
-	'friendlink_type_group1' => '分組1',
-	'friendlink_type_group2' => '分組2',
-	'friendlink_type_group3' => '分組3',
-	'friendlink_type_group4' => '分組4',
-	'friendlink_titlelength' => '站點名稱長度',
-	'friendlink_titlelength_comment' => '設置站點名稱的最大長度',
-	'friendlink_summarylength' => '簡介長度',
-	'friendlink_summarylength_comment' => '設置站點簡介最大長度',
+	'friendlink_content_logo' => '仅logo',
+	'friendlink_content_text' => '仅文字',
+	'friendlink_type' => '链接分组',
+	'friendlink_type_group1' => '分组1',
+	'friendlink_type_group2' => '分组2',
+	'friendlink_type_group3' => '分组3',
+	'friendlink_type_group4' => '分组4',
+	'friendlink_titlelength' => '站点名称长度',
+	'friendlink_titlelength_comment' => '设置站点名称的最大长度',
+	'friendlink_summarylength' => '简介长度',
+	'friendlink_summarylength_comment' => '设置站点简介最大长度',
 );
 
 ?>

@@ -49,7 +49,7 @@ function tpl_global_footer($loadJs) {
 			}
 
 			if (response.errCode == '0' && response.result == '2') {
-				// 發帖的處理
+				// 发帖的处理
 				if (typeof(_is_token_outofdate) != "undefined") {
 					_is_feed_auth = false;
 					_is_token_outofdate = true;
@@ -60,7 +60,7 @@ function tpl_global_footer($loadJs) {
 					_is_token_outofdate_infloat = true;
 					connect_post_init_infloat();
 				}
-				// 分享的處理
+				// 分享的处理
 				if (typeof(_share_buttons) != "undefined" && typeof(_is_oauth_user) != "undefined") {
 					_is_oauth_user = false;
 					_is_share_token_outofdate = true;

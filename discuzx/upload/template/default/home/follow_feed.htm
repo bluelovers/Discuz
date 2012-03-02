@@ -270,7 +270,7 @@
 						var fid = listObj.value;
 						if(fid) {
 							var dforum = $('fid');
-							//判斷是否已經在列表中
+							//判断是否已经在列表中
 							var haveoption = false;
 							for(var i = 0; i < dforum.options.length; i++) {
 								if(dforum.options[i].value == fid) {
@@ -296,7 +296,7 @@
 					function modifyformurl(mfid) {
 						if(parseInt(mfid)) {
 							backupContent();
-							//noteX 修改表單中的兩個固定地址
+							//noteX 修改表单中的两个固定地址
 							$('fastpostform').action = 'home.php?mod=spacecp&ac=follow&op=newthread&topicsubmit=yes&infloat=yes&handlekey=fastnewpost&inajax=1&fid='+mfid;
 							if(upload) {
 								fid = mfid;
@@ -330,7 +330,7 @@
 									if(ele[0] == el.name) {
 										elvalue = !isUndefined(ele[3]) ? ele[3] : '';
 										if(ele[1] == 'SELECT') {
-											//添加選項
+											//添加选项
 											var values = {0:0<!--{if $_G['setting']['followforumid']}-->,$_G['setting']['followforumid']:$_G['setting']['followforumid']<!--{/if}-->};
 											for(var oi = 0; oi < data.length; oi++) {
 												var oObj = data[oi].split(/\x09/);
@@ -365,11 +365,11 @@
 							} else {
 								showDialog(msg, 'notice', null, null, 0, null, null, null, null, 3);
 							}
-							//清空上次的輸入
+							//清空上次的输入
 							var sObj = $('subject');
 							$('attachlist').innerHTML = $('fastpostmessage').value = sObj.value = '';
 							strLenCalc(sObj, 'checklen', 80);
-							//var msg = '您的主題已發佈，<a href="'+url+'" class="xi2">點擊這裡查看主題</a>'
+							//var msg = '您的主题已发布，<a href="'+url+'" class="xi2">点击这里查看主题</a>'
 							//showDialog(msg, 'notice', null, null, 0, null, null, null, null, 3);
 						}
 

@@ -23,7 +23,7 @@ if(empty($_GET['ftn_formhash']) || empty($_G['uid']) || empty($_GET['filesize'])
         include template('xf_storage:cross');
     }
 } elseif($_GET['ftn_formhash'] != $storageService->ftnFormhash()){
-	exit;//showmessage('操作超時或者數據來源錯誤','','error');
+	exit;//showmessage('操作超时或者数据来源错误','','error');
 }
 
 if($_GET['ftn_submit']) {

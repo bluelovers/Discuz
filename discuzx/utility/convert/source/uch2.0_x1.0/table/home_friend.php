@@ -60,7 +60,7 @@ while ($rs = $db_source->fetch_array($query)) {
 }
 
 if($done == false) {
-	showmessage("繼續轉換數據表 ".$table_source." start> $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
+	showmessage("继续转换数据表 ".$table_source." start> $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
 }
 
 ?>

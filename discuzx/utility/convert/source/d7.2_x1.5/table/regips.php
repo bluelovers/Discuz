@@ -33,7 +33,7 @@ while ($row = $db_source->fetch_array($query)) {
 
 if($nextid) {
 	$next = $start + $limit;
-	showmessage("繼續轉換數據表 ".$table_source." $start 至 ".($start+$limit)." 行", "index.php?a=$action&source=$source&prg=$curprg&start=$next");
+	showmessage("继续转换数据表 ".$table_source." $start 至 ".($start+$limit)." 行", "index.php?a=$action&source=$source&prg=$curprg&start=$next");
 }
 
 ?>
