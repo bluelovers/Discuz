@@ -13,7 +13,7 @@ if(!defined('IN_DISCUZ')) {
 
 $lang = array
 (
-	'myapp_titlelength' => '名称长度',
-	'myapp_startrow' => '起始位置',
+	'myapp_titlelength' => '鍚嶇ū闀峰害',
+	'myapp_startrow' => '璧峰浣嶇疆',
 );
 ?>

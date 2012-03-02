@@ -153,7 +153,7 @@ while ($row = $db_source->fetch_array($query)) {
 }
 
 if($nextid) {
-	showmessage("¼ÌÐø×ª»»Êý¾Ý±í ".$table_source." uid > $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
+	showmessage("ç¹¼çºŒè½‰æ›æ•¸æ“šè¡¨ ".$table_source." uid > $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
 }
 
 ?>

@@ -488,7 +488,7 @@ function template($file, $templateid = 0, $tpldir = '', $gettplfile = 0, $primal
 			$indiy = false;
 			$_G['style']['tpldirectory'] = $tpldir ? $tpldir : (defined('TPLDIR') ? TPLDIR : '');
 			$_G['style']['prefile'] = '';
-			$diypath = DISCUZ_ROOT.'./data/diy/'.$_G['style']['tpldirectory'].'/'; //DIYÄ£°åÎÄ¼şÄ¿Â¼
+			$diypath = DISCUZ_ROOT.'./data/diy/'.$_G['style']['tpldirectory'].'/'; //DIYæ¨¡æ¿æ–‡ä»¶ç›®éŒ„
 			$preend = '_diy_preview';
 			$_GET['preview'] = !empty($_GET['preview']) ? $_GET['preview'] : '';
 			$curtplname = $oldfile;
@@ -503,7 +503,7 @@ function template($file, $templateid = 0, $tpldir = '', $gettplfile = 0, $primal
 				$tpldir = 'data/diy/'.$_G['style']['tpldirectory'].'/';
 				!$gettplfile && $_G['style']['tplsavemod'] = $tplsavemod;
 				$curtplname = $file;
-				if($_GET['diy'] == 'yes' || $_GET['preview'] == 'yes') { //DIYÄ£Ê½»òÔ¤ÀÀÄ£Ê½ÏÂ×öÒÔÏÂÅĞ¶Ï
+				if($_GET['diy'] == 'yes' || $_GET['preview'] == 'yes') { //DIYæ¨¡å¼æˆ–é è¦½æ¨¡å¼ä¸‹åšä»¥ä¸‹åˆ¤æ–·
 					$flag = file_exists($diypath.$file.$preend.'.htm');
 					if($_GET['preview'] == 'yes') {
 						$file .= $flag ? $preend : '';

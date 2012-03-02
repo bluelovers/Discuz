@@ -12,15 +12,15 @@ if(!defined('IN_DISCUZ')) {
 }
 
 $lang = array(
-	'friend_group_default' => 'ÆäËû',
-	'friend_group_1' => 'Í¨¹ý±¾Õ¾ÈÏÊ¶',
-	'friend_group_2' => 'Í¨¹ý»î¶¯ÈÏÊ¶',
-	'friend_group_3' => 'Í¨¹ýÅóÓÑÈÏÊ¶',
-	'friend_group_4' => 'Ç×ÈË',
-	'friend_group_5' => 'Í¬ÊÂ',
-	'friend_group_6' => 'Í¬Ñ§',
-	'friend_group_7' => '²»ÈÏÊ¶',
-	'friend_group_more' => '×Ô¶¨Òå{num}'
+	'friend_group_default' => 'å…¶ä»–',
+	'friend_group_1' => 'é€šéŽæœ¬ç«™èªè­˜',
+	'friend_group_2' => 'é€šéŽæ´»å‹•èªè­˜',
+	'friend_group_3' => 'é€šéŽæœ‹å‹èªè­˜',
+	'friend_group_4' => 'è¦ªäºº',
+	'friend_group_5' => 'åŒäº‹',
+	'friend_group_6' => 'åŒå­¸',
+	'friend_group_7' => 'ä¸èªè­˜',
+	'friend_group_more' => 'è‡ªå®šç¾©{num}'
 );
 
 ?>

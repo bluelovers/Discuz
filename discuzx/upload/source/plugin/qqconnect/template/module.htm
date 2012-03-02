@@ -34,7 +34,7 @@ function tpl_global_footer($loadJs) {
 		<script type="text/javascript">
 		function connect_handle_check_token(response, ajax) {
 
-			// ·µ»ØÖµĞÎÈç: errCode=XX&result=XX
+			// è¿”å›å€¼å½¢å¦‚: errCode=XX&result=XX
 			if (typeof(response) == "string" && response.indexOf("&") > 0) {
 
 				var errCode = response.substring(0, response.indexOf("&"));
@@ -49,7 +49,7 @@ function tpl_global_footer($loadJs) {
 			}
 
 			if (response.errCode == '0' && response.result == '2') {
-				// ·¢ÌûµÄ´¦Àí
+				// ç™¼å¸–çš„è™•ç†
 				if (typeof(_is_token_outofdate) != "undefined") {
 					_is_feed_auth = false;
 					_is_token_outofdate = true;
@@ -60,7 +60,7 @@ function tpl_global_footer($loadJs) {
 					_is_token_outofdate_infloat = true;
 					connect_post_init_infloat();
 				}
-				// ·ÖÏíµÄ´¦Àí
+				// åˆ†äº«çš„è™•ç†
 				if (typeof(_share_buttons) != "undefined" && typeof(_is_oauth_user) != "undefined") {
 					_is_oauth_user = false;
 					_is_share_token_outofdate = true;

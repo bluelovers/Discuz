@@ -13,30 +13,30 @@ if(!defined('IN_DISCUZ')) {
 
 $lang = array
 (
-	'login_title' => 'µÇÂ¼¹ÜÀíÖÐÐÄ',
-	'login_username' => 'ÓÃ»§Ãû',
-	'login_password' => 'ÃÜ¡¡Âë',
+	'login_title' => 'ç™»éŒ„ç®¡ç†ä¸­å¿ƒ',
+	'login_username' => 'ç”¨æˆ¶å',
+	'login_password' => 'å¯†ã€€ç¢¼',
 
-	'submit' => 'Ìá½»',
-	'forcesecques' => '±ØÌîÏî',
-	'security_question' => 'Ìá¡¡ÎÊ',
-	'security_answer' => '»Ø¡¡´ð',
-	'security_question_0' => 'ÎÞ°²È«ÌáÎÊ',
-	'security_question_1' => 'Ä¸Ç×µÄÃû×Ö',
-	'security_question_2' => 'Ò¯Ò¯µÄÃû×Ö',
-	'security_question_3' => '¸¸Ç×³öÉúµÄ³ÇÊÐ',
-	'security_question_4' => 'ÄúÆäÖÐÒ»Î»ÀÏÊ¦µÄÃû×Ö',
-	'security_question_5' => 'Äú¸öÈË¼ÆËã»úµÄÐÍºÅ',
-	'security_question_6' => 'Äú×îÏ²»¶µÄ²Í¹ÝÃû³Æ',
-	'security_question_7' => '¼ÝÊ»Ö´ÕÕ×îºóËÄÎ»Êý×Ö',
+	'submit' => 'æäº¤',
+	'forcesecques' => 'å¿…å¡«é …',
+	'security_question' => 'æã€€å•',
+	'security_answer' => 'å›žã€€ç­”',
+	'security_question_0' => 'ç„¡å®‰å…¨æå•',
+	'security_question_1' => 'æ¯è¦ªçš„åå­—',
+	'security_question_2' => 'çˆºçˆºçš„åå­—',
+	'security_question_3' => 'çˆ¶è¦ªå‡ºç”Ÿçš„åŸŽå¸‚',
+	'security_question_4' => 'æ‚¨å…¶ä¸­ä¸€ä½è€å¸«çš„åå­—',
+	'security_question_5' => 'æ‚¨å€‹äººè¨ˆç®—æ©Ÿçš„åž‹è™Ÿ',
+	'security_question_6' => 'æ‚¨æœ€å–œæ­¡çš„é¤é¤¨åç¨±',
+	'security_question_7' => 'é§•é§›åŸ·ç…§æœ€å¾Œå››ä½æ•¸å­—',
 
-	'login_tips' => 'Discuz! ÊÇ <a href="http://www.tencent.com" target="_blank">ÌÚÑ¶</a> ÆìÏÂ <a href="http://www.comsenz.com" target="_blank">Comsenz</a> ¹«Ë¾ÍÆ³öµÄÒÔÉçÇøÎª»ù´¡µÄ×¨Òµ½¨Õ¾Æ½Ì¨£¬°ïÖúÍøÕ¾ÊµÏÖÒ»Õ¾Ê½·þÎñ¡£',
-	'login_nosecques' => 'Äú»¹Ã»ÓÐÊ¹ÓÃ°²È«µÇÂ¼£¬ÇëÔÚ¸öÈËÖÐÐÄÉèÖÃÄúµÄ°²È«ÌáÎÊºó£¬ÔÙ·ÃÎÊ¹ÜÀíÖÐÐÄ¡£Äú¿ÉÒÔ <a href="forum.php?mod=memcp&action=profile&typeid=1" target="_blank">µã»÷ÕâÀï</a> ½øÈë°²È«ÌáÎÊµÄÉèÖÃ¡£',
+	'login_tips' => 'Discuz! æ˜¯ <a href="http://www.tencent.com" target="_blank">é¨°è¨Š</a> æ——ä¸‹ <a href="http://www.comsenz.com" target="_blank">Comsenz</a> å…¬å¸æŽ¨å‡ºçš„ä»¥ç¤¾å€ç‚ºåŸºç¤Žçš„å°ˆæ¥­å»ºç«™å¹³å°ï¼Œå¹«åŠ©ç¶²ç«™å¯¦ç¾ä¸€ç«™å¼æœå‹™ã€‚',
+	'login_nosecques' => 'æ‚¨é‚„æ²’æœ‰ä½¿ç”¨å®‰å…¨ç™»éŒ„ï¼Œè«‹åœ¨å€‹äººä¸­å¿ƒè¨­ç½®æ‚¨çš„å®‰å…¨æå•å¾Œï¼Œå†è¨ªå•ç®¡ç†ä¸­å¿ƒã€‚æ‚¨å¯ä»¥ <a href="forum.php?mod=memcp&action=profile&typeid=1" target="_blank">é»žæ“Šé€™è£¡</a> é€²å…¥å®‰å…¨æå•çš„è¨­ç½®ã€‚',
 
-	'login_cplock' => 'ÄúµÄ¹ÜÀíÃæ°åÒÑ¾­Ëø¶¨! <br>ÇëÔÚ<b> {ltime} </b>ÃëÒÔºóÖØÐÂ·ÃÎÊ¹ÜÀíÖÐÐÄ',
-	'login_user_lock' => 'ÓÉÓÚÄúµÄµÇÂ¼ÃÜÂë´íÎó´ÎÊý¹ý¶à,±¾´ÎµÇÂ¼ÇëÇóÒÑ¾­±»¾Ü¾ø. Çë 15 ·ÖÖÓºóÖØÐÂ³¢ÊÔ',
-	'login_cp_noaccess' => '<b>¹ÜÀíÖÐÐÄ(»ò´ËÏî²Ù×÷)ÉÐÎ´¶ÔÄú¿ª·Å</b><br><br>ÄúµÄ´Ë´Î²Ù×÷ÒÑ¾­¼ÇÂ¼, ÇëÎð·Ç·¨³¢ÊÔ',
-	'noaccess' => 'ºóÌ¨¹ÜÀíÈ¨ÏÞ(»ò´ËÏî²Ù×÷)ÉÐÎ´¶ÔÄú¿ª·Å, ÇëÁªÏµÕ¾µã¹ÜÀíÔ±',
+	'login_cplock' => 'æ‚¨çš„ç®¡ç†é¢æ¿å·²ç¶“éŽ–å®š! <br>è«‹åœ¨<b> {ltime} </b>ç§’ä»¥å¾Œé‡æ–°è¨ªå•ç®¡ç†ä¸­å¿ƒ',
+	'login_user_lock' => 'ç”±æ–¼æ‚¨çš„ç™»éŒ„å¯†ç¢¼éŒ¯èª¤æ¬¡æ•¸éŽå¤š,æœ¬æ¬¡ç™»éŒ„è«‹æ±‚å·²ç¶“è¢«æ‹’çµ•. è«‹ 15 åˆ†é˜å¾Œé‡æ–°å˜—è©¦',
+	'login_cp_noaccess' => '<b>ç®¡ç†ä¸­å¿ƒ(æˆ–æ­¤é …æ“ä½œ)å°šæœªå°æ‚¨é–‹æ”¾</b><br><br>æ‚¨çš„æ­¤æ¬¡æ“ä½œå·²ç¶“è¨˜éŒ„, è«‹å‹¿éžæ³•å˜—è©¦',
+	'noaccess' => 'å¾Œå°ç®¡ç†æ¬Šé™(æˆ–æ­¤é …æ“ä½œ)å°šæœªå°æ‚¨é–‹æ”¾, è«‹è¯ç¹«ç«™é»žç®¡ç†å“¡',
 
 
 );

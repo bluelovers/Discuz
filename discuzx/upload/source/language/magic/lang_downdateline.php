@@ -13,9 +13,9 @@ if(!defined('IN_DISCUZ')) {
 
 $lang = array
 (
-	'downdateline_name' => 'Ê±¹â»ú',
-	'downdateline_desc' => '°Ñ×Ô¼ºÈÕÖ¾µÄ·¢²¼Ê±¼äÐÞ¸ÄÎª¹ýÈ¥',
-	'downdateline_info' => '°Ñ×Ô¼ºÈÕÖ¾µÄ·¢²¼Ê±¼äÐÞ¸ÄÎª¹ýÈ¥',
+	'downdateline_name' => 'æ™‚å…‰æ©Ÿ',
+	'downdateline_desc' => 'æŠŠè‡ªå·±æ—¥èªŒçš„ç™¼ä½ˆæ™‚é–“ä¿®æ”¹ç‚ºéŽåŽ»',
+	'downdateline_info' => 'æŠŠè‡ªå·±æ—¥èªŒçš„ç™¼ä½ˆæ™‚é–“ä¿®æ”¹ç‚ºéŽåŽ»',
 );
 
 ?>

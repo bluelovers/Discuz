@@ -5,7 +5,7 @@
 /* common */
 *{ word-wrap:break-word; }
 body{ padding:5px 0; background:#FFF; text-align:center; }
-body, td, input, textarea, select, button{ color:#666; font:12px/1.5 Verdana, Tahoma, Arial, 'Microsoft Yahei', 'Simsun', sans-serif; }
+body, td, input, textarea, select, button{ color:#666; font:12px/1.5 Verdana, Tahoma, Arial, 'Microsoft Yahei', 'mingliu', sans-serif; }
 ul, dl, dd, p, h1, h2, h3, h4, h5, h6, form, fieldset { margin:0; padding:0; }
 h1, h2, h3, h4, h5, h6{ font-size:12px; }
 a{ color:#2366A8; text-decoration:none; }

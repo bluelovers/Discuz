@@ -13,27 +13,27 @@ if(!defined('IN_DISCUZ')) {
 
 $lang = array
 (
-	'piclist_picids' => 'Ö¸¶¨Í¼Æ¬',
-	'piclist_picids_comment' => 'ÌîÈëÖ¸¶¨Í¼Æ¬µÄID(picid)£¬¶à¸öÍ¼Æ¬Ö®¼äÓÃ¶ººÅ(,)·Ö¸ô',
-	'piclist_aids' => 'Ïà²áID',
-	'piclist_aids_comment' => 'ÌîÈëÖ¸¶¨Ïà²áµÄID(aid)£¬¶à¸öÏà²áÖ®¼äÓÃ¶ººÅ(,)·Ö¸ô',
-	'piclist_uids' => 'ÓÃ»§UID',
-	'piclist_uids_comment' => 'ÌîÈëÖ¸¶¨ÓÃ»§µÄID(uid)£¬¶à¸öÓÃ»§Ö®¼äÓÃ¶ººÅ(,)·Ö¸ô',
-	'piclist_startrow' => 'ÆðÊ¼Êý¾ÝÐÐÊý',
-	'piclist_startrow_comment' => 'ÈçÐèÉè¶¨ÆðÊ¼µÄÊý¾ÝÐÐÊý£¬ÇëÊäÈë¾ßÌåÊýÖµ£¬0 Îª´ÓµÚÒ»ÐÐ¿ªÊ¼£¬ÒÔ´ËÀàÍÆ',
-	'piclist_hours' => 'Ê±¼ä·¶Î§',
-	'piclist_hours_nolimit' => '²»ÏÞÖÆ',
-	'piclist_hours_hour' => '1Ð¡Ê±ÄÚ',
-	'piclist_hours_day' => '24Ð¡Ê±ÄÚ',
-	'piclist_hours_week' => '7ÌìÄÚ',
-	'piclist_hours_month' => '1ÔÂÄÚ',
-	'piclist_hours_year' => '1ÄêÄÚ',
-	'piclist_titlelength' => '±êÌâ³¤¶È',
-	'piclist_titlelength' => 'Ö¸¶¨Í¼Æ¬±êÌâ×î´ó³¤¶È',
-	'piclist_orderby' => 'Í¼Æ¬ÅÅÐò·½Ê½',
-	'piclist_orderby_comment' => 'ÉèÖÃÒÔÄÄÒ»×Ö¶Î»ò·½Ê½¶ÔÍ¼Æ¬½øÐÐÅÅÐò',
-	'piclist_orderby_dateline' => '°´·¢²¼Ê±¼äµ¹Ðò',
-	'piclist_orderby_hot' => '°´ÈÈ¶Èµ¹Ðò'
+	'piclist_picids' => 'æŒ‡å®šåœ–ç‰‡',
+	'piclist_picids_comment' => 'å¡«å…¥æŒ‡å®šåœ–ç‰‡çš„ID(picid)ï¼Œå¤šå€‹åœ–ç‰‡ä¹‹é–“ç”¨é€—è™Ÿ(,)åˆ†éš”',
+	'piclist_aids' => 'ç›¸å†ŠID',
+	'piclist_aids_comment' => 'å¡«å…¥æŒ‡å®šç›¸å†Šçš„ID(aid)ï¼Œå¤šå€‹ç›¸å†Šä¹‹é–“ç”¨é€—è™Ÿ(,)åˆ†éš”',
+	'piclist_uids' => 'ç”¨æˆ¶UID',
+	'piclist_uids_comment' => 'å¡«å…¥æŒ‡å®šç”¨æˆ¶çš„ID(uid)ï¼Œå¤šå€‹ç”¨æˆ¶ä¹‹é–“ç”¨é€—è™Ÿ(,)åˆ†éš”',
+	'piclist_startrow' => 'èµ·å§‹æ•¸æ“šè¡Œæ•¸',
+	'piclist_startrow_comment' => 'å¦‚éœ€è¨­å®šèµ·å§‹çš„æ•¸æ“šè¡Œæ•¸ï¼Œè«‹è¼¸å…¥å…·é«”æ•¸å€¼ï¼Œ0 ç‚ºå¾žç¬¬ä¸€è¡Œé–‹å§‹ï¼Œä»¥æ­¤é¡žæŽ¨',
+	'piclist_hours' => 'æ™‚é–“ç¯„åœ',
+	'piclist_hours_nolimit' => 'ä¸é™åˆ¶',
+	'piclist_hours_hour' => '1å°æ™‚å…§',
+	'piclist_hours_day' => '24å°æ™‚å…§',
+	'piclist_hours_week' => '7å¤©å…§',
+	'piclist_hours_month' => '1æœˆå…§',
+	'piclist_hours_year' => '1å¹´å…§',
+	'piclist_titlelength' => 'æ¨™é¡Œé•·åº¦',
+	'piclist_titlelength' => 'æŒ‡å®šåœ–ç‰‡æ¨™é¡Œæœ€å¤§é•·åº¦',
+	'piclist_orderby' => 'åœ–ç‰‡æŽ’åºæ–¹å¼',
+	'piclist_orderby_comment' => 'è¨­ç½®ä»¥å“ªä¸€å­—æ®µæˆ–æ–¹å¼å°åœ–ç‰‡é€²è¡ŒæŽ’åº',
+	'piclist_orderby_dateline' => 'æŒ‰ç™¼ä½ˆæ™‚é–“å€’åº',
+	'piclist_orderby_hot' => 'æŒ‰ç†±åº¦å€’åº'
 );
 
 ?>

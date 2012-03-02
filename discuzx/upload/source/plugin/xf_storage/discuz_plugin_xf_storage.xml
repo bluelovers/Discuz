@@ -6,7 +6,7 @@
 		<item id="plugin">
 			<item id="available"><![CDATA[1]]></item>
 			<item id="adminid"><![CDATA[1]]></item>
-			<item id="name"><![CDATA[Ðý·ç´æ´¢]]></item>
+			<item id="name"><![CDATA[æ—‹é¢¨å­˜å„²]]></item>
 			<item id="identifier"><![CDATA[xf_storage]]></item>
 			<item id="description"><![CDATA[]]></item>
 			<item id="datatables"><![CDATA[]]></item>
@@ -31,16 +31,16 @@
 		<item id="version"><![CDATA[X2.5]]></item>
 		<item id="language">
 			<item id="templatelang">
-				<item id="sava_attachlist"><![CDATA[Íê±Ï£¬±£´æµ½¸½¼þÁÐ±í]]></item>
-				<item id="xf_storage_tips"><![CDATA[Äú¿ÉÒÔÔÚÉÏ´«¹ý³ÌÖÐ¹Ø±ÕÕâ¸öÐ¡´°¿Ú£¬ÉÏ´«Íê±Ïºó»áÍ¨ÖªÄú]]></item>
-				<item id="wait_for_url"><![CDATA[Ò³Ãæ¼ÓÔØÖÐ£¬ÇëÉÔµÈ...]]></item>
-				<item id="timeout_tips"><![CDATA[³¬´ó¸½¼þÉÏ´«Ò³Ãæ¼ÓÔØÊ§°Ü£¬ÊÇ·ñÇÐ»»µ½ÅúÁ¿ÉÏ´«£¿]]></item>
-				<item id="filesize_limit"><![CDATA[ÎÄ¼þ³ß´ç: Ð¡ÓÚ 2GB]]></item>
-				<item id="xf_storage_btn"><![CDATA[´ó¸½¼þÉÏ´«]]></item>
-				<item id="update_tips"><![CDATA[¸Ã¸½¼þÊÇÍ¨¹ýQQÐý·ç·½Ê½ÉÏ´«µÄ´ó¸½¼þ£¬²»Ö§³ÖÖ±½Ó¸üÐÂ·½Ê½ÐÞ¸Ä¡£]]></item>
-				<item id="notice_name"><![CDATA[Í¨ÖªÐÅÏ¢]]></item>
-				<item id="download_xf"><![CDATA[Ðý·ç¸ßËÙÏÂÔØ]]></item>
-				<item id="attachlist"><![CDATA[¸½¼þÁÐ±í]]></item>
+				<item id="sava_attachlist"><![CDATA[å®Œç•¢ï¼Œä¿å­˜åˆ°é™„ä»¶åˆ—è¡¨]]></item>
+				<item id="xf_storage_tips"><![CDATA[æ‚¨å¯ä»¥åœ¨ä¸Šå‚³éŽç¨‹ä¸­é—œé–‰é€™å€‹å°çª—å£ï¼Œä¸Šå‚³å®Œç•¢å¾Œæœƒé€šçŸ¥æ‚¨]]></item>
+				<item id="wait_for_url"><![CDATA[é é¢åŠ è¼‰ä¸­ï¼Œè«‹ç¨ç­‰...]]></item>
+				<item id="timeout_tips"><![CDATA[è¶…å¤§é™„ä»¶ä¸Šå‚³é é¢åŠ è¼‰å¤±æ•—ï¼Œæ˜¯å¦åˆ‡æ›åˆ°æ‰¹é‡ä¸Šå‚³ï¼Ÿ]]></item>
+				<item id="filesize_limit"><![CDATA[æ–‡ä»¶å°ºå¯¸: å°æ–¼ 2GB]]></item>
+				<item id="xf_storage_btn"><![CDATA[å¤§é™„ä»¶ä¸Šå‚³]]></item>
+				<item id="update_tips"><![CDATA[è©²é™„ä»¶æ˜¯é€šéŽQQæ—‹é¢¨æ–¹å¼ä¸Šå‚³çš„å¤§é™„ä»¶ï¼Œä¸æ”¯æŒç›´æŽ¥æ›´æ–°æ–¹å¼ä¿®æ”¹ã€‚]]></item>
+				<item id="notice_name"><![CDATA[é€šçŸ¥ä¿¡æ¯]]></item>
+				<item id="download_xf"><![CDATA[æ—‹é¢¨é«˜é€Ÿä¸‹è¼‰]]></item>
+				<item id="attachlist"><![CDATA[é™„ä»¶åˆ—è¡¨]]></item>
 			</item>
 		</item>
 	</item>

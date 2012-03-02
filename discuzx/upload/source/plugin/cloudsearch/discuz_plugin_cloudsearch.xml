@@ -6,7 +6,7 @@
 		<item id="plugin">
 			<item id="available"><![CDATA[1]]></item>
 			<item id="adminid"><![CDATA[1]]></item>
-			<item id="name"><![CDATA[纵横搜索]]></item>
+			<item id="name"><![CDATA[绺辨┇鎼滅储]]></item>
 			<item id="identifier"><![CDATA[cloudsearch]]></item>
 			<item id="description"><![CDATA[]]></item>
 			<item id="datatables"><![CDATA[]]></item>
@@ -31,18 +31,18 @@
 		<item id="version"><![CDATA[X2]]></item>
 		<item id="language">
 			<item id="templatelang">
-				<item id="hottopic"><![CDATA[热门话题]]></item>
-				<item id="realtedthread"><![CDATA[搜索相关主题]]></item>
-				<item id="forum"><![CDATA[版块]]></item>
-				<item id="addtocollection"><![CDATA[添加到淘专辑]]></item>
-				<item id="no_content"><![CDATA[暂时还没有内容]]></item>
-				<item id="viewmore"><![CDATA[查看更多]]></item>
-				<item id="relate"><![CDATA[相关主题]]></item>
-				<item id="orderby"><![CDATA[筛选]]></item>
-				<item id="order_default"><![CDATA[相关度]]></item>
-				<item id="order_posted"><![CDATA[发帖时间]]></item>
-				<item id="thread_class"><![CDATA[主题分类]]></item>
-				<item id="loading"><![CDATA[正在加载……]]></item>
+				<item id="hottopic"><![CDATA[鐔遍杸瑭遍]]></item>
+				<item id="realtedthread"><![CDATA[鎼滅储鐩搁棞涓婚]]></item>
+				<item id="forum"><![CDATA[鐗堝]]></item>
+				<item id="addtocollection"><![CDATA[娣诲姞鍒版窐灏堣集]]></item>
+				<item id="no_content"><![CDATA[鏆檪閭勬矑鏈夊収瀹筣]></item>
+				<item id="viewmore"><![CDATA[鏌ョ湅鏇村]]></item>
+				<item id="relate"><![CDATA[鐩搁棞涓婚]]></item>
+				<item id="orderby"><![CDATA[绡╅伕]]></item>
+				<item id="order_default"><![CDATA[鐩搁棞搴]></item>
+				<item id="order_posted"><![CDATA[鐧煎笘鏅傞枔]]></item>
+				<item id="thread_class"><![CDATA[涓婚鍒嗛]]></item>
+				<item id="loading"><![CDATA[姝ｅ湪鍔犺級鈥︹�]></item>
 			</item>
 		</item>
 		<item id="installfile"><![CDATA[install.php]]></item>

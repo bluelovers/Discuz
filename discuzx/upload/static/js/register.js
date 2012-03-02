@@ -51,9 +51,9 @@ function addFormEvent(formid, focus){
 	};
 	formNode[stmp[1]].onblur = function () {
 		if(formNode[stmp[1]].value == '') {
-			var pwmsg = 'ÇëÌîĞ´ÃÜÂë';
+			var pwmsg = 'è«‹å¡«å¯«å¯†ç¢¼';
 			if(pwlength > 0) {
-				pwmsg += ', ×îĞ¡³¤¶ÈÎª '+pwlength+' ¸ö×Ö·û';
+				pwmsg += ', æœ€å°é•·åº¦ç‚º '+pwlength+' å€‹å­—ç¬¦';
 			}
 			errormessage(formNode[stmp[1]].id, pwmsg);
 		}else{
@@ -63,14 +63,14 @@ function addFormEvent(formid, focus){
 	};
 	formNode[stmp[1]].onkeyup = function () {
 		if(pwlength == 0 || $(formNode[stmp[1]].id).value.length >= pwlength) {
-			var passlevels = new Array('','Èõ','ÖĞ','Ç¿');
+			var passlevels = new Array('','å¼±','ä¸­','å¼·');
 			var passlevel = checkstrongpw(formNode[stmp[1]].id);
-			errormessage(formNode[stmp[1]].id, '<span class="passlevel passlevel'+passlevel+'">ÃÜÂëÇ¿¶È:'+passlevels[passlevel]+'</span>');
+			errormessage(formNode[stmp[1]].id, '<span class="passlevel passlevel'+passlevel+'">å¯†ç¢¼å¼·åº¦:'+passlevels[passlevel]+'</span>');
 		}
 	};
 	formNode[stmp[2]].onblur = function () {
 		if(formNode[stmp[2]].value == '') {
-			errormessage(formNode[stmp[2]].id, 'ÇëÔÙ´ÎÊäÈëÃÜÂë');
+			errormessage(formNode[stmp[2]].id, 'è«‹å†æ¬¡è¼¸å…¥å¯†ç¢¼');
 		}
 		checkpassword(formNode[stmp[1]].id, formNode[stmp[2]].id);
 	};
@@ -97,7 +97,7 @@ function addMailEvent(mailObj) {
 	};
 	mailObj.onblur = function () {
 		if(mailObj.value == '') {
-			errormessage(mailObj.id, 'ÇëÊäÈëÓÊÏäµØÖ·');
+			errormessage(mailObj.id, 'è«‹è¼¸å…¥éƒµç®±åœ°å€');
 		}
 		emailMenuOp(3, null, mailObj.id);
 	};
@@ -132,7 +132,7 @@ function showbirthday(){
 	var el = $('birthday');
 	var birthday = el.value;
 	el.length=0;
-	el.options.add(new Option('ÈÕ', ''));
+	el.options.add(new Option('æ—¥', ''));
 	for(var i=0;i<28;i++){
 		el.options.add(new Option(i+1, i+1));
 	}
@@ -261,12 +261,12 @@ function checkusername(id) {
 		lastusername = username;
 	}
 	if(username.match(/<|"/ig)) {
-		errormessage(id, 'ÓÃ»§Ãû°üº¬Ãô¸Ğ×Ö·û');
+		errormessage(id, 'ç”¨æˆ¶ååŒ…å«æ•æ„Ÿå­—ç¬¦');
 		return;
 	}
 	var unlen = username.replace(/[^\x00-\xff]/g, "**").length;
 	if(unlen < 3 || unlen > 15) {
-		errormessage(id, unlen < 3 ? 'ÓÃ»§Ãû²»µÃĞ¡ÓÚ 3 ¸ö×Ö·û' : 'ÓÃ»§Ãû²»µÃ³¬¹ı 15 ¸ö×Ö·û');
+		errormessage(id, unlen < 3 ? 'ç”¨æˆ¶åä¸å¾—å°æ–¼ 3 å€‹å­—ç¬¦' : 'ç”¨æˆ¶åä¸å¾—è¶…é 15 å€‹å­—ç¬¦');
 		return;
 	}
 	var x = new Ajax();
@@ -282,7 +282,7 @@ function checkpassword(id1, id2) {
 	}
 	if(pwlength > 0) {
 		if($(id1).value.length < pwlength) {
-			errormessage(id1, 'ÃÜÂëÌ«¶Ì£¬²»µÃÉÙÓÚ '+pwlength+' ¸ö×Ö·û');
+			errormessage(id1, 'å¯†ç¢¼å¤ªçŸ­ï¼Œä¸å¾—å°‘æ–¼ '+pwlength+' å€‹å­—ç¬¦');
 			return;
 		}
 	}
@@ -292,33 +292,33 @@ function checkpassword(id1, id2) {
 		for(var i in strongpw) {
 			if(strongpw[i] === 1 && !$(id1).value.match(/\d+/g)) {
 				strongpw_error = true;
-				strongpw_str[j] = 'Êı×Ö';
+				strongpw_str[j] = 'æ•¸å­—';
 				j++;
 			}
 			if(strongpw[i] === 2 && !$(id1).value.match(/[a-z]+/g)) {
 				strongpw_error = true;
-				strongpw_str[j] = 'Ğ¡Ğ´×ÖÄ¸';
+				strongpw_str[j] = 'å°å¯«å­—æ¯';
 				j++;
 			}
 			if(strongpw[i] === 3 && !$(id1).value.match(/[A-Z]+/g)) {
 				strongpw_error = true;
-				strongpw_str[j] = '´óĞ´×ÖÄ¸';
+				strongpw_str[j] = 'å¤§å¯«å­—æ¯';
 				j++;
 			}
 			if(strongpw[i] === 4 && !$(id1).value.match(/[^A-Za-z0-9]+/g)) {
 				strongpw_error = true;
-				strongpw_str[j] = 'ÌØÊâ·ûºÅ';
+				strongpw_str[j] = 'ç‰¹æ®Šç¬¦è™Ÿ';
 				j++;
 			}
 		}
 		if(strongpw_error) {
-			errormessage(id1, 'ÃÜÂëÌ«Èõ£¬ÃÜÂëÖĞ±ØĞë°üº¬ '+strongpw_str.join('£¬'));
+			errormessage(id1, 'å¯†ç¢¼å¤ªå¼±ï¼Œå¯†ç¢¼ä¸­å¿…é ˆåŒ…å« '+strongpw_str.join('ï¼Œ'));
 			return;
 		}
 	}
 	errormessage(id2);
 	if($(id1).value != $(id2).value) {
-		errormessage(id2, 'Á½´ÎÊäÈëµÄÃÜÂë²»Ò»ÖÂ');
+		errormessage(id2, 'å…©æ¬¡è¼¸å…¥çš„å¯†ç¢¼ä¸ä¸€è‡´');
 	} else {
 		errormessage(id2, 'succeed');
 	}
@@ -333,7 +333,7 @@ function checkemail(id) {
 		lastemail = email;
 	}
 	if(email.match(/<|"/ig)) {
-		errormessage(id, 'Email °üº¬Ãô¸Ğ×Ö·û');
+		errormessage(id, 'Email åŒ…å«æ•æ„Ÿå­—ç¬¦');
 		return;
 	}
 	var x = new Ajax();
@@ -352,7 +352,7 @@ function checkinvite() {
 		lastinvitecode = invitecode;
 	}
 	if(invitecode.match(/<|"/ig)) {
-		errormessage('invitecode', 'ÑûÇëÂë°üº¬Ãô¸Ğ×Ö·û');
+		errormessage('invitecode', 'é‚€è«‹ç¢¼åŒ…å«æ•æ„Ÿå­—ç¬¦');
 		return;
 	}
 	var x = new Ajax();

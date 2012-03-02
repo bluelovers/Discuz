@@ -69,7 +69,7 @@ if(!$res) {
 }
 
 if($nextid) {
-	showmessage("¼ÌÐø×ª»»Êý¾Ý±í ".$table_source." adid> $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
+	showmessage("ç¹¼çºŒè½‰æ›æ•¸æ“šè¡¨ ".$table_source." adid> $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
 }
 
 function encodeadvcode($advnew) {

@@ -684,7 +684,7 @@ class Cloud_Service_SearchHelper {
 				    'f_id' => $fid,
 					'need_random' => false,
 					'need_num' => $needNum,
-				    'version' => $format == 'num' ? 1 : 2, // 1£º·µ»ØÊı×ÖÏÂ±êµÄ½á¹û¼¯¡¢2£º·µ»Ø¹ØÁªÊı×éĞÎÊ½µÄ½á¹û¼¯
+				    'version' => $format == 'num' ? 1 : 2, // 1ï¼šè¿”å›æ•¸å­—ä¸‹æ¨™çš„çµæœé›†ã€2ï¼šè¿”å›é—œè¯æ•¸çµ„å½¢å¼çš„çµæœé›†
 				);
 
 				$utilService = Cloud::loadClass('Service_Util');

@@ -6,7 +6,7 @@
 		<item id="plugin">
 			<item id="available"><![CDATA[1]]></item>
 			<item id="adminid"><![CDATA[1]]></item>
-			<item id="name"><![CDATA[Ã⁄—∂∞≤»´]]></item>
+			<item id="name"><![CDATA[È®∞Ë®äÂÆâÂÖ®]]></item>
 			<item id="identifier"><![CDATA[security]]></item>
 			<item id="description"><![CDATA[]]></item>
 			<item id="datatables"><![CDATA[]]></item>
@@ -44,14 +44,14 @@
 		<item id="installfile"><![CDATA[install.php]]></item>
 		<item id="language">
 			<item id="scriptlang">
-				<item id="banuser_tips_qq"><![CDATA[±ß«∏£¨ƒ˙µƒ’ ∫≈±ªœµÕ≥Ω˚—‘£¨ƒ˙ø…“‘∞Û∂®QQΩ‚≥˝Ω˚—‘◊¥Ã¨°£<a href="connect.php?mod=login&op=init">∞Û∂®QQ</a>]]></item>
-				<item id="banuser_tips_seccode"><![CDATA[±ß«∏£¨ƒ˙µƒ’ ∫≈±ªœµÕ≥Ω˚—‘£¨ƒ˙ø…“‘µ„ª˜<a href="#" onclick="showWindow('security','plugin.php?id=security:unlock')">’‚¿Ô</a>Ω‚≥˝Ω˚—‘≤Ÿ◊˜°£]]></item>
-				<item id="unlock_success"><![CDATA[Ω‚Ω˚≥…π¶£°]]></item>
-				<item id="wrongcode"><![CDATA[—È÷§¬Î—È÷§ ß∞‹£¨Œﬁ∑®Ω‚Ω˚°£]]></item>
+				<item id="banuser_tips_qq"><![CDATA[Êä±Ê≠âÔºåÊÇ®ÁöÑÂ∏≥ËôüË¢´Á≥ªÁµ±Á¶ÅË®ÄÔºåÊÇ®ÂèØ‰ª•Á∂ÅÂÆöQQËß£Èô§Á¶ÅË®ÄÁãÄÊÖã„ÄÇ<a href="connect.php?mod=login&op=init">Á∂ÅÂÆöQQ</a>]]></item>
+				<item id="banuser_tips_seccode"><![CDATA[Êä±Ê≠âÔºåÊÇ®ÁöÑÂ∏≥ËôüË¢´Á≥ªÁµ±Á¶ÅË®ÄÔºåÊÇ®ÂèØ‰ª•ÈªûÊìä<a href="#" onclick="showWindow('security','plugin.php?id=security:unlock')">ÈÄôË£°</a>Ëß£Èô§Á¶ÅË®ÄÊìç‰Ωú„ÄÇ]]></item>
+				<item id="unlock_success"><![CDATA[Ëß£Á¶ÅÊàêÂäüÔºÅ]]></item>
+				<item id="wrongcode"><![CDATA[È©óË≠âÁ¢ºÈ©óË≠âÂ§±ÊïóÔºåÁÑ°Ê≥ïËß£Á¶Å„ÄÇ]]></item>
 			</item>
 			<item id="templatelang">
-				<item id="unlock_title"><![CDATA[«Î ‰»Î—È÷§¬Î£¨Ω‚≥˝Ω˚—‘◊¥Ã¨]]></item>
-				<item id="unlock"><![CDATA[Ω‚Ω˚]]></item>
+				<item id="unlock_title"><![CDATA[Ë´ãËº∏ÂÖ•È©óË≠âÁ¢ºÔºåËß£Èô§Á¶ÅË®ÄÁãÄÊÖã]]></item>
+				<item id="unlock"><![CDATA[Ëß£Á¶Å]]></item>
 			</item>
 		</item>
 	</item>

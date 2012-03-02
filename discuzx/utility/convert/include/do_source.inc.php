@@ -2,18 +2,18 @@
 
 $datadir = DISCUZ_ROOT.'./source/';
 
-showtips('<li><strong>ÔÚ¿ªÊ¼×ª»»Ö®Ç°£¬ÇëÈ·±£±¾³ÌĞòÄ¿Â¼ÏÂµÄ data Ä¿Â¼Îª¿ÉĞ´È¨ÏŞ£¬·ñÔòÎŞ·¨´æ´¢×ª»»ÉèÖÃ</strong></li><li><strong>Èç¹ûÓĞDiscuz!ºÍUChomeÍ¬Ê±ĞèÒªÉı¼¶£¬ÇëÎñ±ØÏÈÉı¼¶Discuz!ÂÛÌ³</strong></li><li>ÇëÕıÈ·Ñ¡Ôñ×ª»»³ÌĞò£¬·ñÔò¿ÉÄÜÔì³ÉÎŞ·¨×ª»»³É¹¦</li><li>±¾×ª»»³ÌĞò²»»áÆÆ»µÔ­Ê¼Êı¾İ£¬ËùÒÔ×ª»»ĞèÒª2±¶ÓÚÔ­Ê¼Êı¾İ¿Õ¼ä</li>');
+showtips('<li><strong>åœ¨é–‹å§‹è½‰æ›ä¹‹å‰ï¼Œè«‹ç¢ºä¿æœ¬ç¨‹åºç›®éŒ„ä¸‹çš„ data ç›®éŒ„ç‚ºå¯å¯«æ¬Šé™ï¼Œå¦å‰‡ç„¡æ³•å­˜å„²è½‰æ›è¨­ç½®</strong></li><li><strong>å¦‚æœæœ‰Discuz!å’ŒUChomeåŒæ™‚éœ€è¦å‡ç´šï¼Œè«‹å‹™å¿…å…ˆå‡ç´šDiscuz!è«–å£‡</strong></li><li>è«‹æ­£ç¢ºé¸æ“‡è½‰æ›ç¨‹åºï¼Œå¦å‰‡å¯èƒ½é€ æˆç„¡æ³•è½‰æ›æˆåŠŸ</li><li>æœ¬è½‰æ›ç¨‹åºä¸æœƒç ´å£åŸå§‹æ•¸æ“šï¼Œæ‰€ä»¥è½‰æ›éœ€è¦2å€æ–¼åŸå§‹æ•¸æ“šç©ºé–“</li>');
 
 if(is_dir($datadir)) {
 
 	$cdir = dir($datadir);
 	show_table_header();
 	show_table_row(array(
-			'Ô­Ê¼°æ±¾',
-			'Ä¿±ê°æ±¾',
-			array('width="50%"', '¼ò½é'),
-			array('width="5%"', 'ËµÃ÷'),
-			array('width="5%"', 'ÉèÖÃ'),
+			'åŸå§‹ç‰ˆæœ¬',
+			'ç›®æ¨™ç‰ˆæœ¬',
+			array('width="50%"', 'ç°¡ä»‹'),
+			array('width="5%"', 'èªªæ˜'),
+			array('width="5%"', 'è¨­ç½®'),
 			array('width="5%"', ''),
 		), 'header title');
 	while(($entry = $cdir->read()) !== false) {
@@ -21,7 +21,7 @@ if(is_dir($datadir)) {
 			$settingfile = $datadir.$entry.'/setting.ini';
 			$readmefile = $datadir.$entry.'/readme.txt';
 
-			$readme = file_exists($readmefile) ? '<a target="_blank" href="source/'.$entry.'/readme.txt">²é¿´</a>' : '';
+			$readme = file_exists($readmefile) ? '<a target="_blank" href="source/'.$entry.'/readme.txt">æŸ¥çœ‹</a>' : '';
 
 			if(file_exists($settingfile) && $setting = loadsetting($entry)) {
 				$trclass = $trclass == 'bg1' ? 'bg2' : 'bg1';
@@ -31,8 +31,8 @@ if(is_dir($datadir)) {
 						$setting['program']['target'],
 						$setting['program']['introduction'],
 						array('align="center"', $readme),
-						array('align="center"', '<a href="index.php?a=setting&source='.rawurlencode($entry).'">ĞŞ¸Ä</a>'),
-						array('align="center"', '<a href="index.php?a=config&source='.rawurlencode($entry).'">¿ªÊ¼</a>'),
+						array('align="center"', '<a href="index.php?a=setting&source='.rawurlencode($entry).'">ä¿®æ”¹</a>'),
+						array('align="center"', '<a href="index.php?a=config&source='.rawurlencode($entry).'">é–‹å§‹</a>'),
 					), $trclass
 				);
 			}

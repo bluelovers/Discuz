@@ -13,22 +13,22 @@ if(!defined('IN_DISCUZ')) {
 
 $lang = array
 (
-	'member_name' => '»áÔ±ÀàÈÎÎñ',
-	'member_desc' => 'ÊÕ²ØÖ÷Ìâ¡¢Ê¹ÓÃµÀ¾ß¡¢Ìí¼ÓÂþÓÎÓ¦ÓÃ£¬´ËÀàÈÎÎñÓÃÀ´¹ÄÀøºÍÒýµ¼»áÔ±Ê¹ÓÃÂÛÌ³µÄÄ³¸ö¹¦ÄÜ£¬»îÔ¾ÂÛÌ³µÄ·ÕÎ§',
-	'member_complete_var_act' => '¶¯×÷',
-	'member_complete_var_act_favorite' => 'ÊÕ²ØÖ÷Ìâ',
-	'member_complete_var_act_magic' => 'Ê¹ÓÃµÀ¾ß',
-	'member_complete_var_act_userapp' => 'Ìí¼ÓÂþÓÎÓ¦ÓÃ',
-	'member_complete_var_num' => 'Ö´ÐÐ¶¯×÷´ÎÊýÏÂÏÞ',
-	'member_complete_var_num_comment' => '»áÔ±ÐèÒªÖ´ÐÐÏàÓ¦¶¯×÷µÄ×îÉÙ´ÎÊý',
-	'member_complete_var_time' => 'Ê±¼äÏÞÖÆ(Ð¡Ê±)',
-	'member_complete_var_time_comment' => 'ÉèÖÃ»áÔ±´ÓÉêÇëÈÎÎñµ½Íê³ÉÈÎÎñµÄÊ±¼äÏÞÖÆ£¬»áÔ±ÔÚ´ËÊ±¼äÄÚÎ´ÄÜÍê³ÉÈÎÎñÔò²»ÄÜÁìÈ¡½±Àø²¢±ê¼ÇÈÎÎñÊ§°Ü£¬0 »òÁô¿ÕÎª²»ÏÞÖÆ',
+	'member_name' => 'æœƒå“¡é¡žä»»å‹™',
+	'member_desc' => 'æ”¶è—ä¸»é¡Œã€ä½¿ç”¨é“å…·ã€æ·»åŠ æ¼«éŠæ‡‰ç”¨ï¼Œæ­¤é¡žä»»å‹™ç”¨ä¾†é¼“å‹µå’Œå¼•å°Žæœƒå“¡ä½¿ç”¨è«–å£‡çš„æŸå€‹åŠŸèƒ½ï¼Œæ´»èºè«–å£‡çš„æ°›åœ',
+	'member_complete_var_act' => 'å‹•ä½œ',
+	'member_complete_var_act_favorite' => 'æ”¶è—ä¸»é¡Œ',
+	'member_complete_var_act_magic' => 'ä½¿ç”¨é“å…·',
+	'member_complete_var_act_userapp' => 'æ·»åŠ æ¼«éŠæ‡‰ç”¨',
+	'member_complete_var_num' => 'åŸ·è¡Œå‹•ä½œæ¬¡æ•¸ä¸‹é™',
+	'member_complete_var_num_comment' => 'æœƒå“¡éœ€è¦åŸ·è¡Œç›¸æ‡‰å‹•ä½œçš„æœ€å°‘æ¬¡æ•¸',
+	'member_complete_var_time' => 'æ™‚é–“é™åˆ¶(å°æ™‚)',
+	'member_complete_var_time_comment' => 'è¨­ç½®æœƒå“¡å¾žç”³è«‹ä»»å‹™åˆ°å®Œæˆä»»å‹™çš„æ™‚é–“é™åˆ¶ï¼Œæœƒå“¡åœ¨æ­¤æ™‚é–“å…§æœªèƒ½å®Œæˆä»»å‹™å‰‡ä¸èƒ½é ˜å–çŽå‹µä¸¦æ¨™è¨˜ä»»å‹™å¤±æ•—ï¼Œ0 æˆ–ç•™ç©ºç‚ºä¸é™åˆ¶',
 
-	'task_complete_time_start' => '´ÓÉêÇëÈÎÎñ¿ªÊ¼¼ÆÊ±£¬',
-	'task_complete_time_limit' => '{value} Ð¡Ê±ÄÚ£¬',
-	'task_complete_act_favorite' => 'ÊÕ²Ø {value} ¸öÖ÷Ìâ',
-	'task_complete_act_magic' => 'Ê¹ÓÃ {value} ´ÎµÀ¾ß¡£<br />Äú¿ÉÒÔÔÚÌû×ÓÒ³Ãæ¡¢ÈÕÖ¾Ò³Ãæ¡¢Í¼Æ¬Ò³ÃæµÈÊ¹ÓÃµÀ¾ß',
-	'task_complete_act_userapp' => 'Ìí¼Ó {value} ¸öÂþÓÎÓ¦ÓÃ',
+	'task_complete_time_start' => 'å¾žç”³è«‹ä»»å‹™é–‹å§‹è¨ˆæ™‚ï¼Œ',
+	'task_complete_time_limit' => '{value} å°æ™‚å…§ï¼Œ',
+	'task_complete_act_favorite' => 'æ”¶è— {value} å€‹ä¸»é¡Œ',
+	'task_complete_act_magic' => 'ä½¿ç”¨ {value} æ¬¡é“å…·ã€‚<br />æ‚¨å¯ä»¥åœ¨å¸–å­é é¢ã€æ—¥èªŒé é¢ã€åœ–ç‰‡é é¢ç­‰ä½¿ç”¨é“å…·',
+	'task_complete_act_userapp' => 'æ·»åŠ  {value} å€‹æ¼«éŠæ‡‰ç”¨',
 );
 
 ?>

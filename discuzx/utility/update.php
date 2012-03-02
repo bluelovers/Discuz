@@ -34,14 +34,14 @@ $_G['siteurl'] = preg_replace('/\/install\/$/i', '/', $_G['siteurl']);
 
 $lockfile = DISCUZ_ROOT.'./data/update.lock';
 if(file_exists($lockfile)) {
-	show_msg('ÇëÄúÏÈµÇÂ¼·şÎñÆ÷ftp£¬ÊÖ¹¤É¾³ı ./data/update.lock ÎÄ¼ş£¬ÔÙ´ÎÔËĞĞ±¾ÎÄ¼ş½øĞĞÉı¼¶¡£');
+	show_msg('è«‹æ‚¨å…ˆç™»éŒ„æœå‹™å™¨ftpï¼Œæ‰‹å·¥åˆªé™¤ ./data/update.lock æ–‡ä»¶ï¼Œå†æ¬¡é‹è¡Œæœ¬æ–‡ä»¶é€²è¡Œå‡ç´šã€‚');
 }
 
 $devmode = file_exists(DISCUZ_ROOT.'./install/data/install_dev.sql');
 $sqlfile = DISCUZ_ROOT.($devmode ? './install/data/install_dev.sql' : './install/data/install.sql');
 
 if(!file_exists($sqlfile)) {
-	show_msg('SQLÎÄ¼ş '.$sqlfile.' ²»´æÔÚ');
+	show_msg('SQLæ–‡ä»¶ '.$sqlfile.' ä¸å­˜åœ¨');
 }
 $first_to_2_5 = !C::t('common_setting')->skey_exists('strongpw');
 if($_POST['delsubmit']) {
@@ -66,7 +66,7 @@ if($_POST['delsubmit']) {
 		}
 	}
 
-	show_msg('É¾³ı±íºÍ×Ö¶Î²Ù×÷Íê³ÉÁË', $theurl.'?step=style');
+	show_msg('åˆªé™¤è¡¨å’Œå­—æ®µæ“ä½œå®Œæˆäº†', $theurl.'?step=style');
 }
 
 function waitingdb($curstep, $sqlarray) {
@@ -75,7 +75,7 @@ function waitingdb($curstep, $sqlarray) {
 		$sqlurl .= '&sql[]='.md5($sql);
 		$sendsql .= '<img width="1" height="1" src="'.$theurl.'?step='.$curstep.'&waitingdb=1&sqlid='.$key.'">';
 	}
-	show_msg("ÓÅ»¯Êı¾İ±í", $theurl.'?step=waitingdb&nextstep='.$curstep.$sqlurl.'&sendsql='.base64_encode($sendsql), 5000, 1);
+	show_msg("å„ªåŒ–æ•¸æ“šè¡¨", $theurl.'?step=waitingdb&nextstep='.$curstep.$sqlurl.'&sendsql='.base64_encode($sendsql), 5000, 1);
 }
 if(empty($_GET['step'])) $_GET['step'] = 'start';
 
@@ -88,29 +88,29 @@ if($_GET['step'] == 'start') {
 		C::t('common_setting')->update('bbclosed', 1);
 		require_once libfile('function/cache');
 		updatecache('setting');
-		show_msg('ÄúµÄÕ¾µãÎ´¹Ø±Õ£¬ÕıÔÚ¹Ø±Õ£¬ÇëÉÔºó...', $theurl.'?step=start', 5000);
+		show_msg('æ‚¨çš„ç«™é»æœªé—œé–‰ï¼Œæ­£åœ¨é—œé–‰ï¼Œè«‹ç¨å¾Œ...', $theurl.'?step=start', 5000);
 	}
 	if(version_compare($version, '1.5.2') <= 0) {
-		show_msg('ÇëÏÈÉı¼¶ UCenter µ½ 1.6.0 ÒÔÉÏ°æ±¾¡£<br>Èç¹ûÊ¹ÓÃÎªDiscuz! X×Ô´øUCenter£¬ÇëÏÈÏÂÔØ UCenter 1.6.0, ÔÚ utilities Ä¿Â¼ÏÂÕÒµ½¶ÔÓ¦µÄÉı¼¶³ÌĞò£¬¸´ÖÆ»òÉÏ´«µ½ Discuz! X µÄ uc_server Ä¿Â¼ÏÂ£¬ÔËĞĞ¸Ã³ÌĞò½øĞĞÉı¼¶');
+		show_msg('è«‹å…ˆå‡ç´š UCenter åˆ° 1.6.0 ä»¥ä¸Šç‰ˆæœ¬ã€‚<br>å¦‚æœä½¿ç”¨ç‚ºDiscuz! Xè‡ªå¸¶UCenterï¼Œè«‹å…ˆä¸‹è¼‰ UCenter 1.6.0, åœ¨ utilities ç›®éŒ„ä¸‹æ‰¾åˆ°å°æ‡‰çš„å‡ç´šç¨‹åºï¼Œè¤‡è£½æˆ–ä¸Šå‚³åˆ° Discuz! X çš„ uc_server ç›®éŒ„ä¸‹ï¼Œé‹è¡Œè©²ç¨‹åºé€²è¡Œå‡ç´š');
 	} else {
-		show_msg('ËµÃ÷£º<br>±¾Éı¼¶³ÌĞò»á²ÎÕÕ×îĞÂµÄSQLÎÄ¼ş£¬¶ÔÊı¾İ¿â½øĞĞÍ¬²½Éı¼¶¡£<br>
-			ÇëÈ·±£µ±Ç°Ä¿Â¼ÏÂ ./data/install.sql ÎÄ¼şÎª×îĞÂ°æ±¾¡£<br><br>
-			Éı¼¶Íê³Éºó»á¹Ø±ÕËùÓĞ²å¼şÒÔÈ·±£Õı³£ÔËĞĞ£¬ÇëÕ¾³¤Öğ¸ö¿ªÆôÃ¿Ò»¸ö²å¼ş¼ì²âÊÇ·ñ¼æÈİĞÂ°æ±¾¡£<br><br>
-			<a href="'.$theurl.'?step=prepare'.($_GET['from'] ? '&from='.rawurlencode($_GET['from']) : '').'">×¼±¸Íê±Ï£¬Éı¼¶¿ªÊ¼</a>');
+		show_msg('èªªæ˜ï¼š<br>æœ¬å‡ç´šç¨‹åºæœƒåƒç…§æœ€æ–°çš„SQLæ–‡ä»¶ï¼Œå°æ•¸æ“šåº«é€²è¡ŒåŒæ­¥å‡ç´šã€‚<br>
+			è«‹ç¢ºä¿ç•¶å‰ç›®éŒ„ä¸‹ ./data/install.sql æ–‡ä»¶ç‚ºæœ€æ–°ç‰ˆæœ¬ã€‚<br><br>
+			å‡ç´šå®Œæˆå¾Œæœƒé—œé–‰æ‰€æœ‰æ’ä»¶ä»¥ç¢ºä¿æ­£å¸¸é‹è¡Œï¼Œè«‹ç«™é•·é€å€‹é–‹å•Ÿæ¯ä¸€å€‹æ’ä»¶æª¢æ¸¬æ˜¯å¦å…¼å®¹æ–°ç‰ˆæœ¬ã€‚<br><br>
+			<a href="'.$theurl.'?step=prepare'.($_GET['from'] ? '&from='.rawurlencode($_GET['from']) : '').'">æº–å‚™å®Œç•¢ï¼Œå‡ç´šé–‹å§‹</a>');
 	}
 } elseif ($_GET['step'] == 'waitingdb') {
 	$query = DB::fetch_all("SHOW FULL PROCESSLIST");
 	foreach($query as $row) {
 		if(in_array(md5($row['Info']), $_GET['sql'])) {
-			$list .= '[Ê±³¤]:'.$row['Time'].'[×´Ì¬]:<b>'.$row['State'].'</b>[ĞÅÏ¢]:'.$row['Info'].'<br><br>';
+			$list .= '[æ™‚é•·]:'.$row['Time'].'[ç‹€æ…‹]:<b>'.$row['State'].'</b>[ä¿¡æ¯]:'.$row['Info'].'<br><br>';
 		}
 	}
 	if(empty($list) && empty($_GET['sendsql'])) {
-		$msg = '×¼±¸½øÈëÏÂÒ»²½²Ù×÷£¬ÇëÉÔºó...';
+		$msg = 'æº–å‚™é€²å…¥ä¸‹ä¸€æ­¥æ“ä½œï¼Œè«‹ç¨å¾Œ...';
 		$url = "?step=$_GET[nextstep]";
 		$time = 5;
 	} else {
-		$msg = 'ÕıÔÚÉı¼¶Êı¾İ£¬ÇëÉÔºó...<br><br>'.$list.base64_decode($_GET['sendsql']);
+		$msg = 'æ­£åœ¨å‡ç´šæ•¸æ“šï¼Œè«‹ç¨å¾Œ...<br><br>'.$list.base64_decode($_GET['sendsql']);
 		$sqlurl = implode('&sql[]=', $_GET['sql']);
 		$url = "?step=waitingdb&nextstep=$_GET[nextstep]&sql[]=".$sqlurl;
 		$time = 20;
@@ -121,7 +121,7 @@ if($_GET['step'] == 'start') {
 		C::t('forum_groupinvite')->truncate();
 	}
 	if(DB::fetch_first("SHOW COLUMNS FROM ".DB::table('forum_activityapply')." LIKE 'contact'")) {
-		$query = DB::query("UPDATE ".DB::table('forum_activityapply')." SET message=CONCAT_WS(' ÁªÏµ·½Ê½:', message, contact) WHERE contact<>''");
+		$query = DB::query("UPDATE ".DB::table('forum_activityapply')." SET message=CONCAT_WS(' è¯ç¹«æ–¹å¼:', message, contact) WHERE contact<>''");
 		DB::query("ALTER TABLE ".DB::table('forum_activityapply')." DROP contact");
 	}
 	if($row = DB::fetch_first("SHOW COLUMNS FROM ".DB::table('forum_postcomment')." LIKE 'authorid'")) {
@@ -137,7 +137,7 @@ if($_GET['step'] == 'start') {
 		DB::query("ALTER TABLE ".DB::table('common_failedlogin')." ADD PRIMARY KEY ipusername (ip,username)");
 	}
 	if(!$row = DB::fetch_first("SHOW COLUMNS FROM ".DB::table('forum_forumfield')." LIKE 'seodescription'")) {
-		DB::query("ALTER TABLE ".DB::table('forum_forumfield')." ADD seodescription text NOT NULL default '' COMMENT '°æ¿éseoÃèÊö' AFTER keywords");
+		DB::query("ALTER TABLE ".DB::table('forum_forumfield')." ADD seodescription text NOT NULL default '' COMMENT 'ç‰ˆå¡Šseoæè¿°' AFTER keywords");
 		DB::query("UPDATE ".DB::table('forum_forumfield')." SET seodescription=description WHERE membernum='0'");
 	}
 	if(DB::fetch_first("SHOW TABLES LIKE '%common_tagitem'") && !$row = DB::fetch_first("SHOW INDEX FROM ".DB::table('common_tagitem')." WHERE key_name='item'")) {
@@ -186,7 +186,7 @@ if($_GET['step'] == 'start') {
 		DB::query('ALTER TABLE '.DB::table('common_template_block').' DROP PRIMARY KEY');
 	}
 
-	show_msg('×¼±¸Íê±Ï£¬½øÈëÏÂÒ»²½Êı¾İ¿â½á¹¹Éı¼¶', $theurl.'?step=sql');
+	show_msg('æº–å‚™å®Œç•¢ï¼Œé€²å…¥ä¸‹ä¸€æ­¥æ•¸æ“šåº«çµæ§‹å‡ç´š', $theurl.'?step=sql');
 } elseif ($_GET['step'] == 'sql') {
 
 	$sql = implode('', file($sqlfile));
@@ -194,13 +194,13 @@ if($_GET['step'] == 'start') {
 	$newtables = empty($matches[1])?array():$matches[1];
 	$newsqls = empty($matches[0])?array():$matches[0];
 	if(empty($newtables) || empty($newsqls)) {
-		show_msg('SQLÎÄ¼şÄÚÈİÎª¿Õ£¬ÇëÈ·ÈÏ');
+		show_msg('SQLæ–‡ä»¶å…§å®¹ç‚ºç©ºï¼Œè«‹ç¢ºèª');
 	}
 
 	$i = empty($_GET['i'])?0:intval($_GET['i']);
 	$count_i = count($newtables);
 	if($i>=$count_i) {
-		show_msg('Êı¾İ¿â½á¹¹Éı¼¶Íê±Ï£¬½øÈëÏÂÒ»²½Êı¾İÉı¼¶²Ù×÷', $theurl.'?step=data');
+		show_msg('æ•¸æ“šåº«çµæ§‹å‡ç´šå®Œç•¢ï¼Œé€²å…¥ä¸‹ä¸€æ­¥æ•¸æ“šå‡ç´šæ“ä½œ', $theurl.'?step=data');
 	}
 	$newtable = $newtables[$i];
 
@@ -226,9 +226,9 @@ if($_GET['step'] == 'start') {
 		$usql = str_replace("CREATE TABLE pre_", 'CREATE TABLE '.$config['tablepre'], $usql);
 
 		if(!DB::query($usql, 'SILENT')) {
-			show_msg('Ìí¼Ó±í '.DB::table($newtable).' ³ö´í,ÇëÊÖ¹¤Ö´ĞĞÒÔÏÂSQLÓï¾äºó,ÔÙÖØĞÂÔËĞĞ±¾Éı¼¶³ÌĞò:<br><br>'.dhtmlspecialchars($usql));
+			show_msg('æ·»åŠ è¡¨ '.DB::table($newtable).' å‡ºéŒ¯,è«‹æ‰‹å·¥åŸ·è¡Œä»¥ä¸‹SQLèªå¥å¾Œ,å†é‡æ–°é‹è¡Œæœ¬å‡ç´šç¨‹åº:<br><br>'.dhtmlspecialchars($usql));
 		} else {
-			$msg = 'Ìí¼Ó±í '.DB::table($newtable).' Íê³É';
+			$msg = 'æ·»åŠ è¡¨ '.DB::table($newtable).' å®Œæˆ';
 		}
 	} else {
 		$value = DB::fetch($query);
@@ -242,9 +242,9 @@ if($_GET['step'] == 'start') {
 					if(!empty($oldcols[$key])) {
 						$usql = "RENAME TABLE ".DB::table($newtable)." TO ".DB::table($newtable.'_bak');
 						if(!DB::query($usql, 'SILENT')) {
-							show_msg('Éı¼¶±í '.DB::table($newtable).' ³ö´í,ÇëÊÖ¹¤Ö´ĞĞÒÔÏÂÉı¼¶Óï¾äºó,ÔÙÖØĞÂÔËĞĞ±¾Éı¼¶³ÌĞò:<br><br><b>Éı¼¶SQLÓï¾ä</b>:<div style=\"position:absolute;font-size:11px;font-family:verdana,arial;background:#EBEBEB;padding:0.5em;\">'.dhtmlspecialchars($usql)."</div><br><b>Error</b>: ".DB::error()."<br><b>Errno.</b>: ".DB::errno());
+							show_msg('å‡ç´šè¡¨ '.DB::table($newtable).' å‡ºéŒ¯,è«‹æ‰‹å·¥åŸ·è¡Œä»¥ä¸‹å‡ç´šèªå¥å¾Œ,å†é‡æ–°é‹è¡Œæœ¬å‡ç´šç¨‹åº:<br><br><b>å‡ç´šSQLèªå¥</b>:<div style=\"position:absolute;font-size:11px;font-family:verdana,arial;background:#EBEBEB;padding:0.5em;\">'.dhtmlspecialchars($usql)."</div><br><b>Error</b>: ".DB::error()."<br><b>Errno.</b>: ".DB::errno());
 						} else {
-							$msg = '±í¸ÄÃû '.DB::table($newtable).' Íê³É£¡';
+							$msg = 'è¡¨æ”¹å '.DB::table($newtable).' å®Œæˆï¼';
 							show_msg($msg, $theurl.'?step=sql&i='.$_GET['i']);
 						}
 					}
@@ -290,12 +290,12 @@ if($_GET['step'] == 'start') {
 		if(!empty($updates)) {
 			$usql = "ALTER TABLE ".DB::table($newtable)." ".implode(', ', $updates);
 			if(!DB::query($usql, 'SILENT')) {
-				show_msg('Éı¼¶±í '.DB::table($newtable).' ³ö´í,ÇëÊÖ¹¤Ö´ĞĞÒÔÏÂÉı¼¶Óï¾äºó,ÔÙÖØĞÂÔËĞĞ±¾Éı¼¶³ÌĞò:<br><br><b>Éı¼¶SQLÓï¾ä</b>:<div style=\"position:absolute;font-size:11px;font-family:verdana,arial;background:#EBEBEB;padding:0.5em;\">'.dhtmlspecialchars($usql)."</div><br><b>Error</b>: ".DB::error()."<br><b>Errno.</b>: ".DB::errno());
+				show_msg('å‡ç´šè¡¨ '.DB::table($newtable).' å‡ºéŒ¯,è«‹æ‰‹å·¥åŸ·è¡Œä»¥ä¸‹å‡ç´šèªå¥å¾Œ,å†é‡æ–°é‹è¡Œæœ¬å‡ç´šç¨‹åº:<br><br><b>å‡ç´šSQLèªå¥</b>:<div style=\"position:absolute;font-size:11px;font-family:verdana,arial;background:#EBEBEB;padding:0.5em;\">'.dhtmlspecialchars($usql)."</div><br><b>Error</b>: ".DB::error()."<br><b>Errno.</b>: ".DB::errno());
 			} else {
-				$msg = 'Éı¼¶±í '.DB::table($newtable).' Íê³É£¡';
+				$msg = 'å‡ç´šè¡¨ '.DB::table($newtable).' å®Œæˆï¼';
 			}
 		} else {
-			$msg = '¼ì²é±í '.DB::table($newtable).' Íê³É£¬²»ĞèÉı¼¶£¬Ìø¹ı';
+			$msg = 'æª¢æŸ¥è¡¨ '.DB::table($newtable).' å®Œæˆï¼Œä¸éœ€å‡ç´šï¼Œè·³é';
 		}
 	}
 
@@ -321,9 +321,9 @@ if($_GET['step'] == 'start') {
 		if($i==0) {
 			$value = DB::fetch_first('SELECT * FROM '.DB::table('common_member_profile_setting')." WHERE fieldid = 'realname'");
 			if(!empty($value)) {
-				show_msg("ÊµÃû¹¦ÄÜÉı¼¶Íê±Ï", "$theurl?step=data&op=$nextop");
+				show_msg("å¯¦ååŠŸèƒ½å‡ç´šå®Œç•¢", "$theurl?step=data&op=$nextop");
 			}
-			DB::query("INSERT INTO ".DB::table('common_member_profile_setting')." VALUES ('realname', '1', '0', '1', 'ÕæÊµĞÕÃû', '', '0', '0', '0', '0', '1', 'text', '0', '', '', '0', '0')");
+			DB::query("INSERT INTO ".DB::table('common_member_profile_setting')." VALUES ('realname', '1', '0', '1', 'çœŸå¯¦å§“å', '', '0', '0', '0', '0', '1', 'text', '0', '', '', '0', '0')");
 		}
 		$t = DB::result_first('SELECT uid FROM '.DB::table('common_member')." ORDER BY uid DESC LIMIT 1");
 		$names = $uids = array();
@@ -338,35 +338,35 @@ if($_GET['step'] == 'start') {
 		}
 
 		if($n>0) {
-			show_msg("ÊµÃû¹¦ÄÜÉı¼¶ÖĞ[$n/$t]", "$theurl?step=data&op=realname&i=$n");
+			show_msg("å¯¦ååŠŸèƒ½å‡ç´šä¸­[$n/$t]", "$theurl?step=data&op=realname&i=$n");
 		} else {
-			show_msg("ÊµÃû¹¦ÄÜÉı¼¶Íê±Ï", "$theurl?step=data&op=$nextop");
+			show_msg("å¯¦ååŠŸèƒ½å‡ç´šå®Œç•¢", "$theurl?step=data&op=$nextop");
 		}
 
 	} elseif($_GET['op'] == 'profile') {
 		$nextop = 'setting';
 		$value = DB::result_first('SELECT count(*) FROM '.DB::table('common_member_profile_setting')." WHERE fieldid = 'birthdist'");
 		if(!$value) {
-			DB::query("INSERT INTO ".DB::table('common_member_profile_setting')." VALUES ('birthdist', 1, 0, 0, '³öÉúÏØ', '³öÉúĞĞÕşÇø/ÏØ', 0, 0, 0, 0, 0, 0, 0, 'select', 0, '', '')");
-			DB::query("INSERT INTO ".DB::table('common_member_profile_setting')." VALUES ('birthcommunity', 1, 0, 0, '³öÉúĞ¡Çø', '', 0, 0, 0, 0, 0, 0, 0, 'select', 0, '', '')");
-			DB::query("UPDATE ".DB::table('common_member_profile_setting')." SET title='³öÉúµØ' WHERE fieldid = 'birthcity'");
-			DB::query("UPDATE ".DB::table('common_member_profile_setting')." SET title='¾Ó×¡µØ' WHERE fieldid = 'residecity'");
+			DB::query("INSERT INTO ".DB::table('common_member_profile_setting')." VALUES ('birthdist', 1, 0, 0, 'å‡ºç”Ÿç¸£', 'å‡ºç”Ÿè¡Œæ”¿å€/ç¸£', 0, 0, 0, 0, 0, 0, 0, 'select', 0, '', '')");
+			DB::query("INSERT INTO ".DB::table('common_member_profile_setting')." VALUES ('birthcommunity', 1, 0, 0, 'å‡ºç”Ÿå°å€', '', 0, 0, 0, 0, 0, 0, 0, 'select', 0, '', '')");
+			DB::query("UPDATE ".DB::table('common_member_profile_setting')." SET title='å‡ºç”Ÿåœ°' WHERE fieldid = 'birthcity'");
+			DB::query("UPDATE ".DB::table('common_member_profile_setting')." SET title='å±…ä½åœ°' WHERE fieldid = 'residecity'");
 		}
 		$count = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_district')." WHERE `level`='1' AND `usetype`>'0'");
 		if(!$count) {
 			DB::query("UPDATE ".DB::table('common_district')." SET `usetype`='3' WHERE `level` = '1'");
 		}
 		$profile = DB::fetch_first('SELECT * FROM '.DB::table('common_member_profile_setting')." WHERE fieldid = 'birthday'");
-		if($profile['title'] == '³öÉúÈÕÆÚ') {
-			DB::query("UPDATE ".DB::table('common_member_profile_setting')." SET title='ÉúÈÕ' WHERE fieldid = 'birthday'");
-			DB::query("UPDATE ".DB::table('common_member_profile_setting')." SET title='Ö¤¼şÀàĞÍ' WHERE fieldid = 'idcardtype'");
-			DB::query("UPDATE ".DB::table('common_member_profile_setting')." SET title='Ö§¸¶±¦' WHERE fieldid = 'alipay'");
+		if($profile['title'] == 'å‡ºç”Ÿæ—¥æœŸ') {
+			DB::query("UPDATE ".DB::table('common_member_profile_setting')." SET title='ç”Ÿæ—¥' WHERE fieldid = 'birthday'");
+			DB::query("UPDATE ".DB::table('common_member_profile_setting')." SET title='è­‰ä»¶é¡å‹' WHERE fieldid = 'idcardtype'");
+			DB::query("UPDATE ".DB::table('common_member_profile_setting')." SET title='æ”¯ä»˜å¯¶' WHERE fieldid = 'alipay'");
 			DB::query("UPDATE ".DB::table('common_member_profile_setting')." SET title='ICQ' WHERE fieldid = 'icq'");
 			DB::query("UPDATE ".DB::table('common_member_profile_setting')." SET title='QQ' WHERE fieldid = 'qq'");
 			DB::query("UPDATE ".DB::table('common_member_profile_setting')." SET title='MSN' WHERE fieldid = 'msn'");
-			DB::query("UPDATE ".DB::table('common_member_profile_setting')." SET title='°¢ÀïÍúÍú' WHERE fieldid = 'taobao'");
+			DB::query("UPDATE ".DB::table('common_member_profile_setting')." SET title='é˜¿é‡Œæ—ºæ—º' WHERE fieldid = 'taobao'");
 		}
-		show_msg("ÓÃ»§À¸Ä¿Éı¼¶Íê±Ï", "$theurl?step=data&op=$nextop");
+		show_msg("ç”¨æˆ¶æ¬„ç›®å‡ç´šå®Œç•¢", "$theurl?step=data&op=$nextop");
 	} elseif($_GET['op'] == 'setting') {
 		$nextop = 'admingroup';
 		$settings = $newsettings = array();
@@ -495,7 +495,7 @@ if($_GET['step'] == 'start') {
 				array (
 				  'available' => 1,
 				  'displayorder' => 0,
-				  'title' => '»ù±¾×ÊÁÏ',
+				  'title' => 'åŸºæœ¬è³‡æ–™',
 				  'field' =>
 				  array (
 					'realname' => 'realname',
@@ -519,7 +519,7 @@ if($_GET['step'] == 'start') {
 				),
 				'contact' =>
 				array (
-				  'title' => 'ÁªÏµ·½Ê½',
+				  'title' => 'è¯ç¹«æ–¹å¼',
 				  'available' => '1',
 				  'displayorder' => '1',
 				  'field' =>
@@ -537,7 +537,7 @@ if($_GET['step'] == 'start') {
 				array (
 				  'available' => 1,
 				  'displayorder' => 2,
-				  'title' => '½ÌÓıÇé¿ö',
+				  'title' => 'æ•™è‚²æƒ…æ³',
 				  'field' =>
 				  array (
 					'graduateschool' => 'graduateschool',
@@ -548,7 +548,7 @@ if($_GET['step'] == 'start') {
 				array (
 				  'available' => 1,
 				  'displayorder' => 3,
-				  'title' => '¹¤×÷Çé¿ö',
+				  'title' => 'å·¥ä½œæƒ…æ³',
 				  'field' =>
 				  array (
 					'occupation' => 'occupation',
@@ -559,7 +559,7 @@ if($_GET['step'] == 'start') {
 				),
 				'info' =>
 				array (
-				  'title' => '¸öÈËĞÅÏ¢',
+				  'title' => 'å€‹äººä¿¡æ¯',
 				  'available' => '1',
 				  'displayorder' => '4',
 				  'field' =>
@@ -600,7 +600,7 @@ if($_GET['step'] == 'start') {
 		DB::query("REPLACE INTO ".DB::table('common_setting')." VALUES ('regname', 'register')");
 		$newsettings['regname'] = 'register';
 		if(empty($settings['reglinkname'])) {
-			$newsettings['reglinkname'] = '×¢²á';
+			$newsettings['reglinkname'] = 'è¨»å†Š';
 		}
 
 		if(empty($settings['domain'])) {
@@ -650,7 +650,7 @@ if($_GET['step'] == 'start') {
 			$newsettings['allowviewuserthread'] = $allowviewuserthread;
 		}
 		if(!isset($settings['focus'])) {
-			$focusnew = array('title' => 'Õ¾³¤ÍÆ¼ö', 'cookie' => 1);
+			$focusnew = array('title' => 'ç«™é•·æ¨è–¦', 'cookie' => 1);
 			$newsettings['focus'] = $focusnew;
 		} else {
 			$focus = dunserialize($settings['focus']);
@@ -680,7 +680,7 @@ if($_GET['step'] == 'start') {
 			$newsettings['targetblank'] = $targetblanknew;
 		}
 		if(!isset($settings['article_tags'])) {
-			$article_tagsnew = array(1 => 'Ô­´´', 2 => 'ÈÈµã', 3 => '×éÍ¼', 4 => '±¬ÁÏ', 5 => 'Í·Ìõ', 6 => '»ÃµÆ', 7 => '¹ö¶¯', 8 => 'ÍÆ¼ö');
+			$article_tagsnew = array(1 => 'åŸå‰µ', 2 => 'ç†±é»', 3 => 'çµ„åœ–', 4 => 'çˆ†æ–™', 5 => 'é ­æ¢', 6 => 'å¹»ç‡ˆ', 7 => 'æ»¾å‹•', 8 => 'æ¨è–¦');
 			$newsettings['article_tags'] = $article_tagsnew;
 		}
 		if(!isset($settings['newbie'])) {
@@ -688,13 +688,13 @@ if($_GET['step'] == 'start') {
 			$newsettings['newbie'] = $newbienew;
 		}
 		if(empty($settings['anonymoustext'])) {
-			$newsettings['anonymoustext'] = 'ÄäÃû';
+			$newsettings['anonymoustext'] = 'åŒ¿å';
 		}
 		if(!$word_type_count = DB::result_first("SELECT count(*) FROM ".DB::table('common_word_type')."")) {
-			DB::query("INSERT INTO ".DB::table('common_word_type')." VALUES('1', 'ÕşÖÎ'),('2', '¹ã¸æ')");
+			DB::query("INSERT INTO ".DB::table('common_word_type')." VALUES('1', 'æ”¿æ²»'),('2', 'å»£å‘Š')");
 		}
 		if(!isset($settings['userreasons'])) {
-			$newsettings['userreasons'] = 'ºÜ¸øÁ¦!\r\nÉñÂí¶¼ÊÇ¸¡ÔÆ\r\nÔŞÒ»¸ö!\r\nÉ½Õ¯\r\nµ­¶¨';
+			$newsettings['userreasons'] = 'å¾ˆçµ¦åŠ›!\r\nç¥é¦¬éƒ½æ˜¯æµ®é›²\r\nè´Šä¸€å€‹!\r\nå±±å¯¨\r\næ·¡å®š';
 		}
 		if(!$forum_typevar_search = C::t('forum_typevar')->count_by_search(2)) {
 			C::t('forum_typevar')->update_by_search(1, array('search' => 3));
@@ -747,7 +747,7 @@ if($_GET['step'] == 'start') {
 		if(!DB::result_first("SELECT allowreplycredit FROM ".DB::table('common_usergroup_field')." WHERE groupid = 1")) {
 			DB::query("UPDATE ".DB::table('common_usergroup_field')." SET allowreplycredit = '1' WHERE groupid = 1");
 		}
-		show_msg("ÅäÖÃÏîÉı¼¶Íê³É", "$theurl?step=data&op=$nextop");
+		show_msg("é…ç½®é …å‡ç´šå®Œæˆ", "$theurl?step=data&op=$nextop");
 	} elseif($_GET['op'] == 'admingroup') {
 		$nextop = 'updatethreadtype';
 		if(!DB::result_first("SELECT allowclearrecycle FROM ".DB::table('common_admingroup')." WHERE allowclearrecycle='1'")) {
@@ -776,7 +776,7 @@ if($_GET['step'] == 'start') {
 		if($first_to_2_5) {
 			DB::query('UPDATE '.DB::table('common_admingroup')." SET allowmanagecollection='1' WHERE admingid='1' OR admingid='2'");
 		}
-		show_msg("¹ÜÀí×éÉèÖÃÉı¼¶Íê³É", "$theurl?step=data&op=$nextop");
+		show_msg("ç®¡ç†çµ„è¨­ç½®å‡ç´šå®Œæˆ", "$theurl?step=data&op=$nextop");
 	} elseif($_GET['op'] == 'updatethreadtype') {
 		$nextop = 'updatecron';
 		$selectoption = array();
@@ -804,48 +804,48 @@ if($_GET['step'] == 'start') {
 				DB::query("ALTER TABLE ".DB::table('forum_optionvalue')."$threadtypearr[typeid] ".implode(',', $varnames));
 			}
 		}
-		show_msg("·ÖÀàĞÅÏ¢Éı¼¶Íê³É", "$theurl?step=data&op=$nextop");
+		show_msg("åˆ†é¡ä¿¡æ¯å‡ç´šå®Œæˆ", "$theurl?step=data&op=$nextop");
 	} elseif($_GET['op'] == 'updatecron') {
 		$nextop = 'updatemagic';
 		if(!DB::result_first("SELECT filename FROM ".DB::table('common_cron')." WHERE filename='cron_cleanfeed.php'")) {
-			DB::query("INSERT INTO ".DB::table('common_cron')." VALUES ('', '1','system','ÇåÀí¹ıÆÚ¶¯Ì¬','cron_cleanfeed.php','1269746634','1269792000','-1','-1','0','0')");
+			DB::query("INSERT INTO ".DB::table('common_cron')." VALUES ('', '1','system','æ¸…ç†éæœŸå‹•æ…‹','cron_cleanfeed.php','1269746634','1269792000','-1','-1','0','0')");
 		}
 
 		if(!DB::result_first("SELECT filename FROM ".DB::table('common_cron')." WHERE filename='cron_checkpatch_daily.php'")) {
-			DB::query("INSERT INTO ".DB::table('common_cron')." VALUES ('', '1','system','Ã¿ÈÕ»ñÈ¡°²È«²¹¶¡','cron_checkpatch_daily.php','1269746639','1269792000','-1','-1','2','22')");
+			DB::query("INSERT INTO ".DB::table('common_cron')." VALUES ('', '1','system','æ¯æ—¥ç²å–å®‰å…¨è£œä¸','cron_checkpatch_daily.php','1269746639','1269792000','-1','-1','2','22')");
 		}
 
 		if(!DB::result_first("SELECT filename FROM ".DB::table('common_cron')." WHERE filename='cron_publish_halfhourly.php'")) {
-			DB::query("INSERT INTO ".DB::table('common_cron')." VALUES ('', '1','system','¶¨Ê±·¢²¼Ö÷Ìâ','cron_publish_halfhourly.php','1269746639','1269792000','-1','-1','-1','0	30')");
+			DB::query("INSERT INTO ".DB::table('common_cron')." VALUES ('', '1','system','å®šæ™‚ç™¼ä½ˆä¸»é¡Œ','cron_publish_halfhourly.php','1269746639','1269792000','-1','-1','-1','0	30')");
 		}
 
 		if(!DB::result_first("SELECT filename FROM ".DB::table('common_cron')." WHERE filename='cron_follow_daily.php'")) {
-			DB::query("INSERT INTO ".DB::table('common_cron')." VALUES ('','1','system','Ã¿ÖÜ¹ã²¥¹éµµ','cron_follow_daily.php','1269746639','1269792000','-1','-1','02','0')");
+			DB::query("INSERT INTO ".DB::table('common_cron')." VALUES ('','1','system','æ¯é€±å»£æ’­æ­¸æª”','cron_follow_daily.php','1269746639','1269792000','-1','-1','02','0')");
 		}
 		if(!DB::result_first("SELECT filename FROM ".DB::table('common_cron')." WHERE filename='cron_todayviews_daily.php'")) {
-			DB::query("INSERT INTO ".DB::table('common_cron')." VALUES ('','1','system','¸üĞÂÃ¿ÈÕ²é¿´Êı','cron_todayviews_daily.php','1321500558','1321556400','-1','-1','3','0	5	10	15	20	25	30	35	40	45	50	55')");
+			DB::query("INSERT INTO ".DB::table('common_cron')." VALUES ('','1','system','æ›´æ–°æ¯æ—¥æŸ¥çœ‹æ•¸','cron_todayviews_daily.php','1321500558','1321556400','-1','-1','3','0	5	10	15	20	25	30	35	40	45	50	55')");
 		}
 		if(!DB::result_first("SELECT filename FROM ".DB::table('common_cron')." WHERE filename='cron_member_optimize_daily.php'")) {
-			DB::query("INSERT INTO ".DB::table('common_cron')." VALUES ('','0','system','Ã¿ÈÕÓÃ»§±íÓÅ»¯','cron_member_optimize_daily.php','1321500558','1321556400','-1','-1','2','0	5	10	15	20	25	30	35	40	45	50	55')");
+			DB::query("INSERT INTO ".DB::table('common_cron')." VALUES ('','0','system','æ¯æ—¥ç”¨æˆ¶è¡¨å„ªåŒ–','cron_member_optimize_daily.php','1321500558','1321556400','-1','-1','2','0	5	10	15	20	25	30	35	40	45	50	55')");
 		}
 		if(DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_cron')." WHERE filename='cron_birthday_daily.php'")) {
 			DB::query("DELETE FROM ".DB::table('common_cron')." WHERE filename='cron_birthday_daily.php'");
 		}
 
-		show_msg("¼Æ»®ÈÎÎñÉı¼¶Íê³É", "$theurl?step=data&op=$nextop");
+		show_msg("è¨ˆåŠƒä»»å‹™å‡ç´šå®Œæˆ", "$theurl?step=data&op=$nextop");
 	} elseif($_GET['op'] == 'updatemagic') {
 		$nextop = 'updatereport';
 		if(DB::result_first("SELECT name FROM ".DB::table('common_magic')." WHERE identifier='highlight'")) {
-			DB::query("UPDATE ".DB::table('common_magic')." SET name='±äÉ«¿¨', description='¿ÉÒÔ½«Ìû×Ó»òÈÕÖ¾µÄ±êÌâ¸ßÁÁ£¬±ä¸üÑÕÉ«' WHERE identifier='highlight'");
+			DB::query("UPDATE ".DB::table('common_magic')." SET name='è®Šè‰²å¡', description='å¯ä»¥å°‡å¸–å­æˆ–æ—¥èªŒçš„æ¨™é¡Œé«˜äº®ï¼Œè®Šæ›´é¡è‰²' WHERE identifier='highlight'");
 		}
 		if(DB::result_first("SELECT name FROM ".DB::table('common_magic')." WHERE identifier='namepost'")) {
-			DB::query("UPDATE ".DB::table('common_magic')." SET name='ÏÔÉí¿¨', description='¿ÉÒÔ²é¿´Ò»´ÎÄäÃûÓÃ»§µÄÕæÊµÉí·İ¡£' WHERE identifier='namepost'");
+			DB::query("UPDATE ".DB::table('common_magic')." SET name='é¡¯èº«å¡', description='å¯ä»¥æŸ¥çœ‹ä¸€æ¬¡åŒ¿åç”¨æˆ¶çš„çœŸå¯¦èº«ä»½ã€‚' WHERE identifier='namepost'");
 		}
 		if(DB::result_first("SELECT name FROM ".DB::table('common_magic')." WHERE identifier='anonymouspost'")) {
-			DB::query("UPDATE ".DB::table('common_magic')." SET name='ÄäÃû¿¨', description='ÔÚÖ¸¶¨µÄµØ·½£¬ÈÃ×Ô¼ºµÄÃû×ÖÏÔÊ¾ÎªÄäÃû¡£' WHERE identifier='anonymouspost'");
+			DB::query("UPDATE ".DB::table('common_magic')." SET name='åŒ¿åå¡', description='åœ¨æŒ‡å®šçš„åœ°æ–¹ï¼Œè®“è‡ªå·±çš„åå­—é¡¯ç¤ºç‚ºåŒ¿åã€‚' WHERE identifier='anonymouspost'");
 		}
 
-		show_msg("µÀ¾ßÉı¼¶Íê³É", "$theurl?step=data&op=$nextop");
+		show_msg("é“å…·å‡ç´šå®Œæˆ", "$theurl?step=data&op=$nextop");
 	} elseif($_GET['op'] == 'updatereport') {
 		$nextop = 'myappcount';
 		if(!C::t('common_setting')->skey_exists('report_reward')) {
@@ -882,7 +882,7 @@ if($_GET['step'] == 'start') {
 			C::t('common_setting')->update('report_reward', $report_receive);
 		}
 
-		show_msg("¾Ù±¨Éı¼¶Íê³É", "$theurl?step=data&op=$nextop");
+		show_msg("èˆ‰å ±å‡ç´šå®Œæˆ", "$theurl?step=data&op=$nextop");
 	} elseif($_GET['op'] == 'myappcount') {
 
 		$nextop = 'nav';
@@ -891,7 +891,7 @@ if($_GET['step'] == 'start') {
 			DB::query("DROP TABLE `".DB::table('common_myapp_count')."`");
 			DB::query("DROP TABLE `".DB::table('home_userapp_stat')."`");
 		}
-		show_msg("ÂşÓÎÓ¦ÓÃÍ³¼ÆÉı¼¶Íê³É", "$theurl?step=data&op=$nextop");
+		show_msg("æ¼«éŠæ‡‰ç”¨çµ±è¨ˆå‡ç´šå®Œæˆ", "$theurl?step=data&op=$nextop");
 
 	} elseif($_GET['op'] == 'nav') {
 
@@ -931,7 +931,7 @@ if($_GET['step'] == 'start') {
 			}
 		}
 
-		show_msg("µ¼º½Êı¾İÉı¼¶Íê³É", "$theurl?step=data&op=$nextop");
+		show_msg("å°èˆªæ•¸æ“šå‡ç´šå®Œæˆ", "$theurl?step=data&op=$nextop");
 
 	} elseif($_GET['op'] == 'forumstatus') {
 
@@ -944,7 +944,7 @@ if($_GET['step'] == 'start') {
 			DB::update('forum_forum', array('status' => 1), "status='2'");
 		}
 
-		show_msg("°æ¿é×´Ì¬Éı¼¶Íê±Ï", "$theurl?step=data&op=$nextop");
+		show_msg("ç‰ˆå¡Šç‹€æ…‹å‡ç´šå®Œç•¢", "$theurl?step=data&op=$nextop");
 
 	} elseif($_GET['op'] == 'usergroup') {
 		$nextop = 'creditrule';
@@ -953,7 +953,7 @@ if($_GET['step'] == 'start') {
 			!DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_usergroup_field')." WHERE allowmediacode>'0'")) {
 			DB::update('common_usergroup_field', array('allowmediacode' => 1), "groupid<'4' OR groupid>'9'");
 		}
-		show_msg("ÓÃ»§Éı¼¶Íê±Ï", "$theurl?step=data&op=$nextop");
+		show_msg("ç”¨æˆ¶å‡ç´šå®Œç•¢", "$theurl?step=data&op=$nextop");
 	} elseif($_GET['op'] == 'creditrule') {
 		$nextop = 'bbcode';
 		$delrule = array('register', 'realname', 'invitefriend', 'report', 'uploadimage', 'editrealname', 'editrealemail', 'delavatar');
@@ -961,17 +961,17 @@ if($_GET['step'] == 'start') {
 		if($count) {
 			DB::query("DELETE FROM ".DB::table('common_credit_rule')." WHERE action IN(".dimplode($delrule).")");
 		}
-		DB::update('common_credit_rule', array('rulename' => 'Ã¿ÌìµÇÂ¼'), "rulename='Ã¿ÌìµÇÂ½'");
+		DB::update('common_credit_rule', array('rulename' => 'æ¯å¤©ç™»éŒ„'), "rulename='æ¯å¤©ç™»é™¸'");
 		$count = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_credit_rule')." WHERE action='portalcomment'");
 		if(!$count) {
-			DB::query("INSERT INTO ".DB::table('common_credit_rule')." (`rulename`, `action`, `cycletype`, `cycletime`, `rewardnum`, `norepeat`, `extcredits1`, `extcredits2`, `extcredits3`, `extcredits4`, `extcredits5`, `extcredits6`, `extcredits7`, `extcredits8`, `fids`) VALUES ('ÎÄÕÂÆÀÂÛ','portalcomment','1','0','40','1','0','1','0','0','0','0','0','0','')");
+			DB::query("INSERT INTO ".DB::table('common_credit_rule')." (`rulename`, `action`, `cycletype`, `cycletime`, `rewardnum`, `norepeat`, `extcredits1`, `extcredits2`, `extcredits3`, `extcredits4`, `extcredits5`, `extcredits6`, `extcredits7`, `extcredits8`, `fids`) VALUES ('æ–‡ç« è©•è«–','portalcomment','1','0','40','1','0','1','0','0','0','0','0','0','')");
 		}
 		$count = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_credit_rule')." WHERE action='followedcollection'");
 		if(!$count) {
-			DB::query("INSERT INTO ".DB::table('common_credit_rule')." (`rulename`, `action`, `cycletype`, `cycletime`, `rewardnum`, `norepeat`, `extcredits1`, `extcredits2`, `extcredits3`, `extcredits4`, `extcredits5`, `extcredits6`, `extcredits7`, `extcredits8`, `fids`) VALUES ('ÌÔ×¨¼­±»¶©ÔÄ','followedcollection','1','0','3','0','0','1','0','0','0','0','0','0','')");
+			DB::query("INSERT INTO ".DB::table('common_credit_rule')." (`rulename`, `action`, `cycletype`, `cycletime`, `rewardnum`, `norepeat`, `extcredits1`, `extcredits2`, `extcredits3`, `extcredits4`, `extcredits5`, `extcredits6`, `extcredits7`, `extcredits8`, `fids`) VALUES ('æ·˜å°ˆè¼¯è¢«è¨‚é–±','followedcollection','1','0','3','0','0','1','0','0','0','0','0','0','')");
 		}
 
-		show_msg("»ı·Ö¹æÔòÉı¼¶Íê±Ï", "$theurl?step=data&op=$nextop");
+		show_msg("ç©åˆ†è¦å‰‡å‡ç´šå®Œç•¢", "$theurl?step=data&op=$nextop");
 	} elseif($_GET['op'] == 'bbcode') {
 		$nextop = 'stamp';
 		$allowcusbbcodes = array();
@@ -984,7 +984,7 @@ if($_GET['step'] == 'start') {
 		if($allowcusbbcodes) {
 			DB::query("UPDATE ".DB::table('forum_bbcode')." SET perm='".implode("\t", $allowcusbbcodes)."' WHERE perm=''");
 		}
-		show_msg("×Ô¶¨Òå´úÂëÈ¨ÏŞÉı¼¶Íê±Ï", "$theurl?step=data&op=$nextop");
+		show_msg("è‡ªå®šç¾©ä»£ç¢¼æ¬Šé™å‡ç´šå®Œç•¢", "$theurl?step=data&op=$nextop");
 	} elseif($_GET['op'] == 'stamp') {
 		$nextop = 'block_item';
 		$stampnew = DB::result_first("SELECT COUNT(*) FROM ".DB::table('forum_thread')." WHERE stamp>'0'");
@@ -996,13 +996,13 @@ if($_GET['step'] == 'start') {
 				DB::query("UPDATE ".DB::table('forum_thread')." SET stamp='$row[stamp]' WHERE tid='$row[tid]'", 'UNBUFFERED');
 			}
 		}
-		DB::query("REPLACE INTO ".DB::table('common_smiley')." (id, typeid, displayorder, type, code, url) VALUES ('83','4','19','stamp','±à¼­²ÉÓÃ','010.gif')");
-		DB::query("REPLACE INTO ".DB::table('common_smiley')." (id, typeid, displayorder, type, code, url) VALUES ('84','0','18','stamplist','±à¼­²ÉÓÃ','010.small.gif')");
-		DB::query("REPLACE INTO ".DB::table('common_smiley')." (id, typeid, displayorder, type, code, url) VALUES ('85','0','20','stamplist','ĞÂÈËÌû','011.small.gif')");
+		DB::query("REPLACE INTO ".DB::table('common_smiley')." (id, typeid, displayorder, type, code, url) VALUES ('83','4','19','stamp','ç·¨è¼¯æ¡ç”¨','010.gif')");
+		DB::query("REPLACE INTO ".DB::table('common_smiley')." (id, typeid, displayorder, type, code, url) VALUES ('84','0','18','stamplist','ç·¨è¼¯æ¡ç”¨','010.small.gif')");
+		DB::query("REPLACE INTO ".DB::table('common_smiley')." (id, typeid, displayorder, type, code, url) VALUES ('85','0','20','stamplist','æ–°äººå¸–','011.small.gif')");
 		require_once libfile('function/cache');
 		updatecache('stamps');
 		updatecache('stamptypeid');
-		show_msg("¼ø¶¨Í¼ÕÂÉı¼¶Íê±Ï", "$theurl?step=data&op=$nextop");
+		show_msg("é‘’å®šåœ–ç« å‡ç´šå®Œç•¢", "$theurl?step=data&op=$nextop");
 	} elseif($_GET['op'] == 'block_item') {
 		$nextop = 'block_permission';
 		$bids = $items = $blocks = array();
@@ -1025,7 +1025,7 @@ if($_GET['step'] == 'start') {
 				DB::update('common_block_item', array('thumbpath' => $thumbpath), "itemid='$item[itemid]'");
 			}
 		}
-		show_msg("Ä£¿éËõÂÔÍ¼È¨ÏŞÉı¼¶Íê±Ï", "$theurl?step=data&op=$nextop");
+		show_msg("æ¨¡å¡Šç¸®ç•¥åœ–æ¬Šé™å‡ç´šå®Œç•¢", "$theurl?step=data&op=$nextop");
 
 	} elseif($_GET['op'] == 'block_permission') {
 		$nextop = 'portalcategory_permission';
@@ -1046,7 +1046,7 @@ if($_GET['step'] == 'start') {
 				}
 			}
 		}
-		show_msg("Ä£¿éÈ¨ÏŞÉı¼¶Íê±Ï", "$theurl?step=data&op=$nextop");
+		show_msg("æ¨¡å¡Šæ¬Šé™å‡ç´šå®Œç•¢", "$theurl?step=data&op=$nextop");
 	} elseif($_GET['op'] == 'portalcategory_permission') {
 		$nextop = 'portal_comment';
 		if(!DB::result_first('SELECT inheritedcatid FROM '.DB::table('portal_category_permission')." WHERE inheritedcatid > '0' LIMIT 1")) {
@@ -1063,14 +1063,14 @@ if($_GET['step'] == 'start') {
 				}
 			}
 		}
-		show_msg("ÃÅ»§ÆµµÀÈ¨ÏŞÉı¼¶Íê±Ï", "$theurl?step=data&op=$nextop");
+		show_msg("é–€æˆ¶é »é“æ¬Šé™å‡ç´šå®Œç•¢", "$theurl?step=data&op=$nextop");
 	} elseif($_GET['op'] == 'portal_comment') {
 		$nextop = 'portal_article_cover_img';
 		$one = DB::fetch_first('SELECT * FROM '.DB::table('portal_comment')." WHERE id=0 AND idtype='' LIMIT 1");
 		if($one && isset($one['aid'])) {
 			DB::query("UPDATE ".DB::table('portal_comment')." SET id=aid,idtype='aid' WHERE aid>0");
 		}
-		show_msg("ÎÄÕÂÆÀÂÛÉı¼¶Íê±Ï", "$theurl?step=data&op=$nextop");
+		show_msg("æ–‡ç« è©•è«–å‡ç´šå®Œç•¢", "$theurl?step=data&op=$nextop");
 
 	} elseif($_GET['op'] == 'portal_article_cover_img') {
 		$nextop = 'block_style';
@@ -1078,7 +1078,7 @@ if($_GET['step'] == 'start') {
 		if($pic && is_numeric(substr($pic, 0, strpos($pic,'/')))) {
 			DB::query("UPDATE ".DB::table('portal_article_title')." SET pic=CONCAT('portal/',pic) WHERE LENGTH(pic)>6");
 		}
-		show_msg("ÎÄÕÂ·âÃæÍ¼Éı¼¶Íê±Ï", "$theurl?step=data&op=$nextop");
+		show_msg("æ–‡ç« å°é¢åœ–å‡ç´šå®Œç•¢", "$theurl?step=data&op=$nextop");
 
 	} elseif($_GET['op'] == 'block_style') {
 		$nextop = 'block_script';
@@ -1100,10 +1100,10 @@ if($_GET['step'] == 'start') {
 				$sql = implode("\r\n", $data);
 				runquery($sql);
 			}
-			DB::query("UPDATE ".DB::table('common_block_style')." SET name = replace(`name`, 'X1.5', 'ÄÚÖÃ')");
-			DB::query("UPDATE ".DB::table('common_block_style')." SET name = replace(`name`, 'X2.0', 'ÄÚÖÃ')");
+			DB::query("UPDATE ".DB::table('common_block_style')." SET name = replace(`name`, 'X1.5', 'å…§ç½®')");
+			DB::query("UPDATE ".DB::table('common_block_style')." SET name = replace(`name`, 'X2.0', 'å…§ç½®')");
 		}
-		show_msg("Ä£¿éÄ£°åÉı¼¶Íê±Ï", "$theurl?step=data&op=$nextop");
+		show_msg("æ¨¡å¡Šæ¨¡æ¿å‡ç´šå®Œç•¢", "$theurl?step=data&op=$nextop");
 	} elseif($_GET['op'] == 'block_script') {
 		$nextop = 'common_usergroup_field';
 		include_once libfile('function/block');
@@ -1138,7 +1138,7 @@ if($_GET['step'] == 'start') {
 			block_updatecache($bid, true);
 		}
 
-		show_msg("Ä£¿é½Å±¾Éı¼¶Íê±Ï", "$theurl?step=data&op=$nextop");
+		show_msg("æ¨¡å¡Šè…³æœ¬å‡ç´šå®Œç•¢", "$theurl?step=data&op=$nextop");
 	} elseif($_GET['op'] == 'common_usergroup_field') {
 		$nextop = 'group_index';
 		if(!C::t('common_setting')->skey_exists('group_recommend')) {
@@ -1166,7 +1166,7 @@ if($_GET['step'] == 'start') {
 			DB::query('UPDATE '.DB::table('common_usergroup_field')." SET allowcreatecollection='5',allowcommentcollection='1',allowfollowcollection='30' WHERE groupid<'4' OR groupid>'9'");
 		}
 
-		show_msg("ÓÃ»§×éÈ¨ÏŞÉı¼¶Íê±Ï", "$theurl?step=data&op=$nextop");
+		show_msg("ç”¨æˆ¶çµ„æ¬Šé™å‡ç´šå®Œç•¢", "$theurl?step=data&op=$nextop");
 
 	} elseif($_GET['op'] == 'group_index') {
 		$nextop = 'domain';
@@ -1178,7 +1178,7 @@ if($_GET['step'] == 'start') {
 				import_diy($v['importfile'], $v['primaltplname'], $v['targettplname']);
 			}
 		}
-		show_msg("Èº×éÊ×Ò³Éı¼¶Íê±Ï", "$theurl?step=data&op=$nextop");
+		show_msg("ç¾¤çµ„é¦–é å‡ç´šå®Œç•¢", "$theurl?step=data&op=$nextop");
 
 	} elseif($_GET['op'] == 'domain') {
 		$nextop = 'pm';
@@ -1216,12 +1216,12 @@ if($_GET['step'] == 'start') {
 		if(!empty($newsettings)) {
 			C::t('common_setting')->update_batch($newsettings);
 		}
-		show_msg("ÓòÃûÉèÖÃÉı¼¶Íê±Ï", "$theurl?step=data&op=$nextop");
+		show_msg("åŸŸåè¨­ç½®å‡ç´šå®Œç•¢", "$theurl?step=data&op=$nextop");
 
 	} elseif($_GET['op'] == 'pm') {
 		$nextop = 'allowgetimage';
 		DB::query("UPDATE ".DB::table('common_member')." SET newpm='0'");
-		show_msg("ĞÂ¶ÌÏûÏ¢×´Ì¬ÖØÖÃÍê±Ï", "$theurl?step=data&op=$nextop");
+		show_msg("æ–°çŸ­æ¶ˆæ¯ç‹€æ…‹é‡ç½®å®Œç•¢", "$theurl?step=data&op=$nextop");
 
 	} elseif($_GET['op'] == 'allowgetimage') {
 		$nextop = 'verify';
@@ -1235,7 +1235,7 @@ if($_GET['step'] == 'start') {
 				DB::query('UPDATE '.DB::table('forum_access')." SET allowgetimage='".intval($row['allowgetattach'])."' WHERE uid='$row[uid]'");
 			}
 		}
-		show_msg("²é¿´Í¼Æ¬È¨ÏŞÉı¼¶Íê±Ï", "$theurl?step=data&op=$nextop");
+		show_msg("æŸ¥çœ‹åœ–ç‰‡æ¬Šé™å‡ç´šå®Œç•¢", "$theurl?step=data&op=$nextop");
 
 	} elseif($_GET['op'] == 'verify') {
 		$nextop = 'threadimage';
@@ -1246,7 +1246,7 @@ if($_GET['step'] == 'start') {
 		$updateverify = $_GET['updateverify'] ? true : false;
 		if(!isset($verifys[6])) {
 			$verifys[6] = array(
-					'title' => 'ÊµÃûÈÏÖ¤',
+					'title' => 'å¯¦åèªè­‰',
 					'available' => $settings['realname'],
 					'showicon' => 0,
 					'viewrealname' => 0,
@@ -1254,7 +1254,7 @@ if($_GET['step'] == 'start') {
 					'icon' => ''
 				);
 			$verifys[7] = array(
-					'title' => 'ÊÓÆµÈÏÖ¤',
+					'title' => 'è¦–é »èªè­‰',
 					'available' => $settings['videophoto'],
 					'showicon' => 0,
 					'viewvideophoto' => $settings['video_allowviewspace'],
@@ -1289,11 +1289,11 @@ if($_GET['step'] == 'start') {
 
 				}
 				if($n) {
-					show_msg("ÊµÃûÈÏÖ¤Éı¼¶ÖĞ[$n/$t]", "$theurl?step=data&op=verify&i=$n&updateverify=true");
+					show_msg("å¯¦åèªè­‰å‡ç´šä¸­[$n/$t]", "$theurl?step=data&op=verify&i=$n&updateverify=true");
 				}
 			}
 		}
-		show_msg("ÈÏÖ¤Êı¾İÉı¼¶Íê±Ï", "$theurl?step=data&op=$nextop");
+		show_msg("èªè­‰æ•¸æ“šå‡ç´šå®Œç•¢", "$theurl?step=data&op=$nextop");
 	} elseif($_GET['op'] == 'forumattach') {
 		$nextop = 'moderate';
 		$limit = 10000;
@@ -1334,7 +1334,7 @@ if($_GET['step'] == 'start') {
 					));
 				}
 				$start += $limit;
-				show_msg("ÂÛÌ³¸½¼ş±íÉı¼¶ÖĞ ... $start/$count", "$theurl?step=data&op=forumattach&start=$start");
+				show_msg("è«–å£‡é™„ä»¶è¡¨å‡ç´šä¸­ ... $start/$count", "$theurl?step=data&op=forumattach&start=$start");
 			}
 			DB::query("DROP TABLE `".DB::table('forum_attachmentfield')."`");
 			DB::query("ALTER TABLE ".DB::table('forum_attachment')."
@@ -1352,7 +1352,7 @@ if($_GET['step'] == 'start') {
 				DROP `picid`
 			");
 		}
-		show_msg("ÂÛÌ³¸½¼ş±íÉı¼¶Íê±Ï", "$theurl?step=data&op=$nextop");
+		show_msg("è«–å£‡é™„ä»¶è¡¨å‡ç´šå®Œç•¢", "$theurl?step=data&op=$nextop");
 	} elseif($_GET['op'] == 'threadimage') {
 		$nextop = 'forumattach';
 		$defaultmonth = 10;
@@ -1372,19 +1372,19 @@ if($_GET['step'] == 'start') {
 					fwrite($fp, implode('|', $data));
 					fclose($fp);
 				} else {
-					show_msg("Ö÷ÌâÍ¼Æ¬±íÎŞ·¨´¦Àí£¬Ìø¹ı", "$theurl?step=data&op=$nextop");
+					show_msg("ä¸»é¡Œåœ–ç‰‡è¡¨ç„¡æ³•è™•ç†ï¼Œè·³é", "$theurl?step=data&op=$nextop");
 				}
 			} else {
 				$data = @file($cachefile);
 				if(!$data) {
-					show_msg("Ö÷ÌâÍ¼Æ¬±íÎŞ·¨´¦Àí£¬Ìø¹ı", "$theurl?step=data&op=$nextop");
+					show_msg("ä¸»é¡Œåœ–ç‰‡è¡¨ç„¡æ³•è™•ç†ï¼Œè·³é", "$theurl?step=data&op=$nextop");
 				}
 				$data = explode('|', $data[0]);
 			}
 			$tids = array_slice($data, $start, $limit);
 			if(!$tids) {
 				@unlink($cachefile);
-				show_msg("Ö÷ÌâÍ¼Æ¬±í´¦ÀíÍê±Ï", "$theurl?step=data&op=$nextop");
+				show_msg("ä¸»é¡Œåœ–ç‰‡è¡¨è™•ç†å®Œç•¢", "$theurl?step=data&op=$nextop");
 			}
 			$insertsql = array();
 			foreach(C::t('forum_post')->fetch_all_by_tid(0, $tids, false, '', 0, 0, 1) as $row) {
@@ -1398,9 +1398,9 @@ if($_GET['step'] == 'start') {
 				DB::query("INSERT INTO ".DB::table('forum_threadimage')." (`tid`, `attachment`, `remote`) VALUES ".implode(',', $insertsql));
 			}
 			$start += $limit;
-			show_msg("Ö÷ÌâÍ¼Æ¬±í´¦ÀíÖĞ ... $start ", "$theurl?step=data&op=threadimage&start=$start");
+			show_msg("ä¸»é¡Œåœ–ç‰‡è¡¨è™•ç†ä¸­ ... $start ", "$theurl?step=data&op=threadimage&start=$start");
 		} else {
-			show_msg("Ö÷ÌâÍ¼Æ¬±íÎŞ·¨´¦Àí£¬Ìø¹ı", "$theurl?step=data&op=$nextop");
+			show_msg("ä¸»é¡Œåœ–ç‰‡è¡¨ç„¡æ³•è™•ç†ï¼Œè·³é", "$theurl?step=data&op=$nextop");
 		}
 	} elseif($_GET['op'] == 'moderate') {
 
@@ -1460,7 +1460,7 @@ if($_GET['step'] == 'start') {
 				updatemoderate('topicid_cid', $row['cid']);
 			}
 		}
-		show_msg("ÉóºËÊı¾İÉı¼¶Íê±Ï", "$theurl?step=data&op=$nextop");
+		show_msg("å¯©æ ¸æ•¸æ“šå‡ç´šå®Œç•¢", "$theurl?step=data&op=$nextop");
 
 	} elseif($_GET['op'] == 'moderate_update') {
 		$nextop = 'founder';
@@ -1492,7 +1492,7 @@ if($_GET['step'] == 'start') {
 				DB::insert($table, $row, false, true);
 			}
 		}
-		show_msg("ÉóºËÊı¾İ×ª»»Íê±Ï", "$theurl?step=data&op=$nextop");
+		show_msg("å¯©æ ¸æ•¸æ“šè½‰æ›å®Œç•¢", "$theurl?step=data&op=$nextop");
 
 	} elseif($_GET['op'] == 'founder') {
 
@@ -1516,7 +1516,7 @@ if($_GET['step'] == 'start') {
 			}
 		}
 
-		show_msg("´´Ê¼ÈËÊı¾İÉı¼¶Íê±Ï", "$theurl?step=data&op=$nextop");
+		show_msg("å‰µå§‹äººæ•¸æ“šå‡ç´šå®Œç•¢", "$theurl?step=data&op=$nextop");
 
 	} elseif($_GET['op'] == 'plugin') {
 
@@ -1547,7 +1547,7 @@ if($_GET['step'] == 'start') {
 			savecache('pluginlanguage_install', $_G['cache']['pluginlanguage_install']);
 		}
 
-		show_msg("²å¼şÓïÑÔ°üÊı¾İÉı¼¶Íê±Ï", "$theurl?step=data&op=$nextop");
+		show_msg("æ’ä»¶èªè¨€åŒ…æ•¸æ“šå‡ç´šå®Œç•¢", "$theurl?step=data&op=$nextop");
 
 	} elseif($_GET['op'] == 'medal') {
 
@@ -1567,7 +1567,7 @@ if($_GET['step'] == 'start') {
 				}
 			}
 		}
-		show_msg("ÓÃ»§Ñ«ÕÂÊı¾İÉı¼¶Íê±Ï", "$theurl?step=data&op=$nextop");
+		show_msg("ç”¨æˆ¶å‹³ç« æ•¸æ“šå‡ç´šå®Œç•¢", "$theurl?step=data&op=$nextop");
 	} elseif($_GET['op'] == 'closeswitch') {
 		$nextop = 'end';
 		if($first_to_2_5) {
@@ -1576,10 +1576,10 @@ if($_GET['step'] == 'start') {
 			$newsettings['pwlength'] = 0;
 			C::t('common_setting')->update_batch($newsettings);
 		}
-		show_msg("Êı¾İÉı¼¶½áÊø", "$theurl?step=data&op=$nextop");
+		show_msg("æ•¸æ“šå‡ç´šçµæŸ", "$theurl?step=data&op=$nextop");
 	} else {
 
-		$deletevar = array('app', 'home');//configÖĞĞèÒªÉ¾³ıµÄÏîÄ¿
+		$deletevar = array('app', 'home');//configä¸­éœ€è¦åˆªé™¤çš„é …ç›®
 		$default_config = $_config = array();
 		$default_configfile = DISCUZ_ROOT.'./config/config_global_default.php';
 		if(!file_exists($default_configfile)) {
@@ -1592,19 +1592,19 @@ if($_GET['step'] == 'start') {
 		include $configfile;
 		DB::query("UPDATE ".DB::table('common_plugin')." SET available='0' WHERE modules NOT LIKE '%s:6:\"system\";i:2;%'");
 		if($_GET['from']) {
-			show_msg("Êı¾İ´¦ÀíÍê³É", $_GET['from']);
+			show_msg("æ•¸æ“šè™•ç†å®Œæˆ", $_GET['from']);
 		}
 		if(save_config_file($configfile, $_config, $default_config, $deletevar)) {
-			show_msg("Êı¾İ´¦ÀíÍê³É", "$theurl?step=delete");
+			show_msg("æ•¸æ“šè™•ç†å®Œæˆ", "$theurl?step=delete");
 		} else {
-			show_msg('"config/config_global.php" ÎÄ¼şÒÑ¸üĞÂ£¬ÓÉÓÚ "config/" Ä¿Â¼²»¿ÉĞ´Èë£¬ÎÒÃÇÒÑ½«¸üĞÂµÄÎÄ¼ş±£´æµ½ "data/" Ä¿Â¼ÏÂ£¬ÇëÍ¨¹ı FTP Èí¼ş½«Æä×ªÒÆµ½ "config/" Ä¿Â¼ÏÂ¸²¸ÇÔ´ÎÄ¼ş¡£<br /><br /><a href="'.$theurl.'?step=delete">µ±ÄúÍê³ÉÉÏÊö²Ù×÷ºóµã»÷ÕâÀï¼ÌĞø</a>');
+			show_msg('"config/config_global.php" æ–‡ä»¶å·²æ›´æ–°ï¼Œç”±æ–¼ "config/" ç›®éŒ„ä¸å¯å¯«å…¥ï¼Œæˆ‘å€‘å·²å°‡æ›´æ–°çš„æ–‡ä»¶ä¿å­˜åˆ° "data/" ç›®éŒ„ä¸‹ï¼Œè«‹é€šé FTP è»Ÿä»¶å°‡å…¶è½‰ç§»åˆ° "config/" ç›®éŒ„ä¸‹è¦†è“‹æºæ–‡ä»¶ã€‚<br /><br /><a href="'.$theurl.'?step=delete">ç•¶æ‚¨å®Œæˆä¸Šè¿°æ“ä½œå¾Œé»æ“Šé€™è£¡ç¹¼çºŒ</a>');
 		}
 	}
 
 }elseif ($_GET['step'] == 'delete') {
 
 	if(!$devmode) {
-		show_msg("Êı¾İÉ¾³ı²»´¦Àí£¬½øÈëÏÂÒ»²½", "$theurl?step=style");
+		show_msg("æ•¸æ“šåˆªé™¤ä¸è™•ç†ï¼Œé€²å…¥ä¸‹ä¸€æ­¥", "$theurl?step=style");
 	}
 
 	$oldtables = array();
@@ -1665,7 +1665,7 @@ if($_GET['step'] == 'start') {
 			$deltablehtml .= "<tr><td><input type=\"checkbox\" name=\"deltables[$tablename]\" value=\"1\"></td><td>{$config['tablepre']}$tablename</td></tr>";
 		}
 		$deltablehtml .= '</table>';
-		echo "<p>ÒÔÏÂ <strong>Êı¾İ±í</strong> Óë±ê×¼Êı¾İ¿âÏà±ÈÊÇ¶àÓàµÄ:<br>Äú¿ÉÒÔ¸ù¾İĞèÒª×ÔĞĞ¾ö¶¨ÊÇ·ñÉ¾³ı</p>$deltablehtml";
+		echo "<p>ä»¥ä¸‹ <strong>æ•¸æ“šè¡¨</strong> èˆ‡æ¨™æº–æ•¸æ“šåº«ç›¸æ¯”æ˜¯å¤šé¤˜çš„:<br>æ‚¨å¯ä»¥æ ¹æ“šéœ€è¦è‡ªè¡Œæ±ºå®šæ˜¯å¦åˆªé™¤</p>$deltablehtml";
 	}
 
 	$delcolumnhtml = '';
@@ -1675,22 +1675,22 @@ if($_GET['step'] == 'start') {
 			foreach ($cols as $coltype => $col) {
 				if (is_array($col)) {
 					foreach ($col as $index => $indexvalue) {
-						$delcolumnhtml .= "<tr><td><input type=\"checkbox\" name=\"delcols[$tablename][$coltype][$index]\" value=\"1\"></td><td>{$config['tablepre']}$tablename</td><td>Ë÷Òı($coltype) $index $indexvalue</td></tr>";
+						$delcolumnhtml .= "<tr><td><input type=\"checkbox\" name=\"delcols[$tablename][$coltype][$index]\" value=\"1\"></td><td>{$config['tablepre']}$tablename</td><td>ç´¢å¼•($coltype) $index $indexvalue</td></tr>";
 					}
 				} else {
-					$delcolumnhtml .= "<tr><td><input type=\"checkbox\" name=\"delcols[$tablename][$col]\" value=\"1\"></td><td>{$config['tablepre']}$tablename</td><td>×Ö¶Î $col</td></tr>";
+					$delcolumnhtml .= "<tr><td><input type=\"checkbox\" name=\"delcols[$tablename][$col]\" value=\"1\"></td><td>{$config['tablepre']}$tablename</td><td>å­—æ®µ $col</td></tr>";
 				}
 			}
 		}
 		$delcolumnhtml .= '</table>';
 
-		echo "<p>ÒÔÏÂ <strong>×Ö¶Î</strong> Óë±ê×¼Êı¾İ¿âÏà±ÈÊÇ¶àÓàµÄ:<br>Äú¿ÉÒÔ¸ù¾İĞèÒª×ÔĞĞ¾ö¶¨ÊÇ·ñÉ¾³ı</p>$delcolumnhtml";
+		echo "<p>ä»¥ä¸‹ <strong>å­—æ®µ</strong> èˆ‡æ¨™æº–æ•¸æ“šåº«ç›¸æ¯”æ˜¯å¤šé¤˜çš„:<br>æ‚¨å¯ä»¥æ ¹æ“šéœ€è¦è‡ªè¡Œæ±ºå®šæ˜¯å¦åˆªé™¤</p>$delcolumnhtml";
 	}
 
 	if(empty($deltables) && empty($delcolumns)) {
-		echo "<p>Óë±ê×¼Êı¾İ¿âÏà±È£¬Ã»ÓĞĞèÒªÉ¾³ıµÄÊı¾İ±íºÍ×Ö¶Î</p><a href=\"$theurl?step=style\">Çëµã»÷½øÈëÏÂÒ»²½</a></p>";
+		echo "<p>èˆ‡æ¨™æº–æ•¸æ“šåº«ç›¸æ¯”ï¼Œæ²’æœ‰éœ€è¦åˆªé™¤çš„æ•¸æ“šè¡¨å’Œå­—æ®µ</p><a href=\"$theurl?step=style\">è«‹é»æ“Šé€²å…¥ä¸‹ä¸€æ­¥</a></p>";
 	} else {
-		echo "<p><input type=\"submit\" name=\"delsubmit\" value=\"Ìá½»É¾³ı\"></p><p>ÄúÒ²¿ÉÒÔºöÂÔ¶àÓàµÄ±íºÍ×Ö¶Î<br><a href=\"$theurl?step=style\">Ö±½Ó½øÈëÏÂÒ»²½</a></p>";
+		echo "<p><input type=\"submit\" name=\"delsubmit\" value=\"æäº¤åˆªé™¤\"></p><p>æ‚¨ä¹Ÿå¯ä»¥å¿½ç•¥å¤šé¤˜çš„è¡¨å’Œå­—æ®µ<br><a href=\"$theurl?step=style\">ç›´æ¥é€²å…¥ä¸‹ä¸€æ­¥</a></p>";
 	}
 	echo '</form>';
 
@@ -1699,7 +1699,7 @@ if($_GET['step'] == 'start') {
 
 } elseif ($_GET['step'] == 'style') {
 	if(empty($_GET['confirm'])) {
-		show_msg("ÇëÈ·ÈÏÊÇ·ñÒª»Ö¸´Ä¬ÈÏ·ç¸ñ£¿<br /><br /><a href=\"$theurl?step=style&confirm=yes\">[ ÊÇ ]</a>&nbsp;&nbsp;<a href=\"$theurl?step=cache\">[ ·ñ ]</a>", '');
+		show_msg("è«‹ç¢ºèªæ˜¯å¦è¦æ¢å¾©é»˜èªé¢¨æ ¼ï¼Ÿ<br /><br /><a href=\"$theurl?step=style&confirm=yes\">[ æ˜¯ ]</a>&nbsp;&nbsp;<a href=\"$theurl?step=cache\">[ å¦ ]</a>", '');
 	}
 
 	define('IN_ADMINCP', true);
@@ -1709,7 +1709,7 @@ if($_GET['step'] == 'start') {
 	import_styles(1, $dir, 1, 0, 0);
 	C::t('common_setting')->update('styleid', 1);
 
-	show_msg("Ä¬ÈÏ·ç¸ñÒÑ»Ö¸´£¬½øÈëÏÂÒ»²½", "$theurl?step=cache");
+	show_msg("é»˜èªé¢¨æ ¼å·²æ¢å¾©ï¼Œé€²å…¥ä¸‹ä¸€æ­¥", "$theurl?step=cache");
 
 } elseif ($_GET['step'] == 'cache') {
 
@@ -1725,7 +1725,7 @@ if($_GET['step'] == 'start') {
 	dir_clear(ROOT_PATH.'./uc_client/data/cache');
 	savecache('setting', '');
 
-	show_msg('<span id="finalmsg">»º´æ¸üĞÂÖĞ£¬ÇëÉÔºò ...</span><iframe src="../misc.php?mod=initsys" style="display:none;" onload="document.getElementById(\'finalmsg\').innerHTML = \'¹§Ï²£¬Êı¾İ¿â½á¹¹Éı¼¶Íê³É£¡ÎªÁËÊı¾İ°²È«£¬ÇëÉ¾³ı±¾ÎÄ¼ş¡£\'"></iframe>');
+	show_msg('<span id="finalmsg">ç·©å­˜æ›´æ–°ä¸­ï¼Œè«‹ç¨å€™ ...</span><iframe src="../misc.php?mod=initsys" style="display:none;" onload="document.getElementById(\'finalmsg\').innerHTML = \'æ­å–œï¼Œæ•¸æ“šåº«çµæ§‹å‡ç´šå®Œæˆï¼ç‚ºäº†æ•¸æ“šå®‰å…¨ï¼Œè«‹åˆªé™¤æœ¬æ–‡ä»¶ã€‚\'"></iframe>');
 
 }
 
@@ -1814,7 +1814,7 @@ function show_msg($message, $url_forward='', $time = 1, $noexit = 0) {
 
 	if($url_forward) {
 		$url_forward = $_GET['from'] ? $url_forward.'&from='.rawurlencode($_GET['from']) : $url_forward;
-		$message = "<a href=\"$url_forward\">$message (Ìø×ªÖĞ...)</a><script>setTimeout(\"window.location.href ='$url_forward';\", $time);</script>";
+		$message = "<a href=\"$url_forward\">$message (è·³è½‰ä¸­...)</a><script>setTimeout(\"window.location.href ='$url_forward';\", $time);</script>";
 	}
 
 	show_header();
@@ -1838,7 +1838,7 @@ function show_header() {
 	<html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 	<meta http-equiv="Content-Type" content="text/html; charset=$config[charset]" />
-	<title> Êı¾İ¿âÉı¼¶³ÌĞò </title>
+	<title> æ•¸æ“šåº«å‡ç´šç¨‹åº </title>
 	<style type="text/css">
 	* {font-size:12px; font-family: Verdana, Arial, Helvetica, sans-serif; line-height: 1.5em; word-break: break-all; }
 	body { text-align:center; margin: 0; padding: 0; background: #F5FBFF; }
@@ -1853,15 +1853,15 @@ function show_header() {
 	</head>
 	<body>
 	<div class="bodydiv">
-	<h1>Êı¾İ¿âÉı¼¶¹¤¾ß</h1>
+	<h1>æ•¸æ“šåº«å‡ç´šå·¥å…·</h1>
 	<div style="width:90%;margin:0 auto;">
 	<table id="menu">
 	<tr>
-	<td{$nowarr[start]}>Éı¼¶¿ªÊ¼</td>
-	<td{$nowarr[sql]}>Êı¾İ¿â½á¹¹Ìí¼ÓÓë¸üĞÂ</td>
-	<td{$nowarr[data]}>Êı¾İ¸üĞÂ</td>
-	<td{$nowarr[delete]}>Êı¾İ¿â½á¹¹É¾³ı</td>
-	<td{$nowarr[cache]}>Éı¼¶Íê³É</td>
+	<td{$nowarr[start]}>å‡ç´šé–‹å§‹</td>
+	<td{$nowarr[sql]}>æ•¸æ“šåº«çµæ§‹æ·»åŠ èˆ‡æ›´æ–°</td>
+	<td{$nowarr[data]}>æ•¸æ“šæ›´æ–°</td>
+	<td{$nowarr[delete]}>æ•¸æ“šåº«çµæ§‹åˆªé™¤</td>
+	<td{$nowarr[cache]}>å‡ç´šå®Œæˆ</td>
 	</tr>
 	</table>
 	<br>

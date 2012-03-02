@@ -5,63 +5,63 @@ Extend CSS file for Discuz! X
 http://www.comsenz.com
 Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 
-1. Ò»Ğ©Í¨ÓÃÄ£¿éµÄÑùÊ½
-	1. ¹«¸æ
-	2. ÔÚÏß»áÔ±ÁĞ±í
-	3. ÀàËÆÈº×éÖĞÑûÇëºÃÓÑÖĞµÄºÃÓÑÁĞ±í
-	4. ¶¯Ì¬ÁĞ±í
-	5. ½ø¶ÈÌõ
-	6. ¹ã³¡ÒÔÍâµÄÒıÓÃ¡¢´úÂëÑùÊ½
-	7. °æÖ÷¹ÜÀí(°üÀ¨2.3¡¢2.4)
-	8. µÇÂ¼×¢²á
-	9. ±êÇ©
-2. ·¢ÌûÏà¹ØÑùÊ½
-	1. ±à¼­Æ÷ÖĞµÄ¹¦ÄÜÑùÊ½
-	2. Ö÷ÌâÍ¼±ê
-	3. Ìá½»±íµ¥
-	4. ·¢ÌØÊâÖ÷ÌâÌû
-3. ÁĞ±íÑùÊ½
-	1. ¹ã³¡°æ¿é¡¢Èº×é·ÖÀàÁĞ±í
-	2. ·¿ÎİÁĞ±í
-	3. Ö÷ÌâÁĞ±í
-4. Ìû×ÓÄÚÈİÇøÓòÑùÊ½
-	1. ½á¹¹
-	2. ×÷Õß¡¢Ê±¼ä¡¢Â¥²ãµÈÒ»Ğ©ÊôĞÔ
-	3. Ìû×ÓÕıÎÄ
-		1. »ØÌûÍÆ¼ö¡¢µãÆÀµÈ
-		2. ÓÃ»§ÏêÏ¸ĞÅÏ¢
-		3. Ìû×Ó¸½¼ş¼°Ò»Ğ©ÌØÊâÑùÊ½(ÈçËø¶¨¡¢ÒıÓÃ¡¢´úÂëµÈ)
-	4. ÌØÊâÌûÑùÊ½
-	5. ¹ã³¡ºÍ¿Õ¼ä¹²ÓÃµÄÉÌÆ·¡¢±çÂÛµÈÑùÊ½
-	6. ÏÔÊ¾Ô­Ê¼Í¼Æ¬µ¯³ö²ãÑùÊ½
-5. Èº×éÏà¹ØÑùÊ½
-6. ÎÄÕÂ¡¢ÈÕÖ¾µÈÒ³ÃæÑùÊ½
-7. ¿Õ¼äÏà¹ØÑùÊ½
-8. ÃÅ»§Ïà¹ØÑùÊ½
-9. ÂşÓÎÏà¹ØÑùÊ½
-10.ËÑË÷Ïà¹ØÑùÊ½
-11.ÅÅĞĞ°ñÏà¹ØÑùÊ½
-12.Í³¼ÆÏà¹ØÑùÊ½
+1. ä¸€äº›é€šç”¨æ¨¡å¡Šçš„æ¨£å¼
+	1. å…¬å‘Š
+	2. åœ¨ç·šæœƒå“¡åˆ—è¡¨
+	3. é¡ä¼¼ç¾¤çµ„ä¸­é‚€è«‹å¥½å‹ä¸­çš„å¥½å‹åˆ—è¡¨
+	4. å‹•æ…‹åˆ—è¡¨
+	5. é€²åº¦æ¢
+	6. å»£å ´ä»¥å¤–çš„å¼•ç”¨ã€ä»£ç¢¼æ¨£å¼
+	7. ç‰ˆä¸»ç®¡ç†(åŒ…æ‹¬2.3ã€2.4)
+	8. ç™»éŒ„è¨»å†Š
+	9. æ¨™ç±¤
+2. ç™¼å¸–ç›¸é—œæ¨£å¼
+	1. ç·¨è¼¯å™¨ä¸­çš„åŠŸèƒ½æ¨£å¼
+	2. ä¸»é¡Œåœ–æ¨™
+	3. æäº¤è¡¨å–®
+	4. ç™¼ç‰¹æ®Šä¸»é¡Œå¸–
+3. åˆ—è¡¨æ¨£å¼
+	1. å»£å ´ç‰ˆå¡Šã€ç¾¤çµ„åˆ†é¡åˆ—è¡¨
+	2. æˆ¿å±‹åˆ—è¡¨
+	3. ä¸»é¡Œåˆ—è¡¨
+4. å¸–å­å…§å®¹å€åŸŸæ¨£å¼
+	1. çµæ§‹
+	2. ä½œè€…ã€æ™‚é–“ã€æ¨“å±¤ç­‰ä¸€äº›å±¬æ€§
+	3. å¸–å­æ­£æ–‡
+		1. å›å¸–æ¨è–¦ã€é»è©•ç­‰
+		2. ç”¨æˆ¶è©³ç´°ä¿¡æ¯
+		3. å¸–å­é™„ä»¶åŠä¸€äº›ç‰¹æ®Šæ¨£å¼(å¦‚é–å®šã€å¼•ç”¨ã€ä»£ç¢¼ç­‰)
+	4. ç‰¹æ®Šå¸–æ¨£å¼
+	5. å»£å ´å’Œç©ºé–“å…±ç”¨çš„å•†å“ã€è¾¯è«–ç­‰æ¨£å¼
+	6. é¡¯ç¤ºåŸå§‹åœ–ç‰‡å½ˆå‡ºå±¤æ¨£å¼
+5. ç¾¤çµ„ç›¸é—œæ¨£å¼
+6. æ–‡ç« ã€æ—¥èªŒç­‰é é¢æ¨£å¼
+7. ç©ºé–“ç›¸é—œæ¨£å¼
+8. é–€æˆ¶ç›¸é—œæ¨£å¼
+9. æ¼«éŠç›¸é—œæ¨£å¼
+10.æœç´¢ç›¸é—œæ¨£å¼
+11.æ’è¡Œæ¦œç›¸é—œæ¨£å¼
+12.çµ±è¨ˆç›¸é—œæ¨£å¼
 
-* È«¾Ö CSS ÑùÊ½²Î¼û common.css
-* ÒÔÏÂÎªÄ£¿é CSS Ğ´·¨¾ÙÀı
-* ·ÖÀàÖ®¼ä¿ÕÈıĞĞ£¬Ä£¿éÖ®¼ä¿ÕÁ½ĞĞ£¬Çø¿éÖ®¼ä¿ÕÒ»ĞĞ */
+* å…¨å±€ CSS æ¨£å¼åƒè¦‹ common.css
+* ä»¥ä¸‹ç‚ºæ¨¡å¡Š CSS å¯«æ³•èˆ‰ä¾‹
+* åˆ†é¡ä¹‹é–“ç©ºä¸‰è¡Œï¼Œæ¨¡å¡Šä¹‹é–“ç©ºå…©è¡Œï¼Œå€å¡Šä¹‹é–“ç©ºä¸€è¡Œ */
 
 /** group::index **/
-	/* Èº×é index Ä£¿éÊ¹ÓÃµÄCSS */
+	/* ç¾¤çµ„ index æ¨¡å¡Šä½¿ç”¨çš„CSS */
 /** end **/
 
 /** group::index,forum::index **/
-	/* Èº×é index ºÍ ÂÛÌ³ index Ä£¿éÊ¹ÓÃµÄCSS */
+	/* ç¾¤çµ„ index å’Œ è«–å£‡ index æ¨¡å¡Šä½¿ç”¨çš„CSS */
 /** end **/
 
 /** forum **/
-	/* ÂÛÌ³ ËùÓĞÄ£¿éÊ¹ÓÃµÄCSS */
+	/* è«–å£‡ æ‰€æœ‰æ¨¡å¡Šä½¿ç”¨çš„CSS */
 /** end **/
 
 
 
-/* ------------------------------------------------------------------------ Ò»Ğ©Í¨ÓÃÄ£¿éµÄÑùÊ½ */
+/* ------------------------------------------------------------------------ ä¸€äº›é€šç”¨æ¨¡å¡Šçš„æ¨£å¼ */
 
 /** forum::index **/
 #pt .y { width: 550px; height: 29px; overflow: hidden; }
@@ -71,7 +71,7 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 /*
 	Name:			mod_announcement
 	Level:			Function
-	Explain:		¹«¸æ¡£·ÅÖÃÔÚ²»Í¬Î»ÖÃÊ±×¢Òâµ÷Õû #anc, #an li µÄ¸ß¶È
+	Explain:		å…¬å‘Šã€‚æ”¾ç½®åœ¨ä¸åŒä½ç½®æ™‚æ³¨æ„èª¿æ•´ #anc, #an li çš„é«˜åº¦
 	Last Modify:	Pony 11050309
 */
 	#an { margin-bottom: 5px; }
@@ -81,18 +81,18 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 			#an li em { float: left; width: 75px; color: {LIGHTTEXT}; }
 			#anc, #an li { height: 29px; overflow: hidden; }
 
-/* ÔÚÏß»áÔ±ÁĞ±í */
+/* åœ¨ç·šæœƒå“¡åˆ—è¡¨ */
 	.oll li { float: left; overflow: hidden; white-space: nowrap; width: 19.9%; height: 24px; line-height: 24px; }
 		.oll img { vertical-align: middle; }
 
-/* ÂÛÌ³Ê×Ò³ÈÈµã by Pony */
+/* è«–å£‡é¦–é ç†±é» by Pony */
 	.heat { width: 370px; }
 	.heatl { padding-left: 15px; margin-left: 385px; background: url({IMGDIR}/vline.png) repeat-y 0 0; }
 /** end **/
 
 
 /** misc::invite,group,forum::viewthread,portal::view,home::space **/
-	/* .usl -> ÓÃÓÚÀàËÆÈº×éÖĞÑûÇëºÃÓÑÖĞµÄºÃÓÑÁĞ±í by Pony */
+	/* .usl -> ç”¨æ–¼é¡ä¼¼ç¾¤çµ„ä¸­é‚€è«‹å¥½å‹ä¸­çš„å¥½å‹åˆ—è¡¨ by Pony */
 		.usl { overflow: scroll; overflow-x: hidden; padding: 5px; width: 580px; height: 280px; }
 		.usl2 { width: auto; border: dashed {WRAPBORDERCOLOR}; border-width: 0 1px 1px; }
 			.usl li { overflow: hidden; float: left; margin: 3px; width: 134px; height: 64px; }
@@ -109,7 +109,7 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 
 
 /** home::space,home::spacecp,group::group,userapp::userapp,misc::ranklist,portal::view,forum::viewthread,group::viewthread,home::medal,misc::tag **/
-	/* .el -> feed_list ¶¯Ì¬ÁĞ±í by Pony */
+	/* .el -> feed_list å‹•æ…‹åˆ—è¡¨ by Pony */
 	.e { overflow: hidden; }
 		.e .i, .el .i { padding: 6px 10px; border-bottom: 1px dashed {COMMONBORDER}; background: #F7F7F7; }
 	.el {}
@@ -118,7 +118,7 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 			.ie6 .el, .ie6 .el li { zoom: 1; }
 		.el .t { position: absolute; margin: 1px 0 0 -20px; }
 		.el .o { overflow: hidden; float: right; margin: 4px -20px -4px 0; width: 16px; height: 16px; text-indent: 20px; background: url({IMGDIR}/op.png) no-repeat -2px -62px; }
-			/* Íâ¿í¸Ä±äÊ± .ie6 .el .o, .ie6 .xlda .el .o µÄ margin ÖµĞèÒª¸ü¸Ä */
+			/* å¤–å¯¬æ”¹è®Šæ™‚ .ie6 .el .o, .ie6 .xlda .el .o çš„ margin å€¼éœ€è¦æ›´æ”¹ */
 			.ie6 .el .o { position: absolute; margin: 2px 0 0 525px; }
 			.el .del { background-position: -2px -22px; }
 		.el .d { padding-top: 10px; color: {MIDTEXT}; }
@@ -130,7 +130,7 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 				.el .ec .hot a:hover { text-decoration: none; }
 				.el .ec .hot em { display: block; line-height: 30px; font-size: 16px; color: {HIGHLIGHTLINK}; cursor: pointer; }
 		.el a { color: {HIGHLIGHTLINK}; }
-		/* ÓĞÍ·ÏñµÄ¶¯Ì¬ÁĞ±í */
+		/* æœ‰é ­åƒçš„å‹•æ…‹åˆ—è¡¨ */
 		.xlda .el { overflow: hidden; float: left; margin-top: -4px; width: 100%; }
 			.xlda .el li { margin-bottom: -4px; padding-top: 14px; }
 				.ie6 .xlda .el .o { margin: 2px 0 0 460px; }
@@ -139,17 +139,17 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 
 
 /** forum::viewthread,group::viewthread,home::task,misc::stat,home::space **/
-	/* ½ø¶ÈÌõ */
+	/* é€²åº¦æ¢ */
 		.pbg { height: 16px; background: url({IMGDIR}/pllb.png) 0 0 repeat-x; -webkit-border-radius: 0 6px 6px 0; -moz-border-radius: 0 6px 6px 0; border-radius: 0 6px 6px 0; }
 		.pbr { height: 16px; width: 470px; background-image: url({IMGDIR}/pllb.png); background-color: #5AAF4A; background-position: 0 -16px; background-repeat: repeat-x; -webkit-border-radius: 0 6px 6px 0; -moz-border-radius: 0 6px 6px 0; border-radius: 0 6px 6px 0; }
 
-	/* Ñ«ÕÂÁ´½ÓhoverÊ±²»ÏÔÊ¾ÏÂ»®Ïß by Pony 20110519 */
+	/* å‹³ç« éˆæ¥hoveræ™‚ä¸é¡¯ç¤ºä¸‹åŠƒç·š by Pony 20110519 */
 	.md_ctrl a:hover { text-decoration: none; }
 /** end **/
 
 
 /**  forum::forumdisplay,forum::viewthread,group::viewthread,home::space,home::spacecp,home::invite,portal::view,portal::comment,forum::post,group::post **/
-	/* ¹ã³¡ÒÔÍâµÄÒıÓÃ¡¢´úÂëÑùÊ½ by Pony */
+	/* å»£å ´ä»¥å¤–çš„å¼•ç”¨ã€ä»£ç¢¼æ¨£å¼ by Pony */
 		.quote { overflow: hidden; margin: 10px 0; padding-left: 16px; background: url({IMGDIR}/qa.gif) no-repeat 0 0; color: {MIDTEXT}; }
 			.quote blockquote { display: inline; margin: 0; padding-right: 16px; background: url({IMGDIR}/qz.gif) no-repeat 100% 100%; }
 			.m_c .quote { width: 585px; }
@@ -160,14 +160,14 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 
 
 /** forum::modcp,misc::stat **/
-	/* °æ¿é¹ÜÀí */
+	/* ç‰ˆå¡Šç®¡ç† */
 		.mdcp {}
 			.stl { float: left; width: 15%; }
 			.str { float: left; overflow: auto; overflow-y: hidden; width: 84%; *padding-bottom: 17px; }
 /** end **/
 
 /** misc::tag **/
-/* ±êÇ©ÁĞ±í by Pony */
+/* æ¨™ç±¤åˆ—è¡¨ by Pony */
 	.taglist { min-height: 270px; }
 		.ie6 .taglist { height: 270px; }
 		.taglist a { margin-right: 20px; line-height: 30px; white-space: nowrap; }
@@ -175,7 +175,7 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 
 
 
-/* ------------------------------------------------------------------------ ·¢ÌûÏà¹ØÑùÊ½ */
+/* ------------------------------------------------------------------------ ç™¼å¸–ç›¸é—œæ¨£å¼ */
 /** forum::post,forum::forumdisplay,forum::viewthread,group::post,group::forumdisplay,group::viewthread **/
 .ct2_a .mn { float: left; }
 .appl { float: right; margin-top: 8px; border: none; background-color: transparent; }
@@ -193,7 +193,7 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 .fnm li, .fszm li, .simm li { cursor: pointer; }
 .qsv { padding-left: 16px; width: 16px; height: 16px; background: url({IMGDIR}/repquote.gif) no-repeat 50% 50%; cursor: pointer; }
 
-/* ·¢ÌûÊ±Ñ¡Ôñ±êÇ© by Pony */
+/* ç™¼å¸–æ™‚é¸æ“‡æ¨™ç±¤ by Pony */
 	.marked { padding-right: 16px; background: url({IMGDIR}/mark.png) no-repeat 100% 50%; }
 	#taglistarea a { white-space: nowrap; zoom: 1; }
 		#taglistarea .marked { padding-right: 0; background: none; font-weight: 700; color: {NOTICETEXT} !important; }
@@ -237,7 +237,7 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 
 
 /** forum::post,group::post,portal::portalcp,home::spacecp **/
-/* ·¢Ìû¡¢ÈÕÖ¾¡¢ÎÄÕÂÊ±ÉÏ´«µÄÍ¼Æ¬ÁĞ±íÑùÊ½ by Pony 11090615 */
+/* ç™¼å¸–ã€æ—¥èªŒã€æ–‡ç« æ™‚ä¸Šå‚³çš„åœ–ç‰‡åˆ—è¡¨æ¨£å¼ by Pony 11090615 */
 .upfl { margin-top: -1px; height: auto !important; height: 165px; max-height: 300px; overflow: auto; overflow-x: hidden; }
 	.upfl a, #imgattachlist a { color: {HIGHLIGHTLINK}; }
 	.upfl table td { border-bottom: 1px solid {COMMONBORDER}; height: 30px; line-height: 24px; }
@@ -252,7 +252,7 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 /*
 	Name:			mod_opattach
 	Level:			Function
-	Explain:		·¢ÎÄÕÂÊ±ÉÏ´«µÄÍ¼Æ¬ÉÏµÄ²Ù×÷ÇøÓòµÄÑùÊ½
+	Explain:		ç™¼æ–‡ç« æ™‚ä¸Šå‚³çš„åœ–ç‰‡ä¸Šçš„æ“ä½œå€åŸŸçš„æ¨£å¼
 	Last Modify:	Pony 11082416
 */
 	.opattach { display: block; position: relative; margin: 0 auto; width: 110px; border: 1px solid #CDCDCD; }
@@ -261,7 +261,7 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 		.opattach:hover .opattach_ctrl { display: block; }
 		.opattach img { border: none; }
 
-/* ÖØ¶¨ÒåÈÕÖ¾ºÍÎÄÕÂµÄ±à¼­Æ÷µ¯´° by Pony 11082217 */
+/* é‡å®šç¾©æ—¥èªŒå’Œæ–‡ç« çš„ç·¨è¼¯å™¨å½ˆçª— by Pony 11082217 */
 .tfm .fwin .t_l, .tfm .fwin .t_c, .tfm .fwin .t_r, .tfm .fwin .m_c, .tfm .fwin .b_l, .tfm .fwin .b_c, .tfm .fwin .b_r { padding: 0; }
 .tfm .fwin th { padding: 0; width: auto; }
 .tfm .fwin .px { width: auto; }
@@ -270,7 +270,7 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 
 
 /** forum::viewthread,forum::forumdisplay,forum::post,group **/
-/* Ö÷ÌâÍ¼±ê by michael */
+/* ä¸»é¡Œåœ–æ¨™ by michael */
 #newspecial_menu { width: 90px; }
 	#newspecial_menu li, #sti .wx { display: block; background: url({IMGDIR}/folder_new.gif) no-repeat 8px 50%; zoom: 1; }
 		#newspecial_menu .poll, #sti .poll { background-image: url({IMGDIR}/pollsmall.gif); }
@@ -287,7 +287,7 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 
 
 /** forum::modcp,forum::post,group::post,home::spacecp,portal::portalcp **/
-/* Ìá½»±íµ¥ */
+/* æäº¤è¡¨å–® */
 	.exfm { margin: 10px 0; padding: 10px 14px; border: 1px dashed {SPECIALBORDER}; background: {SPECIALBG}; }
 		.exfm .pn { height: 22px; line-height: 22px; font-size: 12px; }
 		.ie6 .exfm .pn, .ie7 .exfm .pn { line-height: 16px; }
@@ -296,7 +296,7 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 			.exfm table th, .exfm table td { padding: 4px 2px; }
 		.mdcp .um { margin-bottom: 0; padding: 10px 5px; }
 
-/* ·¢ÌØÊâÖ÷ÌâÌû by dfox */
+/* ç™¼ç‰¹æ®Šä¸»é¡Œå¸– by dfox */
 	.sinf p, .sadd p { padding: 2px 0; height: 30px; line-height: 30px; }
 	.sinf .px, .sadd .px { width: 120px; }
 	.sinf { float: left; padding-right: 14px; width: 380px; border-right: 1px dashed {WRAPBORDERCOLOR}; }
@@ -328,7 +328,7 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 
 
 /** forum::forumdisplay,forum::viewthread,group::forumdisplay,group::viewthread **/
-	/* ¿ªÆô¿ìËÙ·¢ÌûºÍÍÆ¼ö±íÇéÊ±µÄÑùÊ½ by Pony */
+	/* é–‹å•Ÿå¿«é€Ÿç™¼å¸–å’Œæ¨è–¦è¡¨æƒ…æ™‚çš„æ¨£å¼ by Pony */
 	#f_pst .bm_c { padding: 20px; }
 		#f_pst .tedt { width: auto; }
 		.hasfsl { margin-right: 170px; zoom: 1; }
@@ -337,7 +337,7 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 		#f_pst .upfl td { padding: 4px 0; }
 		#f_pst .atds { width: 100px; }
 		#f_pst .px { padding: 2px; }
-	/* ÊÖ»ú·¢ÌûµÄÏà¹ØÑùÊ½ by Lushnis */
+	/* æ‰‹æ©Ÿç™¼å¸–çš„ç›¸é—œæ¨£å¼ by Lushnis */
 	.mobile-type { position: absolute; margin-left: 103px; margin-top: -5px; width: 58px; height: 80px; background: url({IMGDIR}/mobile-type.png) no-repeat 100% 100%; }
 			.mobile-type a { display: block; width: 46px; height: 80px; background: url({IMGDIR}/mobile-type.png) no-repeat 0 0; }
 				.mobile-type-2 a { background-position: 0 -80px; }
@@ -349,9 +349,9 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 
 
 
-/* ------------------------------------------------------------------------ ¹ã³¡°æ¿é¡¢Èº×é·ÖÀàµÈÁĞ±íÑùÊ½ */
+/* ------------------------------------------------------------------------ å»£å ´ç‰ˆå¡Šã€ç¾¤çµ„åˆ†é¡ç­‰åˆ—è¡¨æ¨£å¼ */
 /** forum::index,forum::forumdisplay,group::index,group::group,search::group **/
-/* °æ¿éÁĞ±í */
+/* ç‰ˆå¡Šåˆ—è¡¨ */
 .fl {}
 	.fl_tb { width: 100%; }
 		.fl_tb td { padding: 10px 0; }
@@ -369,7 +369,7 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 			.fl_g dt { font-weight: 700; }
 	.fl_row td { border-top: 1px dashed {COMMONBORDER}; }
 
-/* Èº×é·ÖÀàÁĞ±í */
+/* ç¾¤çµ„åˆ†é¡åˆ—è¡¨ */
 	.flt {}
 		.flt .flc { width: 294px; }
 		.gcop { margin-right: 15px; clear: left; }
@@ -383,31 +383,31 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 /*
 	Name:			mod_board_navigation
 	Level:			Function
-	Explain:		¿´ÌùÒ³×ó²àµÄ°æ¿éµ¼º½¡£¿í¶ÈÔÚCSSÀïÃ»ÓĞÄ¬ÈÏÖµ£¬¿í¶ÈÔÚºóÌ¨ÉèÖÃ
+	Explain:		çœ‹è²¼é å·¦å´çš„ç‰ˆå¡Šå°èˆªã€‚å¯¬åº¦åœ¨CSSè£¡æ²’æœ‰é»˜èªå€¼ï¼Œå¯¬åº¦åœ¨å¾Œå°è¨­ç½®
 	Last Modify:	Pony
 */
 .bdl { float: left; overflow: hidden; border: 1px solid #BDD7E3; background-color: #F5F9FB; }
 	.ie6 .bdl { position: relative; }
 	.bdl_h { height: 32px; line-height: 22px; }
 .bdl .tbn { margin: 10px; }
-	/* ·ÖÇø */
+	/* åˆ†å€ */
 	.bdl dl { margin: -1px -10px 0; }
 		.bdl dt { overflow: hidden; height: 27px; line-height: 27px; border: solid #CCE0EB; border-width: 1px 0; background: #F5F9FB url({IMGDIR}/titlebg_sd.png) repeat-x 100% 0; }
 			.bdl dt a { display: block; padding: 0 15px 0 10px; }
 				.bdl dt a:hover, .bdl_a a:hover { text-decoration: none; }
-	/* °æ¿é£¬Ä¬ÈÏÊÕÆğ */
+	/* ç‰ˆå¡Šï¼Œé»˜èªæ”¶èµ· */
 	.bdl dd { display: none; }
 		.bdl dd a { display: block; margin: 0 3px; padding: 0 7px; height: 26px; line-height: 26px; overflow: hidden; }
-	/* Õ¹¿ªµÄ·ÖÇø */
+	/* å±•é–‹çš„åˆ†å€ */
 	.bdl dl.a { padding-bottom: 4px; background-color: #FFF; }
 		.bdl dl.a dt { margin-bottom: 3px; background-position: 100% -27px; }
 		.bdl dl.a dd, .bdl_fav dd { display: block; overflow: hidden; zoom: 1; }
-			/* µ±Ç°°æ¿é */
+			/* ç•¶å‰ç‰ˆå¡Š */
 			.bdl dd.bdl_a a { background-color: #F5F9FB; font-weight: 700; color: {HIGHLIGHTLINK}; }
 
 /*
 	Level:			Channel
-	Explain:		°å¿éĞÂÌûÌáĞÑ
+	Explain:		æ¿å¡Šæ–°å¸–æé†’
 	Last Modify:	Max.Cong
 */
 	#forumnew{ position: absolute; right: 0; top: 0; z-index: -1; }
@@ -433,7 +433,7 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 /*
 	Name:			mod_forum_jump
 	Level:			Function
-	Explain:		¿ìËÙÌø×ª²Ëµ¥
+	Explain:		å¿«é€Ÿè·³è½‰èœå–®
 	Last Modify:	Pony 11080915
 */
 #fjump_menu { overflow-x: hidden; max-height: 600px; }
@@ -445,9 +445,9 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 
 
 
-/* ------------------------------------------------------------------------ Ö÷ÌâÁĞ±íÑùÊ½ */
+/* ------------------------------------------------------------------------ ä¸»é¡Œåˆ—è¡¨æ¨£å¼ */
 /** forum::forumdisplay,forum::viewthread,forum::modcp,forum::collection,group,home::space,home::task,home::follow,search::forum,search::group,member::groupexpiry,misc::ranklist,misc::stat,misc::tag,forum::guide,portal::block **/
-/* fct --> froumatction °å¿é¹¦ÄÜ°´Å¥ */
+/* fct --> froumatction æ¿å¡ŠåŠŸèƒ½æŒ‰éˆ• */
 	.fct a { float: left; margin-left: 8px; }
 	.fa_fav_0, .fa_fav, .fa_rss, .fa_achv, .fa_bin, .fa_ivt { padding-left: 20px; background: no-repeat 0 50%; }
 		.fa_fav_0 { background-image: url({IMGDIR}/fav_grey.gif); }
@@ -457,7 +457,7 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 		.fa_bin { background-image: url({IMGDIR}/recyclebin.gif); }
 		.fa_ivt { background-image: url({IMGDIR}/user_add.gif); }
 
-/* Ö÷ÌâÁĞ±íÏà¹Ø */
+/* ä¸»é¡Œåˆ—è¡¨ç›¸é—œ */
 	/*.tl .th th a { float: left; margin-right: 10px; padding-right: 17px; background: url({IMGDIR}/arw_d2.gif) no-repeat 100% 50%; }*/
 	#fh { width: 644px; }
 		.mw #fh { width: 100%; }
@@ -472,14 +472,14 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 	#fh.m { padding-top: 0; background-color: {COMMONBG}; }
 	.xst { font-family: {THREADTITLEFONT}; font-size: {THREADTITLEFONTSIZE}; }
 
-	/* threadtype Ìû×ÓÀàĞÍ */
+	/* threadtype å¸–å­é¡å‹ */
 	.ttp { margin-bottom: 5px; padding-top: 10px; border-width: 2px 0 0; background: transparent; }
 		.ttp li { float: left; padding-bottom: 5px; }
 		.ttp a, .ttp strong { float: left; margin-right: 5px; padding: 4px 8px 3px; height: 18px; border: 1px solid {COMMONBORDER}; background: {WRAPBG}; white-space: nowrap; }
 			.ttp a:hover { border-color: {HIGHLIGHTLINK}; color: {HIGHLIGHTLINK}; text-decoration: none; }
 		.ttp .a a { padding-right: 12px;  padding-left: 12px; border-color: {HIGHLIGHTLINK}; background: {SPECIALBG}; color: {HIGHLIGHTLINK}; }
 		.ttp .pipe { float: left; margin-right: 10px; padding: 0; width: 2px; height: 27px; background: {SPECIALBORDER}; text-indent: -9999px; }
-	/* °æ¿éÓĞ´óÁ¿Ö÷Ìâ·ÖÀàÊ±µÄÕ¹¿ªÊÕÆğÑùÊ½ by Pony */
+	/* ç‰ˆå¡Šæœ‰å¤§é‡ä¸»é¡Œåˆ†é¡æ™‚çš„å±•é–‹æ”¶èµ·æ¨£å¼ by Pony */
 	.cttp { overflow: hidden; padding-right: 35px; height: 32px; }
 		.cttp .unfold, .cttp .fold { float: right; display: inline; margin: 5px -35px 9px 0; padding: 0 0 0 10px; width: 25px; height: 18px; background-color: transparent; color: {HIGHLIGHTLINK}; font-weight: 400; }
 
@@ -516,10 +516,10 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 
 	.tl_reply { padding-left: 10px; background: url({IMGDIR}/dot.gif) no-repeat 0 7px; }
 
-	/* recy --> recyclebin Ö÷ÌâÁĞ±íµÄ»ØÊÕÕ¾Ö÷ÌâÑùÊ½ by shuaishuai*/
+	/* recy --> recyclebin ä¸»é¡Œåˆ—è¡¨çš„å›æ”¶ç«™ä¸»é¡Œæ¨£å¼ by shuaishuai*/
 	.recy { text-decoration: line-through; }
 
-	/* Ö÷Ìâ·ÖÒ³ */
+	/* ä¸»é¡Œåˆ†é  */
 	.tps { white-space: nowrap; }
 		.tps a { padding: 2px 4px; color: {TABLETEXT}; }
 			.tps a:hover { background-color: {COMMONBG}; color: #007CD5; }
@@ -527,7 +527,7 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 /*
 	Name:			mod_thread_type_index
 	Level:			Function
-	Explain:		·ÖÀàĞÅÏ¢¼ìË÷
+	Explain:		åˆ†é¡ä¿¡æ¯æª¢ç´¢
 	Last Modify:	Pony 12020309
 */
 .tsm { overflow: hidden; margin-bottom: -10px; width: 100%; border-collapse: collapse !important; }
@@ -543,7 +543,7 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 /*
 	Name:			mod_thread_type_search
 	Level:			Function
-	Explain:		·ÖÀàĞÅÏ¢ËÑË÷
+	Explain:		åˆ†é¡ä¿¡æ¯æœç´¢
 	Last Modify:	Pony 11050314
 */
 	.mfm .mtm { margin-right: 10px; }
@@ -555,7 +555,7 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 /*
 	Name:			mod_thread_type
 	Level:			Function
-	Explain:		ÂÛÌ³Èº×éµÄÌû×ÓÖ÷Ìâ·ÖÀà·ÖÀàĞÅÏ¢µÈµÄÉ¸Ñ¡ÑùÊ½
+	Explain:		è«–å£‡ç¾¤çµ„çš„å¸–å­ä¸»é¡Œåˆ†é¡åˆ†é¡ä¿¡æ¯ç­‰çš„ç¯©é¸æ¨£å¼
 	Author:			lushnis
 	Last Modify:	Pony
 */
@@ -565,7 +565,7 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 
 
 
-/* ----------------------------------------------------------------------- Ìû×ÓÄÚÈİÇøÓòÑùÊ½ */
+/* ----------------------------------------------------------------------- å¸–å­å…§å®¹å€åŸŸæ¨£å¼ */
 /** forum::viewthread,group::viewthread **/
 .plh { line-height: 46px; }
 	.plh .plc { padding-bottom: 0; }
@@ -573,7 +573,7 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 /*
 	Name:			mod_viewthread_header
 	Level:			Function
-	Explain:		¿´ÌûÒ³±êÌâÇøÓò
+	Explain:		çœ‹å¸–é æ¨™é¡Œå€åŸŸ
 	Last Modify:	Pony 201201181105
 */
 	.vwthd { padding-right: 80px !important; }
@@ -589,7 +589,7 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 .attl_g, .attl_m { margin-left: 10px; padding-left: 16px; background: url({IMGDIR}/attl_icon.png) no-repeat 0 3px; }
 	.attl_m { background-position: -100px 3px; }
 
-/* Ä¬ÈÏ·ÖÀàĞÅÏ¢ by michael */
+/* é»˜èªåˆ†é¡ä¿¡æ¯ by michael */
 .ie6 .cgtl { width: auto; }
 	.cgtl { overflow: hidden; }
 	.cgtl td, .cgtl th, .cgtl caption { padding: 5px; border-bottom: 1px solid {SPECIALBORDER}; }
@@ -599,7 +599,7 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 /*
 	Name:			mod_cp_pls
 	Level:			Function
-	Explain:		Ìû×ÓÒ³Ã¿¸öÂ¥²ãÓÃ»§ĞÅÏ¢ÏÂ·½µÄ¹ÜÀíÁ´½Ó
+	Explain:		å¸–å­é æ¯å€‹æ¨“å±¤ç”¨æˆ¶ä¿¡æ¯ä¸‹æ–¹çš„ç®¡ç†éˆæ¥
 	Author:			Pony 12010414
 */
 .cp_pls a { float: left; margin-right: 4px; line-height: 1.231; }
@@ -607,7 +607,7 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 
 
 /** forum::forumdisplay,group::forumdisplay **/
-/* Ìû×ÓÁĞ±í¡°ĞÂ´°¡±¡¢¡°Í¼Æ¬Ä£Ê½¡±µÈ°´Å¥ÑùÊ½ modified by Pony */
+/* å¸–å­åˆ—è¡¨ã€Œæ–°çª—ã€ã€ã€Œåœ–ç‰‡æ¨¡å¼ã€ç­‰æŒ‰éˆ•æ¨£å¼ modified by Pony */
 	#atarget, .unchk, .chked { padding-left: 15px; line-height: 16px; background: url({IMGDIR}/atarget.png) no-repeat 0 3px; color: {HIGHLIGHTLINK}; cursor: pointer; }
 		.ie_all #atarget, .ie_all .unchk, .ie_all .chked { display: inline-block; height: 20px; line-height: 20px; }
 		#atarget.atarget_1, .chked { background-position: 0 -37px; }
@@ -619,7 +619,7 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 	Name:			mod_media_list_thread
 	Level:			Global
 	depentend:		.ml
-	Explain:		Í¼Æ¬Ä£Ê½µÄÌû×ÓÁĞ±í
+	Explain:		åœ–ç‰‡æ¨¡å¼çš„å¸–å­åˆ—è¡¨
 	Author:			lushnis
 	Last Modify:	Pony 11121511
 */
@@ -639,7 +639,7 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 /*
 	Name:			mod_threadlist_last-child
 	Level:			Function
-	Explain:		Ìû×ÓÁĞ±íÒ³Ö§³Ö last-child µÄä¯ÀÀÆ÷²»ÏÔÊ¾×îºóÒ»ÌõÏß
+	Explain:		å¸–å­åˆ—è¡¨é æ”¯æŒ last-child çš„ç€è¦½å™¨ä¸é¡¯ç¤ºæœ€å¾Œä¸€æ¢ç·š
 	Last Modify:	Pony
 */
 .tl tbody:last-child th, .tl tbody:last-child td { border-bottom: none; }
@@ -681,7 +681,7 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 	#pl_top .ad .pls, #pl_top .ad .plc { height: 1px;overflow: hidden; }
 		#pl_top .pls { text-indent: 15px; }
 
-/* Ìû×Ó×÷Õß¡¢Ê±¼ä¡¢Â¥²ãµÈÒ»Ğ©ÊôĞÔËùÔÚÇø¿é */
+/* å¸–å­ä½œè€…ã€æ™‚é–“ã€æ¨“å±¤ç­‰ä¸€äº›å±¬æ€§æ‰€åœ¨å€å¡Š */
 	.pi { overflow: hidden; margin-bottom: 10px; padding: 10px 0; height: 16px; border-bottom: 1px dashed {COMMONBORDER}; }
 		.pi strong a { float: right; margin-top: -6px; padding: 4px 6px; border: 1px solid {WRAPBG}; font-weight: 400; }
 			.pi strong a:hover { border-color: {COMMONBORDER}; }
@@ -690,7 +690,7 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 		.pti {}
 			.authicn { cursor: pointer; }
 
-/* Ìû×ÓÕıÎÄÇø¿é */
+/* å¸–å­æ­£æ–‡å€å¡Š */
 	.pcb { clear: left; margin-right: 130px; }
 		.ie6 .pcbs table, .ie6 .t_fsz table { width: auto; }
 		.pcb h1, .pcb h2 { margin: 8px 0; font-size: 1.17em; }
@@ -765,7 +765,7 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 					.rate_collapse .op { background-image: url({IMGDIR}/arrow_down.gif); }
 			.rate i { font-style: normal; }
 
-/* »ØÌûÍÆ¼ö post sticklist by dfox */
+/* å›å¸–æ¨è–¦ post sticklist by dfox */
 	.psth { margin: 2em 0 2em -20px; padding: 5px 45px 5px 20px; width: 240px; background: #FFF4DD url({IMGDIR}/arw.gif) no-repeat 100% 50%; color: {NOTICETEXT}; font-size: 14px; }
 	.tpst .psth { margin-left: -15px; }
 	.pstl { clear: left; margin-bottom: 2em; }
@@ -773,7 +773,7 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 			.psta img { width: 24px; height: 24px; }
 		.psti { margin-left: 30px; }
 
-/* µãÆÀ by monkeye */
+/* é»è©• by monkeye */
 	.f_c .cm { overflow: hidden; }
 	.cm .psth { background-color: #FFF4DD; color: {NOTICETEXT}; background-position: 100% 50%; font-size: 12px; }
 		.cm .pg { float: none; }
@@ -787,7 +787,7 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 /*
 	Name:			mod_viewthread_author
 	Level:			Function
-	Explain:		µÚ¶şÒ³ÒÔºóÏÔÊ¾Ö÷Ìâ×÷Õß
+	Explain:		ç¬¬äºŒé ä»¥å¾Œé¡¯ç¤ºä¸»é¡Œä½œè€…
 	Author:			lushnis
 	Last Modify:	Pony 11042913
 */
@@ -800,7 +800,7 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 
 i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: center; font-style: normal; line-height: 32px; color: {LIGHTTEXT}; }
 
-/* ÓÃ»§ÏêÏ¸ĞÅÏ¢ */
+/* ç”¨æˆ¶è©³ç´°ä¿¡æ¯ */
 	.bui { position: absolute; margin: -1px 0 0 -1px; padding: 15px 0 15px 20px; width: 430px !important; border: 1px solid {COMMONBORDER}; background: {WRAPBG}; box-shadow: 2px 2px 3px {WRAPBORDERCOLOR}; -webkit-box-shadow: 2px 2px 3px {WRAPBORDERCOLOR}; -moz-box-shadow: 2px 2px 3px {WRAPBORDERCOLOR}; }
 		.bui dl { margin: 5px 0 10px; }
 			.bui dt { width: 4.5em; }
@@ -814,7 +814,7 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 	/*
 		Name:			mod_user_interaction
 		Level:			Function
-		Explain:		Ìû×Ó×ó²àÓÃ»§»¥¶¯²Ù×÷
+		Explain:		å¸–å­å·¦å´ç”¨æˆ¶äº’å‹•æ“ä½œ
 		Last Modify:	Pony
 	*/
 	.pls .o li { background-position: 0 50%; background-repeat: no-repeat; text-indent: 18px; }
@@ -823,13 +823,13 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 		.pls .o .poke2 { background-image: url({STATICURL}image/feed/poke.gif); }
 		.pls .o .pm2 { background-image: url({IMGDIR}/pmto.gif); }
 		.pls .o .addflw { background-image: url({IMGDIR}/flw_ico.png); }
-	/* Ìû×Ó×ó²àÓÃ»§×éÉı¼¶ÌáÊ¾Ï¸Î¢µ÷Õû Last Modify Pony */
+	/* å¸–å­å·¦å´ç”¨æˆ¶çµ„å‡ç´šæç¤ºç´°å¾®èª¿æ•´ Last Modify Pony */
 	.pls .tip_4 { margin-left: -5px; }
 
 	/*
 		Name:			mod_thread_attr
 		Level:			Function
-		Explain:		Ìû×ÓÖĞÀàËÆ¡°ÓÎ¿Í£¬Èç¹ûÄúÒª²é¿´±¾ÌûÒş²ØÄÚÈİÇë¡±µÈµØ·½µÄÑùÊ½
+		Explain:		å¸–å­ä¸­é¡ä¼¼ã€ŒéŠå®¢ï¼Œå¦‚æœæ‚¨è¦æŸ¥çœ‹æœ¬å¸–éš±è—å…§å®¹è«‹ã€ç­‰åœ°æ–¹çš„æ¨£å¼
 		Last Modify:	Pony 11060209
 	*/
 	.locked { overflow: hidden; margin: 10px 0; padding: 8px 8px 8px 24px; border: 1px dashed #FF9A9A; background: {WRAPBG} url({IMGDIR}/locked.gif) no-repeat 6px 50%; font-size: 12px; zoom: 1; }
@@ -846,7 +846,7 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 	/*
 		Name:			mod_thread_code_quote
 		Level:			Function
-		Explain:		Ìû×Ó´úÂë/ÒıÓÃµÈÑùÊ½
+		Explain:		å¸–å­ä»£ç¢¼/å¼•ç”¨ç­‰æ¨£å¼
 		Author:			lushnis
 		Last Modify:	Pony 11053010
 	*/
@@ -861,7 +861,7 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 			* html .pl .blockcode ol li { font-family: "Courier New",serif; }
 		.pl .blockcode em { margin-left: 43px; color: {HIGHLIGHTLINK} !important; font-size: 12px; cursor: pointer; }
 
-/*Í¶Æ± poll optionvessel by dfox */
+/*æŠ•ç¥¨ poll optionvessel by dfox */
 	.pcht { margin-bottom: 15px; }
 		.pcht h4 a { color: {HIGHLIGHTLINK}; text-decoration:underline; }
 		.pcht table { table-layout: fixed; }
@@ -880,7 +880,7 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 	/*
 		Name:			mod_voter_list
 		Level:			Function
-		Explain:		Í¶Æ±ÕßÁĞ±íÑùÊ½
+		Explain:		æŠ•ç¥¨è€…åˆ—è¡¨æ¨£å¼
 		Last Modify:	Pony
 	*/
 	.voterlist { width: 495px; height: 195px; overflow: auto; }
@@ -890,7 +890,7 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 	/*
 		Name:			mod_thread_trade_activity
 		Level:			Function
-		Explain:		spvimg,spi Îª»î¶¯¡¢ÉÌÆ·¹«ÓÃ²¿·Ö
+		Explain:		spvimg,spi ç‚ºæ´»å‹•ã€å•†å“å…¬ç”¨éƒ¨åˆ†
 		Author:			dfox
 		Last Modify:	Pony 11082511
 	*/
@@ -913,11 +913,11 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 		.actl_pop { overflow: auto; max-width: 200px; max-height: 300px; }
 			.ie6 .actl_pop { width: 200px !important; height: expression(this.offsetHeight > 300 ? 300 : 'auto'); }
 			.actl_pop li { display: block; padding: 3px 0; border-bottom: 1px dashed {COMMONBORDER}; }
-			/* ÖØ¶¨Òåµ¯´°ÀïµÄÁ´½Ó */
+			/* é‡å®šç¾©å½ˆçª—è£¡çš„éˆæ¥ */
 			.actl_pop a { display: inline; position: static; padding: 0; border: none; white-space: normal; }
 				.actl_pop a:hover { background: transparent; text-decoration: underline; }
 
-/* ĞüÉÍ by dfox */
+/* æ‡¸è³ by dfox */
 	.rwd {}
 		.rsld, .rusld { width: 90px; height: 118px; background: url({IMGDIR}/rwd.gif) no-repeat 0 0; text-align: center; color: #F30; }
 		.rsld { background-position: 0 -118px; color: {LIGHTTEXT}; }
@@ -925,7 +925,7 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 		.rwdn { margin-left: 110px; }
 	.rwdbst {}
 
-/* ±çÂÛ¹ÛµãÑùÊ½ by michael */
+/* è¾¯è«–è§€é»æ¨£å¼ by michael */
 	.pdbt { float: right; margin: -5px 10px 0 0; }
 
 	.pdbts { float: left; overflow: hidden; height: 25px; line-height: 25px; background: url({IMGDIR}/pdbt.gif) no-repeat 0 0; }
@@ -938,7 +938,7 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 	.pdbts_2 { background-position: 0 -50px; }
 			.pdbts_2 .b { background-position: 100% -75px; }
 
-/* ÉÌÆ· trade by michael & dfox*/
+/* å•†å“ trade by michael & dfox*/
 	.trdc { margin-top: 20px; background: #09C; height: 30px; line-height: 30px; color: {LIGHTLINK}; }
 		.trdc a { margin: 0 6px; height: 30px; line-height: 30px; color: {LIGHTLINK}; }
 		.trdc em { float: right; padding-right: 6px; line-height: 30px; color: {LIGHTLINK}; }
@@ -961,7 +961,7 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 		.torder .spi { margin-left: 110px; }
 			.torder .spi strong { color: #F30; }
 
-/* ÃÅ»§ viewthread ÏÔÊ¾ */
+/* é–€æˆ¶ viewthread é¡¯ç¤º */
 .vw .pcb { margin-right: 0; }
 	.vw dd .pcb { width: 640px; }
 	.vw dd .rate { padding-left: 0; }
@@ -989,7 +989,7 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 /*
 	Name:			mod_visited_t&b
 	Level:			Function
-	Explain:		·µ»ØÁĞ±íÖĞÏÔÊ¾µÄ·ÃÎÊ¹ıµÄÌû×ÓºÍ°æ¿é
+	Explain:		è¿”å›åˆ—è¡¨ä¸­é¡¯ç¤ºçš„è¨ªå•éçš„å¸–å­å’Œç‰ˆå¡Š
 	Last Modify:	Pony
 */
 #visitedforums_menu { width: 150px; }
@@ -999,7 +999,7 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 	#v_forums { width: 120px; }
 #v_threads li, #v_forums li { padding-left: 10px; background: url({IMGDIR}/dot.gif) no-repeat 0 7px; }
 
-/* ¿ìËÙ±íÇé */
+/* å¿«é€Ÿè¡¨æƒ… */
 #fastsmilies { text-align: right; }
 	#fastsmilies table { table-layout: auto; width: 160px; height: 133px; }
 	#fastsmilies td { text-align: right; vertical-align: middle; cursor: pointer; }
@@ -1011,7 +1011,7 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 /*
 	Name:			mod_trade_list
 	Level:			Function
-	Explain:		Ìû×ÓÒÔ¼°½»Ò×µ¥ÖĞµÄÉÌÆ·ÁĞ±í
+	Explain:		å¸–å­ä»¥åŠäº¤æ˜“å–®ä¸­çš„å•†å“åˆ—è¡¨
 	Last Modify:	Pony 11060710
 */
 .tradl {}
@@ -1029,7 +1029,7 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 
 
 /** forum::viewthread,group::viewthread,home::space **/
-/* ±çÂÛ debatesquare by michael & dfox */
+/* è¾¯è«– debatesquare by michael & dfox */
 	.dtm { padding: 10px 0; text-align: center; font-weight: 700; }
 	.ds { margin-top: 1em; background: url({IMGDIR}/debate_bg.gif) no-repeat 50% 100%; line-height: normal; }
 		.ds th { width: 60px; vertical-align: bottom; }
@@ -1046,7 +1046,7 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 			.ds .chart{ position:absolute; left: 0; bottom: 0; width: 62px; background: url({IMGDIR}/debate_chart.gif) no-repeat; }
 				.ds .sc_1 .chart{ background-position: -62px 0; }
 				.ds .sc_2 .chart{ background-position: -124px 0; }
-		/* ¿Õ¼äÖĞµÄ±çÂÛÁĞ±í by Pony */
+		/* ç©ºé–“ä¸­çš„è¾¯è«–åˆ—è¡¨ by Pony */
 		#nv_home .ds table { table-layout: fixed; width: 100%; }
 		#nv_home .ds th div, #nv_home .ds .point_chart { height: 120px; }
 		#nv_home .ds .ph { font-size: 16px; text-align: center; }
@@ -1062,14 +1062,14 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 			.dr .mls { padding-top: 15px; clear: both; }
 			.dr .mls li { width: 70px; }
 
-/* ±êÇ© */
+/* æ¨™ç±¤ */
 	.ptg { padding-left: 20px; background: url({IMGDIR}/tag.gif) no-repeat 0 2px; }
 		.ptg a { color: {HIGHLIGHTLINK}; }
 /** end **/
 
 
 /** forum::viewthread,group::viewthread,forum::trade,portal::view **/
-/* Ìû×Ó¸½¼ş by dfox */
+/* å¸–å­é™„ä»¶ by dfox */
 	.pattl { overflow: hidden; padding: 1em 0; width: 100%; font-size: 12px; }
 	.tatt, .t_attach_img { padding: 5px; color: {LIGHTTEXT}; font-size: 12px; }
 		.tatt { width: 240px; }
@@ -1095,13 +1095,13 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 	.attp { width: 180px; text-align: left; }
 		.tattl .attp { width: 240px; }
 
-	/* °æÖ÷ä¯ÀÀ°üº¬ÊÕ·Ñ¸½¼şµÄÌû×Ó£¬ÇÒ¸½¼ş²åÈëµ½Ìû×ÓÄÚÈİÖĞÈ¥µÄÊ±ºò by Pony */
+	/* ç‰ˆä¸»ç€è¦½åŒ…å«æ”¶è²»é™„ä»¶çš„å¸–å­ï¼Œä¸”é™„ä»¶æ’å…¥åˆ°å¸–å­å…§å®¹ä¸­å»çš„æ™‚å€™ by Pony */
 	.attprice { padding: 5px; border: 1px dashed #FF9A9A; }
 
 	/*
 		Name:			mod_zoominner
 		Level:			Function
-		Explain:		ÏÔÊ¾Ô­Ê¼Í¼Æ¬µ¯³ö²ã
+		Explain:		é¡¯ç¤ºåŸå§‹åœ–ç‰‡å½ˆå‡ºå±¤
 		Last Modify:	Pony
 	*/
 	.zoominner { padding: 5px 10px 10px; background: {WRAPBG}; text-align: left; }
@@ -1122,22 +1122,22 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 
 
 /** forum::misc **/
-/* ·Çµ¯´°Ê±ÏÔÊ¾³öÀ´µÄÒ³ÃæµÄÑùÊ½ÖØ¶¨Òå */
+/* éå½ˆçª—æ™‚é¡¯ç¤ºå‡ºä¾†çš„é é¢çš„æ¨£å¼é‡å®šç¾© */
 	.mn .flb { padding-left: 0; }
 	.f_c .list { margin-left: 0; }
 /** end **/
 
 
 /** portal::portalcp,portal::view,forum::viewthread,group::viewthread,home::space **/
-/* ×Ô¶¯¸ø¹Ø¼ü´ÊÔö¼ÓµÄÁ´½ÓµÄÑùÊ½ by Pony */
+/* è‡ªå‹•çµ¦é—œéµè©å¢åŠ çš„éˆæ¥çš„æ¨£å¼ by Pony */
 	.relatedlink, .relatedlink:hover { text-decoration: none !important; color: {TABLETEXT} !important; border-bottom: 1px solid blue; }
 
-/* Ä£¿é±êÊ¶ºóÃæµÄÊÕ²ØÍ¼Æ¬ÑùÊ½ by Pony */
+/* æ¨¡å¡Šæ¨™è­˜å¾Œé¢çš„æ”¶è—åœ–ç‰‡æ¨£å¼ by Pony */
 	.favmark { margin-bottom: -3px; }
 /** end **/
 
 
-/* ----------------------------------------------------------------------- Èº×éÏà¹ØÑùÊ½ by dfox */
+/* ----------------------------------------------------------------------- ç¾¤çµ„ç›¸é—œæ¨£å¼ by dfox */
 /** group::index **/
 	#g_focus { width: 320px; }
 	#g_commend {}
@@ -1150,7 +1150,7 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 		#g_guide strong { display: block; }
 	.fl .bm_h { border-bottom: none; background-color: transparent; }
 
-/* Èº×éÁĞ±í by Pony */
+/* ç¾¤çµ„åˆ—è¡¨ by Pony */
 	.fl_icn, .fl_icn_g { width: 48px; }
 	.fl_g dl { margin-left: 48px; padding: 0 5px; }
 /** end **/
@@ -1181,11 +1181,11 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 
 
 /** group::my **/
-/* ÉèÖÃ¹Ø×¢µÄÈº×éµ¯´° by Pony */
+/* è¨­ç½®é—œæ³¨çš„ç¾¤çµ„å½ˆçª— by Pony */
 	.attgroup { width: 450px; }
 		.attgroup li { float: left; overflow: hidden; margin-right: 5px; width: 145px; white-space: nowrap; }
 
-/* ¹Ø×¢°´Å¥ºÍËùÓĞÈº×éµÄ°´Å¥ by Shuaishuai*/
+/* é—œæ³¨æŒ‰éˆ•å’Œæ‰€æœ‰ç¾¤çµ„çš„æŒ‰éˆ• by Shuaishuai*/
 	.groupbtn { float: left; margin: 0 2px; padding: 0 0 0 7px !important; height: 25px; background: url({IMGDIR}/n_rate.png) no-repeat 0 0 !important; line-height: 25px; text-align: center; cursor: pointer; }
 	.groupbtn:hover{ text-decoration: none; }
 		.groupbtn span { display: block; background: url({IMGDIR}/n_rate.png) no-repeat right 100% !important; padding-right: 7px; }
@@ -1193,7 +1193,7 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 
 
 
-/* ----------------------------------------------------------------------- ÎÄÕÂ¡¢ÈÕÖ¾µÈÒ³ÃæÑùÊ½ */
+/* ----------------------------------------------------------------------- æ–‡ç« ã€æ—¥èªŒç­‰é é¢æ¨£å¼ */
 /** portal::list,home::space **/
 .bm_h .addnew { margin-left: 10px; padding-left: 20px; background: url({IMGDIR}/addbuddy.gif) no-repeat 0 45%; }
 .bm_h .rss { margin-left: 10px; padding-left: 20px; background: url({IMGDIR}/feed.gif) no-repeat 0 45%; }
@@ -1223,7 +1223,7 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 			.vw .o .mgcmn { width: auto; text-align: left; }
 		#nv_portal .vw .h, #nv_portal .vw .s, #nv_portal .vw .d, #nv_portal .vw .o,#nv_forum .vw .h, #nv_forum .vw .s, #nv_forum .vw .d { margin-right: 15px; margin-left: 15px; }
 
-/* .atd -> attitude ±íÌ¬ by Pony */
+/* .atd -> attitude è¡¨æ…‹ by Pony */
 	.atd { margin: 15px auto; }
 		.atd img { margin-bottom: 10px; }
 		.atd a { display: block; }
@@ -1243,7 +1243,7 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 .pgm { clear: both; padding: 5px 0; }
 	.pgm .pg { float: left; }
 
-/* ¹ÜÀíÏà¹ØÎÄÕÂ */
+/* ç®¡ç†ç›¸é—œæ–‡ç«  */
 .bart { position: relative; padding: 10px; width: 640px; }
 	.bartl { overflow-y: scroll; padding: 10px; width: 270px; height: 270px; border: 1px solid {COMMONBORDER}; }
 		.bartl li { overflow: hidden; width: 250px; height: 20px; }
@@ -1253,20 +1253,20 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 	.bart .chkall { padding-left: 10px; }
 	#chkalldiv p { width: 292px; }
 
-/* ¹ÜÀíÄ£¿é */
+/* ç®¡ç†æ¨¡å¡Š */
 	.ptblk li { padding: 7px 0; border-bottom: 1px solid {COMMONBORDER}; }
 	.ptblk em { margin-right: 30px; }
 
-/* ÎÄÕÂ±êÌâÑÕÉ«¡¢¼Ó´Ö¡¢Ğ±Ìå¡¢ÏÂ»®ÏßµÈÑùÊ½ by Pony */
+/* æ–‡ç« æ¨™é¡Œé¡è‰²ã€åŠ ç²—ã€æ–œé«”ã€ä¸‹åŠƒç·šç­‰æ¨£å¼ by Pony */
 .colorwd { margin-right: 3px; }
 .dopt input { float: left; }
 /** end **/
 
 
 
-/* ----------------------------------------------------------------------- ¿Õ¼äÏà¹ØÑùÊ½ */
+/* ----------------------------------------------------------------------- ç©ºé–“ç›¸é—œæ¨£å¼ */
 /** home::space,misc::ranklist **/
-/* .mi --> my_infomation ¿Õ¼äÊ×Ò³¸öÈËĞÅÏ¢²¿·Ö */
+/* .mi --> my_infomation ç©ºé–“é¦–é å€‹äººä¿¡æ¯éƒ¨åˆ† */
 	.mi {}
 		.mi th, .mi td { vertical-align: top; }
 		.mi th { width: 145px; }
@@ -1292,7 +1292,7 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 /*
 	Name:			mod_share_form
 	Level:			Function
-	Explain:		·¢²¼·ÖÏíµÄ±íµ¥
+	Explain:		ç™¼ä½ˆåˆ†äº«çš„è¡¨å–®
 	Last Modify:	Pony
 */
 	.sfm { margin: 0 0 20px 10px; }
@@ -1300,10 +1300,10 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 		.sfm .px { width: 432px; }
 		.sfm .pt { width: 432px; height: 67px; }
 
-/* ·ÖÏíÊÓÆµÓĞ½ØÍ¼Ê± by Pony */
+/* åˆ†äº«è¦–é »æœ‰æˆªåœ–æ™‚ by Pony */
 .vdtn { width: 126px; height: 95px; border: 1px solid {COMMONBORDER}; cursor: pointer; }
 
-/* .pic -> picture ²é¿´Í¼Æ¬ by Pony */
+/* .pic -> picture æŸ¥çœ‹åœ–ç‰‡ by Pony */
 	.osld { padding-left: 18px; background: url({IMGDIR}/slide.png) no-repeat 0 50%; }
 	.pic {}
 		.pic .c { margin-top: 20px; text-align: center; }
@@ -1312,25 +1312,25 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 		.pic p { margin: 5px 0; }
 	.albim_pic_title { padding: 5px; border-top: 1px dashed {COMMONBORDER}; background: {COMMONBG}; }
 
-/* ²à±ßÍ¼Æ¬µ¼º½ Media list navigation */
+/* å´é‚Šåœ–ç‰‡å°èˆª Media list navigation */
 	.mlnv { text-align: center; }
 		.mlnv img { margin: 0 5px; padding: 2px; max-width: 100px; max-height: 100px; _width: expression(this.width > 100 && this.width>=this.height ? 100 : true); height: expression(this._height > 100 && this.width<=this.height ? 100 : true); border: 1px solid {WRAPBORDERCOLOR}; background: {WRAPBG};}
 			.mlnv img.a { border-color: {NOTICETEXT}; background: #FFEAA8; }
 		.mlnv .btn img { padding: 0; border: 0; background: none;  }
 
 
-/* .sl -> share_list ·ÖÏíÁĞ±í by Pony */
+/* .sl -> share_list åˆ†äº«åˆ—è¡¨ by Pony */
 	.sl {}
 		.sl li { padding: 10px 0; border-bottom: none; }
 		.sl .h { padding: 6px 10px; _height: 1%; background: {COMMONBG}; border-bottom: 1px solid {COMMONBORDER}; }
 
-/* .favl -> fav_list ÊÕ²ØÁĞ±í by Pony */
+/* .favl -> fav_list æ”¶è—åˆ—è¡¨ by Pony */
 	.favl .o { background: url({IMGDIR}/op.png) no-repeat -4px -2px; }
 		.favl .o:hover { background-position: -4px -22px; }
 		.ie6 .favl li { position: relative; }
 			.ie6 .favl .o { margin: 0; right: 0; top: 12px; }
 
-/* .cmt -> comment feedÖĞµÄÆÀÂÛÇøÓò by Pony */
+/* .cmt -> comment feedä¸­çš„è©•è«–å€åŸŸ by Pony */
 	.cmt { margin: 10px 24px 0 0; padding: 10px; border: 1px solid #EAEAEA; background: {COMMONBG}; zoom: 1; }
 		.cmt form { margin-top: 10px; }
 			.cmt input, .cmt button { vertical-align: middle; }
@@ -1342,13 +1342,13 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 		.cmt .pg a, .cmt .pg strong { background-color: transparent; }
 		.cmt .pg a { border-color: {COMMONBG}; }
 			.cmt .pg a:hover { border-color: {WRAPBORDERCOLOR}; }
-		/* feed ÇøÓòÀïµÄÆÀÂÛ */
+		/* feed å€åŸŸè£¡çš„è©•è«– */
 		.el .cmt li { padding-right: 0; border-bottom: none; }
 		.el .tri { display: none; }
-		/* feed ÇøÓòÖĞÆÀÂÛµÄÑéÖ¤Âë */
+		/* feed å€åŸŸä¸­è©•è«–çš„é©—è­‰ç¢¼ */
 		.el .cmt .sec .px { width: 80px !important; }
 
-/* .pll -> poll_list Í¶Æ±ÁĞ±í */
+/* .pll -> poll_list æŠ•ç¥¨åˆ—è¡¨ */
 	.pll {}
 		.pll li { padding: 10px 0; min-height: auto; }
 		.pll .h { font-size: 14px; }
@@ -1365,7 +1365,7 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 				.pll .s a.joins span { display: block; font-size: 16px; font-weight: 700; }
 			.pll .s a.go { padding: 0 0 0 17px; width: 43px; height: 24px; line-height: 24px; display:block; }
 
-/* .acl -> activity_list »î¶¯ÁĞ±í by Pony */
+/* .acl -> activity_list æ´»å‹•åˆ—è¡¨ by Pony */
 	.acl { width: 100%; table-layout: fixed; }
 		.acl h3 { padding: 10px 0; font-size: 14px; }
 			.acl h3 span { float: left; margin: 1px 10px 0 0; width: 34px; text-align: center; }
@@ -1377,10 +1377,10 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 		.acl .orgr { width: 74px; }
 		.acl .ml li { margin-top: 6px; padding-bottom: 0; }
 
-/* .tlog -> trade_log ½»Ò×¼ÇÂ¼ by Pony */
+/* .tlog -> trade_log äº¤æ˜“è¨˜éŒ„ by Pony */
 	.tlog th, .tlog td { padding: 10px 4px !important; }
 
-/* .rwdl -> reward_list ĞüÉÍÁĞ±í by Pony */
+/* .rwdl -> reward_list æ‡¸è³åˆ—è¡¨ by Pony */
 	.rwdl {}
 		.rwdl li { overflow: hidden; float: left; padding: 15px 10px 15px 100px; width: 290px; height: 92px; }
 		.rwdl .uslvd { position: absolute; margin-left: -100px; width: 90px; height: 92px; background: url({IMGDIR}/rwd2.gif) no-repeat 0 0; }
@@ -1394,11 +1394,11 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 		.rwdl h4 { overflow: hidden; height: 36px; font-weight: 400; }
 		.rwdl p { white-space: nowrap; }
 
-/* .facel -> face_list ¿Õ¼ä²¿·ÖµÄ±íÇé by Pony */
+/* .facel -> face_list ç©ºé–“éƒ¨åˆ†çš„è¡¨æƒ… by Pony */
 	.facel { padding: 8px; width: 240px; }
 		.facel img { margin: 5px; }
 
-/* ÌáĞÑµÄÄÚÈİÖĞ»áÓÃµ½¡£ÕâÀïÊ¹ÓÃ¶ÀÁ¢class£¬ÒÔ±ã¸öĞÔ»¯¡£ÈôÏëÊ¹ÌáĞÑÄÚÈİ¸üĞÑÄ¿£¬¿É¶ÔsummaryÏÂµÄspan½øĞĞ¶¨Òå */
+/* æé†’çš„å…§å®¹ä¸­æœƒç”¨åˆ°ã€‚é€™è£¡ä½¿ç”¨ç¨ç«‹classï¼Œä»¥ä¾¿å€‹æ€§åŒ–ã€‚è‹¥æƒ³ä½¿æé†’å…§å®¹æ›´é†’ç›®ï¼Œå¯å°summaryä¸‹çš„spané€²è¡Œå®šç¾© */
 	.summary { margin: 10px 0; }
 /** end **/
 
@@ -1407,7 +1407,7 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 /*
 	Name:			mod_pprl
 	Level:			Function
-	Explain:		¿Õ¼ä¡¢¹ã²¥µÈ¸öÈË×ÊÁÏÒ³Ãæ
+	Explain:		ç©ºé–“ã€å»£æ’­ç­‰å€‹äººè³‡æ–™é é¢
 	Last Modify:	Pony 1109271712
 */
 	#pprl a { color: {HIGHLIGHTLINK}; }
@@ -1419,21 +1419,21 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 
 
 /** home::space,home::spacecp,home::medal,misc::ranklist **/
-	/* ¿Õ¼äÍ¼Æ¬ÁĞ±í */
+	/* ç©ºé–“åœ–ç‰‡åˆ—è¡¨ */
 	.mla li, .mlp li { width: 150px; }
 /** end **/
 
 
 /** home::space **/
-/* ¿ìËÙºÃÓÑ²éÕÒÁ´½Ó°´Å¥ÑùÊ½ by ShuaiShuai */
+/* å¿«é€Ÿå¥½å‹æŸ¥æ‰¾éˆæ¥æŒ‰éˆ•æ¨£å¼ by ShuaiShuai */
 	.sc_display{ display:inline-block; width:36px; text-align:right;}
 
 	#mood_mystatus { width: 410px; word-break: break-all; overflow: hidden; }
 	#newprompt { background: url({IMGDIR}/info.gif) no-repeat 12px 50%; }
 
-	/* .dtls -> doing_treeline_short ¼ÇÂ¼»Ø¸´Ê÷×´±³¾° by shuaishuai */
+	/* .dtls -> doing_treeline_short è¨˜éŒ„å›å¾©æ¨¹ç‹€èƒŒæ™¯ by shuaishuai */
 		.dtls { background:url({IMGDIR}/treeline_short.gif) no-repeat 0 2px; }
-	/* .dtll -> doing_treeline_long ¼ÇÂ¼»Ø¸´Ê÷×´±³¾° by shuaishuai */
+	/* .dtll -> doing_treeline_long è¨˜éŒ„å›å¾©æ¨¹ç‹€èƒŒæ™¯ by shuaishuai */
 		.dtll { background:url({IMGDIR}/treeline_long.gif) no-repeat 2em 2px; }
 
 	.nts { padding-left: 20px; }
@@ -1443,7 +1443,7 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 /*
 	Name:			mod_pm_list
 	Level:			Channel
-	Explain:		¶ÌÏûÏ¢ÁĞ±í
+	Explain:		çŸ­æ¶ˆæ¯åˆ—è¡¨
 	Last Modify:	Pony
 */
 	.pml {}
@@ -1464,7 +1464,7 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 /*
 	Name:			mod_pm_group
 	Level:			Function
-	Explain:		¶ÌÏûÏ¢ÈºÁÄ
+	Explain:		çŸ­æ¶ˆæ¯ç¾¤èŠ
 	Last Modify:	Pony
 */
 	.pm_g { padding: 10px 15px; border: 1px solid #C2D5E3; background: #F2F7FA; }
@@ -1492,12 +1492,12 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 
 
 /** home::spacecp **/
-/* ¿Õ¼äÍ¼Æ¬ÁĞ±í */
+/* ç©ºé–“åœ–ç‰‡åˆ—è¡¨ */
 	.mls li { width: 90px; }
 /*
 	Name:			mod_my_credits_list
 	Level:			Function
-	Explain:		ÉÏ´«Í¼Æ¬
+	Explain:		ä¸Šå‚³åœ–ç‰‡
 	Last Modify:	Pony 11082413
 */
 	.up_row { width: 100%; table-layout: fixed; }
@@ -1514,7 +1514,7 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 /*
 	Name:			mod_my_credits_list
 	Level:			Function
-	Explain:		ÎÒµÄ»ı·ÖÁĞ±í
+	Explain:		æˆ‘çš„ç©åˆ†åˆ—è¡¨
 	Last Modify:	Pony 11061714
 */
 	.creditl {}
@@ -1526,9 +1526,9 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 
 
 /** home::spacecp,home::magic **/
-/* ²éÕÒºÃÓÑ .scf --> Search friend */
+/* æŸ¥æ‰¾å¥½å‹ .scf --> Search friend */
 	.scf h2 { padding-left: 20px; line-height: 2.2; background: url({IMGDIR}/scf.gif) no-repeat 0 50%; font-weight: 700; font-size: 14px; }
-/* ÓÃÀ´Õ¹Ê¾¸´ÔÓÍ³¼ÆÊı¾İµÄ±í¸ñ£¬Ä¿Ç°½öÓÃ»§×éÒ³ÃæÓÃµ½ */
+/* ç”¨ä¾†å±•ç¤ºè¤‡é›œçµ±è¨ˆæ•¸æ“šçš„è¡¨æ ¼ï¼Œç›®å‰åƒ…ç”¨æˆ¶çµ„é é¢ç”¨åˆ° */
 	.tdats { overflow: hidden; zoom: 1; margin: 10px 0; *padding-bottom: 10px; }
 		.tdats th, .tdats td { overflow: hidden; padding: 0 5px; height: 26px; border-width: 0 1px 0 0; border-color: {WRAPBG}; white-space: nowrap; }
 		.tdats th { height: 40px; font-weight: 700; }
@@ -1565,7 +1565,7 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 /*
 	Name:			mod_ct_vw
 	Level:			Function
-	Explain:		ÈÕÖ¾¡¢ºÃÓÑÁĞ±íÒ³ÓÃµ½µÄÁ½À¸¿ò¼Ü
+	Explain:		æ—¥èªŒã€å¥½å‹åˆ—è¡¨é ç”¨åˆ°çš„å…©æ¬„æ¡†æ¶
 	Last Modify:	Pony
 */
 	.ct_vw {}
@@ -1575,7 +1575,7 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 /*
 	Name:			mod_buddy
 	Level:			Function
-	Explain:		ºÃÓÑÁĞ±í
+	Explain:		å¥½å‹åˆ—è¡¨
 	Last Modify:	Pony
 */
 	.buddy { margin: 0 -4px 10px -2px; }
@@ -1590,7 +1590,7 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 /*
 	Name:			mod_buddy_group
 	Level:			Function
-	Explain:		ºÃÓÑ·Ö×é
+	Explain:		å¥½å‹åˆ†çµ„
 	Last Modify:	Pony
 */
 	.buddy_group { margin-top: -5px; }
@@ -1604,7 +1604,7 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 .ntc_body .summary { margin-left: 2em; padding-left: 10px; border-left: 1px solid {COMMONBORDER}; }
 	.ntc_body .summary span { color: {LIGHTTEXT}; }
 
-/* .pmform -> ¶ÌÏûÏ¢±íµ¥·Çµ¯´° by Pony */
+/* .pmform -> çŸ­æ¶ˆæ¯è¡¨å–®éå½ˆçª— by Pony */
 	.pmform {}
 		.pmform .px { width: 408px; }
 		.pmform .tedt { width: 416px; }
@@ -1612,7 +1612,7 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 /*
 	Name:			mod_user_selector
 	Level:			Function
-	Explain:		ÓÃ»§ÃûÌáÊ¾Ñ¡ÔñĞ§¹û
+	Explain:		ç”¨æˆ¶åæç¤ºé¸æ“‡æ•ˆæœ
 	Last Modify:	Pony 11061311
 */
 	.un_selector { height: auto; cursor: text; overflow: hidden; }
@@ -1624,7 +1624,7 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 			.un_selector .x { float: right; width: 15px; height: 19px; background: url({IMGDIR}/un_selector.png) no-repeat 100% -19px; text-indent: -9999px; overflow: hidden; }
 				.un_selector .x:hover { background-position: 100% -38px; }
 		a.appendmb, a.appendmb span { height: 25px; line-height: 25px !important; }
-	/* ·¢¶ÌÏûÏ¢Ê±¸ù¾İÊäÈëÏÔÊ¾³öµÄÓÃ»§ÃûÁĞ±íÑùÊ½ */
+	/* ç™¼çŸ­æ¶ˆæ¯æ™‚æ ¹æ“šè¼¸å…¥é¡¯ç¤ºå‡ºçš„ç”¨æˆ¶ååˆ—è¡¨æ¨£å¼ */
 	.pmfrndl { position: absolute; margin-top: 3px; padding: 4px; width: 120px; border: solid {DROPMENUBORDER}; border-width: 0 1px 1px; background: #FFF; }
 		.ie6 .pmfrndl, .ie7 .pmfrndl { margin-top: 4px; }
 		.pmfrndl li { display: inline; }
@@ -1648,7 +1648,7 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 		.mgcl .mg_img { margin: 0 auto 5px; }
 			.pg_medal .mgcl img { margin-top: 20px; width: auto; height: auto; }
 
-/* Ñ«ÕÂ¼ÇÂ¼ÖØ¶¨Òå by Pony */
+/* å‹³ç« è¨˜éŒ„é‡å®šç¾© by Pony */
 	.el li { padding-left: 40px; }
 	.el .t { margin: -2px 0 0 -30px; }
 		.el .t img { width: 24px; height: 24px; }
@@ -1656,13 +1656,13 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 
 
 
-/* ------------------------------------------------------------------------ ÃÅ»§Ïà¹ØÑùÊ½ */
+/* ------------------------------------------------------------------------ é–€æˆ¶ç›¸é—œæ¨£å¼ */
 
 
 
-/* ------------------------------------------------------------------------ ÂşÓÎÏà¹ØÑùÊ½ */
+/* ------------------------------------------------------------------------ æ¼«éŠç›¸é—œæ¨£å¼ */
 /** userapp::userapp **/
-/* ¹ÜÀíÂşÓÎÓ¦ÓÃ by Pony */
+/* ç®¡ç†æ¼«éŠæ‡‰ç”¨ by Pony */
 	.myset { margin-top: 15px; padding: 5px 0; background: url({IMGDIR}/vline.png) repeat-y 50% 0; }
 		.mgapp { float: left; padding: 0 15px; width: 374px; }
 		.apps { padding: 7px 0; height: 20px; line-height: 20px; border-bottom: 1px dashed #DDD; }
@@ -1673,11 +1673,11 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 	.note { padding: 0 15px; }
 		.note li { margin-left: 20px; *margin-left: 25px; }
 
-/* Ó¦ÓÃÊ×Ò³Ó¦ÓÃÁĞ±í¶¨¸ß by Pony */
+/* æ‡‰ç”¨é¦–é æ‡‰ç”¨åˆ—è¡¨å®šé«˜ by Pony */
 	.appmaxh .bm_c { height: 140px; }
 	.apl li { margin: 5px 0; }
 
-/* Ó¦ÓÃÁĞ±íÖĞĞÂÓ¦ÓÃºÍÈÈÃÅÓ¦ÓÃÍ¼±ê by Pony */
+/* æ‡‰ç”¨åˆ—è¡¨ä¸­æ–°æ‡‰ç”¨å’Œç†±é–€æ‡‰ç”¨åœ–æ¨™ by Pony */
 	.appl li { position: relative; }
 		.ie6 .appl li { width: 100%; }
 		.appnew, .apphot { position: absolute; right: 0; width: 20px; height: 100%; background-color: {SIDEBGCOLOR}; background-repeat: no-repeat; background-position: 100% 50%; }
@@ -1687,14 +1687,14 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 
 
 /** home::space,home::spacecp,userapp::userapp,forum::forumdisplay **/
-/* ÕÛµş°´Å¥ by Pony */
+/* æŠ˜ç–ŠæŒ‰éˆ• by Pony */
 	.unfold, .fold { float: right; padding-left: 10px; background: url({IMGDIR}/arrwd.gif) no-repeat 0 50%; cursor: pointer; outline: none; }
 	.fold { background-image: url({IMGDIR}/arrow_top.gif); }
 /** end **/
 
 
 
-/* ------------------------------------------------------------------------ ËÑË÷Ïà¹ØÑùÊ½ */
+/* ------------------------------------------------------------------------ æœç´¢ç›¸é—œæ¨£å¼ */
 /** search **/
 a { color: #369; }
 body { background: #FFF none !important; }
@@ -1729,11 +1729,11 @@ body { background: #FFF none !important; }
 
 
 
-/* ------------------------------------------------------------------------ ÅÅĞĞ°ñÏà¹ØÑùÊ½ */
+/* ------------------------------------------------------------------------ æ’è¡Œæ¦œç›¸é—œæ¨£å¼ */
 /** misc::ranklist **/
 .rankicn { width: 20px; }
 
-/* .rnk1 Ã¿ĞĞÒ»¸öÇø¿é */
+/* .rnk1 æ¯è¡Œä¸€å€‹å€å¡Š */
 .rnk1 {}
 	.rnk1 .mlp .d { width: 120px; height: 120px; }
 	.rnk1 .mlp img { max-width: 100px; max-height: 75px; }
@@ -1742,10 +1742,10 @@ body { background: #FFF none !important; }
 		.rnk1 .bigpic img { max-width: 286px; max-height: 200px; }
 			.ie6 .rnk1 .bigpic img { width: expression(this.width > 286 && this.width>=this.height ? 286 : true); height: expression(this.height > 200 && this.width<=this.height ? 200 : true); }
 
-/* Í¼Æ¬ÅÅÃûÉÏµÄĞòºÅ */
+/* åœ–ç‰‡æ’åä¸Šçš„åºè™Ÿ */
 .picrank { position: absolute; margin: 14px 0 0 8px !important; }
 
-/* ¾º¼ÛÅÅÃû by Pony */
+/* ç«¶åƒ¹æ’å by Pony */
 .bid { margin: 2px -4px -2px 2px; zoom: 1; }
 .biduser { width: 780px; background: url({IMGDIR}/avatar_blank.gif); }
 	.biduser li { float: left; margin: 0 4px 4px 0; }
@@ -1755,7 +1755,7 @@ body { background: #FFF none !important; }
 		.bidtop img { width: auto; height: 100px; }
 
 
-/* ÖØ¶¨Òå */
+/* é‡å®šç¾© */
 .xl2 { background: url({IMGDIR}/vline.png) repeat-y 50% 0; }
 	.xl2 li { margin-right: 20px; width: 378px; }
 		.xl2 li.xl2_r { margin-right: 0; }
@@ -1771,7 +1771,7 @@ body { background: #FFF none !important; }
 
 
 
-/* ------------------------------------------------------------------------ Í³¼ÆÏà¹ØÑùÊ½ */
+/* ------------------------------------------------------------------------ çµ±è¨ˆç›¸é—œæ¨£å¼ */
 /** misc::stat **/
 .dt a { color: {HIGHLIGHTLINK}; }
 .dt th, .dt td { border-right: 1px solid {COMMONBORDER}; }
@@ -1779,7 +1779,7 @@ body { background: #FFF none !important; }
 .dt .stat_num { padding-right: 15px; text-align: right; }
 .pbg { float: left; width: 372px; }
 .bm_h { padding-left: 0; background: none; border: none; }
-/* ÖØ¶¨Òå tab ±êÇ©ÑùÊ½ by Pony 11081614 */
+/* é‡å®šç¾© tab æ¨™ç±¤æ¨£å¼ by Pony 11081614 */
 .ttp .a a { padding-left: 8px; padding-right: 8px; }
 .ttp li.xw1 { font-weight: 400; }
 /** end **/
@@ -1811,7 +1811,7 @@ body { background: #FFF none !important; }
 	Name:			mod_collection_tag
 	Level:			Function
 	Sample:			<span class="ctag ctag0">tag</span>
-	Explain:		ÌÔÌû±êÇ©ÑùÊ½£¬´Ó 0 µ½ 2£¬ÑÕÉ«Ô½À´Ô½²»ĞÑÄ¿
+	Explain:		æ·˜å¸–æ¨™ç±¤æ¨£å¼ï¼Œå¾ 0 åˆ° 2ï¼Œé¡è‰²è¶Šä¾†è¶Šä¸é†’ç›®
 	Last Modify:	Pony 2012022311
 */
 .ctag { padding: 1px 3px; font-weight: 400; border-radius: 3px; }
@@ -1822,10 +1822,10 @@ body { background: #FFF none !important; }
 
 
 /** home::follow **/
-/* ¹ã²¥Í·ÏñÍ¨ÓÃÑùÊ½ */
+/* å»£æ’­é ­åƒé€šç”¨æ¨£å¼ */
 .flw_avt { width: 80px; }
 	.flw_avt img { float: left; margin-left: 15px; width: 48px; }
-/* ¹ã²¥ÇøÓòÑùÊ½ */
+/* å»£æ’­å€åŸŸæ¨£å¼ */
 .flw_article { margin: 0 0 10px 70px; padding: 5px 10px 15px; border-bottom: 1px solid #DBDBDB; }
 	.flw_thread .flw_article { margin-left: 0; }
 	.flw_article h2 { font-size: 16px; }
@@ -1863,13 +1863,13 @@ body { background: #FFF none !important; }
 	.flw_more a { display: block; padding: 10px; box-shadow: 0 1px 0 rgba(0,0,0,0.05); border: 1px solid #DBDBDB; border-radius: 4px; background: #F4F7F9; text-align: center; }
 		.flw_more a:hover { border-color: #9EB4C2; text-decoration: none; }
 
-/* ÊÕÌı°´Å¥Í¨ÓÃÑùÊ½ */
+/* æ”¶è½æŒ‰éˆ•é€šç”¨æ¨£å¼ */
 .flw_btn_fo, .flw_btn_unfo { float: right; width: 70px; height: 21px; background: url({IMGDIR}/flw_btn_s.png) no-repeat 0 0; text-indent: -9999px; overflow: hidden; }
 	.flw_btn_unfo { background-image: url({IMGDIR}/flw_btn_unfo_s.png); }
 	.ie6 .flw_btn_fo, .ie7 .flw_btn_fo { position: relative; z-index: 1; }
 	.flw_uheader .flw_btn_fo, .flw_uheader .flw_btn_unfo, .flw_hd .flw_btn_fo, .flw_hd .flw_btn_unfo { float: left; }
 
-/* ·¢¹ã²¥ */
+/* ç™¼å»£æ’­ */
 #flw_header { padding: 10px; }
 #flw_post_subject { width: 628px; height: 30px; line-height: 30px; border: 1px solid #9EB4C2; border-radius: 4px; background: #FFF url({IMGDIR}/input_shadow.png) repeat-x 0 0; }
 #flw_header #subject { margin: 5px; width: 580px; height: 20px; border: none; outline: none; background: transparent; line-height: 20px; }
@@ -1889,21 +1889,21 @@ body { background: #FFF none !important; }
 
 .sd { border-radius: 5px; background: #F4F7F9; }
 
-/* ²à±ßºÍÖ÷ÇøÓòÍ·Ïñ¼°Í³¼ÆĞÅÏ¢ */
+/* å´é‚Šå’Œä¸»å€åŸŸé ­åƒåŠçµ±è¨ˆä¿¡æ¯ */
 #flw_avt { padding: 20px; }
 	#flw_avt img { margin: 0 auto 10px; border: 6px solid #FFF; }
 		.sd #flw_avt img { display: block; }
 
 	.flw_user_info { margin: 10px 0; padding: 10px; box-shadow: 0 1px 0 #FFF, 0 -1px 0 #D7DBDF; border-radius: 5px; background: #E9EEF2; }
 		.flw_linktohome { padding: 2px 0 2px 20px; background: url({IMGDIR}/homelink.gif) no-repeat 0 2px; }
-	/* Ö÷ÇøÓòÍ·Ïñ */
+	/* ä¸»å€åŸŸé ­åƒ */
 	.flw_uheader { padding-right: 0; padding-left: 0; }
 
 		.flw_stat_mn { margin-left: 20px; width: 490px; }
 .pg_follow .sd .bm { border-width: 1px 0 0; border-color: #E8EAEB; background: transparent; }
 	.pg_follow .sd .bm_h { padding-left: 20px; border-width: 1px 0 0; border-color: #FFF; background: transparent; }
 
-/* ÓÃ»§µ¥Ò³¶¥²¿ */
+/* ç”¨æˆ¶å–®é é ‚éƒ¨ */
 #flw_header.flw_uheader { padding-top: 20px; border-bottom: 1px solid rgba(0,0,0,0.15); background: #F4F7F9 none !important; }
 	.flw_uheader .tb { margin-bottom: -1px; }
 	.flw_uheader h1 { font-size: 16px; }
@@ -1917,7 +1917,7 @@ body { background: #FFF none !important; }
 	#specialflag_2_menu { width: 80px; }
 	.flw_uheader .flw_linktohome { padding: 0 0 0 20px; background-position: 0 3px; }
 
-/* »Ø¸´ÇøÓò */
+/* å›å¾©å€åŸŸ */
 .flw_replybox { margin: -11px 0 20px 80px; padding: 15px 20px; box-shadow: 0 1px 0 rgba(0,0,0,0.05); border: 1px solid #DBDBDB; background: #F4F7F9; background: #E9EEF1; }
 	.flw_replybox li { padding: 10px 80px 10px 0; border-top: 1px solid #DBE2E6; }
 		.flw_replybox li .d { margin-right: 10px; }
@@ -1929,25 +1929,25 @@ body { background: #FFF none !important; }
 	.flw_replybox .pnc { width: 77px; height: 33px; border: none; background: transparent url({IMGDIR}/pn_reply.png) no-repeat 0 0; }
 		.flw_replybox .pnc span { line-height: 99px; }
 		.flw_replybox table .pnc { background-image: url({IMGDIR}/pn_rt.png); }
-	/* »Ø¸´²¢×ª²¥Ñ¡Ïî */
+	/* å›å¾©ä¸¦è½‰æ’­é¸é … */
 	.flw_rert { display: inline-block; padding-right: 5px; width: 95px; text-align: right; }
 	.flw_replybox .cnr { position: relative; float: right; overflow: hidden; display: inline; margin: -22px 16px 0 0; width: 11px; height: 7px; background: transparent url({IMGDIR}/flw_cnr_t.png) no-repeat 0 0; }
 
-/* ²à±ßÇĞ»» */
+/* å´é‚Šåˆ‡æ› */
 #flw_side_tab { margin: 10px 0; }
 	#flw_side_tab li { line-height: 32px; }
 	#flw_side_tab a { display: block; height: 32px; padding-left: 20px; background: url({IMGDIR}/flw_side_tab.png) repeat-x 0 0; }
 		#flw_side_tab li.a a { background-position: 0 -32px; }
 		#flw_side_tab a img { float: left; margin: 8px 10px 0 0; }
 
-/* ²à±ßÓÃ»§ÁĞ±í */
+/* å´é‚Šç”¨æˆ¶åˆ—è¡¨ */
 .flw_side_promote {  }
 	.flw_side_promote .xlda dl { margin-bottom: 8px; }
 	.flw_side_promote .xlda .m { margin: 0 0 8px -55px; }
 	.flw_side_promote .xlda dt { padding-top: 0; }
 	.flw_side_promote .flw_btn_fo { float: left; }
 
-/* ÀàËÆÌıÖÚÒ³ÃæµÄÓÃ»§ÁĞ±í */
+/* é¡ä¼¼è½çœ¾é é¢çš„ç”¨æˆ¶åˆ—è¡¨ */
 .flw_ulist {}
 	.flw_ulist li { padding: 10px 0 10px 100px; border-bottom: 1px solid #DBDBDB; }
 	.flw_ulist .flw_avt { float: left; margin: 0 0 0 -80px; }
@@ -1963,7 +1963,7 @@ body { background: #FFF none !important; }
 /*
 	Name:			mod_follow_flashupload
 	Level:			Global
-	Explain:		ÖØ¶¨Òå follow Ò³ÃæµÄ Flash ÉÏ´«Ê±µÄ´¦Àí½çÃæ£¬½á¹¹²Î¼û /static/js/fileprogress.js
+	Explain:		é‡å®šç¾© follow é é¢çš„ Flash ä¸Šå‚³æ™‚çš„è™•ç†ç•Œé¢ï¼Œçµæ§‹åƒè¦‹ /static/js/fileprogress.js
 	Last Modify:	Pony 2012022813
 */
 .progressWrapper { overflow: hidden; float: left; width: auto; }

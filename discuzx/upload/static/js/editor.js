@@ -62,11 +62,11 @@ function initEditor() {
 		if(buttons[i].id.indexOf(editorid + '_') != -1) {
 			buttons[i].href = 'javascript:;';
 			if(buttons[i].id.substr(buttons[i].id.indexOf('_') + 1) == 'fullswitcher') {
-				buttons[i].innerHTML = !editorisfull ? 'È«ÆÁ' : '·µ»Ø';
-				buttons[i].onmouseover = function(e) {setEditorTip(editorisfull ? '»Ö¸´±à¼­Æ÷´óĞ¡' : 'È«ÆÁ·½Ê½±à¼­');};
+				buttons[i].innerHTML = !editorisfull ? 'å…¨å±' : 'è¿”å›';
+				buttons[i].onmouseover = function(e) {setEditorTip(editorisfull ? 'æ¢å¾©ç·¨è¼¯å™¨å¤§å°' : 'å…¨å±æ–¹å¼ç·¨è¼¯');};
 				buttons[i].onclick = function(e) {editorfull();doane();}
 			} else if(buttons[i].id.substr(buttons[i].id.indexOf('_') + 1) == 'simple') {
-				buttons[i].innerHTML = !simplodemode ? '³£ÓÃ' : '¸ß¼¶';
+				buttons[i].innerHTML = !simplodemode ? 'å¸¸ç”¨' : 'é«˜ç´š';
 				buttons[i].onclick = function(e) {editorsimple();doane();}
 			} else {
 				_attachEvent(buttons[i], 'mouseover', function(e) {setEditorTip(BROWSER.ie ? window.event.srcElement.title : e.target.title);});
@@ -95,7 +95,7 @@ function initEditor() {
 	}
 	if($(editorid + '_fullswitcher') && BROWSER.ie && BROWSER.ie < 7) {
 		$(editorid + '_fullswitcher').onclick = function () {
-			showDialog('ÄúµÄä¯ÀÀÆ÷²»Ö§³Ö´Ë¹¦ÄÜ£¬ÇëÉı¼¶ä¯ÀÀÆ÷°æ±¾', 'notice', 'ÓÑÇéÌáÊ¾');
+			showDialog('æ‚¨çš„ç€è¦½å™¨ä¸æ”¯æŒæ­¤åŠŸèƒ½ï¼Œè«‹å‡ç´šç€è¦½å™¨ç‰ˆæœ¬', 'notice', 'å‹æƒ…æç¤º');
 		};
 		$(editorid + '_fullswitcher').className = 'xg1';
 	}
@@ -139,7 +139,7 @@ function initcstbar() {
 
 function savedataTime() {
 	if(!autosave) {
-		$(editorid + '_svdsecond').innerHTML = '<a title="µã»÷¿ªÆô×Ô¶¯±£´æ" href="javascript:;" onclick="setAutosave()">¿ªÆô×Ô¶¯±£´æ</a> ';
+		$(editorid + '_svdsecond').innerHTML = '<a title="é»æ“Šé–‹å•Ÿè‡ªå‹•ä¿å­˜" href="javascript:;" onclick="setAutosave()">é–‹å•Ÿè‡ªå‹•ä¿å­˜</a> ';
 		return;
 	}
 	if(!savedatac) {
@@ -150,15 +150,15 @@ function savedataTime() {
 		var m = d.getMinutes();
 		h = h < 10 ? '0' + h : h;
 		m = m < 10 ? '0' + m : m;
-		setEditorTip('Êı¾İÒÑÓÚ ' + h + ':' + m + ' ±£´æ');
+		setEditorTip('æ•¸æ“šå·²æ–¼ ' + h + ':' + m + ' ä¿å­˜');
 	}
-	$(editorid + '_svdsecond').innerHTML = '<a title="µã»÷¹Ø±Õ×Ô¶¯±£´æ" href="javascript:;" onclick="setAutosave()">' + savedatac + ' Ãëºó±£´æ</a> ';
+	$(editorid + '_svdsecond').innerHTML = '<a title="é»æ“Šé—œé–‰è‡ªå‹•ä¿å­˜" href="javascript:;" onclick="setAutosave()">' + savedatac + ' ç§’å¾Œä¿å­˜</a> ';
 	savedatac -= 10;
 }
 
 function setAutosave() {
 	autosave = !autosave;
-	setEditorTip(autosave ? 'Êı¾İ×Ô¶¯±£´æÒÑ¿ªÆô' : 'Êı¾İ×Ô¶¯±£´æÒÑ¹Ø±Õ');
+	setEditorTip(autosave ? 'æ•¸æ“šè‡ªå‹•ä¿å­˜å·²é–‹å•Ÿ' : 'æ•¸æ“šè‡ªå‹•ä¿å­˜å·²é—œé–‰');
 	setcookie('editorautosave_' + editorid, autosave ? 1 : -1, 2592000);
 	savedataTime();
 }
@@ -314,14 +314,14 @@ function editorfull(op) {
 		editorisfull = 0;
 		editorcontrolpos();
 	}
-	$(editorid + '_fullswitcher').innerHTML = editorisfull ? '·µ»Ø' : 'È«ÆÁ';
+	$(editorid + '_fullswitcher').innerHTML = editorisfull ? 'è¿”å›' : 'å…¨å±';
 	initcstbar();
 }
 
 function editorsimple() {
 	if($(editorid + '_body').className == 'edt') {
 		v = 'none';
-		$(editorid + '_simple').innerHTML = '¸ß¼¶';
+		$(editorid + '_simple').innerHTML = 'é«˜ç´š';
 		$(editorid + '_body').className = 'edt simpleedt';
 		$(editorid + '_adv_s1').className = 'b2r';
 		$(editorid + '_adv_s2').className = 'b2r nbl';
@@ -331,7 +331,7 @@ function editorsimple() {
 		simplodemode = 1;
 	} else {
 		v = '';
-		$(editorid + '_simple').innerHTML = '³£ÓÃ';
+		$(editorid + '_simple').innerHTML = 'å¸¸ç”¨';
 		$(editorid + '_body').className = 'edt';
 		$(editorid + '_adv_s1').className = 'b1r';
 		$(editorid + '_adv_s2').className = 'b2r nbr nbl';
@@ -474,7 +474,7 @@ function checkFocus() {
 
 function checklength(theform) {
 	var message = wysiwyg ? html2bbcode(getEditorContents()) : (!theform.parseurloff.checked ? parseurl(theform.message.value) : theform.message.value);
-	showDialog('µ±Ç°³¤¶È: ' + mb_strlen(message) + ' ×Ö½Ú£¬' + (postmaxchars != 0 ? 'ÏµÍ³ÏŞÖÆ: ' + postminchars + ' µ½ ' + postmaxchars + ' ×Ö½Ú¡£' : ''), 'notice', '×ÖÊı¼ì²é');
+	showDialog('ç•¶å‰é•·åº¦: ' + mb_strlen(message) + ' å­—ç¯€ï¼Œ' + (postmaxchars != 0 ? 'ç³»çµ±é™åˆ¶: ' + postminchars + ' åˆ° ' + postmaxchars + ' å­—ç¯€ã€‚' : ''), 'notice', 'å­—æ•¸æª¢æŸ¥');
 }
 
 function setUnselectable(obj) {
@@ -808,7 +808,7 @@ function discuzcode(cmd, arg) {
 		} else {
 			insertText(opentag + closetag, opentag.length, closetag.length);
 
-			while(listvalue = prompt('ÊäÈëÒ»¸öÁĞ±íÏîÄ¿.\r\nÁô¿Õ»òÕßµã»÷È¡ÏûÍê³É´ËÁĞ±í.', '')) {
+			while(listvalue = prompt('è¼¸å…¥ä¸€å€‹åˆ—è¡¨é …ç›®.\r\nç•™ç©ºæˆ–è€…é»æ“Šå–æ¶ˆå®Œæˆæ­¤åˆ—è¡¨.', '')) {
 				if(BROWSER.opera > 8) {
 					listvalue = '\n' + '[*]' + listvalue;
 					insertText(listvalue, strlen(listvalue) + 1, 0);
@@ -842,18 +842,18 @@ function discuzcode(cmd, arg) {
 		}
 	} else if(cmd == 'rst') {
 		loadData();
-		setEditorTip('Êı¾İÒÑ»Ö¸´');
+		setEditorTip('æ•¸æ“šå·²æ¢å¾©');
 	} else if(cmd == 'svd') {
 		saveData();
-		setEditorTip('Êı¾İÒÑ±£´æ');
+		setEditorTip('æ•¸æ“šå·²ä¿å­˜');
 	} else if(cmd == 'chck') {
 		checklength(editorform);
 	} else if(cmd == 'tpr') {
-		if(confirm('ÄúÈ·ÈÏÒªÇå³ıËùÓĞÄÚÈİÂğ£¿')) {
+		if(confirm('æ‚¨ç¢ºèªè¦æ¸…é™¤æ‰€æœ‰å…§å®¹å—ï¼Ÿ')) {
 			clearContent();
 		}
 	} else if(cmd == 'downremoteimg') {
-		showDialog('<div id="remotedowninfo"><p class="mbn">ÕıÔÚÏÂÔØÔ¶³Ì¸½¼ş£¬ÇëÉÔµÈ¡­¡­</p><p><img src="' + STATICURL + 'image/common/uploading.gif" alt="" /></p></div>', 'notice', '', null, 1);
+		showDialog('<div id="remotedowninfo"><p class="mbn">æ­£åœ¨ä¸‹è¼‰é ç¨‹é™„ä»¶ï¼Œè«‹ç¨ç­‰â€¦â€¦</p><p><img src="' + STATICURL + 'image/common/uploading.gif" alt="" /></p></div>', 'notice', '', null, 1);
 		var message = wysiwyg ? html2bbcode(getEditorContents()) : (!editorform.parseurloff.checked ? parseurl(editorform.message.value) : editorform.message.value);
 		var oldValidate = editorform.onsubmit;
 		var oldAction = editorform.action;
@@ -919,7 +919,7 @@ function setContext(cmd) {
 	} else if(fs == null) {
 		fs = '';
 	}
-	fs = fs && cmd != 'clear' ? fs : '×ÖÌå';
+	fs = fs && cmd != 'clear' ? fs : 'å­—é«”';
 	if(fs != $(editorid + '_font').fontstate) {
 		thingy = fs.indexOf(',') > 0 ? fs.substr(0, fs.indexOf(',')) : fs;
 		$(editorid + '_font').innerHTML = thingy;
@@ -979,7 +979,7 @@ function formatFontsize(csssize) {
 		case '24pt': return 6;
 		case '48px':
 		case '36pt': return 7;
-		default: return '´óĞ¡';
+		default: return 'å¤§å°';
 	}
 }
 
@@ -1024,8 +1024,8 @@ function showEditorMenu(tag, params) {
 	} else {
 		switch(tag) {
 			case 'url':
-				str = 'ÇëÊäÈëÁ´½ÓµØÖ·:<br /><input type="text" id="' + ctrlid + '_param_1" style="width: 98%" value="" class="px" />'+
-					(selection ? '' : '<br />ÇëÊäÈëÁ´½ÓÎÄ×Ö:<br /><input type="text" id="' + ctrlid + '_param_2" style="width: 98%" value="" class="px" />');
+				str = 'è«‹è¼¸å…¥éˆæ¥åœ°å€:<br /><input type="text" id="' + ctrlid + '_param_1" style="width: 98%" value="" class="px" />'+
+					(selection ? '' : '<br />è«‹è¼¸å…¥éˆæ¥æ–‡å­—:<br /><input type="text" id="' + ctrlid + '_param_2" style="width: 98%" value="" class="px" />');
 				break;
 			case 'forecolor':
 				showColorBox(ctrlid, 1);
@@ -1048,26 +1048,26 @@ function showEditorMenu(tag, params) {
 				if(selection) {
 					return insertText((opentag + selection + closetag), strlen(opentag), strlen(closetag), true, sel);
 				}
-				var lang = {'quote' : 'ÇëÊäÈëÒª²åÈëµÄÒıÓÃ', 'code' : 'ÇëÊäÈëÒª²åÈëµÄ´úÂë', 'hide' : 'ÇëÊäÈëÒªÒş²ØµÄĞÅÏ¢ÄÚÈİ', 'free' : 'Èç¹ûÄúÉèÖÃÁËÌû×ÓÊÛ¼Û£¬ÇëÊäÈë¹ºÂòÇ°Ãâ·Ñ¿É¼ûµÄĞÅÏ¢ÄÚÈİ'};
+				var lang = {'quote' : 'è«‹è¼¸å…¥è¦æ’å…¥çš„å¼•ç”¨', 'code' : 'è«‹è¼¸å…¥è¦æ’å…¥çš„ä»£ç¢¼', 'hide' : 'è«‹è¼¸å…¥è¦éš±è—çš„ä¿¡æ¯å…§å®¹', 'free' : 'å¦‚æœæ‚¨è¨­ç½®äº†å¸–å­å”®åƒ¹ï¼Œè«‹è¼¸å…¥è³¼è²·å‰å…è²»å¯è¦‹çš„ä¿¡æ¯å…§å®¹'};
 				str += lang[tag] + ':<br /><textarea id="' + ctrlid + '_param_1" style="width: 98%" cols="50" rows="5" class="txtarea"></textarea>' +
-					(tag == 'hide' ? '<br /><label><input type="radio" name="' + ctrlid + '_radio" id="' + ctrlid + '_radio_1" class="pc" checked="checked" />Ö»ÓĞµ±ä¯ÀÀÕß»Ø¸´±¾ÌûÊ±²ÅÏÔÊ¾</label><br /><label><input type="radio" name="' + ctrlid + '_radio" id="' + ctrlid + '_radio_2" class="pc" />Ö»ÓĞµ±ä¯ÀÀÕß»ı·Ö¸ßÓÚ</label> <input type="text" size="3" id="' + ctrlid + '_param_2" class="px pxs" /> Ê±²ÅÏÔÊ¾<br /><br /><label>ÓĞĞ§ÌìÊı:</label> <input type="text" size="3" id="' + ctrlid + '_param_3" class="px pxs" /> <br />¾àÀë·¢ÌûÈÕÆÚ´óÓÚÕâ¸öÌìÊıÊ±±êÇ©×Ô¶¯Ê§Ğ§' : '');
+					(tag == 'hide' ? '<br /><label><input type="radio" name="' + ctrlid + '_radio" id="' + ctrlid + '_radio_1" class="pc" checked="checked" />åªæœ‰ç•¶ç€è¦½è€…å›å¾©æœ¬å¸–æ™‚æ‰é¡¯ç¤º</label><br /><label><input type="radio" name="' + ctrlid + '_radio" id="' + ctrlid + '_radio_2" class="pc" />åªæœ‰ç•¶ç€è¦½è€…ç©åˆ†é«˜æ–¼</label> <input type="text" size="3" id="' + ctrlid + '_param_2" class="px pxs" /> æ™‚æ‰é¡¯ç¤º<br /><br /><label>æœ‰æ•ˆå¤©æ•¸:</label> <input type="text" size="3" id="' + ctrlid + '_param_3" class="px pxs" /> <br />è·é›¢ç™¼å¸–æ—¥æœŸå¤§æ–¼é€™å€‹å¤©æ•¸æ™‚æ¨™ç±¤è‡ªå‹•å¤±æ•ˆ' : '');
 				break;
 			case 'tbl':
-				str = '<p class="pbn">±í¸ñĞĞÊı: <input type="text" id="' + ctrlid + '_param_1" size="2" value="2" class="px" /> &nbsp; ±í¸ñÁĞÊı: <input type="text" id="' + ctrlid + '_param_2" size="2" value="2" class="px" /></p><p class="pbn">±í¸ñ¿í¶È: <input type="text" id="' + ctrlid + '_param_3" size="2" value="" class="px" /> &nbsp; ±³¾°ÑÕÉ«: <input type="text" id="' + ctrlid + '_param_4" size="2" class="px" onclick="showColorBox(this.id, 2)" /></p><p class="xg2 pbn" style="cursor:pointer" onclick="showDialog($(\'tbltips_msg\').innerHTML, \'notice\', \'Ğ¡ÌáÊ¾\', null, 0)"><img id="tbltips" title="Ğ¡ÌáÊ¾" class="vm" src="' + IMGDIR + '/info_small.gif"> ¿ìËÙÊéĞ´±í¸ñÌáÊ¾</p>';
-				str += '<div id="tbltips_msg" style="display: none">¡°[tr=ÑÕÉ«]¡± ¶¨ÒåĞĞ±³¾°<br />¡°[td=¿í¶È]¡± ¶¨ÒåÁĞ¿í<br />¡°[td=ÁĞ¿ç¶È,ĞĞ¿ç¶È,¿í¶È]¡± ¶¨ÒåĞĞÁĞ¿ç¶È<br /><br />¿ìËÙÊéĞ´±í¸ñ·¶Àı£º<div class=\'xs0\' style=\'margin:0 5px\'>[table]<br />Name:|Discuz!<br />Version:|X1<br />[/table]</div>ÓÃ¡°|¡±·Ö¸ôÃ¿Ò»ÁĞ£¬±í¸ñÖĞÈçÓĞ¡°|¡±ÓÃ¡°\\|¡±´úÌæ£¬»»ĞĞÓÃ¡°\\n¡±´úÌæ¡£</div>';
+				str = '<p class="pbn">è¡¨æ ¼è¡Œæ•¸: <input type="text" id="' + ctrlid + '_param_1" size="2" value="2" class="px" /> &nbsp; è¡¨æ ¼åˆ—æ•¸: <input type="text" id="' + ctrlid + '_param_2" size="2" value="2" class="px" /></p><p class="pbn">è¡¨æ ¼å¯¬åº¦: <input type="text" id="' + ctrlid + '_param_3" size="2" value="" class="px" /> &nbsp; èƒŒæ™¯é¡è‰²: <input type="text" id="' + ctrlid + '_param_4" size="2" class="px" onclick="showColorBox(this.id, 2)" /></p><p class="xg2 pbn" style="cursor:pointer" onclick="showDialog($(\'tbltips_msg\').innerHTML, \'notice\', \'å°æç¤º\', null, 0)"><img id="tbltips" title="å°æç¤º" class="vm" src="' + IMGDIR + '/info_small.gif"> å¿«é€Ÿæ›¸å¯«è¡¨æ ¼æç¤º</p>';
+				str += '<div id="tbltips_msg" style="display: none">ã€Œ[tr=é¡è‰²]ã€ å®šç¾©è¡ŒèƒŒæ™¯<br />ã€Œ[td=å¯¬åº¦]ã€ å®šç¾©åˆ—å¯¬<br />ã€Œ[td=åˆ—è·¨åº¦,è¡Œè·¨åº¦,å¯¬åº¦]ã€ å®šç¾©è¡Œåˆ—è·¨åº¦<br /><br />å¿«é€Ÿæ›¸å¯«è¡¨æ ¼ç¯„ä¾‹ï¼š<div class=\'xs0\' style=\'margin:0 5px\'>[table]<br />Name:|Discuz!<br />Version:|X1<br />[/table]</div>ç”¨ã€Œ|ã€åˆ†éš”æ¯ä¸€åˆ—ï¼Œè¡¨æ ¼ä¸­å¦‚æœ‰ã€Œ|ã€ç”¨ã€Œ\\|ã€ä»£æ›¿ï¼Œæ›è¡Œç”¨ã€Œ\\nã€ä»£æ›¿ã€‚</div>';
 				break;
 			case 'aud':
-				str = '<p class="pbn">ÇëÊäÈëÒôÀÖÎÄ¼şµØÖ·:</p><p class="pbn"><input type="text" id="' + ctrlid + '_param_1" class="px" value="" style="width: 220px;" /></p><p class="xg2 pbn">Ö§³Ö wma mp3 ra rm µÈÒôÀÖ¸ñÊ½<br />Ê¾Àı: http://server/audio.wma</p>';
+				str = '<p class="pbn">è«‹è¼¸å…¥éŸ³æ¨‚æ–‡ä»¶åœ°å€:</p><p class="pbn"><input type="text" id="' + ctrlid + '_param_1" class="px" value="" style="width: 220px;" /></p><p class="xg2 pbn">æ”¯æŒ wma mp3 ra rm ç­‰éŸ³æ¨‚æ ¼å¼<br />ç¤ºä¾‹: http://server/audio.wma</p>';
 				break;
 			case 'vid':
-				str = '<p class="pbn">ÇëÊäÈëÊÓÆµµØÖ·:</p><p class="pbn"><input type="text" value="" id="' + ctrlid + '_param_1" style="width: 220px;" class="px" /></p><p class="pbn">¿í: <input id="' + ctrlid + '_param_2" size="5" value="500" class="px" /> &nbsp; ¸ß: <input id="' + ctrlid + '_param_3" size="5" value="375" class="px" /></p><p class="xg2 pbn">Ö§³ÖÓÅ¿á¡¢ÍÁ¶¹¡¢56¡¢¿á6µÈÊÓÆµÕ¾µÄÊÓÆµÍøÖ·<br />Ö§³Ö wmv avi rmvb mov swf flv µÈÊÓÆµ¸ñÊ½<br />Ê¾Àı: http://server/movie.wmv</p>';
+				str = '<p class="pbn">è«‹è¼¸å…¥è¦–é »åœ°å€:</p><p class="pbn"><input type="text" value="" id="' + ctrlid + '_param_1" style="width: 220px;" class="px" /></p><p class="pbn">å¯¬: <input id="' + ctrlid + '_param_2" size="5" value="500" class="px" /> &nbsp; é«˜: <input id="' + ctrlid + '_param_3" size="5" value="375" class="px" /></p><p class="xg2 pbn">æ”¯æŒå„ªé…·ã€åœŸè±†ã€56ã€é…·6ç­‰è¦–é »ç«™çš„è¦–é »ç¶²å€<br />æ”¯æŒ wmv avi rmvb mov swf flv ç­‰è¦–é »æ ¼å¼<br />ç¤ºä¾‹: http://server/movie.wmv</p>';
 				break;
 			case 'fls':
-				str = '<p class="pbn">ÇëÊäÈë Flash ÎÄ¼şµØÖ·:</p><p class="pbn"><input type="text" id="' + ctrlid + '_param_1" class="px" value="" style="width: 220px;" /></p><p class="pbn">¿í: <input id="' + ctrlid + '_param_2" size="5" value="" class="px" /> &nbsp; ¸ß: <input id="' + ctrlid + '_param_3" size="5" value="" class="px" /></p><p class="xg2 pbn">Ö§³Ö swf flv µÈ Flash ÍøÖ·<br />Ê¾Àı: http://server/flash.swf</p>';
+				str = '<p class="pbn">è«‹è¼¸å…¥ Flash æ–‡ä»¶åœ°å€:</p><p class="pbn"><input type="text" id="' + ctrlid + '_param_1" class="px" value="" style="width: 220px;" /></p><p class="pbn">å¯¬: <input id="' + ctrlid + '_param_2" size="5" value="" class="px" /> &nbsp; é«˜: <input id="' + ctrlid + '_param_3" size="5" value="" class="px" /></p><p class="xg2 pbn">æ”¯æŒ swf flv ç­‰ Flash ç¶²å€<br />ç¤ºä¾‹: http://server/flash.swf</p>';
 				break;
 			case 'pasteword':
-				stitle = '´Ó Word Õ³ÌùÄÚÈİ';
-				str = '<p class="px" style="height:300px"><iframe id="' + ctrlid + '_param_1" frameborder="0" style="width:100%;height:100%" onload="this.contentWindow.document.body.style.width=\'550px\';this.contentWindow.document.body.contentEditable=true;this.contentWindow.document.body.focus();this.onload=null"></iframe></p><p class="xg2 pbn">ÇëÍ¨¹ı¿ì½İ¼ü(Ctrl+V)°Ñ Word ÎÄ¼şÖĞµÄÄÚÈİÕ³Ìùµ½ÉÏ·½</p>';
+				stitle = 'å¾ Word ç²˜è²¼å…§å®¹';
+				str = '<p class="px" style="height:300px"><iframe id="' + ctrlid + '_param_1" frameborder="0" style="width:100%;height:100%" onload="this.contentWindow.document.body.style.width=\'550px\';this.contentWindow.document.body.contentEditable=true;this.contentWindow.document.body.focus();this.onload=null"></iframe></p><p class="xg2 pbn">è«‹é€šéå¿«æ·éµ(Ctrl+V)æŠŠ Word æ–‡ä»¶ä¸­çš„å…§å®¹ç²˜è²¼åˆ°ä¸Šæ–¹</p>';
 				menuwidth = 600;
 				menupos = '00';
 				menutype = 'win';
@@ -1089,7 +1089,7 @@ function showEditorMenu(tag, params) {
 					var promptlang = custombbcodes[tag]['prompt'].split("\t");
 					for(var i = 1; i <= params; i++) {
 						if(i != params || !haveSel) {
-							str += (promptlang[i - 1] ? promptlang[i - 1] : 'ÇëÊäÈëµÚ ' + i + ' ¸ö²ÎÊı:') + '<br /><input type="text" id="' + ctrlid + '_param_' + i + '" style="width: 98%" value="" class="px" />' + (i < params ? '<br />' : '');
+							str += (promptlang[i - 1] ? promptlang[i - 1] : 'è«‹è¼¸å…¥ç¬¬ ' + i + ' å€‹åƒæ•¸:') + '<br /><input type="text" id="' + ctrlid + '_param_' + i + '" style="width: 98%" value="" class="px" />' + (i < params ? '<br />' : '');
 						}
 					}
 				}
@@ -1104,11 +1104,11 @@ function showEditorMenu(tag, params) {
 		if(menupos == '00') {
 			menu.className = 'fwinmask';
 			s = '<table width="100%" cellpadding="0" cellspacing="0" class="fwin"><tr><td class="t_l"></td><td class="t_c"></td><td class="t_r"></td></tr><tr><td class="m_l">&nbsp;&nbsp;</td><td class="m_c">'
-				+ '<h3 class="flb"><em>' + stitle + '</em><span><a onclick="hideMenu(\'\', \'win\');return false;" class="flbc" href="javascript:;">¹Ø±Õ</a></span></h3><div class="c">' + str + '</div>'
-				+ '<p class="o pns"><button type="submit" id="' + ctrlid + '_submit" class="pn pnc"><strong>Ìá½»</strong></button></p>'
+				+ '<h3 class="flb"><em>' + stitle + '</em><span><a onclick="hideMenu(\'\', \'win\');return false;" class="flbc" href="javascript:;">é—œé–‰</a></span></h3><div class="c">' + str + '</div>'
+				+ '<p class="o pns"><button type="submit" id="' + ctrlid + '_submit" class="pn pnc"><strong>æäº¤</strong></button></p>'
 				+ '</td><td class="m_r"></td></tr><tr><td class="b_l"></td><td class="b_c"></td><td class="b_r"></td></tr></table>';
 		} else {
-			s = '<div class="p_opt cl"><span class="y" style="margin:-10px -10px 0 0"><a onclick="hideMenu();return false;" class="flbc" href="javascript:;">¹Ø±Õ</a></span><div>' + str + '</div><div class="pns mtn"><button type="submit" id="' + ctrlid + '_submit" class="pn pnc"><strong>Ìá½»</strong></button></div></div>';
+			s = '<div class="p_opt cl"><span class="y" style="margin:-10px -10px 0 0"><a onclick="hideMenu();return false;" class="flbc" href="javascript:;">é—œé–‰</a></span><div>' + str + '</div><div class="pns mtn"><button type="submit" id="' + ctrlid + '_submit" class="pn pnc"><strong>æäº¤</strong></button></div></div>';
 		}
 		menu.innerHTML = s;
 		$(editorid + '_editortoolbar').appendChild(menu);

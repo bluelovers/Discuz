@@ -1250,7 +1250,7 @@ if($_GET['action'] == 'votepoll' && submitcheck('pollsubmit', 1)) {
 	$applylist = array();
 	$query = C::t('forum_activityapply')->fetch_all_for_thread($_G['tid'], 0, 2000, 0, 1);
 	foreach($query as $apply) {
-		$apply = str_replace(',', '£¬', $apply);
+		$apply = str_replace(',', 'ï¼Œ', $apply);
 		$apply['dateline'] = dgmdate($apply['dateline'], 'dt');
 		$apply['ufielddata'] = !empty($apply['ufielddata']) ? dunserialize($apply['ufielddata']) : '';
 		$ufielddata = '';

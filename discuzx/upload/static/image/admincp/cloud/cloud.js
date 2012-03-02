@@ -100,11 +100,11 @@ function ajaxShowAPIStatus(apiType, ips) {
 		var apiTdFirst = document.createElement('td');
 		apiTdFirst.className = 'td24';
 		if (!apiType || apiType == 1) {
-			apiTdFirst.innerHTML = '<strong>ÔÆÆ½Ì¨ÆäËû½Ó¿Ú²âÊÔ</strong>';
+			apiTdFirst.innerHTML = '<strong>é›²å¹³å°å…¶ä»–æ¥å£æ¸¬è©¦</strong>';
 		} else if (apiType == 2) {
-			apiTdFirst.innerHTML = '<strong>ÂşÓÎÆäËû½Ó¿Ú²âÊÔ</strong>';
+			apiTdFirst.innerHTML = '<strong>æ¼«éŠå…¶ä»–æ¥å£æ¸¬è©¦</strong>';
 		} else if (apiType == 3) {
-			apiTdFirst.innerHTML = '<strong>QQ»¥Áª½Ó¿Ú²âÊÔ</strong>';
+			apiTdFirst.innerHTML = '<strong>QQäº’è¯æ¥å£æ¸¬è©¦</strong>';
 		}
 
 		var apiTdSecond = document.createElement('td');
@@ -141,7 +141,7 @@ function siteTestApiCallback(returnInfo, siteTestPosition) {
 	}
 
 	if (typeof returnInfo == 'undefined' || !returnInfo) {
-		$('cloud_doctor_site_test_result_div').innerHTML = '<img align="absmiddle" src="static/image/admincp/cloud/wrong.gif" /> ·şÎñÆ÷·±Ã¦£¬ÇëÉÔºóÔÙÊÔ';
+		$('cloud_doctor_site_test_result_div').innerHTML = '<img align="absmiddle" src="static/image/admincp/cloud/wrong.gif" /> æœå‹™å™¨ç¹å¿™ï¼Œè«‹ç¨å¾Œå†è©¦';
 		return false;
 	}
 
@@ -152,7 +152,7 @@ function siteTestApiCallback(returnInfo, siteTestPosition) {
 		return false;
 	}
 
-	$('cloud_doctor_site_test_result_div').innerHTML = '<img align="absmiddle" src="static/image/admincp/cloud/right.gif" /> ²âÊÔ³É¹¦£¬ºÄÊ± ' + returnInfo.result.timeUsed + ' Ãë';
+	$('cloud_doctor_site_test_result_div').innerHTML = '<img align="absmiddle" src="static/image/admincp/cloud/right.gif" /> æ¸¬è©¦æˆåŠŸï¼Œè€—æ™‚ ' + returnInfo.result.timeUsed + ' ç§’';
 	if (siteTestPosition == 'open') {
 		$('submit_submit').style.color = '#000';
 		$('submit_submit').disabled = false;

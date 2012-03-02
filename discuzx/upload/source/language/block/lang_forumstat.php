@@ -13,37 +13,37 @@ if(!defined('IN_DISCUZ')) {
 
 $lang = array
 (
-	'forumstat_name' => 'ÂÛÌ³Í³¼Æ',
-	'forumstat_desc' => 'ÂÛÌ³Í³¼ÆÊý¾Ýµ÷ÓÃ',
-	'forumstat_forums_allow' => 'ÏÔÊ¾°æ¿éÊýÍ³¼Æ',
-	'forumstat_forums_order' => '°æ¿éÊýÍ³¼ÆÏÔÊ¾Ë³Ðò',
-	'forumstat_forums_text' => '°æ¿éÊýÍ³¼ÆÌáÊ¾ÎÄ×Ö',
-	'forumstat_forums_default' => '°æ¿éÊý:',
+	'forumstat_name' => 'è«–å£‡çµ±è¨ˆ',
+	'forumstat_desc' => 'è«–å£‡çµ±è¨ˆæ•¸æ“šèª¿ç”¨',
+	'forumstat_forums_allow' => 'é¡¯ç¤ºç‰ˆå¡Šæ•¸çµ±è¨ˆ',
+	'forumstat_forums_order' => 'ç‰ˆå¡Šæ•¸çµ±è¨ˆé¡¯ç¤ºé †åº',
+	'forumstat_forums_text' => 'ç‰ˆå¡Šæ•¸çµ±è¨ˆæç¤ºæ–‡å­—',
+	'forumstat_forums_default' => 'ç‰ˆå¡Šæ•¸:',
 
-	'forumstat_threads_allow' => 'ÏÔÊ¾Ö÷ÌâÊýÍ³¼Æ',
-	'forumstat_threads_order' => 'Ö÷ÌâÊýÍ³¼ÆÏÔÊ¾Ë³Ðò',
-	'forumstat_threads_text' => 'Ö÷ÌâÊýÍ³¼ÆÌáÊ¾ÎÄ×Ö',
-	'forumstat_threads_default' => 'Ö÷ÌâÊý:',
+	'forumstat_threads_allow' => 'é¡¯ç¤ºä¸»é¡Œæ•¸çµ±è¨ˆ',
+	'forumstat_threads_order' => 'ä¸»é¡Œæ•¸çµ±è¨ˆé¡¯ç¤ºé †åº',
+	'forumstat_threads_text' => 'ä¸»é¡Œæ•¸çµ±è¨ˆæç¤ºæ–‡å­—',
+	'forumstat_threads_default' => 'ä¸»é¡Œæ•¸:',
 
-	'forumstat_posts_allow' => 'ÏÔÊ¾Ìû×ÓÊýÍ³¼Æ',
-	'forumstat_posts_order' => 'Ìû×ÓÊýÍ³¼ÆÏÔÊ¾Ë³Ðò',
-	'forumstat_posts_text' => 'Ìû×ÓÊýÍ³¼ÆÌáÊ¾ÎÄ×Ö',
-	'forumstat_posts_default' => 'Ìû×ÓÊý:',
+	'forumstat_posts_allow' => 'é¡¯ç¤ºå¸–å­æ•¸çµ±è¨ˆ',
+	'forumstat_posts_order' => 'å¸–å­æ•¸çµ±è¨ˆé¡¯ç¤ºé †åº',
+	'forumstat_posts_text' => 'å¸–å­æ•¸çµ±è¨ˆæç¤ºæ–‡å­—',
+	'forumstat_posts_default' => 'å¸–å­æ•¸:',
 
-	'forumstat_members_allow' => 'ÏÔÊ¾ÓÃ»§ÊýÍ³¼Æ',
-	'forumstat_members_order' => 'ÓÃ»§ÊýÍ³¼ÆÏÔÊ¾Ë³Ðò',
-	'forumstat_members_text' => 'ÓÃ»§ÊýÍ³¼ÆÌáÊ¾ÎÄ×Ö',
-	'forumstat_members_default' => 'ÓÃ»§Êý:',
+	'forumstat_members_allow' => 'é¡¯ç¤ºç”¨æˆ¶æ•¸çµ±è¨ˆ',
+	'forumstat_members_order' => 'ç”¨æˆ¶æ•¸çµ±è¨ˆé¡¯ç¤ºé †åº',
+	'forumstat_members_text' => 'ç”¨æˆ¶æ•¸çµ±è¨ˆæç¤ºæ–‡å­—',
+	'forumstat_members_default' => 'ç”¨æˆ¶æ•¸:',
 
-	'forumstat_online_allow' => 'ÏÔÊ¾ÔÚÏßÈËÊýÍ³¼Æ',
-	'forumstat_online_order' => 'ÔÚÏßÈËÊýÍ³¼ÆÏÔÊ¾Ë³Ðò',
-	'forumstat_online_text' => 'ÔÚÏßÈËÊýÍ³¼ÆÌáÊ¾ÎÄ×Ö',
-	'forumstat_online_default' => 'ÔÚÏßÈËÊý:',
+	'forumstat_online_allow' => 'é¡¯ç¤ºåœ¨ç·šäººæ•¸çµ±è¨ˆ',
+	'forumstat_online_order' => 'åœ¨ç·šäººæ•¸çµ±è¨ˆé¡¯ç¤ºé †åº',
+	'forumstat_online_text' => 'åœ¨ç·šäººæ•¸çµ±è¨ˆæç¤ºæ–‡å­—',
+	'forumstat_online_default' => 'åœ¨ç·šäººæ•¸:',
 
-	'forumstat_onlinemember_allow' => 'ÏÔÊ¾ÔÚÏß»áÔ±Í³¼Æ',
-	'forumstat_onlinemember_order' => 'ÔÚÏß»áÔ±Í³¼ÆÏÔÊ¾Ë³Ðò',
-	'forumstat_onlinemember_text' => 'ÔÚÏß»áÔ±Í³¼ÆÌáÊ¾ÎÄ×Ö',
-	'forumstat_onlinemember_default' => 'ÔÚÏß»áÔ±:',
+	'forumstat_onlinemember_allow' => 'é¡¯ç¤ºåœ¨ç·šæœƒå“¡çµ±è¨ˆ',
+	'forumstat_onlinemember_order' => 'åœ¨ç·šæœƒå“¡çµ±è¨ˆé¡¯ç¤ºé †åº',
+	'forumstat_onlinemember_text' => 'åœ¨ç·šæœƒå“¡çµ±è¨ˆæç¤ºæ–‡å­—',
+	'forumstat_onlinemember_default' => 'åœ¨ç·šæœƒå“¡:',
 );
 
 ?>

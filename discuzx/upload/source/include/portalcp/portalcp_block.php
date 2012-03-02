@@ -624,12 +624,12 @@ if($op == 'block') {
 				C::t('forum_thread')->update($item['id'], $data);
 			}
 			if($_POST['icflag'] && !(C::t('common_block_pic')->count_by_bid_pic($block['bid'], $thumbpath))) {
-				$picflag = 0; //common_block_pic±íÖĞµÄpicflag±êÊ¶£¨0±¾µØ£¬1Ô¶³Ì£©
+				$picflag = 0; //common_block_picè¡¨ä¸­çš„picflagæ¨™è­˜ï¼ˆ0æœ¬åœ°ï¼Œ1é ç¨‹ï¼‰
 				if($_G['setting']['ftp']['on']) {
 					$ftp = & discuz_ftp::instance();
 					$ftp->connect();
 					if($ftp->connectid && $ftp->ftp_size($thumbpath) > 0 || $ftp->upload($_G['setting']['attachurl'].'/'.$thumbpath, $thumbpath)) {
-						$picflag = 1; //common_block_pic±íÖĞµÄpicflag±êÊ¶£¨0±¾µØ£¬1Ô¶³Ì£©
+						$picflag = 1; //common_block_picè¡¨ä¸­çš„picflagæ¨™è­˜ï¼ˆ0æœ¬åœ°ï¼Œ1é ç¨‹ï¼‰
 						@unlink($_G['setting']['attachdir'].'./'.$thumbpath);
 					}
 				}

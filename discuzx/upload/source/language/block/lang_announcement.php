@@ -13,11 +13,11 @@ if(!defined('IN_DISCUZ')) {
 
 $lang = array
 (
-	'announcement_type' => '公告类型',
-	'announcement_type_text' => '文字公告',
-	'announcement_type_link' => '网站链接',
-	'announcement_titlelength' => '标题长度',
-	'announcement_summarylength' => '内容长度',
-	'announcement_startrow' => '起始位置',
+	'announcement_type' => '鍏憡椤炲瀷',
+	'announcement_type_text' => '鏂囧瓧鍏憡',
+	'announcement_type_link' => '缍茬珯閺堟帴',
+	'announcement_titlelength' => '妯欓闀峰害',
+	'announcement_summarylength' => '鍏у闀峰害',
+	'announcement_startrow' => '璧峰浣嶇疆',
 );
 ?>

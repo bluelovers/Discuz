@@ -14,44 +14,44 @@ if(!defined('IN_DISCUZ')) {
 $sql = <<<EOF
 
 CREATE TABLE IF NOT EXISTS `pre_security_evilpost` (
-  `pid` int(10) unsigned NOT NULL COMMENT 'Ìû×ÓID',
-  `tid` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT 'Ö÷ÌâID',
-  `type` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Ìû×ÓÀàÐÍ',
-  `evilcount` int(10) NOT NULL DEFAULT '0' COMMENT '¶ñÒâ´ÎÊý',
-  `eviltype` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT '¶ñÒâÀàÐÍ',
-  `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '´´½¨Ê±¼ä',
-  `operateresult` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '²Ù×÷½á¹û£º1 Í¨¹ý 2 É¾³ý 3 ºöÂÔ',
-  `isreported` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'ÊÇ·ñÒÑ¾­ÉÏ±¨',
+  `pid` int(10) unsigned NOT NULL COMMENT 'å¸–å­ID',
+  `tid` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT 'ä¸»é¡ŒID',
+  `type` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'å¸–å­é¡žåž‹',
+  `evilcount` int(10) NOT NULL DEFAULT '0' COMMENT 'æƒ¡æ„æ¬¡æ•¸',
+  `eviltype` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT 'æƒ¡æ„é¡žåž‹',
+  `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'å‰µå»ºæ™‚é–“',
+  `operateresult` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT 'æ“ä½œçµæžœï¼š1 é€šéŽ 2 åˆªé™¤ 3 å¿½ç•¥',
+  `isreported` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'æ˜¯å¦å·²ç¶“ä¸Šå ±',
   PRIMARY KEY (`pid`),
   KEY `type` (`tid`,`type`),
   KEY `operateresult` (`operateresult`,`createtime`)
 ) ENGINE=MyISAM;
 
 CREATE TABLE IF NOT EXISTS `pre_security_eviluser` (
-  `uid` int(10) unsigned NOT NULL COMMENT 'ÓÃ»§ID',
-  `evilcount` int(10) NOT NULL DEFAULT '0' COMMENT '¶ñÒâ´ÎÊý',
-  `eviltype` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT '¶ñÒâÀàÐÍ',
-  `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '´´½¨Ê±¼ä',
-  `operateresult` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '²Ù×÷½á¹û£º1 »Ö¸´ 2 É¾³ý 3 ºöÂÔ',
-  `isreported` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'ÊÇ·ñÒÑ¾­ÉÏ±¨',
+  `uid` int(10) unsigned NOT NULL COMMENT 'ç”¨æˆ¶ID',
+  `evilcount` int(10) NOT NULL DEFAULT '0' COMMENT 'æƒ¡æ„æ¬¡æ•¸',
+  `eviltype` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT 'æƒ¡æ„é¡žåž‹',
+  `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'å‰µå»ºæ™‚é–“',
+  `operateresult` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT 'æ“ä½œçµæžœï¼š1 æ¢å¾© 2 åˆªé™¤ 3 å¿½ç•¥',
+  `isreported` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'æ˜¯å¦å·²ç¶“ä¸Šå ±',
   PRIMARY KEY (`uid`),
   KEY `operateresult` (`operateresult`,`createtime`)
 ) ENGINE=MyISAM;
 
 CREATE TABLE IF NOT EXISTS `pre_security_failedlog` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Ö÷¼ü',
-  `reporttype` char(20) NOT NULL COMMENT 'ÉÏ±¨ÀàÐÍ',
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ä¸»éµ',
+  `reporttype` char(20) NOT NULL COMMENT 'ä¸Šå ±é¡žåž‹',
   `tid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'TID',
   `pid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'PID',
   `uid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'UID',
-  `failcount` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '¼ÆÊý',
-  `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Ê§°ÜÊ±¼ä',
-  `posttime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '·¢ÌûÊ±¼ä/ÉÏ´Î·¢ÌûÊ±¼ä',
-  `delreason` char(255) NOT NULL COMMENT '´¦ÀíÔ­Òò',
-  `scheduletime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '¼Æ»®ÖØÊÔÊ±¼ä',
-  `lastfailtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'ÉÏ´ÎÊ§°ÜÊ±¼ä',
-  `extra1` int(10) unsigned NOT NULL COMMENT 'ÕûÐÍµÄÀ©Õ¹×Ö¶Î',
-  `extra2` char(255) NOT NULL DEFAULT '0' COMMENT '×Ö·ûÀàÐÍµÄÀ©Õ¹×Ö¶Î',
+  `failcount` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'è¨ˆæ•¸',
+  `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'å¤±æ•—æ™‚é–“',
+  `posttime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'ç™¼å¸–æ™‚é–“/ä¸Šæ¬¡ç™¼å¸–æ™‚é–“',
+  `delreason` char(255) NOT NULL COMMENT 'è™•ç†åŽŸå› ',
+  `scheduletime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'è¨ˆåŠƒé‡è©¦æ™‚é–“',
+  `lastfailtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'ä¸Šæ¬¡å¤±æ•—æ™‚é–“',
+  `extra1` int(10) unsigned NOT NULL COMMENT 'æ•´åž‹çš„æ“´å±•å­—æ®µ',
+  `extra2` char(255) NOT NULL DEFAULT '0' COMMENT 'å­—ç¬¦é¡žåž‹çš„æ“´å±•å­—æ®µ',
   PRIMARY KEY (`id`),
   KEY `pid` (`pid`),
   KEY `uid` (`uid`)

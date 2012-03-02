@@ -147,7 +147,7 @@ if($op == 'init') {
 			}
 			DB::query("UPDATE ".DB::table('common_member_connect')." SET conuin='$conuin', conuinsecret='$conuinsecret', conopenid='$conopenid', conisregister='0', conisfeed='1', conisqqshow='$isqqshow' WHERE uid='$_G[uid]'");
 
-		} else { // debug ╣╠г╟╣гб╪╣дбшлЁук╨е╡╒ц╩сп╟С╤╗хн╨нQQ╨её╛тР©ирт╟С╤╗╣╠г╟╣дуБ╦ЖQQ╨е
+		} else { // debug Г∙╤Е┴█Г≥╩И▄└Г └Х╚√Её┤ХЁ╛Х≥÷Д╦╕Ф╡▓Ф°┴Г╤│Е╝ Д╩╩Д╫∙QQХ≥÷О╪▄Е┴┤Е▐╞Д╩╔Г╤│Е╝ Г∙╤Е┴█Г └И─≥Е─▀QQХ≥÷
 			if(empty($current_connect_member)) {
 				DB::query("INSERT INTO ".DB::table('common_member_connect')." (uid, conuin, conuinsecret, conopenid, conispublishfeed, conispublisht, conisregister, conisfeed, conisqqshow) VALUES ('$_G[uid]', '$conuin', '$conuinsecret', '$conopenid', '1', '1', '0', '1', '$isqqshow')");
 			} else {
@@ -174,7 +174,7 @@ if($op == 'init') {
 
 	} else {
 
-		if($connect_member) { // debug ╢к╥жж╖йгсц╩╖ж╠╫с╣Ц╩ВQQ╣гб╪ё╛╡╒груБ╦ЖQQ╨еря╬╜╟С╨цр╩╦ЖбшлЁук╨еакё╛╫╚ж╠╫с╣г╫ЬбшлЁак
+		if($connect_member) { // debug Ф╜╓Е┬├Ф■╞Ф≤╞Г■╗Ф┬╤Г⌡╢Ф▌╔И╩·Ф⌠┼QQГ≥╩И▄└О╪▄Д╦╕Д╦■И─≥Е─▀QQХ≥÷Е╥╡Г╤⌠Г╤│Е╔╫Д╦─Е─▀Х╚√Её┤ХЁ╛Х≥÷Д╨├О╪▄Е╟┤Г⌡╢Ф▌╔Г≥╩И─╡Х╚√Её┤Д╨├
 			DB::query("UPDATE ".DB::table('common_member_connect')." SET conuin='$conuin', conuinsecret='$conuinsecret', conopenid='$conopenid', conisfeed='1' WHERE uid='$connect_member[uid]'");
 
 			$params['mod'] = 'login';
@@ -194,7 +194,7 @@ if($op == 'init') {
 			dsetcookie('stats_qc_login', 3, 86400);
 			showmessage('login_succeed', $referer, $param, array('extrajs' => $ucsynlogin));
 
-		} else { // debug ╢к╥жж╖йгсц╩╖ж╠╫с╣Ц╩ВQQ╣гб╪ё╛╡╒груБ╦ЖQQ╨е╩╧н╢╟С╤╗хн╨нбшлЁук╨её╛╫╚╫╚лЬв╙╣╫р╩╦ЖпбрЁрЩ╣╪сц╩╖в╒╡А╦ЖпббшлЁук╨е╩Р╟Ср╩╦Жрясп╣дбшлЁук╨е
+		} else { // debug Ф╜╓Е┬├Ф■╞Ф≤╞Г■╗Ф┬╤Г⌡╢Ф▌╔И╩·Ф⌠┼QQГ≥╩И▄└О╪▄Д╦╕Д╦■И─≥Е─▀QQХ≥÷И┌└Ф°╙Г╤│Е╝ Д╩╩Д╫∙Х╚√Её┤ХЁ╛Х≥÷О╪▄Е╟┤Е╟┤Х╥ЁХ╫┴Е┬╟Д╦─Е─▀Ф√╟И═│Е╪∙Е╟▌Г■╗Ф┬╤Х╗╩Е├┼Е─▀Ф√╟Х╚√Её┤ХЁ╛Х≥÷Ф┬√Г╤│Д╦─Е─▀Е╥╡Ф°┴Г └Х╚√Её┤ХЁ╛Х≥÷
 
 			$encode[] = authcode($conuin, 'ENCODE');
 			$encode[] = authcode($conuinsecret, 'ENCODE');

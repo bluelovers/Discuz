@@ -70,10 +70,10 @@ function attachimglstshow(pid, islazy, fid, showexif) {
 					continue;
 				}
 				if(fid) {
-					imagelist += '<div id="pattimg_' + aimgcount[pid][i] + '_menu" class="tip tip_4" style="display: none;"><div class="tip_horn"></div><div class="tip_c"><a href="forum.php?mod=ajax&action=setthreadcover&aid=' + aimgcount[pid][i] + '&fid=' + fid + '" class="xi2" onclick="showWindow(\'setcover' + aimgcount[pid][i] + '\', this.href)">ÉèÎª·âÃæ</a></div></div>';
+					imagelist += '<div id="pattimg_' + aimgcount[pid][i] + '_menu" class="tip tip_4" style="display: none;"><div class="tip_horn"></div><div class="tip_c"><a href="forum.php?mod=ajax&action=setthreadcover&aid=' + aimgcount[pid][i] + '&fid=' + fid + '" class="xi2" onclick="showWindow(\'setcover' + aimgcount[pid][i] + '\', this.href)">è¨­ç‚ºå°é¢</a></div></div>';
 				}
 				imagelist += '<div class="pattimg">' +
-					'<a id="pattimg_' + aimgcount[pid][i] + '" class="pattimg_zoom" href="javascript:;"' + s + ' onclick="zoom($(\'aimg_' + aimgcount[pid][i] + '\'), attachimggetsrc(\'aimg_' + aimgcount[pid][i] + '\'), 0, 0, ' + (parseInt(showexif) ? 1 : 0) + ')" title="µã»÷·Å´ó">µã»÷·Å´ó</a>' +
+					'<a id="pattimg_' + aimgcount[pid][i] + '" class="pattimg_zoom" href="javascript:;"' + s + ' onclick="zoom($(\'aimg_' + aimgcount[pid][i] + '\'), attachimggetsrc(\'aimg_' + aimgcount[pid][i] + '\'), 0, 0, ' + (parseInt(showexif) ? 1 : 0) + ')" title="é»æ“Šæ”¾å¤§">é»æ“Šæ”¾å¤§</a>' +
 					'<img ' + (islazy ? 'file' : 'src') + '="forum.php?mod=image&aid=' + aimgcount[pid][i] + '&size=100x100&key=' + imagelistkey + '&atid=' + tid + '" width="100" height="100" /></div>';
 			}
 			if($('imagelistthumb_' + pid)) {
@@ -169,7 +169,7 @@ function parsetag(pid) {
 }
 
 function setanswer(pid, from){
-	if(confirm('ÄúÈ·ÈÏÒª°Ñ¸Ã»Ø¸´Ñ¡Îª¡°×î¼Ñ´ğ°¸¡±Âğ£¿')){
+	if(confirm('æ‚¨ç¢ºèªè¦æŠŠè©²å›å¾©é¸ç‚ºã€Œæœ€ä½³ç­”æ¡ˆã€å—ï¼Ÿ')){
 		if(BROWSER.ie) {
 			doane(event);
 		}
@@ -242,7 +242,7 @@ function succeedhandle_fastpost(locationhref, message, param) {
 		$('fastpostreturn').className = '';
 	} else {
 		if(!message) {
-			message = '±¾°æ»ØÌûĞèÒªÉóºË£¬ÄúµÄÌû×Ó½«ÔÚÍ¨¹ıÉóºËºóÏÔÊ¾';
+			message = 'æœ¬ç‰ˆå›å¸–éœ€è¦å¯©æ ¸ï¼Œæ‚¨çš„å¸–å­å°‡åœ¨é€šéå¯©æ ¸å¾Œé¡¯ç¤º';
 		}
 		$('post_new').style.display = $('fastpostmessage').value = $('fastpostreturn').className = '';
 		$('fastpostreturn').innerHTML = message;
@@ -379,16 +379,16 @@ function toggleRatelogCollapse(tarId, ctrlObj) {
 	if($(tarId).className == 'rate') {
 		$(tarId).className = 'rate rate_collapse';
 		setcookie('ratecollapse', 1, 2592000);
-		ctrlObj.innerHTML = 'Õ¹¿ª';
+		ctrlObj.innerHTML = 'å±•é–‹';
 	} else {
 		$(tarId).className = 'rate';
 		setcookie('ratecollapse', 0, -2592000);
-		ctrlObj.innerHTML = 'ÊÕÆğ';
+		ctrlObj.innerHTML = 'æ”¶èµ·';
 	}
 }
 
 function copyThreadUrl(obj) {
-	setCopy($('thread_subject').innerHTML.replace(/&amp;/g, '&') + '\n' + obj.href + '\n', 'Ìû×ÓµØÖ·ÒÑ¾­¸´ÖÆµ½¼ôÌù°å');
+	setCopy($('thread_subject').innerHTML.replace(/&amp;/g, '&') + '\n' + obj.href + '\n', 'å¸–å­åœ°å€å·²ç¶“è¤‡è£½åˆ°å‰ªè²¼æ¿');
 	return false;
 }
 
@@ -398,11 +398,11 @@ function replyNotice() {
 	var status = replynotice.getAttribute("status");
 	if(status == 1) {
 		replynotice.href = newurl + 'receive';
-		replynotice.innerHTML = '½ÓÊÕ»Ø¸´Í¨Öª';
+		replynotice.innerHTML = 'æ¥æ”¶å›å¾©é€šçŸ¥';
 		replynotice.setAttribute("status", 0);
 	} else {
 		replynotice.href = newurl + 'ignore';
-		replynotice.innerHTML = 'È¡Ïû»Ø¸´Í¨Öª';
+		replynotice.innerHTML = 'å–æ¶ˆå›å¾©é€šçŸ¥';
 		replynotice.setAttribute("status", 1);
 	}
 }
@@ -415,13 +415,13 @@ function connect_share(connect_share_url, connect_uin) {
 		if(connect_uin) {
 			setTimeout(function () {
 				if(!connect_share_loaded) {
-					showDialog('·ÖÏí·şÎñÁ¬½ÓÊ§°Ü£¬ÇëÉÔºóÔÙÊÔ¡£', 'notice');
+					showDialog('åˆ†äº«æœå‹™é€£æ¥å¤±æ•—ï¼Œè«‹ç¨å¾Œå†è©¦ã€‚', 'notice');
 					$('append_parent').removeChild($('connect_load_js'));
 				}
 			}, 5000);
 			connect_load(connect_share_url);
 		} else {
-			showDialog($('connect_share_unbind').innerHTML, 'info', 'ÇëÏÈ°ó¶¨QQÕËºÅ');
+			showDialog($('connect_share_unbind').innerHTML, 'info', 'è«‹å…ˆç¶å®šQQè³¬è™Ÿ');
 		}
 		return false;
 	}
@@ -444,7 +444,7 @@ function connect_show_dialog(title, html, type) {
 function connect_get_thread() {
 	connect_thread_info.subject = $('connect_thread_title').value;
 	if ($('postmessage_' + connect_thread_info.post_id)) {
-		connect_thread_info.html_content = preg_replace(["'"], ['%27'], encodeURIComponent(preg_replace(['±¾Ìû×îºóÓÉ .*? ÓÚ .*? ±à¼­','&nbsp;','<em onclick="copycode\\(\\$\\(\'code0\'\\)\\);">¸´ÖÆ´úÂë</em>'], ['',' ', ''], $('postmessage_' + connect_thread_info.post_id).innerHTML)));
+		connect_thread_info.html_content = preg_replace(["'"], ['%27'], encodeURIComponent(preg_replace(['æœ¬å¸–æœ€å¾Œç”± .*? æ–¼ .*? ç·¨è¼¯','&nbsp;','<em onclick="copycode\\(\\$\\(\'code0\'\\)\\);">è¤‡è£½ä»£ç¢¼</em>'], ['',' ', ''], $('postmessage_' + connect_thread_info.post_id).innerHTML)));
 	}
 	return connect_thread_info;
 }

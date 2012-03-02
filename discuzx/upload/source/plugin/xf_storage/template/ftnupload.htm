@@ -27,7 +27,7 @@
 	});
 
 
-	if(BROWSER.firefox && window.HTMLElement) {   //Îª firefox Ôö¼Ó innerText ·½·¨
+	if(BROWSER.firefox && window.HTMLElement) {   //ç‚º firefox å¢åŠ  innerText æ–¹æ³•
 		HTMLElement.prototype.__defineGetter__("innerText", function(){
 			var anyString = "";
 			var childS = this.childNodes;
@@ -99,7 +99,7 @@
 				},time);
 			}
 		}
-		// Ò³Ãæ³¬Ê±¼à¿Ø,½öIEÓĞĞ§
+		// é é¢è¶…æ™‚ç›£æ§,åƒ…IEæœ‰æ•ˆ
 		// if (BROWSER.ie) {
 		// 	var linster = setTimeout(function() {
 		//		if(iframe.readyState != 'complete' && swfupload == 1){

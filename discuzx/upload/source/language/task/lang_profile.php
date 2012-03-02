@@ -13,15 +13,15 @@ if(!defined('IN_DISCUZ')) {
 
 $lang = array
 (
-	'profile_name' => 'ÍêÉÆÓÃ»§×ÊÁÏÈÎÎñ',
-	'profile_desc' => 'ÍêÉÆÖ¸¶¨µÄÓÃ»§×ÊÁÏ»ñµÃÏàÓ¦µÄ½±Àø',
+	'profile_name' => 'å®Œå–„ç”¨æˆ¶è³‡æ–™ä»»å‹™',
+	'profile_desc' => 'å®Œå–„æŒ‡å®šçš„ç”¨æˆ¶è³‡æ–™ç²å¾—ç›¸æ‡‰çš„çŽå‹µ',
 
-	'profile_view' => '<strong>Äú»¹ÓÐÒÔÏÂ¸öÈË×ÊÁÏÏîÐèÒª²¹³äÍêÕû£º</strong><br>
+	'profile_view' => '<strong>æ‚¨é‚„æœ‰ä»¥ä¸‹å€‹äººè³‡æ–™é …éœ€è¦è£œå……å®Œæ•´ï¼š</strong><br>
 		<span style="color:red;">{profiles}</span><br><br>
-		<strong>Çë°´ÕÕÒÔÏÂµÄËµÃ÷À´Íê³É±¾ÈÎÎñ£º</strong>
+		<strong>è«‹æŒ‰ç…§ä»¥ä¸‹çš„èªªæ˜Žä¾†å®Œæˆæœ¬ä»»å‹™ï¼š</strong>
 		<ul>
-		<li><a href="home.php?mod=spacecp&ac=profile" target="_blank" class="xi2">µã»÷ÕâÀï´ò¿ª¸öÈË×ÊÁÏÉèÖÃÒ³Ãæ</a></li>
-		<li>ÔÚÐÂ´ò¿ªµÄÉèÖÃÒ³ÃæÖÐ£¬½«ÉÏÊö¸öÈË×ÊÁÏ²¹³äÍêÕû</li>
+		<li><a href="home.php?mod=spacecp&ac=profile" target="_blank" class="xi2">é»žæ“Šé€™è£¡æ‰“é–‹å€‹äººè³‡æ–™è¨­ç½®é é¢</a></li>
+		<li>åœ¨æ–°æ‰“é–‹çš„è¨­ç½®é é¢ä¸­ï¼Œå°‡ä¸Šè¿°å€‹äººè³‡æ–™è£œå……å®Œæ•´</li>
 		</ul>',
 );
 

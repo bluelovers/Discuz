@@ -406,10 +406,10 @@ function show_header() {
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=$charset" />
-<title>Discuz! Êı¾İ»Ö¸´¹¤¾ß</title>
+<title>Discuz! æ•¸æ“šæ¢å¾©å·¥å…·</title>
 <style type="text/css">
 * { word-break: break-all; }
-body { text-align:center; margin:0; padding:0; background: #F5FBFF; font-size:12px; font-family:Verdana, Arial, Helvetica, 'SimSun', sans-serif; line-height: 1.8; }
+body { text-align:center; margin:0; padding:0; background: #F5FBFF; font-size:12px; font-family:Verdana, Arial, Helvetica, 'mingliu', sans-serif; line-height: 1.8; }
 .bodydiv { margin:40px auto 0; width:960px; text-align:left; border:solid #86B9D6; border-width:5px 1px 1px; background:#FFF; }
 h1 { font-size:18px; margin:1px 0 0; line-height:50px; height:50px; background:#E8F7FC; color:#5086A5; padding-left:10px; }
 	h1 span { font-weight:400; font-size:12px; }
@@ -455,8 +455,8 @@ table { border-collapse:collapse; margin-bottom:20px; }
 
 <div class="bodydiv">
 	<h1>
-		Discuz! Êı¾İ»Ö¸´¹¤¾ß
-		<span> &nbsp; »Ö¸´µ±ÖĞÓĞÈÎºÎÎÊÌâÇë·ÃÎÊ¼¼ÊõÖ§³ÖÕ¾µã <a href="http://www.discuz.net" target="_blank">http://www.discuz.net</a></span>
+		Discuz! æ•¸æ“šæ¢å¾©å·¥å…·
+		<span> &nbsp; æ¢å¾©ç•¶ä¸­æœ‰ä»»ä½•å•é¡Œè«‹è¨ªå•æŠ€è¡“æ”¯æŒç«™é» <a href="http://www.discuz.net" target="_blank">http://www.discuz.net</a></span>
 	</h1>
 	<div class="main">
 EOT;
@@ -486,11 +486,11 @@ function show_msg($message, $url_forward = '', $type = 'message', $success = 0) 
 		echo '<span'.($success ? '' : ' class="red"').'>'.$message.'</span>';
 	} elseif($type == 'redirect') {
 		echo "$message ...";
-		echo "<br /><br /><br /><a href=\"$url_forward\">ä¯ÀÀÆ÷»á×Ô¶¯Ìø×ªÒ³Ãæ£¬ÎŞĞèÈË¹¤¸ÉÔ¤¡£³ı·Çµ±ÄúµÄä¯ÀÀÆ÷³¤Ê±¼äÃ»ÓĞ×Ô¶¯Ìø×ªÊ±£¬Çëµã»÷ÕâÀï</a>";
+		echo "<br /><br /><br /><a href=\"$url_forward\">ç€è¦½å™¨æœƒè‡ªå‹•è·³è½‰é é¢ï¼Œç„¡éœ€äººå·¥å¹²é ã€‚é™¤éç•¶æ‚¨çš„ç€è¦½å™¨é•·æ™‚é–“æ²’æœ‰è‡ªå‹•è·³è½‰æ™‚ï¼Œè«‹é»æ“Šé€™è£¡</a>";
 		echo "<script>setTimeout(\"redirect('$url_forward');\", 1250);</script>";
 	} elseif($type == 'confirm') {
 		echo "$message";
-		echo "<br /><br /><br /><button id=\"confirmbtn\" onclick=\"redirect('$url_forward')\">È·¶¨</button><button id=\"cancelbtn\" onclick=\"redirect('{$siteurl}restore.php')\">È¡Ïû</button>";
+		echo "<br /><br /><br /><button id=\"confirmbtn\" onclick=\"redirect('$url_forward')\">ç¢ºå®š</button><button id=\"cancelbtn\" onclick=\"redirect('{$siteurl}restore.php')\">å–æ¶ˆ</button>";
 	}
 
 	show_footer();
@@ -540,44 +540,44 @@ function show_tips($tip, $title = '', $comment = '', $style = 1) {
 }
 
 function lang($lang_key, $force = true, $replace = array()) {
-	$lang = array('filename' => 'ÎÄ¼şÃû³Æ',
-				'director' => 'ËùÔÚÄ¿Â¼',
-				'version' => '°æ±¾',
-				'time' => '±¸·İÊ±¼ä',
-				'type' => 'ÀàĞÍ',
-				'size' => '³ß´ç',
-				'db_method' => '·½Ê½',
-				'db_volume' => '¾íÊı',
-				'import' => 'µ¼Èë',
-				'different_dbcharset_tablepre' => '¼ì²âµ½µ¼ÈëµÄ±¸·İÊı¾İÓëÅäÖÃÎÄ¼şµÄ{diff} ²»Í¬£¬Äú»¹Òª¼ÌĞøÔËĞĞ´Ë³ÌĞòÂğ£¿',
-				'db_import_tips' => '±¾¹¦ÄÜÔÚ»Ö¸´±¸·İÊı¾İµÄÍ¬Ê±£¬½«È«²¿¸²¸ÇÔ­ÓĞÊı¾İ£¬ÇëÈ·¶¨»Ö¸´Ç°ÒÑ½«ÂÛÌ³¹Ø±Õ£¬»Ö¸´È«²¿Íê³Éºó¿ÉÒÔ½«ÂÛÌ³ÖØĞÂ¿ª·Å¡£<br />Äú¿ÉÒÔÍ¨¹ıÊı¾İ±¸·İ¹ÜÀí¹¦ÄÜ²é¿´Õ¾µãµÄ±¸·İÎÄ¼şµÄÏêÏ¸ĞÅÏ¢£¬É¾³ı¹ıÆÚµÄ±¸·İ,²¢µ¼ÈëĞèÒªµÄ±¸·İ¡£<br /><span class="red">»Ö¸´Êı¾İµÄÕû¸ö¹ı³Ì»áÔÚÒ»¸öĞÂÒ³ÃæÍê³É£¬Äú³É¹¦»Ö¸´Êı¾İºóÇëÎñ±Ø¼°Ê±É¾³ırestore.phpÎÄ¼ş¡£</span><br />',
-				'db_export_discuz' => 'Discuz! Êı¾İ(²»º¬UCenter)',
-				'db_export_discuz_uc' => 'Discuz! ºÍ UCenter Êı¾İ',
-				'db_multivol' => '¶à¾í',
-				'db_import_unzip' => '½âÑ¹Ëõ',
-				'db_export_zip' => 'Ñ¹Ëõ±¸·İ',
+	$lang = array('filename' => 'æ–‡ä»¶åç¨±',
+				'director' => 'æ‰€åœ¨ç›®éŒ„',
+				'version' => 'ç‰ˆæœ¬',
+				'time' => 'å‚™ä»½æ™‚é–“',
+				'type' => 'é¡å‹',
+				'size' => 'å°ºå¯¸',
+				'db_method' => 'æ–¹å¼',
+				'db_volume' => 'å·æ•¸',
+				'import' => 'å°å…¥',
+				'different_dbcharset_tablepre' => 'æª¢æ¸¬åˆ°å°å…¥çš„å‚™ä»½æ•¸æ“šèˆ‡é…ç½®æ–‡ä»¶çš„{diff} ä¸åŒï¼Œæ‚¨é‚„è¦ç¹¼çºŒé‹è¡Œæ­¤ç¨‹åºå—ï¼Ÿ',
+				'db_import_tips' => 'æœ¬åŠŸèƒ½åœ¨æ¢å¾©å‚™ä»½æ•¸æ“šçš„åŒæ™‚ï¼Œå°‡å…¨éƒ¨è¦†è“‹åŸæœ‰æ•¸æ“šï¼Œè«‹ç¢ºå®šæ¢å¾©å‰å·²å°‡è«–å£‡é—œé–‰ï¼Œæ¢å¾©å…¨éƒ¨å®Œæˆå¾Œå¯ä»¥å°‡è«–å£‡é‡æ–°é–‹æ”¾ã€‚<br />æ‚¨å¯ä»¥é€šéæ•¸æ“šå‚™ä»½ç®¡ç†åŠŸèƒ½æŸ¥çœ‹ç«™é»çš„å‚™ä»½æ–‡ä»¶çš„è©³ç´°ä¿¡æ¯ï¼Œåˆªé™¤éæœŸçš„å‚™ä»½,ä¸¦å°å…¥éœ€è¦çš„å‚™ä»½ã€‚<br /><span class="red">æ¢è¤‡æ•¸æ“šçš„æ•´å€‹éç¨‹æœƒåœ¨ä¸€å€‹æ–°é é¢å®Œæˆï¼Œæ‚¨æˆåŠŸæ¢è¤‡æ•¸æ“šå¾Œè«‹å‹™å¿…åŠæ™‚åˆªé™¤restore.phpæ–‡ä»¶ã€‚</span><br />',
+				'db_export_discuz' => 'Discuz! æ•¸æ“š(ä¸å«UCenter)',
+				'db_export_discuz_uc' => 'Discuz! å’Œ UCenter æ•¸æ“š',
+				'db_multivol' => 'å¤šå·',
+				'db_import_unzip' => 'è§£å£“ç¸®',
+				'db_export_zip' => 'å£“ç¸®å‚™ä»½',
 				'db_zip' => 'ZIP',
 				'db_shell' => 'Shell',
-				'unknown' => 'Î´Öª',
-				'backup_file_unexist' => '±¸·İÎÄ¼ş²»´æÔÚ',
-				'connect_error' => 'Á¬½ÓÊı¾İ¿âÊ§°Ü£¬ÇëÄú²é¿´Êı¾İ¿âÅäÖÃÎÄ¼şconfig/config_global.phpºÍconfig/config_ucenter.phpÊÇ·ñ´æÔÚÒÔ¼°ÅäÖÃÊÇ·ñÕıÈ·',
-				'dbcharsetdiff' => ' Êı¾İ¿â×Ö·û¼¯($_config[\'db\'][\'1\'][\'dbcharset\'])',
-				'tableprediff' => ' ±íÇ°×º($_config[\'db\'][\'1\'][\'tablepre\'])',
-				'database_import_multivol_succeed' => '·Ö¾íÊı¾İ³É¹¦µ¼ÈëÕ¾µãÊı¾İ¿â<br />ÇëÔÚºóÌ¨¸üĞÂ»º´æ<br /><span class="red">Çë¾¡¿ìÉ¾³ırestore.phpÎÄ¼ş£¬ÒÔÃâ¶ÔÊı¾İÔì³ÉÓ°Ïì</span>',
-				'database_import_file_illegal' => 'Êı¾İÎÄ¼ş²»´æÔÚ£º¿ÉÄÜ·şÎñÆ÷²»ÔÊĞíÉÏ´«ÎÄ¼ş»òÎÄ¼ş´óĞ¡³¬¹ıÏŞÖÆ',
-				'database_import_multivol_prompt' => '·Ö¾íÊı¾İµÚÒ»¾í³É¹¦µ¼ÈëÊı¾İ¿â£¬ÄúĞèÒª×Ô¶¯µ¼Èë±¾´Î±¸·İµÄÆäËû·Ö¾íÂğ£¿',
-				'database_import_succeed' => 'Êı¾İÒÑ³É¹¦µ¼ÈëÕ¾µãÊı¾İ¿â<br />ÇëÔÚºóÌ¨¸üĞÂ»º´æ<br /><span class="red">Çë¾¡¿ìÉ¾³ırestore.phpÎÄ¼ş£¬ÒÔÃâ¶ÔÊı¾İÔì³ÉÓ°Ïì</span>',
-				'database_import_format_illegal' => 'Êı¾İÎÄ¼ş·Ç Discuz! ¸ñÊ½£¬ÎŞ·¨µ¼Èë',
-				'database_import_unzip' => '{info}<br />±¸·İÎÄ¼ş½âÑ¹ËõÍê±Ï£¬ÄúĞèÒª×Ô¶¯µ¼Èë±¸·İÂğ£¿µ¼Èëºó½âÑ¹ËõµÄÎÄ¼ş½«»á±»É¾³ı',
-				'database_import_multivol_unzip' => '{info}<br />±¸·İÎÄ¼ş½âÑ¹ËõÍê±Ï£¬ÄúĞèÒª×Ô¶¯½âÑ¹ËõÆäËûµÄ·Ö¾íÎÄ¼şÂğ£¿',
-				'database_import_multivol_unzip_redirect' => 'Êı¾İÎÄ¼ş #{multivol} ½âÑ¹Ëõ³É¹¦£¬³ÌĞò½«×Ô¶¯¼ÌĞø',
-				'database_import_confirm' => 'µ¼ÈëºÍµ±Ç° Discuz! °æ±¾²»Ò»ÖÂµÄÊı¾İ¼«ÓĞ¿ÉÄÜ²úÉúÎŞ·¨½â¾öµÄ¹ÊÕÏ£¬ÄúÈ·¶¨¼ÌĞøÂğ£¿',
-				'database_import_confirm_sql' => 'ÄúÈ·¶¨µ¼Èë¸Ã±¸·İÂğ£¿',
-				'database_import_confirm_zip' => 'ÄúÈ·¶¨½âÑ¹¸Ã±¸·İÂğ£¿',
-				'database_import_multivol_confirm' => 'ËùÓĞ·Ö¾íÎÄ¼ş½âÑ¹ËõÍê±Ï£¬ÄúĞèÒª×Ô¶¯µ¼Èë±¸·İÂğ£¿µ¼Èëºó½âÑ¹ËõµÄÎÄ¼ş½«»á±»É¾³ı',
-				'database_import_multivol_redirect' => 'Êı¾İÎÄ¼ş #{volume} ³É¹¦µ¼Èë£¬³ÌĞò½«×Ô¶¯¼ÌĞø',
-				'error_quit_msg' => '±ØĞë½â¾öÒÔÉÏÎÊÌâ£¬²ÅÄÜ¼ÌĞø»Ö¸´Êı¾İ',
-				'restored_error' => '»Ö¸´Êı¾İ¹¦ÄÜËø¶¨£¬ÒÑ¾­»Ö¸´¹ıÁË£¬Èç¹ûÄúÈ·¶¨Òª»Ö¸´Êı¾İ£¬Çëµ½·şÎñÆ÷ÉÏÉ¾³ı./data/restore.lock',
+				'unknown' => 'æœªçŸ¥',
+				'backup_file_unexist' => 'å‚™ä»½æ–‡ä»¶ä¸å­˜åœ¨',
+				'connect_error' => 'é€£æ¥æ•¸æ“šåº«å¤±æ•—ï¼Œè«‹æ‚¨æŸ¥çœ‹æ•¸æ“šåº«é…ç½®æ–‡ä»¶config/config_global.phpå’Œconfig/config_ucenter.phpæ˜¯å¦å­˜åœ¨ä»¥åŠé…ç½®æ˜¯å¦æ­£ç¢º',
+				'dbcharsetdiff' => ' æ•¸æ“šåº«å­—ç¬¦é›†($_config[\'db\'][\'1\'][\'dbcharset\'])',
+				'tableprediff' => ' è¡¨å‰ç¶´($_config[\'db\'][\'1\'][\'tablepre\'])',
+				'database_import_multivol_succeed' => 'åˆ†å·æ•¸æ“šæˆåŠŸå°å…¥ç«™é»æ•¸æ“šåº«<br />è«‹åœ¨å¾Œå°æ›´æ–°ç·©å­˜<br /><span class="red">è«‹ç›¡å¿«åˆªé™¤restore.phpæ–‡ä»¶ï¼Œä»¥å…å°æ•¸æ“šé€ æˆå½±éŸ¿</span>',
+				'database_import_file_illegal' => 'æ•¸æ“šæ–‡ä»¶ä¸å­˜åœ¨ï¼šå¯èƒ½æœå‹™å™¨ä¸å…è¨±ä¸Šå‚³æ–‡ä»¶æˆ–æ–‡ä»¶å¤§å°è¶…éé™åˆ¶',
+				'database_import_multivol_prompt' => 'åˆ†å·æ•¸æ“šç¬¬ä¸€æ²æˆåŠŸå°å…¥æ•¸æ“šåº«ï¼Œæ‚¨éœ€è¦è‡ªå‹•å°å…¥æœ¬æ¬¡å‚™ä»½çš„å…¶ä»–åˆ†å·å—ï¼Ÿ',
+				'database_import_succeed' => 'æ•¸æ“šå·²æˆåŠŸå°å…¥ç«™é»æ•¸æ“šåº«<br />è«‹åœ¨å¾Œå°æ›´æ–°ç·©å­˜<br /><span class="red">è«‹ç›¡å¿«åˆªé™¤restore.phpæ–‡ä»¶ï¼Œä»¥å…å°æ•¸æ“šé€ æˆå½±éŸ¿</span>',
+				'database_import_format_illegal' => 'æ•¸æ“šæ–‡ä»¶é Discuz! æ ¼å¼ï¼Œç„¡æ³•å°å…¥',
+				'database_import_unzip' => '{info}<br />å‚™ä»½æ–‡ä»¶è§£å£“ç¸®å®Œç•¢ï¼Œæ‚¨éœ€è¦è‡ªå‹•å°å…¥å‚™ä»½å—ï¼Ÿå°å…¥å¾Œè§£å£“ç¸®çš„æ–‡ä»¶å°‡æœƒè¢«åˆªé™¤',
+				'database_import_multivol_unzip' => '{info}<br />å‚™ä»½æ–‡ä»¶è§£å£“ç¸®å®Œç•¢ï¼Œæ‚¨éœ€è¦è‡ªå‹•è§£å£“ç¸®å…¶ä»–çš„åˆ†å·æ–‡ä»¶å—ï¼Ÿ',
+				'database_import_multivol_unzip_redirect' => 'æ•¸æ“šæ–‡ä»¶ #{multivol} è§£å£“ç¸®æˆåŠŸï¼Œç¨‹åºå°‡è‡ªå‹•ç¹¼çºŒ',
+				'database_import_confirm' => 'å°å…¥å’Œç•¶å‰ Discuz! ç‰ˆæœ¬ä¸ä¸€è‡´çš„æ•¸æ“šæ¥µæœ‰å¯èƒ½ç”¢ç”Ÿç„¡æ³•è§£æ±ºçš„æ•…éšœï¼Œæ‚¨ç¢ºå®šç¹¼çºŒå—ï¼Ÿ',
+				'database_import_confirm_sql' => 'æ‚¨ç¢ºå®šå°å…¥è©²å‚™ä»½å—ï¼Ÿ',
+				'database_import_confirm_zip' => 'æ‚¨ç¢ºå®šè§£å£“è©²å‚™ä»½å—ï¼Ÿ',
+				'database_import_multivol_confirm' => 'æ‰€æœ‰åˆ†å·æ–‡ä»¶è§£å£“ç¸®å®Œç•¢ï¼Œæ‚¨éœ€è¦è‡ªå‹•å°å…¥å‚™ä»½å—ï¼Ÿå°å…¥å¾Œè§£å£“ç¸®çš„æ–‡ä»¶å°‡æœƒè¢«åˆªé™¤',
+				'database_import_multivol_redirect' => 'æ•¸æ“šæ–‡ä»¶ #{volume} æˆåŠŸå°å…¥ï¼Œç¨‹åºå°‡è‡ªå‹•ç¹¼çºŒ',
+				'error_quit_msg' => 'å¿…é ˆè§£æ±ºä»¥ä¸Šå•é¡Œï¼Œæ‰èƒ½ç¹¼çºŒæ¢è¤‡æ•¸æ“š',
+				'restored_error' => 'æ¢è¤‡æ•¸æ“šåŠŸèƒ½é–å®šï¼Œå·²ç¶“æ¢å¾©éäº†ï¼Œå¦‚æœæ‚¨ç¢ºå®šè¦æ¢è¤‡æ•¸æ“šï¼Œè«‹åˆ°æœå‹™å™¨ä¸Šåˆªé™¤./data/restore.lock',
 			);
 	$return = isset($lang[$lang_key]) ? $lang[$lang_key] : ($force ? $lang_key : '');
 	if($replace && is_array($replace)) {
