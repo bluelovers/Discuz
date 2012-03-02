@@ -14,13 +14,13 @@ if(!defined('IN_DISCUZ')) {
 $lang = array
 (
 
-	'page' => '页',
-	'replies' => '篇回复',
-	'anonymous' => '匿名',
-	'full_version' => '查看完整版本',
-	'forum_nonexistence' => '抱歉，您没有权限访问这个论坛的存档或该论坛不存在',
-	'thread_nonexistence' => '抱歉，您没有权限查看这个话题或该话题不存在',
-	'post_time' => '发表于',
+	'page' => '',
+	'replies' => '絞確',
+	'anonymous' => '拔',
+	'full_version' => '琩Ч俱セ',
+	'forum_nonexistence' => '╆簆眤⊿Τ舦砐拜硂阶韭郎┪赣阶韭ぃ',
+	'thread_nonexistence' => '╆簆眤⊿Τ舦琩硂杠肈┪赣杠肈ぃ',
+	'post_time' => '祇',
 
 );
 

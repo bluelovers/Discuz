@@ -13,15 +13,15 @@ if(!defined('IN_DISCUZ')) {
 
 $lang = array
 (
-	'bump_name' => '提升卡',
-	'bump_forum' => '允许使用本道具的版块',
-	'bump_desc' => '可以提升某个主题',
-	'bump_info' => '提升指定的主题，请输入主题的 ID',
-	'bump_info_nonexistence' => '请指定要提升的主题',
-	'bump_succeed' => '您操作的主题已提升',
-	'bump_info_noperm' => '对不起，主题所在版块不允许使用本道具',
+	'bump_name' => '矗ど',
+	'bump_forum' => 'す砛\ㄏノセ笵ㄣ遏',
+	'bump_desc' => '矗ど琘肈',
+	'bump_info' => '矗ど﹚肈叫块肈 ID',
+	'bump_info_nonexistence' => '叫﹚璶矗ど肈',
+	'bump_succeed' => '眤巨肈矗ど',
+	'bump_info_noperm' => '癸ぃ癬肈┮遏ぃす砛\ㄏノセ笵ㄣ',
 
-	'bump_notification' => '您的主题 {subject} 被 {actor} 使用了{magicname}，<a href="forum.php?mod=viewthread&tid={tid}">快去看看吧！</a>',
+	'bump_notification' => '眤肈 {subject} 砆 {actor} ㄏノ{magicname}<a href="forum.php?mod=viewthread&tid={tid}">е</a>',
 );
 
 ?>

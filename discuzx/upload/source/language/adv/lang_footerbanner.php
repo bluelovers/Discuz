@@ -13,20 +13,20 @@ if(!defined('IN_DISCUZ')) {
 
 $lang = array
 (
-	'footerbanner_name' => '全局 页尾通栏广告',
-	'footerbanner_desc' => '展现方式: 页尾通栏广告显示于页面下方，通常使用 960x60 或其他尺寸图片、Flash 的形式。当前页面有多个页尾通栏广告时，系统会随机选取其中之一显示。<br />价值分析: 与页面头部和中部相比，页面尾部的展现机率相对较低，通常不会引起访问者的反感，同时又基本能够覆盖所有对广告内容感兴趣的受众，因此适合中性而温和的推广。',
-	'footerbanner_index' => '首页',
-	'footerbanner_fids' => '投放版块',
-	'footerbanner_fids_comment' => '设置广告投放的论坛版块，当广告投放范围中包含“论坛”时有效',
-	'footerbanner_groups' => '投放群组分类',
-	'footerbanner_groups_comment' => '设置广告投放的群组分类，当广告投放范围中包含“群组”时有效',
-	'footerbanner_position' => '投放位置',
-	'footerbanner_position_comment' => '分为上中下 3 个位置，当上面的广告到期或被删除，下面的广告会自动上移',
-	'footerbanner_position_up' => '上',
-	'footerbanner_position_middle' => '中',
-	'footerbanner_position_down' => '下',
-	'footerbanner_category' => '投放门户频道',
-	'footerbanner_category_comment' => '设置广告投放的频道分类，当广告投放范围中包含“门户”时有效',
+	'footerbanner_name' => 'Ы Ю硄逆約',
+	'footerbanner_desc' => '甶瞷よΑ: Ю硄逆約陪ボよ硄盽ㄏノ 960x60 ┪ㄤへ瓜Flash Α讽玡ΤЮ硄逆約╰参穦繦诀匡ㄤいぇ陪ボ<br />基だ猂: 籔繷场㎝い场ゑЮ场甶瞷诀瞯癸耕硄盽ぃ穦ま癬砐拜は稰膀セ镑滦籠\┮Τ癸約ず甧稰砍届渤続い┦τ放㎝崩約',
+	'footerbanner_index' => '',
+	'footerbanner_fids' => 'щ遏',
+	'footerbanner_fids_comment' => '砞竚約щ阶韭遏讽約щ絛瞅い阶韭Τ',
+	'footerbanner_groups' => 'щ竤舱だ摸',
+	'footerbanner_groups_comment' => '砞竚約щ竤舱だ摸讽約щ絛瞅い竤舱Τ',
+	'footerbanner_position' => 'щ竚',
+	'footerbanner_position_comment' => 'だい 3 竚讽約戳┪砆埃約穦笆簿',
+	'footerbanner_position_up' => '',
+	'footerbanner_position_middle' => 'い',
+	'footerbanner_position_down' => '',
+	'footerbanner_category' => 'щめ繵笵',
+	'footerbanner_category_comment' => '砞竚約щ繵笵だ摸讽約щ絛瞅いめΤ',
 );
 
 ?>

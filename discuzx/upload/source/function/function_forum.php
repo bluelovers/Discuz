@@ -404,7 +404,7 @@ function loadforum() {
 	if(!$fid && getgpc('gid')) {
 		$fid = intval(getgpc('gid'));
 	}
-	if(!empty($_GET['archiver'])) {//X1.5µÄArchiver¼æÈÝ
+	if(!empty($_GET['archiver'])) {//X1.5ªºArchiver­Ý®e
 		if($fid) {
 			dheader('location: archiver/?fid-'.$fid.'.html');
 		} elseif($tid) {

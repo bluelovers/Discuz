@@ -32,7 +32,7 @@ while ($row = $db_source->fetch_array($query)) {
 }
 
 if($nextid) {
-	showmessage("继续转换数据表 ".$table_source." fid > $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
+	showmessage("膥尿锣传计沮 ".$table_source." fid > $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
 } else {
 	$db_target->query("UPDATE $table_target SET status=1 WHERE status=2");
 }

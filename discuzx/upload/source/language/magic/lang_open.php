@@ -13,16 +13,16 @@ if(!defined('IN_DISCUZ')) {
 
 $lang = array
 (
-	'open_name' => '喧嚣卡',
-	'open_desc' => '可以将主题开启，可以回复',
-	'open_forum' => '允许使用本道具的版块',
-	'open_info' => '开放指定的主题，请输入主题的 ID',
-	'open_info_nonexistence' => '请指定要开放的主题',
-	'open_succeed' => '您操作的主题已开放回复',
-	'open_info_noperm' => '对不起，主题所在版块不允许使用本道具',
-	'open_info_user_noperm' => '对不起，您不能对此人使用本道具',
+	'open_name' => '迟嫩',
+	'open_desc' => '盢肈秨币確',
+	'open_forum' => 'す砛\ㄏノセ笵ㄣ遏',
+	'open_info' => '秨﹚肈叫块肈 ID',
+	'open_info_nonexistence' => '叫﹚璶秨肈',
+	'open_succeed' => '眤巨肈秨確',
+	'open_info_noperm' => '癸ぃ癬肈┮遏ぃす砛\ㄏノセ笵ㄣ',
+	'open_info_user_noperm' => '癸ぃ癬眤ぃ癸ㄏノセ笵ㄣ',
 
-	'open_notification' => '您的主题 {subject} 被 {actor} 使用了{magicname}，<a href="forum.php?mod=viewthread&tid={tid}">快去看看吧！</a>',
+	'open_notification' => '眤肈 {subject} 砆 {actor} ㄏノ{magicname}<a href="forum.php?mod=viewthread&tid={tid}">е</a>',
 );
 
 ?>

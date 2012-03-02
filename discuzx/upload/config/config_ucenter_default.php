@@ -8,22 +8,22 @@
  */
 
 // ============================================================================
-define('UC_CONNECT', 'mysql');				// 连接 UCenter 的方式: mysql/NULL, 默认为空时为 fscoketopen(), mysql 是直接连接的数据库, 为了效率, 建议采用 mysql
-// 数据库相关 (mysql 连接时)
-define('UC_DBHOST', 'localhost');			// UCenter 数据库主机
-define('UC_DBUSER', 'root');				// UCenter 数据库用户名
-define('UC_DBPW', 'root');				// UCenter 数据库密码
-define('UC_DBNAME', 'ucenter');				// UCenter 数据库名称
-define('UC_DBCHARSET', 'gbk');				// UCenter 数据库字符集
-define('UC_DBTABLEPRE', '`ucenter`.uc_');		// UCenter 数据库表前缀
-define('UC_DBCONNECT', '0');				// UCenter 数据库持久连接 0=关闭, 1=打开
+define('UC_CONNECT', 'mysql');				// 硈钡 UCenter よΑ: mysql/NULL, 纐粄 fscoketopen(), mysql 琌钡硈钡计沮畐, 瞯, 某蹦ノ mysql
+// 计沮畐闽 (mysql 硈钡)
+define('UC_DBHOST', 'localhost');			// UCenter 计沮畐诀
+define('UC_DBUSER', 'root');				// UCenter 计沮畐ノめ
+define('UC_DBPW', 'root');				// UCenter 计沮畐盞絏
+define('UC_DBNAME', 'ucenter');				// UCenter 计沮畐嘿
+define('UC_DBCHARSET', 'big5');				// UCenter 计沮畐才栋
+define('UC_DBTABLEPRE', '`ucenter`.uc_');		// UCenter 计沮畐玡后
+define('UC_DBCONNECT', '0');				// UCenter 计沮畐硈钡 0=闽超, 1=ゴ秨
 
-// 通信相关
-define('UC_KEY', 'yeN3g9EbNfiaYfodV63dI1j8Fbk5HaL7W4yaW4y7u2j4Mf45mfg2v899g451k576');	// 与 UCenter 的通信密钥, 要与 UCenter 保持一致
-define('UC_API', 'http://localhost/ucenter/branches/1.5.0/server'); // UCenter 的 URL 地址, 在调用头像时依赖此常量
-define('UC_CHARSET', 'gbk');				// UCenter 的字符集
-define('UC_IP', '127.0.0.1');				// UCenter 的 IP, 当 UC_CONNECT 为非 mysql 方式时, 并且当前应用服务器解析域名有问题时, 请设置此值
-define('UC_APPID', '1');				// 当前应用的 ID
+// 硄獺闽
+define('UC_KEY', 'yeN3g9EbNfiaYfodV63dI1j8Fbk5HaL7W4yaW4y7u2j4Mf45mfg2v899g451k576');	// 籔 UCenter 硄獺盞芲, 璶籔 UCenter 玂璓
+define('UC_API', 'http://localhost/ucenter/branches/1.5.0/server'); // UCenter  URL , 秸ノ繷钩ㄌ苦盽秖
+define('UC_CHARSET', 'big5');				// UCenter 才栋
+define('UC_IP', '127.0.0.1');				// UCenter  IP, 讽 UC_CONNECT 獶 mysql よΑ, 讽玡莱ノ狝叭竟秆猂办Τ拜肈, 叫砞竚
+define('UC_APPID', '1');				// 讽玡莱ノ ID
 
 // ============================================================================
 

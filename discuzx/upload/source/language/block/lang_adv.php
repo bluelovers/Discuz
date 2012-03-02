@@ -13,7 +13,7 @@ if(!defined('IN_DISCUZ')) {
 
 $lang = array
 (
-	'adv_title' => '或者输入名称',
-	'adv_adv' => '选择广告',
+	'adv_title' => '┪块嘿',
+	'adv_adv' => '匡拒約',
 );
 ?>

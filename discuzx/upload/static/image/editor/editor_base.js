@@ -40,10 +40,10 @@ function renewContent() {
 		}
 	};
 
-	if(window.confirm('您确定要恢复上次保存?')) {
+	if(window.confirm('眤絋﹚璶確Ω玂?')) {
 		var data = loadUserdata('home');
 		if(in_array((data = trim(data)), ['', 'null', 'false', null, false])) {
-			parent.showDialog('没有可以恢复的数据！');
+			parent.showDialog('⊿Τ確计沮');
 			return;
 		}
 		var data = data.split(/\x09\x09/);
@@ -205,13 +205,13 @@ function format(type, para){
 	if(!gIsIE){
 		switch(type){
 			case "Cut":
-				sAlert = "您的浏览器安全设置不允许编辑器自动执行剪切操作,请使用键盘快捷键(Ctrl+X)来完成";
+				sAlert = "眤聅凝竟砞竚ぃす砛絪胯竟笆磅︽芭ち巨,叫ㄏノ龄絃е倍龄(Ctrl+X)ㄓЧΘ";
 				break;
 			case "Copy":
-				sAlert = "您的浏览器安全设置不允许编辑器自动执行拷贝操作,请使用键盘快捷键(Ctrl+C)来完成";
+				sAlert = "眤聅凝竟砞竚ぃす砛絪胯竟笆磅︽ī巨,叫ㄏノ龄絃е倍龄(Ctrl+C)ㄓЧΘ";
 				break;
 			case "Paste":
-				sAlert = "您的浏览器安全设置不允许编辑器自动执行粘贴操作,请使用键盘快捷键(Ctrl+V)来完成";
+				sAlert = "眤聅凝竟砞竚ぃす砛絪胯竟笆磅︽诌禟巨,叫ㄏノ龄絃е倍龄(Ctrl+V)ㄓЧΘ";
 				break;
 		}
 	}
@@ -295,7 +295,7 @@ function doodleBox(event, id) {
 	if(parent.$('uchome-ttHtmlEditor') != null) {
 		parent.showWindow(id, 'home.php?mod=magic&mid=doodle&showid=blog_doodle&target=uchome-ttHtmlEditor&from=editor');
 	} else {
-		alert("找不到涂鸦板初始化数据");
+		alert("тぃ额緙狾﹍て计沮");
 	}
 }
 function backColor(e){
@@ -457,7 +457,7 @@ function fSetBorderMouseDown(obj) {
 }
 function fDisplayElement(element,displayValue) {
 	if(gIEVer<=5.01 && gIsIE){
-		alert('只支持IE 5.01以上版本');
+		alert('やIE 5.01セ');
 		return;
 	}
 	fHideMenu();
@@ -493,7 +493,7 @@ function fSetModeTip(obj){
 		dv.style.padding = "2px";
 		dv.style.border = "1px #000000 solid";
 		dv.style.backgroundColor = "#FFFFCC";
-		dv.innerHTML = "编辑源码";
+		dv.innerHTML = "絪胯方絏";
 		document.body.appendChild(dv);
 	}else{
 		dvModeTip.style.display = "";
@@ -616,7 +616,7 @@ function changeEditType(flag, ev){
 			}
 			ev = ev || event;
 			if(ev){
-				if(window.confirm("转换为纯文本时将会遗失某些格式。\n您确定要继续吗？")){
+				if(window.confirm("锣传ゅセ盢穦框ア琘ㄇΑ\n眤絋﹚璶膥尿盾")){
 					$('uchome-editstatus').value = 'text';
 					sub1();
 				}else{
@@ -634,7 +634,7 @@ function changeEditFull(flag, ev) {
 		parent.changeEditFull(flag);
 		ev = ev || event;
 		var ele = ev.target || ev.srcElement;
-		ele.innerHTML = flag ? '返回' : '全屏';
+		ele.innerHTML = flag ? '' : '';
 		ele.onclick = function() {changeEditFull(!flag, ev)};
 	}
 }

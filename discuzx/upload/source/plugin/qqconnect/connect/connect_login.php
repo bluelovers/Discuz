@@ -147,7 +147,7 @@ if($op == 'init') {
 			}
 			DB::query("UPDATE ".DB::table('common_member_connect')." SET conuin='$conuin', conuinsecret='$conuinsecret', conopenid='$conopenid', conisregister='0', conisfeed='1', conisqqshow='$isqqshow' WHERE uid='$_G[uid]'");
 
-		} else { // debug 当前登录的论坛账号并没有绑定任何QQ号，则可以绑定当前的这个QQ号
+		} else { // debug 讽玡祅魁阶韭姐腹⊿Τ竕﹚ヴQQ腹玥竕﹚讽玡硂QQ腹
 			if(empty($current_connect_member)) {
 				DB::query("INSERT INTO ".DB::table('common_member_connect')." (uid, conuin, conuinsecret, conopenid, conispublishfeed, conispublisht, conisregister, conisfeed, conisqqshow) VALUES ('$_G[uid]', '$conuin', '$conuinsecret', '$conopenid', '1', '1', '0', '1', '$isqqshow')");
 			} else {
@@ -174,7 +174,7 @@ if($op == 'init') {
 
 	} else {
 
-		if($connect_member) { // debug 此分支是用户直接点击QQ登录，并且这个QQ号已经绑好一个论坛账号了，将直接登进论坛了
+		if($connect_member) { // debug だや琌ノめ钡翴阑QQ祅魁硂QQ腹竒竕阶韭姐腹盢钡祅秈阶韭
 			DB::query("UPDATE ".DB::table('common_member_connect')." SET conuin='$conuin', conuinsecret='$conuinsecret', conopenid='$conopenid', conisfeed='1' WHERE uid='$connect_member[uid]'");
 
 			$params['mod'] = 'login';
@@ -194,7 +194,7 @@ if($op == 'init') {
 			dsetcookie('stats_qc_login', 3, 86400);
 			showmessage('login_succeed', $referer, $param, array('extrajs' => $ucsynlogin));
 
-		} else { // debug 此分支是用户直接点击QQ登录，并且这个QQ号还未绑定任何论坛账号，将将跳转到一个新页引导用户注册个新论坛账号或绑一个已有的论坛账号
+		} else { // debug だや琌ノめ钡翴阑QQ祅魁硂QQ腹临ゼ竕﹚ヴ阶韭姐腹盢盢铬锣穝ま旧ノめ爹穝阶韭姐腹┪竕Τ阶韭姐腹
 
 			$encode[] = authcode($conuin, 'ENCODE');
 			$encode[] = authcode($conuinsecret, 'ENCODE');

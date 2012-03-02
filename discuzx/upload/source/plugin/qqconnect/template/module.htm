@@ -34,7 +34,7 @@ function tpl_global_footer($loadJs) {
 		<script type="text/javascript">
 		function connect_handle_check_token(response, ajax) {
 
-			// 返回值形如: errCode=XX&result=XX
+			// : errCode=XX&result=XX
 			if (typeof(response) == "string" && response.indexOf("&") > 0) {
 
 				var errCode = response.substring(0, response.indexOf("&"));
@@ -49,7 +49,7 @@ function tpl_global_footer($loadJs) {
 			}
 
 			if (response.errCode == '0' && response.result == '2') {
-				// 发帖的处理
+				// 祇┇矪瞶
 				if (typeof(_is_token_outofdate) != "undefined") {
 					_is_feed_auth = false;
 					_is_token_outofdate = true;
@@ -60,7 +60,7 @@ function tpl_global_footer($loadJs) {
 					_is_token_outofdate_infloat = true;
 					connect_post_init_infloat();
 				}
-				// 分享的处理
+				// だㄉ矪瞶
 				if (typeof(_share_buttons) != "undefined" && typeof(_is_oauth_user) != "undefined") {
 					_is_oauth_user = false;
 					_is_share_token_outofdate = true;

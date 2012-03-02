@@ -13,27 +13,27 @@ if(!defined('IN_DISCUZ')) {
 
 $lang = array
 (
-	'grouplist_gtids' => '群组类别',
-	'grouplist_gtids_comment' => '选择群组类别',
-	'grouplist_fids' => '指定群组',
-	'grouplist_fids_comment' => '输入指定群组的ID，多个ID之间用逗号分隔',
-	'grouplist_startrow' => '起始数据行数',
-	'grouplist_startrow_comment' => '如需设定起始的数据行数，请输入具体数值，0 为从第一行开始，以此类推',
-	'grouplist_titlelength' => '名称长度',
-	'grouplist_titlelength' => '设置群组名称最大长度',
-	'grouplist_summarylength' => '介绍长度',
-	'grouplist_summarylength_comment' => '设置群组介绍最大长度',
-	'grouplist_orderby' => '群组排序方式',
-	'grouplist_orderby_comment' => '设置以哪一字段或方式对群组进行排序',
-	'grouplist_orderby_dateline' => '按创建时间倒序',
-	'grouplist_orderby_posts' => '按总发帖数倒序',
-	'grouplist_orderby_todayposts' => '按今日发帖数倒序',
-	'grouplist_orderby_threads' => '按话题数倒序',
-	'grouplist_orderby_level' => '按等级倒序',
-	'grouplist_orderby_membernum' => '按成员数倒序',
-	'grouplist_orderby_activity' => '按活跃度倒序',
-	'grouplist_orderby_commoncredits' => '按共同积分倒序',
-	'grouplist_orderby_displayorder' => '按默认顺序'
+	'grouplist_gtids' => '竤舱摸',
+	'grouplist_gtids_comment' => '匡拒竤舱摸',
+	'grouplist_fids' => '﹚竤舱',
+	'grouplist_fids_comment' => '块﹚竤舱IDIDぇ丁ノ硆腹だ筳',
+	'grouplist_startrow' => '癬﹍计沮︽计',
+	'grouplist_startrow_comment' => '惠砞﹚癬﹍计沮︽计叫块ㄣ砰计0 眖材︽秨﹍摸崩',
+	'grouplist_titlelength' => '嘿',
+	'grouplist_titlelength' => '砞竚竤舱嘿程',
+	'grouplist_summarylength' => 'ざ残',
+	'grouplist_summarylength_comment' => '砞竚竤舱ざ残程',
+	'grouplist_orderby' => '竤舱逼よΑ',
+	'grouplist_orderby_comment' => '砞竚琿┪よΑ癸竤舱秈︽逼',
+	'grouplist_orderby_dateline' => '承丁',
+	'grouplist_orderby_posts' => '羆祇┇计',
+	'grouplist_orderby_todayposts' => 'さら祇┇计',
+	'grouplist_orderby_threads' => '杠肈计',
+	'grouplist_orderby_level' => '单',
+	'grouplist_orderby_membernum' => 'Θ计',
+	'grouplist_orderby_activity' => '臘',
+	'grouplist_orderby_commoncredits' => '縩だ',
+	'grouplist_orderby_displayorder' => '纐粄抖'
 );
 
 ?>

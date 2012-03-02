@@ -13,20 +13,20 @@ if(!defined('IN_DISCUZ')) {
 
 $lang = array
 (
-	'forumlist_fids' => '指定版块',
-	'forumlist_fids_comment' => '填入指定版块的ID(fid)，多个版块之间用逗号(,)分隔',
-	'forumlist_fups' => '上级版块',
-	'forumlist_fups_comment' => '设置显示某些分类或版块下属的版块',
-	'forumlist_titlelength' => '名称长度',
-	'forumlist_titlelength_comment' => '设置版块名称显示的最大长度',
-	'forumlist_summarylength' => '介绍长度',
-	'forumlist_summarylength_comment' => '设置版块介绍显示的最大长度',
-	'forumlist_orderby' => '版块排序方式',
-	'forumlist_orderby_comment' => '设置以哪一字段或方式对版块进行排序',
-	'forumlist_orderby_displayorder' => '按显示顺序顺序排序',
-	'forumlist_orderby_threads' => '按主题数倒序排序',
-	'forumlist_orderby_todayposts' => '按今日发帖数倒序排序',
-	'forumlist_orderby_posts' => '按帖子数倒序排序',
+	'forumlist_fids' => '﹚遏',
+	'forumlist_fids_comment' => '恶﹚遏ID(fid)遏ぇ丁ノ硆腹(,)だ筳',
+	'forumlist_fups' => '遏',
+	'forumlist_fups_comment' => '砞竚陪ボ琘ㄇだ摸┪遏妮遏',
+	'forumlist_titlelength' => '嘿',
+	'forumlist_titlelength_comment' => '砞竚遏嘿陪ボ程',
+	'forumlist_summarylength' => 'ざ残',
+	'forumlist_summarylength_comment' => '砞竚遏ざ残陪ボ程',
+	'forumlist_orderby' => '遏逼よΑ',
+	'forumlist_orderby_comment' => '砞竚琿┪よΑ癸遏秈︽逼',
+	'forumlist_orderby_displayorder' => '陪ボ抖抖逼',
+	'forumlist_orderby_threads' => '肈计逼',
+	'forumlist_orderby_todayposts' => 'さら祇┇计逼',
+	'forumlist_orderby_posts' => '┇计逼',
 );
 
 ?>

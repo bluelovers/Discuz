@@ -32,7 +32,7 @@ while ($app = $db_source->fetch_array($query)) {
 }
 
 if($nextid) {
-	showmessage("继续转换数据表 ".$table_source." appid> $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
+	showmessage("膥尿锣传计沮 ".$table_source." appid> $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
 }
 
 ?>

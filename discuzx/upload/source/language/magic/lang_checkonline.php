@@ -13,16 +13,16 @@ if(!defined('IN_DISCUZ')) {
 
 $lang = array
 (
-	'checkonline_name' => '雷达卡',
-	'checkonline_desc' => '查看某个用户是否在线',
-	'checkonline_targetuser' => '您要查看谁是否在线',
-	'checkonline_info_nonexistence' => '请输入用户名',
-	'checkonline_hidden_message' => '{username} 当前隐身，最后活动时间是 {time}',
-	'checkonline_online_message' => '{username} 当前在线，最后活动时间是 {time}',
-	'checkonline_offline_message' => '{username} 当前离线',
-	'checkonline_info_noperm' => '对不起，您无权查看此人的 IP',
+	'checkonline_name' => '筽笷',
+	'checkonline_desc' => '琩琘ノめ琌絬',
+	'checkonline_targetuser' => '眤璶琩街琌絬',
+	'checkonline_info_nonexistence' => '叫块ノめ',
+	'checkonline_hidden_message' => '{username} 讽玡留ō程笆丁琌 {time}',
+	'checkonline_online_message' => '{username} 讽玡絬程笆丁琌 {time}',
+	'checkonline_offline_message' => '{username} 讽玡瞒絬',
+	'checkonline_info_noperm' => '癸ぃ癬眤礚舦琩 IP',
 
-	'checkonline_notification' => '有人使用了{magicname}检查您是否在线',
+	'checkonline_notification' => 'Τㄏノ{magicname}浪琩眤琌絬',
 );
 
 ?>

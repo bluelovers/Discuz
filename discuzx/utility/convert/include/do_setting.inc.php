@@ -12,7 +12,7 @@ $sfile = DISCUZ_ROOT.'./source/'.$source.'/setting.ini';
 if(!submitcheck('submit')) {
 	show_form_header();
 	show_table_header();
-	show_table_row(array(array('colspan="3"', '编辑配置文件 source/'.$source.'/setting.ini')), 'title');
+	show_table_row(array(array('colspan="3"', '絪胯皌竚ゅン source/'.$source.'/setting.ini')), 'title');
 
 	foreach ($setting as $key => $value) {
 		if(is_array($value) && !empty($value)) {
@@ -21,7 +21,7 @@ if(!submitcheck('submit')) {
 			foreach ($value as $k => $v) {
 				show_table_row(	array(
 				lang($k),
-				array('class="bg2" width="70%"', '<input type="text" size="40" name="newsetting['.$key.']['.$k.']" value="'.htmlspecialchars($v).'"'.$disabled.'>'.($disabled ? ' 只读' : ''))
+				array('class="bg2" width="70%"', '<input type="text" size="40" name="newsetting['.$key.']['.$k.']" value="'.htmlspecialchars($v).'"'.$disabled.'>'.($disabled ? ' 弄' : ''))
 				), 'bg2'
 				);
 			}
@@ -56,10 +56,10 @@ if(!submitcheck('submit')) {
 		if($fp = @fopen($sfile, 'w')) {
 			fwrite($fp, implode("\n", $lines));
 			fclose($fp);
-			showmessage('设置已经更新完毕并成功保存', 'index.php', '', 1000);
+			showmessage('砞竚竒穝Ч拨Θ玂', 'index.php', '', 1000);
 		} else {
-			showmessage('该设置文件为只读文件，无法保存，请返回');
+			showmessage('赣砞竚ゅン弄ゅン礚猭玂叫');
 		}
 	}
-	showmessage('您没有改变任何设置', 'index.php', '', 1000);
+	showmessage('眤⊿Τэ跑ヴ砞竚', 'index.php', '', 1000);
 }

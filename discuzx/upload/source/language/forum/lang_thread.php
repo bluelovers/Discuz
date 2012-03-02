@@ -12,7 +12,7 @@ if(!defined('IN_DISCUZ')) {
 }
 
 $lang = array (
-	  'forum_archive' => '¥Êµµ',
+	  'forum_archive' => '¶s¿…',
 
 
 );

@@ -6,7 +6,7 @@
 		<item id="plugin">
 			<item id="available"><![CDATA[1]]></item>
 			<item id="adminid"><![CDATA[1]]></item>
-			<item id="name"><![CDATA[旋风存储]]></item>
+			<item id="name"><![CDATA[臂纗]]></item>
 			<item id="identifier"><![CDATA[xf_storage]]></item>
 			<item id="description"><![CDATA[]]></item>
 			<item id="datatables"><![CDATA[]]></item>
@@ -31,16 +31,16 @@
 		<item id="version"><![CDATA[X2.5]]></item>
 		<item id="language">
 			<item id="templatelang">
-				<item id="sava_attachlist"><![CDATA[完毕，保存到附件列表]]></item>
-				<item id="xf_storage_tips"><![CDATA[您可以在上传过程中关闭这个小窗口，上传完毕后会通知您]]></item>
-				<item id="wait_for_url"><![CDATA[页面加载中，请稍等...]]></item>
-				<item id="timeout_tips"><![CDATA[超大附件上传页面加载失败，是否切换到批量上传？]]></item>
-				<item id="filesize_limit"><![CDATA[文件尺寸: 小于 2GB]]></item>
-				<item id="xf_storage_btn"><![CDATA[大附件上传]]></item>
-				<item id="update_tips"><![CDATA[该附件是通过QQ旋风方式上传的大附件，不支持直接更新方式修改。]]></item>
-				<item id="notice_name"><![CDATA[通知信息]]></item>
-				<item id="download_xf"><![CDATA[旋风高速下载]]></item>
-				<item id="attachlist"><![CDATA[附件列表]]></item>
+				<item id="sava_attachlist"><![CDATA[Ч拨玂ン]]></item>
+				<item id="xf_storage_tips"><![CDATA[眤肚筁祘い闽超硂怠肚Ч拨穦硄眤]]></item>
+				<item id="wait_for_url"><![CDATA[更い叫祔单...]]></item>
+				<item id="timeout_tips"><![CDATA[禬ン肚更ア毖琌ち传у秖肚]]></item>
+				<item id="filesize_limit"><![CDATA[ゅンへ:  2GB]]></item>
+				<item id="xf_storage_btn"><![CDATA[ン肚]]></item>
+				<item id="update_tips"><![CDATA[赣ン琌硄筁QQ臂よΑ肚ンぃや钡穝よΑэ]]></item>
+				<item id="notice_name"><![CDATA[硄獺]]></item>
+				<item id="download_xf"><![CDATA[臂蔼硉更]]></item>
+				<item id="attachlist"><![CDATA[ン]]></item>
 			</item>
 		</item>
 	</item>

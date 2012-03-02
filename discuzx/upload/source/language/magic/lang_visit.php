@@ -13,10 +13,10 @@ if(!defined('IN_DISCUZ')) {
 
 $lang = array
 (
-	'visit_name' => '互访卡',
-	'visit_desc' => '随机访问好友空间/向好友打招呼/给好友留言',
-	'visit_num' => '访问好友数',
-	'visit_info' => '随机访问(最多 {num} 个)好友空间/向好友打招呼/给好友留言',
+	'visit_name' => 'が砐',
+	'visit_desc' => '繦诀砐拜ね丁/ねゴ┷㊣/倒ね痙ē',
+	'visit_num' => '砐拜ね计',
+	'visit_info' => '繦诀砐拜(程 {num} )ね丁/ねゴ┷㊣/倒ね痙ē',
 );
 
 ?>

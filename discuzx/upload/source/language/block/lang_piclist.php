@@ -13,27 +13,27 @@ if(!defined('IN_DISCUZ')) {
 
 $lang = array
 (
-	'piclist_picids' => '指定图片',
-	'piclist_picids_comment' => '填入指定图片的ID(picid)，多个图片之间用逗号(,)分隔',
-	'piclist_aids' => '相册ID',
-	'piclist_aids_comment' => '填入指定相册的ID(aid)，多个相册之间用逗号(,)分隔',
-	'piclist_uids' => '用户UID',
-	'piclist_uids_comment' => '填入指定用户的ID(uid)，多个用户之间用逗号(,)分隔',
-	'piclist_startrow' => '起始数据行数',
-	'piclist_startrow_comment' => '如需设定起始的数据行数，请输入具体数值，0 为从第一行开始，以此类推',
-	'piclist_hours' => '时间范围',
-	'piclist_hours_nolimit' => '不限制',
-	'piclist_hours_hour' => '1小时内',
-	'piclist_hours_day' => '24小时内',
-	'piclist_hours_week' => '7天内',
-	'piclist_hours_month' => '1月内',
-	'piclist_hours_year' => '1年内',
-	'piclist_titlelength' => '标题长度',
-	'piclist_titlelength' => '指定图片标题最大长度',
-	'piclist_orderby' => '图片排序方式',
-	'piclist_orderby_comment' => '设置以哪一字段或方式对图片进行排序',
-	'piclist_orderby_dateline' => '按发布时间倒序',
-	'piclist_orderby_hot' => '按热度倒序'
+	'piclist_picids' => '﹚瓜',
+	'piclist_picids_comment' => '恶﹚瓜ID(picid)瓜ぇ丁ノ硆腹(,)だ筳',
+	'piclist_aids' => 'ID',
+	'piclist_aids_comment' => '恶﹚ID(aid)ぇ丁ノ硆腹(,)だ筳',
+	'piclist_uids' => 'ノめUID',
+	'piclist_uids_comment' => '恶﹚ノめID(uid)ノめぇ丁ノ硆腹(,)だ筳',
+	'piclist_startrow' => '癬﹍计沮︽计',
+	'piclist_startrow_comment' => '惠砞﹚癬﹍计沮︽计叫块ㄣ砰计0 眖材︽秨﹍摸崩',
+	'piclist_hours' => '丁絛瞅',
+	'piclist_hours_nolimit' => 'ぃ',
+	'piclist_hours_hour' => '1ず',
+	'piclist_hours_day' => '24ず',
+	'piclist_hours_week' => '7ぱず',
+	'piclist_hours_month' => '1るず',
+	'piclist_hours_year' => '1ず',
+	'piclist_titlelength' => '夹肈',
+	'piclist_titlelength' => '﹚瓜夹肈程',
+	'piclist_orderby' => '瓜逼よΑ',
+	'piclist_orderby_comment' => '砞竚琿┪よΑ癸瓜秈︽逼',
+	'piclist_orderby_dateline' => '祇丁',
+	'piclist_orderby_hot' => '荐'
 );
 
 ?>

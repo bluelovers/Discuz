@@ -89,7 +89,7 @@ while ($space = $db_source->fetch_array($query)) {
 	}
 
 	if(empty($home['extcredits']['credit']) || empty($home['extcredits']['experience'])) {
-		showmessage("发生错误，请配置积分对应关系信息");
+		showmessage("祇ネ岿粇叫皌竚縩だ癸莱闽玒獺");
 	}
 
 	$setarr[$home['extcredits']['credit']] = $space['credit'] + intval($newspace[$home['extcredits']['credit']]);
@@ -210,7 +210,7 @@ while ($space = $db_source->fetch_array($query)) {
 }
 
 if($nextid) {
-	showmessage("继续转换数据表 {$oldpre}space uid> $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
+	showmessage("膥尿锣传计沮 {$oldpre}space uid> $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
 }
 
 function getupdatesql($setarr) {

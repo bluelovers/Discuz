@@ -13,20 +13,20 @@ if(!defined('IN_DISCUZ')) {
 
 $lang = array
 (
-	'google_name' => 'Google 搜索',
-	'google_desc' => 'Google 搜索框',
-	'google_lang' => '搜索网页的语言',
-	'google_lang_comment' => '设置适合自己论坛的网页语言可以有效的提高搜索结果的质量',
-	'google_lang_any' => '任何语言',
-	'google_lang_en' => '英文',
-	'google_lang_zh-CN' => '简体中文',
-	'google_lang_zh-TW' => '繁体中文',
-	'google_default' => '默认搜索选择',
-	'google_default_comment' => '搜索框默认选择的项目',
-	'google_default_0' => '网页搜索',
-	'google_default_1' => '站内搜索',
-	'google_client' => '搜索联盟 ID',
-	'google_client_comment' => '如果您加入了 Google 搜索联盟，可以在这里填写 ID',
+	'google_name' => 'Google 穓',
+	'google_desc' => 'Google 穓',
+	'google_lang' => '穓呼粂ē',
+	'google_lang_comment' => '砞竚続阶韭呼粂ēΤ矗蔼穓挡狦借秖',
+	'google_lang_any' => 'ヴ粂ē',
+	'google_lang_en' => '璣ゅ',
+	'google_lang_zh-CN' => '虏砰いゅ',
+	'google_lang_zh-TW' => '羉砰いゅ',
+	'google_default' => '纐粄穓匡拒',
+	'google_default_comment' => '穓纐粄匡拒兜ヘ',
+	'google_default_0' => '呼穓',
+	'google_default_1' => 'ず穓',
+	'google_client' => '穓羛幅 ID',
+	'google_client_comment' => '狦眤 Google 穓羛幅硂柑恶糶 ID',
 );
 
 ?>

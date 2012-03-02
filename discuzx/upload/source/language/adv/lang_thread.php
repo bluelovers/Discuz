@@ -13,20 +13,20 @@ if(!defined('IN_DISCUZ')) {
 
 $lang = array
 (
-	'thread_name' => '论坛/群组 帖内广告',
-	'thread_desc' => '展现方式: 帖内广告显示于帖子内容的上方、下方或右方，帖子内容的上方和下方通常使用文字的形式，帖子内容右方通常使用图片的形式。当前页面有多个帖内广告时，系统会从中抽取与每页帖数相等的条目进行随机显示。您可以在 全局设置中的其他设置中修改每帖显示的广告数量。<br />价值分析: 由于帖子是论坛最核心的组成部分，嵌入帖子内容内部的帖内广告，便可在用户浏览帖子内容时自然的被接受，加上随机播放的特性，适合于特定内容的有效推广，也可用于论坛自身的宣传和公告之用。建议设置多条帖内广告以实现广告内容的差异化，从而吸引更多访问者的注意力。',
-	'thread_fids' => '投放版块',
-	'thread_fids_comment' => '设置广告投放的论坛版块，当广告投放范围中包含“论坛”时有效',
-	'thread_groups' => '投放群组分类',
-	'thread_groups_comment' => '设置广告投放的群组分类，当广告投放范围中包含“群组”时有效',
-	'thread_position' => '投放位置',
-	'thread_position_comment' => '帖子内容上方和下方的广告适合使用文字形式，而帖子右侧广告适合使用图片或 Flash 形式，也可以同时显示多条文字广告',
-	'thread_position_bottom' => '帖子下方',
-	'thread_position_top' => '帖子上方',
-	'thread_position_right' => '帖子右侧',
-	'thread_pnumber' => '广告显示楼层',
-	'thread_pnumber_comment' => '选项 #1 #2 #3 ... 表示帖子楼层，可以按住 CTRL 多选',
-	'thread_pnumber_all' => '全部',
+	'thread_name' => '阶韭/竤舱 ┇ず約',
+	'thread_desc' => '甶瞷よΑ: ┇ず約陪ボ┇ず甧よよ┪よ┇ず甧よ㎝よ硄盽ㄏノゅΑ┇ず甧よ硄盽ㄏノ瓜Α讽玡Τ┇ず約╰参穦眖い┾籔–┇计单兵ヘ秈︽繦诀陪ボ眤 Ы砞竚いㄤ砞竚いэ–┇陪ボ約计秖<br />基だ猂: パ┇琌阶韭程み舱Θ场だ碠┇ず甧ず场┇ず約獽ノめ聅凝┇ず甧礛砆钡繦诀冀疭┦続疭﹚ず甧Τ崩約ノ阶韭ō肚㎝そぇノ某砞竚兵┇ず約龟瞷約ず甧畉钵て眖τま砐拜猔種',
+	'thread_fids' => 'щ遏',
+	'thread_fids_comment' => '砞竚約щ阶韭遏讽約щ絛瞅い阶韭Τ',
+	'thread_groups' => 'щ竤舱だ摸',
+	'thread_groups_comment' => '砞竚約щ竤舱だ摸讽約щ絛瞅い竤舱Τ',
+	'thread_position' => 'щ竚',
+	'thread_position_comment' => '┇ず甧よ㎝よ約続ㄏノゅΑτ┇凹約続ㄏノ瓜┪ Flash Α陪ボ兵ゅ約',
+	'thread_position_bottom' => '┇よ',
+	'thread_position_top' => '┇よ',
+	'thread_position_right' => '┇凹',
+	'thread_pnumber' => '約陪ボ加糷',
+	'thread_pnumber_comment' => '匡兜 #1 #2 #3 ... ボ┇加糷 CTRL 匡',
+	'thread_pnumber_all' => '场',
 );
 
 ?>

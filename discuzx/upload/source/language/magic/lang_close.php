@@ -13,18 +13,18 @@ if(!defined('IN_DISCUZ')) {
 
 $lang = array
 (
-	'close_name' => '沉默卡',
-	'close_desc' => '可以将主题关闭，禁止回复',
-	'close_expiration' => '关闭有效期',
-	'close_expiration_comment' => '设置主题可以被关闭多长时间，默认 24 小时',
-	'close_forum' => '允许使用本道具的版块',
-	'close_info' => '关闭指定的主题 {expiration} 小时，请输入主题的 ID',
-	'close_info_nonexistence' => '请指定要关闭的主题',
-	'close_succeed' => '您操作的主题已关闭',
-	'close_info_noperm' => '对不起，主题所在版块不允许使用本道具',
-	'close_info_user_noperm' => '对不起，您不能对此人使用本道具',
+	'close_name' => '↖纐',
+	'close_desc' => '盢肈闽超窽ゎ確',
+	'close_expiration' => '闽超Τ戳',
+	'close_expiration_comment' => '砞竚肈砆闽超丁纐粄 24 ',
+	'close_forum' => 'す砛\ㄏノセ笵ㄣ遏',
+	'close_info' => '闽超﹚肈 {expiration} 叫块肈 ID',
+	'close_info_nonexistence' => '叫﹚璶闽超肈',
+	'close_succeed' => '眤巨肈闽超',
+	'close_info_noperm' => '癸ぃ癬肈┮遏ぃす砛\ㄏノセ笵ㄣ',
+	'close_info_user_noperm' => '癸ぃ癬眤ぃ癸ㄏノセ笵ㄣ',
 
-	'close_notification' => '您的主题 {subject} 被 {actor} 使用了{magicname}，<a href="forum.php?mod=viewthread&tid={tid}">快去看看吧！</a>',
+	'close_notification' => '眤肈 {subject} 砆 {actor} ㄏノ{magicname}<a href="forum.php?mod=viewthread&tid={tid}">е</a>',
 );
 
 ?>

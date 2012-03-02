@@ -13,18 +13,18 @@ if(!defined('IN_DISCUZ')) {
 
 $lang = array
 (
-	'gift_name' => '红包卡',
-	'gift_desc' => '将自己的一部分积分埋在空间，来访者可以点击获取',
-	'gift_info' => '将积分作为红包（可分成多份）埋在自己空间，<br />每个来访者最多可以获取其中一份',
-	'gift_succeed' => '埋设红包成功 ',
-	'gift_bad_credits_input' => '输入的积分总数有误',
-	'gift_bad_percredit_input' => '输入的每份积分数有误',
-	'gift_bad_credittype_input' => '指定的积分类型有误',
-	'gift_credits_out_of_own' => '输入的积分数超出您拥有的积分数',
-	'gift_gc' => '回收红包',
-	'gift_use' => '埋个红包',
+	'gift_name' => '',
+	'gift_desc' => '盢场だ縩だ甀丁ㄓ砐翴阑莉',
+	'gift_info' => '盢縩だだΘ甀丁<br />–ㄓ砐程莉ㄤい',
+	'gift_succeed' => '甀砞Θ\ ',
+	'gift_bad_credits_input' => '块縩だ羆计Τ粇',
+	'gift_bad_percredit_input' => '块–縩だ计Τ粇',
+	'gift_bad_credittype_input' => '﹚縩だ摸Τ粇',
+	'gift_credits_out_of_own' => '块縩だ计禬眤局Τ縩だ计',
+	'gift_gc' => 'Μ',
+	'gift_use' => '甀',
 
-	'gift_receive_gift' => '领取红包 {percredit} {credittype}',
+	'gift_receive_gift' => '烩 {percredit} {credittype}',
 );
 
 ?>

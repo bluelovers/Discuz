@@ -41,7 +41,7 @@ if(empty($nexttable)) {
 
 
 if($nextid) {
-	showmessage("继续转换数据表 ".$table_source." $start 至 ".($start+$limit)." 行", "index.php?a=$action&source=$source&prg=$curprg&start=".($start+$limit));
+	showmessage("膥尿锣传计沮 ".$table_source." $start  ".($start+$limit)." ︽", "index.php?a=$action&source=$source&prg=$curprg&start=".($start+$limit));
 }
 
 ?>

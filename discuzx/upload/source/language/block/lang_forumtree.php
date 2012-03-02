@@ -13,10 +13,10 @@ if(!defined('IN_DISCUZ')) {
 
 $lang = array
 (
-	'forumtree_name' => '°æ¿éÊ÷ÐÎÁÐ±í',
-	'forumtree_desc' => 'Ê÷ÐÎÏÔÊ¾°æ¿éÁÐ±í',
-	'forumtree_fids' => 'ÏÔÊ¾µÄ°æ¿é',
-	'forumtree_fids_comment' => 'ÉèÖÃÔÊÐíÏÔÊ¾µÄ°æ¿é£¬Áô¿ÕÎªÏÔÊ¾ËùÓÐ°æ¿é',
+	'forumtree_name' => 'ª©¶ô¾ð§Î¦Cªí',
+	'forumtree_desc' => '¾ð§ÎÅã¥Üª©¶ô¦Cªí',
+	'forumtree_fids' => 'Åã¥Üªºª©¶ô',
+	'forumtree_fids_comment' => '³]¸m¤¹³\\Åã¥Üªºª©¶ô¡A¯dªÅ¬°Åã¥Ü©Ò¦³ª©¶ô',
 );
 
 ?>

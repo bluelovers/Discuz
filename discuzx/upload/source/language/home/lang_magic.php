@@ -13,18 +13,18 @@ if(!defined('IN_DISCUZ')) {
 
 $lang = array
 (
-	'target_tid' => '目标主题 tid',
-	'target_pid' => '目标帖子 pid',
-	'target_username' => '目标用户名',
-	'magics_type_1' => '帖子类',
-	'magics_type_2' => '会员类',
-	'magics_type_3' => '其他类',
+	'target_tid' => 'ヘ夹肈 tid',
+	'target_pid' => 'ヘ夹┇ pid',
+	'target_username' => 'ヘ夹ノめ',
+	'magics_type_1' => '┇摸',
+	'magics_type_2' => '穦摸',
+	'magics_type_3' => 'ㄤ摸',
 
-	'CCK_color' => '颜色',
-	'MOK_info' => '获得的钱币数目规则：大于 1 且小于购买价格 150% 的随机数',
-	'CODE_info' => '获得 Discuz! 测试邀请码一个',
-	'MVK_target' => '要移动到的版面',
-	'SOFA_message' => '一道闪电划破湛蓝的天空，随着一声巨响，沙发被我抢了！哈哈！',
+	'CCK_color' => '肅︹',
+	'MOK_info' => '莉眔窥刽计ヘ砏玥 1 潦禦基 150% 繦诀计',
+	'CODE_info' => '莉眔 Discuz! 代刚淋叫絏',
+	'MVK_target' => '璶簿笆',
+	'SOFA_message' => '笵皗筿购瘆达屡ぱ繦帝羘エ臫‵祇砆и穖',
 );
 
 ?>

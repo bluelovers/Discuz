@@ -103,7 +103,7 @@ if ($pluginop == 'config') {
 			$code = $errorCode;
 			if($errorCode == 41001) {
 				$message = lang('connect', 'user_unauthorized', array('login_url' => $_G['connect']['login_url'].'&reauthorize=yes&formhash='.FORMHASH));
-			} elseif($errorCode == 41003 || $errorCode == 40006) { // access token失效或非法
+			} elseif($errorCode == 41003 || $errorCode == 40006) { // access tokenア┪獶猭
 				$message = lang('connect', 'share_token_outofdate', array('login_url' => $_G['connect']['login_url']));
 			} elseif ($errorCode == 3021) {
 				$message = lang('connect', 'qzone_share_same_url');
@@ -146,7 +146,7 @@ if ($pluginop == 'config') {
 			$code = $errorCode;
 			if($errorCode == 41001) {
 				$message = lang('connect', 'user_unauthorized', array('login_url' => $_G['connect']['login_url'].'&reauthorize=yes&formhash='.FORMHASH));
-			} elseif($errorCode == 41003 || $errorCode == 40006) { // access token失效或非法
+			} elseif($errorCode == 41003 || $errorCode == 40006) { // access tokenア┪獶猭
 				$message = lang('connect', 'share_token_outofdate', array('login_url' => $_G['connect']['login_url']));
 			} elseif ($errorCode == 3013) {
 				$message = lang('connect', 'weibo_same_content');

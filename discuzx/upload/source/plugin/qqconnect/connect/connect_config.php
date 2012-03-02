@@ -20,7 +20,7 @@ $referer = dreferer();
 
 if(submitcheck('connectsubmit')) {
 
-	if($op == 'config') { // debug 修改QQ绑定设置
+	if($op == 'config') { // debug эQQ竕﹚砞竚
 
 		$ispublishfeed = !empty($_GET['ispublishfeed']) ? 1 : 0;
 		$ispublisht = !empty($_GET['ispublisht']) ? 1 : 0;
@@ -67,7 +67,7 @@ if(submitcheck('connectsubmit')) {
 
 			$connectService->connectUserUnbind();
 
-		} else { // debug 因为老用户access token等信息，所以没法通知connect，所以直接在本地解绑就行了，不fopen connect
+		} else { // debug ρノめaccess token单獺┮⊿猭硄connect┮钡セ秆竕碞︽ぃfopen connect
 
 			if($_G['member']['conisregister']) {
 				if($_GET['newpassword1'] !== $_GET['newpassword2']) {

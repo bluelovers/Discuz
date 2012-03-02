@@ -624,12 +624,12 @@ if($op == 'block') {
 				C::t('forum_thread')->update($item['id'], $data);
 			}
 			if($_POST['icflag'] && !(C::t('common_block_pic')->count_by_bid_pic($block['bid'], $thumbpath))) {
-				$picflag = 0; //common_block_pic表中的picflag标识（0本地，1远程）
+				$picflag = 0; //common_block_picいpicflag夹醚0セ1环祘
 				if($_G['setting']['ftp']['on']) {
 					$ftp = & discuz_ftp::instance();
 					$ftp->connect();
 					if($ftp->connectid && $ftp->ftp_size($thumbpath) > 0 || $ftp->upload($_G['setting']['attachurl'].'/'.$thumbpath, $thumbpath)) {
-						$picflag = 1; //common_block_pic表中的picflag标识（0本地，1远程）
+						$picflag = 1; //common_block_picいpicflag夹醚0セ1环祘
 						@unlink($_G['setting']['attachdir'].'./'.$thumbpath);
 					}
 				}

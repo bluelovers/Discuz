@@ -13,9 +13,9 @@ if(!defined('IN_DISCUZ')) {
 
 $lang = array
 (
-	'updateline_name' => '救生圈',
-	'updateline_desc' => '把自己日志的发布时间更新为当前时间',
-	'updateline_info' => '把自己日志的发布时间更新为当前时间',
+	'updateline_name' => '毕ネ伴',
+	'updateline_desc' => 'рら粁祇丁穝讽玡丁',
+	'updateline_info' => 'рら粁祇丁穝讽玡丁',
 );
 
 ?>

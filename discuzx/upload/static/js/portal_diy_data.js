@@ -12,8 +12,8 @@ drag.extend({
 	'blockDefaultClass' : [],
 	'frameDefaultClass' : [],
 	setSampleMenu : function () {
-		this.addMenu('block', '数据', 'drag.openBlockEdit(event,"data")');
-		this.addMenu('block', '更新', 'drag.blockForceUpdate(event)');
+		this.addMenu('block', '计沮', 'drag.openBlockEdit(event,"data")');
+		this.addMenu('block', '穝', 'drag.blockForceUpdate(event)');
 	},
 	openBlockEdit : function (e,op) {
 		e = Util.event(e);
@@ -48,7 +48,7 @@ drag.extend({
 	},
 	init : function (sampleMode) {
 		this.initCommon();
-		$('samplepanel').innerHTML = '可直接管理模块数据 [<a href="javascript:;" onclick="spaceDiy.cancel();return false;" class="xi2">退出</a>]';
+		$('samplepanel').innerHTML = '钡恨瞶家遏计沮 [<a href="javascript:;" onclick="spaceDiy.cancel();return false;" class="xi2">癶</a>]';
 		this.setSampleMode(sampleMode);
 		this.initSample();
 		return true;
@@ -74,13 +74,13 @@ drag.extend({
 		var height = Util.getFinallyStyle(bcontent, 'height');
 		bcontent.style.lineHeight = height == 'auto' ? '' : (height == '0px' ? '20px' : height);
 		var boldcontent = bcontent.innerHTML;
-		bcontent.innerHTML = '<center>正在加载内容...</center>';
+		bcontent.innerHTML = '<center>タ更ず甧...</center>';
 		var x = new Ajax();
 		x.get('portal.php?mod=portalcp&ac=block&op=getblock&forceupdate=1&inajax=1&bid='+bid+'&tpl='+document.diyform.template.value, function(s) {
 			if(s.indexOf('errorhandle_') != -1) {
 				bcontent.innerHTML = boldcontent;
 				runslideshow();
-				showDialog('抱歉，您没有权限添加或编辑模块', 'alert');
+				showDialog('╆簆眤⊿Τ舦睰┪絪胯家遏', 'alert');
 				doane();
 			} else {
 				var obj = document.createElement('div');

@@ -13,9 +13,9 @@ if(!defined('IN_DISCUZ')) {
 
 $lang = array
 (
-	'thunder_name' => '雷鸣之声',
-	'thunder_desc' => '发布一条全站动态，通知大家自己上线了',
-	'thunder_info' => '发布一条全站动态，通知大家自己上线了',
+	'thunder_name' => '筽伙ぇ羘',
+	'thunder_desc' => '祇兵笆篈硄產絬',
+	'thunder_info' => '祇兵笆篈硄產絬',
 );
 
 ?>

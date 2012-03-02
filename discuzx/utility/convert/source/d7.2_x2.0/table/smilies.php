@@ -32,10 +32,10 @@ while ($row = $db_source->fetch_array($query)) {
 }
 
 if($nextid) {
-	showmessage("继续转换数据表 ".$table_source." id > $nextid ", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
+	showmessage("膥尿锣传计沮 ".$table_source." id > $nextid ", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
 } else {
-	$db_target->query("REPLACE INTO $table_target (id, typeid, displayorder, type, code, url) VALUES ('83','4','9','stamp','编辑采用','010.gif')");
-	$db_target->query("REPLACE INTO $table_target (id, typeid, displayorder, type, code, url) VALUES ('84','0','18','stamplist','编辑采用','010.small.gif')");
+	$db_target->query("REPLACE INTO $table_target (id, typeid, displayorder, type, code, url) VALUES ('83','4','9','stamp','絪胯蹦ノ','010.gif')");
+	$db_target->query("REPLACE INTO $table_target (id, typeid, displayorder, type, code, url) VALUES ('84','0','18','stamplist','絪胯蹦ノ','010.small.gif')");
 
 }
 

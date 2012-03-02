@@ -24,8 +24,8 @@ if(!empty($eventfid)) {
 	}
 }
 if(empty($eventfid)) {
-	$board_name = 'UCHome数据';
-	$forum_name = 'UCHome活动';
+	$board_name = 'UCHome计沮';
+	$forum_name = 'UCHome笆';
 	$value = $db_target->fetch_first('SELECT fid FROM '.$db_target->table_name('forum_forum')." WHERE type='forum' AND status='1' AND `name`='$forum_name'");
 	if(!empty($value)) {
 		$eventfid = intval($value['fid']);
@@ -53,7 +53,7 @@ if(empty($eventfid)) {
 		$eventfid = $db_target->insert('forum_forum', $forum, true);
 		$forumfield = array(
 			'fid' => $eventfid,
-			'description' => '从 UCenter Home 转移过来的活动内容'
+			'description' => '眖 UCenter Home 锣簿筁ㄓ笆ず甧'
 		);
 		$db_target->insert('forum_forumfield', $forumfield);
 	}
@@ -113,7 +113,7 @@ while ($event = $db_source->fetch_array($event_query)) {
 		'place' => '['.$event['province'].$event['city'].'] '.$event['location'],
 		'class' => $eventclass[$event['classid']],
 		'number' => $event['limitnum'],
-		'applynumber' => $event['membernum'] - 1,// Home 里的活动成员包括创建者
+		'applynumber' => $event['membernum'] - 1,// Home 柑笆Θ珹承
 		'expiration' => $event['deadline']
 	);
 	$db_target->insert('forum_activity', daddslashes($activityarr));
@@ -146,7 +146,7 @@ while ($event = $db_source->fetch_array($event_query)) {
 }
 
 if($nextid) {
-	showmessage("继续转换数据表 ".$table_source." eventid> $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
+	showmessage("膥尿锣传计沮 ".$table_source." eventid> $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
 }
 
 $maxpid = $db_target->result_first("SELECT MAX(pid) FROM ".$db_target->table('forum_post'));

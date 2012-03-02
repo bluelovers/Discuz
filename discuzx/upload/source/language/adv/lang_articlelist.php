@@ -13,16 +13,16 @@ if(!defined('IN_DISCUZ')) {
 
 $lang = array
 (
-	'articlelist_name' => '门户 文章列表广告',
-	'articlelist_desc' => '展现方式: 文章广告显示于频道文章分类的文章列表页面，分为顶部、底部 2 个投放位置。',
-	'articlelist_position' => '投放位置',
-	'articlelist_position_comment' => '分为 4 个位置，上下各有 2 个紧邻的显示位置',
-	'articlelist_position_up1' => '顶部(上)',
-	'articlelist_position_up2' => '顶部(下)',
-	'articlelist_position_down1' => '底部(上)',
-	'articlelist_position_down2' => '底部(下)',
-	'articlelist_category' => '投放频道分类',
-	'articlelist_category_comment' => '设置广告投放的频道分类',
+	'articlelist_name' => 'め ゅ彻約',
+	'articlelist_desc' => '甶瞷よΑ: ゅ彻約陪ボ繵笵ゅ彻だ摸ゅ彻だ郴场┏场 2 щ竚',
+	'articlelist_position' => 'щ竚',
+	'articlelist_position_comment' => 'だ 4 竚Τ 2 候綟陪ボ竚',
+	'articlelist_position_up1' => '郴场()',
+	'articlelist_position_up2' => '郴场()',
+	'articlelist_position_down1' => '┏场()',
+	'articlelist_position_down2' => '┏场()',
+	'articlelist_category' => 'щ繵笵だ摸',
+	'articlelist_category_comment' => '砞竚約щ繵笵だ摸',
 );
 
 ?>

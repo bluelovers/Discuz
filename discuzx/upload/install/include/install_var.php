@@ -13,7 +13,7 @@ if(!defined('IN_COMSENZ')) {
 
 define('SOFT_NAME', 'Discuz!');
 
-define('INSTALL_LANG', 'SC_GBK');
+define('INSTALL_LANG', 'TC_BIG5');
 
 define('CONFIG', './config/config_global.php');
 define('CONFIG_UC', './config/config_ucenter.php');
@@ -23,8 +23,8 @@ $lockfile = ROOT_PATH.'./data/install.lock';
 
 @include ROOT_PATH.CONFIG;
 
-define('CHARSET', 'gbk');
-define('DBCHARSET', 'gbk');
+define('CHARSET', 'big5');
+define('DBCHARSET', 'big5');
 
 define('ORIG_TABLEPRE', 'pre_');
 
@@ -149,7 +149,7 @@ $serialize_sql_setting = array (
     1 =>
     array (
       'img' => '',
-      'title' => '威望',
+      'title' => '辨',
       'unit' => '',
       'ratio' => 0,
       'available' => '1',
@@ -160,7 +160,7 @@ $serialize_sql_setting = array (
     2 =>
     array (
       'img' => '',
-      'title' => '金钱',
+      'title' => '窥',
       'unit' => '',
       'ratio' => 0,
       'available' => '1',
@@ -171,7 +171,7 @@ $serialize_sql_setting = array (
     3 =>
     array (
       'img' => '',
-      'title' => '贡献',
+      'title' => '癪膍',
       'unit' => '',
       'ratio' => 0,
       'available' => '1',
@@ -237,16 +237,16 @@ $serialize_sql_setting = array (
   ),
   'postnocustom' =>
   array (
-    0 => '楼主',
-    1 => '沙发',
-    2 => '板凳',
-    3 => '地板',
+    0 => '加',
+    1 => '‵祇',
+    2 => '狾构',
+    3 => '狾',
   ),
   'recommendthread' =>
   array (
     'status' => '0',
-    'addtext' => '支持',
-    'subtracttext' => '反对',
+    'addtext' => 'や',
+    'subtracttext' => 'は癸',
     'defaultshow' => '1',
     'daycount' => '0',
     'ownthread' => '0',
@@ -254,34 +254,34 @@ $serialize_sql_setting = array (
   ),
   'seotitle' =>
   array (
-    'portal' => '门户',
-    'forum' => '论坛',
-    'group' => '群组',
-    'home' => '家园',
-    'userapp' => '应用',
+    'portal' => 'め',
+    'forum' => '阶韭',
+    'group' => '竤舱',
+    'home' => '產堕',
+    'userapp' => '莱ノ',
   ),
   'activityfield' =>
   array (
-    'realname' => '真实姓名',
-    'mobile' => '手机',
-    'qq' => 'QQ号',
+    'realname' => '痷龟﹎',
+    'mobile' => 'も诀',
+    'qq' => 'QQ腹',
   ),
   'article_tags' =>
   array (
-    1 => '原创',
-    2 => '热点',
-    3 => '组图',
-    4 => '爆料',
-    5 => '头条',
-    6 => '幻灯',
-    7 => '滚动',
-    8 => '推荐',
+    1 => '承',
+    2 => '荐翴',
+    3 => '舱瓜',
+    4 => '脄',
+    5 => '繷兵',
+    6 => 'ほ縊',
+    7 => '簎笆',
+    8 => '崩滤',
   ),
   'verify' =>
   array (
     6 =>
     array (
-      'title' => '实名认证',
+      'title' => '龟粄靡',
       'available' => '0',
       'showicon' => '0',
       'viewrealname' => '0',
@@ -314,7 +314,7 @@ $serialize_sql_setting = array (
     ),
     7 =>
     array (
-      'title' => '视频认证',
+      'title' => '跌繵粄靡',
       'available' => '0',
       'showicon' => '0',
       'viewvideophoto' => '0',
@@ -323,7 +323,7 @@ $serialize_sql_setting = array (
   ),
   'focus' =>
   array (
-    'title' => '站长推荐',
+    'title' => '崩滤',
     'data' =>
     array (
     ),
@@ -335,7 +335,7 @@ $serialize_sql_setting = array (
     array (
       'available' => 1,
       'displayorder' => 0,
-      'title' => '基本资料',
+      'title' => '膀セ戈',
       'field' =>
       array (
         'realname' => 'realname',
@@ -359,7 +359,7 @@ $serialize_sql_setting = array (
     ),
     'contact' =>
     array (
-      'title' => '联系方式',
+      'title' => '羛么よΑ',
       'available' => '1',
       'displayorder' => '1',
       'field' =>
@@ -377,7 +377,7 @@ $serialize_sql_setting = array (
     array (
       'available' => 1,
       'displayorder' => 2,
-      'title' => '教育情况',
+      'title' => '毙▅薄猵',
       'field' =>
       array (
         'graduateschool' => 'graduateschool',
@@ -388,7 +388,7 @@ $serialize_sql_setting = array (
     array (
       'available' => 1,
       'displayorder' => 3,
-      'title' => '工作情况',
+      'title' => '薄猵',
       'field' =>
       array (
         'occupation' => 'occupation',
@@ -399,7 +399,7 @@ $serialize_sql_setting = array (
     ),
     'info' =>
     array (
-      'title' => '个人信息',
+      'title' => '獺',
       'available' => '1',
       'displayorder' => '4',
       'field' =>

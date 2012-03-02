@@ -64,7 +64,7 @@ while ($data = $db_source->fetch_array($query)) {
 }
 
 if($nextid) {
-	showmessage("继续转换数据表 ".$table_source." groupid > $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
+	showmessage("膥尿锣传计沮 ".$table_source." groupid > $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
 } else {
 	$db_target->query("UPDATE $table_target SET allowvisit='2' WHERE groupid='1'");
 }

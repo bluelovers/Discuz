@@ -10,7 +10,7 @@ function validate_ajax(obj) {
 	if (subject) {
 		var slen = strlen(subject.value);
 		if (slen < 1 || slen > 80) {
-			alert("标题长度(1~80字符)不符合要求");
+			alert("夹肈(1~80才)ぃ才璶―");
 			subject.focus();
 			return false;
 		}

@@ -13,10 +13,10 @@ if(!defined('IN_DISCUZ')) {
 
 $lang = array
 (
-	'detector_name' => '探测器',
-	'detector_desc' => '探测埋了红包的会员空间',
-	'detector_num' => '最大探测数',
-	'detector_info' => '探测(最多 {num} 个)埋了红包的会员空间',
+	'detector_name' => '贝代竟',
+	'detector_desc' => '贝代甀穦丁',
+	'detector_num' => '程贝代计',
+	'detector_info' => '贝代(程 {num} )甀穦丁',
 );
 
 ?>

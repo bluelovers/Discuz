@@ -14,269 +14,269 @@ if(!defined('IN_DISCUZ')) {
 
 $lang = array
 (
-	'hello' => '您好',
-	'moderate_member_invalidate' => '否决',
-	'moderate_member_delete' => '删除',
-	'moderate_member_validate' => '通过',
+	'hello' => '眤',
+	'moderate_member_invalidate' => '∕',
+	'moderate_member_delete' => '埃',
+	'moderate_member_validate' => '硄筁',
 
 
-	'get_passwd_subject' =>		'取回密码说明',
+	'get_passwd_subject' =>		'盞絏弧',
 	'get_passwd_message' =>		'
-<p>{username}，
-这封信是由 {bbname} 发送的。</p>
+<p>{username}
+硂獺琌パ {bbname} 祇癳</p>
 
-<p>您收到这封邮件，是由于这个邮箱地址在 {bbname} 被登记为用户邮箱，
-且该用户请求使用 Email 密码重置功能所致。</p>
+<p>眤Μ硂秎ン琌パ硂秎絚 {bbname} 砆祅癘ノめ秎絚
+赣ノめ叫―ㄏノ Email 盞絏竚\┮璓</p>
 <p>
 ----------------------------------------------------------------------<br />
-<strong>重要！</strong><br />
+<strong>璶</strong><br />
 ----------------------------------------------------------------------</p>
 
-<p>如果您没有提交密码重置的请求或不是 {bbname} 的注册用户，请立即忽略
-并删除这封邮件。只有在您确认需要重置密码的情况下，才需要继续阅读下面的
-内容。</p>
+<p>狦眤⊿Τ矗ユ盞絏竚叫―┪ぃ琌 {bbname} 爹ノめ叫ミ┛菠
+埃硂秎ンΤ眤絋粄惠璶竚盞絏薄猵惠璶膥尿綷\弄
+ず甧</p>
 <p>
 ----------------------------------------------------------------------<br />
-<strong>密码重置说明</strong><br />
+<strong>盞絏竚弧</strong><br />
 ----------------------------------------------------------------------</p>
 </p>
-您只需在提交请求后的三天内，通过点击下面的链接重置您的密码：<br />
+眤惠矗ユ叫―ぱず硄筁翴阑渺钡竚眤盞絏<br />
 
 <a href="{siteurl}member.php?mod=getpasswd&amp;uid={uid}&amp;id={idstring}" target="_blank">{siteurl}member.php?mod=getpasswd&amp;uid={uid}&amp;id={idstring}</a>
 <br />
-(如果上面不是链接形式，请将该地址手工粘贴到浏览器地址栏再访问)</p>
+(狦ぃ琌渺钡Α叫盢赣も诌禟聅凝竟逆砐拜)</p>
 
-<p>在上面的链接所打开的页面中输入新的密码后提交，您即可使用新的密码登录网站了。您可以在用户控制面板中随时修改您的密码。</p>
+<p>渺钡┮ゴ秨い块穝盞絏矗ユ眤ㄏノ穝盞絏祅魁呼眤ノめ北狾い繦э眤盞絏</p>
 
-<p>本请求提交者的 IP 为 {clientip}</p>
+<p>セ叫―矗ユ IP  {clientip}</p>
 
 
 <p>
-此致<br />
+璓<br />
 </p>
-<p>{bbname} 管理团队.
+<p>{bbname} 恨瞶刮钉.
 {siteurl}</p>',
 
 
-	'email_verify_subject' =>	'Email 地址验证',
+	'email_verify_subject' =>	'Email 喷靡',
 	'email_verify_message' =>	'<br />
-<p>{username}，<br />
-这封信是由 {bbname} 发送的。</p>
+<p>{username}<br />
+硂獺琌パ {bbname} 祇癳</p>
 
-<p>您收到这封邮件，是由于在 {bbname} 进行了新用户注册，或用户修改 Email 使用
-了这个邮箱地址。如果您并没有访问过 {bbname}，或没有进行上述操作，请忽
-略这封邮件。您不需要退订或进行其他进一步的操作。</p>
+<p>眤Μ硂秎ン琌パ {bbname} 秈︽穝ノめ爹┪ノめэ Email ㄏノ
+硂秎絚狦眤⊿Τ砐拜筁 {bbname}┪⊿Τ秈︽瓃巨叫┛
+菠硂秎ン眤ぃ惠璶癶璹┪秈︽ㄤ秈˙巨</p>
 <br />
 ----------------------------------------------------------------------<br />
-<strong>帐号激活说明</strong><br />
+<strong>眀腹縀弧</strong><br />
 ----------------------------------------------------------------------<br />
 <br />
-<p>如果您是 {bbname} 的新用户，或在修改您的注册 Email 时使用了本地址，我们需
-要对您的地址有效性进行验证以避免垃圾邮件或地址被滥用。</p>
+<p>狦眤琌 {bbname} 穝ノめ┪э眤爹 Email ㄏノセи惠
+璶癸眤Τ┦秈︽喷靡磷︰В秎ン┪砆垒ノ</p>
 
-<p>您只需点击下面的链接即可激活您的帐号：<br />
+<p>眤惠翴阑渺钡縀眤眀腹<br />
 
 <a href="{url}" target="_blank">{url}</a>
 <br />
-(如果上面不是链接形式，请将该地址手工粘贴到浏览器地址栏再访问)</p>
+(狦ぃ琌渺钡Α叫盢赣も诌禟聅凝竟逆砐拜)</p>
 
-<p>感谢您的访问，祝您使用愉快！</p>
+<p>稰谅眤砐拜眤ㄏノ磖е</p>
 
 
 <p>
-此致<br />
+璓<br />
 
-{bbname} 管理团队.<br />
+{bbname} 恨瞶刮钉.<br />
 {siteurl}</p>',
 
-	'email_register_subject' =>	'论坛注册地址',
+	'email_register_subject' =>	'阶韭爹',
 	'email_register_message' =>	'<br />
-<p>这封信是由 {bbname} 发送的。</p>
+<p>硂獺琌パ {bbname} 祇癳</p>
 
-<p>您收到这封邮件，是由于在 {bbname} 获取了新用户注册地址使用
-了这个邮箱地址。如果您并没有访问过 {bbname}，或没有进行上述操作，请忽
-略这封邮件。您不需要退订或进行其他进一步的操作。</p>
+<p>眤Μ硂秎ン琌パ {bbname} 莉穝ノめ爹ㄏノ
+硂秎絚狦眤⊿Τ砐拜筁 {bbname}┪⊿Τ秈︽瓃巨叫┛
+菠硂秎ン眤ぃ惠璶癶璹┪秈︽ㄤ秈˙巨</p>
 <br />
 ----------------------------------------------------------------------<br />
-<strong>新用户注册说明</strong><br />
+<strong>穝ノめ爹弧</strong><br />
 ----------------------------------------------------------------------<br />
 <br />
-<p>如果您是 {bbname} 的新用户，或在修改您的注册 Email 时使用了本地址，我们需
-要对您的地址有效性进行验证以避免垃圾邮件或地址被滥用。</p>
+<p>狦眤琌 {bbname} 穝ノめ┪э眤爹 Email ㄏノセи惠
+璶癸眤Τ┦秈︽喷靡磷︰В秎ン┪砆垒ノ</p>
 
-<p>您只需点击下面的链接即可进行用户注册，以下链接有效期为3天。过期可以重新请求发送一封新的邮件验证：<br />
+<p>眤惠翴阑渺钡秈︽ノめ爹渺钡Τ戳3ぱ筁戳穝叫―祇癳穝秎ン喷靡<br />
 
 <a href="{url}" target="_blank">{url}</a>
 <br />
-(如果上面不是链接形式，请将该地址手工粘贴到浏览器地址栏再访问)</p>
+(狦ぃ琌渺钡Α叫盢赣も诌禟聅凝竟逆砐拜)</p>
 
-<p>感谢您的访问，祝您使用愉快！</p>
+<p>稰谅眤砐拜眤ㄏノ磖е</p>
 
 
 <p>
-此致<br />
+璓<br />
 
-{bbname} 管理团队.<br />
+{bbname} 恨瞶刮钉.<br />
 {siteurl}</p>',
 
 
-	'add_member_subject' =>		'您被添加成为会员',
+	'add_member_subject' =>		'眤砆睰Θ穦',
 	'add_member_message' => 	'
-{newusername} ，
-这封信是由 {bbname} 发送的。<br />
+{newusername} 
+硂獺琌パ {bbname} 祇癳<br />
 <br />
-我是 {adminusername} ，{bbname} 的管理者之一。您收到这封邮件，是由于您<br />
-刚刚被添加成为 {bbname} 的会员，当前 Email 即是我们为您注册的邮箱地址。<br />
-<br />
-----------------------------------------------------------------------<br />
-重要！<br />
-----------------------------------------------------------------------<br />
-<br />
-如果您对 {bbname} 不感兴趣或无意成为会员，请忽略这封邮件。<br />
+и琌 {adminusername} {bbname} 恨瞶ぇ眤Μ硂秎ン琌パ眤<br />
+砆睰Θ {bbname} 穦讽玡 Email 琌и眤爹秎絚<br />
 <br />
 ----------------------------------------------------------------------<br />
-帐号信息<br />
+璶<br />
 ----------------------------------------------------------------------<br />
 <br />
-网站名称：{bbname}<br />
-网站地址：{siteurl}<br />
+狦眤癸 {bbname} ぃ稰砍届┪礚種Θ穦叫┛菠硂秎ン<br />
 <br />
-用户名：{newusername}<br />
-密码：{newpassword}<br />
+----------------------------------------------------------------------<br />
+眀腹獺<br />
+----------------------------------------------------------------------<br />
 <br />
-从现在起您可以使用您的帐号登录 {bbname}，祝您使用愉快！<br />
+呼嘿{bbname}<br />
+呼{siteurl}<br />
+<br />
+ノめ{newusername}<br />
+盞絏{newpassword}<br />
+<br />
+眖瞷癬眤ㄏノ眤眀腹祅魁 {bbname}眤ㄏノ磖е<br />
 <br />
 <br />
 <br />
-此致<br />
+璓<br />
 <br />
-{bbname} 管理团队.<br />
+{bbname} 恨瞶刮钉.<br />
 {siteurl}',
 
 
-	'birthday_subject' =>		'祝您生日快乐',
+	'birthday_subject' =>		'眤ネらе贾',
 	'birthday_message' => 		'<br />
-{username}，<br />
-这封信是由 {bbname} 发送的。<br />
+{username}<br />
+硂獺琌パ {bbname} 祇癳<br />
 <br />
-您收到这封邮件，是由于这个邮箱地址在 {bbname} 被登记为用户邮箱，<br />
-并且按照您填写的信息，今天是您的生日。很高兴能在此时为您献上一份<br />
-生日祝福，我谨代表{bbname}管理团队，衷心祝福您生日快乐。<br />
+眤Μ硂秎ン琌パ硂秎絚 {bbname} 砆祅癘ノめ秎絚<br />
+酚眤恶糶獺さぱ琌眤ネら蔼砍眤膍<br />
+ネら褐и略{bbname}恨瞶刮钉癑み褐眤ネらе贾<br />
 <br />
-如果您并非 {bbname} 的会员，或今天并非您的生日，可能是有人误用了您的邮<br />
-件地址，或错误的填写了生日信息。本邮件不会多次重复发送，请忽略这封邮件。<br />
+狦眤獶 {bbname} 穦┪さぱ獶眤ネら琌Τ粇ノ眤秎<br />
+ン┪岿粇恶糶ネら獺セ秎ンぃ穦Ω狡祇癳叫┛菠硂秎ン<br />
 <br />
 <br />
-此致<br />
+璓<br />
 <br />
-{bbname} 管理团队.<br />
+{bbname} 恨瞶刮钉.<br />
 {siteurl}',
 
-	'email_to_friend_subject' =>	'{$_G[member][username]} 推荐给您: $thread[subject]',
+	'email_to_friend_subject' =>	'{$_G[member][username]} 崩滤倒眤: $thread[subject]',
 	'email_to_friend_message' =>	'<br />
-这封信是由 {$_G[setting][bbname]} 的 {$_G[member][username]} 发送的。<br />
+硂獺琌パ {$_G[setting][bbname]}  {$_G[member][username]} 祇癳<br />
 <br />
-您收到这封邮件，是由于在 {$_G[member][username]} 通过 {$_G[setting][bbname]} 的“推荐给朋友”<br />
-功能推荐了如下的内容给您。如果您对此不感兴趣，请忽略这封邮件。您不需要退订或进行其他进一步的操作。<br />
+眤Μ硂秎ン琌パ {$_G[member][username]} 硄筁 {$_G[setting][bbname]} 崩滤倒狟ね<br />
+\崩滤ず甧倒眤狦眤癸ぃ稰砍届叫┛菠硂秎ン眤ぃ惠璶癶璹┪秈︽ㄤ秈˙巨<br />
 <br />
 ----------------------------------------------------------------------<br />
-信件原文开始<br />
+獺ンゅ秨﹍<br />
 ----------------------------------------------------------------------<br />
 <br />
 $message<br />
 <br />
 ----------------------------------------------------------------------<br />
-信件原文结束<br />
+獺ンゅ挡<br />
 ----------------------------------------------------------------------<br />
 <br />
-请注意这封信仅仅是由用户使用 “推荐给朋友”发送的，不是网站官方邮件，<br />
-网站管理团队不会对这类邮件负责。<br />
+叫猔種硂獺度度琌パノめㄏノ 崩滤倒狟ね祇癳ぃ琌呼﹛よ秎ン<br />
+呼恨瞶刮钉ぃ穦癸硂摸秎ン璽砫<br />
 <br />
-欢迎您访问 {$_G[setting][bbname]}<br />
+舧眤砐拜 {$_G[setting][bbname]}<br />
 $_G[siteurl]',
 
-	'email_to_invite_subject' =>	'您的朋友 {$_G[member][username]} 发送 {$_G[setting][bbname]} 网站注册邀请码给您',
+	'email_to_invite_subject' =>	'眤狟ね {$_G[member][username]} 祇癳 {$_G[setting][bbname]} 呼爹淋叫絏倒眤',
 	'email_to_invite_message' =>	'<br />
 $sendtoname,<br />
-这封信是由 {$_G[setting][bbname]} 的 {$_G[member][username]} 发送的。<br />
+硂獺琌パ {$_G[setting][bbname]}  {$_G[member][username]} 祇癳<br />
 <br />
-您收到这封邮件，是由于 {$_G[member][username]} 通过 {bbname} 的“发送邀请码给朋友”<br />
-功能推荐了如下的内容给您。如果您对此不感兴趣，请忽略这封邮件。您不需要退订或进行其他进<br />
-一步的操作。<br />
+眤Μ硂秎ン琌パ {$_G[member][username]} 硄筁 {bbname} 祇癳淋叫絏倒狟ね<br />
+\崩滤ず甧倒眤狦眤癸ぃ稰砍届叫┛菠硂秎ン眤ぃ惠璶癶璹┪秈︽ㄤ秈<br />
+˙巨<br />
 <br />
 ----------------------------------------------------------------------<br />
-信件原文开始<br />
+獺ンゅ秨﹍<br />
 ----------------------------------------------------------------------<br />
 <br />
 $message<br />
 <br />
 ----------------------------------------------------------------------<br />
-信件原文结束<br />
+獺ンゅ挡<br />
 ----------------------------------------------------------------------<br />
 <br />
-请注意这封信仅仅是由用户使用 “发送邀请码给朋友”发送的，不是网站官方邮件，<br />
-网站管理团队不会对这类邮件负责。<br />
+叫猔種硂獺度度琌パノめㄏノ 祇癳淋叫絏倒狟ね祇癳ぃ琌呼﹛よ秎ン<br />
+呼恨瞶刮钉ぃ穦癸硂摸秎ン璽砫<br />
 <br />
-欢迎您访问 {$_G[setting][bbname]}<br />
+舧眤砐拜 {$_G[setting][bbname]}<br />
 $_G[siteurl]',
 
 
-	'moderate_member_subject' =>	'用户审核结果通知',
+	'moderate_member_subject' =>	'ノめ糵挡狦硄',
 	'moderate_member_message' =>	'<br />
 <p>{username},
-这封信是由 {bbname} 发送的。</p>
+硂獺琌パ {bbname} 祇癳</p>
 
-<p>您收到这封邮件，是由于这个邮箱地址在 {bbname} 被新用户注册时所
-使用，且管理员设置了对新用户需要进行人工审核，本邮件将通知您提交
-申请的审核结果。</p>
+<p>眤Μ硂秎ン琌パ硂秎絚 {bbname} 砆穝ノめ爹┮
+ㄏノ恨瞶砞竚癸穝ノめ惠璶秈︽糵セ秎ン盢硄眤矗ユ
+ビ叫糵挡狦</p>
 <br />
 ----------------------------------------------------------------------<br />
-<strong>注册信息与审核结果</strong><br />
+<strong>爹獺籔糵挡狦</strong><br />
 ----------------------------------------------------------------------<br />
 <br />
-用户名: {username}<br />
-注册时间: {regdate}<br />
-提交时间: {submitdate}<br />
-提交次数: {submittimes}<br />
-注册原因: {message}<br />
+ノめ: {username}<br />
+爹丁: {regdate}<br />
+矗ユ丁: {submitdate}<br />
+矗ユΩ计: {submittimes}<br />
+爹: {message}<br />
 <br />
-审核结果: {modresult}<br />
-审核时间: {moddate}<br />
-审核管理员: {adminusername}<br />
-管理员留言: {remark}<br />
+糵挡狦: {modresult}<br />
+糵丁: {moddate}<br />
+糵恨瞶: {adminusername}<br />
+恨瞶痙ē: {remark}<br />
 <br />
 ----------------------------------------------------------------------<br />
-<strong>审核结果说明</strong><br />
+<strong>糵挡狦弧</strong><br />
 ----------------------------------------------------------------------<br />
 
-<p>通过: 您的注册已通过审核，您已成为 {bbname} 的正式用户。</p>
+<p>硄筁: 眤爹硄筁糵眤Θ {bbname} タΑノめ</p>
 
-<p>否决: 您的注册信息不完整，或未满足我们对新用户的某些要求，您可以
-	  根据管理员留言，<a href="home.php?mod=spacecp&ac=profile" target="_blank">完善您的注册信息</a>，然后再次提交。</p>
+<p>∕: 眤爹獺ぃЧ俱┪ゼ骸ìи癸穝ノめ琘ㄇ璶―眤
+	  沮恨瞶痙ē<a href="home.php?mod=spacecp&ac=profile" target="_blank">Ч到眤爹獺</a>礛Ω矗ユ</p>
 
-<p>删除：您的注册由于与我们的要求偏差较大，或本站的新注册人数已
-	  超过预期，申请已被否决。您的帐号已从数据库中删除，将无法
-	  再使用其登录或提交再次审核，请您谅解。</p>
+<p>埃眤爹パ籔и璶―熬畉耕┪セ穝爹计
+	  禬筁箇戳ビ叫砆∕眤眀腹眖计沮畐い埃盢礚猭
+	  ㄏノㄤ祅魁┪矗ユΩ糵叫眤教秆</p>
 
 <br />
 <br />
-此致<br />
+璓<br />
 <br />
-{bbname} 管理团队.<br />
+{bbname} 恨瞶刮钉.<br />
 {siteurl}',
 
-	'adv_expiration_subject' =>	'您站点的广告将于 {day} 天后到期，请及时处理',
-	'adv_expiration_message' =>	'您站点的以下广告将于 {day} 天后到期，请及时处理：<br /><br />{advs}',
+	'adv_expiration_subject' =>	'眤翴約盢 {day} ぱ戳叫の矪瞶',
+	'adv_expiration_message' =>	'眤翴約盢 {day} ぱ戳叫の矪瞶<br /><br />{advs}',
 	'invite_payment_email_message' => '
-欢迎您光临{bbname}（{siteurl}），您的订单{orderid}已经支付完成，订单已确认有效。<br />
+舧眤羬{bbname}{siteurl}眤璹虫{orderid}竒やЧΘ璹虫絋粄Τ<br />
 <br />----------------------------------------------------------------------<br />
-以下是您获得的邀请码
+琌眤莉眔淋叫絏
 <br />----------------------------------------------------------------------<br />
 
 {codetext}
 
 <br />----------------------------------------------------------------------<br />
-重要！
+璶
 <br />----------------------------------------------------------------------<br />',
 );
 

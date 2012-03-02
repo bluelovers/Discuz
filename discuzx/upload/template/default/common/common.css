@@ -7,84 +7,84 @@ Created & Modified by Lushnis, Pony, Dfox & DragonLee.
 
 ----------------------------------
 
-结构目录：
-	1. 重定义浏览器默认样式
-	2. 全局常用 CSS 样式
-	3. 表单及表单元素
-	4. 页面布局以及通用的区块样式
-	5. 列表样式vwmy
-	6. 其他特定功能块
-		1. 个人中心面板
-		2. 简易编辑器
-		3. 弹出菜单、弹出层及弹出窗口
-		4. 联系人列表、短消息窗口
-		5. 登录和注册
-		6. 其他
-	7. 拖拽及页面 DIY
+挡篶ヘ魁
+	1. ﹚竡聅凝竟纐粄妓Α
+	2. Ы盽ノ CSS 妓Α
+	3. 虫の虫じ
+	4. Ыの硄ノ跋遏妓Α
+	5. 妓Αvwmy
+	6. ㄤ疭﹚遏
+		1. いみ狾
+		2. 虏絪胯竟
+		3. 紆垫虫紆糷の紆怠
+		4. 羛么祏怠
+		5. 祅魁㎝爹
+		6. ㄤ
+	7. ╈の DIY
 
-	*  其他页面专用样式参见 module.css
-
-----------------------------------
-
-常用变量说明：
-
-	通用边框颜色：		{COMMONBORDER}		#CDCDCD
-	通用背景填充色：		{COMMONBG}			#F2F2F2
-	特殊边框颜色：		{SPECIALBORDER}		#D1D9DF
-	特殊背景填充色：		{SPECIALBG}			#E9F2F9
+	*  ㄤ盡ノ妓Α把ǎ module.css
 
 ----------------------------------
 
-CSS 样式模块的格式示例：
+盽ノ跑秖弧
 
-	Name:			模块名称
-	Level:			级别（Global, Channel, Function）
-	Dependent:		依赖关系，该模块必须依赖于何种模块
-	Sample:			用法示例，或指出改模块所作用的直接页面
-	Explain:		附加说明
-	Author:			创建者 日期(两位数年月日时)
-	Last Modify:	最终修改者 日期(两位数年月日时)
+	硄ノ娩肅︹		{COMMONBORDER}		#CDCDCD
+	硄ノ璉春恶︹		{COMMONBG}			#F2F2F2
+	疭娩肅︹		{SPECIALBORDER}		#D1D9DF
+	疭璉春恶︹		{SPECIALBG}			#E9F2F9
 
 ----------------------------------
 
-CSS 写作注意事项：
-	1. 属性写在一行内，属性之间、属性名和值之间以及属性与“{}”之间须有空格，例如：.class { width: 400px; height: 300px; }
-	2. 属性的书写顺序：
-		2.1. 按照元素模型由外及内，由整体到细节书写，大致分为五组：
-			位置：position,left,right,float
-			盒模型属性：display,margin,padding,width,height
-			边框与背景：border,background
-			段落与文本：line-height,text-indent,font,color,text-decoration,...
-			其他属性：overflow,cursor,visibility,...
-		2.2. 针对特殊浏览器的属性，应写在标准属性之前，例如：-webkit-box-shadow:; -moz-box-shadow:; box-shaow:;
-	3. 谨慎添加新的选择符规则，尤其不可滥用 id，尽可能继承和复用已有样式
-	4. 选择符、属性、值均用小写（格式的颜色值除外），缩写的选择符名称须说明缩写前的全称，例如 .cl -> Clearfix
-	5. 避免使用各种 CSS Hack，如需对 IE 进行特殊定义，请参阅下节“关于 CSS Hack 的说明”
-	6. 勿使用冗余低效的 CSS 写法，例如：
+CSS 妓Α家遏Αボㄒ
+
+	Name:			家遏嘿
+	Level:			Global, Channel, Function
+	Dependent:		ㄌ苦闽玒赣家遏ゲ斗ㄌ苦贺家遏
+	Sample:			ノ猭ボㄒ┪э家遏┮ノ钡
+	Explain:		弧
+	Author:			承 ら戳(ㄢ计るら)
+	Last Modify:	程沧э ら戳(ㄢ计るら)
+
+----------------------------------
+
+CSS 糶猔種ㄆ兜
+	1. 妮┦糶︽ず妮┦ぇ丁妮┦㎝ぇ丁の妮┦籔{}ぇ丁斗Τㄒ.class { width: 400px; height: 300px; }
+	2. 妮┦糶抖
+		2.1. 酚じ家パのずパ俱砰灿竊糶璓だき舱
+			竚position,left,right,float
+			舶家妮┦display,margin,padding,width,height
+			娩籔璉春border,background
+			琿辅籔ゅセline-height,text-indent,font,color,text-decoration,...
+			ㄤ妮┦overflow,cursor,visibility,...
+		2.2. 皐癸疭聅凝竟妮┦莱糶夹非妮┦ぇ玡ㄒ-webkit-box-shadow:; -moz-box-shadow:; box-shaow:;
+	3. 略稸睰穝匡拒才砏玥ぷㄤぃ垒ノ id荷膥┯㎝確ノΤ妓Α
+	4. 匡拒才妮┦Аノ糶Α肅︹埃罽糶匡拒才嘿斗弧罽糶玡嘿ㄒ .cl -> Clearfix
+	5. 磷ㄏノ贺 CSS Hack惠癸 IE 秈︽疭﹚竡叫把綷竊闽 CSS Hack 弧
+	6. づㄏノぞ緇 CSS 糶猭ㄒ
 		ul li a span { ... }
-	7. 慎用 !important
-	8. 建议使用在 class/id 名称中的词语
-		6.1. 表示状态：a->active
-		6.2. 表示结构：h->header,c->content,f->footer
-		6.3. 表示区域：mn->main,sd->side,nv-navigation,mu->menu
-		6.4. 表示样式：l-list,tab,p_pop
-	9. 开发过程中的未定事项，须用 [!] 标出，以便于后续讨论整理
+	7. 稸ノ !important
+	8. 某ㄏノ class/id 嘿い迭粂
+		6.1. ボ篈a->active
+		6.2. ボ挡篶h->header,c->content,f->footer
+		6.3. ボ跋办mn->main,sd->side,nv-navigation,mu->menu
+		6.4. ボ妓Αl-list,tab,p_pop
+	9. 秨祇筁祘いゼ﹚ㄆ兜斗ノ [!] 夹獽尿癚阶俱瞶
 
 ----------------------------------
 
-关于 CSS Hack 的说明：
+闽 CSS Hack 弧
 
-	所有 IE浏览器适用：	.ie_all .foo { ... }
-	IE6 专用：			.ie6 .foo { ... }
-	IE7 专用：			.ie7 .foo { ... }
-	IE8 专用：			.ie8 .foo { ... }
+	┮Τ IE聅凝竟続ノ	.ie_all .foo { ... }
+	IE6 盡ノ			.ie6 .foo { ... }
+	IE7 盡ノ			.ie7 .foo { ... }
+	IE8 盡ノ			.ie8 .foo { ... }
 
 ---------------------------------- */
 
 /*
 	Name:			mod_reset
 	Level:			Global
-	Explain:		重定义浏览器默认样式
+	Explain:		﹚竡聅凝竟纐粄妓Α
 	Last Modify:	Pony
 */
 	* { word-wrap: break-word; }
@@ -105,7 +105,7 @@ CSS 写作注意事项：
 	Name:			mod_float
 	Level:			Global
 	Sample:			class="z/y"
-	Explain:		.z/.y 浮动 left/right
+	Explain:		.z/.y 疊笆 left/right
 	Last Modify:	lushnis
 */
 	.z { float: left; } .y { float: right; }
@@ -114,7 +114,7 @@ CSS 写作注意事项：
 	Name:			mod_clearfix
 	Level:			Global
 	Sample:			class="cl"
-	Explain:		Clearfix,避免因子元素浮动而导致的父元素高度缺失能问题
+	Explain:		Clearfix,磷じ疊笆τ旧璓じ蔼ア拜肈
 	Last Modify:	lushnis
 */
 	.cl:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; } .cl { zoom: 1; }
@@ -123,7 +123,7 @@ CSS 写作注意事项：
 	Name:			mod_hr
 	Level:			Global
 	Sample:			<hr />
-	Explain:		重定义 <hr /> 元素的样式，去除默认边距
+	Explain:		﹚竡 <hr /> じ妓Α埃纐粄娩禯
 	Last Modify:	lushnis
 */
 	hr { display: block; clear: both; *margin-top: -8px !important; *margin-bottom: -8px !important; }
@@ -134,7 +134,7 @@ CSS 写作注意事项：
 	Level:			Global
 	Dependent:		mod_hr
 	Sample:			<hr class="l" />
-	Explain:		定义 1px 高度实线样式的 <hr /> 元素，具有两个个扩展样式，.l2 和 .l3，分别实现 2px 和 3px 的实线分割线
+	Explain:		﹚竡 1px 蔼龟絬妓Α <hr /> じㄣΤㄢ耎甶妓Α.l2 ㎝ .l3だ龟瞷 2px ㎝ 3px 龟絬だ澄絬
 	Last Modify:	lushnis
 */
 	hr.l { height: 1px; border: none; background: {COMMONBORDER}; color: {COMMONBORDER}; }
@@ -145,37 +145,37 @@ CSS 写作注意事项：
 	Level:			Global
 	Dependent:		mod_hr
 	Sample:			<hr class="da" />
-	Explain:		定义 1px 高度虚线样式的 <hr /> 元素
+	Explain:		﹚竡 1px 蔼店絬妓Α <hr /> じ
 	Last Modify:	lushnis
 */
 	hr.da { height: 0; border: none; border-top: 1px dashed {COMMONBORDER}; background: transparent; color: transparent; }
 
-	/* [!]使用注意 */
+	/* [!]ㄏノ猔種 */
 	hr.bk { margin-bottom: 10px !important; *margin-bottom: 2px !important; height: 0; border: none; border-top: 1px solid {WRAPBG}; background: transparent; color: transparent; }
 		.n .sd hr.bk { border-top-color: #F9F9F9; }
-	/* 清除Margin */
+	/* 睲埃Margin */
 	hr.m0 { margin-left: 0; margin-right: 0; }
 
 /*
 	Name:			mod_page_header
 	Level:			Global
 	Sample:			<h1 class="ph">Text</h1>
-	Explain:		页面中标题级别的文字 [!]此处须整合为一个单独 class
+	Explain:		い夹肈ゅ [!]矪斗俱虫縒 class
 	Last Modify:	lushnis
 */
-	/* .wx --> weight text 粗体字，通常用于大标题 */
+	/* .wx --> weight text 彩砰硄盽ノ夹肈 */
 	.wx, .ph { font-family: "Microsoft YaHei", "Hiragino Sans GB", STHeiti, Tahoma, SimHei, sans-serif; font-weight: 100; }
 	/* Page header */ .ph { font-size: 20px; }
 	/* Main title */ .mt { padding: 10px 0; font-size: 16px; }
 
-/* 行内分割竖线 */ .pipe { margin: 0 5px; color: #CCC; }
+/* ︽ずだ澄捷絬 */ .pipe { margin: 0 5px; color: #CCC; }
 
-/* 文本属性：字号、颜色、粗细 */
+/* ゅセ妮┦腹肅︹彩灿 */
 /*
 	Name:			mod_text_size
 	Level:			Global
 	Sample:			class="xs*"
-	Explain:		文字字号，分为四个级别
+	Explain:		ゅ腹だ
 	Last Modify:	lushnis
 */
 	.xs0 { font-family: {SMFONT}; font-size: {SMFONTSIZE}; -webkit-text-size-adjust: none; }
@@ -187,7 +187,7 @@ CSS 写作注意事项：
 	Level:			Global
 	Dependent:		-
 	Sample:			class="xs[*]"
-	Explain:		文字字号，分为四个级别
+	Explain:		ゅ腹だ
 	Last Modify:	lushnis
 */
 	.xg1, .xg1 a { color: {LIGHTTEXT} !important; }
@@ -197,7 +197,7 @@ CSS 写作注意事项：
 	Name:			mod_text_importance_level
 	Level:			Global
 	Sample:			class="xs[*]"
-	Explain:		文字提亮级别，分为两级，默认模板中，1为橙色，2为蓝色
+	Explain:		ゅ矗獹だㄢ纐粄家狾い1卷︹2屡︹
 	Last Modify:	lushnis
 */
 	.xi1, .onerror { color: {NOTICETEXT}; }
@@ -206,7 +206,7 @@ CSS 写作注意事项：
 	Name:			mod_text_weight_level
 	Level:			Global
 	Sample:			class="xs[*]"
-	Explain:		文字字号，分为四个级别
+	Explain:		ゅ腹だ
 	Last Modify:	lushnis
 */
 	.xw0 { font-weight: 400; }
@@ -216,7 +216,7 @@ CSS 写作注意事项：
 	Level:			Global
 	Dependent:		-
 	Sample:			class="bbda/bbs"
-	Explain:		边框样式，该模块仅作用于元素的下边框，分为虚线和实线两种，宽度均为 1px
+	Explain:		娩妓Α赣家遏度ノじ娩だ店絬㎝龟絬ㄢ贺糴А 1px
 	Last Modify:	lushnis
 */
 	.bbda { border-bottom: 1px dashed {COMMONBORDER}; }
@@ -225,7 +225,7 @@ CSS 写作注意事项：
 	Name:			mod_border_reset
 	Level:			Global
 	Sample:			class="bw0/bw0_all"
-	Explain:		去除边框
+	Explain:		埃娩
 	Last Modify:	lushnis
 */
 	.bw0 { border: none !important; }
@@ -234,7 +234,7 @@ CSS 写作注意事项：
 	Name:			mod_background_reset
 	Level:			Global
 	Sample:			class="bg0_c/bg0_i/bg0_all"
-	Explain:		去除背景，bg0_c、bg0_i 和 bg0_all 分别为去除背景颜色、去除背景图片和去除所有背景元素
+	Explain:		埃璉春bg0_cbg0_i ㎝ bg0_all だ埃璉春肅︹埃璉春瓜㎝埃┮Τ璉春じ
 	Last Modify:	Pony
 */
 	.bg0_c { background-color: transparent !important; }
@@ -245,14 +245,14 @@ CSS 写作注意事项：
 	Name:			mod_notice_line
 	Level:			Global
 	Sample:			<div class="ntc_l">
-	Explain:		黄色背景的提示条，一般用在单行醒目提示，不可用于多行块级区域
+	Explain:		独︹璉春矗ボ兵ノ虫︽眶ヘ矗ボぃノ︽遏跋办
 	Last Modify:	lushnis
 */
 	.ntc_l { padding: 5px 10px; background: #FEFEE9; }
 		.ntc_l .d { width: 20px; height: 20px; background: url({IMGDIR}/op.png) no-repeat 0 0; line-height: 9999px; overflow: hidden; }
 			.ntc_l .d:hover { background-position: 0 -20px; }
 
-/* 圆角 [!]此处考虑弃用 */
+/* 蛾à [!]矪σ納斌ノ */
 	.brs, .avt img, .oshr { -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px; }
 	.brm { -moz-border-radius: 10px; -webkit-border-radius: 10px;  border-radius: 10px; }
 	.brw { -moz-border-radius: 20px; -webkit-border-radius: 20px; border-radius: 20px;  }
@@ -260,7 +260,7 @@ CSS 写作注意事项：
 	Name:			mod_margin
 	Level:			Global
 	Sample:			class="mtn/mtm/mtw/..."
-	Explain:		外边距样式，作用于元素的上下外边距，上下各具有 n, m, w 三个级别
+	Explain:		娩禯妓Αノじ娩禯ㄣΤ n, m, w 
 	Last Modify:	lushnis
 */
 	.mtn { margin-top: 5px !important; }
@@ -273,7 +273,7 @@ CSS 写作注意事项：
 	Name:			mod_padding
 	Level:			Global
 	Sample:			class="ptn/ptm/ptw/..."
-	Explain:		内边距样式，作用于元素的上下内边距，上下各具有 n, m, w 三个级别
+	Explain:		ず娩禯妓Αノじず娩禯ㄣΤ n, m, w 
 	Last Modify:	lushnis
 */
 	.ptn { padding-top: 5px !important; }
@@ -286,7 +286,7 @@ CSS 写作注意事项：
 	Name:			mod_avatar
 	Level:			Global
 	Sample:			<div class="avt"><img src="avatar source" alt="username" /></div>
-	Explain:		标准尺寸头像样式，默认为 48px*48px，带边框
+	Explain:		夹非へ繷钩妓Α纐粄 48px*48px盿娩
 	Last Modify:	lushnis
 */
 	.avt img { padding: 2px; width: 48px; height: 48px; background: {WRAPBG}; border: 1px solid; border-color: {COMMONBG} {COMMONBORDER} {COMMONBORDER} {COMMONBG}; }
@@ -294,7 +294,7 @@ CSS 写作注意事项：
 	Name:			mod_avatar_middle, mod_avatar_small
 	Level:			Global
 	Sample:			<div class="avtm/avts"><img src="avatar source" alt="username" /></div>
-	Explain:		中等尺寸和小尺寸头像样式，中等尺寸为宽度 120px，高度按比例；小尺寸为 24px*24px
+	Explain:		い单へ㎝へ繷钩妓Αい单へ糴 120px蔼ゑㄒへ 24px*24px
 	Last Modify:	lushnis
 */
 	.avtm img { width: 120px; height: auto; }
@@ -302,8 +302,8 @@ CSS 写作注意事项：
 /*
 	Name:			mod_emp
 	Level:			Global
-	Sample:			<p class="emp">暂无数据</p>
-	Explain:		页面中无数据输出时，用此样式显示相关提示，如无特殊必要，建议使用 <p> 而不是 <div>
+	Sample:			<p class="emp">既礚计沮</p>
+	Explain:		い礚计沮块ノ妓Α陪ボ闽矗ボ礚疭ゲ璶某ㄏノ <p> τぃ琌 <div>
 	Last Modify:	lushnis
 */
 	.emp { padding: 20px 10px; }
@@ -312,7 +312,7 @@ CSS 写作注意事项：
 	Name:			mod_align
 	Level:			Global
 	Sample:			class="vm/hm"
-	Explain:		纵向及横向对齐方式
+	Explain:		羇の绢癸霍よΑ
 	Last Modify:	lushnis
 */
 	.vm { vertical-align: middle; }
@@ -322,7 +322,7 @@ CSS 写作注意事项：
 	Name:			mod_alt
 	Level:			Global
 	Sample:			class="{echo swapclass('alt');}"
-	Explain:		隔行换色时深色背景
+	Explain:		筳︽传︹瞏︹璉春
 	Last Modify:	lushnis
 */
 	.alt, .alt th, .alt td { background-color: {COMMONBG}; }
@@ -330,7 +330,7 @@ CSS 写作注意事项：
 	Name:			mod_notice
 	Level:			Global
 	Sample:			class="notice"
-	Explain:		类似统计中需注意的文字样式 [!]此处须考虑名称简写为 ntc
+	Explain:		摸参璸い惠猔種ゅ妓Α [!]矪斗σ納嘿虏糶 ntc
 	Last Modify:	lushnis
 */
 	.notice { clear: both; margin: 5px 0; padding: 3px 5px 3px 20px; background: url({IMGDIR}/notice.gif) no-repeat 2px 6px; }
@@ -338,7 +338,7 @@ CSS 写作注意事项：
 	Name:			mod_ajax_wait_info
 	Level:			Global
 	Sample:			id="ajaxwaitid"
-	Explain:		相应页面中 AJAX 请求时的状态显示
+	Explain:		莱い AJAX 叫―篈陪ボ
 	Last Modify:	lushnis
 */
 	#ajaxwaitid { display: none; position: absolute; right: 0; top: 0; z-index: 1; padding: 0 5px; background: #D00; color: {LIGHTLINK}; }
@@ -346,7 +346,7 @@ CSS 写作注意事项：
 	Name:			mod_showmenu
 	Level:			Global
 	Sample:			class="showmenu"
-	Explain:		下拉菜单
+	Explain:		┰垫虫
 	Last Modify:	lushnis
 */
 	.showmenu { padding-right: 16px; background: url({IMGDIR}/arrwd.gif) no-repeat 100% 50%; cursor: pointer; white-space: nowrap; }
@@ -356,16 +356,16 @@ CSS 写作注意事项：
 	Name:			mod_cursor
 	Level:			Global
 	Sample:			class="cur1"
-	Explain:		鼠标样式，可以根据需要按序添加
+	Explain:		公夹妓Α沮惠璶睰
 	Last Modify:	Pony
 */
 	.cur1 { cursor: pointer; }
 
-/* 如果验证码有错乱，可添加此样式.sec（全局，修改时要小心，会涉及分享、快速回复和 feed日志相册中的评论等地方） by Pony */
+/* 狦喷靡絏Τ岿睹睰妓Α.secЫэ璶み穦疉のだㄉе硉確㎝ feedら粁い蝶阶单よ by Pony */
 .ie6 .sec .p_pop { white-space: expression(this.offsetWidth >= 220 ? 'normal' : 'nowrap'); width: expression(this.offsetWidth >= 220 ? 200 : 'auto'); }
 
 
-/* ------------------------------------------------------------------------ 表单及表单元素 */
+/* ------------------------------------------------------------------------ 虫の虫じ */
 		/*
 		.pn				button
 			.pnc		button with light color
@@ -381,13 +381,13 @@ CSS 写作注意事项：
 		.oivt			invite button with oshr
 		*/
 
-/* 必填项 */ .rq { color: red; }
+/* ゲ恶兜 */ .rq { color: red; }
 
 /*
 	Name:			mod_input[text]_textarea_select
 	Level:			Global
 	Sample:			class="px/pt/ps"
-	Explain:		单行输入框（px）、多行文本框（pt）和选择框(ps/select)
+	Explain:		虫︽块px︽ゅセpt㎝匡拒(ps/select)
 	Last Modify:	Pony
 */
 	.px, .pt, .ps, select { border: 1px solid; border-color: {INPUTBORDERDARKCOLOR} {INPUTBORDER} {INPUTBORDER} {INPUTBORDERDARKCOLOR}; background: {INPUTBG} url({IMGDIR}/px.png) repeat-x 0 0; color: {TEXT}; }
@@ -400,7 +400,7 @@ CSS 写作注意事项：
 		.pt { overflow-y: auto; }
 			div.pt { height: 100px; line-height: 100px; }
 		.ps, select { padding: 2px 2px 2px 1px; }
-		/* 自动调整高度的 textarea by Pony */
+		/* 笆秸俱蔼 textarea by Pony */
 		.pts { vertical-align: top; overflow: hidden; }
 		.cmt .pts { width: 60%; }
 
@@ -408,7 +408,7 @@ CSS 写作注意事项：
 	Name:			mod_button
 	Level:			Global
 	Sample:			<button class="pn">Submit</button>
-	Explain:		按钮样式
+	Explain:		秙妓Α
 	Last Modify:	Pony
 */
 	button::-moz-focus-inner { border: 0; padding: 0; }
@@ -435,7 +435,7 @@ CSS 写作注意事项：
 	Name:			mod_input[radio]_input[checkbox]_label
 	Level:			Global
 	Sample:			class="pr/pc/lb"
-	Explain:		单选按钮(pr)、多选框(pc)和<label>(lb)
+	Explain:		虫匡秙(pr)匡(pc)㎝<label>(lb)
 	Last Modify:	Pony
 */
 	.pr, .pc { vertical-align: middle; margin: 0 5px 1px 0; padding: 0; }
@@ -447,7 +447,7 @@ CSS 写作注意事项：
 	Name:			mod_narrow_input
 	Level:			Global
 	Sample:			<div class="pns"></div>
-	Explain:		小尺寸的输入框和按钮样式。该样式在模板中保留，目前样式为空。
+	Explain:		へ块㎝秙妓Α赣妓Α家狾い玂痙ヘ玡妓Α
 	Last Modify:	Pony
 */
 	.pns .px {}
@@ -461,7 +461,7 @@ CSS 写作注意事项：
 							<option>Option</option>
 						</select>
 					</div>
-	Explain:		模拟下拉菜单样式
+	Explain:		家览┰垫虫妓Α
 	Last Modify:	Pony
 */
 .ftid { float: left; margin-right: 6px; }
@@ -478,10 +478,10 @@ CSS 写作注意事项：
 		.sltm li:hover { color: {HIGHLIGHTLINK}; }
 		.sltm li.current { color: {NOTICETEXT}; }
 
-/* 分享按钮 */ .oshr { float: right; margin-left: 5px; padding: 0 5px 0 22px; border: 1px solid; border-color: #CCC #A9A9A9 #A9A9A9 #CCC; background: {WRAPBG} url({IMGDIR}/oshr.png) no-repeat 5px 50%; }
+/* だㄉ秙 */ .oshr { float: right; margin-left: 5px; padding: 0 5px 0 22px; border: 1px solid; border-color: #CCC #A9A9A9 #A9A9A9 #CCC; background: {WRAPBG} url({IMGDIR}/oshr.png) no-repeat 5px 50%; }
 				.oshr:hover { text-decoration: none; }
-/* 收藏按钮 with oshr */ .ofav { background-image: url({IMGDIR}/fav.gif); }
-/* 邀请按钮 with oshr */ .oivt { background-image: url({IMGDIR}/activitysmall.gif); }
+/* Μ旅秙 with oshr */ .ofav { background-image: url({IMGDIR}/fav.gif); }
+/* 淋叫秙 with oshr */ .oivt { background-image: url({IMGDIR}/activitysmall.gif); }
 
 
 /*
@@ -495,7 +495,7 @@ CSS 写作注意事项：
 							</tr>
 						</table>
 					</form>
-	Explain:		表单样式
+	Explain:		虫妓Α
 	Last Modify:	Pony
 */
 	.tfm { width: 100%; }
@@ -519,14 +519,14 @@ CSS 写作注意事项：
 /*
 	Name:			mod_postboxtitle
 	Level:			Function
-	Explain:		发帖页面、弹窗等的标题栏
+	Explain:		祇┇紆怠单夹肈逆
 	Last Modify:	Pony
 */
 .pbt { margin-bottom: 10px; }
 	.ie6 .pbt .ftid a, .ie7 .pbt .ftid a { margin-top: 1px; }
 	#custominfo.mtn { margin-bottom: -5px; }
 
-/* 提示信息 alert_win － altw*/
+/* 矗ボ獺 alert_win ⌒ altw*/
 .altw { width: 350px; }
 	.altw .fltc { margin-bottom: 0; padding: 8px; }
 		.alert_right, .alert_error, .alert_info { padding: 6px 0 6px 58px; min-height: 40px; height: auto !important; height: 40px; line-height: 160%; background:url({IMGDIR}/right.gif) no-repeat 8px 8px; font-size: 14px; }
@@ -537,7 +537,7 @@ CSS 写作注意事项：
 		.alert_btn { margin-top: 20px; text-align: center; }
 		.alert_act { margin-top: 20px; padding-left: 58px; }
 
-/* 发帖导航 by lushnis */
+/* 祇┇旧 by lushnis */
 .pbnv { float: left; white-space: nowrap; overflow: hidden; width: 400px; padding: 7px 0; }
 .pbl { overflow: hidden; margin: 9px 0; width: 621px; border-width: 1px 0 1px 1px; border-style: solid; border-color: #CCC; background: {WRAPBG}; }
 	.pbl li { float: left; overflow-x: hidden; overflow-y: auto; padding: 5px; width: 196px; height: 300px; border-right: 1px solid #CCC; }
@@ -548,7 +548,7 @@ CSS 写作注意事项：
 	.pbls a, .pbls a:hover { background-color: #EEE; color: {MIDTEXT}; font-weight: 700; }
 		.pbsb { background: url({IMGDIR}/arrow.gif) right -33px no-repeat; }
 
-/* ------------------------------------------------------------------------ 页面布局 */
+/* ------------------------------------------------------------------------ Ы */
 		/*
 		#hd				Header
 			#nv			Navigation
@@ -568,9 +568,9 @@ CSS 写作注意事项：
 		.pmfl			PM friend list (Window)
 		*/
 
-/* 通用容器，定义页面宽度 */ .wp { margin: 0 auto; width: 960px; } #wp .wp { width: auto; }
+/* 硄ノ甧竟﹚竡糴 */ .wp { margin: 0 auto; width: 960px; } #wp .wp { width: auto; }
 
-/* 页头 */
+/* 繷 */
 	#toptb { line-height: 24px; }
 		#toptb a { float: left; padding: 0 4px; height: 24px; }
 		#toptb a.showmenu { padding-right: 15px; }
@@ -626,7 +626,7 @@ CSS 写作注意事项：
 				#um .avt { display: inline; margin-right: -60px; }
 				.vwmy { padding-left: 16px; background: url({IMGDIR}/user_online.gif) no-repeat 0 2px; }
 					.vwmy.qq { background: url({IMGDIR}/connect_qq.gif) no-repeat scroll 0 0; padding-left: 20px; }
-				/* .topnav .new, .sch .new 分别为为个人中心和搜索页面头部新消息样式 */
+				/* .topnav .new, .sch .new だいみ㎝穓繷场穝妓Α */
 				#um .new, .topnav .new, .sch .new, #toptb .new { padding-left: 20px; background-repeat: no-repeat; background-position: 0 50%; color: {HIGHLIGHTLINK}; font-weight: 700; }
 					#myprompt.new { background-image: url({IMGDIR}/notice.gif); background-position: 3px 50%; }
 					#pm_ntc.new { background-image: url({IMGDIR}/new_pm.gif); }
@@ -647,7 +647,7 @@ CSS 写作注意事项：
 					#qmenu_menu ul a { margin-bottom: 10px; padding: 47px 0 0; width: 60px; border: none; border-radius: 4px; background: url({IMGDIR}/noicon.gif) no-repeat 50% 5px; text-align: center; }
 						#qmenu_menu ul a:hover { background-color: {SPECIALBG}; color: {HIGHLIGHTLINK}; text-shadow: none; }
 
-/* 页面主区域 */
+/* 跋办 */
 	#ct { min-height: 300px; }
 		.ie6 #ct { height: 300px; }
 		.mn { overflow: hidden; }
@@ -674,7 +674,7 @@ CSS 写作注意事项：
 		.mnw { clear: both; border-top: 1px solid #CCC; }
 		.mnh { width: 643px; background: {COMMONBG}; margin-bottom: 0; }
 
-/* 页尾 */
+/* Ю */
 	#ft { padding: 10px 0 50px; border-top: 1px solid {COMMONBORDER}; line-height: 1.8; color: {FOOTERTEXT}; }
 		#flk { text-align: right; }
 			#flk img { vertical-align: middle; }
@@ -682,13 +682,13 @@ CSS 写作注意事项：
 		.ie6 #scrolltop { position: absolute; bottom: auto; }
 		#nv_home #ft, .pg_announcement #ft, .pg_modcp #ft, .pg_portalcp #ft, .pg_ranklist #ft, #nv_userapp #ft { border-top: none; }
 
-/* 通用的区域块 */
+/* 硄ノ跋办遏 */
 	/*
-	.bm 是最常用的区块元素，默认带有 1px 的边框和 10px 的下边距。一般情况下，.bm 内应包括两个子容器：.bm_h 和 .bm_c，前者代表区块头部，带有灰色背景和下边框；后者是容器主体，默认带有 10px 的内边距。
-	.bm 另有三种子样式
-		.bmw	Weight		头部为彩色背景
-		.bml	Lite		头部无背景填充
-		.bmn	Notice		整体带有彩色背景，常用于提示信息
+	.bm 琌程盽ノ跋遏じ纐粄盿Τ 1px 娩㎝ 10px 娩禯薄猵.bm ず莱珹ㄢ甧竟.bm_h ㎝ .bm_c玡跋遏繷场盿Τη︹璉春㎝娩琌甧竟砰纐粄盿Τ 10px ず娩禯
+	.bm Τ贺妓Α
+		.bmw	Weight		繷场眒︹璉春
+		.bml	Lite		繷场礚璉春恶
+		.bmn	Notice		俱砰盿Τ眒︹璉春盽ノ矗ボ獺
 	*/
 	.bm, .bn { margin-bottom: 10px; }
 		.bm { border: 1px solid {COMMONBORDER}; background: {WRAPBG}; }
@@ -714,13 +714,13 @@ CSS 写作注意事项：
 		.bm2 .bm2_b_y { float: right; }
 	.bw0 { background: transparent; }
 
-	/* 宽布局下的通用块 */.bw { padding: 0 15px; }
+	/* 糴Ы硄ノ遏 */.bw { padding: 0 15px; }
 
 /*
 	Name:			mod_path
 	Level:			Global
 	Sample:			<div id="pt"><div class="z">Path here</div></div>
-	Explain:		面包屑导航
+	Explain:		难甴旧
 	Last Modify:	lushnis
 */
 	#pt { margin: 2px 0; height: 29px; border:none; background: transparent; line-height: 29px; }
@@ -728,14 +728,14 @@ CSS 写作注意事项：
 		#pt .z a, #pt .z em, #pt .z span { float: left; height: 29px; }
 		#pt .z em { width: 20px; background: url({IMGDIR}/pt_item.png) no-repeat 3px 10px; line-height: 200px; overflow: hidden; }
 		.nvhm { width: 16px; background: url({IMGDIR}/search.png) no-repeat -8px -119px; line-height: 200px; overflow: hidden; }
-			/* XP 或 Windows 7，IE 最高版本为 8 或 9，这几种组合情况对字体的渲染存在差异，所以需要对背景进行微调，以适应更多情况 by Pony 11050511 */
+			/* XP ┪ Windows 7IE 程蔼セ 8 ┪ 9硂碭贺舱薄猵癸砰磋琕畉钵┮惠璶癸璉春秈︽稬秸続莱薄猵 by Pony 11050511 */
 			.ie_all #pt .z em { background-position: 3px 9px; }
 			.ie_all .nvhm { background-position: -8px -120px; }
 /*
 	Name:			mod_userheader
 	Level:			Global
 	Sample:			div id="uhd"
-	Explain:		论坛皮肤下用户页面头部
+	Explain:		阶韭ブ涧ノめ繷场
 	Last Modify:	lushnis
 */
 #uhd { padding-top: 10px;border: 1px solid #CCC; border-bottom: none; background: {SPECIALBG}; }
@@ -754,7 +754,7 @@ CSS 写作注意事项：
 	#uhd .flw_hd { float: right; width: 260px; margin-right: 10px; margin-bottom: -30px; }
 		#uhd .tns th, #uhd .tns td { padding-left: 20px; text-align: left; }
 		#uhd .flw_hd .o { padding-left: 20px; }
-/* 统计数据 */
+/* 参璸计沮 */
 .tns { padding: 10px 0; }
 	.tns table { width: 100%; }
 		.tns th, .tns td { text-align: center; font-size: 12px; }
@@ -764,7 +764,7 @@ CSS 写作注意事项：
 	.pls .tns { padding: 0 10px 10px; }
 		.pls .tns th p, .pls .tns td p { font-size: 12px; margin: 0; }
 
-/* 带图标页面头部 ih. --> icon header */
+/* 盿瓜夹繷场 ih. --> icon header */
 	.ih .icn { float: left; width: 60px; }
 	.ih dl { margin-left: 60px; }
 		.ih dt { font-size: 14px; font-weight: 700; }
@@ -779,7 +779,7 @@ CSS 写作注意事项：
 						<li class="a"><a href="#">Active Tab Item</a></li>
 						<li><a href="#">Tab Item</a></li>
 					</ul>
-	Explain:		标签样式
+	Explain:		夹乓妓Α
 	Last Modify:	lushnis
 */
 .tb { margin-top: 10px; padding-left: 5px; line-height: 30px; border-bottom: 1px solid {COMMONBORDER}; }
@@ -800,46 +800,46 @@ CSS 写作注意事项：
 		.tb_h .o { margin-top: 2px; }
 	.tb_s { margin-top: 0; line-height: 26px; }
 
-	/* 类似menu的Tab */
+	/* 摸menuTab */
 .tbmu { padding: 8px 10px 8px 0; border-bottom: 1px dashed {COMMONBORDER}; }
 	.tbmu a { color: {HIGHLIGHTLINK}; }
 	.tbmu .a { color: {LINK}; font-weight: 700; }
-	/* tab的强调信息提示 */
+	/* tab眏秸獺矗ボ */
 .tbms { padding: 10px 10px 10px 26px; border: 1px dashed #FF9A9A; background: url({IMGDIR}/notice.gif) no-repeat 10px 50%; }
 .tbms_r { background-image: url({IMGDIR}/data_valid.gif); }
-	/* 极简 Tab */
+	/* 伐虏 Tab */
 .tbx { margin: 10px 0; }
 	.tbx span { margin-right: 10px; cursor: pointer; }
 	.tbx .a { padding: 3px 5px; border: solid #999; border-width: 0 1px 1px 0; background: {COMMONBG} url({IMGDIR}/thead.png) repeat-x 0 -20px; }
 	.tbx strong { color: {NOTICETEXT}; }
-/* 类似相册侧边切换页面用的 */
+/* 摸凹娩ち传ノ */
 .obn { border-bottom: 1px solid {COMMONBORDER}; }
 	.obn select { width: 100%; margin-bottom: 5px; }
 
-/* 广告 */
-	/* 页头广告 */ .a_h { padding-top: 5px; }
-	/* 二级导航广告 */ .a_mu { border: solid {COMMONBORDER}; border-width: 0 1px 1px; background: {COMMONBG}; }
-	/* 页尾广告 */ .a_f { margin: 5px auto; }
-	/* 日志内容广告 */ .a_b { float: right; margin: 0 0 5px 5px; }
-	/* 格子广告 */ .a_t { margin-bottom: 10px; }
+/* 約 */
+	/* 繷約 */ .a_h { padding-top: 5px; }
+	/* 旧約 */ .a_mu { border: solid {COMMONBORDER}; border-width: 0 1px 1px; background: {COMMONBG}; }
+	/* Ю約 */ .a_f { margin: 5px auto; }
+	/* ら粁ず甧約 */ .a_b { float: right; margin: 0 0 5px 5px; }
+	/* 約 */ .a_t { margin-bottom: 10px; }
 		.a_t table { width: 100%; }
 		.a_t td { padding: 4px 15px; border: 1px solid {COMMONBORDER}; }
-	/* 帖内广告 */ .a_pr { float: right; overflow: hidden; }
+	/* ┇ず約 */ .a_pr { float: right; overflow: hidden; }
 		.a_pt, .a_pb { background: url({IMGDIR}/ad.gif) no-repeat 0 50%; margin-bottom: 6px; padding-left: 20px; zoom: 1; }
-	/* 漂浮广告 */ .a_fl, .a_fr { float: right; position: fixed; top: 350px; z-index: 100; }
+	/* 簘疊約 */ .a_fl, .a_fr { float: right; position: fixed; top: 350px; z-index: 100; }
 		.a_fl { left: 0; }
 		.a_fr { right: 0; text-align: right; }
 		* html .a_fl, * html .a_fr { position: absolute; top: expression(offsetParent.scrollTop+350); }
-	/* 对联广告 */ .a_cb { top: 20px }
+	/* 癸羛約 */ .a_cb { top: 20px }
 		* html .a_cb { top: expression(offsetParent.scrollTop+20); }
-	/* 文章漂浮广告 */ .a_af { float:left; margin-right: 10px; margin-bottom: 10px; }
-	/* 右下角广告 */ .a_cn { position: fixed; right: 10px; bottom: 10px; z-index: 300; }
+	/* ゅ彻簘疊約 */ .a_af { float:left; margin-right: 10px; margin-bottom: 10px; }
+	/* à約 */ .a_cn { position: fixed; right: 10px; bottom: 10px; z-index: 300; }
 		* html .a_cn { position: absolute; top: expression(offsetParent.scrollTop+document.documentElement.clientHeight-this.offsetHeight); }
 		.a_cn .close { text-align: right; }
 
 	.a_h, .a_mu, .a_c, .a_p, .a_f, .a_t { text-align: center; }
 
-/* ------------------------------------------------------------------------ 列表样式 */
+/* ------------------------------------------------------------------------ 妓Α */
 		/*
 		.xl				Text list
 			.xl1		1 line list ( wrap text will be hidden );
@@ -852,7 +852,7 @@ CSS 写作注意事项：
 		.al				Application list
 		*/
 
-/* 文本列表 */
+/* ゅセ */
 .xl li { margin: 2px 0; }
 	.xl em { float: right; padding-left: 5px; }
 		.xl em, .xl em a { color: {LIGHTTEXT}; }
@@ -884,7 +884,7 @@ CSS 写作注意事项：
 		.xlda dd a { color: {HIGHLIGHTLINK}; }
 		.xlda dd .hot { color: {NOTICETEXT}; }
 
-/* 图片列表 */
+/* 瓜 */
 .ml {}
 	.ml li { float: left; padding: 0 5px 5px; text-align: center; overflow: hidden; }
 		.ml img { display: block; margin: 0 auto; }
@@ -907,12 +907,12 @@ CSS 写作注意事项：
 		.mlp img { padding: 2px; max-width: 120px; max-height: 120px; border: 1px solid #CCC; background: {WRAPBG}; }
 		* html .mlp img { width: expression(this.width > 120 && this.width>=this.height ? 120 : true); height: expression(this.height > 120 && this.width<=this.height ? 120 : true); }
 
-/* 用户头像列表时，各种状态图标。.gm -> 管理员; .gs -> 明星会员 ; .gol -> 在线会员; */
+/* ノめ繷钩贺篈瓜夹.gm -> 恨瞶; .gs -> 琍穦 ; .gol -> 絬穦; */
 .gm, .gs, .gol { position: absolute; overflow: hidden; margin: -3px 0 0 -3px; width: 60px; height: 18px; background: url({IMGDIR}/gst.gif) no-repeat 0 0; display: block;/* ie6 */ }
 .gs { background-position: 0 -18px; }
 .gol { background-position: 0 -36px; }
 
-/* 应用列表*/
+/* 莱ノ*/
 	.appl ul { margin: 3px 0; }
 	.appl li { display: block; height: 28px; line-height: 28px; white-space: nowrap; word-wrap: normal; font-size: 14px; text-overflow: ellipsis; overflow: hidden; }
 	.appl li a { text-decoration: none !important; }
@@ -920,11 +920,11 @@ CSS 写作注意事项：
 	.appl span { float: right; font-size: 12px; }
 		.appl span a { color: {LIGHTTEXT}; }
 			.appl span a:hover { color: {HIGHLIGHTLINK}; }
-	/* 应用侧边 by Pony */
+	/* 莱ノ凹娩 by Pony */
 	.myo li { height: auto; line-height: 1.5; }
 	.myo img { margin-bottom: -1px; }
 	.myo a { color: {HIGHLIGHTLINK}; }
-	/* 侧边管理列表 */
+	/* 凹娩恨瞶 */
 	.tbn { margin: -6px -10px 0; }
 		.tbn ul { margin: 0; }
 			.tbn li { margin: 0 10px; height: 33px; border-bottom: 1px dashed #CCC; }
@@ -932,7 +932,7 @@ CSS 写作注意事项：
 		.tbn ul a { display: block; height: 33px; line-height: 33px; }
 		.tbn .mt { padding: 10px; }
 
-/* 道具 magic */
+/* 笵ㄣ magic */
 .mg_img { padding: 10px; width: 76px; height: 76px; background: url({IMGDIR}/magic_imgbg.gif) no-repeat 0 0; }
 
 /*
@@ -943,7 +943,7 @@ CSS 写作注意事项：
 						<li class="a"><a href="#">Active Tab Item</a></li>
 						<li><a href="#">Tab Item</a></li>
 					</ul>
-	Explain:		友情链接
+	Explain:		ね薄渺钡
 	Last Modify:	lushnis
 */
 	.lk img { float: left; margin-right: 5px; margin-bottom: 5px; width: 88px; height: 31px; }
@@ -953,8 +953,8 @@ CSS 写作注意事项：
 	.lk .x li { float: left; margin-right: 5px; width: 88px; height: 1.5em; overflow: hidden; }
 	.lk_logo .lk_content { float: left; }
 
-/* ------------------------------------------------------------------------ 其他特定功能块 */
-/* 简易编辑器 Tiny Editor */
+/* ------------------------------------------------------------------------ ㄤ疭﹚遏 */
+/* 虏絪胯竟 Tiny Editor */
 	.tedt { width: 98%; border: 1px solid; border-color: #999 #CCC #CCC #999; }
 		.tedt .bar { padding: 0 10px 0 0; height: 25px; line-height: 25px; border-bottom: 1px solid {COMMONBORDER}; background: {COMMONBG}; }
 			.fpd a { float: left; margin: 2px 5px 0 0; width: 20px; height: 20px; background: url({STATICURL}image/editor/editor.gif) no-repeat; text-indent: -9999px; line-height: 20px; overflow: hidden; }
@@ -971,7 +971,7 @@ CSS 写作注意事项：
 			.tedt .pt:focus { outline: none; -moz-box-shadow: none; }
 	.m_c .tedt { width: 600px; }
 
-/* 表情 */
+/* 薄 */
 .sllt { padding: 10px 5px 5px !important; }
 	.sllt td { padding: 8px; border: none; cursor: pointer; }
 	.sllt_p { *float: left; text-align: right; }
@@ -983,7 +983,7 @@ CSS 写作注意事项：
 	Name:			mod_style_selector
 	Level:			Fuction
 	Dependent:		mod_popupmenu
-	Explain:		风格切换菜单
+	Explain:		ち传垫虫
 	Last Modify:	lushnis
 */
 	#toptb a#sslct { width: 10px; background: url({IMGDIR}/style_switch.png) no-repeat 50% 50%; text-indent: -9999px; overflow: hidden; }
@@ -991,7 +991,7 @@ CSS 写作注意事项：
 		 .sslct_btn { float: left; margin: 4px 4px 0 0; width: 12px; height: 12px; border: 1px solid {COMMONBORDER}; cursor: pointer; }
 			.sslct_btn i { float: left; display: inline; margin: 1px; width: 10px; height: 10px; background: #2E80D1; overflow: hidden; font-style: normal; }
 
-/* 弹出菜单、弹出层及弹出窗口 */
+/* 紆垫虫紆糷の紆怠 */
 	.p_pop, .p_pof, .sllt { padding: 4px; border: 1px solid; min-width: 60px; border-color: {DROPMENUBORDER}; {DROPMENUBGCODE}; box-shadow: 1px 2px 2px rgba(0,0,0,0.3); }
 		.ie6 .p_pop { width: 100px; }
 		.p_pof .p_pop { padding: 0; border: none; box-shadow: none; }
@@ -1002,24 +1002,24 @@ CSS 写作注意事项：
 			.p_pop li:last-child a { border: none; }
 			.ie6 .p_pop a { position: relative; }
 			.p_pop a:hover, .p_pop a.a, #sctype_menu .sca { background-color: {SPECIALBG}; color: {HIGHLIGHTLINK}; text-decoration: none; }
-		/* .blk -> block 内容较为复杂的弹出层使用 .blk 的 class，内部的 a 标签重新定义 */
+		/* .blk -> block ず甧耕狡馒紆糷ㄏノ .blk  classず场 a 夹乓穝﹚竡 */
 		.blk a, .inlinelist a { display: inline; padding: 0; border: none; }
 			.blk a:hover { background: none; color: {LINK}; text-shadow: none; text-decoration: underline; }
 		.inlinelist { padding: 5px; }
 			.inlinelist a { float: left; width: 5em; height: 2em; overflow: hidden; text-align: center; line-height: 2em; }
 	.h_pop { min-width: 120px; border-top: none; }
-/* .txt 和 .textarea 属于旧的命名规范，待整理 by lushnis */.p_opt .txt, .p_opt .txtarea { margin: 5px 0; }
+/* .txt ㎝ .textarea 妮侣㏑砏絛俱瞶 by lushnis */.p_opt .txt, .p_opt .txtarea { margin: 5px 0; }
 
 	.p_pop .flbc, .p_pof .flbc{margin-right: 8px;margin-top: 4px;}
 
-/* 弹出层 以下 class 都可以分开写，单独定义，以便个性化 */
-	/* 四条边、四个角的公用样式 */
+/* 紆糷  class 常だ秨糶虫縒﹚竡獽┦て */
+	/* 兵娩àそノ妓Α */
 	.t_l, .t_c, .t_r, .m_l, .m_r, .b_l, .b_c, .b_r { overflow: hidden; {FLOATMASKBGCODE}; opacity: 0.2; filter: alpha(opacity=20); }
-	/* 四个角 */
+	/* à */
 	.t_l, .t_r, .b_l, .b_r { width: 8px; height: 8px; }
-	/* 上下两条边 */
+	/* ㄢ兵娩 */
 	.t_c, .b_c { height: 8px; }
-	/* 左右两条边 */
+	/* オㄢ兵娩 */
 	.m_l, .m_r { width: 8px; }
 
 	.t_l { -moz-border-radius: 8px 0 0 0; -webkit-border-radius: 8px 0 0 0; border-radius: 8px 0 0 0; }
@@ -1028,15 +1028,15 @@ CSS 写作注意事项：
 	.b_r { -moz-border-radius: 0 0 8px 0; -webkit-border-radius: 0 0 8px 0; border-radius: 0 0 8px 0; }
 	.m_c { {FLOATBGCODE}; }
 
-/* 弹出层内容区 by Pony */
+/* 紆糷ず甧跋 by Pony */
 	.m_c .tb { margin: 0 0 10px; padding: 0 10px; }
 	.m_c .c { padding: 0 10px 10px; }
 	.m_c .o { padding: 8px 10px; height: 26px; text-align: right; border-top: 1px solid #CCC; background: {COMMONBG}; }
-		/* 分享时会用到 */
+		/* だㄉ穦ノ */
 	.m_c .el { width: 420px; }
 		.m_c .el li { padding: 0; border: none; }
 
-/* .flb 弹出层header */
+/* .flb 紆糷header */
 	.flb { padding: 10px 10px 8px; height: 20px; line-height: 20px; }
 		.flb em { float: left; font-size: 14px; font-weight: 700; color: {HIGHLIGHTLINK}; }
 			.flb em a { text-decoration: none; }
@@ -1063,13 +1063,13 @@ CSS 写作注意事项：
 				.f_c .th th, .f_c .th td { padding: 10px 0; }
 				.f_c .list th { background: none; }
 
-/* 弹窗未开启时 nofloat */
+/* 紆怠ゼ秨币 nofloat */
 .nfl { height: auto !important; height: 320px; min-height: 320px; }
 	.nfl .f_c { margin: 60px auto; padding: 20px; width: 580px; border: 3px solid {COMMONBG}; background: {WRAPBG}; }
 	.nfl .loginform { height: auto; }
 	.nfl .clause { width: auto; height: auto; }
 
-/* dropdownbtn 下拉菜单 */
+/* dropdownbtn ┰垫虫 */
 .hasd {}
 	.hasd input { float: left; width: 121px; }
 		.hasd input.crl { padding: 0; width: 20px; height: 20px; background: none; border-style: solid; border-color: {INPUTBORDERDARKCOLOR} {INPUTBORDER} {INPUTBORDER} {INPUTBORDERDARKCOLOR}; border-width: 1px 0 1px 1px; }
@@ -1080,16 +1080,16 @@ CSS 写作注意事项：
 		.tpclg h4 a.dpbtn { float: right; border-width: 1px; }
 		.tpclg h4 { font-weight: 400; }
 		.tpclg .pt { margin: 5px 0; width: 212px; overflow: hidden; }
-		/* 下面两行为评分时用到的 */
+		/* ㄢ︽蝶だノ */
 		.mark .dt, .mark .tpclg h4 { width: 270px; }
 		.mark .tpclg .pt { width: 260px; }
 	#postbox dd.hasd input { width: 99px; margin-right: 0; }
 
-/*弹窗 编辑器 颜色框 colorbox*/
+/*紆怠 絪胯竟 肅︹ colorbox*/
 .colorbox{ width: 130px !important; }
 .colorbox input { float: left; margin: 2px; padding: 0; width: 12px; height: 12px; border: 0; cursor: pointer; }
 
-/* 短消息对话框 .pm -> personal_message (window) by Pony */
+/* 祏癸杠 .pm -> personal_message (window) by Pony */
 	.pm { overflow: hidden; width: 400px; }
 		.pm .flb { margin-bottom: 0; padding: 1px 5px 4px; background: #CCC url({IMGDIR}/pm.png) repeat-x 0 -101px; }
 			* html .pm .flb { padding: 4px 5px 1px; }
@@ -1104,7 +1104,7 @@ CSS 写作注意事项：
 					.pmd, .pmd img { max-width: 292px; }
 					* html .pmd { width: expression(this.offsetWidth > 292 ? 292+'px':'auto'); }
 						* html .pmd img { width: expression(this.width > 292 ? 292 : true); }
-					/* 短消息下的引用和代码样式 */
+					/* 祏まノ㎝絏妓Α */
 					.pmd .quote { overflow: hidden; margin: 0; padding-left: 16px; background: url({IMGDIR}/qa.gif) no-repeat 0 0; color: {MIDTEXT}; }
 						.pmd .quote blockquote { display: inline; margin: 0; padding-right: 16px; background: url({IMGDIR}/qz.gif) no-repeat 100% 100%; }
 					.pmd .blockcode { overflow: hidden; margin: 0; padding: 0; background: transparent; color: {MIDTEXT}; }
@@ -1119,7 +1119,7 @@ CSS 写作注意事项：
 			.pmfm .pn { float: right; }
 			.pma a { margin-right: 5px; }
 
-/* 短消息联系人列表 by Pony */
+/* 祏羛么 by Pony */
 	.pmo { position: absolute; top: 8px; right: 10px; overflow: hidden; padding-left: 10px; width: 130px; height: 31px; line-height: 24px; line-height /*\**/: 26px\9; background: url({IMGDIR}/pn.png) repeat-x 0 -320px; text-shadow: 1px 1px 1px {WRAPBG}; }
 		.pmo em { display: block; padding: 3px 5px 4px 0; background: url({IMGDIR}/pn.png) no-repeat 100% -360px; }
 		.pmo a { overflow: hidden; white-space: nowrap; display: block; padding-right: 10px; background: url({IMGDIR}/pm.png) no-repeat 100% -222px; outline: none; }
@@ -1135,16 +1135,16 @@ CSS 写作注意事项：
 			.pmfl li { padding: 5px; height: 24px; }
 			.pmfl .avt { float: left; width: 29px; height: 29px; }
 				.pmfl .avt img { padding: 0; width: 24px; height: 24px; border: none; }
-				/* 跳动的头像样式 by Pony */
+				/* 铬笆繷钩妓Α by Pony */
 				.pmfl .newpm img { margin: 1px 0 0 1px; }
 			.pmfl p { overflow: hidden; white-space: nowrap; width: 78px; }
-				/* 当前交谈的用户 */
+				/* 讽玡ユ酵ノめ */
 				.pmfl p .a { color: red; }
-				/* 在线的用户 */
+				/* 絬ノめ */
 				.pmfl p .ol { color: {LINK}; }
 				.pmfl strong { color: #000; }
 
-/* 登录和注册 */
+/* 祅魁㎝爹 */
 
 .rfm { margin: 0 auto; width: 760px; border-bottom: 1px dotted {COMMONBORDER}; }
 		.rfm a { color: {HIGHLIGHTLINK}; }
@@ -1171,7 +1171,7 @@ CSS 写作注意事项：
 /*
 	Name:			mod_passlevel
 	Level:			Function
-	Explain:		密码强度检测
+	Explain:		盞絏眏浪代
 	Last Modify:	lushnis
 */
 	.passlevel { padding-left: 70px; background: url({IMGDIR}/passlevel.png) no-repeat 0 5px; }
@@ -1184,7 +1184,7 @@ CSS 写作注意事项：
 .lgfm { font: {FONTSIZE} {FONT}; float: left; margin-bottom: 10px; *margin-bottom: -10px; padding: 20px 0; width: 280px; border-right: 1px solid #CCC; }
 	.rgs { margin-bottom: 10px; }
 	.lgfm label, .lgfm p, .reginfo { clear: both; overflow: hidden; display: block; margin-bottom: 10px; line-height: 22px; }
-		/* 自定义的注册信息 */
+		/* ﹚竡爹獺 */
 		.reginfo label { display: inline; }
 		.reg_c { float: left; width: 200px; }
 	.lgfm .txt, .lgfm .px { padding: 2px 4px; height: 16px; border: 1px solid; border-color: {INPUTBORDERDARKCOLOR} {INPUTBORDER} {INPUTBORDER} {INPUTBORDERDARKCOLOR}; background-image: none; }
@@ -1216,7 +1216,7 @@ CSS 写作注意事项：
 /*
 	Name:			mod_messagelogin
 	Level:			Global
-	Explain:		showmessage 处的登录框
+	Explain:		showmessage 矪祅魁
 	Last Modify:	lushnis
 */
 #messagelogin { margin-top: 5px; border-top: 1px solid {COMMONBORDER}; }
@@ -1229,7 +1229,7 @@ CSS 写作注意事项：
 /*
 	Name:			mod_fast_login
 	Level:			Global
-	Explain:		页面头部的快速登录
+	Explain:		繷场е硉祅魁
 	Last Modify:	Pony 11061011
 */
 .fastlg { line-height: 24px; }
@@ -1241,22 +1241,22 @@ CSS 写作注意事项：
 
 	.fastlg_l { padding-right: 4px !important; border-right: 1px solid {SPECIALBG}; }
 
-/* 打招呼 by Pony */
+/* ゴ┷㊣ by Pony */
 	.poke { margin-bottom: 10px; }
 		.poke li { float: left; margin: 0 1% 5px 0; width: 32%; height: 22px; }
 		.poke img { vertical-align: middle; }
 
-/* 普通数据列表 datatable by michael */
+/* 炊硄计沮 datatable by michael */
 .dt { border-top: 1px solid {COMMONBORDER}; width: 100%; }
 	.dt th { background: {COMMONBG}; }
 	.dt td, .dt th { padding: 7px 4px; border-bottom: 1px solid {COMMONBORDER}; }
 	.dt .c { width: 50px; }
 
-	/* 用来展示数据的表格 */
+	/* ノㄓ甶ボ计沮 */
 .tdat { width: 100%; border: 1px solid {COMMONBORDER}; }
 	.tdat th, .tdat td { padding: 4px 5px; border: 1px solid {COMMONBORDER}; }
 
-/* ==  um 公告 帮助 message 通用列表  lum -- um list == */
+/* ==  um そ 腊 message 硄ノ  lum -- um list == */
 .um { margin-bottom: 1em; padding-bottom: 1em; border-bottom: 1px dashed {COMMONBORDER}; clear: left; }
 	.umh { margin-bottom: 10px; overflow: hidden; }
 		.umh h2, .umh h3 { clear: left; font-size:  14px; float: left; background: {WRAPBG} url({IMGDIR}/arrow.gif) no-repeat right 6px;  padding-right: 14px; cursor: pointer; }
@@ -1276,7 +1276,7 @@ CSS 写作注意事项：
 	.lum ul { padding: 1em 0 1em 2em; margin-bottom: 1em; border-bottom: 1px dashed {COMMONBORDER}; }
 		.lum ul li { padding: 0.2em 0; }
 
-/* pgs --> pages & postbutton 分页、发帖按钮, pgb -->返回首页, nxt -->下一页 */
+/* pgs --> pages & postbutton だ祇┇秙, pgb -->, nxt --> */
 .pgs {}
 	.pgs #newspecial, .pgs #newspecialtmp, .pgs #post_reply, .pgs #post_replytmp { float: left; margin-right: 5px; }
 	.pg { float: right; }
@@ -1292,13 +1292,13 @@ CSS 写作注意事项：
 			.ie6 .pg label { padding-top: 3px; height: 23px; }
 			.pg label .px { padding: 0; width: 25px; height: 16px; line-height: 16px; }
 	#pgt .pg, #pgt .pgb { margin-top: 5px; }
-/* 用于行动的按钮 button action */
+/* ノ︽笆秙 button action */
 .bac {margin: 0; padding: 0; width: 70px; height: 30px;line-height: 30px; color: {LINK}; overflow: hidden; text-decoration: none; background: url({IMGDIR}/pg_arw.png) no-repeat 0 0; text-align: center; text-indent: -7px; display: block;}
 
 #psd .bn .mbn input, #postbox input { margin-right: 4px; }
 #postbox .mbn, #psd .mbn { height: 1.6em; line-height: 1.6em; }
 
-/* 用于积分奖励提示等弹出层提示 */
+/* ノ縩だ贱纘矗ボ单紆糷矗ボ */
 .popupcredit {}
 	.pc_l, .pc_c, .pc_inner, .pc_r { width: 29px; height: 56px; line-height: 56px; background: url({IMGDIR}/popupcredit_bg.gif) no-repeat 0 0; }
 	.pc_c { width: 200px; background-position: 0 -56px; background-repeat: repeat-x; }
@@ -1314,7 +1314,7 @@ CSS 写作注意事项：
 				.pc_btn:hover img { opacity: 1; }
 	.pc_r { background-position: -30px 0; }
 
-/* 快速跳转菜单 */
+/* е硉铬锣垫虫 */
 #fjump_menu { padding: 7px 0 10px 10px; background: {COMMONBG}; }
 	.ie6 #fjump_menu { width: expression(this.getElementsByTagName('li')[2] ? '600px' : (this.getElementsByTagName('li')[1] ? '400px' : '200px')); }
 	#fjump_menu .sch { position: absolute; top: 6px; right: 10px; }
@@ -1328,17 +1328,17 @@ CSS 写作注意事项：
 	.jump_bdl a { display: block; position: static !important; padding: 0 4px; text-decoration: none; color: {TABLETEXT}; }
 	.jump_bdl .a a, .jump_bdl .a a:hover { background-color: {SPECIALBG}; }
 
-/* 可用道具列表 by lushnis */
+/* ノ笵ㄣ by lushnis */
 	.mgcmn { width: 100px; }
 		.mgcmn a { padding-left: 25px; line-height: 16px !important; }
 			.mgcmn img { position: absolute; margin-left: -20px; }
 
-/* 高亮道具用到的 */
+/* 蔼獹笵ㄣノ */
 .cmen { overflow: hidden; width: 63px; }
 	.cmen a { overflow: hidden; float:left; width: 20px; height: 20px; }
 
 
-/* 热点：站长推荐内容，在页面右下角弹出 */
+/* 荐翴崩滤ず甧à紆 */
 .focus { position: fixed; right: 10px; bottom: 0; z-index: 300; overflow: hidden; width: 270px; background: {WRAPBG}; }
 	* html .focus { position: absolute; top: expression(offsetParent.scrollTop+document.documentElement.clientHeight-this.offsetHeight); }
 	.fctrl { margin-left: 10px; font-weight: 400; }
@@ -1347,13 +1347,13 @@ CSS 写作注意事项：
 	.focus .m img { width: 60px; height: 60px; }
 	.focus dt { padding-top: 0; }
 
-/* 分享的验证码（全局） by Pony */
+/* だㄉ喷靡絏Ы by Pony */
 .m_c .sec .secq { display: block; margin: 5px 0 10px; }
 
 /*
 	Name:			mod_reason_select
 	Level:			Global
-	Explain:		类似评分窗口中的评分原因选择的样式
+	Explain:		摸蝶だ怠い蝶だ匡拒妓Α
 	Last Modify:	Pony
 */
 .reason_slct {}
@@ -1369,20 +1369,20 @@ CSS 写作注意事项：
 						<input type="file" class="pf cur1" size="1" />
 						<button type="button" class="pn pnc"><strong>{lang}</strong></button>
 					</div>
-	Explain:		模拟 <input type="file" />，注意不要让 button 太宽
+	Explain:		家览 <input type="file" />猔種ぃ璶琵 button び糴
 	Last Modify:	Pony
 */
 .filebtn { position: relative; margin: 0 auto; width: 60px; overflow: hidden; }
 	.filebtn .pf { position: absolute; right: 0; height: 23px; opacity: 0; filter:alpha(opacity=0); }
 
-/* 上传弹出层 */
+/* 肚紆糷 */
 .upfile { width: 220px; }
 	.uploadform { padding: 0 10px; border: 1px dashed {COMMONBORDER}; background: {COMMONBG}; }
 
 /*
 	Name:			mod_flashupload
 	Level:			Global
-	Explain:		Flash 上传时的处理界面，结构参见 /static/js/fileprogress.js
+	Explain:		Flash 肚矪瞶挡篶把ǎ /static/js/fileprogress.js
 	Last Modify:	Pony 2012022813
 */
 .progressWrapper { overflow: hidden; width: 100%; }
@@ -1401,12 +1401,12 @@ a.progressCancel { display: block; float: right; width: 14px; height: 14px; back
 .swfupload { vertical-align: top; }
 
 
-/* ------------------------------------------------------------------------ 拖拽及页面 DIY */
+/* ------------------------------------------------------------------------ ╈の DIY */
 .frame, .frame-tab { margin-bottom: 10px; border: 1px solid {WRAPBORDERCOLOR}; background: {WRAPBG}; }
 	.title { padding: 0 10px; height: 32px; font-size: 14px; font-weight: 700; line-height: 32px; overflow: hidden; }
 		.frame-title, .frametitle, .tab-title { background: {COMMONBG} url({IMGDIR}/title.png) repeat-x 0 100%; }
 
-	/* 新的框架结构 */
+	/* 穝琜挡篶 */
 	.frame-1-1-l, .frame-1-1-1-l, .frame-1-1-1-c, .frame-2-1-l, .frame-1-2-l, .frame-3-1-l, .frame-1-3-l { float: left; }
 	.frame-1-1-r, .frame-1-1-1-r, .frame-2-1-r, .frame-1-2-r, .frame-3-1-r, .frame-1-3-r { float: right; }
 	.frame-1-1-l, .frame-1-1-r { width: 49.9% }
@@ -1416,7 +1416,7 @@ a.progressCancel { display: block; float: right; width: 14px; height: 14px; back
 	.frame-3-1-r, .frame-1-3-l { width: 24.9%; }
 	/* End */
 
-	/* X1 之前的框架结构 */
+	/* X1 ぇ玡琜挡篶 */
 	.frame .mn { margin-bottom: 0; }
 	.frame .sd { min-height: 0; _height: auto; }
 
@@ -1458,16 +1458,16 @@ a.progressCancel { display: block; float: right; width: 14px; height: 14px; back
 	.frame-1-2 .mn .block, .col-r .block, .frame-2-1 .sd .block, .frame-1-1-1 .col-c .block, .frame-1-3 .mn .block, .frame-3-1 .sd .block { margin-left: 10px; }
 	body#space .block { margin: 0 5px 10px; }
 .temp {margin:1px;}
-/* 重定义 frame */
+/* ﹚竡 frame */
 	#ct .frame { margin: 0; border: none; }
 	.bx { border: none; }
 		.bx .frame-1-1-1 { background: transparent url({IMGDIR}/vline2.png) repeat-y 320px 0; }
 		.bx .frame-2-1 { background: transparent url({IMGDIR}/vline.png) repeat-y 645px 0; }
 
-/* 拖动生成的页面元素 by lushnis */
+/* ╈笆ネΘじ by lushnis */
 .drag .block .title { margin-bottom: 0; padding-left: 0; font-size: 14px; font-weight: 700; }
 
-/* 重定义 block */
+/* ﹚竡 block */
 #ct .sd .block { margin: 0; }
 
 .block .xl1 ul li { padding-left: 10px; background: url({IMGDIR}/dot.gif) no-repeat 0 50%; }
@@ -1547,7 +1547,7 @@ a.progressCancel { display: block; float: right; width: 14px; height: 14px; back
 	.fcs dt { font-size: 18px; font-weight: 100; }
 	.fcs dd, .fcs dd a { color: {MIDTEXT}; }
 
-/* 幻灯片 */
+/* ほ縊 */
 .slideblock { position: relative; }
 	.slideshow { clear: both; }
 		.slideshow li { position: relative; overflow: hidden; }
@@ -1556,13 +1556,13 @@ a.progressCancel { display: block; float: right; width: 14px; height: 14px; back
 			.slidebar li { float: left; margin-right: 1px; width: 20px; height: 20px; line-height: 20px; text-align: center; font-size: 10px; cursor: pointer; }
 				.slidebar li.on { background: rgba(255, 255, 255, 0.5); filter:progid:DXImageTransform.Microsoft.gradient(startColorstr = #50FFFFFF, endColorstr = #50FFFFFF); color: #000; font-weight: 700; }
 
-/* 清除DIY产生的多余样式使用的公共样式 */
+/* 睲埃DIY玻ネ緇妓Αㄏノそ妓Α */
 .cl_frame_bm { margin: 0 !important; border: 0 !important;}
 .cl_block_bm { margin: 0 !important; border: 0 !important;}
 .cl_block_bm .dxb_bc { margin: 0 !important;}
 
-/* 侧边调用 */
-	/* 投票 */
+/* 凹娩秸ノ */
+	/* щ布 */
 	.b_poll dt { padding-left: 20px; background: url({IMGDIR}/pollsmall.gif) no-repeat 0 9px; }
 	.b_poll dd li { padding: 0 0 4px 20px; }
 		.b_poll dd li .pc { float: left; margin: 4px 0 0 -20px; }
@@ -1580,7 +1580,7 @@ a.progressCancel { display: block; float: right; width: 14px; height: 14px; back
 /*
 	Name:			mod_tip
 	Level:			Global
-	Explain:		弹出的气泡信息，1、2、3、4 分别指气泡尖角从左上到左小顺时针方向的位置
+	Explain:		紆獁獺1234 だ獁à眖オオ抖皐よ竚
 	Last Modify:	lushnis
 */
 .tip { position: absolute; padding: 10px; width: 260px; border: 1px solid #B1B1B1; background: #FEFEE9; }
@@ -1594,16 +1594,16 @@ a.progressCancel { display: block; float: right; width: 14px; height: 14px; back
 		.tip_js .tip_horn { right: 61px; bottom: -6px; background: url({IMGDIR}/tip_bottom.png); }
 	.aimg_tip { margin-top: 0; }
 
-/* 推荐商品 by dfox */
+/* 崩滤坝珇 by dfox */
 em.hot { position: absolute; left: -2px; top: -2px; text-indent: -9999px; overflow: hidden; background: url({IMGDIR}/hot.png) no-repeat 0 0; }
 
-/* 板块、群组、空间主区域/侧边搜索 by dfox */
+/* 狾遏竤舱丁跋办/凹娩穓 by dfox */
 .gsh { text-align: center; }
 	.gsh h1 { margin: 1em 0 0.5em -60px; font-size: 16px; font-weight: 100; }
 	.gsh .px { width: 272px; }
 	.gsh .pns .px { margin-right: 3px; width: 190px; }
 
-/* 名片 */
+/*  */
 .card { padding: 0; width: 295px !important; border-color: {SPECIALBORDER}; background: #FDFEFF; }
 	.card .p_opt { padding: 0; }
 	.card .avt { position: absolute; display: inline; margin-left: -70px; width: 70px; }
@@ -1623,7 +1623,7 @@ em.hot { position: absolute; left: -2px; top: -2px; text-indent: -9999px; overfl
 /*
 	Name:			mod_BIUC
 	Level:			Global
-	Explain:		模块中编辑单条数据BIU、颜色选择器其中 colorwd 要配合 pn 使用（不要合并 colorwd 的 background，因为其他配色会受影响）
+	Explain:		家遏い絪胯虫兵计沮BIU肅︹匡拒竟ㄤい colorwd 璶皌 pn ㄏノぃ璶ㄖ colorwd  backgroundㄤ皌︹穦紇臫
 	Last Modify:	Pony
 */
 .ss em { display: block; float: left; margin-right: 2px; padding-left: 7px; width: 16px; line-height: 23px; background: #EEE; cursor: pointer; }
@@ -1638,7 +1638,7 @@ em.hot { position: absolute; left: -2px; top: -2px; text-indent: -9999px; overfl
 .colorpx { margin: 0 -3px 0 3px; border-right: none; }
 
 /*
-DIY图片幻灯片未加载时隐藏,模块标识隐藏
+DIY瓜ほ縊ゼ更留旅,家遏夹醚留旅
 */
 .slidebox, .block-name {display: none; }
 

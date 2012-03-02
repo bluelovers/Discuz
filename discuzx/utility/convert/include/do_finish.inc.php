@@ -19,15 +19,15 @@ $process = load_process('main');
 list($rday, $rhour, $rmin, $rsec) = remaintime(time() - $process['timestart']);
 $stime = gmdate('Y-m-d H:i:s', $process['timestart'] + 3600* 8);
 $etime = gmdate('Y-m-d H:i:s',time() + 3600* 8);
-$timetodo = "您已经顺利的完成了数据转换!";
-$timetodo .= "<br><br>本次升级开始时间: <strong>$stime</strong><br>本次升级结束时间: <strong>$etime</strong>";
-$timetodo .= "<br>升级累计执行时间: <strong>$rday</strong>天 <strong>$rhour</strong>小时 <strong>$rmin</strong>分 <strong>$rsec</strong>秒";
-$timetodo .= "<br><br>通常情况下，您可能还需要按照以下提示继续进行升级，从而使您的新程序正常运行";
+$timetodo = "眤竒抖ЧΘ计沮锣传!";
+$timetodo .= "<br><br>セΩど秨﹍丁: <strong>$stime</strong><br>セΩど挡丁: <strong>$etime</strong>";
+$timetodo .= "<br>ど仓璸磅︽丁: <strong>$rday</strong>ぱ <strong>$rhour</strong> <strong>$rmin</strong>だ <strong>$rsec</strong>";
+$timetodo .= "<br><br>硄盽薄猵眤临惠璶酚矗ボ膥尿秈︽ど眖τㄏ眤穝祘タ盽笲︽";
 
 showtips($timetodo);
 
 show_table_header();
-show_table_row(array('最后的说明(readme)'), 'title');
+show_table_row(array('程弧(readme)'), 'title');
 show_table_row(array($txt));
 show_table_footer();
 

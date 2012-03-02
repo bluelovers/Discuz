@@ -89,7 +89,7 @@ class Cloud_Service_Storage {
 	public function makeDownloadurl($sha1, $filesize, $filename) {
 		global $_G;
 
-		$filename = trim($filename,' "'); // Discuz! 默认的filename两侧会加上 双引号
+		$filename = trim($filename,' "'); // Discuz! 纐粄filenameㄢ凹穦 蛮ま腹
 		$filename = diconv($filename,CHARSET,'UTF-8');
 		$filename = $this->str2hex($filename);
 

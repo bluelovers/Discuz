@@ -13,15 +13,15 @@ if(!defined('IN_DISCUZ')) {
 
 $lang = array
 (
-	'profile_name' => '完善用户资料任务',
-	'profile_desc' => '完善指定的用户资料获得相应的奖励',
+	'profile_name' => 'Ч到ノめ戈ヴ叭',
+	'profile_desc' => 'Ч到﹚ノめ戈莉眔莱贱纘',
 
-	'profile_view' => '<strong>您还有以下个人资料项需要补充完整：</strong><br>
+	'profile_view' => '<strong>眤临Τ戈兜惠璶干Ч俱</strong><br>
 		<span style="color:red;">{profiles}</span><br><br>
-		<strong>请按照以下的说明来完成本任务：</strong>
+		<strong>叫酚弧ㄓЧΘセヴ叭</strong>
 		<ul>
-		<li><a href="home.php?mod=spacecp&ac=profile" target="_blank" class="xi2">点击这里打开个人资料设置页面</a></li>
-		<li>在新打开的设置页面中，将上述个人资料补充完整</li>
+		<li><a href="home.php?mod=spacecp&ac=profile" target="_blank" class="xi2">翴阑硂柑ゴ秨戈砞竚</a></li>
+		<li>穝ゴ秨砞竚い盢瓃戈干Ч俱</li>
 		</ul>',
 );
 

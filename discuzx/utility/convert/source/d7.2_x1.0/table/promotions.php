@@ -35,6 +35,6 @@ while($row = $db_source->fetch_array($query)) {
 }
 $nextstep = $step + 1;
 if($continue) {
-	showmessage("继续转换数据表 ".$table_source."，已转换 $total 条记录。", "index.php?a=$action&source=$source&prg=$curprg&step=$nextstep&total=$total");
+	showmessage("膥尿锣传计沮 ".$table_source."锣传 $total 兵癘魁", "index.php?a=$action&source=$source&prg=$curprg&step=$nextstep&total=$total");
 }
 ?>

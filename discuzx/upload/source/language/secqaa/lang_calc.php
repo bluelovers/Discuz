@@ -13,8 +13,8 @@ if(!defined('IN_DISCUZ')) {
 
 $lang = array
 (
-	'calc_name' => '100 以内加减法',
-	'calc_desc' => '随机显示 100 以内加减法的验证问答',
+	'calc_name' => '100 ず搭猭',
+	'calc_desc' => '繦诀陪ボ 100 ず搭猭喷靡拜氮',
 );
 
 ?>

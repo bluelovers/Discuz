@@ -13,22 +13,22 @@ if(!defined('IN_DISCUZ')) {
 
 $lang = array
 (
-	'member_name' => '会员类任务',
-	'member_desc' => '收藏主题、使用道具、添加漫游应用，此类任务用来鼓励和引导会员使用论坛的某个功能，活跃论坛的氛围',
-	'member_complete_var_act' => '动作',
-	'member_complete_var_act_favorite' => '收藏主题',
-	'member_complete_var_act_magic' => '使用道具',
-	'member_complete_var_act_userapp' => '添加漫游应用',
-	'member_complete_var_num' => '执行动作次数下限',
-	'member_complete_var_num_comment' => '会员需要执行相应动作的最少次数',
-	'member_complete_var_time' => '时间限制(小时)',
-	'member_complete_var_time_comment' => '设置会员从申请任务到完成任务的时间限制，会员在此时间内未能完成任务则不能领取奖励并标记任务失败，0 或留空为不限制',
+	'member_name' => '穦摸ヴ叭',
+	'member_desc' => 'Μ旅肈ㄏノ笵ㄣ睰憨笴莱ノ摸ヴ叭ノㄓ躬纘㎝ま旧穦ㄏノ阶韭琘\臘阶韭猑瞅',
+	'member_complete_var_act' => '笆',
+	'member_complete_var_act_favorite' => 'Μ旅肈',
+	'member_complete_var_act_magic' => 'ㄏノ笵ㄣ',
+	'member_complete_var_act_userapp' => '睰憨笴莱ノ',
+	'member_complete_var_num' => '磅︽笆Ω计',
+	'member_complete_var_num_comment' => '穦惠璶磅︽莱笆程ぶΩ计',
+	'member_complete_var_time' => '丁()',
+	'member_complete_var_time_comment' => '砞竚穦眖ビ叫ヴ叭ЧΘヴ叭丁穦丁ずゼЧΘヴ叭玥ぃ烩贱纘夹癘ヴ叭ア毖0 ┪痙ぃ',
 
-	'task_complete_time_start' => '从申请任务开始计时，',
-	'task_complete_time_limit' => '{value} 小时内，',
-	'task_complete_act_favorite' => '收藏 {value} 个主题',
-	'task_complete_act_magic' => '使用 {value} 次道具。<br />您可以在帖子页面、日志页面、图片页面等使用道具',
-	'task_complete_act_userapp' => '添加 {value} 个漫游应用',
+	'task_complete_time_start' => '眖ビ叫ヴ叭秨﹍璸',
+	'task_complete_time_limit' => '{value} ず',
+	'task_complete_act_favorite' => 'Μ旅 {value} 肈',
+	'task_complete_act_magic' => 'ㄏノ {value} Ω笵ㄣ<br />眤┇ら粁瓜单ㄏノ笵ㄣ',
+	'task_complete_act_userapp' => '睰 {value} 憨笴莱ノ',
 );
 
 ?>

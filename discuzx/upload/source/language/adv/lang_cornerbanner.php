@@ -13,21 +13,21 @@ if(!defined('IN_DISCUZ')) {
 
 $lang = array
 (
-	'cornerbanner_name' => '全局 右下角广告',
-	'cornerbanner_desc' => '展现方式: 显示于页面右下角。当前页面有多个页头通栏广告时，系统会随机选取其中之一显示。<br />价值分析: 由于能够在页面的明显位置展现，因此成为了网页中价位最高、最适合进行商业宣传或品牌推广的广告类型之一。',
-	'cornerbanner_index' => '首页',
-	'cornerbanner_fids' => '投放版块',
-	'cornerbanner_fids_comment' => '设置广告投放的论坛版块，当广告投放范围中包含“论坛”时有效',
-	'cornerbanner_groups' => '投放群组分类',
-	'cornerbanner_groups_comment' => '设置广告投放的群组分类，当广告投放范围中包含“群组”时有效',
-	'cornerbanner_animator' => '动画效果',
-	'cornerbanner_animator_comment' => '设置展现时是否显示动画效果',
-	'cornerbanner_category' => '投放门户频道',
-	'cornerbanner_category_comment' => '设置广告投放的频道分类，当广告投放范围中包含“门户”时有效',
-	'cornerbanner_disableclose' => '关闭广告的链接',
-	'cornerbanner_disableclose_comment' => '如果广告代码中已内置关闭操作，可以关闭系统预置的关闭链接',
-	'cornerbanner_show' => '显示',
-	'cornerbanner_hidden' => '隐藏',
+	'cornerbanner_name' => 'Ы à約',
+	'cornerbanner_desc' => '甶瞷よΑ: 陪ボà讽玡Τ繷硄逆約╰参穦繦诀匡ㄤいぇ陪ボ<br />基だ猂: パ镑陪竚甶瞷Θ呼い基程蔼程続秈︽坝穨肚┪珇礟崩約約摸ぇ',
+	'cornerbanner_index' => '',
+	'cornerbanner_fids' => 'щ遏',
+	'cornerbanner_fids_comment' => '砞竚約щ阶韭遏讽約щ絛瞅い阶韭Τ',
+	'cornerbanner_groups' => 'щ竤舱だ摸',
+	'cornerbanner_groups_comment' => '砞竚約щ竤舱だ摸讽約щ絛瞅い竤舱Τ',
+	'cornerbanner_animator' => '笆礶狦',
+	'cornerbanner_animator_comment' => '砞竚甶瞷琌陪ボ笆礶狦',
+	'cornerbanner_category' => 'щめ繵笵',
+	'cornerbanner_category_comment' => '砞竚約щ繵笵だ摸讽約щ絛瞅いめΤ',
+	'cornerbanner_disableclose' => '闽超約渺钡',
+	'cornerbanner_disableclose_comment' => '狦約絏いず竚闽超巨闽超╰参箇竚闽超渺钡',
+	'cornerbanner_show' => '陪ボ',
+	'cornerbanner_hidden' => '留旅',
 );
 
 ?>

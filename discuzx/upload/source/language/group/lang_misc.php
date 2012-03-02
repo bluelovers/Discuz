@@ -13,11 +13,11 @@ if(!defined('IN_DISCUZ')) {
 
 $lang = array
 (
-	'group_normal_member' => '设为普通成员',
-	'group_goaway' => '踢出群组',
-	'group_demise_message_title' => "把{$_G[setting][navs][3][navname]}{forum}成功转让给您了。",
-	'group_demise_message_body' => "我的{$_G[setting][navs][3][navname]}{forum}成功转让给您了，[url={siteurl}forum.php?mod=group&fid={fid}]点这里查看{$_G[setting][navs][3][navname]}[/url]",
-	'group_join' => '加入{groupname}群组',
+	'group_normal_member' => '砞炊硄Θ',
+	'group_goaway' => '金竤舱',
+	'group_demise_message_title' => "р{$_G[setting][navs][3][navname]}{forum}Θ\锣琵倒眤",
+	'group_demise_message_body' => "и{$_G[setting][navs][3][navname]}{forum}Θ\锣琵倒眤[url={siteurl}forum.php?mod=group&fid={fid}]翴硂柑琩{$_G[setting][navs][3][navname]}[/url]",
+	'group_join' => '{groupname}竤舱',
 );
 
 ?>

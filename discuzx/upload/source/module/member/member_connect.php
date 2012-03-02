@@ -21,7 +21,7 @@ if(defined('IN_MOBILE')) {
 	showmessage("connect_register_mobile_bind_error", '', array("changeqqurl" => $_G['connect']['change_qq_url']));
 }
 
-if($_GET['action'] == 'login') { // debug 已有账号，绑定我的账号走此分支
+if($_GET['action'] == 'login') { // debug Τ姐腹竕﹚и姐腹ǐだや
 
 	$ctl_obj = new logging_ctl();
 	$ctl_obj->setting = $_G['setting'];
@@ -31,7 +31,7 @@ if($_GET['action'] == 'login') { // debug 已有账号，绑定我的账号走此分支
 	$ctl_obj->template = 'member/login';
 	$ctl_obj->on_login();
 
-} else { // debug 完善我的资料，即添加个新的论坛账号走此分支
+} else { // debug Ч到и戈睰穝阶韭姐腹ǐだや
 
 	$_G['qc']['connect_auth_hash'] = $_GET['con_auth_hash'];
 	$auth_code = authcode($_G['qc']['connect_auth_hash']);

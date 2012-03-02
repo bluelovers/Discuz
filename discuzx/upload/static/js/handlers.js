@@ -71,7 +71,7 @@ function fileQueued(file) {
 
 		}
 		if(createQueue) {
-			progress.setStatus("等待上传...");
+			progress.setStatus("单肚...");
 		} else {
 			this.cancelUpload(file.id);
 			progress.setCancelled();
@@ -89,7 +89,7 @@ function fileQueueError(file, errorCode, message) {
 	try {
 		if (errorCode === SWFUpload.QUEUE_ERROR.QUEUE_LIMIT_EXCEEDED) {
 			message = parseInt(message);
-			showDialog("您选择的文件个数超过限制。\n"+(message === 0 ? "您已达到上传文件的上限了。" : "您还可以选择 " + message + " 个文件"), 'notice', null, null, 0, null, null, null, null, sdCloseTime);
+			showDialog("眤匡拒ゅン计禬筁\n"+(message === 0 ? "眤笷肚ゅン" : "眤临匡拒 " + message + " ゅン"), 'notice', null, null, 0, null, null, null, null, sdCloseTime);
 			return;
 		}
 
@@ -99,15 +99,15 @@ function fileQueueError(file, errorCode, message) {
 
 		switch (errorCode) {
 			case SWFUpload.QUEUE_ERROR.FILE_EXCEEDS_SIZE_LIMIT:
-				progress.setStatus("文件太大.");
+				progress.setStatus("ゅンび.");
 				this.debug("Error Code: File too big, File name: " + file.name + ", File size: " + file.size + ", Message: " + message);
 				break;
 			case SWFUpload.QUEUE_ERROR.ZERO_BYTE_FILE:
-				progress.setStatus("不能上传零字节文件.");
+				progress.setStatus("ぃ肚箂竊ゅン.");
 				this.debug("Error Code: Zero byte file, File name: " + file.name + ", File size: " + file.size + ", Message: " + message);
 				break;
 			case SWFUpload.QUEUE_ERROR.INVALID_FILETYPE:
-				progress.setStatus("禁止上传该类型的文件.");
+				progress.setStatus("窽ゎ肚赣摸ゅン.");
 				this.debug("Error Code: Invalid File Type, File name: " + file.name + ", File size: " + file.size + ", Message: " + message);
 				break;
 			case SWFUpload.QUEUE_ERROR.QUEUE_LIMIT_EXCEEDED:
@@ -168,7 +168,7 @@ function uploadStart(file) {
 	try {
 		this.addPostParam('filetype', file.type);
 		var progress = new FileProgress(file, this.customSettings.progressTarget);
-		progress.setStatus("上传中...");
+		progress.setStatus("肚い...");
 		progress.toggleCancel(true, this);
 		if(this.customSettings.uploadSource == 'forum') {
 			var objId = this.customSettings.uploadType == 'attach' ? 'attachlist' : 'imgattachlist';
@@ -187,7 +187,7 @@ function uploadProgress(file, bytesLoaded, bytesTotal) {
 		var percent = Math.ceil((bytesLoaded / bytesTotal) * 100);
 
 		var progress = new FileProgress(file, this.customSettings.progressTarget);
-		progress.setStatus("正在上传("+percent+"%)...");
+		progress.setStatus("タ肚("+percent+"%)...");
 
 	} catch (ex) {
 		this.debug(ex);
@@ -213,7 +213,7 @@ function uploadSuccess(file, serverData) {
 					progress.setStatus(STATUSMSG[aid]);
 					showDialog(STATUSMSG[aid], 'notice', null, null, 0, null, null, null, null, sdCloseTime);
 				} else {
-					progress.setStatus("取消上传");
+					progress.setStatus("肚");
 				}
 				this.cancelUpload(file.id);
 				progress.setCancelled();
@@ -238,7 +238,7 @@ function uploadSuccess(file, serverData) {
 			newTr.appendChild(newTd);
 			newTd = document.createElement("TD");
 			newTd.className = 'd';
-			newTd.innerHTML = '图片描述<br/><textarea name="title['+data.picid+']" cols="40" rows="2" class="pt"></textarea>';
+			newTd.innerHTML = '瓜磞瓃<br/><textarea name="title['+data.picid+']" cols="40" rows="2" class="pt"></textarea>';
 			newTr.appendChild(newTd);
 			this.customSettings.imgBoxObj.appendChild(newTr);
 			$(file.id).style.display = 'none';
@@ -259,7 +259,7 @@ function uploadSuccess(file, serverData) {
 				inputObj.value= data.picid;
 				tdObj.appendChild(inputObj);
 			} else {
-				showDialog('图片上传失败', 'notice', null, null, 0, null, null, null, null, sdCloseTime);
+				showDialog('瓜肚ア毖', 'notice', null, null, 0, null, null, null, null, sdCloseTime);
 			}
 			$(file.id).style.display = 'none';
 		} else if(this.customSettings.uploadSource == 'portal') {
@@ -276,7 +276,7 @@ function uploadSuccess(file, serverData) {
 					$(file.id).style.display = 'none';
 				}
 			} else {
-				showDialog('上传失败', 'notice', null, null, 0, null, null, null, null, sdCloseTime);
+				showDialog('肚ア毖', 'notice', null, null, 0, null, null, null, null, sdCloseTime);
 				progress.setStatus("Cancelled");
 				this.cancelUpload(file.id);
 				progress.setCancelled();
@@ -284,7 +284,7 @@ function uploadSuccess(file, serverData) {
 			}
 		} else {
 			progress.setComplete();
-			progress.setStatus("上传完成.");
+			progress.setStatus("肚ЧΘ.");
 			progress.toggleCancel(false);
 		}
 	} catch (ex) {

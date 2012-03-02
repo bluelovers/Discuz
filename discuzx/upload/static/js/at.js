@@ -61,7 +61,7 @@ function extrafunc_atListMenu(tag, op) {
 		}
 		curatli = 0;
 		setTimeout(function() {atFilter('', 'at_list','atListSet');$('atkeyword').focus();}, 100);
-		return '③怀蚚誧靡:<br /><input type="text" id="atkeyword" style="width:240px" value="" class="px" onkeydown="atEnter(event, \'atListSet\')" onkeyup="atFilter(this.value, \'at_list\',\'atListSet\',event, true);" /><div class="p_pop" id="at_list" style="width:250px;"><ul><li>@攬衭梖瘍ㄛ憩夔枑倳坻懂艘泃赽</li></ul></div>';
+		return '請輸用戶名:<br /><input type="text" id="atkeyword" style="width:240px" value="" class="px" onkeydown="atEnter(event, \'atListSet\')" onkeyup="atFilter(this.value, \'at_list\',\'atListSet\',event, true);" /><div class="p_pop" id="at_list" style="width:250px;"><ul><li>@朋友賬號，就能提醒他來看帖子</li></ul></div>';
 	} else {
 		if($('atkeyword').value) {
 			str = '@' + $('atkeyword').value + (wysiwyg ? '&nbsp;' : ' ');
@@ -88,7 +88,7 @@ function atMenu(x, y) {
 	$('at_menu').style.left = x + 'px';
 	$('at_menu').style.top = y + 'px';
 	$('at_menu').style.display = '';
-	$('at_menu').innerHTML = '<img src="' + IMGDIR + '/loading.gif" class="vm"> ③尕緊... ';
+	$('at_menu').innerHTML = '<img src="' + IMGDIR + '/loading.gif" class="vm"> 請稍候... ';
 }
 
 function atSearch(kw, call) {
@@ -158,7 +158,7 @@ function atFilter(kw, id, call, e, nae) {
 				var atclass = i == curatli ? ' class="a"' : '';
 				newlist += '<li><a href="javascript:;" id="atli_'+i+'"'+atclass+' onclick="'+call+'(this.innerText)">' + atResult[i] + '</a></li>';
 			}
-			$(id).innerHTML = '<ul>' + newlist + '<li class="xg1">@攬衭梖瘍ㄛ憩夔枑倳坻懂艘泃赽</li></ul>';
+			$(id).innerHTML = '<ul>' + newlist + '<li class="xg1">@朋友賬號，就能提醒他來看帖子</li></ul>';
 		} else {
 			$(id).style.visibility = 'hidden';
 		}

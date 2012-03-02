@@ -52,7 +52,7 @@ if (!empty($mcids)) {
 }
 
 if($nextid) {
-	showmessage("继续转换数据表 ".$table_source." mcid> $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
+	showmessage("膥尿锣传计沮 ".$table_source." mcid> $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
 }
 
 ?>

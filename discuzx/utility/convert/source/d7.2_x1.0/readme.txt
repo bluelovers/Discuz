@@ -1,36 +1,36 @@
 ====================================
-Discuz! 7.2 升级至 Discuz! X1 说明
+Discuz! 7.2 ど Discuz! X1 弧
 ====================================
 
-I 升级前的准备
+I ど玡非称
 ---------------
-1. 建立程序备份目录，例如 old/
-2. 将原论坛所有程序移动到 old/ 目录中
-3. 上传 Discuz! X 产品的 upload/ 目录中的程序到论坛目录
-4. 执行安装程序 /install
-   如果您的论坛版本是完整版（含 uc_server/ 目录），则安装的时候选择全新安装
-   如果您的论坛版本是独立版本（自行安装的 uc_server/ 目录），则安装的时候请指定 UCenter 地址
+1. ミ祘称ヘ魁ㄒ old/
+2. 盢阶韭┮Τ祘簿笆 old/ ヘ魁い
+3. 肚 Discuz! X 玻珇 upload/ ヘ魁い祘阶韭ヘ魁
+4. 磅︽杆祘 /install
+   狦眤阶韭セ琌Ч俱 uc_server/ ヘ魁玥杆匡拒穝杆
+   狦眤阶韭セ琌縒ミセ︽杆 uc_server/ ヘ魁玥杆叫﹚ UCenter 
 
-II 升级论坛数据
+II ど阶韭计沮
 ---------------
-1. 安装完毕，测试论坛可以正常运行以后，上传 Discuz! X Convert 程序到论坛更目录
-2. 执行 /convert
-3. 选择相应的程序版本，开始转换
-4. 转换过程中不可擅自中断，直到程序自动执行完毕。
-5. 转换过程可能需要较长时间，且消耗较多服务器资源，您应当选择服务器空闲的时候执行
+1. 杆Ч拨代刚阶韭タ盽笲︽肚 Discuz! X Convert 祘阶韭ヘ魁
+2. 磅︽ /convert
+3. 匡拒莱祘セ秨﹍锣传
+4. 锣传筁祘いぃ菊い耞祘笆磅︽Ч拨
+5. 锣传筁祘惠璶耕丁耕狝叭竟戈方眤莱讽匡拒狝叭竟盯磅︽
 
-III 升级完毕, 还要做的几件事
+III どЧ拨, 临璶暗碭ンㄆ
 --------------------------
-1. 编辑新论坛的 config/config_global.php 文件，设定好创始人
-2. 直接访问新论坛的 admin.php
-3. 使用创始人帐号登录，进入后台更新缓存
-4. 新系统增加了很多设置项目，包括用户权限、组权限、论坛板块等等，您需要仔细的重新设置一次
-5. 转移旧附件目录（在转移之前，您的帖子将会无法找到任何附件）
-   a)进入 old/attachments/ 目录
-   b)将所有文件移动到 新论坛目录/data/attachment/forum/ 目录中
-6. 转移用户头像（独立安装 UCenter 的用户不需要这个步骤）
-   a)进入 old/uc_server/data/avatar/ 目录
-   b)将所有文件移动到 新论坛目录 uc_server/data/avatar/
-7. 删除 convert 程序，以免给您的论坛安装带来隐患
-8. 待测试新论坛的所有功能均正常后，可以删除旧的程序备份和数据备份
-9. 如果使用过分类信息，需要重新整理一次分类信息（后台->更新统计->分类信息整理）。
+1. 絪胯穝阶韭 config/config_global.php ゅン砞﹚承﹍
+2. 钡砐拜穝阶韭 admin.php
+3. ㄏノ承﹍眀腹祅魁秈穝絯
+4. 穝╰参糤砞竚兜ヘ珹ノめ舦舱舦阶韭狾遏单单眤惠璶灿穝砞竚Ω
+5. 锣簿侣ンヘ魁锣簿ぇ玡眤┇盢穦礚猭тヴン
+   a)秈 old/attachments/ ヘ魁
+   b)盢┮Τゅン簿笆 穝阶韭ヘ魁/data/attachment/forum/ ヘ魁い
+6. 锣簿ノめ繷钩縒ミ杆 UCenter ノめぃ惠璶硂˙艼
+   a)秈 old/uc_server/data/avatar/ ヘ魁
+   b)盢┮Τゅン簿笆 穝阶韭ヘ魁 uc_server/data/avatar/
+7. 埃 convert 祘倒眤阶韭杆盿ㄓ留眞
+8. 代刚穝阶韭┮ΤАタ盽埃侣祘称㎝计沮称
+9. 狦ㄏノ筁だ摸獺惠璶穝俱瞶Ωだ摸獺->穝参璸->だ摸獺俱瞶

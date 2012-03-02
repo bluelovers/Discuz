@@ -13,14 +13,14 @@ if(!defined('IN_DISCUZ')) {
 
 $lang = array
 (
-	'portalcategory_thecatid' => '指定栏目',
-	'portalcategory_thecatid_comment' => '指定栏目的ID，多个ID之间用半角逗号（,）分割',
-	'portalcategory_catid' => '指定父级栏目',
-	'portalcategory_catid_comment' => '选择父级栏目',
-	'portalcategory_orderby' => '排序方式',
-	'portalcategory_orderby_comment' => '设置以哪一字段或方式对分类进行排序',
-	'portalcategory_orderby_displayorder' => '按默认顺序排序',
-	'portalcategory_orderby_articles' => '按文章数倒序',
+	'portalcategory_thecatid' => '﹚逆ヘ',
+	'portalcategory_thecatid_comment' => '﹚逆ヘIDIDぇ丁ノà硆腹,だ澄',
+	'portalcategory_catid' => '﹚逆ヘ',
+	'portalcategory_catid_comment' => '匡拒逆ヘ',
+	'portalcategory_orderby' => '逼よΑ',
+	'portalcategory_orderby_comment' => '砞竚琿┪よΑ癸だ摸秈︽逼',
+	'portalcategory_orderby_displayorder' => '纐粄抖逼',
+	'portalcategory_orderby_articles' => 'ゅ彻计',
 );
 
 ?>

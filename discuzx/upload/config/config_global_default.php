@@ -10,18 +10,18 @@
 $_config = array();
 
 // ----------------------------  CONFIG DB  ----------------------------- //
-// ----------------------------  数据库相关设置---------------------------- //
+// ----------------------------  计沮畐闽砞竚---------------------------- //
 
 /**
- * 数据库主服务器设置, 支持多组服务器设置, 当设置多组服务器时, 则会根据分布式策略使用某个服务器
+ * 计沮畐狝叭竟砞竚, や舱狝叭竟砞竚, 讽砞竚舱狝叭竟, 玥穦沮だΑ郸菠ㄏノ琘狝叭竟
  * @example
- * $_config['db']['1']['dbhost'] = 'localhost'; // 服务器地址
- * $_config['db']['1']['dbuser'] = 'root'; // 用户
- * $_config['db']['1']['dbpw'] = 'root';// 密码
- * $_config['db']['1']['dbcharset'] = 'gbk';// 字符集
- * $_config['db']['1']['pconnect'] = '0';// 是否持续连接
- * $_config['db']['1']['dbname'] = 'x1';// 数据库
- * $_config['db']['1']['tablepre'] = 'pre_';// 表名前缀
+ * $_config['db']['1']['dbhost'] = 'localhost'; // 狝叭竟
+ * $_config['db']['1']['dbuser'] = 'root'; // ノめ
+ * $_config['db']['1']['dbpw'] = 'root';// 盞絏
+ * $_config['db']['1']['dbcharset'] = 'gbk';// 才栋
+ * $_config['db']['1']['pconnect'] = '0';// 琌尿硈钡
+ * $_config['db']['1']['dbname'] = 'x1';// 计沮畐
+ * $_config['db']['1']['tablepre'] = 'pre_';// 玡后
  *
  * $_config['db']['2']['dbhost'] = 'localhost';
  * ...
@@ -30,13 +30,13 @@ $_config = array();
 $_config['db'][1]['dbhost']  		= 'localhost';
 $_config['db'][1]['dbuser']  		= 'root';
 $_config['db'][1]['dbpw'] 	 	= 'root';
-$_config['db'][1]['dbcharset'] 		= 'gbk';
+$_config['db'][1]['dbcharset'] 		= 'big5';
 $_config['db'][1]['pconnect'] 		= 0;
 $_config['db'][1]['dbname']  		= 'ultrax';
 $_config['db'][1]['tablepre'] 		= 'pre_';
 
 /**
- * 数据库从服务器设置( slave, 只读 ), 支持多组服务器设置, 当设置多组服务器时, 系统每次随机使用
+ * 计沮畐眖狝叭竟砞竚( slave, 弄 ), や舱狝叭竟砞竚, 讽砞竚舱狝叭竟, ╰参–Ω繦诀ㄏノ
  * @example
  * $_config['db']['slave']['1']['dbhost'] = 'localhost';
  * $_config['db']['slave']['1']['dbuser'] = 'root';
@@ -53,133 +53,133 @@ $_config['db'][1]['tablepre'] 		= 'pre_';
 $_config['db']['slave'] = array();
 
 /**
- * 数据库 分布部署策略设置
+ * 计沮畐 だ场竝郸菠砞竚
  *
- * @example 将 common_member 部署到第二服务器, common_session 部署在第三服务器, 则设置为
+ * @example 盢 common_member 场竝材狝叭竟, common_session 场竝材狝叭竟, 玥砞竚
  * $_config['db']['map']['common_member'] = 2;
  * $_config['db']['map']['common_session'] = 3;
  *
- * 对于没有明确声明服务器的表, 则一律默认部署在第一服务器上
+ * 癸⊿Τ絋羘狝叭竟, 玥纐粄场竝材狝叭竟
  *
  */
 $_config['db']['map'] = array();
 
 /**
- * 数据库 公共设置, 此类设置通常对针对每个部署的服务器
+ * 计沮畐 そ砞竚, 摸砞竚硄盽癸皐癸–场竝狝叭竟
  */
 $_config['db']['common'] = array();
 
 /**
- *  禁用从数据库的数据表, 表名字之间使用逗号分割
+ *  窽ノ眖计沮畐计沮, ぇ丁ㄏノ硆腹だ澄
  *
- * @example common_session, common_member 这两个表仅从主服务器读写, 不使用从服务器
+ * @example common_session, common_member 硂ㄢ度眖狝叭竟弄糶, ぃㄏノ眖狝叭竟
  * $_config['db']['common']['slave_except_table'] = 'common_session, common_member';
  *
  */
 $_config['db']['common']['slave_except_table'] = '';
 
 /**
- * 内存服务器优化设置
- * 以下设置需要PHP扩展组件支持，其中 memcache 优先于其他设置，
- * 当 memcache 无法启用时，会自动开启另外的两种优化模式
+ * ず狝叭竟纔て砞竚
+ * 砞竚惠璶PHP耎甶舱ンやㄤい memcache 纔ㄤ砞竚
+ * 讽 memcache 礚猭币ノ穦笆秨币ㄢ贺纔て家Α
  */
 
-//内存变量前缀, 可更改,避免同服务器中的程序引用错乱
+//ず跑秖玡后, э,磷狝叭竟い祘まノ岿睹
 $_config['memory']['prefix'] = 'discuz_';
 
-/* reids设置, 需要PHP扩展组件支持, timeout参数的作用没有查证 */
+/* reids砞竚, 惠璶PHP耎甶舱ンや, timeout把计ノ⊿Τ琩靡 */
 $_config['memory']['redis']['server'] = '';
 $_config['memory']['redis']['port'] = 6379;
 $_config['memory']['redis']['pconnect'] = 1;
 $_config['memory']['redis']['timeout'] = 0;
 /**
- * 是否使用 Redis::SERIALIZER_IGBINARY选项,需要igbinary支持,windows下测试时请关闭，否则会出>现错误Reading from client: Connection reset by peer
- * 支持以下选项，默认使用PHP的serializer
- * [重要] 该选项已经取代原来的 $_config['memory']['redis']['igbinary'] 选项
+ * 琌ㄏノ Redis::SERIALIZER_IGBINARY匡兜,惠璶igbinaryや,windows代刚叫闽超玥穦>瞷岿粇Reading from client: Connection reset by peer
+ * や匡兜纐粄ㄏノPHPserializer
+ * [璶] 赣匡兜竒ㄓ $_config['memory']['redis']['igbinary'] 匡兜
  * Redis::SERIALIZER_IGBINARY =2
  * Redis::SERIALIZER_PHP =1
- * Redis::SERIALIZER_NONE =0 //则不使用serialize,即无法保存array
+ * Redis::SERIALIZER_NONE =0 //玥ぃㄏノserialize,礚猭玂array
  */
 $_config['memory']['redis']['serializer'] = 1;
 
-$_config['memory']['memcache']['server'] = '';			// memcache 服务器地址
-$_config['memory']['memcache']['port'] = 11211;			// memcache 服务器端口
-$_config['memory']['memcache']['pconnect'] = 1;			// memcache 是否长久连接
-$_config['memory']['memcache']['timeout'] = 1;			// memcache 服务器连接超时
+$_config['memory']['memcache']['server'] = '';			// memcache 狝叭竟
+$_config['memory']['memcache']['port'] = 11211;			// memcache 狝叭竟狠
+$_config['memory']['memcache']['pconnect'] = 1;			// memcache 琌硈钡
+$_config['memory']['memcache']['timeout'] = 1;			// memcache 狝叭竟硈钡禬
 
-$_config['memory']['apc'] = 1;							// 启动对 apc 的支持
-$_config['memory']['xcache'] = 1;						// 启动对 xcache 的支持
-$_config['memory']['eaccelerator'] = 1;					// 启动对 eaccelerator 的支持
-// 服务器相关设置
-$_config['server']['id']		= 1;			// 服务器编号，多webserver的时候，用于标识当前服务器的ID
+$_config['memory']['apc'] = 1;							// 币笆癸 apc や
+$_config['memory']['xcache'] = 1;						// 币笆癸 xcache や
+$_config['memory']['eaccelerator'] = 1;					// 币笆癸 eaccelerator や
+// 狝叭竟闽砞竚
+$_config['server']['id']		= 1;			// 狝叭竟絪腹webserverノ夹醚讽玡狝叭竟ID
 
-// 附件下载相关
+// ン更闽
 //
-// 本地文件读取模式; 模式2为最节省内存方式，但不支持多线程下载
+// セゅン弄家Α; 家Α2程竊ずよΑぃや絬祘更
 // 1=fread 2=readfile 3=fpassthru 4=fpassthru+multiple
 $_config['download']['readmod'] = 2;
 
-// 是否启用 X-Sendfile 功能（需要服务器支持）0=close 1=nginx 2=lighttpd 3=apache
+// 琌币ノ X-Sendfile \惠璶狝叭竟や0=close 1=nginx 2=lighttpd 3=apache
 $_config['download']['xsendfile']['type'] = 0;
 
-// 启用 nginx X-sendfile 时，论坛附件目录的虚拟映射路径，请使用 / 结尾
+// 币ノ nginx X-sendfile 阶韭ンヘ魁店览琈甮隔畖叫ㄏノ / 挡Ю
 $_config['download']['xsendfile']['dir'] = '/down/';
 
 //  CONFIG CACHE
-$_config['cache']['type'] 			= 'sql';	// 缓存类型 file=文件缓存, sql=数据库缓存
+$_config['cache']['type'] 			= 'sql';	// 絯摸 file=ゅン絯, sql=计沮畐絯
 
-// 页面输出设置
-$_config['output']['charset'] 			= 'gbk';	// 页面字符集
-$_config['output']['forceheader']		= 1;		// 强制输出页面字符集，用于避免某些环境乱码
-$_config['output']['gzip'] 			= 0;		// 是否采用 Gzip 压缩输出
-$_config['output']['tplrefresh'] 		= 1;		// 模板自动刷新开关 0=关闭, 1=打开
-$_config['output']['language'] 			= 'zh_cn';	// 页面语言 zh_cn/zh_tw
-$_config['output']['staticurl'] 		= 'static/';	// 站点静态文件路径，“/”结尾
-$_config['output']['ajaxvalidate']		= 0;		// 是否严格验证 Ajax 页面的真实性 0=关闭，1=打开
-$_config['output']['iecompatible']		= 0;		// 页面 IE 兼容模式
+// 块砞竚
+$_config['output']['charset'] 			= 'big5';	// 才栋
+$_config['output']['forceheader']		= 1;		// 眏块才栋ノ磷琘ㄇ吏挂睹絏
+$_config['output']['gzip'] 			= 0;		// 琌蹦ノ Gzip 溃罽块
+$_config['output']['tplrefresh'] 		= 1;		// 家狾笆穝秨闽 0=闽超, 1=ゴ秨
+$_config['output']['language'] 			= 'zh_tw';	// 粂ē zh_cn/zh_tw
+$_config['output']['staticurl'] 		= 'static/';	// 翴繰篈ゅン隔畖/挡Ю
+$_config['output']['ajaxvalidate']		= 0;		// 琌腨喷靡 Ajax 痷龟┦ 0=闽超1=ゴ秨
+$_config['output']['iecompatible']		= 0;		//  IE 甧家Α
 
-// COOKIE 设置
-$_config['cookie']['cookiepre'] 		= 'uchome_'; 	// COOKIE前缀
-$_config['cookie']['cookiedomain'] 		= ''; 		// COOKIE作用域
-$_config['cookie']['cookiepath'] 		= '/'; 		// COOKIE作用路径
+// COOKIE 砞竚
+$_config['cookie']['cookiepre'] 		= 'uchome_'; 	// COOKIE玡后
+$_config['cookie']['cookiedomain'] 		= ''; 		// COOKIEノ办
+$_config['cookie']['cookiepath'] 		= '/'; 		// COOKIEノ隔畖
 
-// 站点安全设置
-$_config['security']['authkey']			= 'asdfasfas';	// 站点加密密钥
-$_config['security']['urlxssdefend']		= true;		// 自身 URL XSS 防御
-$_config['security']['attackevasive']		= 0;		// CC 攻击防御 1|2|4|8
+// 翴砞竚
+$_config['security']['authkey']			= 'asdfasfas';	// 翴盞盞芲
+$_config['security']['urlxssdefend']		= true;		// ō URL XSS ň縨
+$_config['security']['attackevasive']		= 0;		// CC ю阑ň縨 1|2|4|8
 
-$_config['security']['querysafe']['status']	= 1;		// 是否开启SQL安全检测，可自动预防SQL注入攻击
+$_config['security']['querysafe']['status']	= 1;		// 琌秨币SQL浪代笆箇ňSQL猔ю阑
 $_config['security']['querysafe']['dfunction']	= array('load_file','hex','substring','if','ord','char');
 $_config['security']['querysafe']['daction']	= array('intooutfile','intodumpfile','unionselect','(select', 'unionall', 'uniondistinct');
 $_config['security']['querysafe']['dnote']	= array('/*','*/','#','--','"');
 $_config['security']['querysafe']['dlikehex']	= 1;
 $_config['security']['querysafe']['afullnote']	= 0;
 
-$_config['admincp']['founder']			= '1';		// 站点创始人：拥有站点管理后台的最高权限，每个站点可以设置 1名或多名创始人
-								// 可以使用uid，也可以使用用户名；多个创始人之间请使用逗号“,”分开;
-$_config['admincp']['forcesecques']		= 0;		// 管理人员必须设置安全提问才能进入系统设置 0=否, 1=是[安全]
-$_config['admincp']['checkip']			= 1;		// 后台管理操作是否验证管理员的 IP, 1=是[安全], 0=否。仅在管理员无法登陆后台时设置 0。
-$_config['admincp']['runquery']			= 1;		// 是否允许后台运行 SQL 语句 1=是 0=否[安全]
-$_config['admincp']['dbimport']			= 1;		// 是否允许后台恢复论坛数据  1=是 0=否[安全]
+$_config['admincp']['founder']			= '1';		// 翴承﹍局Τ翴恨瞶程蔼舦–翴砞竚 1┪承﹍
+								// ㄏノuidㄏノノめ承﹍ぇ丁叫ㄏノ硆腹,だ秨;
+$_config['admincp']['forcesecques']		= 0;		// 恨瞶ゲ斗砞竚矗拜秈╰参砞竚 0=, 1=琌[]
+$_config['admincp']['checkip']			= 1;		// 恨瞶巨琌喷靡恨瞶 IP, 1=琌[], 0=度恨瞶礚猭祅嘲砞竚 0
+$_config['admincp']['runquery']			= 1;		// 琌す砛\笲︽ SQL 粂 1=琌 0=[]
+$_config['admincp']['dbimport']			= 1;		// 琌す砛\確阶韭计沮  1=琌 0=[]
 
 /**
- * 系统远程调用功能模块
+ * ╰参环祘秸ノ\家遏
  */
 
-// 远程调用: 总开关 0=关  1=开
+// 环祘秸ノ: 羆秨闽 0=闽  1=秨
 $_config['remote']['on'] = 0;
 
-// 远程调用: 程序目录名. 出于安全考虑,您可以更改这个目录名, 修改完毕, 请手工修改程序的实际目录
+// 环祘秸ノ: 祘ヘ魁. σ納,眤э硂ヘ魁, эЧ拨, 叫もэ祘龟悔ヘ魁
 $_config['remote']['dir'] = 'remote';
 
-// 远程调用: 通信密钥. 用于客户端和本服务端的通信加密. 长度不少于 32 位
-//          默认值是 $_config['security']['authkey']	的 md5, 您也可以手工指定
+// 环祘秸ノ: 硄獺盞芲. ノめ狠㎝セ狝叭狠硄獺盞. ぃぶ 32 
+//          纐粄琌 $_config['security']['authkey']	 md5, 眤も﹚
 $_config['remote']['appkey'] = md5($_config['security']['authkey']);
 
-// 远程调用: 开启外部 cron 任务. 系统内部不再执行cron, cron任务由外部程序激活
+// 环祘秸ノ: 秨币场 cron ヴ叭. ╰参ず场ぃ磅︽cron, cronヴ叭パ场祘縀
 $_config['remote']['cron'] = 0;
 
-// $_GET|$_POST的兼容处理，0为关闭，1为开启；开启后即可使用$_G['gp_xx'](xx为变量名，$_GET和$_POST集合的所有变量名)，值为已经addslashes()处理过
+// $_GET|$_POST甧矪瞶0闽超1秨币秨币ㄏノ$_G['gp_xx'](xx跑秖$_GET㎝$_POST栋┮Τ跑秖)竒addslashes()矪瞶筁
 $_config['input']['compatible'] = 1;
 
 ?>

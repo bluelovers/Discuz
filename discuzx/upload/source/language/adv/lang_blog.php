@@ -13,8 +13,8 @@ if(!defined('IN_DISCUZ')) {
 
 $lang = array
 (
-	'blog_name' => '空间 日志广告',
-	'blog_desc' => '展现方式: 日志广告显示于日志右方。',
+	'blog_name' => '丁 ら粁約',
+	'blog_desc' => '甶瞷よΑ: ら粁約陪ボら粁よ',
 );
 
 ?>

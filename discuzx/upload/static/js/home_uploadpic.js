@@ -75,18 +75,18 @@ function insertAttach(id) {
 		return;
 	}
 	if(extensions != '' && (re.exec(extensions) == null || ext == '')) {
-		alert('对不起，不支持上传此类扩展名的图片');
+		alert('癸ぃ癬ぃや肚摸耎甶瓜');
 		return;
 	}
 	attachexts[id] = inArray(ext, ['gif', 'jpg', 'jpeg', 'png']) ? 2 : 1;
 
 	var inhtml = '<table cellspacing="0" cellpadding="0" class="up_row"><tr>';
 	if(typeof no_insert=='undefined') {
-		localfile += '&nbsp;<a href="javascript:;" class="xi2" title="点击这里插入内容中当前光标的位置" onclick="insertAttachimgTag(' + id + ');return false;">[插入]</a>';
+		localfile += '&nbsp;<a href="javascript:;" class="xi2" title="翴阑硂柑础ず甧い讽玡夹竚" onclick="insertAttachimgTag(' + id + ');return false;">[础]</a>';
 	}
 	inhtml += '<td><strong>' + localfile +'</strong>';
-	inhtml += '</td><td class="d">图片描述<br/><textarea name="pic_title" cols="40" rows="2" class="pt"></textarea>';
-	inhtml += '</td><td class="o"><span id="showmsg' + id + '"><a href="javascript:;" onclick="delAttach(' + id + ');return false;" class="xi2">[删除]</a></span>';
+	inhtml += '</td><td class="d">瓜磞瓃<br/><textarea name="pic_title" cols="40" rows="2" class="pt"></textarea>';
+	inhtml += '</td><td class="o"><span id="showmsg' + id + '"><a href="javascript:;" onclick="delAttach(' + id + ');return false;" class="xi2">[埃]</a></span>';
 	inhtml += '</td></tr></table>';
 
 	$('localfile_' + id).innerHTML = inhtml;
@@ -149,7 +149,7 @@ function upload() {
 	if(nowUid>0) {
 		var upobj = $('showmsg'+nowid);
 		if(uploadStat==1) {
-			upobj.innerHTML = '上传成功';
+			upobj.innerHTML = '肚Θ';
 			successState = true;
 			var InputNode;
 			try {
@@ -165,12 +165,12 @@ function upload() {
 
 		} else {
 			upobj.style.color = "#f00";
-			upobj.innerHTML = '上传失败 '+uploadStat;
+			upobj.innerHTML = '肚ア毖 '+uploadStat;
 		}
 	}
 
 	if($('showmsg'+nid) != null) {
-		$('showmsg'+nid).innerHTML = '上传中，请等待(<a href="javascript:;" onclick="forms[nowUid].submit();">重试</a>)';
+		$('showmsg'+nid).innerHTML = '肚い叫单(<a href="javascript:;" onclick="forms[nowUid].submit();">刚</a>)';
 		$('albumid_'+nid).value = albumid;
 		forms[nowUid].submit();
 	} else if(nowUid+1 == forms.length) {

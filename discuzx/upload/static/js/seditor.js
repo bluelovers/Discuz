@@ -40,24 +40,24 @@ function seditor_menu(seditorkey, tag) {
 				curatli = 0;
 				atsubmitid = ctrlid + '_submit';
 				setTimeout(function() {atFilter('', 'at_list','atListSet');$('atkeyword').focus();}, 100);
-				str = 'ÇëÊäÓÃ»§Ãû:<br /><input type="text" id="atkeyword" style="width:240px" value="" class="px" onkeydown="atFilter(this.value, \'at_list\',\'atListSet\',event);" /><div class="p_pop" id="at_list" style="width:250px;"><ul><li>@ÅóÓÑÕËºÅ£¬¾ÍÄÜÌáÐÑËûÀ´¿´Ìû×Ó</li></ul></div>';
+				str = '½Ð¿é¥Î¤á¦W:<br /><input type="text" id="atkeyword" style="width:240px" value="" class="px" onkeydown="atFilter(this.value, \'at_list\',\'atListSet\',event);" /><div class="p_pop" id="at_list" style="width:250px;"><ul><li>@ªB¤Í½ã¸¹¡A´N¯à´£¿ô¥L¨Ó¬Ý©«¤l</li></ul></div>';
 				submitstr = 'seditor_insertunit(\'' + seditorkey + '\', \'@\' + $(\'atkeyword\').value.replace(/<\\/?b>/g, \'\')+\' \'); hideMenu();';
 				break;
 			case 'url':
-				str = 'ÇëÊäÈëÁ´½ÓµØÖ·:<br /><input type="text" id="' + ctrlid + '_param_1" sautocomplete="off" style="width: 98%" value="" class="px" />' +
-					'<br />ÇëÊäÈëÁ´½ÓÎÄ×Ö:<br /><input type="text" id="' + ctrlid + '_param_2" style="width: 98%" value="" class="px" />';
+				str = '½Ð¿é¤JÃì±µ¦a§}:<br /><input type="text" id="' + ctrlid + '_param_1" sautocomplete="off" style="width: 98%" value="" class="px" />' +
+					'<br />½Ð¿é¤JÃì±µ¤å¦r:<br /><input type="text" id="' + ctrlid + '_param_2" style="width: 98%" value="" class="px" />';
 				submitstr = "$('" + ctrlid + "_param_2').value !== '' ? seditor_insertunit('" + seditorkey + "', '[url='+$('" + ctrlid + "_param_1').value+']'+$('" + ctrlid + "_param_2').value, '[/url]', null, 1) : seditor_insertunit('" + seditorkey + "', '[url]'+$('" + ctrlid + "_param_1').value, '[/url]', null, 1);hideMenu();";
 				break;
 			case 'code':
 			case 'quote':
-				var tagl = {'quote' : 'ÇëÊäÈëÒª²åÈëµÄÒýÓÃ', 'code' : 'ÇëÊäÈëÒª²åÈëµÄ´úÂë'};
+				var tagl = {'quote' : '½Ð¿é¤J­n´¡¤Jªº¤Þ¥Î', 'code' : '½Ð¿é¤J­n´¡¤Jªº¥N½X'};
 					str = tagl[tag] + ':<br /><textarea id="' + ctrlid + '_param_1" style="width: 98%" cols="50" rows="5" class="txtarea"></textarea>';
 				submitstr = "seditor_insertunit('" + seditorkey + "', '[" + tag + "]'+$('" + ctrlid + "_param_1').value, '[/" + tag + "]', null, 1);hideMenu();";
 				break;
 			case 'img':
-				str = 'ÇëÊäÈëÍ¼Æ¬µØÖ·:<br /><input type="text" id="' + ctrlid + '_param_1" style="width: 98%" value="" class="px" onchange="loadimgsize(this.value, \'' + seditorkey + '\',\'' + tag + '\')" />' +
-					'<p class="mtm">¿í(¿ÉÑ¡): <input type="text" id="' + ctrlid + '_param_2" style="width: 15%" value="" class="px" /> &nbsp;' +
-					'¸ß(¿ÉÑ¡): <input type="text" id="' + ctrlid + '_param_3" style="width: 15%" value="" class="px" /></p>';
+				str = '½Ð¿é¤J¹Ï¤ù¦a§}:<br /><input type="text" id="' + ctrlid + '_param_1" style="width: 98%" value="" class="px" onchange="loadimgsize(this.value, \'' + seditorkey + '\',\'' + tag + '\')" />' +
+					'<p class="mtm">¼e(¥i¿ï): <input type="text" id="' + ctrlid + '_param_2" style="width: 15%" value="" class="px" /> &nbsp;' +
+					'°ª(¥i¿ï): <input type="text" id="' + ctrlid + '_param_3" style="width: 15%" value="" class="px" /></p>';
 				submitstr = "seditor_insertunit('" + seditorkey + "', '[img' + ($('" + ctrlid + "_param_2').value !== '' && $('" + ctrlid + "_param_3').value !== '' ? '='+$('" + ctrlid + "_param_2').value+','+$('" + ctrlid + "_param_3').value : '')+']'+$('" + ctrlid + "_param_1').value, '[/img]', null, 1);hideMenu();";
 				break;
 		}
@@ -67,7 +67,7 @@ function seditor_menu(seditorkey, tag) {
 		menu.className = 'p_pof upf';
 		menu.style.width = '270px';
 		$('append_parent').appendChild(menu);
-		menu.innerHTML = '<span class="y"><a onclick="hideMenu()" class="flbc" href="javascript:;">¹Ø±Õ</a></span><div class="p_opt cl"><form onsubmit="' + submitstr + ';return false;" autocomplete="off"><div>' + str + '</div><div class="pns mtn"><button type="submit" id="' + ctrlid + '_submit" class="pn pnc"><strong>Ìá½»</strong></button><button type="button" onClick="hideMenu()" class="pn"><em>È¡Ïû</em></button></div></form></div>';
+		menu.innerHTML = '<span class="y"><a onclick="hideMenu()" class="flbc" href="javascript:;">Ãö³¬</a></span><div class="p_opt cl"><form onsubmit="' + submitstr + ';return false;" autocomplete="off"><div>' + str + '</div><div class="pns mtn"><button type="submit" id="' + ctrlid + '_submit" class="pn pnc"><strong>´£¥æ</strong></button><button type="button" onClick="hideMenu()" class="pn"><em>¨ú®ø</em></button></div></form></div>';
 	}
 	showMenu({'ctrlid':ctrlid,'evt':'click','duration':3,'cache':0,'drag':1});
 }

@@ -13,9 +13,9 @@ if(!defined('IN_DISCUZ')) {
 
 $lang = array
 (
-	'hot_name' => '热点灯',
-	'hot_desc' => '把自己的日志热度增加站点推荐的热点值',
-	'hot_info' => '把自己的日志热度增加 {num} 个热点值',
+	'hot_name' => '荐翴縊',
+	'hot_desc' => 'рら粁荐糤翴崩滤荐翴',
+	'hot_info' => 'рら粁荐糤 {num} 荐翴',
 );
 
 ?>

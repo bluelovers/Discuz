@@ -13,8 +13,8 @@ if(!defined('IN_DISCUZ')) {
 
 $lang = array
 (
-	'search_name' => '搜索 右侧广告',
-	'search_desc' => '展现方式: 搜索右侧广告展现于搜索结果页右侧。',
+	'search_name' => '穓 凹約',
+	'search_desc' => '甶瞷よΑ: 穓凹約甶瞷穓挡狦凹',
 );
 
 ?>

@@ -80,7 +80,7 @@ if($op=='magic') {
 	}
 
 	$table_source = $db_source->tablepre.'magic';
-	showmessage("继续转换数据表 ".$table_source." 用户道具", "index.php?a=$action&source=$source&prg=$curprg&op=usermagic&start=0");
+	showmessage("膥尿锣传计沮 ".$table_source." ノめ笵ㄣ", "index.php?a=$action&source=$source&prg=$curprg&op=usermagic&start=0");
 
 } elseif($op == 'usermagic') {
 
@@ -120,9 +120,9 @@ if($op=='magic') {
 
 	$table_source = $db_source->tablepre.'usermagic';
 	if($done == false) {
-		showmessage("继续转换数据表 ".$table_source." 用户道具-> $nextid", "index.php?a=$action&source=$source&prg=$curprg&op=usermagic&start=$nextid");
+		showmessage("膥尿锣传计沮 ".$table_source." ノめ笵ㄣ-> $nextid", "index.php?a=$action&source=$source&prg=$curprg&op=usermagic&start=$nextid");
 	} else {
-		showmessage("继续转换数据表 ".$table_source." 道具收入记录->0", "index.php?a=$action&source=$source&prg=$curprg&op=magicinlog&start=0");
+		showmessage("膥尿锣传计沮 ".$table_source." 笵ㄣΜ癘魁->0", "index.php?a=$action&source=$source&prg=$curprg&op=magicinlog&start=0");
 	}
 
 } elseif($op == 'magicinlog') {
@@ -151,9 +151,9 @@ if($op=='magic') {
 
 	$table_source = $db_source->tablepre.'magicinlog';
 	if($done == false) {
-		showmessage("继续转换数据表 ".$table_source." 道具收入记录-> $nextid", "index.php?a=$action&source=$source&prg=$curprg&op=magicinlog&start=$nextid");
+		showmessage("膥尿锣传计沮 ".$table_source." 笵ㄣΜ癘魁-> $nextid", "index.php?a=$action&source=$source&prg=$curprg&op=magicinlog&start=$nextid");
 	} else {
-		showmessage("继续转换数据表 ".$table_source." 道具使用记录->0", "index.php?a=$action&source=$source&prg=$curprg&op=magicuselog&start=0");
+		showmessage("膥尿锣传计沮 ".$table_source." 笵ㄣㄏノ癘魁->0", "index.php?a=$action&source=$source&prg=$curprg&op=magicuselog&start=0");
 	}
 
 } elseif($op == 'magicuselog') {
@@ -178,7 +178,7 @@ if($op=='magic') {
 
 	$table_source = $db_source->tablepre.'magicuselog';
 	if($done == false) {
-		showmessage("继续转换数据表 ".$table_source." 道具使用记录-> $nextid", "index.php?a=$action&source=$source&prg=$curprg&op=magicuselog&start=$nextid");
+		showmessage("膥尿锣传计沮 ".$table_source." 笵ㄣㄏノ癘魁-> $nextid", "index.php?a=$action&source=$source&prg=$curprg&op=magicuselog&start=$nextid");
 	}
 }
 

@@ -13,14 +13,14 @@ if(!defined('IN_DISCUZ')) {
 
 $lang = array
 (
-	'intercat_name' => '论坛 分类间广告',
-	'intercat_desc' => '展现方式: 论坛分类间广告显示于版块列表相邻的两个版块分类之间，可使用 960x60 或其他尺寸图片和 Flash 的形式。当前页面有多个分类间广告时，系统会从中抽取与版块分类数相等的条目进行随机显示。<br />价值分析:由于出现在版块列表页比较明显的位置，广告展示效果较好，但是过多过大的广告可能会招致访问者反感。 ',
-	'intercat_fids' => '投放分区',
-	'intercat_fids_comment' => '设置广告投放的版块分区',
-	'intercat_position' => '投放位置',
-	'intercat_position_comment' => '设置广告在哪个分区的下方显示',
-	'intercat_position_random' => '所有位置随机',
-	'intercat_position_fav' => '收藏栏',
+	'intercat_name' => '阶韭 だ摸丁約',
+	'intercat_desc' => '甶瞷よΑ: 阶韭だ摸丁約陪ボ遏綟ㄢ遏だ摸ぇ丁ㄏノ 960x60 ┪ㄤへ瓜㎝ Flash Α讽玡Τだ摸丁約╰参穦眖い┾籔遏だ摸计单兵ヘ秈︽繦诀陪ボ<br />基だ猂:パ瞷遏ゑ耕陪竚約甶ボ狦耕琌筁筁約穦┷璓砐拜は稰 ',
+	'intercat_fids' => 'щだ跋',
+	'intercat_fids_comment' => '砞竚約щ遏だ跋',
+	'intercat_position' => 'щ竚',
+	'intercat_position_comment' => '砞竚約だ跋よ陪ボ',
+	'intercat_position_random' => '┮Τ竚繦诀',
+	'intercat_position_fav' => 'Μ旅逆',
 );
 
 ?>
