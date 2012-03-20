@@ -4,7 +4,7 @@
  *	  [Discuz!] (C)2001-2099 Comsenz Inc.
  *	  This is NOT a freeware, use is subject to license terms
  *
- *	  $Id: member_connect_register.php 26543 2011-12-15 02:17:57Z monkey $
+ *	  $Id: member_connect_register.php 28644 2012-03-06 13:44:19Z houdelei $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -19,12 +19,14 @@ if(empty($_POST)) {
 	$_G['qc']['connect_auth_hash'] = $_GET['con_auth_hash'];
 	$_G['qc']['dreferer'] = dreferer();
 
-	$auth_code = authcode($_G['qc']['connect_auth_hash']);
-	if (empty($auth_code)) {
-		showmessage('qqconnect:connect_get_request_token_failed', $referer);
+	if(!$_G['qc']['connect_auth_hash']) {
+		$_G['qc']['connect_auth_hash'] = $_G['cookie']['con_auth_hash'];
 	}
-	$auth_code = explode('|', $auth_code);
-	$conopenid = authcode($auth_code[2]);
+	$conopenid = authcode($_G['qc']['connect_auth_hash']);
+
+	if (empty($conopenid)) {
+		showmessage('qqconnect:connect_login_first', $referer);
+	}
 
 	$_G['qc']['connect_is_feed'] = true;
 
@@ -54,15 +56,9 @@ if(empty($_POST)) {
 		}
 	}
 
-	if(empty($_GET['auth_hash'])) {
-		$_GET['auth_hash'] = $_G['cookie']['con_auth_hash'];
-	}
-	$auth_code = authcode($_GET['auth_hash']);
-	$auth_code = explode('|', authcode($_GET['auth_hash']));
-	$conuin = authcode($auth_code[0]);
-	$conuinsecret = authcode($auth_code[1]);
-	$conopenid = authcode($auth_code[2]);
-	$user_auth_fields = authcode($auth_code[3]);
+	$conuin = $this->connect_guest['conuin'];
+	$conuinsecret = $this->connect_guest['conuinsecret'];
+	$conopenid = $this->connect_guest['conopenid'];
 
 	$cookie_expires = 2592000;
 	dsetcookie('client_created', TIMESTAMP, $cookie_expires);
@@ -76,10 +72,8 @@ if(empty($_POST)) {
 		showmessage('qqconnect:connect_register_bind_uin_already');
 	}
 
-	$conispublishfeed = $conispublisht = 0;
-	if ($_GET['is_feed']) {
-		$conispublishfeed = $conispublisht = 1;
-	}
+	$conispublishfeed = $conispublisht = 1;
+
 	$is_qzone_avatar = !empty($_GET['use_qzone_avatar']) ? 1 : 0;
 	$is_use_qqshow = !empty($_GET['use_qqshow']) ? 1 : 0;
 	$userdata = array();
@@ -95,10 +89,9 @@ if(empty($_POST)) {
 		'conispublisht' => $conispublisht,
 		'conisregister' => '1',
 		'conisqzoneavatar' => $is_qzone_avatar,
-		'conisfeed' => $user_auth_fields,
+		'conisfeed' => '1',
 		'conisqqshow' => $is_use_qqshow,
 	));
-
 
 	dsetcookie('connect_js_name', 'user_bind', 86400);
 	dsetcookie('connect_js_params', base64_encode(serialize(array('type' => 'register'))), 86400);
@@ -112,6 +105,8 @@ if(empty($_POST)) {
 
 	C::t('#qqconnect#connect_memberbindlog')->insert(array('uid' => $uid, 'uin' => $conopenid, 'type' => '1', 'dateline' => $_G['timestamp']));
 	dsetcookie('con_auth_hash');
+
+	C::t('#qqconnect#common_connect_guest')->delete($conopenid);
 
 	if($_G['setting']['connect']['register_groupid']) {
 		$userdata['groupid'] = $groupinfo['groupid'] = $_G['setting']['connect']['register_groupid'];

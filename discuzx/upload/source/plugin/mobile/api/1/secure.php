@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: secure.php 28142 2012-02-23 04:10:53Z congyushuai $
+ *      $Id: secure.php 28691 2012-03-08 05:07:45Z monkey $
  */
 
 if(!defined('IN_MOBILE_API')) {
@@ -31,7 +31,7 @@ class mobile_api {
 		if($seccodecheck || $secqaacheck) {
 			$variable = array('sechash' => $sechash);
 			if($seccodecheck) {
-				$variable['seccode'] = $_G['siteurl'].'mobile.php?module=seccode&sechash='.$sechash.'&version='.(empty($_GET['secversion']) ? 1 : $_GET['secversion']);
+				$variable['seccode'] = $_G['siteurl'].'api/mobile/index.php?module=seccode&sechash='.$sechash.'&version='.(empty($_GET['secversion']) ? '1' : $_GET['secversion']);
 			}
 			if($secqaacheck) {
 				require_once libfile('function/seccode');

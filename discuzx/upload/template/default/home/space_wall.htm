@@ -43,6 +43,8 @@
 				<div class="area">
 					<!--{if $_G['uid']}-->
 						<textarea id="comment_message" onkeydown="ctrlEnter(event, 'commentsubmit_btn');" name="message" rows="5" class="pt"></textarea>
+					<!--{elseif $_G['connectguest']}-->
+						<div class="pt hm">{lang connect_fill_profile_to_comment}</div>
 					<!--{else}-->
 						<div class="pt hm">{lang login_to_wall} <a href="member.php?mod=logging&action=login" onclick="showWindow('login', this.href)" class="xi2">{lang login}</a> | <a href="member.php?mod={$_G[setting][regname]}" class="xi2">$_G['setting']['reglinkname']</a></div>
 					<!--{/if}-->
@@ -78,7 +80,7 @@
 			<div class="pgs cl mtm">$multi</div>
 		</div>
 		<script type="text/javascript">
-			var elems = selector('dd[class~=magicflicker]'); 
+			var elems = selector('dd[class~=magicflicker]');
 			for(var i=0; i<elems.length; i++){
 				magicColor(elems[i]);
 			}
@@ -86,7 +88,7 @@
 				wall_add(values['cid']);
 			}
 		</script>
-				
+
 		<!--{if !$_G[setting][homepagestyle]}--><!--[diy=diycontentbottom]--><div id="diycontentbottom" class="area"></div><!--[/diy]--><!--{/if}-->
 
 		<!--{if $diymode}-->

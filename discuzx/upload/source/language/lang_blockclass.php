@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_blockclass.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: lang_blockclass.php 28619 2012-03-06 08:40:56Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -189,7 +189,7 @@ $lang = array(
 	'blockclass_member_field_reason' => '推薦原因',
 	'blockclass_member_field_unitprice' => '竟價單次訪問單價',
 	'blockclass_member_field_showcredit' => '竟價總積分',
-	'blockclass_member_field_shwonote' => '竟價上榜宣言',
+	'blockclass_member_field_shownote' => '竟價上榜宣言',
 	'blockclass_member_field_extcredits1' => '擴展積分1',
 	'blockclass_member_field_extcredits2' => '擴展積分2',
 	'blockclass_member_field_extcredits3' => '擴展積分3',

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_comment.php 27765 2012-02-14 05:32:50Z chenmengshu $
+ *      $Id: admincp_comment.php 28774 2012-03-12 10:09:50Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -157,7 +157,7 @@ EOT;
 								$address = "<a href=\"home.php?mod=space&uid=$comment[uid]&do=album&picid=$comment[id]\" target=\"_blank\">$comment[message]</a>";
 								break;
 							case 'uid':
-								$address = "<a href=\"home.php?mod=space&uid=$comment[uid]&do=uid\" target=\"_blank\">$comment[message]</a>";
+								$address = "<a href=\"home.php?mod=space&uid=$comment[uid]&do=wall\" target=\"_blank\">$comment[message]</a>";
 								break;
 							case 'sid':
 								$address = "<a href=\"home.php?mod=space&uid=1&do=share&id=$comment[id]\" target=\"_blank\">$comment[message]</a>";

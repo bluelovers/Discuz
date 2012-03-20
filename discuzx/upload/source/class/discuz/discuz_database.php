@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: discuz_database.php 28423 2012-02-29 07:51:49Z cnteacher $
+ *      $Id: discuz_database.php 28779 2012-03-13 02:01:51Z cnteacher $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -33,7 +33,7 @@ class discuz_database {
 
 	public static function delete($table, $condition, $limit = 0, $unbuffered = true) {
 		if (empty($condition)) {
-			$where = '1';
+			return false;
 		} elseif (is_array($condition)) {
 			if (count($condition) == 2 && isset($condition['where']) && isset($condition['arg'])) {
 				$where = self::format($condition['where'], $condition['arg']);
@@ -43,6 +43,7 @@ class discuz_database {
 		} else {
 			$where = $condition;
 		}
+		$limit = dintval($limit);
 		$sql = "DELETE FROM " . self::table($table) . " WHERE $where " . ($limit ? "LIMIT $limit" : '');
 		return self::query($sql, ($unbuffered ? 'UNBUFFERED' : ''));
 	}
@@ -230,12 +231,9 @@ class discuz_database {
 		return self::quote_field($field) . ' ' . $order;
 	}
 
-	public static function field($field, $val = null, $glue = '=') {
+	public static function field($field, $val, $glue = '=') {
 
 		$field = self::quote_field($field);
-		if (!isset($val)) {
-			return $field;
-		}
 
 		if (is_array($val)) {
 			$glue = $glue == 'notin' ? 'notin' : 'in';

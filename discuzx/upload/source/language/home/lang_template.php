@@ -4,25 +4,16 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_template.php 28515 2012-03-02 02:57:41Z svn_project_zhangjie $
+ *      $Id: lang_template.php 28726 2012-03-09 03:05:19Z yexinhao $
  *
  *      This file is automatically generate
  */
 
 $lang = array (
-  'aim_album' => '上傳到:',
   'cancel' => '取消',
   'close' => '關閉',
   'create' => '創建',
-  'create_new_album' => '創建新相冊',
-  'default_album' => '默認相冊',
-  'file_size' => '文件大小',
-  'filename' => '文件名',
-  'input_album_name' => '請輸入相冊名稱',
-  'select_album' => '選擇相冊',
   'submit' => '提交',
-  'upload_attach' => '上傳附件',
-  'upload_pic' => '上傳圖片',
   'accessory' => '附件',
   'activity' => '活動',
   'comefrom' => '來自',
@@ -1543,8 +1534,8 @@ $lang = array (
   'video_cer_audit_manage' => '視頻認證審核管理',
   'video_cer_audit_message' => '您可以進入視頻認證平台，自行進行設置認證審核管理',
   'video_certification_audit' => '視頻認證審核',
-  'click_pic_to_editor' => '點擊圖片添加到編輯器內容中',
-  'click_filename_to_article' => '點擊文件名將附件添加到文章中',
+  'connect_fill_profile_to_view' => '<a href="member.php?mod=connect" target="_blank">完善帳號信息</a> <a href="member.php?mod=connect&ac=bind" target="_blank">綁定已有帳號</a>',
+  'connect_fill_profile_to_comment' => '您需要<a href="member.php?mod=connect" class="xi2">完善帳號信息</a> 或 <a href="member.php?mod=connect&ac=bind" class="xi2">綁定已有帳號</a> 後才可以留言',
 );
 
 ?>

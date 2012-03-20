@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_home_specialuser.php 27846 2012-02-15 09:04:33Z zhangguosheng $
+ *      $Id: table_home_specialuser.php 28772 2012-03-12 09:21:59Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -38,11 +38,11 @@ class table_home_specialuser extends discuz_table
 	}
 
 	public function delete_by_uid_status($uid, $status) {
-		return ($uid = dintval($uid)) ? DB::delete($this->_table, DB::field('uid', $uid).' AND '.DB::field('status', dintval($status))) : false;
+		return ($uid = dintval($uid, true)) ? DB::delete($this->_table, DB::field('uid', $uid).' AND '.DB::field('status', dintval($status))) : false;
 	}
 
 	public function fetch_by_uid_status($uid, $status) {
-		return ($uid = dintval($uid)) ? DB::fetch_first('SELECT * FROM %t WHERE uid=%d AND status=%d', array($this->_table, $uid, $status)) : array();
+		return ($uid = dintval($uid, true)) ? DB::fetch_first('SELECT * FROM %t WHERE uid=%d AND status=%d', array($this->_table, $uid, $status)) : array();
 	}
 }
 

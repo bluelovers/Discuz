@@ -1,5 +1,5 @@
 {eval
-function tpl_cloudsearch_index_top($recwords, $searchparams, $srchotquery) {
+function tpl_cloudsearch_index_top($recwords, $searchparams, $srchotquery, $position = 'hotopicf') {
 if($recwords) {
 $recwords_tmp = $recwords;
 $recwords = array();
@@ -29,9 +29,9 @@ $recwords[$k+1] = $v;
 						<ul class="cl">
 						<!--{loop $recwords $key $recword}-->
 					    <!--{if empty($recword[inc_num])}-->
-						    <li><a href="$searchparams[url]?q=$recword[word]&source=word.hotopicf.$key$srchotquery&num=$recword[result_num]" target="_blank">$recword[word]<span class="number">($recword[result_num])</span></a></li>
+						    <li><a href="$searchparams[url]?q=$recword[word]&source=word.$position.$key$srchotquery&num=$recword[result_num]" target="_blank">$recword[word]<span class="number">($recword[result_num])</span></a></li>
 					    <!--{else}-->
-						    <li class="clewcolor"><a href="$searchparams[url]?q=$recword[word]&source=word.hotopicf.$key$srchotquery&num=$recword[result_num]" target="_blank">$recword[word]<span class="number">($recword[result_num])</span></a></li>
+						    <li class="clewcolor"><a href="$searchparams[url]?q=$recword[word]&source=word.$position.$key$srchotquery&num=$recword[result_num]" target="_blank">$recword[word]<span class="number">($recword[result_num])</span></a></li>
 					    <!--{/if}-->
 						<!--{/loop}-->
 						</ul>
@@ -246,7 +246,7 @@ global $_G;
 {eval
 }
 
-function tpl_cloudsearch_relate_threadlist_js_output($relatethreadlist, $urlkw) {
+function tpl_cloudsearch_relate_threadlist_js_output($relatethreadlist, $urlkw, $searchparams, $srchotquery) {
 global $_G;
 }
 <!--{block return}-->
@@ -305,7 +305,7 @@ global $_G;
 		<!--{/loop}-->
 		<tr>
 			<td colspan="4" align="center" style="line-height:25px;">
-				<a href="search.php?mod=forum&srchtxt={$urlkw}&formhash={FORMHASH}&searchsubmit=true&source=collectionsearch">{lang cloudsearch:viewmore}</a>
+				<a href="$searchparams[url]?q={$urlkw}&source=word.tao_more.a$srchotquery">{lang cloudsearch:viewmore}</a>
 			</td>
 		</tr>
 		</table>
@@ -354,6 +354,21 @@ $my_search_se_url = 'http://search.discuz.qq.com/api/site/se?' . $signUrl . "";
 	<!--{if empty($_GET['inajax'])}-->
 	<script type="text/javascript" language="utf-8" src="$my_search_se_url"></script>
 	<!--{/if}-->
+<!--{/block}-->
+<!--{eval return $return;}-->
+{eval
+}
+
+function tpl_index_forum_extra_output($forum_recwords) {
+global $_G;
+}
+<!--{block return}-->
+    <!--{if $forum_recwords}-->
+    <dd>
+        {lang cloudsearch:forumhottopic}: 
+        <!--{loop $forum_recwords $k $frecword}--><!--{if $k}--><span class="pipe">|</span><!--{/if}--><a class="xi2" href="$frecword[url]" target="_blank">$frecword[word]</a><!--{/loop}-->
+    </dd>
+    <!--{/if}-->
 <!--{/block}-->
 <!--{eval return $return;}-->
 {eval

@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: handlers.js 27346 2012-01-17 05:56:24Z monkey $
+	$Id: handlers.js 28886 2012-03-16 08:29:18Z zhengqingpeng $
 */
 
 var sdCloseTime = 2;
@@ -132,12 +132,12 @@ function fileDialogComplete(numFilesSelected, numFilesQueued) {
 				if(typeof switchAttachbutton == "function") {
 					switchAttachbutton('attachlist');
 				}
-				if(this.getStats().files_queued) {
-					try {
+				try {
+					if(this.getStats().files_queued) {
 						$('attach_tblheader').style.display = '';
 						$('attach_notice').style.display = '';
-					} catch (ex)  {}
-				}
+					}
+				} catch (ex)  {}
 
 			} else if(this.customSettings.uploadType == 'image') {
 				if(typeof switchImagebutton == "function") {

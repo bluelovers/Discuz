@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_block_style.php 27846 2012-02-15 09:04:33Z zhangguosheng $
+ *      $Id: table_common_block_style.php 28634 2012-03-06 10:24:30Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -42,12 +42,14 @@ class table_common_block_style extends discuz_table
 	public function insert_batch($styles) {
 		$inserts = array();
 		foreach($styles as $value) {
-			if(empty($value['blockclass'])) {
+			if(!empty($value['blockclass'])) {
 				$value = daddslashes($value);
 				$inserts[] = "('$value[blockclass]', '$value[name]', '$value[template]', '$value[hash]', '$value[getpic]', '$value[getsummary]', '$value[settarget]', '$value[fields]', '$value[moreurl]')";
 			}
 		}
-		DB::query('INSERT INTO '.DB::table($this->_table)."(`blockclass`, `name`, `template`, `hash`, `getpic`, `getsummary`, `settarget`, `fields`, `moreurl`) VALUES ".implode(',',$inserts));
+		if(!empty($inserts)) {
+			DB::query('INSERT INTO '.DB::table($this->_table)."(`blockclass`, `name`, `template`, `hash`, `getpic`, `getsummary`, `settarget`, `fields`, `moreurl`) VALUES ".implode(',',$inserts));
+		}
 	}
 
 	public function update($val, $data, $unbuffered = false, $low_priority = false) {

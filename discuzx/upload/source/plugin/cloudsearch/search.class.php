@@ -4,7 +4,7 @@
  *      [Discuz! X] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: search.class.php 28302 2012-02-27 09:08:49Z yangli $
+ *      $Id: search.class.php 28857 2012-03-15 07:06:51Z zhouxiaobo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -30,7 +30,7 @@ class plugin_cloudsearch {
 		if($this->allow) {
 			$this->allow_hot_topic = $_G['setting']['my_search_data']['allow_hot_topic'];
 			$this->allow_thread_related = $_G['setting']['my_search_data']['allow_thread_related'];
-			$this->allow_forum_recommend = FALSE;
+			$this->allow_forum_recommend = 1;//$_G['setting']['my_search_data']['allow_forum_recommend'];
 			$this->allow_forum_related = $_G['setting']['my_search_data']['allow_forum_related'];
 			$this->allow_collection_related = $_G['setting']['my_search_data']['allow_collection_related'];
 			include_once template('cloudsearch:module');
@@ -45,11 +45,6 @@ class plugin_cloudsearch {
 		global $searchparams;
 		$searchHelper = Cloud::loadClass('Cloud_Service_SearchHelper');
 		$searchparams = $searchHelper->makeSearchSignUrl();
-
-		if ($this->allow_forum_recommend && CURSCRIPT == 'forum' && (CURMODULE == 'forumdisplay') && $_GET['cloudop'] == 'relatedthread' && $_GET['fid']) {
-			global $_G;
-			require_once DISCUZ_ROOT.'./source/plugin/cloudsearch/forumdisplay.inc.php';
-		}
 
 		if ($_GET['mod'] == 'redirect' && $_GET['goto'] == 'findpost' && $_GET['ptid'] && $_GET['pid']) {
             $post = get_post_by_pid($_GET['pid']);
@@ -99,9 +94,9 @@ class plugin_cloudsearch {
         					if(in_array($operation, array('stick', 'highlight', 'digest', 'bump', 'down', 'delete', 'move', 'close', 'open'))) {
 
         					    if($operation == 'stick') {
-        					        $my_opt = $_GET['stick_level'] ? 'sticky' : 'update';
+        					        $my_opt = $_GET['sticklevel'] ? 'sticky' : 'update';
         					    } elseif($operation == 'digest') {
-        					        $my_opt = $_GET['digest_level'] ? 'digest' : 'update';
+        					        $my_opt = $_GET['digestlevel'] ? 'digest' : 'update';
         					    } else {
         					        $my_opt = $operation;
         					    }
@@ -359,9 +354,10 @@ class plugin_cloudsearch_forum extends plugin_cloudsearch {
 			return;
 		}
 
+		global $searchparams;
+
 		$searchHelper = Cloud::loadClass('Service_SearchHelper');
 		$recwords = $searchHelper->getRecWords(14, 'assoc');
-		$searchparams = $searchHelper->makeSearchSignUrl();
 		$srchotquery = '';
 		if(!empty($searchparams['params'])) {
 			foreach($searchparams['params'] as $key => $value) {
@@ -448,26 +444,70 @@ class plugin_cloudsearch_forum extends plugin_cloudsearch {
 		return tpl_cloudsearch_relate_threadlist_output(urlencode($_G['forum']['name']));
 	}
 
-	public function forumdisplay_threadtype_extra_output() {
-		if(!$this->allow_forum_recommend) {
+	public function forumdisplay_middle_output() {
+		if(!$this->allow || !$this->allow_forum_recommend) {
 			return;
 		}
-		global $_G;
+
+		global $_G, $searchparams;;
+		$result = '';
+		if ($_G['fid']) {
+			$searchHelper = Cloud::loadClass('Service_SearchHelper');
+			$recwords = $searchHelper->getRecWords(14, 'assoc', $_G['fid']);
+			$srchotquery = '';
+			if(!empty($searchparams['params'])) {
+				foreach($searchparams['params'] as $key => $value) {
+					$srchotquery .= '&' . $key . '=' . $value;
+				}
+			}
+			$result = tpl_cloudsearch_index_top($recwords, $searchparams, $srchotquery, 'hotopic_fm');
+		}
+
+		return $result;
+	}
+
+	public function index_forum_extra_output() {
+		if (!$this->allow || !$this->allow_forum_recommend) {
+			return;
+		}
+
+		global $_G, $forumlist, $searchparams;
+
+		if (!is_array($forumlist) || count($forumlist) == 0) {
+			return;
+		}
 
 		$searchHelper = Cloud::loadClass('Service_SearchHelper');
-		$recwords = $searchHelper->getRecWords(10);
-		if(!$recwords) {
-			return;
+		$srchotquery = '';
+		if(!empty($searchparams['params'])) {
+			foreach($searchparams['params'] as $key => $value) {
+				$srchotquery .= '&' . $key . '=' . $value;
+			}
 		}
 
-		return tpl_cloudsearch_forumdisplay_threadtype_extra_output($recwords);
-	}
-	public function forumdisplay_threadtype_inner_output() {
-		if(!$this->allow_forum_recommend) {
-			return;
+		$return = $cachenames = $fids = array();
+		if ($searchparams['url']) {
+			foreach ($forumlist as $fid => $forum) {
+				$cachenames[] = 'search_recommend_words_' . $fid;
+				$fids[] = $fid;
+			}
+			loadcache($cachenames);
+			foreach ($fids as $v) {
+				$forum_recwords = $_G['cache']['search_recommend_words_' . $v]['result'];
+				if (!$forum_recwords) {
+					continue;
+				}
+
+				$forum_recwords = array_slice($forum_recwords, 0, 3);
+
+				foreach($forum_recwords as $key => $word) {
+					$forum_recwords[$key]['url'] = $searchparams['url'] . '?' . $srchotquery . '&q=' . urlencode($word['word']) . '&source=word.hotopic_if.'.$key.'&keywordType=recommend';
+				}
+				$return[$v] = tpl_index_forum_extra_output($forum_recwords);
+			}
 		}
 
-		return tpl_cloudsearch_forumdisplay_threadtype_inner_output();
+		return $return;
 	}
 
 }

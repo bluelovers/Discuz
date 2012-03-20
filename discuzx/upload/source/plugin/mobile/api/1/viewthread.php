@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: viewthread.php 28022 2012-02-21 03:27:54Z congyushuai $
+ *      $Id: viewthread.php 28687 2012-03-08 03:30:54Z monkey $
  */
 
 if(!defined('IN_MOBILE_API')) {
@@ -35,7 +35,7 @@ class mobile_api {
 			$variable['$postlist'][$k]['attachments'] = array_values(mobile_core::getvalues($v['attachments'], array('/^\d+$/'), array('aid', 'tid', 'uid', 'dbdateline', 'dateline', 'filename', 'filesize', 'url', 'attachment', 'remote', 'description', 'readperm', 'price', 'width', 'thumb', 'picid', 'ext', 'imgalt', 'attachsize', 'payed', 'downloads')));
 		}
 
-		$variable['forum']['password'] = $variable['forum']['password'] ? 1 : 0;
+		$variable['forum']['password'] = $variable['forum']['password'] ? '1' : '0';
 		mobile_core::result(mobile_core::variable($variable));
 	}
 

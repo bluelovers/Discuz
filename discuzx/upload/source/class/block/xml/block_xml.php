@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: block_xml.php 26205 2011-12-05 10:09:32Z zhangguosheng $
+ *      $Id: block_xml.php 28663 2012-03-07 05:50:37Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -66,7 +66,8 @@ class block_xml extends discuz_block {
 			require_once libfile('function/importdata');
 			$importtxt = @dfsockopen($xmlurl, 0, create_sign_url($parameter, $this->blockdata['key'], $this->blockdata['signtype']));
 		} else {
-			$importtxt = @file_get_contents($xmlurl);
+			$ctx = stream_context_create(array('http' => array('timeout' => 20)));
+			$importtxt = @file_get_contents($xmlurl, false, $ctx);
 		}
 		if($importtxt) {
 			require libfile('class/xml');

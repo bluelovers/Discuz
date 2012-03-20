@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: connect_config.php 27941 2012-02-17 03:25:15Z zhouxiaobo $
+ *      $Id: connect_config.php 28617 2012-03-06 08:30:36Z songlixin $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -24,7 +24,12 @@ if(submitcheck('connectsubmit')) {
 
 		$ispublishfeed = !empty($_GET['ispublishfeed']) ? 1 : 0;
 		$ispublisht = !empty($_GET['ispublisht']) ? 1 : 0;
-		DB::query("UPDATE ".DB::table('common_member_connect')." SET conispublishfeed='$ispublishfeed', conispublisht='$ispublisht' WHERE uid='$_G[uid]'");
+		C::t('#qqconnect#common_member_connect')->update($_G['uid'],
+			array(
+				'conispublishfeed' => $ispublishfeed,
+				'conispublisht' => $ispublisht,
+			)
+		);
 		if (!$ispublishfeed || !$ispublisht) {
 			dsetcookie('connect_synpost_tip');
 		}
@@ -32,9 +37,8 @@ if(submitcheck('connectsubmit')) {
 
 	} elseif($op == 'unbind') {
 
-		$connectService->connectMergeMember();
-
-		$connect_member = DB::fetch_first("SELECT * FROM ".DB::table('common_member_connect')." WHERE uid='$_G[uid]'");
+		$connect_member = C::t('#qqconnect#common_member_connect')->fetch($_G['uid']);
+		$_G['member'] = array_merge($_G['member'], $connect_member);
 
 		if ($connect_member['conuinsecret']) {
 
@@ -82,7 +86,14 @@ if(submitcheck('connectsubmit')) {
 		C::t('#qqconnect#common_member_connect')->delete($_G['uid']);
 
 		C::t('common_member')->update($_G['uid'], array('conisbind' => 0));
-		DB::query("INSERT INTO ".DB::table('connect_memberbindlog')." (uid, uin, type, dateline) VALUES ('$_G[uid]', '{$_G[member][conopenid]}', '2', '$_G[timestamp]')");
+		C::t('#qqconnect#connect_memberbindlog')->insert(
+			array(
+				'uid' => $_G['uid'],
+				'uin' => $_G['member']['conopenid'],
+				'type' => 2,
+				'dateline' => $_G['timestamp'],
+			)
+		);
 
 		if($_G['member']['conisregister']) {
 			loaducenter();
@@ -102,8 +113,45 @@ if(submitcheck('connectsubmit')) {
 } else {
 
 	if($_G[inajax] && $op == 'synconfig') {
-		DB::query("UPDATE ".DB::table('common_member_connect')." SET conispublishfeed='0', conispublisht='0' WHERE uid='$_G[uid]'");
+		C::t('#qqconnect#common_member_connect')->update($_G['uid'],
+			array(
+				'conispublishfeed' => 0,
+				'conispublisht' => 0,
+			)
+		);
 		dsetcookie('connect_synpost_tip');
+
+	} elseif($op == 'weibosign') {
+		if($_GET['hash'] != formhash()) {
+			showmessage('submit_invalid');
+		}
+
+		$connectService = Cloud::loadClass('Service_Connect');
+		$connectService->connectMergeMember();
+
+		if($_G['member']['conuin'] && $_G['member']['conuinsecret']) {
+
+			$arr = array();
+			$arr['oauth_consumer_key'] = $_G['setting']['connectappid'];
+			$arr['oauth_nonce'] = mt_rand();
+			$arr['oauth_timestamp'] = TIMESTAMP;
+			$arr['oauth_signature_method'] = 'HMAC_SHA1';
+			$arr['oauth_token'] = $_G['member']['conuin'];
+			ksort($arr);
+			$arr['oauth_signature'] = $connectService->connectGetOauthSignature('http://api.discuz.qq.com/connect/getSignature', $arr, 'GET', $_G['member']['conuinsecret']);
+
+			$arr['version'] = 'qzone1.0';
+
+			$utilService = Cloud::loadClass('Service_Util');
+			$result = $connectService->connectOutputPhp('http://api.discuz.qq.com/connect/getSignature?' . $utilService->httpBuildQuery($arr, '', '&'));
+			if ($result['status'] == 0) {
+				$connectService->connectAjaxOuputMessage('[wb=' . $result['result']['username'] . ']' . $result['result']['signature_url'] . '[/wb]', 0);
+			} else {
+				$connectService->connectAjaxOuputMessage('connect_wbsign_no_account', $result['status']);
+			}
+		} else {
+			$connectService->connectAjaxOuputMessage('connect_wbsign_no_bind', -1);
+		}
 
 	} else {
 		dheader('location: home.php?mod=spacecp&ac=plugin&id=qqconnect:spacecp');

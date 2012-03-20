@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_forum_forum.php 27763 2012-02-14 03:42:56Z liulanbo $
+ *      $Id: table_forum_forum.php 28586 2012-03-05 07:41:37Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -203,7 +203,7 @@ class table_forum_forum extends discuz_table
 		return DB::result_first("SELECT COUNT(*) as num FROM ".DB::table($this->_table)." WHERE fup=%d AND type='sub' GROUP BY fup", array($fup));
 	}
 	public function fetch_all_group_for_ranking() {
-		return DB::fetch_all("SELECT f.fid FROM ".DB::table($this->_table)." as f LEFT JOIN ".DB::table('forum_forumfield')." as ff ON ff.fid=f.fid WHERE f.type='sub' AND f.status='3' ORDER BY ff.activity DESC LIMIT 0, 1000");
+		return DB::fetch_all("SELECT fid FROM ".DB::table($this->_table)." WHERE type='sub' AND status='3' ORDER BY commoncredits DESC LIMIT 0, 1000");
 	}
 	public function fetch_all_for_ranklist($status, $type, $orderfield, $start = 0, $limit = 0, $ignorefids = array()) {
 		if(empty($orderfield)) {

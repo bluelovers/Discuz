@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_members.php 28247 2012-02-26 10:42:38Z zhengqingpeng $
+ *      $Id: admincp_members.php 28788 2012-03-13 03:49:23Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -29,7 +29,8 @@ foreach($search_condition as $k => $v) {
 	}
 }
 $search_condition = searchcondition($search_condition);
-
+$tmpsearch_condition = $search_condition;
+unset($tmpsearch_condition['tablename']);
 $member = array();
 $tableext = '';
 if(in_array($operation, array('ban', 'edit', 'group', 'credit', 'medal', 'access'), true)) {
@@ -140,7 +141,8 @@ EOF;
 		if($membernum) {
 			showsubtitle(array('', 'username', 'credits', 'posts', 'admingroup', 'usergroup', ''));
 			echo $members;
-			showsubmit('submit', cplang('delete'), ($condition_str ? '<input type="checkbox" name="chkall" onclick="checkAll(\'prefix\', this.form, \'uidarray\');if(this.checked){$(\'deleteallinput\').style.display=\'\';}else{$(\'deleteall\').checked = false;$(\'deleteallinput\').style.display=\'none\';}" class="checkbox">'.cplang('select_all') : ''), ' &nbsp;&nbsp;&nbsp;<span id="deleteallinput" style="display:none"><input id="deleteall" type="checkbox" name="deleteall" class="checkbox">'.cplang('members_search_deleteall', array('membernum' => $membernum)).'</span>', $multipage);
+			$condition_str = str_replace('&tablename=master', '', $condition_str);
+			showsubmit('submit', cplang('delete'), ($tmpsearch_condition ? '<input type="checkbox" name="chkall" onclick="checkAll(\'prefix\', this.form, \'uidarray\');if(this.checked){$(\'deleteallinput\').style.display=\'\';}else{$(\'deleteall\').checked = false;$(\'deleteallinput\').style.display=\'none\';}" class="checkbox">'.cplang('select_all') : ''), ' &nbsp;&nbsp;&nbsp;<span id="deleteallinput" style="display:none"><input id="deleteall" type="checkbox" name="deleteall" class="checkbox">'.cplang('members_search_deleteall', array('membernum' => $membernum)).'</span>', $multipage);
 		}
 		showtablefooter();
 		showformfooter();
@@ -324,8 +326,7 @@ EOF;
 		showsearchform('clean');
 
 	} else {
-
-		if(!$search_condition && empty($_GET['uidarray'])) {
+		if(!$tmpsearch_condition && empty($_GET['uidarray'])) {
 			cpmsg('members_no_find_deluser', '', 'error');
 		}
 		if(!empty($_GET['deleteall'])) {
@@ -351,7 +352,7 @@ EOF;
 					$membernum ++;
 				}
 			}
-		} else {
+		} elseif($tmpsearch_condition) {
 			$membernum = countmembers($search_condition, $urladd);
 			$uids = searchmembers($search_condition, $delmemberlimit, 0);
 		}
@@ -1568,7 +1569,7 @@ EOF;
 					loadcache('posttableids');
 					$posttables = empty($_G['cache']['posttableids']) ? array(0) : $_G['cache']['posttableids'];
 					foreach($posttables as $posttableid) {
-						$pidsdelete = array();
+						$pidsthread = $pidsdelete = array();
 						$postlist = C::t('forum_post')->fetch_all_by_authorid($posttableid, $member['uid'], false);
 						if($postlist) {
 							foreach($postlist as $post) {
@@ -1578,6 +1579,16 @@ EOF;
 									$tidsdelete[] = $post['tid'];
 								}
 								$pidsdelete[] = $post['pid'];
+								$pidsthread[$post['pid']] = $post['tid'];
+							}
+							foreach($pidsdelete as $key=>$pid) {
+								if(in_array($pidsthread[$pid], $tidsdelete)) {
+									unset($pidsdelete[$key]);
+									unset($prune['thread'][$pidsthread[$pid]]);
+									updatemodlog($pidsthread[$pid], 'DEL');
+								} else {
+									updatemodlog($pidsthread[$pid], 'DLP');
+								}
 							}
 						}
 						deletepost($pidsdelete, 'pid', false, $posttableid, true);

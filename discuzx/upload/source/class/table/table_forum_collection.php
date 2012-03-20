@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_forum_collection.php 27781 2012-02-14 07:38:55Z zhengqingpeng $
+ *      $Id: table_forum_collection.php 28665 2012-03-07 06:23:38Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -97,7 +97,7 @@ class table_forum_collection extends discuz_table
 		}
 		if($incratenum > 0) {
 			if($totalratenum > 0) {
-				$sql[] = 'ratenum=ratenum+1,rate=(rate+\'%d\')/2';
+				$sql[] = 'rate=((rate*ratenum)+\'%d\')/(ratenum+1),ratenum=ratenum+1';
 			} else {
 				$sql[] = 'ratenum=ratenum+1,rate=%d';
 			}
@@ -124,10 +124,6 @@ class table_forum_collection extends discuz_table
 		$where .= $ctid ? ' AND '.DB::field('ctid', $ctid) : '';
 		$where .= $username ? ' AND '.DB::field('username', '%'.stripsearchkey($username).'%', 'like') : '';
 		$where .= $uid ? ' AND '.DB::field('uid', $uid) : '';
-
-		if(trim($where) == '1') {
-			return null;
-		}
 
 		if($start == -1) {
 			return DB::result_first("SELECT count(*) FROM %t WHERE %i", array($this->_table, $where));

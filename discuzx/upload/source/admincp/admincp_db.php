@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_db.php 27637 2012-02-08 09:16:56Z zhengqingpeng $
+ *      $Id: admincp_db.php 28648 2012-03-07 02:24:19Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -297,7 +297,7 @@ if($operation == 'export') {
 			if(@file_exists($dumpfile)) {
 
 				if($_GET['usezip']) {
-					require_once adminfile('function/zip');
+					require_once libfile('class/zip');
 					$zip = new zipfile();
 					$zipfilename = $backupfilename.'.zip';
 					$fp = fopen($dumpfile, "r");

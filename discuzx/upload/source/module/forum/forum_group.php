@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_group.php 27723 2012-02-13 06:50:39Z zhengqingpeng $
+ *      $Id: forum_group.php 28586 2012-03-05 07:41:37Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -244,7 +244,7 @@ if($action == 'index') {
 			if($modmember == 4) {
 				C::t('forum_forumfield')->update_membernum($_G['fid']);
 			}
-			updateactivity($_G['fid'], 0);
+			C::t('forum_forumfield')->update($_G['fid'], array('lastupdate' => TIMESTAMP));
 		}
 		include_once libfile('function/stat');
 		updatestat('groupjoin');

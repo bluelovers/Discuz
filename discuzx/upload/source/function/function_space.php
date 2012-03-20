@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_space.php 28493 2012-03-01 10:39:23Z zhengqingpeng $
+ *      $Id: function_space.php 28826 2012-03-14 07:45:14Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -497,7 +497,7 @@ function getblockhtml($blockname,$parameters = array()) {
 			$do = $blockname;
 			$walllist = array();
 			if(ckprivacy('wall', 'view')) {
-				$query = C::t('home_comment')->fetch_all_by_id_idtype($uid, 'uid', 0, $shownum);
+				$query = C::t('home_comment')->fetch_all_by_id_idtype($uid, 'uid', 0, $shownum, '', 'DESC');
 				foreach($query as $value) {
 					$value['message'] = strlen($value['message'])>500? getstr($value['message'], 500, 0, 0, 0, -1).' ...':$value['message'];
 					if($value['status'] == 0 || $value['authorid'] == $_G['uid']) {

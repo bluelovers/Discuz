@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_core.php 28407 2012-02-29 05:18:47Z monkey $
+ *      $Id: function_core.php 28875 2012-03-16 04:33:59Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -1654,9 +1654,6 @@ function forumperm($permstr, $groupid = 0) {
 	global $_G;
 
 	$groupidarray = array($_G['groupid']);
-	if($_G['connectguest']) {
-		$groupid = $_G['setting']['connect']['register_groupid'] ? $_G['setting']['connect']['register_groupid'] : $_G['setting']['newusergroupid'];
-	}
 	if($groupid) {
 		return preg_match("/(^|\t)(".$groupid.")(\t|$)/", $permstr);
 	}

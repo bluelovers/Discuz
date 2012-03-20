@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_member.php 28004 2012-02-20 09:56:54Z monkey $
+ *      $Id: class_member.php 28873 2012-03-16 03:12:04Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -430,9 +430,12 @@ class register_ctl {
 				showmessage('register_email_send_succeed', dreferer(), array('bbname' => $this->setting['bbname']), array('showdialog' => true, 'msgtype' => 3, 'closetime' => 10));
 			}
 
-			if($_G['setting']['sendregisterurl'] && !$sendurl) {
+			if($this->setting['sendregisterurl'] && !$sendurl) {
 				$_GET['email'] = strtolower($hash[0]);
 				$this->setting['regverify'] = $this->setting['regverify'] == 1 ? 0 : $this->setting['regverify'];
+				if(!$this->setting['regverify']) {
+					$groupinfo['groupid'] = $this->setting['newusergroupid'];
+				}
 			}
 
 			if($this->setting['regstatus'] == 2 && empty($invite) && !$invitestatus) {

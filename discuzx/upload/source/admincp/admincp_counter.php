@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_counter.php 27729 2012-02-13 07:35:33Z chenmengshu $
+ *      $Id: admincp_counter.php 28831 2012-03-14 08:30:27Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -29,7 +29,9 @@ if(submitcheck('forumsubmit', 1)) {
 		$threadtables = array('0');
 		$archive = 0;
 		foreach(C::t('forum_forum_threadtable')->fetch_all_by_fid($forum['fid']) as $data) {
-			$threadtables[] = $data['threadtableid'];
+			if($data['threadtableid']) {
+				$threadtables[] = $data['threadtableid'];
+			}
 		}
 		foreach($threadtables as $tableid) {
 			$data = C::t('forum_thread')->count_posts_by_fid($forum['fid'], $tableid);

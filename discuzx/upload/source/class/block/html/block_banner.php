@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: block_banner.php 25525 2011-11-14 04:39:11Z zhangguosheng $
+ *      $Id: block_banner.php 28625 2012-03-06 09:09:49Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -65,7 +65,7 @@ class block_banner extends commonblock_html {
 	}
 
 	function getdata($style, $parameter) {
-		$parameter = $this->cookparameter($parameter);
+		$parameter = dhtmlspecialchars($this->cookparameter($parameter));
 		$return = '<img src="'.$parameter['pic'].'"'
 			.($parameter['width'] ? ' width="'.$parameter['width'].'"' : '')
 			.($parameter['height'] ? ' height="'.$parameter['height'].'"' : '')

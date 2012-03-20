@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_forum_collectioncomment.php 27779 2012-02-14 07:33:17Z chenmengshu $
+ *      $Id: table_forum_collectioncomment.php 28611 2012-03-06 07:48:24Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -72,10 +72,6 @@ class table_forum_collectioncomment extends discuz_table
 		$where .= $message ? ' AND '.DB::field('message', '%'.stripsearchkey($message).'%', 'like') : '';
 		$where .= $starttime != '' ? ' AND '.DB::field('dateline', $starttime, '>') : '';
 		$where .= $endtime != '' ? ' AND '.DB::field('dateline', $endtime, '<') : '';
-
-		if(trim($where) == '1') {
-			return null;
-		}
 
 		if($start == -1) {
 			return DB::result_first("SELECT count(*) FROM %t WHERE %i", array($this->_table, $where));

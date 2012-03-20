@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_tasks.php 26975 2011-12-28 10:30:00Z chenmengshu $
+ *      $Id: admincp_tasks.php 28704 2012-03-08 07:16:32Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -407,7 +407,7 @@ if(!($operation)) {
 		showtagheader('tbody', 'specialgroup', $task['grouplimit'] == 'special');
 		showsetting('tasks_add_usergroup', array('applyperm[]', C::t('common_usergroup')->fetch_all_by_type()), explode("\t", $task['applyperm']), 'mselect');
 		showtagfooter('tbody');
-		$tasklist = array();
+		$tasklist = array(0 => array('taskid'=>0, 'name'=>cplang('nolimit') ));
 		foreach(C::t('common_task')->fetch_all_by_available(2) as $value) {
 			if($value['taskid'] != $task['taskid']) {
 				$tasklist[$value['taskid']] = array('taskid'=>$value['taskid'], 'name'=>$value['name']);

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_security_failedlog.php 27666 2012-02-09 05:33:43Z songlixin $
+ *      $Id: table_security_failedlog.php 28862 2012-03-15 08:30:54Z songlixin $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -21,9 +21,7 @@ class table_security_failedlog extends discuz_table {
 	}
 
 	public function deleteDirtyLog() {
-		DB::delete($this->_table, 'lastfailtime = 0');
-		DB::delete($this->_table, 'failcount >= 10');
-		DB::delete($this->_table, 'pid = 0 AND tid = 0 AND uid = 0');
+		DB::delete($this->_table, 'pid = 0 AND tid = 0 AND uid = 0 OR lastfailtime = 0 OR failcount >= 10');
 		return true;
 	}
 

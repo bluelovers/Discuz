@@ -38,6 +38,10 @@
 				<a href="member.php?mod=logging&action=login" onclick="showWindow('login', this.href)">{lang activation}</a>
 				<a href="member.php?mod=logging&action=logout&formhash={FORMHASH}">{lang logout}</a>
 			</div>
+		<!--{elseif $_G['connectguest']}-->
+			<div class="y">
+				{lang connect_fill_profile_to_view}
+			</div>
 		<!--{else}-->
 			<div class="y">
 				<a href="member.php?mod={$_G[setting][regname]}">$_G['setting']['reglinkname']</a>

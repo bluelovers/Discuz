@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_cloudaddons.php 28363 2012-02-28 07:28:58Z monkey $
+ *      $Id: admincp_cloudaddons.php 28853 2012-03-15 05:19:49Z monkey $
  */
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
@@ -137,8 +137,8 @@ if(!$operation) {
 			cpmsg('cloudaddons_downloading', "action=cloudaddons&operation=download&addonids=$_GET[addonids]&i=$addoni&step=1&md5hash=".$_GET['md5hash'].'&timestamp='.$_GET['timestamp'], 'loading', array('addonid' => $_GET['key'].'.'.$_GET['type']), FALSE);
 		}
 		list($_GET['key'], $_GET['type'], $_GET['rid']) = explode('.', $addonids[0]);
+		cloudaddons_downloadlog($_GET['key'].'.'.$_GET['type']);
 		if($_GET['type'] == 'plugin') {
-			cloudaddons_downloadlog($_GET['key'].'.plugin');
 			$plugin = C::t('common_plugin')->fetch_by_identifier($_GET['key']);
 			if(!$plugin['pluginid']) {
 				dheader('location: '.ADMINSCRIPT.'?action=plugins&operation=import&dir='.$_GET['key']);
@@ -146,7 +146,6 @@ if(!$operation) {
 				dheader('location: '.ADMINSCRIPT.'?action=plugins&operation=upgrade&pluginid='.$plugin['pluginid']);
 			}
 		} elseif($_GET['type'] == 'template') {
-			cloudaddons_downloadlog($_GET['key'].'.template');
 			dheader('location: '.ADMINSCRIPT.'?action=styles&operation=import&dir='.$_GET['key']);
 		} else {
 			cloudaddons_validator($_GET['key'].'.pack');

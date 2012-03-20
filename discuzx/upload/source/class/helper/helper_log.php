@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: helper_log.php 27957 2012-02-17 08:48:07Z zhangguosheng $
+ *      $Id: helper_log.php 28822 2012-03-14 06:35:55Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -47,7 +47,9 @@ class helper_log {
 		}
 		if($fp = @fopen($logfile, 'a')) {
 			@flock($fp, 2);
-			$log = is_array($log) ? $log : array($log);
+			if(!is_array($log)) {
+				$log = array($log);
+			}
 			foreach($log as $tmp) {
 				fwrite($fp, "<?PHP exit;?>\t".str_replace(array('<?', '?>'), '', $tmp)."\n");
 			}
@@ -75,28 +77,6 @@ class helper_log {
 			$value = array_search($var, $ops);
 		}
 		return $value;
-	}
-
-	public static function coredebuglog($errno, $errstr, $errfile, $errline) {
-		$log = "Errno:[$errno]\n\rErrstr:[$errstr]\n\rFile:[".str_replace(DISCUZ_ROOT, '', $errfile)."]\n\rLine:[$errline]\n\r";
-		$show = "Stack trace:\n\r";
-		$debug_backtrace = debug_backtrace();
-		array_pop($debug_backtrace);
-		krsort($debug_backtrace);
-		foreach ($debug_backtrace as $k => $error) {
-			$file = str_replace(DISCUZ_ROOT, '', $error['file']);
-			$func = isset($error['class']) ? $error['class'] : '';
-			$func .= isset($error['type']) ? $error['type'] : '';
-			$func .= isset($error['function']) ? $error['function'] : '';
-			$error['line'] = sprintf('%04d', $error['line']);
-
-			$show .= "[Line: $error[line]]".$file."($func)\n";
-		}
-		helper_log::runlog('discuz_core_debug', $log.$show);
-		if($errno == E_ERROR || $errno == E_CORE_ERROR || $errno == E_COMPILE_ERROR || $errno == E_PARSE) {
-			helper_sysmessage::show(nl2br($log.$show), 'System Error');
-		}
-		return false;
 	}
 
 }

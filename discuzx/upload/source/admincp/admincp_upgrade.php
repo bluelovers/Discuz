@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_upgrade.php 26689 2011-12-20 05:05:58Z zhangguosheng $
+ *      $Id: admincp_upgrade.php 28882 2012-03-16 07:53:52Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -31,6 +31,12 @@ if($operation == 'patch' || $operation == 'cross') {
 	$locale = trim($_GET['locale']);
 	$charset = trim($_GET['charset']);
 	$upgradeinfo = array();
+
+	C::t('common_cache')->insert(array(
+		'cachekey' => 'upgrade_step',
+		'cachevalue' => serialize(array('step' => $step, 'operation' => $operation, 'version' => $version, 'release' => $release, 'charset' => $charset, 'locale' => $locale)),
+		'dateline' => $_G['timestamp'],
+	), false, true);
 
 	foreach($_G['setting']['upgrade'] as $type => $list) {
 		if($type == $operation && $version == $list['latestversion'] && $release == $list['latestrelease']) {
@@ -59,6 +65,10 @@ if($operation == 'patch' || $operation == 'cross') {
 	$updatefilelist = $updatefilelist['file'];
 
 	$theurl = 'upgrade&operation='.$operation.'&version='.$version.'&locale='.$locale.'&charset='.$charset.'&release='.$release;
+
+	if(empty($updatefilelist)) {
+		cpmsg('upgrade_download_upgradelist_error', 'action='.$theurl, 'form');
+	}
 
 	if($step == 1) {
 		showtablerow('class="header"', '', $lang['founder_upgrade_preupdatelist']);
@@ -97,11 +107,11 @@ if($operation == 'patch' || $operation == 'cross') {
 			if(isset($ignorelist[$v])) {
 				continue;
 			} elseif(isset($modifylist[$v])) {
-				showtablerow('', array('class="td24" style="color:red;"', 'class="td24" style="color:red;"'), array('<em class="files bold">'.$v.'</em>', $lang['founder_upgrade_diff'].'<em class="edited">&nbsp;</em>'));
+				showtablerow('', array('class="" style="color:red;"', 'class="td24" style="color:red;"'), array('<em class="files bold">'.$v.'</em>', $lang['founder_upgrade_diff'].'<em class="edited">&nbsp;</em>'));
 			} elseif(isset($showlist[$v])) {
-				showtablerow('', array('class="td24"', 'class="td24"'), array('<em class="files bold">'.$v.'</em>', $lang['founder_upgrade_normal'].'<em class="fixed">&nbsp;</em>'));
+				showtablerow('', array('class=""', 'class="td24"'), array('<em class="files bold">'.$v.'</em>', $lang['founder_upgrade_normal'].'<em class="fixed">&nbsp;</em>'));
 			} else {
-				showtablerow('', array('class="td24"', 'class="td24"'), array('<em class="files bold">'.$v.'</em>', $lang['founder_upgrade_new'].'<em class="unknown">&nbsp;</em>'));
+				showtablerow('', array('class=""', 'class="td24"'), array('<em class="files bold">'.$v.'</em>', $lang['founder_upgrade_new'].'<em class="unknown">&nbsp;</em>'));
 			}
 		}
 
@@ -181,6 +191,11 @@ if($operation == 'patch' || $operation == 'cross') {
 					cpmsg('upgrade_copy_error', $linkurl, 'form');
 				}
 			}
+			C::t('common_cache')->insert(array(
+				'cachekey' => 'upgrade_step',
+				'cachevalue' => serialize(array('step' => 'dbupdate', 'operation' => $operation, 'version' => $version, 'release' => $release, 'charset' => $charset, 'locale' => $locale)),
+				'dateline' => $_G['timestamp'],
+			), false, true);
 			cpmsg('upgrade_file_successful', $_G['siteurl'].'install/update.php?step=prepare&from='.rawurlencode($_G['siteurl'].ADMINSCRIPT.'?action=upgrade&operation='.$operation.'&version='.$version.'&release='.$release.'&step=5'));
 		}
 		dheader('Location: '.ADMINSCRIPT.'?action=upgrade&operation='.$operation.'&version='.$version.'&release='.$release.'&step=5');
@@ -188,11 +203,39 @@ if($operation == 'patch' || $operation == 'cross') {
 	} elseif($step == 5) {
 		$file = DISCUZ_ROOT.'./data/update/Discuz! X'.$upgradeinfo['latestversion'].' Release['.$upgradeinfo['latestrelease'].']/updatelist.tmp';
 		@unlink($file);
+		C::t('common_cache')->delete('upgrade_step');
 		cpmsg('upgrade_successful', '', 'succeed', array('version' => $version, 'release' => $release), '<script type="text/javascript">if(parent.document.getElementById(\'notice\')) parent.document.getElementById(\'notice\').style.display = \'none\';</script>');
 	}
 	showtablefooter();
 
 } elseif($operation == 'check') {
+	if(!intval($_GET['rechecking'])) {
+		$upgrade_step = C::t('common_cache')->fetch('upgrade_step');
+		if(!empty($upgrade_step['cachevalue'])) {
+			$upgrade_step['cachevalue'] = dunserialize($upgrade_step['cachevalue']);
+			$theurl = 'upgrade&operation='.$upgrade_step['cachevalue']['operation'].'&version='.$upgrade_step['cachevalue']['version'].'&locale='.$upgrade_step['cachevalue']['locale'].'&charset='.$upgrade_step['cachevalue']['charset'].'&release='.$upgrade_step['cachevalue']['release'];
+			$steplang = array('', cplang('founder_upgrade_updatelist'), cplang('founder_upgrade_download'), cplang('founder_upgrade_compare'), cplang('founder_upgrade_upgrading'), cplang('founder_upgrade_complete'), 'dbupdate' => cplang('founder_upgrade_dbupdate'));
+			if($upgrade_step['cachevalue']['step'] == 'dbupdate') {
+				$stepurl =  $_G['siteurl'].'install/update.php?step=prepare&from='.rawurlencode($_G['siteurl'].ADMINSCRIPT.'?action='.$theurl.'&step=5');
+				cpmsg('upgrade_continue',
+					'',
+					'',
+					array('step' => $steplang['dbupdate']),
+					'<br /><input type="button" class="btn" onclick="window.location.href=\''.$stepurl.'\'" value="'.$lang['founder_upgrade_continue'].'" /><br /><br />'
+				);
+			} else {
+				$stepurl =  ADMINSCRIPT.'?action='.$theurl.'&step='.$upgrade_step['cachevalue']['step'];
+				cpmsg('upgrade_continue',
+					'',
+					'',
+					array('step' => $steplang[$upgrade_step['cachevalue']['step']]),
+					'<br /><input type="button" class="btn" onclick="window.location.href=\''.$stepurl.'\'" value="'.$lang['founder_upgrade_continue'].'" /><br /><br />'
+				);
+			}
+		}
+	} else {
+		C::t('common_cache')->delete('upgrade_step');
+	}
 	if(!intval($_GET['checking'])) {
 		cpmsg('upgrade_checking', 'action=upgrade&operation=check&checking=1', 'loading', '', false);
 	}

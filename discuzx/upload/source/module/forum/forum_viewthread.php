@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_viewthread.php 28534 2012-03-02 05:25:14Z liulanbo $
+ *      $Id: forum_viewthread.php 28852 2012-03-15 04:30:22Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -212,7 +212,7 @@ if($rushreply) {
 		if(!$rushresult['starttimeto'] && !$rushresult['stopfloor']) {
 			C::t('forum_thread')->update($_G['tid'], array('closed'=>0));
 		} else {
-			if(($rushresult['starttimeto'] && TIMESTAMP < $rushresult['starttimeto']) || ($rushresult['stopfloor'] && $_G['forum_thread']['replies'] + 1 < $rushresult['stopfloor'])) {
+			if(($rushresult['starttimeto'] && TIMESTAMP < $rushresult['starttimeto'] && $rushresult['stopfloor'] > $_G['forum_thread']['replies'] + 1) || ($rushresult['stopfloor'] && $_G['forum_thread']['replies'] + 1 < $rushresult['stopfloor'])) {
 				C::t('forum_thread')->update($_G['tid'], array('closed'=>0));
 			}
 		}
@@ -251,6 +251,7 @@ $_G['forum_attachmentdown'] = $_G['group']['exempt'] & $exemptvalue;
 
 $seccodecheck = ($_G['setting']['seccodestatus'] & 4) && (!$_G['setting']['seccodedata']['minposts'] || getuserprofile('posts') < $_G['setting']['seccodedata']['minposts']);
 $secqaacheck = $_G['setting']['secqaa']['status'] & 2 && (!$_G['setting']['secqaa']['minposts'] || getuserprofile('posts') < $_G['setting']['secqaa']['minposts']);
+$usesigcheck = $_G['uid'] && $_G['group']['maxsigsize'];
 
 $postlist = $_G['forum_attachtags'] = $attachlist = $_G['forum_threadstamp'] = array();
 $aimgcount = 0;
@@ -350,7 +351,7 @@ $onlyauthoradd = $threadplughtml = '';
 
 $maxposition = 0;
 if(empty($_GET['viewpid'])) {
-	$disablepos = C::t('forum_threaddisablepos')->fetch($_G['tid']) && !$rushreply ? 1 : 0;
+	$disablepos = !$rushreply && C::t('forum_threaddisablepos')->fetch($_G['tid']) ? 1 : 0;
 	if(!$disablepos && !in_array($_G['forum_thread']['special'], array(2,3,5))) {
 		if($_G['forum_thread']['maxposition']) {
 			$maxposition = $_G['forum_thread']['maxposition'];
@@ -391,8 +392,7 @@ if(empty($_GET['viewpid'])) {
 			$_G['forum_thread']['replies'] = $countrushpost = count($rushids) - 1;
 			$rushids = array_slice($rushids, ($page - 1) * $_G['ppp'], $_G['ppp']);
 			foreach(C::t('forum_post')->fetch_all_by_tid_position($posttableid, $_G['tid'], $rushids) as $post) {
-				$postarr[$post['pid']] = $post;
-				$rushpositionlist[$post['pid']] = $post['position'];
+				$postarr[$post['position']] = $post;
 			}
 		} else {
 			for($i = ($page - 1) * $_G['ppp'] + 1; $i <= $page * $_G['ppp']; $i++) {
@@ -500,7 +500,7 @@ if($maxposition) {
 			$have_badpost = 1;
 		}
 		$cachepids[$post[position]] = $post['pid'];
-		$postarr[$post['pid']] = $post;
+		$postarr[$post[position]] = $post;
 		$lastposition = $post['position'];
 	}
 	$realpost = count($postarr);
@@ -509,9 +509,9 @@ if($maxposition) {
 		for($i = $start; $i < $end; $i ++) {
 			if(!empty($cachepids[$i])) {
 				$k = $cachepids[$i];
-				$isdel_post[$k] = array('deleted' => 1, 'pid' => $k, 'message' => '', 'position' => $i);
+				$isdel_post[$i] = array('deleted' => 1, 'pid' => $k, 'message' => '', 'position' => $i);
 			} elseif($i < $maxposition || ($lastposition && $i < $lastposition)) {
-				$isdel_post[$k] = array('deleted' => 1, 'pid' => $k, 'message' => '', 'position' => $i);
+				$isdel_post[$i] = array('deleted' => 1, 'pid' => $k, 'message' => '', 'position' => $i);
 			}
 			$k ++;
 		}
@@ -569,7 +569,7 @@ if(!empty($isdel_post)) {
 		$postarr[$id] = $post;
 		$updatedisablepos = true;
 	}
-	if($updatedisablepos) {
+	if($updatedisablepos && !$rushreply) {
 		C::t('forum_threaddisablepos')->insert(array('tid' => $_G['tid']), false, true);
 	}
 	$ordertype != 1 ? ksort($postarr) : krsort($postarr);
@@ -737,9 +737,13 @@ if(empty($_GET['authorid']) && empty($postlist)) {
 if($_G['forum_pagebydesc'] && (!$savepostposition || $_GET['ordertype'] == 1)) {
 	$postlist = array_reverse($postlist, TRUE);
 }
-$_G['setting']['vtonlinestatus'] = 2;
+
+if(!empty($_G['setting']['sessionclose'])) {
+	$_G['setting']['vtonlinestatus'] = 1;
+}
+
 if($_G['setting']['vtonlinestatus'] == 2 && $_G['forum_onlineauthors']) {
-	foreach(C::app()->session->fetch_all_by_uid($_G['forum_onlineauthors']) as $author) {
+	foreach(C::app()->session->fetch_all_by_uid(array_keys($_G['forum_onlineauthors'])) as $author) {
 		if(!$author['invisible']) {
 			$_G['forum_onlineauthors'][$author['uid']] = 1;
 		}
@@ -871,7 +875,11 @@ if(empty($_GET['viewpid'])) {
 } else {
 	$_G['setting']['admode'] = 0;
 	$post = $postlist[$_GET['viewpid']];
-	$post['number'] = $post['position'];
+	if($maxposition) {
+		$post['number'] = $post['position'];
+	} else {
+		$post['number'] = C::t('forum_post')->count_by_tid_dateline($posttableid, $post['tid'], $post['dbdateline']);
+	}
 	if($rushreply) {
 		$preg_str = rushreply_rule($rewardfloorarr);
 		preg_match_all($preg_str, ",,".$post['number'].",,", $arr);
@@ -956,7 +964,7 @@ function viewthread_procpost($post, $lastvisit, $ordertype, $maxposition = 0) {
 
 	if($post['username']) {
 
-		$_G['forum_onlineauthors'][] = $post['authorid'];
+		$_G['forum_onlineauthors'][$post['authorid']] = 0;
 		$post['usernameenc'] = rawurlencode($post['username']);
 		$post['readaccess'] = $_G['cache']['usergroups'][$post['groupid']]['readaccess'];
 		if($_G['cache']['usergroups'][$post['groupid']]['userstatusby'] == 1) {

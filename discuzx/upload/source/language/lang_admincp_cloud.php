@@ -4,7 +4,7 @@
  *	  [Discuz!] (C)2001-2099 Comsenz Inc.
  *	  This is NOT a freeware, use is subject to license terms
  *
- *	  $Id: lang_admincp_cloud.php 28535 2012-03-02 05:25:30Z yangli $
+ *	  $Id: lang_admincp_cloud.php 28728 2012-03-09 03:15:48Z songlixin $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -30,7 +30,7 @@ $extend_lang = array
 	'menu_cloud_connect' => 'QQ互聯',
 	'menu_cloud_search' => '縱橫搜索',
 	'menu_cloud_stats' => '騰訊分析',
-	'menu_cloud_security' => '騰訊安全',
+	'menu_cloud_security' => '防水牆',
 	'menu_cloud_smilies' => 'SOSO表情',
 	'menu_cloud_qqgroup' => '社區QQ群',
 	'menu_cloud_union' => 'Discuz!聯盟',
@@ -329,12 +329,12 @@ $extend_lang = array
 	'security_exfoldall' => '全部展開',
 	'security_userdeleted' => '該用戶已被管理人員刪除',
 	'security_postdeleted' => '該帖子已被管理人員刪除',
-	'security_modreason' => '騰訊安全自動處理',
+	'security_modreason' => '防水牆自動處理',
 	'security_restore_user' => '恢復該用戶',
 	'security_change_usergroup' => '更改用戶組',
 
-	'recyclebin_search_security_thread' => '僅包含騰訊安全處理的主題',
-	'recyclebin_search_security_post' => '僅包含騰訊安全處理的回帖',
+	'recyclebin_search_security_thread' => '僅包含防水牆處理的主題',
+	'recyclebin_search_security_post' => '僅包含防水牆處理的回帖',
 
 	'security_setting' => '設置',
 	'security_setting_list' => '設置',
@@ -342,9 +342,9 @@ $extend_lang = array
 	'security_tips_1' => '<li><p>累計識別違規主題：<a href="admin.php?action=cloud&operation=security&anchor=thread" style="font-size:14px; text-decoration:none; color:#0000FF;">%d</a>，違規回帖：<a href="admin.php?action=cloud&operation=security&anchor=post" style="font-size:14px; text-decoration:none; color:#0000FF;">%d</a>，違規用戶：<a href="admin.php?action=cloud&operation=security&anchor=member" style="font-size:14px; text-decoration:none; color:#0000FF;">%d</a></p></li><li><p>系統識別到違規主題和違規回帖後，自動將主題和回帖放入<a href="admin.php?action=recyclebin" style="text-decoration:none; color:#0000FF;">回收站</a></p></li><li><p>系統識別到違規用戶後，自動將用戶禁言</p></li>',
 	'security_white_list_setting' => '白名單設置',
 	'security_usergroup_white_list' => '用戶組白名單',
-	'security_usergroup_white_list_comment' => '所選用戶組內用戶的操作，騰訊安全不做處理，可以按住 CTRL 多選',
+	'security_usergroup_white_list_comment' => '所選用戶組內用戶的操作，防水牆不做處理，可以按住 CTRL 多選',
 	'security_forum_white_list' => '版塊白名單',
-	'security_forum_white_list_comment' => '所選版塊內的主題和回復，騰訊安全不做處理，可以按住 CTRL 多選',
+	'security_forum_white_list_comment' => '所選版塊內的主題和回復，防水牆不做處理，可以按住 CTRL 多選',
 	'security_recyclebin_thread' => '到回收站處理主題',
 	'security_recyclebin_post' => '到回收站處理回帖',
 	'security_thread_status' => '主題狀態',

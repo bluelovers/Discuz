@@ -3,7 +3,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: home_follow.php 28505 2012-03-01 11:55:47Z zhengqingpeng $
+ *      $Id: home_follow.php 28683 2012-03-08 01:40:09Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -27,6 +27,8 @@ $viewself = $uid == $_G['uid'] ? true : false;
 $space = $viewself ? $_G['member'] : getuserbyuid($uid);
 if(empty($space)) {
 	showmessage('follow_visituser_not_exist');
+} elseif(in_array($space['groupid'], array(4, 5, 6)) && ($_G['adminid'] != 1 && $space['uid'] != $_G['uid'])) {
+	dheader("Location:home.php?mod=space&uid=$uid&do=profile");
 }
 space_merge($space, 'count');
 space_merge($space, 'profile');

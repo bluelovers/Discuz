@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_cloudaddons.php 28363 2012-02-28 07:28:58Z monkey $
+ *      $Id: function_cloudaddons.php 28743 2012-03-09 11:32:46Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -37,16 +37,18 @@ function cloudaddons_check() {
 	if(dfsockopen(CLOUDADDONS_WEBSITE_URL.'/image/logo.png', 4) !== chr(0x89).'PNG') {
 		cpmsg('cloudaddons_check_url_fopen_error', '', 'error');
 	}
-	$tmpdir = DISCUZ_ROOT.'./data/download/'.random(5);
-	$tmpfile = $tmpdir.'/index.html';
-	dmkdir($tmpdir, 0777);
-	if(!is_dir($tmpdir) || !file_exists($tmpfile)) {
-		cpmsg('cloudaddons_check_write_error', '', 'error');
-	}
-	@unlink($tmpfile);
-	@rmdir($tmpdir);
-	if(is_dir($tmpdir) || file_exists($tmpfile)) {
-		cpmsg('cloudaddons_check_write_error', '', 'error');
+	foreach(array('download', 'addonmd5') as $path) {
+		$tmpdir = DISCUZ_ROOT.'./data/'.$path.'/'.random(5);
+		$tmpfile = $tmpdir.'/index.html';
+		dmkdir($tmpdir, 0777);
+		if(!is_dir($tmpdir) || !file_exists($tmpfile)) {
+			cpmsg('cloudaddons_check_write_error', '', 'error');
+		}
+		@unlink($tmpfile);
+		@rmdir($tmpdir);
+		if(is_dir($tmpdir) || file_exists($tmpfile)) {
+			cpmsg('cloudaddons_check_write_error', '', 'error');
+		}
 	}
 }
 

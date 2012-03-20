@@ -229,7 +229,7 @@
 									<!--{/if}-->
 										<div class="xg1">
 											<!--{if isset($value['follow']) && $key != $_G['uid'] && $value[username] != ''}-->
-											<a href="home.php?mod=spacecp&ac=follow&op={if $value['follow']}del{else}add{/if}&fuid=$value[uid]&from=a_followmod_" id="a_followmod_$key" onclick="showWindow('followmod', this.href, 'get', 0)"><!--{if $value['follow']}-->{lang follow_del}<!--{else}-->{lang follow_add}TA<!--{/if}--></a>
+											<a href="home.php?mod=spacecp&ac=follow&op={if $value['follow']}del{else}add{/if}&fuid=$value[uid]&hash={FORMHASH}&from=a_followmod_" id="a_followmod_$key" onclick="showWindow('followmod', this.href, 'get', 0)"><!--{if $value['follow']}-->{lang follow_del}<!--{else}-->{lang follow_add}TA<!--{/if}--></a>
 											<!--{/if}-->
 											<!--{if $value[uid] != $_G['uid'] && $value[username] != ''}-->
 											<span class="pipe">|</span><a href="javascript:;" id="interaction_$value[uid]" onmouseover="showMenu(this.id);" class="showmenu">{lang interactive}</a>
@@ -281,7 +281,7 @@
 		                                            <p class="maxh">$value[reason]</p>
 		                                            <div class="xg1">
 		                                            <!--{if isset($value['follow']) && $key != $_G['uid'] && $value[username] != ''}-->
-													<a href="home.php?mod=spacecp&ac=follow&op={if $value['follow']}del{else}add{/if}&fuid=$value[uid]&from=a_specialuser_" id="a_specialuser_$key" onclick="showWindow('followmod', this.href, 'get', 0)"><!--{if $value['follow']}-->{lang follow_del}<!--{else}-->{lang follow_add}TA<!--{/if}--></a>
+													<a href="home.php?mod=spacecp&ac=follow&op={if $value['follow']}del{else}add{/if}&fuid=$value[uid]&hash={FORMHASH}&from=a_specialuser_" id="a_specialuser_$key" onclick="showWindow('followmod', this.href, 'get', 0)"><!--{if $value['follow']}-->{lang follow_del}<!--{else}-->{lang follow_add}TA<!--{/if}--></a>
 													<span class="pipe">|</span>
 													<!--{/if}-->
 													<a href="home.php?mod=spacecp&ac=friend&op=add&uid=$value[uid]&handlekey=adduserhk_{$value[uid]}" id="a_friend_$key" onclick="showWindow(this.id, this.href, 'get', 0);" title="{lang add_friend}">{lang add_friend}</a></div>
@@ -308,7 +308,7 @@
 		                                            <p class="maxh">$value[recentnote]</p>
 		                                            <div class="xg1">
 		                                            <!--{if isset($value['follow']) && $key != $_G['uid'] && $value[username] != '' && helper_access::check_module('follow')}-->
-													<a href="home.php?mod=spacecp&ac=follow&op={if $value['follow']}del{else}add{/if}&fuid=$value[uid]&from=a_online_" id="a_online_$key" onclick="showWindow('followmod', this.href, 'get', 0)"><!--{if $value['follow']}-->{lang follow_del}<!--{else}-->{lang follow_add}TA<!--{/if}--></a>
+													<a href="home.php?mod=spacecp&ac=follow&op={if $value['follow']}del{else}add{/if}&fuid=$value[uid]&hash={FORMHASH}&from=a_online_" id="a_online_$key" onclick="showWindow('followmod', this.href, 'get', 0)"><!--{if $value['follow']}-->{lang follow_del}<!--{else}-->{lang follow_add}TA<!--{/if}--></a>
 													<span class="pipe">|</span>
 													<!--{/if}-->
 													<a href="home.php?mod=spacecp&ac=friend&op=add&uid=$value[uid]&handlekey=adduserhk_{$value[uid]}" id="a_friend_$key" onclick="showWindow(this.id, this.href, 'get', 0);" title="{lang add_friend}">{lang add_friend}</a></div>

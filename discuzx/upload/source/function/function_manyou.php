@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_manyou.php 24946 2011-10-18 02:54:40Z zhengqingpeng $
+ *      $Id: function_manyou.php 28663 2012-03-07 05:50:37Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -92,7 +92,8 @@ function downloadmyappicon($appid) {
 		dmkdir(dirname($iconpath));
 	}
 	C::t('common_myapp')->update($appid, array('iconstatus'=>'-1'));
-	$icondata = file_get_contents(getmyappiconpath($appid, 0));
+	$ctx = stream_context_create(array('http' => array('timeout' => 10)));
+	$icondata = file_get_contents(getmyappiconpath($appid, 0), false, $ctx);
 	if($icondata) {
 		file_put_contents($iconpath, $icondata);
 		C::t('common_myapp')->update($appid, array('iconstatus'=>'1', 'icondowntime'=>TIMESTAMP));

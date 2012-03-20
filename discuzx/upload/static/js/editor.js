@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: editor.js 27506 2012-02-03 02:19:03Z monkey $
+	$Id: editor.js 28601 2012-03-06 02:49:55Z monkey $
 */
 
 var editorcurrentheight = 400, editorminheight = 400, savedataInterval = 30, editbox = null, editwin = null, editdoc = null, editcss = null, savedatat = null, savedatac = 0, autosave = 1, framemObj = null, cursor = -1, stack = [], initialized = false, postSubmited = false, editorcontroltop = false, editorcontrolwidth = false, editorcontrolheight = false, editorisfull = 0, fulloldheight = 0, savesimplodemode = null;
@@ -913,7 +913,11 @@ function setContext(cmd) {
 		}
 	}
 
-	var fs = editdoc.queryCommandValue('fontname');
+	try {
+		var fs = editdoc.queryCommandValue('fontname');
+	} catch(e) {
+		fs = null;
+	}
 	if(fs == '' && !BROWSER.ie && window.getComputedStyle) {
 		fs = editdoc.body.style.fontFamily;
 	} else if(fs == null) {
@@ -935,7 +939,9 @@ function setContext(cmd) {
 				ss = formatFontsize(ss);
 			}
 		}
-	} catch(e) {}
+	} catch(e) {
+		ss = '¤j¤p';
+	}
 
 	if(ss != $(editorid + '_size').sizestate) {
 		if($(editorid + '_size').sizestate == null) {
@@ -1145,7 +1151,7 @@ function showEditorMenu(tag, params) {
 				href = (isEmail(href) ? 'mailto:' : '') + href;
 				if(href != '') {
 					var v = selection ? selection : ($(ctrlid + '_param_2').value ? $(ctrlid + '_param_2').value : href);
-					str = wysiwyg ? ('<a href="' + href + '">' + v + '</a>') : '[url=' + href + ']' + v + '[/url]';
+					str = wysiwyg ? ('<a href="' + href + '">' + v + '</a>') : '[url=' + squarestrip(href) + ']' + v + '[/url]';
 					if(wysiwyg) insertText(str, str.length - v.length, 0, (selection ? true : false), sel);
 					else insertText(str, str.length - v.length - 6, 6, (selection ? true : false), sel);
 				}
@@ -1229,9 +1235,9 @@ function showEditorMenu(tag, params) {
 				break;
 			case 'fls':
 				if($(ctrlid + '_param_2').value && $(ctrlid + '_param_3').value) {
-					insertText('[flash=' + parseInt($(ctrlid + '_param_2').value) + ',' + parseInt($(ctrlid + '_param_3').value) + ']' + $(ctrlid + '_param_1').value + '[/flash]', 7, 8, false, sel);
+					insertText('[flash=' + parseInt($(ctrlid + '_param_2').value) + ',' + parseInt($(ctrlid + '_param_3').value) + ']' + squarestrip($(ctrlid + '_param_1').value) + '[/flash]', 7, 8, false, sel);
 				} else {
-					insertText('[flash]' + $(ctrlid + '_param_1').value + '[/flash]', 7, 8, false, sel);
+					insertText('[flash]' + squarestrip($(ctrlid + '_param_1').value) + '[/flash]', 7, 8, false, sel);
 				}
 				break;
 			case 'vid':
@@ -1246,7 +1252,7 @@ function showEditorMenu(tag, params) {
 						ext = 'rtsp';
 					}
 				}
-				var str = '[media=' + ext + ',' + $(ctrlid + '_param_2').value + ',' + $(ctrlid + '_param_3').value + ']' + mediaUrl + '[/media]';
+				var str = '[media=' + ext + ',' + $(ctrlid + '_param_2').value + ',' + $(ctrlid + '_param_3').value + ']' + squarestrip(mediaUrl) + '[/media]';
 				insertText(str, str.length, 0, false, sel);
 				break;
 			case 'image':
@@ -1261,7 +1267,7 @@ function showEditorMenu(tag, params) {
 					insertText(str, str.length, 0, false, sel);
 				} else {
 					style += width || height ? '=' + width + ',' + height : '';
-					insertText('[img' + style + ']' + src + '[/img]', 0, 0, false, sel);
+					insertText('[img' + style + ']' + squarestrip(src) + '[/img]', 0, 0, false, sel);
 				}
 				hideMenu('', 'win');
 				$(ctrlid + '_param_1').value = '';
@@ -1583,6 +1589,12 @@ function getSnapshot() {
 	} else {
 		return false;
 	}
+}
+
+function squarestrip(str) {
+	str = str.replace('[', '%5B');
+	str = str.replace(']', '%5D');
+	return str;
 }
 
 function loadimgsize(imgurl, editor, p) {
