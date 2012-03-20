@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: install.php 26543 2011-12-15 02:17:57Z monkey $
+ *      $Id: install.php 28639 2012-03-06 12:05:21Z liudongdong $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -53,18 +53,6 @@ CREATE TABLE IF NOT EXISTS pre_connect_memberbindlog (
   KEY dateline (dateline)
 ) ENGINE=MyISAM;
 
-CREATE TABLE IF NOT EXISTS pre_connect_tlog (
-  tlid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  tid mediumint(8) unsigned NOT NULL DEFAULT '0',
-  uid mediumint(8) unsigned NOT NULL DEFAULT '0',
-  publishtimes mediumint(8) unsigned NOT NULL DEFAULT '0',
-  lastpublished int(10) unsigned NOT NULL DEFAULT '0',
-  dateline int(10) unsigned NOT NULL DEFAULT '0',
-  `status` tinyint(1) NOT NULL DEFAULT '1',
-  PRIMARY KEY (tlid),
-  UNIQUE KEY tid (tid)
-) ENGINE=MyISAM;
-
 CREATE TABLE IF NOT EXISTS pre_connect_tthreadlog (
   twid char(16) NOT NULL,
   tid mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -86,6 +74,13 @@ CREATE TABLE IF NOT EXISTS pre_common_uin_black (
   PRIMARY KEY (uin),
   UNIQUE KEY uid (uid)
 ) ENGINE=MyISAM;
+
+CREATE TABLE IF NOT EXISTS pre_common_connect_guest (
+  `conopenid` char(32) NOT NULL default '',
+  `conuin` char(40) NOT NULL default '',
+  `conuinsecret` char(16) NOT NULL default '',
+  PRIMARY KEY (conopenid)
+) TYPE=MyISAM;
 
 REPLACE INTO pre_common_setting VALUES ('regconnect', '1');
 REPLACE INTO pre_common_setting VALUES ('connect', 'a:19:{s:5:"allow";s:1:"1";s:4:"feed";a:2:{s:5:"allow";s:1:"1";s:5:"group";s:1:"0";}s:1:"t";a:4:{s:5:"allow";s:1:"1";s:5:"group";s:1:"0";s:5:"reply";i:1;s:16:"reply_showauthor";i:1;}s:10:"like_allow";s:1:"1";s:7:"like_qq";s:0:"";s:10:"turl_allow";s:1:"1";s:7:"turl_qq";s:0:"";s:8:"like_url";s:0:"";s:17:"register_birthday";s:1:"0";s:15:"register_gender";s:1:"0";s:17:"register_uinlimit";s:0:"";s:21:"register_rewardcredit";s:1:"1";s:18:"register_addcredit";s:0:"";s:16:"register_groupid";s:1:"0";s:18:"register_regverify";s:1:"1";s:15:"register_invite";s:1:"1";s:10:"newbiespan";s:0:"";s:9:"turl_code";s:0:"";s:13:"mblog_app_key";s:3:"abc";}');

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_modcp.php 25246 2011-11-02 03:34:53Z zhangguosheng $
+ *      $Id: forum_modcp.php 28867 2012-03-16 02:27:08Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -160,12 +160,14 @@ $reportnum = $modpostnum = $modthreadnum = $modforumnum = 0;
 $modforumnum = count($modforums['list']);
 $modnum = '';
 if($modforumnum) {
-	if($_G['group']['allowmodpost']) {
-		$modnum = C::t('common_moderate')->count_by_idtype_status_fid('tid', 0, explode(',', $modforums['fids']));
-		$modnum += C::t('common_moderate')->count_by_idtype_status_fid('pid', 0, explode(',', $modforums['fids']));
-	}
-	if($_G['group']['allowmoduser']) {
-		$modnum += C::t('common_member_validate')->count_by_status(0);
+	if(!empty($_G['setting']['moddetail'])) {
+		if($_G['group']['allowmodpost']) {
+			$modnum = C::t('common_moderate')->count_by_idtype_status_fid('tid', 0, explode(',', $modforums['fids']));
+			$modnum += C::t('common_moderate')->count_by_idtype_status_fid('pid', 0, explode(',', $modforums['fids']));
+		}
+		if($_G['group']['allowmoduser']) {
+			$modnum += C::t('common_member_validate')->count_by_status(0);
+		}
 	}
 }
 

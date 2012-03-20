@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_security_evilpost.php 27778 2012-02-14 07:11:14Z zhengqingpeng $
+ *      $Id: table_security_evilpost.php 28652 2012-03-07 03:16:47Z songlixin $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -85,7 +85,7 @@ class table_security_evilpost extends discuz_table {
 		return DB::result_first('SELECT COUNT(*) FROM '.DB::table('forum_thread').' t INNER JOIN '.DB::table('security_evilpost').' s ON s.tid = t.tid LEFT JOIN '.DB::table('forum_threadmod').' tm ON tm.tid=t.tid '.$sql[0], $sql[1]);
 	}
 
-	private function recyclebine_where($fid = 0, $isgroup = 0, $author = array(), $username = array(), $pstarttime = 0, $pendtime = 0, $mstarttime = 0, $mendtime = 0, $keywords = '') {
+	private function recyclebine_where($fid = 0, $isgroup = 0, $authors = array(), $username = array(), $pstarttime = 0, $pendtime = 0, $mstarttime = 0, $mendtime = 0, $keywords = '') {
 		$parameter = array();
 		$wherearr = array('t.displayorder=-1', 'tm.action=\'DEL\'', 's.type=1');
 		if($fid) {

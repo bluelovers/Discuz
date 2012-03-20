@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_misc.php 28331 2012-02-28 04:25:50Z liulanbo $
+ *      $Id: forum_misc.php 28749 2012-03-12 01:49:53Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -433,9 +433,7 @@ if($_GET['action'] == 'votepoll' && submitcheck('pollsubmit', 1)) {
 		$polloptionids[] = $id;
 	}
 
-	$pollanswers = implode('\',\'', $polloptionids);
-
-	C::t('forum_polloption')->update_vote($pollanswers, $voterids."\t", 1);
+	C::t('forum_polloption')->update_vote($polloptionids, $voterids."\t", 1);
 	C::t('forum_thread')->update($_G['tid'], array('lastpost'=>$_G['timestamp']), true);
 	C::t('forum_poll')->update_vote($_G['tid']);
 	C::t('forum_pollvoter')->insert(array(
@@ -1093,12 +1091,6 @@ if($_GET['action'] == 'votepoll' && submitcheck('pollsubmit', 1)) {
 	}
 
 	if(!submitcheck('applylistsubmit')) {
-		$sqlverified = $isactivitymaster ? '' : "AND verified='1'";
-
-		if(!empty($_GET['uid']) && $isactivitymaster) {
-			$sqlverified .= " AND uid='$_GET[uid]'";
-		}
-
 		$applylist = array();
 		$activity['ufield'] = $activity['ufield'] ? dunserialize($activity['ufield']) : array();
 		$query = C::t('forum_activityapply')->fetch_all_for_thread($_G['tid'], 0, 500, $_GET['uid'], $isactivitymaster);

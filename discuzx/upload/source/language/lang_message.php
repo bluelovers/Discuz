@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_message.php 28364 2012-02-28 07:31:23Z zhengqingpeng $
+ *      $Id: lang_message.php 28860 2012-03-15 07:17:21Z monkey $
  *
  *      This file is automatically generate
  */
@@ -464,6 +464,12 @@ $lang = array (
   'faq_content_empty' => '抱歉，指定的幫助項目不存在',
   'faq_keywords_empty' => '抱歉，您尚未指定要搜索的關鍵字',
 
+  'imagepreview_errorcode_0' => '圖片不符合處理條件，無法處理',
+  'imagepreview_errorcode_-1' => '無效的圖片，無法處理',
+  'imagepreview_errorcode_-2' => '文件讀寫權限不足，無法處理圖片',
+  'imagepreview_errorcode_-3' => '系統設置錯誤，無法處理圖片',
+  'imagepreview_errorcode_-4' => '服務器缺少處理圖片所需的功能，無法處理',
+
   'group_invite_failed' => '抱歉，您不是本{_G/setting/navs/3/navname}成員，不能邀請',
   'noperm_at_user' => '您沒有@用戶的權限',
   'thread_at_usernum_limit' => '本主題的@用戶數達到上限',
@@ -607,6 +613,8 @@ $lang = array (
   'diy_backup_noexist' => '備份文件不存在',
   'diy_data_format_invalid' => '數據格式錯誤',
   'diy_no_export_data' => '沒有可以導出的數據',
+  'diy_export_no_data' => '此頁面無DIY數據',
+  'diy_export_tpl_invalid' => '指定的頁面標識不正確',
   'diy_operation_invalid' => '錯誤的操作',
   'diy_nopermission' => '抱歉，您沒有DIY權限',
 
@@ -654,8 +662,6 @@ $lang = array (
   'search_threadtype_invalid' => '抱歉，您尚未輸入要搜索的分類信息項目',
 
   'home_no_privilege' => '抱歉，您需要登錄後才能查看',
-
-  'thread_delete_succeed' => '主題刪除成功 ',
 
   'member_nonexistence' => '抱歉，指定的用戶不存在或被凍結',
 
@@ -735,14 +741,15 @@ $lang = array (
 
   'follow_not_follow_self' => '不能關注自己',
   'follow_other_unfollow' => '對方不允許您關注TA',
+  'follow_followed_ta' => '您已經收聽了TA',
   'follow_add_succeed' => '成功收聽',
   'follow_cancel_succeed' => '取消成功',
   'follow_not_assignation_user' => '未指定用戶',
   'follow_remark_succeed' => '備註成功',
   'follow_anonymous_unfollow' => '匿名帖子不允許被轉播',
   'follow_content_not_exist' => '轉播的內容不存在',
-  'follow_only_allow_the_relay_time' => '抱歉，第二次轉播必須同時進行回帖操作',
   'follow_input_word_limit' => '您輸入的轉播理由超過140個字',
+  'follow_only_allow_the_relay_time' => '抱歉，第二次轉播必須同時進行回帖操作',
   'relay_feed_success' => '轉播成功',
   'follow_specify_follow_not_exist' => '指定的廣播記錄不存在',
 

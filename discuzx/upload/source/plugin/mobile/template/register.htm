@@ -24,7 +24,7 @@
 </style>
 </head>
 <body>
-<form method="post" autocomplete="off" enctype="multipart/form-data" onsubmit="checksubmit();return false;" action="$_G[siteurl]mobile.php?module=register&version=$_G[mobile_version]&mobilemessage={$_GET[mobilemessage]}&mod=$_GET[mod]">
+<form method="post" autocomplete="off" enctype="multipart/form-data" action="$_G[siteurl]api/mobile/index.php?module=register&version=$_G[mobile_version]&mobilemessage={$_GET[mobilemessage]}&mod=$_GET[mod]">
 	<input type="hidden" name="regsubmit" value="yes" />
 	<input type="hidden" name="formhash" value="{FORMHASH}" />
 	<!--{if $_G['setting']['sendregisterurl']}-->
@@ -95,9 +95,9 @@
 	<!--{/loop}-->
 </ul>
 	<!--{if $seccodecheck || $secqaacheck}-->
-    	{eval $sechash = random(8);}
+		{eval $sechash = random(8);}
 		<input type="hidden" class="txt" name="sechash" value="$sechash" />
-    <ul>
+	<ul>
 		<!--{if $seccodecheck}-->
 			<li>
 				<label><strong>{lang mobile:seccode}:</strong></label>
@@ -105,10 +105,10 @@
 				<a href="javascript:;" onclick="updateseccode()">{lang mobile:change_seccode}</a>
 				<input type="text" class="txt" name="seccodeverify" />
 				<script type="text/javascript">
-                var updateseccode = function () {document.getElementById('seccode').innerHTML = '<img id="seccode" src="$_G[siteurl]mobile.php?module=seccode&sechash=$sechash&version={if empty($_GET['secversion'])}1{else}$_GET['secversion']{/if}&random=' + Math.random() + '" />';}
-                updateseccode();
-                </script>
-            </li>
+				var updateseccode = function () {document.getElementById('seccode').innerHTML = '<img id="seccode" src="$_G[siteurl]api/mobile/index.php?module=seccode&sechash=$sechash&mobile=no&version={if empty($_GET['secversion'])}1{else}$_GET['secversion']{/if}&random=' + Math.random() + '" />';}
+				updateseccode();
+				</script>
+			</li>
 		<!--{/if}-->
 		<!--{if $secqaacheck}-->
 			<li>
@@ -118,13 +118,14 @@
 				<input type="text" class="txt" name="secanswer" />
 			</li>
 		<!--{/if}-->
-        </ul>
+		</ul>
 	<!--{/if}-->
-    <ul>
-        <li class="submitbox">
-        	<button type="submit" id="registerformsubmit">{lang submit}</button>
-        </li>
-    </ul>
+	<ul>
+		<li class="submitbox">
+		<input type="hidden" name="agreebbrule" value="$bbrulehash" />
+			<button type="submit" id="registerformsubmit">{lang submit}</button>
+		</li>
+	</ul>
 	</div>
 </div>
 </form>

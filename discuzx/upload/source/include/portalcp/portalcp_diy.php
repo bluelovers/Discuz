@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portalcp_diy.php 27332 2012-01-16 09:24:24Z zhangguosheng $
+ *      $Id: portalcp_diy.php 28705 2012-03-08 07:21:19Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -290,7 +290,11 @@ if($op == 'blockclass') {
 				}
 				echo $str;
 				exit();
+			} else {
+				showmessage('diy_export_no_data','/');
 			}
+		} else {
+			showmessage('diy_export_tpl_invalid','/');
 		}
 	}
 	showmessage('diy_operation_invalid','/');

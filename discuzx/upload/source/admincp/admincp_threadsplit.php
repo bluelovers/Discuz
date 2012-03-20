@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_threadsplit.php 26205 2011-12-05 10:09:32Z zhangguosheng $
+ *      $Id: admincp_threadsplit.php 28688 2012-03-08 03:37:15Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -384,9 +384,7 @@ EOT;
 				'posts' => $row['posts'],
 			), false, true);
 			if($row['threads'] > 0) {
-				DB::update('forum_forum', array(
-					'archive' => '1',
-				), "fid='{$row['fid']}'");
+				C::t('forum_forum')->update($row['fid'], array('archive' => '1'));
 			}
 		}
 		$nextstep = $step + 1;

@@ -1918,7 +1918,7 @@ body { background: #FFF none !important; }
 	.flw_uheader .flw_linktohome { padding: 0 0 0 20px; background-position: 0 3px; }
 
 /* 回復區域 */
-.flw_replybox { margin: -11px 0 20px 80px; padding: 15px 20px; box-shadow: 0 1px 0 rgba(0,0,0,0.05); border: 1px solid #DBDBDB; background: #F4F7F9; background: #E9EEF1; }
+.flw_replybox { margin: -11px 0 20px 70px; padding: 15px 20px; box-shadow: 0 1px 0 rgba(0,0,0,0.05); border: 1px solid #DBDBDB; background: #E9EEF1; }
 	.flw_replybox li { padding: 10px 80px 10px 0; border-top: 1px solid #DBE2E6; }
 		.flw_replybox li .d { margin-right: 10px; }
 	.flw_replybox .px, .flw_autopt { border: 1px solid #CCDBE5; border-radius: 4px; background: #FFF url({IMGDIR}/input_shadow.png) repeat-x 0 0; }
@@ -1957,7 +1957,7 @@ body { background: #FFF none !important; }
 		.my_flw_stats .xg1 { padding-right: 10px; }
 
 .ie6 .tb .a { position: static; }
-#flw_bar .fpd { position: relative; }
+#flw_bar .fpd { position: relative; zoom: 1; }
 .ie6 #flw_bar object { position: absolute; }
 
 /*

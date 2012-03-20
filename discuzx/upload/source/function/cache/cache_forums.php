@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_forums.php 26847 2011-12-26 06:10:43Z chenmengshu $
+ *      $Id: cache_forums.php 28876 2012-03-16 04:43:25Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -15,13 +15,6 @@ function build_cache_forums() {
 	$data = array();
 	$forums = C::t('forum_forum')->fetch_all_forum();
 	$pluginvalue = $forumlist = array();
-	$nopermdefault = array(
-		'viewperm' => array(),
-		'getattachperm' => array(),
-		'postperm' => array(7),
-		'replyperm' => array(7),
-		'postattachperm' => array(7),
-	);
 	$pluginvalue = pluginsettingvalue('forums');
 
 	$forumnoperms = array();

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: post_editpost.php 28080 2012-02-22 06:44:16Z zhengqingpeng $
+ *      $Id: post_editpost.php 28760 2012-03-12 07:35:10Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -29,7 +29,7 @@ if($_G['setting']['magicstatus']) {
 
 $isfirstpost = $orig['first'] ? 1 : 0;
 $isorigauthor = $_G['uid'] && $_G['uid'] == $orig['authorid'];
-$isanonymous = $_G['group']['allowanonymous'] && getgpc('isanonymous') ? 1 : 0;
+$isanonymous = ($_G['group']['allowanonymous'] || $orig['anonymous']) && getgpc('isanonymous') ? 1 : 0;
 $audit = $orig['invisible'] == -2 || $thread['displayorder'] == -2 ? $_GET['audit'] : 0;
 
 if(empty($orig)) {
@@ -538,7 +538,7 @@ if(!submitcheck('editsubmit')) {
 					if($_G['forum_optionlist'][$optionid]['type'] == 'image') {
 						$identifier = $_G['forum_optionlist'][$optionid]['identifier'];
 						$newsortaid = intval($_GET['typeoption'][$identifier]['aid']);
-						if($newsortaid && $newsortaid != $_GET['oldsortaid'][$identifier]) {
+						if($newsortaid && $_GET['oldsortaid'][$identifier] && $newsortaid != $_GET['oldsortaid'][$identifier]) {
 							$attach = C::t('forum_attachment_n')->fetch('tid:'.$_G['tid'], $_GET['oldsortaid'][$identifier]);
 							C::t('forum_attachment')->delete($_GET['oldsortaid'][$identifier]);
 							C::t('forum_attachment_n')->delete('tid:'.$_G['tid'], $_GET['oldsortaid'][$identifier]);
@@ -794,7 +794,7 @@ if(!submitcheck('editsubmit')) {
 					showmessage('tread_please_number');
 				}
 
-				if($trade['aid'] != $_GET['tradeaid']) {
+				if($trade['aid'] && $_GET['tradeaid'] && $trade['aid'] != $_GET['tradeaid']) {
 					$attach = C::t('forum_attachment_n')->fetch('tid:'.$_G['tid'], $trade['aid']);
 					C::t('forum_attachment')->delete($trade['aid']);
 					C::t('forum_attachment_n')->delete('tid:'.$_G['tid'], $trade['aid']);
@@ -832,7 +832,7 @@ if(!submitcheck('editsubmit')) {
 		if($special == 4 && $isfirstpost && $_G['group']['allowpostactivity']) {
 			$activity = C::t('forum_activity')->fetch($_G['tid']);
 			$activityaid = $activity['aid'];
-			if($activityaid != $_GET['activityaid']) {
+			if($activityaid && $_GET['activityaid'] && $activityaid != $_GET['activityaid']) {
 				$attach = C::t('forum_attachment_n')->fetch('tid:'.$_G['tid'], $activityaid);
 				C::t('forum_attachment')->delete($activityaid);
 				C::t('forum_attachment_n')->delete('tid:'.$_G['tid'], $activityaid);

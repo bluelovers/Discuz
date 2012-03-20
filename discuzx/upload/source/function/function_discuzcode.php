@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_discuzcode.php 27534 2012-02-03 06:18:27Z monkey $
+ *      $Id: function_discuzcode.php 28663 2012-03-07 05:50:37Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -241,19 +241,6 @@ function discuzcode($message, $smileyoff, $bbcodeoff, $htmlon = 0, $allowsmilies
 		$message = str_replace("[\tDISCUZ_CODE_$i\t]", $_G['forum_discuzcode']['codehtml'][$i], $message);
 	}
 
-	if(!empty($_GET['highlight'])) {
-		$highlightarray = explode('+', $_GET['highlight']);
-		$sppos = strrpos($message, chr(0).chr(0).chr(0));
-		if($sppos !== FALSE) {
-			$specialextra = substr($message, $sppos + 3);
-			$message = substr($message, 0, $sppos);
-		}
-		$message = preg_replace(array("/(^|>)([^<]+)(?=<|$)/sUe", "/<highlight>(.*)<\/highlight>/siU"), array("highlightword('\\2', \$highlightarray, '\\1')", "<strong><font color=\"#FF0000\">\\1</font></strong>"), $message);
-		if($sppos !== FALSE) {
-			$message = $message.chr(0).chr(0).chr(0).$specialextra;
-		}
-	}
-
 	unset($msglower);
 
 	if($jammer) {
@@ -469,11 +456,12 @@ function parseflv($url, $width = 0, $height = 0) {
 	if($lowerurl != str_replace(array('player.youku.com/player.php/sid/','tudou.com/v/','player.ku6.com/refer/'), '', $lowerurl)) {
 		$flv = $url;
 	} elseif(strpos($lowerurl, 'v.youku.com/v_show/') !== FALSE) {
+		$ctx = stream_context_create(array('http' => array('timeout' => 10)));
 		if(preg_match("/http:\/\/v.youku.com\/v_show\/id_([^\/]+)(.html|)/i", $url, $matches)) {
 			$flv = 'http://player.youku.com/player.php/sid/'.$matches[1].'/v.swf';
 			if(!$width && !$height) {
 				$api = 'http://v.youku.com/player/getPlayList/VideoIDS/'.$matches[1];
-				$str = stripslashes(file_get_contents($api));
+				$str = stripslashes(file_get_contents($api, false, $ctx));
 				if(!empty($str) && preg_match("/\"logo\":\"(.+?)\"/i", $str, $image)) {
 					$url = substr($image[1], 0, strrpos($image[1], '/')+1);
 					$filename = substr($image[1], strrpos($image[1], '/')+2);
@@ -485,7 +473,7 @@ function parseflv($url, $width = 0, $height = 0) {
 		if(preg_match("/http:\/\/(www.)?tudou.com\/programs\/view\/([^\/]+)/i", $url, $matches)) {
 			$flv = 'http://www.tudou.com/v/'.$matches[2];
 			if(!$width && !$height) {
-				$str = file_get_contents($url);
+				$str = file_get_contents($url, false, $ctx);
 				if(!empty($str) && preg_match("/<span class=\"s_pic\">(.+?)<\/span>/i", $str, $image)) {
 					$imgurl = trim($image[1]);
 				}
@@ -496,7 +484,7 @@ function parseflv($url, $width = 0, $height = 0) {
 			$flv = 'http://player.ku6.com/refer/'.$matches[1].'/v.swf';
 			if(!$width && !$height) {
 				$api = 'http://vo.ku6.com/fetchVideo4Player/1/'.$matches[1].'.html';
-				$str = file_get_contents($api);
+				$str = file_get_contents($api, false, $ctx);
 				if(!empty($str) && preg_match("/\"picpath\":\"(.+?)\"/i", $str, $image)) {
 					$imgurl = str_replace(array('\u003a', '\u002e'), array(':', '.'), $image[1]);
 				}
@@ -507,7 +495,7 @@ function parseflv($url, $width = 0, $height = 0) {
 			$flv = 'http://player.ku6.com/refer/'.$matches[1].'/v.swf';
 			if(!$width && !$height) {
 				$api = 'http://vo.ku6.com/fetchVideo4Player/1/'.$matches[1].'.html';
-				$str = file_get_contents($api);
+				$str = file_get_contents($api, false, $ctx);
 				if(!empty($str) && preg_match("/\"picpath\":\"(.+?)\"/i", $str, $image)) {
 					$imgurl = str_replace(array('\u003a', '\u002e'), array(':', '.'), $image[1]);
 				}
@@ -517,7 +505,7 @@ function parseflv($url, $width = 0, $height = 0) {
 		if(preg_match("/http:\/\/www.youtube.com\/watch\?v=([^\/&]+)&?/i", $url, $matches)) {
 			$flv = 'http://www.youtube.com/v/'.$matches[1].'&hl=zh_CN&fs=1';
 			if(!$width && !$height) {
-				$str = file_get_contents($url);
+				$str = file_get_contents($url, false, $ctx);
 				if(!empty($str) && preg_match("/'VIDEO_HQ_THUMB':\s'(.+?)'/i", $str, $image)) {
 					$url = substr($image[1], 0, strrpos($image[1], '/')+1);
 					$filename = substr($image[1], strrpos($image[1], '/')+3);
@@ -529,7 +517,7 @@ function parseflv($url, $width = 0, $height = 0) {
 		if(preg_match("/http:\/\/tv.mofile.com\/([^\/]+)/i", $url, $matches)) {
 			$flv = 'http://tv.mofile.com/cn/xplayer.swf?v='.$matches[1];
 			if(!$width && !$height) {
-				$str = file_get_contents($url);
+				$str = file_get_contents($url, false, $ctx);
 				if(!empty($str) && preg_match("/thumbpath=\"(.+?)\";/i", $str, $image)) {
 					$imgurl = trim($image[1]);
 				}
@@ -539,7 +527,7 @@ function parseflv($url, $width = 0, $height = 0) {
 		if(preg_match("/http:\/\/v.mofile.com\/show\/([^\/]+).shtml/i", $url, $matches)) {
 			$flv = 'http://tv.mofile.com/cn/xplayer.swf?v='.$matches[1];
 			if(!$width && !$height) {
-				$str = file_get_contents($url);
+				$str = file_get_contents($url, false, $ctx);
 				if(!empty($str) && preg_match("/thumbpath=\"(.+?)\";/i", $str, $image)) {
 					$imgurl = trim($image[1]);
 				}
@@ -550,7 +538,7 @@ function parseflv($url, $width = 0, $height = 0) {
 			$flv = 'http://vhead.blog.sina.com.cn/player/outer_player.swf?vid='.$matches[1];
 			if(!$width && !$height) {
 				$api = 'http://interface.video.sina.com.cn/interface/common/getVideoImage.php?vid='.$matches[1];
-				$str = file_get_contents($api);
+				$str = file_get_contents($api, false, $ctx);
 				if(!empty($str)) {
 					$imgurl = str_replace('imgurl=', '', trim($str));
 				}
@@ -561,7 +549,7 @@ function parseflv($url, $width = 0, $height = 0) {
 			$flv = 'http://vhead.blog.sina.com.cn/player/outer_player.swf?vid='.$matches[1];
 			if(!$width && !$height) {
 				$api = 'http://interface.video.sina.com.cn/interface/common/getVideoImage.php?vid='.$matches[1];
-				$str = file_get_contents($api);
+				$str = file_get_contents($api, false, $ctx);
 				if(!empty($str)) {
 					$imgurl = str_replace('imgurl=', '', trim($str));
 				}
@@ -572,7 +560,7 @@ function parseflv($url, $width = 0, $height = 0) {
 			$flv = 'http://v.blog.sohu.com/fo/v4/'.$matches[1];
 			if(!$width && !$height) {
 				$api = 'http://v.blog.sohu.com/videinfo.jhtml?m=view&id='.$matches[1].'&outType=3';
-				$str = file_get_contents($api);
+				$str = file_get_contents($api, false, $ctx);
 				if(!empty($str) && preg_match("/\"cutCoverURL\":\"(.+?)\"/i", $str, $image)) {
 					$imgurl = str_replace(array('\u003a', '\u002e'), array(':', '.'), $image[1]);
 				}
@@ -583,14 +571,14 @@ function parseflv($url, $width = 0, $height = 0) {
 			$flv = 'http://v.blog.sohu.com/fo/v4/'.$matches[1];
 			if(!$width && !$height) {
 				$api = 'http://v.blog.sohu.com/videinfo.jhtml?m=view&id='.$matches[1].'&outType=3';
-				$str = file_get_contents($api);
+				$str = file_get_contents($api, false, $ctx);
 				if(!empty($str) && preg_match("/\"cutCoverURL\":\"(.+?)\"/i", $str, $image)) {
 					$imgurl = str_replace(array('\u003a', '\u002e'), array(':', '.'), $image[1]);
 				}
 			}
 		}
 	} elseif(strpos($lowerurl, 'http://www.ouou.com/fun_funview') !== FALSE) {
-		$str = file_get_contents($url);
+		$str = file_get_contents($url, false, $ctx);
 		if(!empty($str) && preg_match("/var\sflv\s=\s'(.+?)';/i", $str, $matches)) {
 			$flv = $_G['style']['imgdir'].'/flvplayer.swf?&autostart=true&file='.urlencode($matches[1]);
 			if(!$width && !$height && preg_match("/var\simga=\s'(.+?)';/i", $str, $image)) {
@@ -607,7 +595,7 @@ function parseflv($url, $width = 0, $height = 0) {
 		}
 		if(!$width && !$height && !empty($matches[1])) {
 			$api = 'http://vxml.56.com/json/'.str_replace('v_', '', $matches[1]).'/?src=out';
-			$str = file_get_contents($api);
+			$str = file_get_contents($api, false, $ctx);
 			if(!empty($str) && preg_match("/\"img\":\"(.+?)\"/i", $str, $image)) {
 				$imgurl = trim($image[1]);
 			}

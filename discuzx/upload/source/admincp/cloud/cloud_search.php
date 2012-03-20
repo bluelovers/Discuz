@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cloud_search.php 26954 2011-12-28 06:40:25Z yangli $
+ *      $Id: cloud_search.php 28739 2012-03-09 08:49:13Z yangli $
  */
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
@@ -22,7 +22,7 @@ if(preg_match('/^[a-z|A-Z|\d]+$/', $anchor)) {
 
 	$cp_version = $_G['setting']['my_search_data']['cp_version'];
 
-	$params = array('link_url' => 'admin.php?action=cloud&operation=search', 'cp_version' => $cp_version, 'anchor' => $anchor);
+	$params = array('link_url' => ADMINSCRIPT . '?action=cloud&operation=search', 'cp_version' => $cp_version, 'anchor' => $anchor);
 
 	$signUrl = $utilService->generateSiteSignUrl($params);
 

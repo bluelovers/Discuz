@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: discuz_table.php 28455 2012-03-01 04:55:11Z zhangguosheng $
+ *      $Id: discuz_table.php 28628 2012-03-06 09:33:10Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -139,7 +139,7 @@ class discuz_table extends discuz_base
 	public function fetch_cache($ids, $pre_cache_key = null) {
 		$data = false;
 		if($this->_allowmem) {
-			$pre_cache_key  = $pre_cache_key !== null ? $pre_cache_key : $this->_pre_cache_key;
+			if($pre_cache_key === null)	$pre_cache_key = $this->_pre_cache_key;
 			$data = memory('get', $ids, $pre_cache_key);
 		}
 		return $data;
@@ -148,8 +148,8 @@ class discuz_table extends discuz_base
 	public function store_cache($id, $data, $cache_ttl = null, $pre_cache_key = null) {
 		$ret = false;
 		if($this->_allowmem) {
-			$cache_ttl  = $cache_ttl !== null ? $cache_ttl : $this->_cache_ttl;
-			$pre_cache_key  = $pre_cache_key !== null ? $pre_cache_key : $this->_pre_cache_key;
+			if($pre_cache_key === null)	$pre_cache_key = $this->_pre_cache_key;
+			if($cache_ttl === null)	$cache_ttl = $this->_cache_ttl;
 			$ret = memory('set', $id, $data, $cache_ttl, $pre_cache_key);
 		}
 		return $ret;
@@ -158,7 +158,7 @@ class discuz_table extends discuz_base
 	public function clear_cache($ids, $pre_cache_key = null) {
 		$ret = false;
 		if($this->_allowmem) {
-			$pre_cache_key  = $pre_cache_key !== null ? $pre_cache_key : $this->_pre_cache_key;
+			if($pre_cache_key === null)	$pre_cache_key = $this->_pre_cache_key;
 			$ret = memory('rm', $ids, $pre_cache_key);
 		}
 		return $ret;
@@ -167,7 +167,8 @@ class discuz_table extends discuz_base
 	public function update_cache($id, $data, $cache_ttl = null, $pre_cache_key = null) {
 		$ret = false;
 		if($this->_allowmem) {
-			$pre_cache_key  = $pre_cache_key !== null ? $pre_cache_key : $this->_pre_cache_key;
+			if($pre_cache_key === null)	$pre_cache_key = $this->_pre_cache_key;
+			if($cache_ttl === null)	$cache_ttl = $this->_cache_ttl;
 			if(($_data = memory('get', $id, $pre_cache_key)) !== false) {
 				$ret = $this->store_cache($id, array_merge($_data, $data), $cache_ttl, $pre_cache_key);
 			}
@@ -178,7 +179,8 @@ class discuz_table extends discuz_base
 	public function update_batch_cache($ids, $data, $cache_ttl = null, $pre_cache_key = null) {
 		$ret = false;
 		if($this->_allowmem) {
-			$pre_cache_key  = $pre_cache_key !== null ? $pre_cache_key : $this->_pre_cache_key;
+			if($pre_cache_key === null)	$pre_cache_key = $this->_pre_cache_key;
+			if($cache_ttl === null)	$cache_ttl = $this->_cache_ttl;
 			if(($_data = memory('get', $ids, $pre_cache_key)) !== false) {
 				foreach($_data as $id => $value) {
 					$ret = $this->store_cache($id, array_merge($value, $data), $cache_ttl, $pre_cache_key);

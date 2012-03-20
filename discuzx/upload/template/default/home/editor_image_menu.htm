@@ -114,7 +114,7 @@
 							<script type="text/javascript">
 								var attachUpload = new SWFUpload({
 									// Backend Settings
-									upload_url: "{$_G[siteroot]}misc.php?mod=swfupload&action=swfupload&operation=<!--{if $_G['basescript'] == 'portal'}-->portal<!--{else}-->album<!--{/if}-->",
+									upload_url: "{$_G[siteurl]}misc.php?mod=swfupload&action=swfupload&operation=<!--{if $_G['basescript'] == 'portal'}-->portal<!--{else}-->album<!--{/if}-->",
 									post_params: {"uid" : "$_G[uid]", "hash":"$swfconfig[hash]"<!--{if $_G['basescript'] == 'portal'}-->,"aid":$aid,"catid":$catid<!--{/if}-->},
 
 									// File Upload Settings
@@ -154,10 +154,6 @@
 									button_text: '',
 									button_window_mode: "transparent",
 
-									// Flash Settings
-									flash_url : IMGDIR+"/swfupload.swf",
-									flash9_url : IMGDIR+"/swfupload_fp9.swf",
-
 									custom_settings : {
 										progressTarget : "fsUploadProgress",
 										uploadSource: 'portal',
@@ -196,7 +192,7 @@
 <script type="text/javascript">
 	var upload = new SWFUpload({
 		// Backend Settings
-		upload_url: "{$_G[siteroot]}misc.php?mod=swfupload&action=swfupload&operation=<!--{if $_G['basescript'] == 'portal'}-->portal<!--{else}-->album<!--{/if}-->",
+		upload_url: "{$_G[siteurl]}misc.php?mod=swfupload&action=swfupload&operation=<!--{if $_G['basescript'] == 'portal'}-->portal<!--{else}-->album<!--{/if}-->",
 		post_params: {"uid" : "$_G[uid]", "hash":"$swfconfig[hash]"<!--{if $_G['basescript'] == 'portal'}-->,"aid":$aid,"catid":$catid<!--{/if}-->},
 
 		// File Upload Settings
@@ -230,10 +226,6 @@
 		//button_text: '<span class="button">上傳</span>',
 		button_text: '',
 		button_window_mode: "transparent",
-
-		// Flash Settings
-		flash_url : IMGDIR+"/swfupload.swf",
-		flash9_url : IMGDIR+"/swfupload_fp9.swf",
 
 		custom_settings : {
 			progressTarget : "imgUploadProgress",

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_core.php 27823 2012-02-15 06:40:26Z zhangguosheng $
+ *      $Id: class_core.php 28824 2012-03-14 06:41:27Z zhangguosheng $
  */
 
 error_reporting(E_ALL);
@@ -101,13 +101,13 @@ class core
 
 	public static function handleError($errno, $errstr, $errfile, $errline) {
 		if($errno & DISCUZ_CORE_DEBUG) {
-			helper_log::coredebuglog($errno, $errstr, $errfile, $errline);
+			discuz_error::system_error($errstr, false, true, false);
 		}
 	}
 
 	public static function handleShutdown() {
 		if(($error = error_get_last()) && $error['type'] & DISCUZ_CORE_DEBUG) {
-			helper_log::coredebuglog($error['type'], $error['message'], $error['file'], $error['line']);
+			discuz_error::system_error($error['message'], false, true, false);
 		}
 	}
 

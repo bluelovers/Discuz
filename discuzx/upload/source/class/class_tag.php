@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_tag.php 27654 2012-02-09 03:20:55Z svn_project_zhangjie $
+ *      $Id: class_tag.php 28830 2012-03-14 08:30:08Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -97,6 +97,17 @@ class tag
 			}
 		}
 		return $tagstr;
+	}
+
+	public function copy_tag($oldid, $newid, $idtype = 'tid') {
+		$results = C::t('common_tagitem')->select(0, $oldid, $idtype);
+		foreach($results as $result) {
+			C::t('common_tagitem')->insert(array(
+					'tagid' => $result['tagid'],
+					'itemid' => $newid,
+					'idtype' => $idtype
+			));
+		}
 	}
 
 	public function merge_tag($tagidarray, $newtag, $idtype = '') {

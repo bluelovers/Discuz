@@ -3,7 +3,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_imgcropper.php 25889 2011-11-24 09:52:20Z monkey $
+ *      $Id: misc_imgcropper.php 28859 2012-03-15 07:09:05Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -43,7 +43,9 @@ if(!submitcheck('imgcroppersubmit')) {
 
 	require_once libfile('class/image');
 	$image = new image();
-	$image->Thumb($_G['setting']['attachurl'].'/'.$_GET['cutimg'], $cropfile, $picwidth, $picheight);
+	if(!$image->Thumb($_G['setting']['attachurl'].$_GET['cutimg'], $cropfile, $picwidth, $picheight)) {
+		showmessage('imagepreview_errorcode_'.$image->errorcode, null, null, array('showdialog' => true, 'closetime' => true));
+	}
 	$image->Cropper($image->target, $cropfile, $cutwidth, $cutheight, $left, $top);
 	showmessage('do_success', dreferer(), array('icurl' => $cropfile), array('showdialog' => true, 'closetime' => true));
 }

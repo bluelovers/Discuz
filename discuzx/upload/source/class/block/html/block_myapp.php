@@ -4,14 +4,14 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: block_myapp.php 27184 2012-01-10 07:43:31Z zhangguosheng $
+ *      $Id: block_myapp.php 28626 2012-03-06 09:10:25Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
-class block_myapp {
+class block_myapp extends discuz_block{
 
 	var $setting = array();
 

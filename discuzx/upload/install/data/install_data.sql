@@ -574,6 +574,7 @@ INSERT INTO pre_common_setting VALUES ('newbie', '20');
 INSERT INTO pre_common_setting VALUES ('collectionteamworkernum', '3');
 INSERT INTO pre_common_setting VALUES ('collectionnum', '10');
 INSERT INTO pre_common_setting VALUES ('blockmaxaggregationitem','20000');
+INSERT INTO pre_common_setting VALUES ('moddetail','0');
 
 INSERT INTO pre_common_smiley VALUES ('1','1','1','smiley',':)','smile.gif');
 INSERT INTO pre_common_smiley VALUES ('2','1','2','smiley',':(','sad.gif');

@@ -4,7 +4,7 @@
  *		[Discuz! X] (C)2001-2099 Comsenz Inc.
  *		This is NOT a freeware, use is subject to license terms
  *
- *		$Id: security.class.php 28519 2012-03-02 03:23:38Z songlixin $
+ *		$Id: security.class.php 28728 2012-03-09 03:15:48Z songlixin $
  */
 
 

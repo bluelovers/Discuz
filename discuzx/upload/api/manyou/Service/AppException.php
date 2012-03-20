@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: AppException.php 25510 2011-11-14 02:22:26Z yexinhao $
+ *      $Id: AppException.php 28702 2012-03-08 06:43:58Z yexinhao $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -14,7 +14,7 @@ if(!defined('IN_DISCUZ')) {
 class Cloud_Service_AppException extends Exception {
 
 	public function __construct($message, $code = 0) {
-		if (is_a($message, 'Exception')) {
+		if ($message instanceof Exception) {
 			parent::__construct($message->getMessage(), intval($message->getCode()));
 		} else {
 			parent::__construct($message, intval($code));

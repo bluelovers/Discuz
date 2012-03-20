@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_message.php 27222 2012-01-11 08:01:39Z monkey $
+ *      $Id: function_message.php 28834 2012-03-14 08:43:55Z houdelei $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -135,6 +135,7 @@ function dshowmessage($message, $url_forward = '', $values = array(), $extrapara
 	}
 	if($_G['connectguest']) {
 		$param['login'] = false;
+		$param['alert'] = 'info';
 		$show_message = str_replace(lang('forum/misc', 'connectguest_message_search'), lang('forum/misc', 'connectguest_message_replace'), $show_message);
 	}
 	if($param['msgtype'] == 2 && $param['login']) {

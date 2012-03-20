@@ -1,10 +1,10 @@
 <?php
 
 /**
- *      [Discuz!] (C)2001-2099 Comsenz Inc.
- *      This is NOT a freeware, use is subject to license terms
+ *		[Discuz!] (C)2001-2099 Comsenz Inc.
+ *		This is NOT a freeware, use is subject to license terms
  *
- *      $Id: Connect.php 27709 2012-02-13 03:13:04Z zhouxiaobo $
+ *		$Id: Connect.php 28748 2012-03-12 01:49:50Z songlixin $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -13,6 +13,8 @@ if(!defined('IN_DISCUZ')) {
 
 class Cloud_Service_Connect {
 
+
+	const SPECIAL_GID = 7;
 	protected static $_instance;
 
 	public $state = '';
@@ -84,7 +86,7 @@ class Cloud_Service_Connect {
 		return $jsurl;
 	}
 
-	function connectUserBindParams() {
+	public function connectUserBindParams() {
 		global $_G;
 
 		$this->connectMergeMember();
@@ -135,7 +137,7 @@ class Cloud_Service_Connect {
 		return $params;
 	}
 
-	function connectFeedResendJs() {
+	public function connectFeedResendJs() {
 		global $_G;
 
 		$jsname = $_G['cookie']['connect_js_name'];
@@ -153,15 +155,45 @@ class Cloud_Service_Connect {
 		return $jsurl;
 	}
 
+	public function connectGuestPtloginJs() {
+		global $_G;
 
-	function connectGetSigKey() {
+		$jsname = $_G['cookie']['connect_js_name'];
+		$openid = authcode($_G['cookie']['con_auth_hash']);
+		if($jsname != 'guest_ptlogin' || !$openid) {
+			return false;
+		}
+
+		$params = array(
+			'oauth_consumer_key' => $_G['setting']['connectappid'],
+			'openid' => $openid,
+			'ts' => TIMESTAMP
+		);
+		$params['sig'] = $this->connectGetSig($params, $this->connectGetSigKey());
+
+		$utilService = Cloud::loadClass('Service_Util');
+		$jsurl = $_G['connect']['url'] . '/notify/user/login';
+		$jsurl .= '?' . $utilService->httpBuildQuery($params, '', '&');
+
+		dsetcookie('connect_js_name');
+
+		return $jsurl;
+	}
+
+	public function connectCookieLoginJs() {
+		global $_G;
+
+		return $ajaxUrl = 'connect.php?mod=check&op=cookie';
+	}
+
+	public function connectGetSigKey() {
 		global $_G;
 
 		return $_G['setting']['connectappid'] . '|' . $_G['setting']['connectappkey'];
 	}
 
 
-	function connectGetSig($params, $app_key) {
+	public function connectGetSig($params, $app_key) {
 		ksort($params);
 		$base_string = '';
 		foreach($params as $key => $value) {
@@ -171,7 +203,7 @@ class Cloud_Service_Connect {
 		return md5($base_string);
 	}
 
-	function connectParseBbcode($bbcode, $fId, $pId, $isHtml, &$attachImages) {
+	public function connectParseBbcode($bbcode, $fId, $pId, $isHtml, &$attachImages) {
 		include_once libfile('function/discuzcode');
 
 		$result = preg_replace('/\[hide(=\d+)?\].+?\[\/hide\](\r\n|\n|\r)/i', '', $bbcode);
@@ -183,15 +215,20 @@ class Cloud_Service_Connect {
 		return $result;
 	}
 
-	function connectParseAttach($content, $fId, $pId, &$attachImages) {
+	public function connectParseAttach($content, $fId, $pId, &$attachImages) {
 		global $_G;
+
+		$permissions = $this->connectGetUserGroupPermissions(self::SPECIAL_GID, $fId);
+		$visitorPermission = $permissions[self::SPECIAL_GID];
 
 		$attachIds = array();
 		$attachImages = array ();
-		$query = DB :: query("SELECT aid, remote, attachment, filename, isimage, readperm, price FROM ".DB :: table(getattachtablebypid($pId))." WHERE pid='$pId'");
-		while ($attach = DB :: fetch($query)) {
+		$attachments = C::t('forum_attachment')->fetch_all_by_id('pid', $pId);
+		$attachments = C::t('forum_attachment_n')->fetch_all("pid:$pId", array_keys($attachments));
+
+		foreach ($attachments as $k => $attach) {
 			$aid = $attach['aid'];
-			if($attach['isimage'] == 0 || $attach['price'] > 0 || $attach['readperm'] > 0 || in_array($attach['aid'], $attachIds)) {
+			if($attach['isimage'] == 0 || $attach['price'] > 0 || $attach['readperm'] > $visitorPermission['readPermission'] || in_array($fId, $visitorPermission['forbidViewAttachForumIds']) || in_array($attach['aid'], $attachIds)) {
 				continue;
 			}
 
@@ -218,10 +255,11 @@ class Cloud_Service_Connect {
 			$attachImages[] = $imageItem;
 		}
 		$content = preg_replace('/\[attach\](\d+)\[\/attach\]/ie', '$this->connectParseAttachTag(\\1, $attachNames)', $content);
+
 		return $content;
 	}
 
-	function connectParseAttachTag($attachId, $attachNames) {
+	public function connectParseAttachTag($attachId, $attachNames) {
 		include_once libfile('function/discuzcode');
 		if(array_key_exists($attachId, $attachNames)) {
 			return '<span class="attach"><a href="'.$_G['siteurl'].'/attachment.php?aid='.aidencode($attachId).'">'.$attachNames[$attachId].'</a></span>';
@@ -229,7 +267,74 @@ class Cloud_Service_Connect {
 		return '';
 	}
 
-	function connectOutputPhp($url, $postData = '') {
+	function connectGetUserGroupPermissions($gid, $fid) {
+		global $_G;
+
+		loadcache('usergroups');
+		$fields = array (
+			'groupid' => 'userGroupId',
+			'grouptitle' => 'userGroupName',
+			'readaccess' => 'readPermission',
+			'allowvisit' => 'allowVisit'
+		);
+		$userGroup = C::t('common_usergroup')->fetch_all($gid);
+		$userGroupInfo = array();
+		foreach ($userGroup as $id => $value) {
+			$userGroupInfo[$id] = array_merge($value, $_G['cache']['usergroups'][$id]);
+			$userGroupInfo[$id]['forbidForumIds'] = array ();
+			$userGroupInfo[$id]['allowForumIds'] = array ();
+			$userGroupInfo[$id]['specifyAllowForumIds'] = array ();
+			$userGroupInfo[$id]['allowViewAttachForumIds'] = array ();
+			$userGroupInfo[$id]['forbidViewAttachForumIds'] = array ();
+			foreach ($fields as $k => $v) {
+				$userGroupInfo[$id][$v] = $userGroupInfo[$id][$k];
+			}
+		}
+		$forumField = C::t('forum_forumfield')->fetch($fid);
+		$allowViewGroupIds = array ();
+		if($forumField['viewperm']) {
+			$allowViewGroupIds = explode("\t", $forumField['viewperm']);
+		}
+		$allowViewAttachGroupIds = array ();
+		if($forumField['getattachperm']) {
+			$allowViewAttachGroupIds = explode("\t", $forumField['getattachperm']);
+		}
+
+		foreach ($userGroupInfo as $groupId => $value) {
+			if($forumField['password']) {
+				$userGroupInfo[$groupId]['forbidForumIds'][] = $fid;
+				continue;
+			}
+			$perm = unserialize($forumField['formulaperm']);
+			if(is_array($perm)) {
+				if($perm[0] || $perm[1] || $perm['users']) {
+					$userGroupInfo[$groupId]['forbidForumIds'][] = $fid;
+					continue;
+				}
+			}
+
+			if(!$allowViewGroupIds) {
+				$userGroupInfo[$groupId]['allowForumIds'][] = $fid;
+			} elseif (!in_array($groupId, $allowViewGroupIds)) {
+				$userGroupInfo[$groupId]['forbidForumIds'][] = $fid;
+			} elseif (in_array($groupId, $allowViewGroupIds)) {
+				$userGroupInfo[$groupId]['allowForumIds'][] = $fid;
+				$userGroupInfo[$groupId]['specifyAllowForumIds'][] = $fid;
+			}
+
+			if(!$allowViewAttachGroupIds) {
+				$userGroupInfo[$groupId]['allowViewAttachForumIds'][] = $fid;
+			} elseif (!in_array($groupId, $allowViewAttachGroupIds)) {
+				$userGroupInfo[$groupId]['forbidViewAttachForumIds'][] = $fid;
+			} elseif (in_array($groupId, $allowViewGroupIds)) {
+				$userGroupInfo[$groupId]['allowViewAttachForumIds'][] = $fid;
+			}
+		}
+
+		return $userGroupInfo;
+	}
+
+	public function connectOutputPhp($url, $postData = '') {
 		global $_G;
 
 		$response = dfsockopen($url, 0, $postData, '', false, $_G['setting']['cloud_api_ip']);
@@ -237,7 +342,7 @@ class Cloud_Service_Connect {
 		return $result;
 	}
 
-	function connectJsOutputMessage($msg = '', $errMsg = '', $errCode = '') {
+	public function connectJsOutputMessage($msg = '', $errMsg = '', $errCode = '') {
 		$result = array (
 			'result' => $msg,
 			'errMessage' => $errMsg,
@@ -247,7 +352,7 @@ class Cloud_Service_Connect {
 		exit;
 	}
 
-	function _connectUrlencode($value) {
+	protected function _connectUrlencode($value) {
 
 		if (is_array($value)) {
 			foreach ($value as $k => $v) {
@@ -260,7 +365,7 @@ class Cloud_Service_Connect {
 		return $value;
 	}
 
-	function connectCookieLoginParams() {
+	public function connectCookieLoginParams() {
 		global $_G;
 
 		$this->connectMergeMember();
@@ -291,7 +396,26 @@ class Cloud_Service_Connect {
 		}
 	}
 
-	function connectAjaxOuputMessage($msg = '', $errCode = '') {
+	function connectAddCookieLogins() {
+		global $_G;
+
+		loadcache('connect_has_setting_count');
+		if (!$_G['cache']['connect_has_setting_count']) {
+			$times = C::t('common_setting')->fetch('connect_login_times');
+			C::t('common_setting')->update('connect_login_times', $times + 1);
+			savecache('connect_has_setting_count', '1');
+		} else {
+			C::t('common_setting')->update_count('connect_login_times', 1);
+		}
+
+		$life = 86400;
+		$current_date = date('Y-m-d');
+		dsetcookie('connect_last_report_time', $current_date, $life);
+
+		return true;
+	}
+
+	public function connectAjaxOuputMessage($msg = '', $errCode = '') {
 
 		@header("Content-type: text/html; charset=".CHARSET);
 
@@ -299,7 +423,7 @@ class Cloud_Service_Connect {
 		exit;
 	}
 
-	function connectUserUnbind($uin, $secet, $client_ip) {
+	public function connectUserUnbind($uin, $secet, $client_ip) {
 		global $_G;
 
 		$api_url = $_G['connect']['api_url'].'/connect/user/unbind';
@@ -321,7 +445,7 @@ class Cloud_Service_Connect {
 	}
 
 
-	function connectGetOauthSignature($url, $params, $method = 'POST', $oauth_token_secret = '') {
+	public function connectGetOauthSignature($url, $params, $method = 'POST', $oauth_token_secret = '') {
 
 		global $_G;
 
@@ -344,7 +468,7 @@ class Cloud_Service_Connect {
 		return $signature;
 	}
 
-	function connectGetOauthSignatureParams($extra = array ()) {
+	public function connectGetOauthSignatureParams($extra = array ()) {
 		global $_G;
 
 		$params = array (
@@ -361,7 +485,7 @@ class Cloud_Service_Connect {
 		return $params;
 	}
 
-	function _connectCustomHmac($algo, $data, $key, $raw_output = false) {
+	protected function _connectCustomHmac($algo, $data, $key, $raw_output = false) {
 		$algo = strtolower($algo);
 		$pack = 'H'.strlen($algo ('test'));
 		$size = 64;
@@ -384,14 +508,14 @@ class Cloud_Service_Connect {
 		return ($raw_output) ? pack($pack, $output) : $output;
 	}
 
-	function _connectGetNonce() {
+	protected function _connectGetNonce() {
 		$mt = microtime();
 		$rand = mt_rand();
 
 		return md5($mt.$rand);
 	}
 
-	function connectParseXml($contents, $getAttributes = true, $priority = 'tag') {
+	public function connectParseXml($contents, $getAttributes = true, $priority = 'tag') {
 		if (!$contents) {
 			return array();
 		}
@@ -502,15 +626,36 @@ class Cloud_Service_Connect {
 	}
 
 
-	function connectFilterUsername($username) {
+	public function connectFilterUsername($username) {
 		$username = str_replace(' ', '_', trim($username));
 		return cutstr($username, 15, '');
 	}
 
-	function connectErrlog($errno, $error) {
+	public function connectErrlog($errno, $error) {
+		return true;
+	}
+
+	function connectCookieLoginReport($loginTimes) {
 		global $_G;
-		writelog('errorlog', $_G['timestamp']."\t[QQConnect]".$errno." ".$error);
+
+		$utilService = Cloud::loadClass('Service_Util');
+		$response = '';
+
+		if ($loginTimes) {
+			$api_url = $_G['connect']['api_url'].'/connect/discuz/batchCookieReport';
+			$params = array (
+				'oauth_consumer_key' => $_G['setting']['connectappid'],
+				'login_times' => $loginTimes,
+				'date' => dgmdate(TIMESTAMP - 86400, 'Y-m-d'),
+				'ts' => TIMESTAMP,
+			);
+			$params['sig'] = $this->connectGetSig($params, $this->connectGetSigKey());
+
+			$response = $this->connectOutputPhp($api_url.'?', $utilService->httpBuildQuery($params, '', '&'));
+		} else {
+			$response = array('status' => 0);
+		}
+
+		return $response;
 	}
 }
-
-?>

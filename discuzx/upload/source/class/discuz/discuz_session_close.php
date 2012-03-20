@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: discuz_session_close.php 28357 2012-02-28 07:06:09Z zhangguosheng $
+ *      $Id: discuz_session_close.php 28628 2012-03-06 09:33:10Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -111,7 +111,7 @@ class discuz_session_close {
 			return $count;
 		}
 
-		$multiple = ($multiple = getglobal('setting/onlineguestsmultiple')) ? $multiple : 11;
+		if(!($multiple = getglobal('setting/onlineguestsmultiple'))) $multiple = 11;
 		$add = mt_rand(0, $multiple);
 		if($type == 2) {
 			return intval($count * $multiple) + $add - $count;

@@ -3,7 +3,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_domain.php 26548 2011-12-15 02:46:34Z chenmengshu $
+ *      $Id: admincp_domain.php 28741 2012-03-09 10:38:56Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -38,6 +38,9 @@ if($operation == 'app') {
 		showsubtitle(array('name', 'setting_domain_app_domain'));
 		$app = array();
 		foreach($appkeyarr as $key => $desc) {
+			if(in_array($key, array('portal', 'group')) && !helper_access::check_module($key) || ($key == 'home' && !helper_access::check_module('feed'))) {
+				continue;
+			}
 			showtablerow('', array('class="td25"', ''), array(
 					$desc,
 					"<input type=\"text\" class=\"txt\" style=\"width:50%;\" name=\"appnew[$key]\" value=\"".$_G['setting']['domain']['app'][$key]."\">".($key == 'mobile' ? cplang('setting_domain_app_mobile_tips') : '')
@@ -49,6 +52,7 @@ if($operation == 'app') {
 	} else {
 		$olddomain = $_G['setting']['domain']['app'];
 		$_G['setting']['domain']['app'] = array();
+		$appset = false;
 		foreach($_GET['appnew'] as $appkey => $domain) {
 			if(preg_match('/^((http|https|ftp):\/\/|\.)|(\/|\.)$/i', $domain)) {
 				cpmsg('setting_domain_http_error', '', 'error');
@@ -56,7 +60,13 @@ if($operation == 'app') {
 			if(!empty($domain) && in_array($domain, $_G['setting']['domain']['app'])) {
 				cpmsg('setting_domain_repeat_error', '', 'error');
 			}
+			if($appkey != 'default' && $domain) {
+				$appset = true;
+			}
 			$_G['setting']['domain']['app'][$appkey] = $domain;
+		}
+		if($appset && !$_G['setting']['domain']['app']['default']) {
+			cpmsg('setting_domain_need_default_error', '', 'error');
 		}
 
 		if($_GET['appnew']['mobile'] != $olddomain['mobile']) {
@@ -83,6 +93,9 @@ if($operation == 'app') {
 		showtableheader();
 		showsubtitle(array('name', 'setting_domain_app_domain'));
 		foreach($roottype as $type => $desc) {
+			if(in_array($type, array('topic', 'channel')) && !helper_access::check_module('portal') || ($type == 'home' && !$_G['setting']['homepagestyle']) || ($type == 'group' && !helper_access::check_module('group'))) {
+				continue;
+			}
 			$domainroot = $_G['setting']['domain']['root'][$type];
 			showtablerow('', array('class="td25"', ''), array(
 					$desc,

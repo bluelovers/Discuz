@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: mobile.class.php 28449 2012-03-01 04:12:13Z monkey $
+ *      $Id: mobile.class.php 28883 2012-03-16 07:55:31Z monkey $
  */
 
 class mobile_core {
@@ -34,13 +34,20 @@ class mobile_core {
 						$return[$key] = mobile_core::getvalues($value, $subkeys);
 					} else {
 						if(!empty($value) || !empty($_GET['debug']) || (is_numeric($value) && intval($value) === 0 )) {
-							$return[$key] = $value;
+							$return[$key] = is_array($value) ? mobile_core::arraystring($value) : (string)$value;
 						}
 					}
 				}
 			}
 		}
 		return $return;
+	}
+
+	function arraystring($array) {
+		foreach($array as $k => $v) {
+			$array[$k] = is_array($v) ? mobile_core::arraystring($v) : (string)$v;
+		}
+		return $array;
 	}
 
 	function variable($variables = array()) {
@@ -54,6 +61,7 @@ class mobile_core {
 			'groupid' => $_G['groupid'],
 			'formhash' => FORMHASH,
 			'ismoderator' => $_G['forum']['ismoderator'],
+			'readaccess' => $_G['group']['readaccess'],
 		);
 		if(!empty($_GET['submodule']) == 'checkpost') {
 			$apifile = 'source/plugin/mobile/api/'.$_GET['version'].'/sub_checkpost.php';
@@ -110,6 +118,7 @@ class base_plugin_mobile {
 		if(!empty($_GET['ppp'])) {
 			$_G['ppp'] = intval($_GET['ppp']);
 		}
+		$_G['siteurl'] = preg_replace('/api\/mobile\/$/', '', $_G['siteurl']);
 		$_G['setting']['msgforward'] = '';
 		$_G['setting']['cacheindexlife'] = $_G['setting']['cachethreadlife'] = false;
 		if(class_exists('mobile_api', 'common')) {
@@ -155,7 +164,9 @@ class base_plugin_mobile_misc extends base_plugin_mobile {
 			}
 			define('MOBILE_API_OUTPUT', 1);
 			$_G['disabledwidthauto'] = 1;
-			include template('mobile:mobile');exit;
+			define('TPL_DEFAULT', true);
+			include template('mobile:mobile');
+			exit;
 		}
 	}
 
@@ -167,11 +178,11 @@ class plugin_mobile_misc extends base_plugin_mobile_misc {}
 class mobileplugin_mobile extends base_plugin_mobile {
 	function global_header_mobile() {
 		$useragent = strtolower($_SERVER['HTTP_USER_AGENT']);
-		if(strpos($useragent, 'iphone') !== -1 || strpos($useragent, 'ios') !== -1) {
+		if(strpos($useragent, 'iphone') !== false || strpos($useragent, 'ios') !== false) {
 			return lang('plugin/mobile', 'mobile_tip_ios');
-		} elseif(strpos($useragent, 'android') !== -1) {
+		} elseif(strpos($useragent, 'android') !== false) {
 			return lang('plugin/mobile', 'mobile_tip_android');
-		} elseif(strpos($useragent, 'windows phone') !== -1) {
+		} elseif(strpos($useragent, 'windows phone') !== false) {
 			return lang('plugin/mobile', 'mobile_tip_wp7');
 		}
 	}

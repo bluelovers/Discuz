@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: connect_login.php 28346 2012-02-28 05:56:51Z zhouxiaobo $
+ *      $Id: connect_login.php 28808 2012-03-13 10:37:36Z houdelei $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -50,7 +50,12 @@ if($op == 'init') {
 	dsetcookie('con_request_token_secret', $request_token_secret);
 
 	$callback = $_G['connect']['callback_url'] . '&referer=' . urlencode($_GET['referer']) . (!empty($_GET['isqqshow']) ? '&isqqshow=yes' : '');
-	$redirect = $connectOAuthClient->getOAuthAuthorizeURL($request_token, $callback);;
+	$redirect = $connectOAuthClient->getOAuthAuthorizeURL($request_token, $callback);
+
+	if(defined('IN_MOBILE') || $_GET['oauth_style'] == 'mobile') {
+		$redirect .= '&oauth_style=mobile';
+	}
+
 	dheader('Location:' . $redirect);
 
 } elseif($op == 'callback') {
@@ -105,23 +110,24 @@ if($op == 'init') {
 	dsetcookie('client_token', $conopenid, $cookie_expires);
 
 	$connect_member = array();
+	$fields = array('uid', 'conuin', 'conuinsecret', 'conopenid');
 	if($old_conuin) {
-		$connect_member = DB::fetch_first("SELECT uid, conuin, conuinsecret, conopenid FROM ".DB::table('common_member_connect')." WHERE conuin='$old_conuin'");
+		$connect_member = C::t('#qqconnect#common_member_connect')->fetch_fields_by_openid($old_conuin, $fields);
 	}
 	if(empty($connect_member)) {
-		$connect_member = DB::fetch_first("SELECT uid, conuin, conuinsecret, conopenid FROM ".DB::table('common_member_connect')." WHERE conopenid='$conopenid'");
+		$connect_member = C::t('#qqconnect#common_member_connect')->fetch_fields_by_openid($conopenid, $fields);
 	}
 	if($connect_member) {
 		$member = getuserbyuid($connect_member['uid']);
 		if($member) {
 			if(!$member['conisbind']) {
-				DB::delete('common_member_connect', array('uid' => $connect_member['uid']));
+				C::t('#qqconnect#common_member_connect')->delete($connect_member['uid']);
 				unset($connect_member);
 			} else {
 				$connect_member['conisbind'] = $member['conisbind'];
 			}
 		} else {
-			DB::delete('common_member_connect', array('uid' => $connect_member['uid']));
+			C::t('#qqconnect#common_member_connect')->delete($connect_member['uid']);
 			unset($connect_member);
 		}
 	}
@@ -140,20 +146,54 @@ if($op == 'init') {
 
 		$isqqshow = !empty($_GET['isqqshow']) ? 1 : 0;
 
-		$current_connect_member = DB::fetch_first("SELECT conopenid FROM ".DB::table('common_member_connect')." WHERE uid='$_G[uid]'");
+		$current_connect_member = C::t('#qqconnect#common_member_connect')->fetch($_G['uid']);
 		if($_G['member']['conisbind'] && $current_connect_member['conopenid']) {
 			if(strtoupper($current_connect_member['conopenid']) != $conopenid) {
 				showmessage('qqconnect:connect_register_bind_already', $referer);
 			}
-			DB::query("UPDATE ".DB::table('common_member_connect')." SET conuin='$conuin', conuinsecret='$conuinsecret', conopenid='$conopenid', conisregister='0', conisfeed='1', conisqqshow='$isqqshow' WHERE uid='$_G[uid]'");
+			C::t('#qqconnect#common_member_connect')->update($_G['uid'],
+				array(
+					'conuin' => $conuin,
+					'conuinsecret' => $conuinsecret,
+					'conopenid' => $conopenid,
+					'conisregister' => 0,
+					'conisfeed' => 1,
+					'conisqqshow' => $isqqshow,
+				)
+			);
 
 		} else { // debug 當前登錄的論壇賬號並沒有綁定任何QQ號，則可以綁定當前的這個QQ號
 			if(empty($current_connect_member)) {
-				DB::query("INSERT INTO ".DB::table('common_member_connect')." (uid, conuin, conuinsecret, conopenid, conispublishfeed, conispublisht, conisregister, conisfeed, conisqqshow) VALUES ('$_G[uid]', '$conuin', '$conuinsecret', '$conopenid', '1', '1', '0', '1', '$isqqshow')");
+				C::t('#qqconnect#common_member_connect')->insert(
+					array(
+						'uid' => $_G['uid'],
+						'conuin' => $conuin,
+						'conuinsecret' => $conuinsecret,
+						'conopenid' => $conopenid,
+						'conispublishfeed' => 1,
+						'conispublisht' => 1,
+						'conisregister' => 0,
+						'conisfeed' => 1,
+						'conisqqshow' => $isqqshow,
+					)
+				);
 			} else {
-				DB::query("UPDATE ".DB::table('common_member_connect')." SET conuin='$conuin', conuinsecret='$conuinsecret', conopenid='$conopenid', conispublishfeed='1', conispublisht='1', conisregister='0', conisfeed='1', conisqqshow='$isqqshow' WHERE uid='$_G[uid]'");
+				C::t('#qqconnect#common_member_connect')->update($_G['uid'],
+					array(
+						'conuin' => $conuin,
+						'conuinsecret' => $conuinsecret,
+						'conopenid' => $conopenid,
+						'conispublishfeed' => 1,
+						'conispublisht' => 1,
+						'conisregister' => 0,
+						'conisfeed' => 1,
+						'conisqqshow' => $isqqshow,
+					)
+				);
 			}
 			C::t('common_member')->update($_G['uid'], array('conisbind' => '1'));
+
+			C::t('#qqconnect#common_connect_guest')->delete($conopenid);
 		}
 
 		if($is_notify) {
@@ -168,14 +208,28 @@ if($op == 'init') {
 			dsetcookie('connect_synpost_tip', 1, 31536000);
 		}
 
-		DB::query("INSERT INTO ".DB::table('connect_memberbindlog')." (uid, uin, type, dateline) VALUES ('$_G[uid]', '$conopenid', '1', '$_G[timestamp]')");
+		C::t('#qqconnect#connect_memberbindlog')->insert(
+			array(
+				'uid' => $_G['uid'],
+				'uin' => $conopenid,
+				'type' => 1,
+				'dateline' => $_G['timestamp'],
+			)
+		);
 
 		showmessage('qqconnect:connect_register_bind_success', $referer);
 
 	} else {
 
 		if($connect_member) { // debug 此分支是用戶直接點擊QQ登錄，並且這個QQ號已經綁好一個論壇賬號了，將直接登進論壇了
-			DB::query("UPDATE ".DB::table('common_member_connect')." SET conuin='$conuin', conuinsecret='$conuinsecret', conopenid='$conopenid', conisfeed='1' WHERE uid='$connect_member[uid]'");
+			C::t('#qqconnect#common_member_connect')->update($connect_member['uid'],
+				array(
+					'conuin' => $conuin,
+					'conuinsecret' => $conuinsecret,
+					'conopenid' => $conopenid,
+					'conisfeed' => 1,
+				)
+			);
 
 			$params['mod'] = 'login';
 			connect_login($connect_member);
@@ -196,21 +250,21 @@ if($op == 'init') {
 
 		} else { // debug 此分支是用戶直接點擊QQ登錄，並且這個QQ號還未綁定任何論壇賬號，將將跳轉到一個新頁引導用戶註冊個新論壇賬號或綁一個已有的論壇賬號
 
-			$encode[] = authcode($conuin, 'ENCODE');
-			$encode[] = authcode($conuinsecret, 'ENCODE');
-			$encode[] = authcode($conopenid, 'ENCODE');
-			$encode[] = authcode($user_auth_fields, 'ENCODE');
-			$auth_hash = authcode(implode('|', $encode), 'ENCODE');
-			dsetcookie('con_auth_hash', $auth_hash);
+			$auth_hash = authcode($conopenid, 'ENCODE');
+			$insert_arr = array(
+				'conuin' => $conuin,
+				'conuinsecret' => $conuinsecret,
+				'conopenid' => $conopenid,
+			);
 
-			unset($params['op']);
-			$params['mod'] = 'register';
-			$params['referer'] = $referer;
-			$params['con_auth_hash'] = $auth_hash;
+			C::t('#qqconnect#common_connect_guest')->insert($insert_arr, false, true);
+			dsetcookie('con_auth_hash', $auth_hash, 86400);
+			dsetcookie('connect_js_name', 'guest_ptlogin', 86400);
+			dsetcookie('stats_qc_login', 4, 86400);
 
 			$utilService = Cloud::loadClass('Service_Util');
-			$redirect = 'connect.php?'.$utilService->httpBuildQuery($params, '', '&');
-			$utilService->redirect($redirect);
+			$utilService->redirect($referer);
+
 		}
 	}
 
@@ -255,5 +309,3 @@ function connect_login($connect_member) {
 	dsetcookie('connect_uin', $connect_member['conopenid'], 31536000);
 	return true;
 }
-
-?>

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_smiley.php 27890 2012-02-16 07:13:56Z zhengqingpeng $
+ *      $Id: table_common_smiley.php 28700 2012-03-08 06:23:29Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -44,14 +44,14 @@ class table_common_smiley extends discuz_table
 		return DB::fetch_first('SELECT * FROM %t WHERE id=%d AND type=%s', array($this->_table, $id, $type), $this->_pk);
 	}
 	public function update_by_type($type, $data) {
-		if(!empty($data) && is_array($data) && !in_array($type, $this->allowtype)) {
+		if(!empty($data) && is_array($data) && in_array($type, $this->allowtype)) {
 			return DB::update($this->_table, $data, DB::field('type', $type));
 		}
 		return 0;
 	}
 	public function update_by_id_type($id, $type, $data) {
 		$id = dintval($id, true);
-		if(!empty($data) && is_array($data) && $id && !in_array($type, $this->allowtype)) {
+		if(!empty($data) && is_array($data) && $id && in_array($type, $this->allowtype)) {
 			return DB::update($this->_table, $data, DB::field('id', $id).' AND '.DB::field('type', $type));
 		}
 		return 0;
@@ -84,7 +84,7 @@ class table_common_smiley extends discuz_table
 	}
 	public function count_by_type_typeid($type, $typeid) {
 		$typeid = dintval($typeid, true);
-		if(!empty($typeid) && !in_array($type, $this->allowtype)) {
+		if(!empty($typeid) && in_array($type, $this->allowtype)) {
 			return DB::result_first('SELECT COUNT(*) FROM %t WHERE type=%s AND typeid IN(%n)', array($this->_table, $type, $typeid));
 		}
 		return 0;

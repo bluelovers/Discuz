@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portalcp_article.php 27364 2012-01-18 09:18:53Z zhangguosheng $
+ *      $Id: portalcp_article.php 28762 2012-03-12 07:50:18Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -247,7 +247,7 @@ if(submitcheck("articlesubmit", 0, $seccodecheck, $secqaacheck)) {
 		$from_cookie = '';
 		$from_cookie_array = array();
 		$from_cookie = getcookie('from_cookie');
-		$from_cookie_array = explode('\t', $from_cookie);
+		$from_cookie_array = explode("\t", $from_cookie);
 		$from_cookie_array[] = $_GET['from'];
 		$from_cookie_array = array_unique($from_cookie_array);
 		$from_cookie_array = array_filter($from_cookie_array);
@@ -255,7 +255,7 @@ if(submitcheck("articlesubmit", 0, $seccodecheck, $secqaacheck)) {
 		$from_cookie_start = $from_cookie_num - 10;
 		$from_cookie_start = $from_cookie_start > 0 ? $from_cookie_start : 0;
 		$from_cookie_array = array_slice($from_cookie_array, $from_cookie_start, $from_cookie_num);
-		$from_cookie = implode('\t', $from_cookie_array);
+		$from_cookie = implode("\t", $from_cookie_array);
 		dsetcookie('from_cookie', $from_cookie);
 	}
 	dsetcookie('clearUserdata', 'home');
@@ -463,7 +463,7 @@ if($op == 'delete') {
 	$from_cookie_str = '';
 	$from_cookie = array();
 	$from_cookie_str = stripcslashes(getcookie('from_cookie'));
-	$from_cookie = explode('\t', $from_cookie_str);
+	$from_cookie = explode("\t", $from_cookie_str);
 	$from_cookie = array_filter($from_cookie);
 
 	if($article) {

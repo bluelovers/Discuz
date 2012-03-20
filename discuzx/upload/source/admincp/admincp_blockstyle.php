@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_blockstyle.php 25289 2011-11-03 10:06:19Z zhangguosheng $
+ *      $Id: admincp_blockstyle.php 28566 2012-03-05 04:39:26Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -168,7 +168,7 @@ BLOCKCLASSSEL;
 	}
 	$styles = array();
 	if(($styles = C::t('common_block_style')->fetch_all_by_blockclass($thestyle['blockclass']))) {
-		unsert($styles[$_GET['styleid']]);
+		unset($styles[$_GET['styleid']]);
 	}
 	if(empty($styles)) {
 		cpmsg('blockstyle_should_be_kept', 'action=blockstyle', 'error');

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_threadsort.php 28293 2012-02-27 07:46:51Z svn_project_zhangjie $
+ *      $Id: function_threadsort.php 28825 2012-03-14 07:26:15Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -409,7 +409,7 @@ function threadsortshow($sortid, $tid) {
 						$_G['forum_option'][$option['identifier']]['value'] = $optiondata[$optionid]['value'] ? "<a href=\"".$optiondata[$optionid]['value']."\" target=\"_blank\">".$optiondata[$optionid]['value']."</a>" : '';
 					} else {
 						if($option['protect']['status'] && $optiondata[$optionid]['value']) {
-							$optiondata[$optionid]['value'] = $option['protect']['mode'] == 1 ? '<image src="'.makevaluepic($optiondata[$optionid]['value']).'">' : '<span id="sortmessage_'.$option['identifier'].'"><a href="###" onclick="ajaxget(\'forum.php?mod=misc&action=protectsort&tid='.$tid.'&optionid='.$optionid.'\', \'sortmessage_'.$option['identifier'].'\');return false;">'.lang('forum/misc', 'click_view').'</a></span>';
+							$optiondata[$optionid]['value'] = $option['protect']['mode'] == 1 ? '<image src="'.makevaluepic($optiondata[$optionid]['value']).'">' : (!defined('IN_MOBILE') ? '<span id="sortmessage_'.$option['identifier'].'"><a href="###" onclick="ajaxget(\'forum.php?mod=misc&action=protectsort&tid='.$tid.'&optionid='.$optionid.'\', \'sortmessage_'.$option['identifier'].'\');return false;">'.lang('forum/misc', 'click_view').'</a></span>' : $optiondata[$optionid]['value']);
 						}
 
 						$_G['forum_option'][$option['identifier']]['value'] = $optiondata[$optionid]['value'] ? $optiondata[$optionid]['value'] : $option['defaultvalue'];

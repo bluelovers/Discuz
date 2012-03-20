@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_setting.php 28361 2012-02-28 07:12:03Z monkey $
+ *      $Id: cache_setting.php 28875 2012-03-16 04:33:59Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -412,13 +412,7 @@ function build_cache_setting() {
 			require_once libfile('function/admincp');
 			$output['preg'] = rewritedata(0);
 		}
-		if($repflag) {
-			if($defaultcurhost != '{CURHOST}') {
-				$defaultcurhost = 'http://'.$defaultcurhost.$_G['siteport'].'/';
-			}
-			$output['preg']['search'][] = "/<a href=\"(\w+\.php)/";
-			$output['preg']['replace'][] = '<a href="'.$defaultcurhost."$1";
-		}
+
 		foreach($data['footernavs'] as $id => $nav) {
 			$data['footernavs'][$id]['code'] = preg_replace($output['preg']['search'], $output['preg']['replace'], $nav['code']);
 		}
@@ -436,6 +430,7 @@ function build_cache_setting() {
 		}
 	}
 	$data['output'] = $output;
+	$data['connect'] = in_array('qqconnect', $data['plugins']['available']) ? $data['connect'] : array();
 
 	savecache('setting', $data);
 	$_G['setting'] = $data;

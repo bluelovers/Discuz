@@ -125,8 +125,12 @@
 									</td>
 									<!--{if !$_GET['archiveid'] && $_G['forum']['ismoderator']}-->
 									<td class="o">
-										<!--{if $thread['fid'] == $_G[fid] && $thread['displayorder'] <= 3 || $_G['adminid'] == 1}-->
-											<input onclick="tmodclick(this)" type="checkbox" name="moderate[]" value="$thread[tid]" />
+										<!--{if $thread['fid'] == $_G[fid]}-->
+											<!--{if $thread['displayorder'] <= 3 || $_G['adminid'] == 1}-->
+												<input onclick="tmodclick(this)" type="checkbox" name="moderate[]" value="$thread[tid]" />
+											<!--{else}-->
+												<input type="checkbox" disabled="disabled" />
+											<!--{/if}-->
 										<!--{else}-->
 											<input type="checkbox" disabled="disabled" />
 										<!--{/if}-->

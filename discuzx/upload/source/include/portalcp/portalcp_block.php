@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portalcp_block.php 27632 2012-02-08 04:03:54Z zhangguosheng $
+ *      $Id: portalcp_block.php 28838 2012-03-14 09:54:21Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -422,7 +422,7 @@ if($op == 'block') {
 		}
 	} elseif($op == 'push') {
 
-		$item = get_push_item($thestyle, $_GET['id'], $_GET['idtype']);
+		$item = get_push_item($block, $thestyle, $_GET['id'], $_GET['idtype']);
 		if($itemid) {
 			$item['itemid'] = $itemid;
 		}
@@ -446,7 +446,7 @@ if($op == 'block') {
 			if(in_array($_GET['idtype'],array('tid', 'gtid', 'aid', 'picid', 'blogid'))) {
 				$_GET['idtype'] = $_GET['idtype'] == 'gtid' ? 'tids' : $_GET['idtype'].'s';
 			}
-			$item = get_push_item($thestyle, $_GET['id'], $_GET['idtype'], $block['blockclass'], $block['script']);
+			$item = get_push_item($block, $thestyle, $_GET['id'], $_GET['idtype'], $block['blockclass'], $block['script']);
 			if(empty($item)) showmessage('block_data_type_invalid', null, null, array('msgtype'=>3));
 		}
 	} elseif($op=='verifydata' || $op=='managedata') {
@@ -701,13 +701,16 @@ if($op == 'block') {
 			$_GET['id'] = $itemfields['id'];
 		}
 
-		if($_GET['idtype'] == 'tids') {
+		if(in_array($_GET['idtype'], array('tids', 'tid'))) {
 			$prefix .= 'forum/';
 			$firstpost = C::t('forum_post')->fetch_threadpost_by_tid_invisible($_GET['id']);
 			foreach(C::t('forum_attachment_n')->fetch_all_by_pid_width('pid:'.$firstpost['pid'], $firstpost['pid'], $block['picwidth']) as $pic) {
 				if($first) {
 					$first = false;
 					$itemfields['pics'][0] = '';
+					if(strpos($itemfields['oldpic'], 'nophoto.gif') !== false) {
+						$itemfields['oldpic'] = 'forum/'.$pic['attachment'];
+					}
 				}
 				$thumb = $prefix.($pic['thumb'] ? getimgthumbname($pic['attachment']) : $pic['attachment']);
 				if('forum/'.$pic['attachment'] == $itemfields['oldpic']) {
@@ -716,12 +719,18 @@ if($op == 'block') {
 					$itemfields['pics'][] = array('big' => $prefix.$pic['attachment'], 'thumb' => $thumb, 'attachment' => 'forum/'.$pic['attachment'], 'first' => 0);
 				}
 			}
+			if(empty($itemfields['pics'][0])) {
+				unset($itemfields['pics'][0]);
+			}
 		} elseif($_GET['idtype'] == 'aids') {
 			$prefix .= 'portal/';
 			foreach(C::t('portal_attachment')->fetch_all_by_aid($_GET['id']) as $pic) {
 				if($first) {
 					$first = false;
 					$itemfields['pics'][0] = '';
+					if(strpos($itemfields['oldpic'], 'nophoto.gif') !== false) {
+						$itemfields['oldpic'] = 'portal/'.$pic['attachment'];
+					}
 				}
 				$thumb = $prefix.($pic['thumb'] ? getimgthumbname($pic['attachment']) : $pic['attachment']);
 				if('portal/'.$pic['attachment'] == $itemfields['oldpic']) {
@@ -730,9 +739,13 @@ if($op == 'block') {
 					$itemfields['pics'][] = array('big' => $prefix.$pic['attachment'], 'thumb' => $thumb, 'attachment' => 'portal/'.$pic['attachment'], 'first' => 0);
 				}
 			}
+			if(empty($itemfields['pics'][0])) {
+				unset($itemfields['pics'][0]);
+			}
 		} elseif($_GET['idtype'] == 'blogids') {
 			$itemfields['pics'][] = array('big' => $itemfields['pic'], 'thumb' => 1, 'attachment' => $itemfields['oldpic']);
 		}
+
 	}
 
 } elseif ($op == 'getblock') {
@@ -761,7 +774,7 @@ if($op == 'block') {
 		$setarr = array('classname'=>getstr($_POST['classname'], 100, 0, 0, 0, -1));
 		C::t('common_block')->update($bid, $setarr);
 	}
-	block_memory_clear($bid);
+	C::t('common_block')->clear_cache($bid);
 
 	showmessage('do_success');
 } elseif ($op == 'saveblocktitle') {
@@ -782,7 +795,7 @@ if($op == 'block') {
 		C::t('common_block')->update($bid, $setarr);
 	}
 
-	block_memory_clear($bid);
+	C::t('common_block')->clear_cache($bid);
 
 	showmessage('do_success');
 } elseif ($op == 'convert') {
@@ -885,7 +898,7 @@ function block_ban_item($block, $item) {
 	C::t('common_block')->update($block['bid'], array('param'=>$parameters));
 }
 
-function get_push_item($blockstyle, $id, $idtype, $blockclass = '', $script = '') {
+function get_push_item($block, $blockstyle, $id, $idtype, $blockclass = '', $script = '') {
 	$item = array();
 	$obj = null;
 	if(empty($blockclass) || empty($script)) {
@@ -906,6 +919,9 @@ function get_push_item($blockstyle, $id, $idtype, $blockclass = '', $script = ''
 	}
 	if($obj && is_object($obj)) {
 		$paramter = array($idtype => intval($id));
+		if(isset($block['param']['picrequired'])) {
+			$paramter['picrequired'] = $block['param']['picrequired'];
+		}
 		$return = $obj->getData($blockstyle, $paramter);
 		if($return['data']) {
 			$item = array_shift($return['data']);
@@ -957,6 +973,7 @@ function block_convert($bid, $toblockclass) {
 				$block['script'] = $convertrule['script'];
 				$block['blockclass'] = $toblockclass;
 				$block['blockstyle'] = serialize($blockstyle);
+				$block['param'] = serialize($block['param']);
 				C::t('common_block')->update($bid, $block);
 			}
 		}

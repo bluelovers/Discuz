@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_block.php 28085 2012-02-22 07:23:36Z chenmengshu $
+ *      $Id: table_common_block.php 28646 2012-03-07 01:44:16Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -13,12 +13,19 @@ if(!defined('IN_DISCUZ')) {
 
 class table_common_block extends discuz_table
 {
+
+	public $cache_ttl;
+	public $allowmem;
+
 	public function __construct() {
 
 		$this->_table = 'common_block';
 		$this->_pk    = 'bid';
 
 		parent::__construct();
+		$this->cache_ttl = $this->_cache_ttl = getglobal('setting/memory/diyblock');
+		$this->allowmem = $this->_allowmem =  $this->_cache_ttl !== null && memory('check');
+
 	}
 
 	public function fetch($bid) {
@@ -48,7 +55,7 @@ class table_common_block extends discuz_table
 
 	public function fetch_all_bid_by_blocktype($blocktype, $limit = 1000) {
 		$data = array();
-		if ($blocktype && ($data = DB::fetch_all('SELECT bid FROM '.DB::table($this->_table).' WHERE '.DB::field('blocktype', $blocktype).' ORDER BY bid DESC'.DB::limit($limit), null, $this->_pk))) {
+		if ($blocktype !== null && ($data = DB::fetch_all('SELECT bid FROM '.DB::table($this->_table).' WHERE '.DB::field('blocktype', $blocktype).' ORDER BY bid DESC'.DB::limit($limit), null, $this->_pk))) {
 			$data = array_keys($data);
 		}
 		return $data;
@@ -79,22 +86,28 @@ class table_common_block extends discuz_table
 
 	public function update($val, $data, $unbuffered = false, $low_priority = false) {
 		if(($val = dintval($val, true)) && $data && is_array($data)) {
-			$this->_pre_cache_key = 'blockcache_';
-			$this->_cache_ttl = getglobal('setting/memory/diyblock');
-			$this->_allowmem = $this->_cache_ttl && memory('check');
-			return parent::update($val, $data, $unbuffered, $low_priority);
+			$ret = parent::update($val, $data, $unbuffered, $low_priority);
+			$this->clear_cache($val);
+			return $ret;
 		}
 		return false;
 	}
 
 	public function delete($val, $unbuffered = false) {
 		if(($val = dintval($val, true))) {
-			$this->_pre_cache_key = 'blockcache_';
-			$this->_cache_ttl = getglobal('setting/memory/diyblock');
-			$this->_allowmem = $this->_cache_ttl && memory('check');
-			return parent::delete($val, $unbuffered);
+			$ret = parent::delete($val, $unbuffered);
+			$this->clear_cache($val);
+			return $ret;
 		}
 		return false;
+	}
+
+	public function clear_cache($bids) {
+		if($this->_allowmem) {
+			memory('rm', $bids,'blockcache_');
+			memory('rm', $bids, 'blockcache_htm_');
+			memory('rm', $bids, 'blockcache_js_');
+		}
 	}
 }
 

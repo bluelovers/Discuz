@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_forumdisplay.php 28479 2012-03-01 08:49:44Z liulanbo $
+ *      $Id: forum_forumdisplay.php 28829 2012-03-14 08:26:37Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -534,13 +534,13 @@ if($_G['forum']['picstyle']) {
 	}
 }
 
+$filterbool = !empty($filter) && in_array($filter, $filterfield);
+$_G['forum_threadcount'] += $filterbool ? 0 : $stickycount;
 if(@ceil($_G['forum_threadcount']/$_G['tpp']) < $page) {
 	$page = 1;
 }
 $start_limit = ($page - 1) * $_G['tpp'];
 
-$filterbool = !empty($filter) && in_array($filter, $filterfield);
-$_G['forum_threadcount'] += $filterbool ? 0 : $stickycount;
 $forumdisplayadd['page'] = !empty($forumdisplayadd['page']) ? $forumdisplayadd['page'] : '';
 $multipage_archive = $_GET['archiveid'] && in_array($_GET['archiveid'], $threadtableids) ? "&archiveid={$_GET['archiveid']}" : '';
 $multipage = multi($_G['forum_threadcount'], $_G['tpp'], $page, "forum.php?mod=forumdisplay&fid=$_G[fid]".$forumdisplayadd['page'].($multiadd ? '&'.implode('&', $multiadd) : '')."$multipage_archive", $_G['setting']['threadmaxpages']);
@@ -656,7 +656,6 @@ foreach($threadlist as $thread) {
 	}
 
 	$thread['moved'] = $thread['heatlevel'] = $thread['new'] = 0;
-	$thread['icontid'] = $thread['forumstick'] || !$thread['moved'] && $thread['isgroup'] != 1 ? $thread['tid'] : $thread['closed'];
 	if($_G['forum']['status'] != 3 && ($thread['closed'] || ($_G['forum']['autoclose'] && TIMESTAMP - $thread[$closedby] > $_G['forum']['autoclose']))) {
 		if($thread['isgroup'] == 1) {
 			$thread['folder'] = 'common';
@@ -685,6 +684,10 @@ foreach($threadlist as $thread) {
 				}
 			}
 		}
+	}
+	$thread['icontid'] = $thread['forumstick'] || !$thread['moved'] && $thread['isgroup'] != 1 ? $thread['tid'] : $thread['closed'];
+	if(!$thread['forumstick'] && ($thread['isgroup'] == 1 || $thread['fid'] != $_G['fid'])) {
+		$thread['icontid'] = $thread['closed'] > 1 ? $thread['closed'] : $thread['tid'];
 	}
 	$thread['istoday'] = $thread['dateline'] > $todaytime ? 1 : 0;
 	$thread['dbdateline'] = $thread['dateline'];

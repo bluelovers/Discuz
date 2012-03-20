@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_admincp.php 28503 2012-03-01 11:41:29Z zhangguosheng $
+ *      $Id: lang_admincp.php 28882 2012-03-16 07:53:52Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -567,6 +567,8 @@ $lang = array
 	'founder_upgrade_automatically' => '自動升級',
 	'founder_upgrade_manually' => '手動下載',
 	'founder_upgrade_select_version' => '檢測到有新的版本可供升級，您可以選擇自動升級或者下載安裝包手動升級。',
+	'founder_upgrade_continue' => '繼續升級',
+	'founder_upgrade_dbupdate' => '升級數據庫',
 	'upgrade_right_now' => '您目前使用的 Discuz! 程序有新版本發佈，請及時升級<span>在線升級</span>',
 
 	'nav_report' => '用戶舉報',
@@ -674,7 +676,7 @@ $lang = array
 	'setting_access_register_censoruser' => '用戶信息保留關鍵字',
 	'setting_access_register_censoruser_comment' => '用戶在其用戶信息中無法使用這些關鍵字。每個關鍵字一行，可使用通配符 "*" 如 "*版主*"(不含引號)',
 	'setting_access_register_verify' => '新用戶註冊驗證',
-	'setting_access_register_verify_comment' => '選擇「無」用戶可直接註冊成功；選擇「Email 驗證」將向用戶註冊 Email 發送一封驗證郵件以確認郵箱的有效性；選擇「人工審核」將由管理員人工逐個確定是否允許新用戶註冊',
+	'setting_access_register_verify_comment' => '選擇「無」用戶可直接註冊成功；選擇「Email 驗證」將向用戶註冊 Email 發送一封驗證郵件以確認郵箱的有效性（<strong>開啟「通過郵件發送註冊鏈接」該設置自動通過驗證</strong>）；選擇「人工審核」將由管理員人工逐個確定是否允許新用戶註冊',
 	'setting_access_register_verify_email' => 'Email 驗證',
 	'setting_access_register_verify_manual' => '人工審核',
 	'setting_access_register_verify_areawhite' => '不受新用戶註冊驗證限制的地區列表',
@@ -759,6 +761,8 @@ $lang = array
 	'setting_access_register_strongpw_4' => '符號',
 	'setting_access_register_pwlength' => '密碼最小長度',
 	'setting_access_register_pwlength_comment' => '新用戶註冊時密碼最小長度，0或不填為不限制',
+	'setting_access_guest_connect_group' => 'QQ登錄用戶遊客用戶組',
+	'setting_access_guest_connect_group_comment' => '通過QQ登錄後，尚未完善資料用戶的初始用戶組',
 
 	'setting_access_access' => '訪問控制',
 	'setting_access_access_newbiespan' => '新手見習期限(分鐘)',
@@ -1507,6 +1511,8 @@ $lang = array
 	'setting_functions_mod_bannedmessages_signature' => '用戶簽名',
 	'setting_functions_mod_rewardexpiration' => '懸賞主題有效期',
 	'setting_functions_mod_rewardexpiration_comment' => '設置懸賞主題的有效天數，當懸賞主題超過有效期後依然未發放懸賞，版主或管理員有權代為主題作者發放懸賞。0 或留空表示不允許版主或管理員進行此操作',
+	'setting_functions_mod_moddetail' => '<span class="spectitle">版主面板顯示審核數目</span>',
+	'setting_functions_mod_moddetail_comment' => '設置版主面板是否詳細顯示待審核主題、帖子及用戶的具體數目',
 	'setting_functions_heatthread_tips' => '主題熱度將按參與人次計算，包括回帖，點評，收藏，分享，評分，推薦',
 	'setting_functions_heatthread' => '主題熱度',
 	'setting_functions_heatthread_type' => '熱度計算方式',
@@ -1810,7 +1816,7 @@ $lang = array
 	'setting_mail_check_error' => '郵件發送返回錯誤信息:\n',
 
 	'setting_sec' => '防灌水設置',
-	'setting_sec_code_tips' => '<li>使用圖片作為驗證碼文字，圖片必須包含字符「2346789BCEFGHJKMPQRTVWXY」24 個字符，且必須為 GIF 透明圖片、背景透明、前景黑色，黑色為圖片的第一個索引色。圖片大小不限制，但建議寬度不大於驗證碼寬度的 1/4，高度不大於驗證碼高度。製作完畢後在 static/image/seccode/gif/ 下創建一個新的子目錄，目錄名任意，把製作完畢的 24 個 GIF 圖片上傳到新子目錄下</li><li>使用圖片作為驗證碼的背景，把製作好的 JPG 圖片上傳到 static/image/seccode/background/ 目錄下，站點將隨機使用裡面的圖片作為驗證碼的背景</li><li>使用 TTF 字體作為驗證碼文字，把下載的 TTF 英文字體文件上傳到 static/image/seccode/font/en/ 目錄下，站點將隨機使用裡面的字體文件作為驗證碼的文字</li><li>使用中文圖片驗證碼前，需要把包含完整中文漢字的 TTF 中文字體文件上傳到 static/image/seccode/font/ch/ 目錄下，站點將隨機使用裡面的字體文件作為驗證碼的文字</li>',
+	'setting_sec_code_tips' => '<li>使用圖片作為驗證碼文字，圖片必須包含字符「2346789BCEFGHJKMPQRTVWXY」24 個字符，且必須為 GIF 透明圖片、背景透明、前景黑色，黑色為圖片的第一個索引色。圖片大小不限制，但建議寬度不大於驗證碼寬度的 1/4，高度不大於驗證碼高度。製作完畢後在 static/image/seccode/gif/ 下創建一個新的子目錄，目錄名任意，把製作完畢的 24 個 GIF 圖片上傳到新子目錄下</li><li>使用圖片作為驗證碼的背景，把製作好的 JPG 圖片上傳到 static/image/seccode/background/ 目錄下，站點將隨機使用裡面的圖片作為驗證碼的背景</li><li>使用 TTF 字體作為驗證碼文字，把下載的 TTF 英文字體文件上傳到 static/image/seccode/font/en/ 目錄下，站點將隨機使用裡面的字體文件作為驗證碼的文字</li><li>使用中文圖片驗證碼前，需要把包含完整中文漢字的 TTF 中文字體文件上傳到 static/image/seccode/font/ch/ 目錄下，站點將隨機使用裡面的字體文件作為驗證碼的文字</li><li>安裝新的驗證碼腳本，需將驗證碼腳本程序上傳到 source/class/seccode/ 目錄，然後即可在驗證碼類型中選擇使用了。</li>',
 	'setting_sec_qaa_tips' => '<li>驗證問題應該言簡意賅，沒有歧義，正常人都能夠正確作答。請經常更新驗證問答的問題及答案以防止被猜測！</li><li>安裝新的驗證問答腳本，需將驗證問答腳本程序上傳到 source/class/secqaa/ 目錄，然後即可在以下列表中選擇使用了。</li><li>插件開發人員在設計新的驗證問答腳本前請務必仔細閱讀《<a href="http://dev.discuz.org/wiki" target="_blank">Discuz! 技術文庫</a>》中的內容。</li>',
 
 	'setting_sec_seclevel' => '安全驗證模式',
@@ -2470,11 +2476,11 @@ $lang = array
 	'forums_edit_posts_recyclebin_comment' => '是否在本版啟用回收站功能，打開此功能後，所有被刪除主題和回帖將被放在回收站中，而不會被直接刪除',
 	'forums_edit_posts_html' => '允許使用 HTML 代碼',
 	'forums_edit_posts_html_comment' => '注意: 選擇「是」將不屏蔽帖子中的任何代碼，將帶來嚴重的安全隱患，請慎用',
-	'forums_edit_posts_bbcode' => '允許使用 Discuz! 代碼',
+	'forums_edit_posts_bbcode' => '允許使用Discuz!代碼',
 	'forums_edit_posts_bbcode_comment' => 'Discuz! 代碼是一種簡化和安全的頁面格式代碼',
 	'forums_edit_posts_imgcode' => '允許使用 [img] 代碼',
 	'forums_edit_posts_imgcode_comment' => '允許 [img] 代碼作者將可以在帖子插入其他網站的圖片並顯示',
-	'forums_edit_posts_mediacode' => '允許使用 [audio] [media] [flash] 等多媒體代碼',
+	'forums_edit_posts_mediacode' => '允許使用多媒體代碼',
 	'forums_edit_posts_mediacode_comment' => '允許 [audio] [media] [flash] 等多媒體代碼後，作者將可以在帖子插入多媒體文件並顯示',
 	'forums_edit_posts_smilies' => '允許使用表情',
 	'forums_edit_posts_smilies_comment' => '表情提供對表情符號，如「:)」的解析，使之作為圖片顯示',
@@ -3238,7 +3244,7 @@ $lang = array
 	'members_verify_setting_field' => '<em class="right">(<a href="?action=members&operation=profile">點此新增資料項</a>)</em>可選資料項',
 	'members_verify_group' => '允許參於認證的用戶組',
 	'members_verify_group_comment' => '設置允許參與認證的用戶組，可以按住 CTRL 多選， 空代表都可以參於認證',
-	'members_verify_pic_removed' => '圖片已刪除',
+	'members_verify_pic_removed' => '未上傳圖片或已被刪除',
 
 	'members_newsletter' => '站點通知',
 	'members_newsletter_method' => '通知發送方式',
@@ -4783,7 +4789,7 @@ $lang = array
 	'plugins_config_uninstallplugin' => '卸載此插件',
 	'plugins_edit' => '設計插件',
 	'plugins_edit_available' => ' (插件已啟用)',
-	'plugins_edit_tips' => '<li><b>本功能僅供插件開發者使用，如果您只是安裝或使用本插件，切勿修改本設置。</b></li><li>插件開發人員在使用本功能前請務必仔細閱讀《<a href="http://dev.discuz.org/wiki" target="_blank">Discuz! 技術文庫</a>》中的內容。</li><li>警告: 不正確的插件設計或安裝可能危及到整個站點的正常使用。</li><li>如果把導出的插件文件放置在 source/plugin/插件目錄/ 目錄下，則可以通過插件管理直接安裝插件。</li>',
+	'plugins_edit_tips' => '<li><b>本功能僅供插件開發者使用，如果您只是安裝或使用本插件，切勿修改本設置。</b></li><li>插件開發人員在使用本功能前請務必仔細閱讀《<a href="http://dev.discuz.org/wiki" target="_blank">Discuz! 技術文庫</a>》中的內容。</li><li>警告: 不正確的插件設計或安裝可能危及到整個站點的正常使用。</li><li>把設計完的插件發佈到<a href="http://addon.discuz.com" target="_blank">「Discuz! 應用中心」</a>分享給廣大站長。</li>',
 	'plugins_edit_name' => '插件名稱(name)',
 	'plugins_edit_name_comment' => '此插件的名稱，中英文均可，最多 40 個字節',
 	'plugins_edit_version' => '插件版本號(version)',
@@ -4885,6 +4891,9 @@ $lang = array
 	'plugins_conflict_info' => '聯繫作者',
 	'plugins_module_sample' => '<span title="下載模塊模板文件">[&darr;]</span>',
 	'plugins_find_newversion' => '發現新版',
+	'plugins_list_available' => '已啟用的插件',
+	'plugins_list_unavailable' => '未啟用的插件',
+	'plugins_list_new' => '未安裝的插件',
 
 	'medals' => '勳章',
 	'medals_tips' => '<li>本功能用於設置可以頒發給用戶的勳章信息，勳章圖片中請填寫圖片文件名，並將相應圖片文件上傳到 static/image/common/ 目錄中。</li>',
@@ -4923,7 +4932,7 @@ $lang = array
 	'medals_perm' => '勳章領取權限',
 	'medals_modpass' => '通過',
 	'medals_modnopass' => '否決',
-	'medals_permformula' => '當您設定了權限表達式後，只有符合此表達式的會員才可以領取本勳章。如 "posts > 100 and extcredits1 > 10" 表示 "發帖數 > 100 並且 威望 > 10"<br />日期格式 "{Y-M-D}"，如 "{2009-10-1}"。IP 格式 "{x.x.x.x}"，既可輸入完整地址，也可只輸入 IP 開頭，如 "{10.0.0.1}"、"{192.168.0}"',
+	'medals_permformula' => '當您設定了權限表達式後，只有符合此表達式的會員才可以領取本勳章，如勳章可購買本功能失效。如 "posts > 100 and extcredits1 > 10" 表示 "發帖數 > 100 並且 威望 > 10"<br />日期格式 "{Y-M-D}"，如 "{2009-10-1}"。IP 格式 "{x.x.x.x}"，既可輸入完整地址，也可只輸入 IP 開頭，如 "{10.0.0.1}"、"{192.168.0}"',
 	'medals_credit' => '積分',
 	'medals_price' => '價格',
 
@@ -6432,8 +6441,13 @@ $lang = array
 	'threadsplit_move_threads_per_time_comment' => '建議不超過 1000',
 
 	'membersplit' => '用戶表優化',
-	'membersplit_tips' => '<li>通過用戶優化可以大幅度提高網站的性能。</li><li>當可優化用戶數大於30%以上時，我們強烈建議進行用戶表優化操作</li>',
+	'membersplit_check' => '立即體檢',
+	'membersplit_lasttime_check' => '上次體檢',
+	'membersplit_has_no_check' => '您的網站從未進行過用戶表優化，建議立即體檢',
+	'membersplit_check_tips' => '<li>通過用戶優化可以大幅度提高網站的性能。</li><li>因體檢操作較慢，所以體檢的結果會緩存一天的時間</li>',
+	'membersplit_tips' => '<li>通過用戶優化可以大幅度提高網站的性能。</li><li>當可優化用戶數大於30%以上時，我們強烈建議進行用戶表優化操作</li><li>請根據服務器性能，適當調整單步優化數。</li><li>建議在關閉站點下進行優化操作。</li>',
 	'membersplit_combie_count' => '可優化用戶數',
+	'membersplit_splitnum' => '單步優化數',
 	'membersplit_count' => '總用戶數',
 	'membersplit_table_orig' => '用戶表信息',
 	'membersplit_message0' => '用戶表狀態良好，無可優化',
@@ -6535,6 +6549,9 @@ $lang = array
 	'cloudaddons_unwriteabledirs' => '站點 {basedir} 目錄下的以下目錄不可寫，無法在線安裝此應用，請填寫本站點的 FTP 連接參數(本設置不會被保存):<br />{unwriteabledirs}',
 	'cloudaddons_plugin_link' => '獲取更多插件',
 	'cloudaddons_style_link' => '獲取更多風格',
+	'plugins_validator_nowupgrade' => '以下插件現在可以更新為新版本，點擊安裝更新',
+	'plugins_validator_newversion' => '以下插件存在新版本，點擊安裝更新',
+	'plugins_validator_error' => '以下插件不是正版插件，點擊安裝正版插件',
 
 
 	'rewrite_message' => '<h1>Apache Web Server(獨立主機用戶)</h1>

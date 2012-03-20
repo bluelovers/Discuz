@@ -1,17 +1,20 @@
 <?php
 
 /**
- *      [Discuz! X] (C)2001-2099 Comsenz Inc.
- *      This is NOT a freeware, use is subject to license terms
+ *		[Discuz! X] (C)2001-2099 Comsenz Inc.
+ *		This is NOT a freeware, use is subject to license terms
  *
- *      $Id: connect.class.php 28470 2012-03-01 07:24:49Z houdelei $
+ *		$Id: connect.class.php 28812 2012-03-14 02:33:46Z songlixin $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
-
 class plugin_qqconnect_base {
+
+	public $retryInterval = 60;
+	public $retryMax = 5;
+	public $retryAvaiableTime = 1800;
 
 	function init() {
 		global $_G;
@@ -36,7 +39,7 @@ class plugin_qqconnect_base {
 
 			$_G['connect']['login_url'] = $_G['siteurl'].'connect.php?mod=login&op=init&referer='.urlencode($_G['connect']['referer'] ? $_G['connect']['referer'] : 'index.php');
 			$_G['connect']['callback_url'] = $_G['siteurl'].'connect.php?mod=login&op=callback';
-			$_G['connect']['discuz_new_feed_url'] = $_G['siteurl'].'connect.php?mod=feed&op=new';
+			$_G['connect']['discuz_new_feed_url'] = $_G['siteurl'].'connect.php?mod=feed&op=new&formhash=' . formhash();
 			$_G['connect']['discuz_new_share_url'] = $_G['siteurl'].'home.php?mod=spacecp&ac=plugin&id=qqconnect:spacecp&pluginop=new';
 			$_G['connect']['discuz_sync_tthread_url'] = $_G['siteurl'].'home.php?mod=spacecp&ac=plugin&id=qqconnect:spacecp&pluginop=sync_tthread';
 			$_G['connect']['discuz_change_qq_url'] = $_G['siteurl'].'connect.php?mod=login&op=change';
@@ -154,20 +157,26 @@ class plugin_qqconnect extends plugin_qqconnect_base {
 			} elseif($_G['cookie']['connect_js_name'] == 'feed_resend') {
 				$jsurl = $connectService->connectFeedResendJs();
 				$loadJs['feedjs'] = array('jsurl' => $jsurl);
+			} elseif($_G['cookie']['connect_js_name'] == 'guest_ptlogin') {
+				$jsurl = $connectService->connectGuestPtloginJs();
+				$loadJs['guestloginjs'] = array('jsurl' => $jsurl);
 			}
+
 			dsetcookie('connect_js_name');
 			dsetcookie('connect_js_params');
 		}
 
-		$connectService->connectMergeMember();
-		if(!$_G['cookie']['connect_check_token'] && $_G['member']['conuinsecret']) {
-			$request_url = $_G['siteurl'] . 'connect.php?mod=check&op=token&_r=' . rand(1, 10000);
-			$loadJs['checktokenjs'] = array('jsurl' => $request_url);
+		loadcache('connect_login_report_date');
+		if (dgmdate(TIMESTAMP, 'Y-m-d') != $_G['cache']['connect_login_report_date']) {
+			$jsurl = $connectService->connectCookieLoginJs();
+			$loadJs['cookieloginjs'] = array('jsurl' => $jsurl);
 		}
 
-		if($_G['member']['conuinsecret'] && ($_G['cookie']['connect_last_report_time'] != date('Y-m-d') || $_G['cookie']['connect_report_times'] <= 4)) {
-			$ajaxUrl = 'connect.php?mod=check&op=cookie';
-			$loadJs['cookieloginjs'] = array('jsurl' => $ajaxUrl);
+		if ($_G['member']['conisbind']) {
+			$connectService->connectMergeMember();
+			if($_G['member']['conuinsecret'] && ($_G['cookie']['connect_last_report_time'] != dgmdate(TIMESTAMP, 'Y-m-d'))) {
+				$connectService->connectAddCookieLogins();
+			}
 		}
 
 		return tpl_global_footer($loadJs);
@@ -242,118 +251,131 @@ class plugin_qqconnect extends plugin_qqconnect_base {
 			return;
 		}
 		global $_G;
-		if(empty($_GET['connect_publish_feed']) || $_GET['action'] == 'reply' || substr($param['param'][0], -8) != '_succeed' || $_GET['action'] == 'edit' && !$GLOBALS['isfirstpost'] || !$this->_allowconnectfeed()) {
-			return;
+		$condition1 = $_GET['action'] == 'reply' || substr($param['param'][0], -8) != '_succeed';
+		$condition2 = $_GET['action'] == 'edit' && !$GLOBALS['isfirstpost'];
+		$condition3 = !$this->_allowconnectfeed() && !$this->_allowconnectt();
+		$condition4 = empty($_GET['connect_publish_feed']) && empty($_GET['connect_publish_t']);
+		if ($condition1 || $condition2 || $condition3 || $condition4) {
+			return false;
 		}
 
 		$tid = $param['param'][2]['tid'];
-		DB::query("REPLACE INTO ".DB::table('connect_feedlog')." (tid, uid, lastpublished, dateline, status) VALUES ('$tid', '$_G[uid]', '0', '$_G[timestamp]', '1')");
-	}
 
-	function _post_tlog_message($param) {
-		if(!$this->allow) {
-			return;
+		$thread = C::t('forum_thread')->fetch($tid);
+		if ($_GET['connect_publish_feed']) {
+			$thread['status'] = setstatus(7, 1, $thread['status']);
 		}
-		global $_G;
-		if(empty($_GET['connect_publish_t']) || $_GET['action'] == 'reply' || substr($param['param'][0], -8) != '_succeed' || $_GET['action'] == 'edit' && !$GLOBALS['isfirstpost'] || !$this->_allowconnectt()) {
-			return;
+		if ($_GET['connect_publish_t']) {
+			$thread['status'] = setstatus(8, 1, $thread['status']);
 		}
 
-		$tid = $param['param'][2]['tid'];
-		DB::query("REPLACE INTO ".DB::table('connect_tlog')." (tid, uid, lastpublished, dateline, status) VALUES ('$tid', '$_G[uid]', '0', '$_G[timestamp]', '1')");
+		C::t('forum_thread')->update($tid, array('status' => $thread['status']));
+
+		$data = array(
+			'tid' => $tid,
+			'uid' => $_G['uid'],
+			'lastpublished' => 0,
+			'dateline' => $_G['timestamp'],
+			'status' => 0,
+		);
+		C::t('#qqconnect#connect_feedlog')->insert($data, 0, 1);
 	}
+
 
 	function _viewthread_share_method_output() {
-		global $_G;
+		global $_G, $postlist, $canonical;
+		$needFeedStatus = getstatus($_G['forum_thread']['status'], 7);
+		$needWeiboStatus = getstatus($_G['forum_thread']['status'], 8);
+		$_G['connect']['thread_url'] = $_G['siteurl'] . $canonical;
 
 		$connectService = Cloud::loadClass('Service_Connect');
+		$_G['connect']['qzone_share_url'] = $_G['siteurl'] . 'home.php?mod=spacecp&ac=plugin&id=qqconnect:spacecp&pluginop=share&sh_type=1&thread_id=' . $_G['tid'];
+		$_G['connect']['weibo_share_url'] = $_G['siteurl'] . 'home.php?mod=spacecp&ac=plugin&id=qqconnect:spacecp&pluginop=share&sh_type=2&thread_id=' . $_G['tid'];
+		$_G['connect']['pengyou_share_url'] = $_G['siteurl'] . 'home.php?mod=spacecp&ac=plugin&id=qqconnect:spacecp&pluginop=share&sh_type=3&thread_id=' . $_G['tid'];
 
-		if($GLOBALS['page'] == 1 && $_G['forum_firstpid'] && $GLOBALS['postlist'][$_G['forum_firstpid']]['invisible'] == 0) {
-			$_G['connect']['feed_js'] = $_G['connect']['t_js'] = $feedlogstatus = $tlogstatus = false;
-			if($_G['member']['conisbind'] && $_G['uid'] == $_G['forum_thread']['authorid'] && $_G['forum_thread']['displayorder'] >= 0 && !getstatus($_G['forum_thread']['status'], 7)) {
-				$_G['connect']['feed_log'] = DB::fetch_first("SELECT * FROM ".DB::table('connect_feedlog')." WHERE tid='$_G[tid]'");
-				if($_G['connect']['feed_log']) {
-					$_G['connect']['feed_interval'] = 300;
-					$_G['connect']['feed_publish_max'] = 1000;
-					if($_G['connect']['feed_log']['status'] == 1 || ($_G['connect']['feed_log']['status'] == 2
-						&& TIMESTAMP - $_G['connect']['feed_log']['lastpublished'] > $_G['connect']['feed_interval']
-						&& $_G['connect']['feed_log']['publishtimes'] < $_G['connect']['feed_publish_max'])) {
-						DB::query("UPDATE ".DB::table('connect_feedlog')." SET status='2', lastpublished='$_G[timestamp]', publishtimes=publishtimes+1 WHERE tid='$_G[tid]' AND status!=4");
-						$_G['connect']['feed_js'] = $feedlogstatus = true;
+		$_G['connect']['first_post'] = $postlist[$_G['forum_firstpid']];
+		$_GET['connect_autoshare'] = !empty($_GET['connect_autoshare']) ? 1 : 0;
+
+		$_G['connect']['weibo_appkey'] = $_G['connect']['weibo_public_appkey'];
+		if($this->allow && $_G['setting']['connect']['qshare_appkey']) {
+			$_G['connect']['weibo_appkey'] = $_G['setting']['connect']['qshare_appkey'];
+		}
+
+		$condition1 = $_G['uid'] != $_G['forum_thread']['authorid'] || !$_G['member']['conopenid'];
+		$condition2 = $_G['forum_thread']['displayorder'] < 0;
+		$condition3 = $_G['timestamp'] - $_G['forum_thread']['dateline'] > $this->retryAvaiableTime;
+		if ($condition1 || $condition2 || $condition3) {
+			$needFeedStatus = $needWeiboStatus = false;
+		}
+
+		if (!$needFeedStatus && !$needWeiboStatus) {
+			return tpl_viewthread_share_method($jsurl);
+		}
+		if ($_G['page'] == 1 && $_G['forum_firstpid'] && $postlist[$_G['forum_firstpid']]['invisible'] == 0) {
+			$feedLog = C::t('#qqconnect#connect_feedlog')->fetch_by_tid($_G['tid']);
+			if ($feedLog['publishtimes'] >= $this->retryMax) {
+				return tpl_viewthread_share_method($jsurl);
+			}
+			$hadFeedStatus = getstatus($feedLog['status'], 2);
+			$hadWeiboStatus = getstatus($feedLog['status'], 4);
+
+			if (!$hadFeedStatus || !$hadWeiboStatus) {
+
+				if ($needFeedStatus && !$hadFeedStatus) {
+					if ($_G['timestamp'] - $feedLog['lastpublished'] < 60) {
+						$needFeedStatus = false;
 					}
+				} else {
+					$needFeedStatus = false;
+				}
+
+				if($needWeiboStatus && !$hadWeiboStatus) {
+					if ($_G['timestamp'] - $feedLog['lastpublished'] < 60) {
+						$needWeiboStatus = false;
+					}
+				} else {
+					$needWeiboStatus = false;
 				}
 			}
 
-			if($_G['member']['conisbind'] && $_G['uid'] == $_G['forum_thread']['authorid'] && $_G['forum_thread']['displayorder'] >= 0 && !getstatus($_G['forum_thread']['status'], 8)) {
-				$_G['connect']['t_log'] = DB::fetch_first("SELECT * FROM ".DB::table('connect_tlog')." WHERE tid='$_G[tid]'");
-				if($_G['connect']['t_log']) {
-					$_G['connect']['t_interval'] = 300;
-					$_G['connect']['t_publish_max'] = 1000;
-					if($_G['connect']['t_log']['status'] == 1 || ($_G['connect']['t_log']['status'] == 2
-						&& TIMESTAMP - $_G['connect']['t_log']['lastpublished'] > $_G['connect']['t_interval']
-						&& $_G['connect']['t_log']['publishtimes'] < $_G['connect']['t_publish_max'])) {
-						DB::query("UPDATE ".DB::table('connect_tlog')." SET status='2', lastpublished='$_G[timestamp]', publishtimes=publishtimes+1 WHERE tid='$_G[tid]' AND status!=4");
-						$_G['connect']['t_js'] = $tlogstatus = true;
-					}
-				}
-			}
 
-			if($feedlogstatus || $tlogstatus){
-				$newstatus = $_G['forum_thread']['status'];
-				$newstatus = $feedlogstatus ? setstatus(7, 1, $newstatus) : $newstatus;
-				$newstatus = $tlogstatus ? setstatus(8, 1, $newstatus) : $newstatus;
-				C::t('forum_thread')->update($_G['tid'], array('status' => $newstatus));
-			}
-
-			$_G['connect']['thread_url'] = $_G['siteurl'].$GLOBALS['canonical'];
-
-			$_G['connect']['qzone_share_url'] = $_G['siteurl'] . 'home.php?mod=spacecp&ac=plugin&id=qqconnect:spacecp&pluginop=share&sh_type=1&thread_id=' . $_G['tid'];
-			$_G['connect']['weibo_share_url'] = $_G['siteurl'] . 'home.php?mod=spacecp&ac=plugin&id=qqconnect:spacecp&pluginop=share&sh_type=2&thread_id=' . $_G['tid'];
-			$_G['connect']['pengyou_share_url'] = $_G['siteurl'] . 'home.php?mod=spacecp&ac=plugin&id=qqconnect:spacecp&pluginop=share&sh_type=3&thread_id=' . $_G['tid'];
-
-			$_G['connect']['qzone_share_api'] = $_G['connect']['qzone_public_share_url'].'?url='.urlencode($_G['connect']['thread_url']);
-			$_G['connect']['pengyou_share_api'] = $_G['connect']['qzone_public_share_url'].'?to=pengyou&url='.urlencode($_G['connect']['thread_url']);
-			$params = array('oauth_consumer_key' => $_G['setting']['connectappid'], 'title' => $GLOBALS['postlist'][$_G['forum_firstpid']]['subject'], 'url' => $_G['connect']['thread_url']);
-			$params['sig'] = $connectService->connectGetSig($params, $connectService->connectGetSigKey());
-			$utilService = Cloud::loadClass('Service_Util');
-			$_G['connect']['t_share_api'] =	$_G['connect']['url'].'/mblog/redirect?'.$utilService->httpBuildQuery($params, '', '&');
-
-			$_G['connect']['first_post'] = daddslashes($GLOBALS['postlist'][$_G['forum_firstpid']]);
-			$_GET['connect_autoshare'] = !empty($_GET['connect_autoshare']) ? 1 : 0;
-
-			$_G['connect']['weibo_appkey'] = $_G['connect']['weibo_public_appkey'];
-			if($this->allow && $_G['setting']['connect']['qshare_appkey']) {
-				$_G['connect']['weibo_appkey'] = $_G['setting']['connect']['qshare_appkey'];
-			}
 
 			$jsurl = '';
-			if($_G['connect']['feed_js'] || $_G['connect']['t_js']) {
+			if($needFeedStatus || $needWeiboStatus) {
 				$params = array();
 				$params['thread_id'] = $_G['tid'];
 				$params['ts'] = TIMESTAMP;
-				$params['type'] = bindec(($_G['connect']['t_js'] ? '1' : '0').($_G['connect']['feed_js'] ? '1' : '0'));
+				$params['type'] = bindec(($needWeiboStatus ? '1' : '0').($needFeedStatus ? '1' : '0'));
 				$params['sig'] = $connectService->connectGetSig($params, $connectService->connectGetSigKey());
 
 				$utilService = Cloud::loadClass('Service_Util');
 				$jsurl = $_G['connect']['discuz_new_feed_url'].'&'.$utilService->httpBuildQuery($params, '', '&');
 			}
-
 			if (!$_G['member']['conisbind'] && $_G['group']['allowgetimage'] && $_G['thread']['price'] == 0) {
-				if ($_G['connect']['first_post']['message']) {
-					$connectService = Cloud::loadClass('Service_Connect');
-					$post['html_content'] = $connectService->connectParseBbcode($_G['connect']['first_post']['message'], $_G['connect']['first_post']['fid'], $_G['connect']['first_post']['pid'], $_G['connect']['first_post']['htmlon'], $attach_images);
-					if($attach_images && is_array($attach_images)) {
-						$attach_images = array_slice($attach_images, 0, 3);
-						$share_images = array();
-						foreach ($attach_images as $attach_image) {
-							$share_images[] = urlencode($attach_image['big']);
-						}
-						$_G['connect']['share_images'] = implode('|', $share_images);
-						unset($share_images);
-					}
+				if (trim($_G['forum']['viewperm'])) {
+					$allowViewPermGroupIds = explode("\t", trim($_G['forum']['viewperm']));
 				}
+				if (trim($_G['forum']['getattachperm'])) {
+					$allowViewAttachGroupIds = explode("\t", trim($_G['forum']['getattachperm']));
+				}
+				$bigWidth = '400';
+				$bigHeight = '400';
+				$share_images = array();
+				foreach ($postlist[$_G['connect']['first_post']['pid']]['attachments'] as $attachment) {
+					if ($attachment['isimage'] == 0 || $attachment['price'] > 0
+						|| $attachment['readperm'] > $_G['group']['readaccess']
+						|| ($allowViewPermGroupIds && !in_array($_G['groupid'], $allowViewPermGroupIds))
+						|| ($allowViewAttachGroupIds && !in_array($_G['groupid'], $allowViewAttachGroupIds))) {
+						continue;
+					}
+					$key = md5($attachment['aid'].'|'.$bigWidth.'|'.$bigHeight);
+					$bigImageURL = $_G['siteurl'] . 'forum.php?mod=image&aid='.$attachment['aid'] . '&size=' . $bigWidth . 'x' . $bigHeight . '&key=' . rawurlencode($key) . '&type=fixnone&nocache=1';
+					$share_images[] = urlencode($bigImageURL);
+				}
+				$_G['connect']['share_images'] = implode('|', $share_images);
 			}
 			$connectService->connectMergeMember();
+
 			return tpl_viewthread_share_method($jsurl);
 		}
 	}
@@ -411,10 +433,45 @@ class plugin_qqconnect extends plugin_qqconnect_base {
 		global $_G;
 		return '<img width="120" src="http://open.show.qq.com/cgi-bin/qs_open_snapshot?appid='.$_G['setting']['connectappid'].'&openid='.$openid.'" />';
 	}
-
 }
 
 class plugin_qqconnect_member extends plugin_qqconnect {
+
+	function connect_member() {
+		global $_G, $seccodecheck, $secqaacheck, $connect_guest;
+
+		if($this->allow) {
+			if($_G['uid'] && $_G['member']['conisbind']) {
+				dheader('location: '.$_G['siteurl'].'index.php');
+			}
+			$connect_guest = array();
+			if($_G['connectguest'] && (submitcheck('regsubmit', 0, $seccodecheck, $secqaacheck) || submitcheck('loginsubmit', 1, $seccodestatus))) {
+				if(!$_GET['auth_hash']) {
+					$_GET['auth_hash'] = $_G['cookie']['con_auth_hash'];
+				}
+				$conopenid = authcode($_GET['auth_hash']);
+				$connect_guest = C::t('#qqconnect#common_connect_guest')->fetch($conopenid);
+				if(!$connect_guest) {
+					dsetcookie('con_auth_hash');
+					showmessage('qqconnect:connect_login_first');
+				}
+			}
+		}
+	}
+
+	function logging_member() {
+		global $_G;
+		if($this->allow && $_G['connectguest'] && $_GET['action'] == 'login') {
+			dheader('location: '.$_G['siteurl'].'member.php?mod=connect&ac=bind');
+		}
+	}
+
+	function register_member() {
+		global $_G;
+		if($this->allow && $_G['connectguest']) {
+			dheader('location: '.$_G['siteurl'].'member.php?mod=connect');
+		}
+	}
 
 	function logging_method() {
 		if(!$this->allow) {
@@ -476,10 +533,6 @@ class plugin_qqconnect_forum extends plugin_qqconnect {
 		return $this->_post_feedlog_message($param);
 	}
 
-	function post_tlog_message($param) {
-		return $this->_post_tlog_message($param);
-	}
-
 	function viewthread_share_method_output() {
 		return $this->_viewthread_share_method_output();
 	}
@@ -508,10 +561,6 @@ class plugin_qqconnect_group extends plugin_qqconnect {
 		return $this->_post_feedlog_message($param);
 	}
 
-	function post_tlog_message($param) {
-		return $this->_post_tlog_message($param);
-	}
-
 	function viewthread_share_method_output() {
 		return $this->_viewthread_share_method_output();
 	}
@@ -531,40 +580,7 @@ class plugin_qqconnect_home extends plugin_qqconnect {
 			return;
 		}
 		if($_G['uid'] && $_G['setting']['connect']['allow']) {
-
-			$connectService = Cloud::loadClass('Service_Connect');
-			$connectService->connectMergeMember();
-
-			if($_G['member']['conuin'] && $_G['member']['conuinsecret']) {
-
-				$arr = array();
-				$arr['oauth_consumer_key'] = $_G['setting']['connectappid'];
-				$arr['oauth_nonce'] = mt_rand();
-				$arr['oauth_timestamp'] = TIMESTAMP;
-				$arr['oauth_signature_method'] = 'HMAC_SHA1';
-				$arr['oauth_token'] = $_G['member']['conuin'];
-				ksort($arr);
-				$arr['oauth_signature'] = $connectService->connectGetOauthSignature('http://api.discuz.qq.com/connect/getSignature', $arr, 'GET', $_G['member']['conuinsecret']);
-
-				$arr['version'] = 'qzone1.0';
-
-				$utilService = Cloud::loadClass('Service_Util');
-				$result = $connectService->connectOutputPhp('http://api.discuz.qq.com/connect/getSignature?' . $utilService->httpBuildQuery($arr, '', '&'));
-				if($result['status'] == 0) {
-					$js = 'a.onclick = function () { seditor_insertunit(\'sightml\', \'[wb='.$result['result']['username'].']'.$result['result']['signature_url'].'[/wb]\'); };';
-				} else {
-					$js = 'a.onclick = function () { showDialog(\''.lang('plugin/qqconnect', 'connect_wbsign_no_account').'\'); };';
-				}
-			} else {
-				$js = 'a.onclick = function () { showDialog(\''.lang('plugin/qqconnect', 'connect_wbsign_no_bind').'\'); };';
-			}
-			return '<script type="text/javascript">if($(\'sightmlsml\')) {'.
-				'var a = document.createElement(\'a\');a.href = \'javascript:;\';a.style.background = \'url(\' + STATICURL + \'image/common/weibo.png) no-repeat 0 2px\';'.
-				'a.onmouseover = function () { showTip(this); };a.setAttribute(\'tip\', \''.lang('plugin/qqconnect', 'connect_wbsign_tip').'\');'.
-				$js.
-				'$(\'sightmlsml\').parentNode.appendChild(a);'.
-				'}</script>';
-
+			return tpl_spacecp_profile_bottom();
 		}
 
 	}

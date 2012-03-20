@@ -4,7 +4,7 @@
  *		[Discuz!] (C)2001-2099 Comsenz Inc.
  *		This is NOT a freeware, use is subject to license terms
  *
- *		$Id: cloud_security.php 26420 2011-12-13 02:39:01Z songlixin $
+ *		$Id: cloud_security.php 28620 2012-03-06 08:41:55Z songlixin $
  */
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
@@ -74,7 +74,7 @@ if ($_GET['anchor'] == 'setting') {
 		$forumselect = str_replace('%', '%%', forumselect(FALSE, 0, $forumswhitelist, TRUE));
 
 		showformheader('cloud&operation=security&anchor=setting');
-		showtableheader('security_white_list_setting', '', '', 0);
+		showtableheader('security_white_list_setting', '', '', 2);
 		showsetting('security_usergroup_white_list', '', '', '<select name="groupid[]" multiple="multiple" size="10">'.$groupselect.'</select>');
 		showsetting('security_forum_white_list', '', '', '<select name="fid[]" multiple="multiple" size="10">'.$forumselect.'</select>');
 		showsubmit('settingsubmit');

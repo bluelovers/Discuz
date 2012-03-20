@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: forum_viewthread.js 28530 2012-03-02 05:01:21Z zhangguosheng $
+	$Id: forum_viewthread.js 28794 2012-03-13 05:39:46Z zhangguosheng $
 */
 
 var replyreload = '', attachimgST = new Array(), zoomgroup = new Array(), zoomgroupinit = new Array();
@@ -502,7 +502,7 @@ function lazyload(className) {
 		lazyload.imgs = imgs;
 		return true;
 	};
-	this.initImages();
+	this.showImage();
 	_attachEvent(window, 'scroll', function(){obj.showImage();});
 }
 function update_collection(){

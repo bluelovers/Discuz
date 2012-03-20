@@ -1,8 +1,10 @@
 <!--{eval $carray = array();}-->
 <!--{eval $beforeuser = 0;}-->
+<!--{eval $hiddennum = 0;}-->
 <!--{loop $list['feed'] $feed}-->
 	<!--{eval $content = $list['content'][$feed['tid']];}-->
 	<!--{eval $thread = $list['threads'][$content['tid']];}-->
+	<!--{if !empty($thread) && $thread['displayorder'] >= 0 || !empty($feed['note'])}-->
 	<li class="cl{if $lastviewtime && $feed[dateline] > $lastviewtime} unread{/if}" id="feed_li_$feed['feedid']" onmouseover="this.className='flw_feed_hover cl'" onmouseout="this.className='cl'">
 		<!--{if $_GET['do'] != 'view' && !isset($_GET[banavatar])}-->
 		<div class="z flw_avt">
@@ -64,6 +66,9 @@
 		<div id="replybox_$feed['feedid']" class="flw_replybox cl" style="display: none;"></div>
 		<div id="relaybox_$feed['feedid']" class="flw_replybox cl" style="display: none;"></div>
 	</li>
+	<!--{else}-->
+		<!--{eval $hiddennum++;}-->
+	<!--{/if}-->
 	<!--{if !isset($carray[$feed['cid']])}-->
 		<!--{eval $carray[$feed['cid']] = $feed['cid'];}-->
 	<!--{/if}-->

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_misc.php 28378 2012-02-28 09:25:19Z monkey $
+ *      $Id: lang_misc.php 28828 2012-03-14 07:55:21Z yexinhao $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -296,7 +296,7 @@ $lang = array
 	'crime_reason' => '{reason}',
 
 	'connectguest_message_search' => array('尚未登錄', '先登錄'),
-	'connectguest_message_replace' => array('尚未<a href="member.php?mod=connect" target="_blank">完善資料</a>或<a href="member.php?mod=connect&ac=bind" target="_blank">綁定帳號</a>', '先<a href="member.php?mod=connect" target="_blank">完善資料</a>或<a href="member.php?mod=connect&ac=bind" target="_blank">綁定帳號</a>'),
+	'connectguest_message_replace' => array('尚未 <a href="member.php?mod=connect">完善帳號信息</a> 或 <a href="member.php?mod=connect&ac=bind">綁定已有帳號</a> ', '您需要先 <a href="member.php?mod=connect">完善帳號信息</a> 或 <a href="member.php?mod=connect&ac=bind">綁定已有帳號</a> '),
 
 	'avatar' => '頭像',
 	'signature' => '簽名',
