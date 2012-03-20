@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: upgrade.php 26543 2011-12-15 02:17:57Z monkey $
+ *      $Id: upgrade.php 28668 2012-03-07 07:46:05Z liudongdong $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -38,9 +38,26 @@ if($_GET['fromversion'] <= '1.04') {
 
 	REPLACE INTO pre_common_setting VALUES ('connect', '{$connect}');
 
-	ALTER TABLE pre_common_member_connect ADD COLUMN `conisqqshow` tinyint(1) unsigned NOT NULL default '0';
+	CREATE TABLE IF NOT EXISTS pre_common_connect_guest (
+	  `conopenid` char(32) NOT NULL default '',
+	  `conuin` char(40) NOT NULL default '',
+	  `conuinsecret` char(16) NOT NULL default '',
+	  PRIMARY KEY (conopenid)
+	) TYPE=MyISAM;
 
 EOF;
+
+	$columnexisted = false;
+
+	$query = DB::query("SHOW COLUMNS FROM pre_common_member_connect");
+	while($temp = DB::fetch($query)) {
+		if($temp['Field'] == 'conisqqshow') {
+			$columnexisted = true;
+			break;
+		}
+	}
+
+	$sql .= !$columnexisted ? "ALTER TABLE pre_common_member_connect ADD COLUMN conisqqshow tinyint(1) unsigned NOT NULL default '0';" : '';
 
 }
 

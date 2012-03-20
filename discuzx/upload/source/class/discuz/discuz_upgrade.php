@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: discuz_upgrade.php 27678 2012-02-09 08:11:21Z svn_project_zhangjie $
+ *      $Id: discuz_upgrade.php 28882 2012-03-16 07:53:52Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -20,15 +20,11 @@ class discuz_upgrade {
 	public function fetch_updatefile_list($upgradeinfo) {
 
 		$file = DISCUZ_ROOT.'./data/update/Discuz! X'.$upgradeinfo['latestversion'].' Release['.$upgradeinfo['latestrelease'].']/updatelist.tmp';
+		$upgradedataflag = true;
 		$upgradedata = @file_get_contents($file);
 		if(!$upgradedata) {
-			$upgradedata = dfsockopen($this->upgradeurl.$upgradeinfo['upgradelist']);
-			$this->mkdirs(dirname($file));
-			$fp = fopen($file, 'w');
-			if(!$fp) {
-				return array();
-			}
-			fwrite($fp, $upgradedata);
+			$upgradedata = dfsockopen($this->upgradeurl.substr($upgradeinfo['upgradelist'], 0, -4).strtolower('_'.$this->locale.'_'.$this->charset).'.txt');
+			$upgradedataflag = false;
 		}
 
 		$return = array();
@@ -39,7 +35,19 @@ class discuz_upgrade {
 			}
 			$return['file'][$k] = trim(substr($v, 34));
 			$return['md5'][$k] = substr($v, 0, 32);
+			if(trim(substr($v, 32, 2)) != '*') {
+				@unlink($file);
+				return array();
+			}
 
+		}
+		if(!$upgradedataflag) {
+			$this->mkdirs(dirname($file));
+			$fp = fopen($file, 'w');
+			if(!$fp) {
+				return array();
+			}
+			fwrite($fp, $upgradedata);
 		}
 
 		return $return;
@@ -94,7 +102,8 @@ class discuz_upgrade {
 			return false;
 		}
 		$content = preg_replace('/\s/', '', file_get_contents($file));
-		$remotecontent = preg_replace('/\s/', '', file_get_contents($remotefile));
+		$ctx = stream_context_create(array('http' => array('timeout' => 60)));
+		$remotecontent = preg_replace('/\s/', '', file_get_contents($remotefile, false, $ctx));
 		if(strcmp($content, $remotecontent)) {
 			return false;
 		} else {

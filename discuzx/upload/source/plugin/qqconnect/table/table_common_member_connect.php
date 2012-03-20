@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_member_connect.php 28497 2012-03-01 11:16:19Z monkey $
+ *      $Id: table_common_member_connect.php 28617 2012-03-06 08:30:36Z songlixin $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -32,10 +32,13 @@ class table_common_member_connect extends discuz_table {
 		} else {
 			$field = '*';
 		}
+
 		return DB::fetch_first('SELECT %i FROM %t WHERE conopenid=%s', array($field, $this->_table, $openid));
 	}
 
+	public function update_by_openid($openId, $data) {
 
-
+		return DB::update($this->_table, $data, DB::field('openId', $openId));
+	}
 }
 ?>

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_profile.php 27242 2012-01-12 03:21:51Z zhengqingpeng $
+ *      $Id: function_profile.php 28582 2012-03-05 07:15:39Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -318,6 +318,8 @@ function profile_show($fieldid, $space=array()) {
 	} elseif($fieldid == 'site') {
 		$url = str_replace('"', '\\"', $space[$fieldid]);
 		return "<a href=\"$url\" target=\"_blank\">$url</a>";
+	} elseif($fieldid == 'position') {
+		return nl2br($space['office'] ? $space['office'] : $space['position']);
 	} else {
 		return nl2br($space[$fieldid]);
 	}

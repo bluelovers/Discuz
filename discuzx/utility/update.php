@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: update.php 28531 2012-03-02 05:01:47Z liulanbo $
+ *      $Id: update.php 28678 2012-03-07 10:53:34Z liulanbo $
  */
 
 include_once('../source/class/class_core.php');
@@ -140,22 +140,31 @@ if($_GET['step'] == 'start') {
 		DB::query("ALTER TABLE ".DB::table('forum_forumfield')." ADD seodescription text NOT NULL default '' COMMENT '版块seo描述' AFTER keywords");
 		DB::query("UPDATE ".DB::table('forum_forumfield')." SET seodescription=description WHERE membernum='0'");
 	}
-	if(DB::fetch_first("SHOW TABLES LIKE '%common_tagitem'") && !$row = DB::fetch_first("SHOW INDEX FROM ".DB::table('common_tagitem')." WHERE key_name='item'")) {
-		$query = DB::query("SELECT *, count(idtype) AS rcount FROM ".DB::table('common_tagitem')." GROUP BY tagid,itemid,idtype ORDER BY rcount DESC");
+	if(DB::fetch_first("SHOW TABLES LIKE '%common_tagitem'")) {
+		$noexist_itemkey = true;
+		$query = DB::query("SHOW INDEX FROM ".DB::table('common_tagitem'));
 		while($row = DB::fetch($query)) {
-			if($row['rcount'] > 1) {
-				DB::query("DELETE FROM ".DB::table('common_tagitem')." WHERE tagid='$row[tagid]' AND itemid='$row[itemid]' AND idtype='$row[idtype]' LIMIT ".($row['rcount'] - 1));
-			} else {
+			if($row['Key_name'] == 'item') {
+				$noexist_itemkey = false;
 				break;
 			}
 		}
-
+		if($noexist_itemkey) {
+			$query = DB::query("SELECT *, count(idtype) AS rcount FROM ".DB::table('common_tagitem')." GROUP BY tagid,itemid,idtype ORDER BY rcount DESC");
+			while($row = DB::fetch($query)) {
+				if($row['rcount'] > 1) {
+					DB::query("DELETE FROM ".DB::table('common_tagitem')." WHERE tagid='$row[tagid]' AND itemid='$row[itemid]' AND idtype='$row[idtype]' LIMIT ".($row['rcount'] - 1));
+				} else {
+					break;
+				}
+			}
+		}
 	}
 	$posttables = get_special_tables_array('forum_post');
 	$posttables[] = 'forum_post';
 	foreach($posttables as $post_tablename) {
 		if(!$row = DB::fetch_first("SHOW COLUMNS FROM ".DB::table($post_tablename)." LIKE 'position'")) {
-			$sql[] = "ALTER TABLE ".DB::table($post_tablename)." ORDER BY pid ASC";
+			$sql[] = "ALTER TABLE ".DB::table($post_tablename)." ORDER BY tid ASC, first DESC, pid ASC";
 			$sql[] = "ALTER TABLE ".DB::table($post_tablename)." CHANGE `pid` `pid` INT(10) UNSIGNED NOT NULL, CHANGE `replycredit` `replycredit` int(10) NOT NULL default '0', CHANGE `status` `status` int(10) NOT NULL default '0', ADD UNIQUE KEY pid (pid), DROP PRIMARY KEY, ADD `position` INT(8) UNSIGNED NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY(`tid`, `position`), DROP INDEX authorid, ADD INDEX authorid (authorid,invisible)";
 			if(!$_GET['waitingdb']) {
 				waitingdb('prepare', $sql);
@@ -281,7 +290,7 @@ if($_GET['step'] == 'start') {
 					}
 				} else {
 					$i = array_search($key, $allfileds);
-					$fieldposition = $i > 0 ? 'AFTER '.$allfileds[$i-1] : 'FIRST';
+					$fieldposition = $i > 0 ? 'AFTER `'.$allfileds[$i-1].'`' : 'FIRST';
 					$updates[] = "ADD `$key` $value $fieldposition";
 				}
 			}
@@ -683,10 +692,6 @@ if($_GET['step'] == 'start') {
 			$article_tagsnew = array(1 => '原创', 2 => '热点', 3 => '组图', 4 => '爆料', 5 => '头条', 6 => '幻灯', 7 => '滚动', 8 => '推荐');
 			$newsettings['article_tags'] = $article_tagsnew;
 		}
-		if(!isset($settings['newbie'])) {
-			$newbienew = 20;
-			$newsettings['newbie'] = $newbienew;
-		}
 		if(empty($settings['anonymoustext'])) {
 			$newsettings['anonymoustext'] = '匿名';
 		}
@@ -996,12 +1001,23 @@ if($_GET['step'] == 'start') {
 				DB::query("UPDATE ".DB::table('forum_thread')." SET stamp='$row[stamp]' WHERE tid='$row[tid]'", 'UNBUFFERED');
 			}
 		}
-		DB::query("REPLACE INTO ".DB::table('common_smiley')." (id, typeid, displayorder, type, code, url) VALUES ('83','4','19','stamp','编辑采用','010.gif')");
-		DB::query("REPLACE INTO ".DB::table('common_smiley')." (id, typeid, displayorder, type, code, url) VALUES ('84','0','18','stamplist','编辑采用','010.small.gif')");
-		DB::query("REPLACE INTO ".DB::table('common_smiley')." (id, typeid, displayorder, type, code, url) VALUES ('85','0','20','stamplist','新人帖','011.small.gif')");
+		if(!DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_smiley')." WHERE url='010.gif'")) {
+			DB::query("REPLACE INTO ".DB::table('common_smiley')." (typeid, displayorder, type, code, url) VALUES ('4','19','stamp','编辑采用','010.gif')");
+		}
+		if(!DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_smiley')." WHERE url='010.small.gif'")) {
+			DB::query("REPLACE INTO ".DB::table('common_smiley')." (typeid, displayorder, type, code, url) VALUES ('0','18','stamplist','编辑采用','010.small.gif')");
+		}
+		if(!DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_smiley')." WHERE url='011.small.gif'")) {
+			DB::query("REPLACE INTO ".DB::table('common_smiley')." (typeid, displayorder, type, code, url) VALUES ('0','20','stamplist','新人帖','011.small.gif')");
+			$setnewbie = true;
+		}
 		require_once libfile('function/cache');
 		updatecache('stamps');
 		updatecache('stamptypeid');
+		if($setnewbie) {
+			$id = DB::result_first("SELECT displayorder FROM ".DB::table('common_smiley')." WHERE url='011.small.gif'");
+			DB::query("REPLACE INTO ".DB::table('common_setting')." VALUES ('newbie', '$id')");
+		}
 		show_msg("鉴定图章升级完毕", "$theurl?step=data&op=$nextop");
 	} elseif($_GET['op'] == 'block_item') {
 		$nextop = 'block_permission';
@@ -1618,7 +1634,7 @@ if($_GET['step'] == 'start') {
 	preg_match_all("/CREATE\s+TABLE.+?pre\_(.+?)\s+\((.+?)\)\s*(ENGINE|TYPE)\s*\=/is", $sql, $matches);
 	$newtables = empty($matches[1])?array():$matches[1];
 
-	$connecttables = array('common_member_connect', 'common_uin_black', 'connect_feedlog', 'connect_memberbindlog', 'connect_tlog', 'connect_tthreadlog');
+	$connecttables = array('common_member_connect', 'common_uin_black', 'connect_feedlog', 'connect_memberbindlog', 'connect_tlog', 'connect_tthreadlog', 'connect_guest');
 
 	$newsqls = empty($matches[0])?array():$matches[0];
 

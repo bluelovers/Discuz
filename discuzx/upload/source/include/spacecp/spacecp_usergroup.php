@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_usergroup.php 28431 2012-02-29 09:51:23Z monkey $
+ *      $Id: spacecp_usergroup.php 28839 2012-03-14 10:00:31Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -124,25 +124,7 @@ if(in_array($do, array('buy', 'exit'))) {
 	}
 	$group = C::t('common_usergroup')->fetch($groupid);
 	if(submitcheck('groupsubmit')) {
-		$memberfieldforum = C::t('common_member_field_forum')->fetch($_G['uid']);
-		$groupterms = dunserialize($memberfieldforum['groupterms']);
-		unset($memberfieldforum);
-		$extgroupidsnew = $_G['groupid'];
-		$groupexpirynew = $groupterms['ext'][$groupid];
-		foreach($extgroupids as $extgroupid) {
-			if($extgroupid && $extgroupid != $groupid) {
-				$extgroupidsnew .= "\t".$extgroupid;
-			}
-		}
-		if($_G['adminid'] > 0 && $group['radminid'] > 0) {
-			$newadminid = $_G['adminid'] < $group['radminid'] ? $_G['adminid'] : $group['radminid'];
-		} elseif($_G['adminid'] > 0) {
-			$newadminid = $_G['adminid'];
-		} else {
-			$newadminid = $group['radminid'];
-		}
-
-		C::t('common_member')->update($_G['uid'], array('groupid' => $groupid, 'adminid' => $newadminid, 'groupexpiry' => $groupexpirynew, 'extgroupids' => $extgroupidsnew));
+		switch_group($group);
 		showmessage('usergroups_switch_succeed', "home.php?mod=spacecp&ac=usergroup".($_GET['gid'] ? "&gid=$_GET[gid]" : '&do=expiry'), array('group' => $group['grouptitle']), array('showdialog' => 3, 'showmsg' => true, 'locationtime' => true));
 	}
 
@@ -216,7 +198,7 @@ if(in_array($do, array('buy', 'exit'))) {
 
 	if(!empty($groupterms['ext'])) {
 		foreach($groupterms['ext'] as $extgroupid => $time) {
-			$expirylist[$extgroupid] = array('time' => dgmdate($time, 'd'), 'type' => 'ext');
+			$expirylist[$extgroupid] = array('time' => dgmdate($time, 'd'), 'type' => 'ext', 'noswitch' => $time < TIMESTAMP);
 		}
 	}
 
@@ -237,7 +219,12 @@ if(in_array($do, array('buy', 'exit'))) {
 	$groupids = array_merge($extgroupids, $expiryids, $groupids);
 	$usermoney = $space['extcredits'.$_G['setting']['creditstrans']];
 	if($groupids) {
+		$autoswitch = 0;
 		foreach(C::t('common_usergroup')->fetch_all($groupids) as $group) {
+			$isexp = in_array($group['groupid'], $expgrouparray);
+			if(!$autoswitch && !$isexp) {
+				$autoswitch = $group['groupid'];
+			}
 			if($_G['cache']['usergroups'][$group['groupid']]['pubtype'] == 'buy') {
 				list($dailyprice) = explode("\t", $group['system']);
 				$expirylist[$group['groupid']]['dailyprice'] = $dailyprice;
@@ -246,7 +233,12 @@ if(in_array($do, array('buy', 'exit'))) {
 				$expirylist[$group['groupid']]['usermaxdays'] = 0;
 			}
 			$expirylist[$group['groupid']]['maingroup'] = $group['type'] != 'special' || $group['system'] == 'private' || $group['radminid'] > 0;
-			$expirylist[$group['groupid']]['grouptitle'] = in_array($group['groupid'], $expgrouparray) ? '<s>'.$group['grouptitle'].'</s>' : $group['grouptitle'];
+			$expirylist[$group['groupid']]['grouptitle'] = $isexp ? '<s>'.$group['grouptitle'].'</s>' : $group['grouptitle'];
+		}
+		if(in_array($_G['groupid'], $expgrouparray) && $autoswitch && $_G['groupid'] != $autoswitch) {
+			$group = C::t('common_usergroup')->fetch($autoswitch);
+			switch_group($group);
+			dheader('location: home.php?mod=spacecp&ac=usergroup&do=expiry');
 		}
 	}
 
@@ -348,5 +340,29 @@ if(in_array($do, array('buy', 'exit'))) {
 }
 
 include_once template("home/spacecp_usergroup");
+
+function switch_group($group) {
+	global $_G, $extgroupids;
+	$groupid = $group['groupid'];
+	$memberfieldforum = C::t('common_member_field_forum')->fetch($_G['uid']);
+	$groupterms = dunserialize($memberfieldforum['groupterms']);
+	unset($memberfieldforum);
+	$extgroupidsnew = $_G['groupid'];
+	$groupexpirynew = $groupterms['ext'][$groupid];
+	foreach($extgroupids as $extgroupid) {
+		if($extgroupid && $extgroupid != $groupid) {
+			$extgroupidsnew .= "\t".$extgroupid;
+		}
+	}
+	if($_G['adminid'] > 0 && $group['radminid'] > 0) {
+		$newadminid = $_G['adminid'] < $group['radminid'] ? $_G['adminid'] : $group['radminid'];
+	} elseif($_G['adminid'] > 0) {
+		$newadminid = $_G['adminid'];
+	} else {
+		$newadminid = $group['radminid'];
+	}
+
+	C::t('common_member')->update($_G['uid'], array('groupid' => $groupid, 'adminid' => $newadminid, 'groupexpiry' => $groupexpirynew, 'extgroupids' => $extgroupidsnew));
+}
 
 ?>

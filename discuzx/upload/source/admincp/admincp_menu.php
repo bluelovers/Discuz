@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_menu.php 27617 2012-02-07 08:24:14Z monkey $
+ *      $Id: admincp_menu.php 28655 2012-03-07 03:46:59Z zhangguosheng $
  */
 
 global $_G;
@@ -229,7 +229,7 @@ if($isfounder) {
 		array('menu_patch', 'patch'),
 		array('menu_setting_uc', 'setting_uc'),
 		array('menu_db', 'db_export'),
-		array('menu_membersplit', 'membersplit_manage'),
+		array('menu_membersplit', 'membersplit_check'),
 		array('menu_postsplit', 'postsplit_manage'),
 		array('menu_threadsplit', 'threadsplit_manage'),
 		array('menu_upgrade', 'upgrade'),

@@ -35,9 +35,10 @@ template/default/forum/discuz.htm *<!--{hook/index_nav_extra}-->
 template/default/forum/discuz.htm *<!--{hook/index_top}-->
 template/default/forum/discuz.htm *<!--{hook/index_catlist_top}-->
 template/default/forum/discuz.htm *<!--{hook/index_favforum_extra $forum[fid]}-->
+template/default/forum/discuz.htm *<!--{hook/index_favforum_extra $forum[fid]}-->
 template/default/forum/discuz.htm *<!--{hook/index_catlist $cat[fid]}-->
 template/default/forum/discuz.htm *<!--{hook/index_forum_extra $forum[fid]}-->
-template/default/forum/discuz.htm *<!--{hook/index_forum_extra $forumid}-->
+template/default/forum/discuz.htm *<!--{hook/index_forum_extra $forum[fid]}-->
 template/default/forum/discuz.htm *<!--{hook/index_middle}-->
 template/default/forum/discuz.htm *<!--{hook/index_bottom}-->
 template/default/forum/discuz.htm *<!--{hook/index_side_top}-->

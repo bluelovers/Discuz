@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_cloud.php 26524 2011-12-14 09:04:11Z liulanbo $
+ *      $Id: class_cloud.php 28702 2012-03-08 06:43:58Z yexinhao $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -57,7 +57,7 @@ class Cloud {
 class Cloud_Exception extends Exception {
 
 	public function __construct($message, $code = 0) {
-		if (is_a($message, 'Exception')) {
+		if ($message instanceof Exception) {
 			parent::__construct($message->getMessage(), intval($message->getCode()));
 		} else {
 			parent::__construct($message, intval($code));

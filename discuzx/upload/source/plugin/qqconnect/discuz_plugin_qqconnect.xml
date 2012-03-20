@@ -12,7 +12,7 @@
 			<item id="datatables"><![CDATA[]]></item>
 			<item id="directory"><![CDATA[qqconnect/]]></item>
 			<item id="copyright"><![CDATA[Comsenz Inc.]]></item>
-			<item id="version"><![CDATA[1.04]]></item>
+			<item id="version"><![CDATA[1.05]]></item>
 			<item id="__modules">
 				<item id="0">
 					<item id="name"><![CDATA[connect]]></item>
@@ -62,10 +62,13 @@
 				<item id="connect_register_bind_already"><![CDATA[抱歉，该用户已绑定过另一个QQ用户，无法再次绑定]]></item>
 				<item id="connect_register_uinlimit"><![CDATA[抱歉，每个QQ帐号只能注册 {limit} 个帐号]]></item>
 				<item id="connect_register_closed"><![CDATA[QQ注册功能已关闭]]></item>
+				<item id="connect_register_bind"><![CDATA[绑定已有帐号]]></item>
+				<item id="connect_register_profile"><![CDATA[完善帐号信息]]></item>
 				<item id="connect_get_access_token_failed"><![CDATA[抱歉，当前存在网络问题或服务器繁忙，请您稍候再试。谢谢。]]></item>
 				<item id="connect_get_request_token_failed"><![CDATA[抱歉，当前存在网络问题或服务器繁忙，请您稍候再试。谢谢。]]></item>
 				<item id="connect_register_bind_uin_already"><![CDATA[抱歉，该QQ用户已绑定了本站的另一个用户，无法再次绑定]]></item>
 				<item id="connect_config_success"><![CDATA[QQ互联设置更新成功]]></item>
+				<item id="connect_login_first"><![CDATA[请先使用QQ互联登录再进行此操作]]></item>
 				<item id="connect_config_unbind_failed"><![CDATA[抱歉，解绑失败，请重试使用QQ登录后再进行解绑操作]]></item>
 				<item id="connect_config_unbind_busy"><![CDATA[抱歉，当前存在网络问题或服务器繁忙，请您稍候再尝试解绑。谢谢。]]></item>
 				<item id="connect_config_unbind_success"><![CDATA[您的论坛帐号和QQ帐号解除绑定成功。]]></item>
@@ -73,9 +76,6 @@
 				<item id="connect_reauth_success"><![CDATA[QQ互联授权修改成功]]></item>
 				<item id="connect_register_bind_success"><![CDATA[您的帐号与QQ帐号绑定成功]]></item>
 				<item id="connect_register_bind_need_inactive"><![CDATA[抱歉，您的帐号尚未激活，请先激活后再绑定QQ帐号]]></item>
-				<item id="connect_wbsign_no_account"><![CDATA[您尚未开通腾讯微博功能，无法使用腾讯微博签名档功能]]></item>
-				<item id="connect_wbsign_no_bind"><![CDATA[您需要绑定QQ帐号，才可使用腾讯微博签名档功能]]></item>
-				<item id="connect_wbsign_tip"><![CDATA[插入腾讯微博做为论坛签名，可第一时间将您的微博最新信息展示给本站的会员和游客]]></item>
 				<item id="connect_qqshow_open"><![CDATA[设置成功，您已在社区使用QQ秀形象]]></item>
 				<item id="connect_qqshow_close"><![CDATA[设置成功，您已取消在社区使用QQ秀形象]]></item>
 				<item id="connect_reply_filter_smiley"><![CDATA[/微笑 /撇嘴 /色 /发呆 /得意 /流泪 /害羞 /闭嘴 /睡 /大哭 /尴尬 /发怒 /调皮 /呲牙 /惊讶 /难过 /酷 /冷汗 /抓狂 /吐 /偷笑 /可爱 /白眼 /傲慢 /饥饿 /困 /惊恐 /流汗 /憨笑 /大兵 /奋斗 /咒骂 /疑问 /嘘 /晕 /折磨 /衰 /骷髅 /敲打 /再见 /擦汗 /抠鼻 /鼓掌 /糗大了 /坏笑 /左哼哼 /右哼哼 /哈欠 /鄙视 /委屈 /快哭了 /阴险 /亲亲 /吓 /可怜 /菜刀 /西瓜 /啤酒 /篮球 /乒乓 /咖啡 /饭 /猪头 /玫瑰 /凋谢 /示爱 /爱心 /心碎 /蛋糕 /闪电 /炸弹 /刀 /足球 /瓢虫 /便便 /月亮 /太阳 /礼物 /拥抱 /强 /弱 /握手 /胜利 /抱拳 /勾引 /拳头 /差劲 /爱你 /NO /OK /爱情 /飞吻 /跳跳 /发抖 /怄火 /转圈 /磕头 /回头 /跳绳 /挥手 /激动 /街舞 /献吻 /左太极 /右太极]]></item>
@@ -88,7 +88,7 @@
 				<item id="connect_publish_feed"><![CDATA[将此主题发送到QQ空间动态]]></item>
 				<item id="connect_publish_t"><![CDATA[将此主题转播到腾讯微博]]></item>
 				<item id="connect_register_complete"><![CDATA[完善一点信息，马上开始浏览]]></item>
-				<item id="connect_register_bind"><![CDATA[绑定我的帐号]]></item>
+				<item id="connect_register_bind"><![CDATA[绑定已有帐号]]></item>
 				<item id="connect_register_profile"><![CDATA[完善帐号信息]]></item>
 				<item id="connect_register_has_id"><![CDATA[已有帐号？]]></item>
 				<item id="connect_register_new_username"><![CDATA[输入新用户名]]></item>
@@ -104,7 +104,7 @@
 				<item id="connect_register_sex_female"><![CDATA[女]]></item>
 				<item id="connect_register_sex_secret"><![CDATA[保密]]></item>
 				<item id="connect_register_public_email"><![CDATA[公开邮箱地址]]></item>
-				<item id="connect_register_use_qzone_avatar"><![CDATA[使用QQ空间头像]]></item>
+				<item id="connect_register_use_qzone_avatar"><![CDATA[使用QQ头像]]></item>
 				<item id="connect_register_use_qqshow"><![CDATA[<span title="QQ秀将展示在论坛帖子左侧和个人空间首页">使用QQ秀形象</span>]]></item>
 				<item id="connect_register_agree"><![CDATA[同意服务条款]]></item>
 				<item id="connect_register_must_agree"><![CDATA[您必须同意服务条款后才能注册]]></item>
@@ -207,8 +207,13 @@
 				<item id="connect_spacecp_weibo_share"><![CDATA[转播]]></item>
 				<item id="connect_spacecp_weibo_reason_is_long"><![CDATA[微博内容超过了长度限制]]></item>
 				<item id="connect_spacecp_weibo_reason_is_short"><![CDATA[请输入您要转播的微博内容]]></item>
-				<item id="connect_member_register_tip"><![CDATA[您将使用QQ账号<span id="connect_nick_register"></span>注册本站，<a href="{$change_qq_url}">更换QQ账号</a>？]]></item>
-				<item id="connect_member_loginbind_tip"><![CDATA[您将使用QQ账号<span id="connect_nick_logging"></span>绑定本站账号，<a href="{$change_qq_url}">更换QQ账号</a>？]]></item>
+				<item id="connect_member_register_tip"><![CDATA[完善帐号信息可体验本站更多功能]]></item>
+				<item id="connect_member_loginbind_tip"><![CDATA[绑定已有帐号可使用QQ帐号快速登录本站]]></item>
+				<item id="connect_member_register_button_tip"><![CDATA[体验本站更多功能]]></item>
+				<item id="connect_member_loginbind_button_tip"><![CDATA[使用QQ帐号快速登录本站]]></item>
+				<item id="connect_wbsign_no_account"><![CDATA[网络繁忙，暂时无法使用腾讯微博签名档功能]]></item>
+				<item id="connect_wbsign_no_bind"><![CDATA[您需要绑定QQ帐号，才可使用腾讯微博签名档功能]]></item>
+				<item id="connect_wbsign_tip"><![CDATA[插入腾讯微博做为论坛签名，可第一时间将您的微博最新信息展示给本站的会员和游客]]></item>
 			</item>
 		</item>
 	</item>

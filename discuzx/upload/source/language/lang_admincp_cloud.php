@@ -4,7 +4,7 @@
  *	  [Discuz!] (C)2001-2099 Comsenz Inc.
  *	  This is NOT a freeware, use is subject to license terms
  *
- *	  $Id: lang_admincp_cloud.php 28535 2012-03-02 05:25:30Z yangli $
+ *	  $Id: lang_admincp_cloud.php 28728 2012-03-09 03:15:48Z songlixin $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -30,7 +30,7 @@ $extend_lang = array
 	'menu_cloud_connect' => 'QQ互联',
 	'menu_cloud_search' => '纵横搜索',
 	'menu_cloud_stats' => '腾讯分析',
-	'menu_cloud_security' => '腾讯安全',
+	'menu_cloud_security' => '防水墙',
 	'menu_cloud_smilies' => 'SOSO表情',
 	'menu_cloud_qqgroup' => '社区QQ群',
 	'menu_cloud_union' => 'Discuz!联盟',
@@ -329,12 +329,12 @@ $extend_lang = array
 	'security_exfoldall' => '全部展开',
 	'security_userdeleted' => '该用户已被管理人员删除',
 	'security_postdeleted' => '该帖子已被管理人员删除',
-	'security_modreason' => '腾讯安全自动处理',
+	'security_modreason' => '防水墙自动处理',
 	'security_restore_user' => '恢复该用户',
 	'security_change_usergroup' => '更改用户组',
 
-	'recyclebin_search_security_thread' => '仅包含腾讯安全处理的主题',
-	'recyclebin_search_security_post' => '仅包含腾讯安全处理的回帖',
+	'recyclebin_search_security_thread' => '仅包含防水墙处理的主题',
+	'recyclebin_search_security_post' => '仅包含防水墙处理的回帖',
 
 	'security_setting' => '设置',
 	'security_setting_list' => '设置',
@@ -342,9 +342,9 @@ $extend_lang = array
 	'security_tips_1' => '<li><p>累计识别违规主题：<a href="admin.php?action=cloud&operation=security&anchor=thread" style="font-size:14px; text-decoration:none; color:#0000FF;">%d</a>，违规回帖：<a href="admin.php?action=cloud&operation=security&anchor=post" style="font-size:14px; text-decoration:none; color:#0000FF;">%d</a>，违规用户：<a href="admin.php?action=cloud&operation=security&anchor=member" style="font-size:14px; text-decoration:none; color:#0000FF;">%d</a></p></li><li><p>系统识别到违规主题和违规回帖后，自动将主题和回帖放入<a href="admin.php?action=recyclebin" style="text-decoration:none; color:#0000FF;">回收站</a></p></li><li><p>系统识别到违规用户后，自动将用户禁言</p></li>',
 	'security_white_list_setting' => '白名单设置',
 	'security_usergroup_white_list' => '用户组白名单',
-	'security_usergroup_white_list_comment' => '所选用户组内用户的操作，腾讯安全不做处理，可以按住 CTRL 多选',
+	'security_usergroup_white_list_comment' => '所选用户组内用户的操作，防水墙不做处理，可以按住 CTRL 多选',
 	'security_forum_white_list' => '版块白名单',
-	'security_forum_white_list_comment' => '所选版块内的主题和回复，腾讯安全不做处理，可以按住 CTRL 多选',
+	'security_forum_white_list_comment' => '所选版块内的主题和回复，防水墙不做处理，可以按住 CTRL 多选',
 	'security_recyclebin_thread' => '到回收站处理主题',
 	'security_recyclebin_post' => '到回收站处理回帖',
 	'security_thread_status' => '主题状态',

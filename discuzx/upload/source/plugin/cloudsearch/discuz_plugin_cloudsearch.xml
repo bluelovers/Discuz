@@ -12,7 +12,7 @@
 			<item id="datatables"><![CDATA[]]></item>
 			<item id="directory"><![CDATA[cloudsearch/]]></item>
 			<item id="copyright"><![CDATA[Comsenz Inc.]]></item>
-			<item id="version"><![CDATA[1.00]]></item>
+			<item id="version"><![CDATA[1.02]]></item>
 			<item id="__modules">
 				<item id="0">
 					<item id="name"><![CDATA[search]]></item>
@@ -43,6 +43,7 @@
 				<item id="order_posted"><![CDATA[发帖时间]]></item>
 				<item id="thread_class"><![CDATA[主题分类]]></item>
 				<item id="loading"><![CDATA[正在加载……]]></item>
+				<item id="forumhottopic"><![CDATA[热点]]></item>
 			</item>
 		</item>
 		<item id="installfile"><![CDATA[install.php]]></item>

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: thread_activity.php 26205 2011-12-05 10:09:32Z zhangguosheng $
+ *      $Id: thread_activity.php 28709 2012-03-08 08:53:48Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -67,7 +67,7 @@ if($activity['aid']) {
 
 $applylistverified = array();
 $noverifiednum = 0;
-$query = C::t('forum_activityapply')->fetch_all_for_thread($_G['tid'], 0, 0);
+$query = C::t('forum_activityapply')->fetch_all_for_thread($_G['tid'], 0, 0, 0, 1);
 foreach($query as $activityapplies) {
 	$activityapplies['dateline'] = dgmdate($activityapplies['dateline'], 'u');
 	if($activityapplies['verified'] == 1) {

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_forum_activityapply.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: table_forum_activityapply.php 28709 2012-03-08 08:53:48Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -43,7 +43,7 @@ class table_forum_activityapply extends discuz_table
 		if(intval($uid)) {
 			$verifiedsql .= ' AND uid='.intval($uid);
 		}
-		return DB::fetch_all("SELECT * FROM %t WHERE tid=%d $verifiedsql ORDER BY dateline DESC".DB::limit($start, $limit), array($this->_table, $tid, $start, $limit));
+		return DB::fetch_all("SELECT * FROM %t WHERE tid=%d $verifiedsql ORDER BY dateline DESC".DB::limit($start, $limit), array($this->_table, $tid));
 	}
 	public function update_verified_for_thread($verified, $tid, $applyid) {
 		DB::query("UPDATE %t SET verified=%d WHERE tid=%d AND applyid IN (%n)", array($this->_table, $verified, $tid, $applyid));

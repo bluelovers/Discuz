@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_template.php 28113 2012-02-22 09:25:55Z svn_project_zhangjie $
+ *      $Id: lang_template.php 28726 2012-03-09 03:05:19Z yexinhao $
  *
  *      This file is automatically generate
  */
@@ -364,6 +364,18 @@ $lang = array (
   'top_orderby_credits' => '按积分总数',
   'top_orderby_posts' => '按发帖总数',
   'top_orderby_uid' => '按注册时间',
+  'upload_pic' => '上传图片',
+  'aim_album' => '上传到:',
+  'default_album' => '默认相册',
+  'create_new_album' => '创建新相册',
+  'input_album_name' => '请输入相册名称',
+  'click_pic_to_editor' => '点击图片添加到编辑器内容中',
+  'select_album' => '选择相册',
+  'upload_attach' => '上传附件',
+  'filename' => '文件名',
+  'file_size' => '文件大小',
+  'click_filename_to_article' => '点击文件名将附件添加到文章中',
+  'connect_fill_profile_to_visit' => '请先<br /><a class="xi2" href="member.php?mod=connect"><strong>完善帐号信息</strong></a> 或 <a href="member.php?mod=connect&ac=bind" class="xi2 xw1"><strong>绑定已有帐号</strong></a><br />后使用快捷导航',
 );
 
 ?>

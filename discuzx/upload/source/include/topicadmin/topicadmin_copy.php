@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: topicadmin_copy.php 25788 2011-11-22 06:39:01Z zhengqingpeng $
+ *      $Id: topicadmin_copy.php 28832 2012-03-14 08:31:20Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -66,6 +66,9 @@ if(!submitcheck('modsubmit')) {
 		$post = daddslashes($post);
 		$pid = insertpost($post);
 	}
+
+	$class_tag = new tag();
+	$class_tag->copy_tag($_G['tid'], $threadid, 'tid');
 
 	if($typeoptionvar) {
 		foreach($typeoptionvar AS $key => $value) {

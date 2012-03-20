@@ -4,14 +4,14 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: Video.php 25522 2011-11-14 03:32:59Z yexinhao $
+ *      $Id: VideoAuth.php 28833 2012-03-14 08:42:59Z yexinhao $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
-class Cloud_Service_Server_Video extends Cloud_Service_Server_Restful {
+class Cloud_Service_Server_VideoAuth extends Cloud_Service_Server_Restful {
 
 	protected static $_instance;
 

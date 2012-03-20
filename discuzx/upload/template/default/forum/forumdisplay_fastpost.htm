@@ -54,7 +54,7 @@ var fid = parseInt('$_G[fid]');
 										<!--{if !$_G['connectguest']}-->
 											{lang login_to_post} <a href="member.php?mod=logging&action=login" onclick="showWindow('login', this.href)" class="xi2">{lang login}</a> | <a href="member.php?mod={$_G[setting][regname]}" class="xi2">$_G['setting']['reglinkname']</a>
 										<!--{else}-->
-											{lang fill_profile_to_post}
+											{lang connect_fill_profile_to_post}
 										<!--{/if}-->
 									<!--{else}-->
 										{lang no_permission_to_post}<a href="javascript:;" onclick="$('newspecial').onclick()" class="xi2">{lang click_to_show_reason}</a>
@@ -105,7 +105,7 @@ var fid = parseInt('$_G[fid]');
 				<script type="text/javascript">
 					var upload = new SWFUpload({
 						// Backend Settings
-						upload_url: "{$_G[siteroot]}misc.php?mod=swfupload&action=swfupload&operation=upload&fid=$fid",
+						upload_url: "{$_G[siteurl]}misc.php?mod=swfupload&action=swfupload&operation=upload&fid=$_G[fid]",
 						post_params: {"uid" : "$_G[uid]", "hash":"$swfconfig[hash]"},
 
 						// File Upload Settings
@@ -139,10 +139,6 @@ var fid = parseInt('$_G[fid]');
 						//button_text: '<span class="button">上传</span>',
 						button_text: '',
 						button_window_mode: "transparent",
-
-						// Flash Settings
-						flash_url : IMGDIR+"/swfupload.swf",
-						flash9_url : IMGDIR+"/swfupload_fp9.swf",
 
 						custom_settings : {
 							progressTarget : "attachlist",

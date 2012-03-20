@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_admincp.php 28503 2012-03-01 11:41:29Z zhangguosheng $
+ *      $Id: lang_admincp.php 28882 2012-03-16 07:53:52Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -567,6 +567,8 @@ $lang = array
 	'founder_upgrade_automatically' => '自动升级',
 	'founder_upgrade_manually' => '手动下载',
 	'founder_upgrade_select_version' => '检测到有新的版本可供升级，您可以选择自动升级或者下载安装包手动升级。',
+	'founder_upgrade_continue' => '继续升级',
+	'founder_upgrade_dbupdate' => '升级数据库',
 	'upgrade_right_now' => '您目前使用的 Discuz! 程序有新版本发布，请及时升级<span>在线升级</span>',
 
 	'nav_report' => '用户举报',
@@ -674,7 +676,7 @@ $lang = array
 	'setting_access_register_censoruser' => '用户信息保留关键字',
 	'setting_access_register_censoruser_comment' => '用户在其用户信息中无法使用这些关键字。每个关键字一行，可使用通配符 "*" 如 "*版主*"(不含引号)',
 	'setting_access_register_verify' => '新用户注册验证',
-	'setting_access_register_verify_comment' => '选择“无”用户可直接注册成功；选择“Email 验证”将向用户注册 Email 发送一封验证邮件以确认邮箱的有效性；选择“人工审核”将由管理员人工逐个确定是否允许新用户注册',
+	'setting_access_register_verify_comment' => '选择“无”用户可直接注册成功；选择“Email 验证”将向用户注册 Email 发送一封验证邮件以确认邮箱的有效性（<strong>开启“通过邮件发送注册链接”该设置自动通过验证</strong>）；选择“人工审核”将由管理员人工逐个确定是否允许新用户注册',
 	'setting_access_register_verify_email' => 'Email 验证',
 	'setting_access_register_verify_manual' => '人工审核',
 	'setting_access_register_verify_areawhite' => '不受新用户注册验证限制的地区列表',
@@ -759,6 +761,8 @@ $lang = array
 	'setting_access_register_strongpw_4' => '符号',
 	'setting_access_register_pwlength' => '密码最小长度',
 	'setting_access_register_pwlength_comment' => '新用户注册时密码最小长度，0或不填为不限制',
+	'setting_access_guest_connect_group' => 'QQ登录用户游客用户组',
+	'setting_access_guest_connect_group_comment' => '通过QQ登录后，尚未完善资料用户的初始用户组',
 
 	'setting_access_access' => '访问控制',
 	'setting_access_access_newbiespan' => '新手见习期限(分钟)',
@@ -1507,6 +1511,8 @@ $lang = array
 	'setting_functions_mod_bannedmessages_signature' => '用户签名',
 	'setting_functions_mod_rewardexpiration' => '悬赏主题有效期',
 	'setting_functions_mod_rewardexpiration_comment' => '设置悬赏主题的有效天数，当悬赏主题超过有效期后依然未发放悬赏，版主或管理员有权代为主题作者发放悬赏。0 或留空表示不允许版主或管理员进行此操作',
+	'setting_functions_mod_moddetail' => '<span class="spectitle">版主面板显示审核数目</span>',
+	'setting_functions_mod_moddetail_comment' => '设置版主面板是否详细显示待审核主题、帖子及用户的具体数目',
 	'setting_functions_heatthread_tips' => '主题热度将按参与人次计算，包括回帖，点评，收藏，分享，评分，推荐',
 	'setting_functions_heatthread' => '主题热度',
 	'setting_functions_heatthread_type' => '热度计算方式',
@@ -1810,7 +1816,7 @@ $lang = array
 	'setting_mail_check_error' => '邮件发送返回错误信息:\n',
 
 	'setting_sec' => '防灌水设置',
-	'setting_sec_code_tips' => '<li>使用图片作为验证码文字，图片必须包含字符“2346789BCEFGHJKMPQRTVWXY”24 个字符，且必须为 GIF 透明图片、背景透明、前景黑色，黑色为图片的第一个索引色。图片大小不限制，但建议宽度不大于验证码宽度的 1/4，高度不大于验证码高度。制作完毕后在 static/image/seccode/gif/ 下创建一个新的子目录，目录名任意，把制作完毕的 24 个 GIF 图片上传到新子目录下</li><li>使用图片作为验证码的背景，把制作好的 JPG 图片上传到 static/image/seccode/background/ 目录下，站点将随机使用里面的图片作为验证码的背景</li><li>使用 TTF 字体作为验证码文字，把下载的 TTF 英文字体文件上传到 static/image/seccode/font/en/ 目录下，站点将随机使用里面的字体文件作为验证码的文字</li><li>使用中文图片验证码前，需要把包含完整中文汉字的 TTF 中文字体文件上传到 static/image/seccode/font/ch/ 目录下，站点将随机使用里面的字体文件作为验证码的文字</li>',
+	'setting_sec_code_tips' => '<li>使用图片作为验证码文字，图片必须包含字符“2346789BCEFGHJKMPQRTVWXY”24 个字符，且必须为 GIF 透明图片、背景透明、前景黑色，黑色为图片的第一个索引色。图片大小不限制，但建议宽度不大于验证码宽度的 1/4，高度不大于验证码高度。制作完毕后在 static/image/seccode/gif/ 下创建一个新的子目录，目录名任意，把制作完毕的 24 个 GIF 图片上传到新子目录下</li><li>使用图片作为验证码的背景，把制作好的 JPG 图片上传到 static/image/seccode/background/ 目录下，站点将随机使用里面的图片作为验证码的背景</li><li>使用 TTF 字体作为验证码文字，把下载的 TTF 英文字体文件上传到 static/image/seccode/font/en/ 目录下，站点将随机使用里面的字体文件作为验证码的文字</li><li>使用中文图片验证码前，需要把包含完整中文汉字的 TTF 中文字体文件上传到 static/image/seccode/font/ch/ 目录下，站点将随机使用里面的字体文件作为验证码的文字</li><li>安装新的验证码脚本，需将验证码脚本程序上传到 source/class/seccode/ 目录，然后即可在验证码类型中选择使用了。</li>',
 	'setting_sec_qaa_tips' => '<li>验证问题应该言简意赅，没有歧义，正常人都能够正确作答。请经常更新验证问答的问题及答案以防止被猜测！</li><li>安装新的验证问答脚本，需将验证问答脚本程序上传到 source/class/secqaa/ 目录，然后即可在以下列表中选择使用了。</li><li>插件开发人员在设计新的验证问答脚本前请务必仔细阅读《<a href="http://dev.discuz.org/wiki" target="_blank">Discuz! 技术文库</a>》中的内容。</li>',
 
 	'setting_sec_seclevel' => '安全验证模式',
@@ -2470,11 +2476,11 @@ $lang = array
 	'forums_edit_posts_recyclebin_comment' => '是否在本版启用回收站功能，打开此功能后，所有被删除主题和回帖将被放在回收站中，而不会被直接删除',
 	'forums_edit_posts_html' => '允许使用 HTML 代码',
 	'forums_edit_posts_html_comment' => '注意: 选择“是”将不屏蔽帖子中的任何代码，将带来严重的安全隐患，请慎用',
-	'forums_edit_posts_bbcode' => '允许使用 Discuz! 代码',
+	'forums_edit_posts_bbcode' => '允许使用Discuz!代码',
 	'forums_edit_posts_bbcode_comment' => 'Discuz! 代码是一种简化和安全的页面格式代码',
 	'forums_edit_posts_imgcode' => '允许使用 [img] 代码',
 	'forums_edit_posts_imgcode_comment' => '允许 [img] 代码作者将可以在帖子插入其他网站的图片并显示',
-	'forums_edit_posts_mediacode' => '允许使用 [audio] [media] [flash] 等多媒体代码',
+	'forums_edit_posts_mediacode' => '允许使用多媒体代码',
 	'forums_edit_posts_mediacode_comment' => '允许 [audio] [media] [flash] 等多媒体代码后，作者将可以在帖子插入多媒体文件并显示',
 	'forums_edit_posts_smilies' => '允许使用表情',
 	'forums_edit_posts_smilies_comment' => '表情提供对表情符号，如“:)”的解析，使之作为图片显示',
@@ -3238,7 +3244,7 @@ $lang = array
 	'members_verify_setting_field' => '<em class="right">(<a href="?action=members&operation=profile">点此新增资料项</a>)</em>可选资料项',
 	'members_verify_group' => '允许参于认证的用户组',
 	'members_verify_group_comment' => '设置允许参与认证的用户组，可以按住 CTRL 多选， 空代表都可以参于认证',
-	'members_verify_pic_removed' => '图片已删除',
+	'members_verify_pic_removed' => '未上传图片或已被删除',
 
 	'members_newsletter' => '站点通知',
 	'members_newsletter_method' => '通知发送方式',
@@ -4783,7 +4789,7 @@ $lang = array
 	'plugins_config_uninstallplugin' => '卸载此插件',
 	'plugins_edit' => '设计插件',
 	'plugins_edit_available' => ' (插件已启用)',
-	'plugins_edit_tips' => '<li><b>本功能仅供插件开发者使用，如果您只是安装或使用本插件，切勿修改本设置。</b></li><li>插件开发人员在使用本功能前请务必仔细阅读《<a href="http://dev.discuz.org/wiki" target="_blank">Discuz! 技术文库</a>》中的内容。</li><li>警告: 不正确的插件设计或安装可能危及到整个站点的正常使用。</li><li>如果把导出的插件文件放置在 source/plugin/插件目录/ 目录下，则可以通过插件管理直接安装插件。</li>',
+	'plugins_edit_tips' => '<li><b>本功能仅供插件开发者使用，如果您只是安装或使用本插件，切勿修改本设置。</b></li><li>插件开发人员在使用本功能前请务必仔细阅读《<a href="http://dev.discuz.org/wiki" target="_blank">Discuz! 技术文库</a>》中的内容。</li><li>警告: 不正确的插件设计或安装可能危及到整个站点的正常使用。</li><li>把设计完的插件发布到<a href="http://addon.discuz.com" target="_blank">“Discuz! 应用中心”</a>分享给广大站长。</li>',
 	'plugins_edit_name' => '插件名称(name)',
 	'plugins_edit_name_comment' => '此插件的名称，中英文均可，最多 40 个字节',
 	'plugins_edit_version' => '插件版本号(version)',
@@ -4885,6 +4891,9 @@ $lang = array
 	'plugins_conflict_info' => '联系作者',
 	'plugins_module_sample' => '<span title="下载模块模板文件">[&darr;]</span>',
 	'plugins_find_newversion' => '发现新版',
+	'plugins_list_available' => '已启用的插件',
+	'plugins_list_unavailable' => '未启用的插件',
+	'plugins_list_new' => '未安装的插件',
 
 	'medals' => '勋章',
 	'medals_tips' => '<li>本功能用于设置可以颁发给用户的勋章信息，勋章图片中请填写图片文件名，并将相应图片文件上传到 static/image/common/ 目录中。</li>',
@@ -4923,7 +4932,7 @@ $lang = array
 	'medals_perm' => '勋章领取权限',
 	'medals_modpass' => '通过',
 	'medals_modnopass' => '否决',
-	'medals_permformula' => '当您设定了权限表达式后，只有符合此表达式的会员才可以领取本勋章。如 "posts > 100 and extcredits1 > 10" 表示 "发帖数 > 100 并且 威望 > 10"<br />日期格式 "{Y-M-D}"，如 "{2009-10-1}"。IP 格式 "{x.x.x.x}"，既可输入完整地址，也可只输入 IP 开头，如 "{10.0.0.1}"、"{192.168.0}"',
+	'medals_permformula' => '当您设定了权限表达式后，只有符合此表达式的会员才可以领取本勋章，如勋章可购买本功能失效。如 "posts > 100 and extcredits1 > 10" 表示 "发帖数 > 100 并且 威望 > 10"<br />日期格式 "{Y-M-D}"，如 "{2009-10-1}"。IP 格式 "{x.x.x.x}"，既可输入完整地址，也可只输入 IP 开头，如 "{10.0.0.1}"、"{192.168.0}"',
 	'medals_credit' => '积分',
 	'medals_price' => '价格',
 
@@ -6432,8 +6441,13 @@ $lang = array
 	'threadsplit_move_threads_per_time_comment' => '建议不超过 1000',
 
 	'membersplit' => '用户表优化',
-	'membersplit_tips' => '<li>通过用户优化可以大幅度提高网站的性能。</li><li>当可优化用户数大于30%以上时，我们强烈建议进行用户表优化操作</li>',
+	'membersplit_check' => '立即体检',
+	'membersplit_lasttime_check' => '上次体检',
+	'membersplit_has_no_check' => '您的网站从未进行过用户表优化，建议立即体检',
+	'membersplit_check_tips' => '<li>通过用户优化可以大幅度提高网站的性能。</li><li>因体检操作较慢，所以体检的结果会缓存一天的时间</li>',
+	'membersplit_tips' => '<li>通过用户优化可以大幅度提高网站的性能。</li><li>当可优化用户数大于30%以上时，我们强烈建议进行用户表优化操作</li><li>请根据服务器性能，适当调整单步优化数。</li><li>建议在关闭站点下进行优化操作。</li>',
 	'membersplit_combie_count' => '可优化用户数',
+	'membersplit_splitnum' => '单步优化数',
 	'membersplit_count' => '总用户数',
 	'membersplit_table_orig' => '用户表信息',
 	'membersplit_message0' => '用户表状态良好，无可优化',
@@ -6535,6 +6549,9 @@ $lang = array
 	'cloudaddons_unwriteabledirs' => '站点 {basedir} 目录下的以下目录不可写，无法在线安装此应用，请填写本站点的 FTP 连接参数(本设置不会被保存):<br />{unwriteabledirs}',
 	'cloudaddons_plugin_link' => '获取更多插件',
 	'cloudaddons_style_link' => '获取更多风格',
+	'plugins_validator_nowupgrade' => '以下插件现在可以更新为新版本，点击安装更新',
+	'plugins_validator_newversion' => '以下插件存在新版本，点击安装更新',
+	'plugins_validator_error' => '以下插件不是正版插件，点击安装正版插件',
 
 
 	'rewrite_message' => '<h1>Apache Web Server(独立主机用户)</h1>

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: moderate_reply.php 28113 2012-02-22 09:25:55Z svn_project_zhangjie $
+ *      $Id: moderate_reply.php 28757 2012-03-12 07:06:31Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -74,8 +74,7 @@ if(!submitcheck('modsubmit') && !$_GET['fast']) {
 		$sqlwhere .= " AND t.subject LIKE '%{$_GET['title']}%'";
 	}
 	if($modfid > 0) {
-		$fidadd['and'] = ' AND';
-		$fidadd['fids'] = " p.fid='$modfid'";
+		$fidadd['fids'] = $modfid;
 	}
 
 	$modcount = C::t('common_moderate')->count_by_search_for_post(getposttable($posttable), $moderatestatus, 0, ($modfid > 0 ? $modfid : 0), $_GET['username'], (($dateline &&  $dateline != 'all') ? (TIMESTAMP - $dateline) : null), $_GET['title'], ($modfid == -1 ? 1 : 0));
@@ -201,7 +200,7 @@ if(!submitcheck('modsubmit') && !$_GET['fast']) {
 	if($deletepids = dimplode($moderation['delete'])) {
 		$pids = $recyclebinpids = array();
 		foreach(C::t('forum_post')->fetch_all($posttable, $moderation['delete']) as $post) {
-			if($post['invisilbe'] != $displayorder || $post['first'] != 0 || ($fidadd['fids'] && $post['fid'] != $fidadd['fids'])) {
+			if($post['invisible'] != $displayorder || $post['first'] != 0 || ($fidadd['fids'] && $post['fid'] != $fidadd['fids'])) {
 				continue;
 			}
 			if($recyclebins[$post['fid']]) {

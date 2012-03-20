@@ -4,7 +4,7 @@
  *		[Discuz!] (C)2001-2099 Comsenz Inc.
  *		This is NOT a freeware, use is subject to license terms
  *
- *		$Id: qqgroup.class.php 28397 2012-02-29 02:41:24Z songlixin $
+ *		$Id: qqgroup.class.php 28558 2012-03-05 02:59:09Z yexinhao $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -30,17 +30,17 @@ class plugin_qqgroup {
 			return false;
 		}
 		$tid = $_G['tid'];
-		$title = rawurlencode(trim($_G['forum_thread']['subject']));
-        $post = C::t('forum_post')->fetch_all_by_tid_position($_G['fotum_thread']['posttableid'], $_G['tid'], 1);
-        include_once libfile('function/discuzcode');
-        $content = preg_replace("/\[audio(=1)*\]\s*([^\[\<\r\n]+?)\s*\[\/audio\]/ies", '', trim($post[0]['message']));
-        $content = preg_replace("/\[flash(=(\d+),(\d+))?\]\s*([^\[\<\r\n]+?)\s*\[\/flash\]/ies", '', $content);
-        $content = preg_replace("/\[media=([\w,]+)\]\s*([^\[\<\r\n]+?)\s*\[\/media\]/ies", '', $content);
-        $content = preg_replace("/\[hide[=]?(d\d+)?[,]?(\d+)?\]\s*(.*?)\s*\[\/hide\]/is", '', $content);
-        $content = strip_tags(discuzcode($content, 0, 0, 0));
-        $content = preg_replace('%\[attach\].*\[/attach\]%im', '', $content);
-        $content = str_replace('&nbsp;', '', $content);
-		$content = rawurlencode(cutstr($content, 500, ''));
+		$title = urlencode(trim($_G['forum_thread']['subject']));
+		$post = C::t('forum_post')->fetch_all_by_tid_position($_G['fotum_thread']['posttableid'], $_G['tid'], 1);
+		include_once libfile('function/discuzcode');
+		$content = preg_replace("/\[audio(=1)*\]\s*([^\[\<\r\n]+?)\s*\[\/audio\]/ies", '', trim($post[0]['message']));
+		$content = preg_replace("/\[flash(=(\d+),(\d+))?\]\s*([^\[\<\r\n]+?)\s*\[\/flash\]/ies", '', $content);
+		$content = preg_replace("/\[media=([\w,]+)\]\s*([^\[\<\r\n]+?)\s*\[\/media\]/ies", '', $content);
+		$content = preg_replace("/\[hide[=]?(d\d+)?[,]?(\d+)?\]\s*(.*?)\s*\[\/hide\]/is", '', $content);
+		$content = strip_tags(discuzcode($content, 0, 0, 0));
+		$content = preg_replace('%\[attach\].*\[/attach\]%im', '', $content);
+		$content = str_replace('&nbsp;', ' ', $content);
+		$content = urlencode(cutstr($content, 500, ''));
 		include template('qqgroup:push');
 
 		return trim($return);

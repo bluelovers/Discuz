@@ -35,37 +35,13 @@ textarea, input, select, .html { padding:2px; border:1px solid; border-color:#66
 
 
 /* .html */
-.html {
-	width: 180px !important;
-	height: 16px;
-	float: left;
-	cursor: text;
-}
-.htmlbtn {
-    background: url("../editor/editor.gif") no-repeat scroll 0 0 transparent;
-    border-color: #CCCCCC;
-    width: 21px;
-    height: 21px;
-    margin-right: 2px;
-    float: left;
-    cursor: pointer;
-    padding: 0px;
-}
-.htmlbtn.current {
-    border-color: #369;
-}
-.htmlbtn.b {
-	background-position:0 0;
-}
-.htmlbtn.i {
-	background-position:-20px 0;
-}
-.htmlbtn.u {
-	background-position:-40px 0;
-}
-.htmlbtn.c {
-	background-position:-60px 0;
-}
+.html { width: 180px !important; height: 16px; float: left; cursor: text; white-space: nowrap; overflow-x: hidden; }
+.htmlbtn { background: url("../editor/editor.gif") no-repeat scroll 0 0 transparent;border-color: #CCCCCC;width: 21px;height: 21px;margin-right: 2px;float: left;cursor: pointer;padding: 0px; }
+.htmlbtn.current { border-color: #369; }
+.htmlbtn.b {background-position:0 0;}
+.htmlbtn.i { background-position:-20px 0; }
+.htmlbtn.u { background-position:-40px 0; }
+.htmlbtn.c { background-position:-60px 0; }
 
 /* title */
 h3{ margin-bottom:10px; font-size:14px; color:#09C; }
@@ -561,3 +537,6 @@ a.faq { background: url(faq.gif) no-repeat 0 2px; padding:1px; margin-left:10px;
 	.mbm { margin-bottom: 10px !important; }
 	.mtw { margin-top: 20px !important; }
 	.mbw { margin-bottom: 20px !important; }
+
+.psetting { margin-top: 5px; }
+	.psetting a { margin-left: 0; margin-right: 5px; }

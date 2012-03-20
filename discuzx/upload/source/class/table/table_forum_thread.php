@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_forum_thread.php 28475 2012-03-01 08:16:46Z liulanbo $
+ *      $Id: table_forum_thread.php 28827 2012-03-14 07:54:23Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -446,7 +446,7 @@ class table_forum_thread extends discuz_table
 
 	public function fetch_all_moderate($fid = 0, $displayorder = null, $isgroup = null, $dateline = null, $author = null, $subject = null) {
 		$parameter = $this->make_query_condition(null, $fid, $isgroup, $author, $subject, $displayorder, $dateline);
-		return DB::fetch_all('SELECT * FROM '.$parameter[0], $parameter[1], $this->_pk);
+		return DB::fetch_all('SELECT * FROM %t '.$parameter[0], $parameter[1], $this->_pk);
 	}
 
 	public function fetch_all_movedthread($start = 0, $limit = 0) {
@@ -484,7 +484,7 @@ class table_forum_thread extends discuz_table
 		}
 		$data = array();
 		$tlkey = !empty($conditions['inforum']) && !is_array($conditions['inforum']) ? $conditions['inforum'] : '';
-		$firstpage = $istop = false;
+		$firstpage = false;
 		$defult = count($conditions) < 5 ? true : false;
 		if(count($conditions) < 5) {
 			foreach(array_keys($conditions) as $key) {
@@ -495,10 +495,8 @@ class table_forum_thread extends discuz_table
 			}
 		}
 		if($defult && $conditions['sticky'] == 4 && $start == 0 && $limit && strtolower(preg_replace("/\s?/ies", '', $order)) == 'displayorderdesc,lastpostdesc' && empty($sort)) {
-			$istop = true;
 			foreach($conditions['displayorder'] as $id) {
 				if($id < 2) {
-					$istop = false;
 					$firstpage = true;
 					if($id < 0) {
 						$firstpage = false;
@@ -506,9 +504,7 @@ class table_forum_thread extends discuz_table
 					}
 				}
 			}
-			if($istop && ($data = $this->fetch_cache('globalstick')) !== false) {
-				return $data;
-			} elseif($firstpage && !empty($tlkey) && ($ttl = getglobal('setting/memory/forum_thread_forumdisplay')) !== null && ($data = $this->fetch_cache($tlkey, 'forumdisplay_')) !== false) {
+			if($firstpage && !empty($tlkey) && ($ttl = getglobal('setting/memory/forum_thread_forumdisplay')) !== null && ($data = $this->fetch_cache($tlkey, 'forumdisplay_')) !== false) {
 				$delusers = $this->fetch_cache('deleteuids', '');
 				if(!empty($delusers)) {
 					foreach($data as $tid => $value) {
@@ -523,18 +519,15 @@ class table_forum_thread extends discuz_table
 			}
 		}
 		$data = DB::fetch_all("SELECT * FROM ".DB::table($this->get_table_name($tableid))." $forceindex".$this->search_condition($conditions)." $ordersql ".DB::limit($start, $limit));
-		if($istop) {
-			$this->_cache_ttl = 0;
-			$this->store_cache('globalstick', $data, $this->_cache_ttl);
-		} elseif($firstpage && !empty($tlkey) && ($ttl = getglobal('setting/memory/forum_thread_forumdisplay')) !== null) {
+		if($firstpage && !empty($tlkey) && ($ttl = getglobal('setting/memory/forum_thread_forumdisplay')) !== null) {
 			$this->store_cache($tlkey, $data, $ttl, 'forumdisplay_');
 		}
 		return $data;
 	}
 
-	public function fetch_all_by_special($special, $authorid = 0, $replies = 0, $displayorder = null, $subject = '', $join = 0, $start = 0, $limit = 0, $order = 't.dateline', $sort = 'DESC') {
+	public function fetch_all_by_special($special, $authorid = 0, $replies = 0, $displayorder = null, $subject = '', $join = 0, $start = 0, $limit = 0, $order = 'dateline', $sort = 'DESC') {
 		$condition = $this->make_special_condition($special, $authorid, $replies, $displayorder, $subject, $join, 0);
-		$ordersql = !empty($order) ? ' ORDER BY '.DB::order($order, $sort) : '';
+		$ordersql = !empty($order) ? ' ORDER BY t.'.DB::order($order, $sort) : '';
 		return DB::fetch_all("SELECT t.* FROM %t t $condition[jointable] ".$condition['where'].$ordersql.DB::limit($start, $limit), $condition['parameter'], $this->_pk);
 	}
 	public function fetch_all_heats() {
@@ -844,9 +837,6 @@ class table_forum_thread extends discuz_table
 		if($data && is_array($data) && $tid) {
 			if(!$realdata) {
 				$num = DB::update($this->get_table_name($tableid), $data, DB::field('tid', $tid), $unbuffered, $low_priority);
-				if($data['displayorder'] > 1) {
-					$this->clear_cache('globalstick');
-				}
 				$this->update_batch_cache((array)$tid, $data);
 			} else {
 				$num = DB::query('UPDATE '.DB::table($this->get_table_name($tableid))." SET ".implode(',', $data)." WHERE ".DB::field('tid', $tid), 'UNBUFFERED');

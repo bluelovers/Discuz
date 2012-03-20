@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: topicadmin_merge.php 27209 2012-01-11 04:38:59Z liulanbo $
+ *      $Id: topicadmin_merge.php 28630 2012-03-06 09:43:46Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -41,10 +41,10 @@ if(!submitcheck('modsubmit')) {
 	$other['views'] = intval($other['views']);
 	$other['replies']++;
 	if(!$other['maxposition']) {
-		$other['maxposition'] = C::t('thread')->fetch_maxposition_by_tid($other['posttableid'], $othertid);
+		$other['maxposition'] = C::t('forum_post')->fetch_maxposition_by_tid($other['posttableid'], $othertid);
 	}
 	if(!$thread['maxposition']) {
-		$thread['maxposition'] = C::t('thread')->fetch_maxposition_by_tid($thread['posttableid'], $_G['tid']);
+		$thread['maxposition'] = C::t('forum_post')->fetch_maxposition_by_tid($thread['posttableid'], $_G['tid']);
 	}
 	$pos = 1;
 	if($posttable != $otherposttable) {

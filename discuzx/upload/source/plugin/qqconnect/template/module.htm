@@ -13,9 +13,14 @@ global $_G;
 }
 
 function tpl_global_usernav_extra1() {
+global $_G;
 }
 <!--{block return}-->
+	<!--{if $_G['connectguest']}-->
+	<span class="pipe">|</span><a href="member.php?mod=connect" target="_blank" title="{lang qqconnect:connect_member_register_button_tip}">{lang qqconnect:connect_register_profile}</a><span class="pipe">|</span><a href="member.php?mod=connect&ac=bind" target="_blank" title="{lang qqconnect:connect_member_loginbind_button_tip}">{lang qqconnect:connect_register_bind}</a>
+	<!--{else}-->
 	<span class="pipe">|</span><a href="connect.php?mod=config" target="_blank"><img src="{IMGDIR}/qq_bind_small.gif" class="qq_bind" align="absmiddle" alt="{lang qqconnect:connect_config}" /></a>
+	<!--{/if}-->
 <!--{/block}-->
 <!--{eval return $return;}-->
 {eval
@@ -30,54 +35,11 @@ function tpl_global_footer($loadJs) {
 	<!--{if $loadJs['feedjs']}-->
 		<script type="text/javascript">_attachEvent(window, 'load', function () { appendscript('{$loadJs[feedjs][jsurl]}', '', 1, 'utf-8') }, document);</script>
 	<!--{/if}-->
-	<!--{if $loadJs['checktokenjs']}-->
-		<script type="text/javascript">
-		function connect_handle_check_token(response, ajax) {
-
-			// 返回值形如: errCode=XX&result=XX
-			if (typeof(response) == "string" && response.indexOf("&") > 0) {
-
-				var errCode = response.substring(0, response.indexOf("&"));
-				errCode = errCode.substring(errCode.indexOf("=") + 1);
-
-				var result = response.substring(response.indexOf("&") + 1);
-				result = result.substring(result.indexOf("=") + 1);
-
-				response = {"errCode" : errCode, "result" : result};
-			} else {
-				return false;
-			}
-
-			if (response.errCode == '0' && response.result == '2') {
-				// 发帖的处理
-				if (typeof(_is_token_outofdate) != "undefined") {
-					_is_feed_auth = false;
-					_is_token_outofdate = true;
-					connect_post_init();
-				}
-				if (typeof(_is_token_outofdate_infloat) != "undefined") {
-					_is_feed_auth_infloat = false;
-					_is_token_outofdate_infloat = true;
-					connect_post_init_infloat();
-				}
-				// 分享的处理
-				if (typeof(_share_buttons) != "undefined" && typeof(_is_oauth_user) != "undefined") {
-					_is_oauth_user = false;
-					_is_share_token_outofdate = true;
-				}
-			}
-		}
-
-		function connect_ajax_check_token() {
-			var _check_token_ajax = Ajax("HTML", null);
-			_check_token_ajax.get("{$loadJs['checktokenjs']['jsurl']}", connect_handle_check_token);
-		}
-
-		_attachEvent(window, 'load', connect_ajax_check_token);
-		</script>
-	<!--{/if}-->
 	<!--{if $loadJs['cookieloginjs']}-->
 		<script type="text/javascript">var cookieLogin = Ajax("TEXT");cookieLogin.get("{$loadJs['cookieloginjs']['jsurl']}", function() {});</script>
+	<!--{/if}-->
+	<!--{if $loadJs['guestloginjs']}-->
+		<script type="text/javascript">_attachEvent(window, 'load', function () { appendscript('{$loadJs[guestloginjs][jsurl]}', '', 1, 'utf-8') }, document);</script>
 	<!--{/if}-->
 <!--{/block}-->
 <!--{eval return $return;}-->
@@ -87,7 +49,9 @@ function tpl_login_bar() {
 global $_G;
 }
 <!--{block return}-->
+	<!--{if !$_G['connectguest']}-->
 	<a href="$_G[connect][login_url]&statfrom=login" target="_top" rel="nofollow"><img src="{IMGDIR}/qq_login.gif" class="vm" /></a>
+	<!--{/if}-->
 <!--{/block}-->
 <!--{eval return $return;}-->
 {eval
@@ -171,9 +135,9 @@ global $_G;
 				var _auth_text = '{lang qqconnect:connect_post_sync_unauthorized_desc}';
 				if (_is_token_outofdate) {
 					_auth_text = '{lang qqconnect:connect_access_token_out_of_date_feed}';
-                    var _button = '{lang qqconnect:connect_access_token_outofdate_button}';
-                    showDialog(_auth_text, 'notice', null, null, 0, null, null, _button);
-                    return;
+					var _button = '{lang qqconnect:connect_access_token_outofdate_button}';
+					showDialog(_auth_text, 'notice', null, null, 0, null, null, _button);
+					return;
 				} else if (!_is_oauth_user) {
 					_auth_text = '{lang qqconnect:connect_post_sync_not_bind_desc}';
 				}
@@ -314,13 +278,13 @@ global $_G;
 			} else {
 				var _auth_text = '{lang qqconnect:connect_post_sync_unauthorized_desc}';
 				if (_is_token_outofdate) {
-                    _auth_text = '{lang qqconnect:connect_access_token_out_of_date_feed}';
-                    var _button = '{lang qqconnect:connect_access_token_outofdate_button}';
-                    showDialog(_auth_text, 'notice', null, null, 0, null, null, _button);
-                    return;
-                } else if (!_is_oauth_user_infloat) {
-                    _auth_text = '{lang qqconnect:connect_post_sync_not_bind_desc}';
-                }
+					_auth_text = '{lang qqconnect:connect_access_token_out_of_date_feed}';
+					var _button = '{lang qqconnect:connect_access_token_outofdate_button}';
+					showDialog(_auth_text, 'notice', null, null, 0, null, null, _button);
+					return;
+				} else if (!_is_oauth_user_infloat) {
+					_auth_text = '{lang qqconnect:connect_post_sync_not_bind_desc}';
+				}
 				showDialog(_auth_text, 'notice', '{lang qqconnect:connect_post_sync_unauthorized_title}', 'connect_goto_setting_infloat()', 0, null, null, '{lang qqconnect:connect_modify_authorization_button}');
 			}
 		}
@@ -374,7 +338,7 @@ if (!$_G['setting']['connect']['allow']) return;
 $connect_thread_subject = addslashes(strip_tags($_G['thread']['subject']));
 }
 <!--{block return}-->
-	<!--{if $_G['member']['conisbind']}-->
+	<!--{if $_G['member']['conisbind'] && $_G['member']['conuinsecret']}-->
 		<a href="javascript:void(0);" ref="{$_G[connect][qzone_share_url]}" id="k_qqshare" title="{lang qqconnect:connect_viewthread_share_to_qzone}"><i><img src="{IMGDIR}/qzone.gif" alt="{lang qqconnect:connect_viewthread_share_to_qzone}" />{lang qqconnect:connect_viewthread_share_to_qzone}</i></a>
 		<a href="javascript:void(0);" ref="{$_G[connect][weibo_share_url]}" id="k_weiboshare" title="{lang qqconnect:connect_viewthread_share_to_t}"><i><img src="{IMGDIR}/weibo.png" alt="{lang qqconnect:connect_viewthread_share_to_t}" />{lang qqconnect:connect_viewthread_share_to_t}</i></a>
 		<a href="javascript:void(0);" ref="{$_G[connect][pengyou_share_url]}" id="k_pengyoushare" title="{lang qqconnect:connect_viewthread_share_to_pengyou}"><i><img src="{IMGDIR}/pengyou.png" alt="{lang qqconnect:connect_viewthread_share_to_pengyou}" />{lang qqconnect:connect_viewthread_share_to_pengyou}</i></a>
@@ -398,10 +362,10 @@ $connect_thread_subject = addslashes(strip_tags($_G['thread']['subject']));
 				showWindow(obj.id, _url, 'get', 1);
 			} else {
 				if (_is_share_token_outofdate) {
-                    var _text = '{lang qqconnect:connect_access_token_out_of_date_share}';
-                    var _button = '{lang qqconnect:connect_access_token_outofdate_button}';
-                    showDialog(_text, 'notice', null, null, 0, null, null, _button);
-                } else if (!_is_oauth_user) {
+					var _text = '{lang qqconnect:connect_access_token_out_of_date_share}';
+					var _button = '{lang qqconnect:connect_access_token_outofdate_button}';
+					showDialog(_text, 'notice', null, null, 0, null, null, _button);
+				} else if (!_is_oauth_user) {
 					var _text = '{lang qqconnect:connect_share_unbind}';
 					var _button = '{lang qqconnect:connect_share_unbind_know_button}';
 					showDialog(_text, 'notice', null, 'connect_goto_setting()', 0, null, null, _button);
@@ -547,17 +511,27 @@ function tpl_register_bottom() {
 global $_G;
 
 $loginhash = 'L'.random(4);
-}
-{eval
-$js1 = str_replace(array("'", "\r", "\n"), array("\'", '', ''), $js1);
 $change_qq_url = $_G['connect']['discuz_change_qq_url'];
+$qq_nick = $_G['qc']['qq_nick'];
 }
 <!--{block js2}-->
-	<div class="tb cl qqregtb">
-		<ul>
-			<li id="connect_tab_1" class="a"><a href="javascript:;" onclick="connect_switch(1);this.blur();" tabindex="900">{lang qqconnect:connect_register_profile}</a></li>
-			<li id="connect_tab_2"><a onclick="connect_switch(2);this.blur();" href="javascript:;" tabindex="900">{lang qqconnect:connect_register_has_id} {lang qqconnect:connect_register_bind}</a></li>
-		</ul>
+	<!--{if $_GET['ac'] == 'bind'}-->
+	<div class="bm_h bbs">
+		<h3 class="xs2">{lang qqconnect:connect_register_bind}</h3>
+	</div>
+	<div class="rfm" id="connect_member_loginbind_tip">
+		<table>
+			<tr>
+				<th><img src="{IMGDIR}/connect_qq.gif" alt="QQ" class="mtn" /></th>
+				<td>{lang qqconnect:connect_member_loginbind_tip}</td>
+			</tr>
+		</table>
+	</div>
+	<!--{elseif $_G['setting']['regconnect']}-->
+	<div class="bm_h bbs" id="main_hnav">
+		<h3 id="layer_reginfo_t" class="xs2">
+			{lang qqconnect:connect_register_profile}
+		</h3>
 	</div>
 	<div class="rfm" id="connect_member_register_tip" style="display:block;">
 		<table>
@@ -567,14 +541,7 @@ $change_qq_url = $_G['connect']['discuz_change_qq_url'];
 			</tr>
 		</table>
 	</div>
-	<div class="rfm" id="connect_member_loginbind_tip" style="display:none;">
-		<table>
-			<tr>
-				<th><img src="{IMGDIR}/connect_qq.gif" alt="QQ" class="mtn" /></th>
-				<td>{lang qqconnect:connect_member_loginbind_tip}</td>
-			</tr>
-		</table>
-	</div>
+	<!--{/if}-->
 <!--{/block}-->
 {eval
 $js2 = str_replace(array("'", "\r", "\n"), array("\'", '', ''), $js2);
@@ -679,7 +646,6 @@ $js2 = str_replace(array("'", "\r", "\n"), array("\'", '', ''), $js2);
 			</div>
 		</form>
 	</div>
-
 	<script type="text/javascript">
 		<!--{if $_G['setting']['regconnect']}-->
 			$('reginfo_a').parentNode.className = '';
@@ -693,17 +659,17 @@ $js2 = str_replace(array("'", "\r", "\n"), array("\'", '', ''), $js2);
 				$('returnmessage4').className='';
 				$('returnmessage4').innerHTML='';
 				if(op == 1) {
-					$('loginform_$loginhash').style.display='none';$('registerform').style.display='block';$('connect_member_register_tip').style.display='block';$('connect_member_loginbind_tip').style.display='none';<!--{if $_G['setting']['regconnect']}-->$('connect_tab_1').className='a';$('connect_tab_2').className='';<!--{/if}-->
+					$('loginform_$loginhash').style.display='none';$('registerform').style.display='block';
 				} else {
-					$('loginform_$loginhash').style.display='block';$('registerform').style.display='none';$('connect_member_register_tip').style.display='none';$('connect_member_loginbind_tip').style.display='block';<!--{if $_G['setting']['regconnect']}-->$('connect_tab_1').className='';$('connect_tab_2').className='a';<!--{/if}-->
+					$('loginform_$loginhash').style.display='block';$('registerform').style.display='none';
 				}
 			}
 			function connect_use_available(value) {
 				$('{$_G['setting']['reginput']['username']}').value = value;
 				checkusername(value);
 			}
-			<!--{if !$_G['setting']['regconnect']}-->
-				_attachEvent(window, 'load', function () { connect_switch(2); }, document);
+			<!--{if !$_G['setting']['regconnect'] || $_GET['ac'] == 'bind'}-->
+				connect_switch(2);
 			<!--{/if}-->
 			<!--{if $_G['qc']['uinlimit']}-->
 				$('registerformsubmit').disabled = true;
@@ -719,25 +685,69 @@ $js2 = str_replace(array("'", "\r", "\n"), array("\'", '', ''), $js2);
 				simulateSelect('loginfield_$loginhash');
 			<!--{/if}-->
 		<!--{/if}-->
+		
+		<!--{if $_G['setting']['regconnect'] && $_GET['ac'] != 'bind'}-->
 		function connect_get_user_info() {
-			var x = new Ajax('HTML');
-			x.get('connect.php?mod=user&op=get&hash={FORMHASH}&_r='+Math.random(), function(s){
-				s = s.replace('<span>', '').replace('</span>', '');
-				var params = s.split("\t");
-				var nick = params[0];
-				var username = params[1];
+			var x = new Ajax();
+			x.get('connect.php?mod=user&op=get&hash={FORMHASH}&inajax=1&_r='+Math.random(), function(s){
+				var nick = s;
 				if(nick) {
-					document.getElementById('connect_nick_register').innerHTML = '<strong>&nbsp;'+nick+'&nbsp;</strong>';
-					document.getElementById('connect_nick_logging').innerHTML = '<strong>&nbsp;'+nick+'&nbsp;</strong>';
-				}
-				if(username) {
-					document.getElementById('{$_G[setting][reginput][username]}').value = username;
-					document.getElementById('{$_G[setting][reginput][username]}').style.color = '';
+					document.getElementById('{$_G['setting']['reginput']['username']}').value = nick;
 				}
 			});
 		}
 		window.load=connect_get_user_info();
+		<!--{/if}-->
 </script>
+<!--{/block}-->
+<!--{eval return $return;}-->
+{eval
+}
+
+function tpl_spacecp_profile_bottom() {
+	global $_G;
+}
+<!--{block return}-->
+	<script type="text/javascript">
+	function connect_handle_get_weibosign(response, ajax) {
+		// 返回值形如: errCode=XX&result=XX
+		if (typeof(response) == "string" && response.indexOf("&") > 0) {
+
+			var errCode = response.substring(0, response.indexOf("&"));
+			errCode = errCode.substring(errCode.indexOf("=") + 1);
+
+			var result = response.substring(response.indexOf("&") + 1);
+			result = result.substring(result.indexOf("=") + 1);
+
+			response = {"errCode" : errCode, "result" : result};
+		} else {
+			return false;
+		}
+
+		if (response.errCode == '0') {
+			seditor_insertunit('sightml', response.result);
+		} else {
+			// 请求失败
+			showDialog('{lang qqconnect:connect_wbsign_no_account}');
+		}
+	}
+
+	function connect_get_weibosign() {
+		var sign_url = '{$_G['siteurl']}connect.php?mod=config&op=weibosign&hash={FORMHASH}&_r='+Math.random();
+		var get_weibosign_ajax = Ajax("HTML", null);
+		get_weibosign_ajax.get(sign_url, connect_handle_get_weibosign);
+	}
+
+	if($('sightmlsml')) {
+			var a = document.createElement('a');
+			a.href = 'javascript:void(0);';
+			a.style.background = 'url(' + STATICURL + 'image/common/weibo.png) no-repeat 0 2px';
+			a.onmouseover = function () { showTip(this); };
+			a.onclick = connect_get_weibosign;
+			a.setAttribute('tip', '{lang qqconnect:connect_wbsign_tip}');
+			$('sightmlsml').parentNode.appendChild(a);
+	}
+	</script>
 <!--{/block}-->
 <!--{eval return $return;}-->
 {eval

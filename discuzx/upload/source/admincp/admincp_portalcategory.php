@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_portalcategory.php 27484 2012-02-02 05:08:02Z zhangguosheng $
+ *      $Id: admincp_portalcategory.php 28706 2012-03-08 08:10:04Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_DISCUZ')) {
@@ -342,7 +342,7 @@ SCRIPT;
 	}
 
 } elseif($operation == 'move') {
-
+	$_GET['catid'] = intval($_GET['catid']);
 	if(!$_GET['catid'] || !$portalcategory[$_GET['catid']]) {
 		cpmsg('portalcategory_catgory_not_found', '', 'error');
 	}
@@ -381,13 +381,14 @@ SCRIPT;
 		cpmsg('portalcategory_move_succeed', 'action=portalcategory', 'succeed');
 	}
 } elseif($operation == 'edit' || $operation == 'add') {
-
+	$_GET['catid'] = intval($_GET['catid']);
 	if($_GET['catid'] && !$portalcategory[$_GET['catid']]) {
 		cpmsg('portalcategory_catgory_not_found', '', 'error');
 	}
 
 	$cate = $_GET['catid'] ? $portalcategory[$_GET['catid']] : array();
 	if($operation == 'add') {
+		$_GET['upid'] = intval($_GET['upid']);
 		if($_GET['upid']) {
 			$cate['level'] = $portalcategory[$_GET['upid']] ? $portalcategory[$_GET['upid']]['level']+1 : 0;
 			$cate['upid'] = intval($_GET['upid']);

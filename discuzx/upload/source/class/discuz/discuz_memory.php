@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: discuz_memory.php 28402 2012-02-29 03:12:47Z zhangguosheng $
+ *      $Id: discuz_memory.php 28628 2012-03-06 09:33:10Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -67,10 +67,10 @@ class discuz_memory extends discuz_base
 	}
 
 	public function get($key, $prefix = '') {
-		static $getmulti;
+		static $getmulti = null;
 		$ret = false;
 		if($this->enable) {
-			$getmulti = isset($getmulti) ? $getmulti : method_exists($this->memory, 'getMulti');
+			if(!isset($getmulti)) $getmulti = method_exists($this->memory, 'getMulti');
 			$this->userprefix = $prefix;
 			if(is_array($key)) {
 				if($getmulti) {
@@ -91,10 +91,10 @@ class discuz_memory extends discuz_base
 						}
 					}
 				}
-				$ret = empty($ret) ? false : $ret;
+				if(empty($ret)) $ret = false;
 			} else {
 				$ret = $this->memory->get($this->_key($key));
-				$ret = isset($ret) ? $ret : false;
+				if(!isset($ret)) $ret = false;
 			}
 		}
 		return $ret;
@@ -103,7 +103,7 @@ class discuz_memory extends discuz_base
 	public function set($key, $value, $ttl = 0, $prefix = '') {
 
 		$ret = false;
-		$value = $value === false ? '' : $value;
+		if($value === false) $value = '';
 		if($this->enable) {
 			$this->userprefix = $prefix;
 			$ret = $this->memory->set($this->_key($key), $value, $ttl);
@@ -132,10 +132,10 @@ class discuz_memory extends discuz_base
 	}
 
 	public function inc($key, $step = 1) {
-		static $hasinc;
+		static $hasinc = null;
 		$ret = false;
 		if($this->enable) {
-			$hasinc = isset($hasinc) ? $hasinc : method_exists($this->memory, 'inc');
+			if(!isset($hasinc)) $hasinc = method_exists($this->memory, 'inc');
 			if($hasinc) {
 				$ret = $this->memory->inc($this->_key($key), $step);
 			} else {
@@ -148,10 +148,10 @@ class discuz_memory extends discuz_base
 	}
 
 	public function dec($key, $step = 1) {
-		static $hasdec;
+		static $hasdec = null;
 		$ret = false;
 		if($this->enable) {
-			$hasdec = isset($hasdec) ? $hasdec : method_exists($this->memory, 'dec');
+			if(!isset($hasdec)) $hasdec = method_exists($this->memory, 'dec');
 			if($hasdec) {
 				$ret = $this->memory->dec($this->_key($key), $step);
 			} else {

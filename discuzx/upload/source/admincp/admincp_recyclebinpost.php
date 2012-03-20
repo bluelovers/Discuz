@@ -4,7 +4,7 @@
 	[Discuz!] (C)2001-2007 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: admincp_recyclebinpost.php 28286 2012-02-27 06:43:22Z yexinhao $
+	$Id: admincp_recyclebinpost.php 28728 2012-03-09 03:15:48Z songlixin $
 */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {

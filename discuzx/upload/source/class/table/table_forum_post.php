@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_forum_post.php 28391 2012-02-28 10:56:20Z svn_project_zhangjie $
+ *      $Id: table_forum_post.php 28821 2012-03-14 06:29:10Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -660,7 +660,7 @@ class table_forum_post extends discuz_table
 
 	public function count_by_search($tableid, $tid = null, $keywords = null, $invisible =null, $fid = null, $authorid = null, $author = null, $starttime = null, $endtime = null, $useip = null, $first = null) {
 		$sql = '';
-		$sql .= $tid ? ' AND '.DB::field('tid', $invisible) : '';
+		$sql .= $tid ? ' AND '.DB::field('tid', $tid) : '';
 		$sql .= $authorid !== null ? ' AND '.DB::field('authorid', $authorid) : '';
 		$sql .= $invisible !== null ? ' AND '.DB::field('invisible', $invisible) : '';
 		$sql .= $first !== null ? ' AND '.DB::field('first', $first) : '';

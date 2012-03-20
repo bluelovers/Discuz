@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_template.php 28435 2012-03-01 01:11:01Z chenmengshu $
+ *      $Id: lang_template.php 28726 2012-03-09 03:05:19Z yexinhao $
  *
  *      This file is automatically generate
  */
@@ -302,7 +302,7 @@ $lang = array (
   'viewd_threads' => '浏览过的帖子',
   'viewed_forums' => '浏览过的版块',
   'click_to_show_reason' => '点击查看原因',
-  'fill_profile_to_post' => '您需要<a href="member.php?mod=connect" class="xi2" target="_blank">完善资料</a>或<a href="member.php?mod=connect&ac=bind" class="xi2" target="_blank">绑定帐号</a>后才可以发帖',
+  'connect_fill_profile_to_post' => '您需要 <a href="member.php?mod=connect" class="xi2">完善帐号信息</a> 或 <a href="member.php?mod=connect&ac=bind" class="xi2">绑定已有帐号</a> 后才可以发帖',
   'login_to_post' => '您需要登录后才可以发帖',
   'no_permission_to_post' => '您现在无权发帖。',
   'post_advancemode' => '高级模式',
@@ -1166,6 +1166,7 @@ $lang = array (
   'admin_message_banned' => '提示: <em>作者被禁止或删除 内容自动屏蔽，只有管理员或有管理权限的成员可见</em>',
   'admin_message_single_banned' => '提示: <em>该帖被管理员或版主屏蔽，只有管理员或有管理权限的成员可见</em>',
   'attach_nopermission_login' => '您需要 <a href="member.php?mod=logging&action=login" onclick="showWindow(\'login\', this.href);return false;">登录</a> 才可以下载或查看，没有帐号？<a href="member.php?mod={$_G[setting][regname]}" title="注册帐号">{$_G[setting][reglinkname]}</a>',
+  'attach_nopermission_connect_fill_profile' => '您需要 <a href="member.php?mod=connect" class="xi2">完善帐号信息</a> 或 <a href="member.php?mod=connect&ac=bind" class="xi2">绑定已有帐号</a> 后才可以下载或查看',
   'attach_nopermission_notice' => '本帖子中包含更多资源',
   'has_expired' => '该信息已经过期',
   'have' => '已有',
@@ -1178,7 +1179,7 @@ $lang = array (
   'more_images' => '更多图片',
   'pack' => '收起',
   'pay_threads' => '付费主题, 价格',
-  'published_in_floor' => '发表于$rpost[position]楼',
+  'published_in_floor' => '查看楼层',
   'rate_total' => '总评分',
   'replies_recommended' => '回帖推荐',
   'pay_comment' => '本主题需向作者支付 <strong>{$thread[price]} {$_G[setting][extcredits][$_G[setting][creditstransextra][1]][unit]}{$_G[setting][extcredits][$_G[setting][creditstransextra][1]][title]}</strong> 才能浏览',

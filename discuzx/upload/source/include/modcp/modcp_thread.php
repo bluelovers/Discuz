@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: modcp_thread.php 27222 2012-01-11 08:01:39Z monkey $
+ *      $Id: modcp_thread.php 28845 2012-03-15 00:59:32Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_MODCP')) {
@@ -222,7 +222,7 @@ if($op == 'post') {
 						$deletedposts = deletepost($pid, 'pid', !getgpc('nocredit'), $posttableid, $forums[$fid]['recyclebin']);
 						updatemodlog($pids_tids[$pid], 'DLP');
 					} else {
-						$deletedthreads = deletethread($tidsdelete[$pid], false, !getgpc('nocredit'), $forums[$fid]['recyclebin']);
+						$deletedthreads = deletethread(array($tidsdelete[$pid]), false, !getgpc('nocredit'), $forums[$fid]['recyclebin']);
 						updatemodlog($tidsdelete[$pid], 'DEL');
 					}
 				}

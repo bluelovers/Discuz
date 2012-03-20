@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_group.php 26594 2011-12-16 03:38:24Z liulanbo $
+ *      $Id: function_group.php 28586 2012-03-05 07:41:37Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -254,10 +254,6 @@ function getgroupcache($fid, $typearray = array(), $timestamp = 0, $num = 10, $p
 
 function getgroupranking($fid = '', $nowranking = '', $num = 100) {
 	$topgroup = $rankingdata = $topyesterday = array();
-	if($fid) {
-		updateactivity($fid);
-	}
-
 	$ranking = 1;
 	$query = C::t('forum_forum')->fetch_all_group_for_ranking();
 	foreach($query as $group) {
@@ -269,18 +265,6 @@ function getgroupranking($fid = '', $nowranking = '', $num = 100) {
 		$rankingdata['today'] = intval($topgroup[$fid]);
 		$rankingdata['trend'] = $rankingdata['yesterday'] ? grouptrend($rankingdata['yesterday'], $rankingdata['today']) : 0;
 		$topgroup = $rankingdata;
-	} else {
-		$query = C::t('forum_groupranking')->fetch_all_today_ranking($num);
-		foreach($query as $top) {
-			$topyesterday[$top['fid']] = $top;
-		}
-
-		foreach($topgroup as $forumid => $today) {
-			$yesterday = intval($topyesterday[$forumid]);
-			$trend = $yesterday ? grouptrend($yesterday, $today) : 0;
-				C::t('forum_groupranking')->insert(array('fid' => $forumid, 'yesterday' => $yesterday, 'today' => $today, 'trend' => $trend), false, true);
-		}
-		$topgroup = $topyesterday;
 	}
 
 	return $topgroup;
@@ -318,19 +302,6 @@ function write_groupviewed($fid) {
 			dsetcookie('groupviewed', implode(',', $groupviewed), 86400);
 		}
 	}
-}
-
-function updateactivity($fid, $activity = 1) {
-	$fid = $fid ? intval($fid) : intval($_G['fid']);
-	if($activity) {
-		$forumdata = C::t('forum_forum')->fetch_info_by_fid($fid);
-		if(!$forumdata['activity']) {
-			$perpost = intval(($forumdata['threads'] + $forumdata['posts']) / ((TIMESTAMP - $forumdata['dateline']) / 86400));
-			$activity = intval($forumdata['threads'] / 2 + $forumdata['posts'] / 5 + $forumdata['membernum'] / 10 + $perpost * 2);
-			C::t('forum_forumfield')->update($fid, array('activity' => $activity));
-		}
-	}
-	C::t('forum_forumfield')->update($fid, array('lastupdate' => TIMESTAMP));
 }
 
 function update_groupmoderators($fid) {

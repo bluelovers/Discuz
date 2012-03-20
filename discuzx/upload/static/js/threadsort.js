@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: threadsort.js 27293 2012-01-13 04:20:43Z svn_project_zhangjie $
+	$Id: threadsort.js 28777 2012-03-13 01:41:36Z liulanbo $
 */
 
 function xmlobj() {
@@ -224,7 +224,7 @@ function checkoption(identifier, required, checktype, checkmaxnum, checkminnum, 
 				warning(ce, '小于设置最小值');
 				return false;
 			}
-		} else if(checktype == 'url' && !(/(http[s]?|ftp):\/\/[^\/\.]+?\..+\w$/i.test(checkvalue))) {
+		} else if(checktype == 'url' && !(/(http[s]?|ftp):\/\/[^\/\.]+?\..+\w[\/]?$/i.test(checkvalue))) {
 			warning(ce, '请正确填写以http://开头的URL地址');
 			return false;
 		}
