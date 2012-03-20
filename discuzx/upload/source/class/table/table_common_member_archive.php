@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_member_archive.php 28308 2012-02-28 01:51:52Z zhangguosheng $
+ *      $Id: table_common_member_archive.php 28636 2012-03-06 11:01:16Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -184,12 +184,9 @@ class table_common_member_archive extends table_common_member
 
 		$ret = true;
 		if(!empty($updates)) {
-			DB::query('ALTER TABLE '.$archivetable.' DISABLE KEYS');
 			if(!DB::query("ALTER TABLE ".$archivetable." ".implode(', ', $updates), 'SILENT')) {
-				DB::query('ALTER TABLE '.$archivetable.' ENABLE KEYS');
 				$ret = $mastertable;
 			} else {
-				DB::query('ALTER TABLE '.$archivetable.' ENABLE KEYS');
 			}
 		}
 		return $ret;

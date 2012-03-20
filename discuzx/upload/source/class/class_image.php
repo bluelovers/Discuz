@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_image.php 28221 2012-02-24 08:00:30Z zhengqingpeng $
+ *      $Id: class_image.php 28859 2012-03-15 07:09:05Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -181,7 +181,7 @@ class image {
 			$this->imginfo['animated'] = strpos($content, 'NETSCAPE2.0') === FALSE ? 0 : 1;
 		}
 
-		return $this->imagecreatefromfunc ? 1 : 0;
+		return $this->imagecreatefromfunc ? 1 : -4;
 	}
 
 	function sleep($return) {

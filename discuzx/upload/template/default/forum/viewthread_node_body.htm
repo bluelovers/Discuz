@@ -88,7 +88,7 @@
 			<div class="attach_nopermission">
 				<div>
 					<h3>{lang attach_nopermission_notice}</h3>
-					<p><!--{if $_G['uid']}-->{lang attach_nopermission}<!--{else}-->{lang attach_nopermission_login} <!--{hook/global_login_text}--><!--{/if}--></p>
+					<p><!--{if $_G['uid']}-->{lang attach_nopermission}<!--{elseif $_G['connectguest']}-->{lang attach_nopermission_connect_fill_profile}<!--{else}-->{lang attach_nopermission_login} <!--{hook/global_login_text}--><!--{/if}--></p>
 				</div>
 			</div>
 		<!--{elseif $post['imagelist'] || $post['attachlist']}-->

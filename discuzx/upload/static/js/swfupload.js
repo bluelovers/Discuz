@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: swfupload.js 25940 2011-11-25 09:54:54Z monkey $
+	$Id: swfupload.js 28614 2012-03-06 08:21:39Z zhengqingpeng $
 */
 
 var SWFUpload;
@@ -143,9 +143,9 @@ SWFUpload.prototype.initSettings = function (userSettings) {
 	this.ensureDefault("file_upload_limit", 0);
 	this.ensureDefault("file_queue_limit", 0);
 
-	this.ensureDefault("flash_url", "swfupload.swf");
-	this.ensureDefault("flash9_url", "swfupload_fp9.swf");
-	this.ensureDefault("prevent_swf_caching", true);
+	this.ensureDefault("flash_url", IMGDIR+"/swfupload.swf");
+	this.ensureDefault("flash9_url", IMGDIR+"/swfupload.swf");
+	this.ensureDefault("prevent_swf_caching", false);
 
 	this.ensureDefault("button_image_url", "");
 	this.ensureDefault("button_width", 1);
@@ -206,7 +206,7 @@ SWFUpload.prototype.initSettings = function (userSettings) {
 SWFUpload.prototype.loadSupport = function () {
 	this.support = {
 		loading : swfobject.hasFlashPlayerVersion("9.0.28"),
-		imageResize : swfobject.hasFlashPlayerVersion("10.0.0")
+		imageResize : false
 	};
 
 };

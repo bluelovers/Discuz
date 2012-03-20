@@ -4,7 +4,7 @@
  *	  [Discuz! X] (C)2001-2099 Comsenz Inc.
  *	  This is NOT a freeware, use is subject to license terms
  *
- *	  $Id: spacecp.inc.php 28020 2012-02-21 02:13:11Z zhouxiaobo $
+ *	  $Id: spacecp.inc.php 28844 2012-03-14 11:39:26Z houdelei $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -64,6 +64,9 @@ if ($pluginop == 'config') {
 	}
 
 } elseif ($pluginop == 'new') {
+	if (trim($_GET['formhash']) != formhash()) {
+		showmessage('submit_invalid');
+	}
 
 	$sh_type = intval(trim($_POST['sh_type']));
 	$tid = intval(trim($_POST['thread_id']));
@@ -159,7 +162,7 @@ if ($pluginop == 'config') {
 			}
 		} else {
 			$thread = C::t('forum_thread')->fetch($tid);
-			if($response['data']['id'] && $_G['setting']['connect']['t']['reply'] && $thread['tid'] && !$thread['closed'] && !getstatus($thread['status'], 3)) {
+			if($response['data']['id'] && $_G['setting']['connect']['t']['reply'] && $thread['tid'] && !$thread['closed'] && !getstatus($thread['status'], 3) && empty($_G['forum']['replyperm'])) {
 
 				C::t('#qqconnect#connect_tthreadlog')->insert(array(
 					'twid' => $response['data']['id'],
@@ -189,7 +192,7 @@ if ($pluginop == 'config') {
 		exit;
 	}
 	$thread = C::t('forum_thread')->fetch($tid);
-	if(!$thread || $thread['closed'] == 1 || getstatus($thread['status'], 3) || $thread['displayorder'] < 0) {
+	if(!$thread || $thread['closed'] == 1 || getstatus($thread['status'], 3) || $thread['displayorder'] < 0 || !empty($_G['forum']['replyperm'])) {
 		discuz_process::unlock($processname);
 		exit;
 	}
@@ -219,7 +222,7 @@ if ($pluginop == 'config') {
 	try {
 		$response = $connectOAuthClient->connectGetRepostList($tthread['conopenid'], $connectmember['conuin'], $connectmember['conuinsecret'], $param);
 	} catch(Exception $e) {
-		showmessage($e->getMessage());
+		showmessage('server_busy');
 	}
 	if($response && $response['ret'] == 0 && $response['data']['info']) {
 

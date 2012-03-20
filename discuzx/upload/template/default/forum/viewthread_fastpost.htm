@@ -55,7 +55,7 @@ var disablepostctrl = parseInt('{$_G['group']['disablepostctrl']}');
 								<!--{if !$_G['connectguest']}-->
 									{lang login_to_reply} <a href="member.php?mod=logging&action=login" onclick="showWindow('login', this.href)" class="xi2">{lang login}</a> | <a href="member.php?mod={$_G[setting][regname]}" class="xi2">$_G['setting']['reglinkname']</a>
 								<!--{else}-->
-									{lang fill_profile_to_post}
+									{lang connect_fill_profile_to_post}
 								<!--{/if}-->
 							<!--{else}-->
 								{lang no_permission_to_post}<a href="javascript:;" onclick="$('fastpostform').submit()" class="xi2">{lang click_to_show_reason}</a>
@@ -103,7 +103,7 @@ var disablepostctrl = parseInt('{$_G['group']['disablepostctrl']}');
 			<script type="text/javascript">
 					var upload = new SWFUpload({
 						// Backend Settings
-						upload_url: "{$_G[siteroot]}misc.php?mod=swfupload&action=swfupload&operation=upload&fid=$fid",
+						upload_url: "{$_G[siteurl]}misc.php?mod=swfupload&action=swfupload&operation=upload&fid=$fid",
 						post_params: {"uid" : "$_G[uid]", "hash":"$swfconfig[hash]"},
 
 						// File Upload Settings
@@ -138,10 +138,6 @@ var disablepostctrl = parseInt('{$_G['group']['disablepostctrl']}');
 						button_text: '',
 						button_window_mode: "transparent",
 
-						// Flash Settings
-						flash_url : IMGDIR+"/swfupload.swf",
-						flash9_url : IMGDIR+"/swfupload_fp9.swf",
-
 						custom_settings : {
 							progressTarget : "attachlist",
 							uploadSource: 'forum',
@@ -166,6 +162,7 @@ var disablepostctrl = parseInt('{$_G['group']['disablepostctrl']}');
 	<!--{/if}-->
 
 	<input type="hidden" name="formhash" value="{FORMHASH}" />
+	<input type="hidden" name="usesig" value="$usesigcheck" />
 	<input type="hidden" name="subject" value="  " />
 	<p class="ptm pnpost">
 		<button {if $allowpostreply}type="submit" {elseif !$_G['uid']}type="button" onclick="showWindow('login', 'member.php?mod=logging&action=login&guestmessage=yes')" {/if}name="replysubmit" id="fastpostsubmit" class="pn pnc vm" value="replysubmit" tabindex="5"><strong>{lang post_newreply}</strong></button>

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_relatekw.php 24666 2011-09-30 02:33:41Z svn_project_zhangjie $
+ *      $Id: forum_relatekw.php 28830 2012-03-14 08:30:08Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -50,10 +50,11 @@ if($data) {
 	if($kws) {
 		foreach($kws as $kw) {
 			$kw = htmlspecialchars($kw);
-			$return .= $kw.' ';
+			$return .= $kw.',';
 		}
 		$return = htmlspecialchars($return);
 	}
+	$return = substr($return, 0, strlen($return)-1);
 
 	if(!$tid) {
 		$_G['inajax'] = 1;

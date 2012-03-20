@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_post.php 28428 2012-02-29 09:10:50Z zhengqingpeng $
+ *      $Id: function_post.php 28609 2012-03-06 07:17:46Z cnteacher $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -311,13 +311,12 @@ function updateattach($modnewthreads, $tid, $pid, $attachnew, $attachupdate = ar
 function checkflood() {
 	global $_G;
 	if(!$_G['group']['disablepostctrl'] && $_G['uid']) {
-		$isflood = $_G['setting']['floodctrl'] && (TIMESTAMP - $_G['setting']['floodctrl'] <= getuserprofile('lastpost'));
-
-		if(empty($isflood)) {
-			return FALSE;
-		} else {
-			return TRUE;
+		if($_G['setting']['floodctrl'] && discuz_process::islocked("post_lock_".$_G['uid'], $_G['setting']['floodctrl'])) {
+			return true;
 		}
+		return false;
+
+
 	}
 	return FALSE;
 }

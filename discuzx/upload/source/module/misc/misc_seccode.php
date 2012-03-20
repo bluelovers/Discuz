@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_seccode.php 25246 2011-11-02 03:34:53Z zhangguosheng $
+ *      $Id: misc_seccode.php 28864 2012-03-15 09:04:45Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -35,7 +35,25 @@ if($_GET['action'] == 'update') {
 				'FlashVars', 'sFile=".rawurlencode("$_G[siteurl]misc.php?mod=seccode&update=$rand&idhash=$idhash")."', 'menu', 'false', 'allowScriptAccess', 'sameDomain', 'swLiveConnect', 'true', 'wmode', 'transparent');\n</script>";
 			$message = 'seccode_player';
 		} else {
-			$message = lang('core', 'seccode_image'.$ani.'_tips').'<img onclick="updateseccode(\''.$idhash.'\')" width="'.$_G['setting']['seccodedata']['width'].'" height="'.$_G['setting']['seccodedata']['height'].'" src="misc.php?mod=seccode&update='.$rand.'&idhash='.$idhash.'" class="vm" alt="" />';
+			if(!is_numeric($_G['setting']['seccodedata']['type'])) {
+				if(file_exists($codefile = libfile('seccode/'.$_G['setting']['seccodedata']['type'], 'class'))) {
+					@include_once $codefile;
+					$class = 'seccode_'.$_G['setting']['seccodedata']['type'];
+					if(class_exists($class)) {
+						$code = new $class();
+						$code->setting = $_G['setting']['seccodedata']['extra'][$_G['setting']['seccodedata']['type']];
+						if(method_exists($code, 'make')) {
+							include template('common/header_ajax');
+							$code->make($_GET['idhash']);
+							include template('common/footer_ajax');
+							exit;
+						}
+					}
+				}
+				exit;
+			} else {
+				$message = lang('core', 'seccode_image'.$ani.'_tips').'<img onclick="updateseccode(\''.$idhash.'\')" width="'.$_G['setting']['seccodedata']['width'].'" height="'.$_G['setting']['seccodedata']['height'].'" src="misc.php?mod=seccode&update='.$rand.'&idhash='.$idhash.'" class="vm" alt="" />';
+			}
 		}
 	}
 	include template('common/header_ajax');

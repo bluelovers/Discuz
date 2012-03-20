@@ -3,7 +3,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_follow.php 28476 2012-03-01 08:29:44Z zhengqingpeng $
+ *      $Id: spacecp_follow.php 28801 2012-03-13 08:50:13Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -51,6 +51,8 @@ if($op == 'add') {
 		$status = $special == 1 ? 1 : 0;
 		C::t('home_follow')->update_by_uid_followuid($_G['uid'], $followuid, array('status'=>$status));
 		$special = $special == 1 ? 2 : 1;
+	} else {
+		showmessage('follow_followed_ta');
 	}
 	$type = !$special ? 'add' : 'special';
 	showmessage('follow_add_succeed', dreferer(), array('fuid' => $followuid, 'type' => $type, 'special' => $special, 'from' => !empty($_GET['from']) ? $_GET['from'] : 'list'), array('closetime' => '2', 'showmsg' => '1'));
@@ -85,8 +87,6 @@ if($op == 'add') {
 	}
 
 	if(submitcheck('topicsubmit')) {
-		$_G['setting']['seccodestatus'] = 0;
-		$_G['setting']['secqaa']['status'] = 0;
 
 		if(empty($_GET['syncbbs'])) {
 			$fid = intval($_G['setting']['followforumid']);
@@ -118,6 +118,7 @@ if($op == 'add') {
 		} else {
 			$fid = intval($_GET['fid']);
 		}
+		loadcache(array('bbcodes_display', 'bbcodes', 'smileycodes', 'smilies', 'smileytypes', 'domainwhitelist', 'albumcategory'));
 		$_POST['replysubmit'] = true;
 		$_GET['fid'] = $fid;
 		$_GET['action'] = 'newthread';

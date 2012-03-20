@@ -66,12 +66,12 @@
 						<!--{if $option[type] == 'select'}-->
 							<!--{loop $option['choices'] $id $value}-->
 								<!--{if $value[foptionid] == 0}-->
-								<li{if preg_match('/^'.$value[optionid].'/i', $_GET[''.$option[identifier]])} class="a"{/if}><a href="forum.php?mod=forumdisplay&fid=$_G[fid]&filter=sortid&sortid=$_GET[sortid]&searchsort=1&$option[identifier]=$id$sorturladdarray[$option[identifier]]" class="xi2">$value[content]</a></li>
+								<li{if preg_match('/^'.$value[optionid].'\./i', $_GET[''.$option[identifier]]) || preg_match('/^'.$value[optionid].'$/i', $_GET[''.$option[identifier]])} class="a"{/if}><a href="forum.php?mod=forumdisplay&fid=$_G[fid]&filter=sortid&sortid=$_GET[sortid]&searchsort=1&$option[identifier]=$id$sorturladdarray[$option[identifier]]" class="xi2">$value[content]</a></li>
 								<!--{/if}-->
 							<!--{/loop}-->
 							<!--{if !($_GET[''.$option[identifier]] == 'all' || !isset($_GET[''.$option[identifier]]))}-->
 								<!--{loop $option['choices'] $id $value}-->
-									<!--{if preg_match('/^'.$value[foptionid].'/i', $_GET[''.$option[identifier]]) && ($showoption[$value[count]][$id] = $value)}-->
+									<!--{if (preg_match('/^'.$value[foptionid].'\./i', $_GET[''.$option[identifier]]) || preg_match('/^'.$value[foptionid].'$/i', $_GET[''.$option[identifier]])) && ($showoption[$value[count]][$id] = $value)}-->
 									<!--{/if}-->
 								<!--{/loop}-->
 								<!--{if ksort($showoption)}--><!--{/if}-->
@@ -79,7 +79,7 @@
 									<!--{if $tmpcount != $optioncount && ($tmpcount = $optioncount)}-->
 									</ul><ul class="subtsm cl">
 										<!--{loop $values $id $value}-->
-											<li{if preg_match('/^'.$value[optionid].'/i', $_GET[''.$option[identifier]])} class="a"{/if}><a href="forum.php?mod=forumdisplay&fid=$_G[fid]&filter=sortid&sortid=$_GET[sortid]&searchsort=1&$option[identifier]=$id$sorturladdarray[$option[identifier]]" class="xi2">$value[content]</a></li>
+											<li{if preg_match('/^'.$value[optionid].'\./i', $_GET[''.$option[identifier]]) || preg_match('/^'.$value[optionid].'$/i', $_GET[''.$option[identifier]])} class="a"{/if}><a href="forum.php?mod=forumdisplay&fid=$_G[fid]&filter=sortid&sortid=$_GET[sortid]&searchsort=1&$option[identifier]=$id$sorturladdarray[$option[identifier]]" class="xi2">$value[content]</a></li>
 										<!--{/loop}-->
 									</ul><ul>
 									<!--{/if}-->

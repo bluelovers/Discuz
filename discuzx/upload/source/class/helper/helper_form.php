@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: helper_form.php 27894 2012-02-16 07:26:19Z monkey $
+ *      $Id: helper_form.php 28804 2012-03-13 09:51:37Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -111,6 +111,20 @@ class helper_form {
 		global $_G;
 		if(!$_G['setting']['seccodestatus']) {
 			return true;
+		}
+		if(!is_numeric($_G['setting']['seccodedata']['type'])) {
+			if(file_exists($codefile = libfile('seccode/'.$_G['setting']['seccodedata']['type'], 'class'))) {
+				@include_once $codefile;
+				$class = 'seccode_'.$_G['setting']['seccodedata']['type'];
+				if(class_exists($class)) {
+					$code = new $class();
+					$code->setting = $_G['setting']['seccodedata']['extra'][$_G['setting']['seccodedata']['type']];
+					if(method_exists($code, 'check')) {
+						return $code->check($value, $idhash);
+					}
+				}
+			}
+			return false;
 		}
 		if(!isset($_G['cookie']['seccode'.$idhash])) {
 			return false;

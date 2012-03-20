@@ -121,7 +121,7 @@
 									var resulttype = 'follow';
 									var upload = new SWFUpload({
 										// Backend Settings
-										upload_url: "{$_G[siteroot]}misc.php?mod=swfupload&action=swfupload&operation=upload&fid={$dmfid}",
+										upload_url: "{$_G[siteurl]}misc.php?mod=swfupload&action=swfupload&operation=upload&fid={$dmfid}",
 										post_params: {"uid" : "$_G[uid]", "hash":"$swfconfig[hash]"},
 		
 										// File Upload Settings
@@ -155,11 +155,7 @@
 										//button_text: '<span class="button">{lang upload}</span>',
 										button_text: '',
 										button_window_mode: "transparent",
-		
-										// Flash Settings
-										flash_url : IMGDIR+"/swfupload.swf",
-										flash9_url : IMGDIR+"/swfupload_fp9.swf",
-		
+
 										custom_settings : {
 											progressTarget : "attachlist",
 											uploadSource: 'forum',
@@ -365,6 +361,7 @@
 							} else {
 								showDialog(msg, 'notice', null, null, 0, null, null, null, null, 3);
 							}
+							showCreditPrompt();
 							//清空上次的输入
 							var sObj = $('subject');
 							$('attachlist').innerHTML = $('fastpostmessage').value = sObj.value = '';

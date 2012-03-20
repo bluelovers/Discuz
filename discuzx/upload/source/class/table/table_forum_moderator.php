@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_forum_moderator.php 27757 2012-02-14 03:08:15Z chenmengshu $
+ *      $Id: table_forum_moderator.php 28576 2012-03-05 06:46:08Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -86,7 +86,7 @@ class table_forum_moderator extends discuz_table
 	}
 
 	public function delete_by_uid_fid_inherited($uid, $fid, $fidarray) {
-		if(!$fid || !$uid || !$fidarray) {
+		if(!$fid || !$uid) {
 			return null;
 		}
 		$fid = dintval($fid);

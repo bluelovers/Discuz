@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: connect_user.php 26679 2011-12-19 12:55:05Z zhouxiaobo $
+ *      $Id: connect_user.php 28799 2012-03-13 08:40:06Z houdelei $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -13,28 +13,35 @@ if(!defined('IN_DISCUZ')) {
 
 define('NOROBOT', TRUE);
 
+include template('common/header');
+
 $op = !empty($_GET['op']) ? trim($_GET['op'], '/') : '';
 if(!in_array($op, array('get'))) {
-	showmessage('undefined_action');
+	connect_error_output('undefined_action');
 }
 
 if($_GET['hash'] != formhash()) {
-	showmessage('submit_invalid');
+	connect_error_output('submit_invalid');
 }
 
 if($op == 'get') {
-	$auth_code = authcode($_G['cookie']['con_auth_hash']);
-	$auth_code = explode('|', authcode($_G['cookie']['con_auth_hash']));
-	$conuin = authcode($auth_code[0]);
-	$conuinsecret = authcode($auth_code[1]);
-	$conopenid = authcode($auth_code[2]);
+
+	$conopenid = authcode($_G['cookie']['con_auth_hash']);
+	$connect_guest = C::t('#qqconnect#common_connect_guest')->fetch($conopenid);
+	if(!$connect_guest) {
+		dsetcookie('con_auth_hash');
+		connect_error_output('qqconnect:connect_login_first');
+	}
+
+	$conuin = $connect_guest['conuin'];
+	$conuinsecret = $connect_guest['conuinsecret'];
 
 	if($conuin && $conuinsecret && $conopenid) {
 		try {
 			$connectOAuthClient = Cloud::loadClass('Service_Client_ConnectOAuth');
 			$connect_user_info = $connectOAuthClient->connectGetUserInfo($conopenid, $conuin, $conuinsecret);
 		} catch(Exception $e) {
-			exit;
+			connect_error_output();
 		}
 		if ($connect_user_info['nickname']) {
 			$qq_nick = $connect_user_info['nickname'];
@@ -47,8 +54,14 @@ if($op == 'get') {
 		if($ucresult >= 0) {
 			$first_available_username = $connect_nickname;
 		}
-		echo "<span>".$qq_nick."\t".$first_available_username."</span>";
+		echo $first_available_username;
 	}
 }
 
+include template('common/footer');
+
+function connect_error_output($error = '') {
+	include template('common/footer');
+	exit;
+}
 ?>

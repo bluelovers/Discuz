@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: post_newthread.php 28273 2012-02-27 03:29:06Z zhengqingpeng $
+ *      $Id: post_newthread.php 28586 2012-03-05 07:41:37Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -792,8 +792,7 @@ if(!submitcheck('topicsubmit', 0, $seccodecheck, $secqaacheck)) {
 		}
 
 		if($_G['forum']['status'] == 3) {
-			require_once libfile('function/group');
-			updateactivity($_G['fid'], 0);
+			C::t('forum_forumfield')->update($_G['fid'], array('lastupdate' => TIMESTAMP));
 			require_once libfile('function/grouplog');
 			updategroupcreditlog($_G['fid'], $_G['uid']);
 		}

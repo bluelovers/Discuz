@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: post_newreply.php 28475 2012-03-01 08:16:46Z liulanbo $
+ *      $Id: post_newreply.php 28610 2012-03-06 07:21:26Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -295,12 +295,12 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 
 } else {
 
-	if(trim($subject) == '' && trim($message) == '' && $thread['special'] != 2) {
-		showmessage('post_sm_isnull');
-	} elseif($thread['closed'] && !$_G['forum']['ismoderator'] && !$thread['isgroup']) {
+	if($thread['closed'] && !$_G['forum']['ismoderator'] && !$thread['isgroup']) {
 		showmessage('post_thread_closed');
 	} elseif(!$thread['isgroup'] && $post_autoclose = checkautoclose($thread)) {
 		showmessage($post_autoclose, '', array('autoclose' => $_G['forum']['autoclose']));
+	} if(trim($subject) == '' && trim($message) == '' && $thread['special'] != 2) {
+		showmessage('post_sm_isnull');
 	} elseif($post_invalid = checkpost($subject, $message, $special == 2 && $_G['group']['allowposttrade'])) {
 		showmessage($post_invalid, '', array('minpostsize' => $_G['setting']['minpostsize'], 'maxpostsize' => $_G['setting']['maxpostsize']));
 	} elseif(checkflood()) {
@@ -656,7 +656,7 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 					C::t('forum_thread')->increase($_G['forum']['closed'], $fieldarr, true);
 				}
 				C::t('forum_groupuser')->update_counter_for_user($_G['uid'], $_G['fid'], 0, 1);
-				updateactivity($_G['fid'], 0);
+				C::t('forum_forumfield')->update($_G['fid'], array('lastupdate' => TIMESTAMP));
 				require_once libfile('function/grouplog');
 				updategroupcreditlog($_G['fid'], $_G['uid']);
 			}

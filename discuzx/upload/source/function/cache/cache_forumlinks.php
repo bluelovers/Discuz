@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_forumlinks.php 24531 2011-09-23 05:45:11Z chenmengshu $
+ *      $Id: cache_forumlinks.php 28612 2012-03-06 08:10:47Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -22,9 +22,9 @@ function build_cache_forumlinks() {
 		foreach ($query as $flink) {
 			if($flink['description']) {
 				if($flink['logo']) {
-					$tightlink_content .= '<li class="lk_logo mbm bbda cl"><img src="'.$flink['logo'].'" border="0" alt="'.strip_tags($flink['name']).'" /><div class="lk_content z"><h5><a href="'.$flink['url'].'" target="_blank">'.$flink['name'].'</a></h5><p>'.$flink['description'].'</p></div>';
+					$tightlink_content .= '<li class="lk_logo mbm bbda cl"><img src="'.$flink['logo'].'" border="0" alt="'.strip_tags($flink['name']).'" /><div class="lk_content z"><h5><a href="'.$flink['url'].'" target="_blank">'.$flink['name'].'</a></h5><p>'.$flink['description'].'</p></div></li>';
 				} else {
-					$tightlink_content .= '<li class="mbm bbda"><div class="lk_content"><h5><a href="'.$flink['url'].'" target="_blank">'.$flink['name'].'</a></h5><p>'.$flink['description'].'</p></div>';
+					$tightlink_content .= '<li class="mbm bbda"><div class="lk_content"><h5><a href="'.$flink['url'].'" target="_blank">'.$flink['name'].'</a></h5><p>'.$flink['description'].'</p></div></li>';
 				}
 			} else {
 				if($flink['logo']) {

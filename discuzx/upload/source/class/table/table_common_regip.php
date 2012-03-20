@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_regip.php 27871 2012-02-16 03:52:11Z zhengqingpeng $
+ *      $Id: table_common_regip.php 28771 2012-03-12 09:13:43Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -27,7 +27,7 @@ class table_common_regip extends discuz_table
 
 	public function count_by_ip_dateline($ctrlip, $dateline) {
 		if(!empty($ctrlip)) {
-			return DB::result_first('SELECT COUNT(*) FROM %t WHERE '.DB::field(ip, $ctrlip, 'like').' AND count=-1 AND dateline>%d  LIMIT 1', array($this->_table, $dateline));
+			return DB::result_first('SELECT COUNT(*) FROM %t WHERE '.DB::field('ip', $ctrlip, 'like').' AND count=-1 AND dateline>%d  LIMIT 1', array($this->_table, $dateline));
 		}
 		return 0;
 	}

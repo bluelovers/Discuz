@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_admincp_msg.php 28305 2012-02-27 09:51:43Z chenmengshu $
+ *      $Id: lang_admincp_msg.php 28882 2012-03-16 07:53:52Z svn_project_zhangjie $
  *
  *      This file is automatically generate
  */
@@ -69,9 +69,9 @@ $lang = array (
   'nav_not_found' => '导航未找到或类型不符',
   'patch_successful' => '操作成功',
   'plugin_not_found' => '插件未找到',
-  'plugins_edit_identifier_invalid' => '您输入的唯一标识符不合法或与现有插件重复',
   'plugins_install_succeed' => '插件成功安装！<br />为了正常使用此插件，您可能还需要上传或修改相应的文件或模板，详情请查看本插件的安装说明<br /><br /><a href="http://addon.discuz.com?view=plugins">点击这里返回应用中心</a><br />',
   'plugin_file_error' => '插件文件缺失',
+  'plugins_edit_identifier_invalid' => '您输入的唯一标识符不合法或与现有插件重复',
   'plugins_upgrade_succeed' => '插件成功更新到 {toversion}<br /><br /><a href="http://addon.discuz.com?view=plugins">点击这里返回应用中心</a><br />',
   'plugins_edit_name_invalid' => '您没有输入插件名称',
   'plugins_edit_succeed' => '插件配置更新成功 ',
@@ -114,7 +114,7 @@ $lang = array (
   'members_verify_update_succeed' => '认证设置更新成功 ',
   'action_noaccess' => '抱歉，您无权使用此功能',
   'members_delete_confirm' => '本操作不可恢复，您确定要删除符合条件的 {membernum} 个用户吗？',
-  'cloudaddons_check_write_error' => '"data/download/" 目录无法创建或写入，这将会导致应用无法安装，请检查服务器环境',
+  'cloudaddons_check_write_error' => '"data/download/" 或 "data/addonmd5/" 目录无法创建或写入，这将会导致应用无法安装，请检查服务器环境',
   'cloudaddons_file_read_error' => '文件读取错误，请重试',
   'cloudaddons_file_write_error' => '文件写入错误，请重试',
 
@@ -223,6 +223,7 @@ $lang = array (
   'setting_district_edit_success' => '修改地区数据成功 ',
 
   'setting_domain_repeat_error' => '配置中存在重复的域名',
+  'setting_domain_need_default_error' => '请设置默认域名',
 
   'alipay_not_contract' => '请输入支付宝签约用户信息',
   'alipay_succeed' => '支付宝功能设定成功 ',
@@ -463,7 +464,6 @@ $lang = array (
   'smilies_import_succeed_renamed' => '表情导入成功。导入的表情分类名称与现有重复，已被自动重命名',
   'smilies_import_succeed' => '表情导入成功 ',
 
-  'specialuser_defaultuser_noreason_invalid' => '请输入原因',
   'specialuser_hotuser_noreason_invalid' => '请输入原因',
   'specialuser_defaultuser_del_succeed' => '删除推荐好友成功 ',
   'specialuser_hotuser_del_succeed' => '删除明星会员成功 ',
@@ -473,7 +473,6 @@ $lang = array (
   'specialuser_hotuser_nouser_invalid' => '该用户不存在或被冻结',
   'specialuser_defaultuser_add_succeed' => '添加推荐好友成功 ',
   'specialuser_hotuser_add_succeed' => '添加会员成功 ',
-  'specialuser_follow_add_succeed' => '添加推荐关注用户成功 ',
 
   'styles_export_invalid' => '指定的风格不存在，无法导出',
   'csscache_update' => 'CSS 缓存文件已更新',
@@ -547,6 +546,8 @@ $lang = array (
 
   'upgrade_close_site' => '升级前，请先关闭站点，并对文件及数据备份',
   'upgrade_none' => '没有该升级信息',
+  'upgrade_continue' => '您上次升级到 {step}，请继续完成升级',
+  'upgrade_download_upgradelist_error' => '获取待更新文件列表失败，是否重新获取？',
   'upgrade_download_complete_to_compare' => '待更新文件下载完成，即将进行本地文件比较',
   'upgrade_redownload' => '更新文件 {file} 下载出现问题，是否进行重试？',
   'upgrade_downloading_file' => '正在从官方下载更新文件 {file}',
@@ -559,7 +560,7 @@ $lang = array (
   'upgrade_file_successful' => '文件升级成功，即将进入更新数据库',
   'upgrade_successful' => '恭喜您，升级成功! <br />您当前的版本为：[Discuz! X{version} Release[{release}]',
   'upgrade_checking' => '正在检测新的升级版本',
-  'upgrade_latest_version' => '您目前使用的是已经是最新版本，不需要升级',
+  'upgrade_latest_version' => '您目前使用的已经是最新版本，不需要升级',
 
   'usergroups_type_nonexistence' => '用户组类型错误',
   'usergroups_update_creditshigher_invalid' => '您没有填写积分下限',
@@ -615,7 +616,7 @@ $lang = array (
 
   'cloudaddons_ftp_path_error' => '站点 FTP 路径错误，请重新填写',
 
-  'cloudaddons_check_url_fopen_error' => '您的服务器无法访问应用中心，这将会导致应用无法安装，请检查服务器环境',
+  'cloudaddons_check_url_fopen_error' => '您的服务器无法访问应用中心，这将会导致应用无法安装。请联系您的服务商或者网站技术人员，确保您的服务器能够正常访问 addon.discuz.com',
   'cloudaddons_genuine_message' => '对不起，您安装的不是正版应用，安装程序无法继续执行<br /><br /><a href="admin.php?action=cloudaddons&id={addonid}">点击这里安装正版应用</a>',);
 
 ?>

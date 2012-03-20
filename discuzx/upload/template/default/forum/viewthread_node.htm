@@ -73,7 +73,7 @@
 			<!--{elseif $post['avatar'] && $showavatars}-->
 				<!--{if $post[mobiletype]}-->
 				<div class="mobile-type mobile-type-$post[mobiletype]">
-					<a href="#" tip="{lang post_from_mobile}" onmouseover="showTip(this)"></a>
+					<a href="misc.php?mod=mobile" tip="{lang post_from_mobile}" onmouseover="showTip(this)"></a>
 				</div>
 				<!--{/if}-->
 				<div class="avatar" onmouseover="showauthor(this, 'userinfo$post[pid]')"><a href="home.php?mod=space&uid=$post[authorid]" target="_blank">$post[avatar]</a></div>
@@ -275,7 +275,7 @@
 			<!--{subtemplate forum/viewthread_node_body}-->
 		</div>
 
-		<!--{if !$_G['forum']['disablecollect']}-->
+		<!--{if helper_access::check_module('collection') && !$_G['forum']['disablecollect']}-->
 			<!--{if $post['relatecollection']}-->
 				<div class="cm">
 					<h3 class="psth xs1">{lang collection_related}</h3>

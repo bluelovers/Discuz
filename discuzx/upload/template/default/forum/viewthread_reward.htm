@@ -11,7 +11,7 @@
 </div>
 
 <!--{if $post['attachment']}-->
-	<div class="locked">{lang attachment}: <em><!--{if $_G['uid']}-->{lang attach_nopermission}<!--{else}-->{lang attach_nopermission_login}<!--{/if}--></em></div>
+	<div class="locked">{lang attachment}: <em><!--{if $_G['uid']}-->{lang attach_nopermission}<!--{elseif $_G['connectguest']}-->{lang attach_nopermission_connect_fill_profile}<!--{else}-->{lang attach_nopermission_login}<!--{/if}--></em></div>
 <!--{elseif $post['imagelist'] || $post['attachlist']}-->
 	<div class="pattl">
 		<!--{if $post['imagelist']}-->

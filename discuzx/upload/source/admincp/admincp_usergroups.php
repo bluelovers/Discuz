@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_usergroups.php 28450 2012-03-01 04:28:10Z monkey $
+ *      $Id: admincp_usergroups.php 28549 2012-03-02 10:44:40Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -1207,12 +1207,13 @@ EOT;
 		$gids = $comma = '';
 		if(is_array($_GET['target']) && count($_GET['target'])) {
 			foreach($_GET['target'] as $key => $gid) {
-				if(!(($fid = intval($gid)) && $gid != $source )) {
+				$_GET['target'][$key] = intval($gid);
+				if(empty($_GET['target'][$key]) || $_GET['target'][$key] == $source) {
 					unset($_GET['target'][$key]);
 				}
 			}
 		}
-		if(empty($gids)) {
+		if(empty($_GET['target'])) {
 			cpmsg('usergroups_copy_target_invalid', '', 'error');
 		}
 

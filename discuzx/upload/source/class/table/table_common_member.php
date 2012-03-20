@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_member.php 28524 2012-03-02 03:48:52Z zhangguosheng $
+ *      $Id: table_common_member.php 28866 2012-03-16 01:11:04Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -32,7 +32,7 @@ class table_common_member extends discuz_table_archive
 
 	public function update_by_groupid($groupid, $data) {
 		$uids = array();
-		$groupid = dintval($groupid);
+		$groupid = dintval($groupid, true);
 		if($groupid && $this->_allowmem) {
 			$uids = array_keys($this->fetch_all_by_groupid($groupid));
 		}
@@ -124,7 +124,7 @@ class table_common_member extends discuz_table_archive
 
 	public function fetch_all_by_groupid($groupid, $start = 0, $limit = 0) {
 		$users = array();
-		if(!($groupid = intval($groupid))) {
+		if(!($groupid = dintval($groupid, true))) {
 			$users = DB::fetch_all('SELECT * FROM '.DB::table($this->_table).' WHERE '.DB::field('groupid', $groupid).' '.DB::limit($start, $limit), null, 'uid');
 		}
 		return $users;
@@ -157,7 +157,7 @@ class table_common_member extends discuz_table_archive
 	}
 
 	public function fetch_all_ban_by_groupexpiry($timestamp) {
-		return ($timestamp = intval($timestamp)) ? DB::fetch_all("SELECT uid, groupid, credits FROM ".DB::table($this->_table)." WHERE groupid IN ('4', '5') AND groupexpiry>'0' AND groupexpiry<'$timestamp'") : array();
+		return ($timestamp = intval($timestamp)) ? DB::fetch_all("SELECT uid, groupid, credits FROM ".DB::table($this->_table)." WHERE groupid IN ('4', '5') AND groupexpiry>'0' AND groupexpiry<'$timestamp'", array(), 'uid') : array();
 	}
 
 	public function count($fetch_archive = 1) {
@@ -165,6 +165,7 @@ class table_common_member extends discuz_table_archive
 		if(isset($this->membersplit) && $fetch_archive) {
 			$count += C::t($this->_table.'_archive')->count();
 		}
+		$count += intval(DB::result_first('SELECT COUNT(*) FROM '.DB::table('common_connect_guest'), null, true));
 		return $count;
 	}
 
@@ -342,8 +343,10 @@ class table_common_member extends discuz_table_archive
 			if(!$iscron && getglobal('setting/memberspliting') === null) {
 				$this->switch_keys('disable');
 			}
-			$movesql = 'REPLACE INTO %t SELECT * FROM %t WHERE uid IN (SELECT uid FROM '.$temptablename.')';
-			$deletesql = 'DELETE FROM %t WHERE uid IN (SELECT uid FROM '.$temptablename.')';
+			$uidlist = DB::fetch_all('SELECT uid FROM '.$temptablename, null, 'uid');
+			$uids = dimplode(array_keys($uidlist));
+			$movesql = 'REPLACE INTO %t SELECT * FROM %t WHERE uid IN ('.$uids.')';
+			$deletesql = 'DELETE FROM %t WHERE uid IN ('.$uids.')';
 			if(DB::query($movesql, array('common_member_archive', 'common_member'), false, true)) {
 				DB::query($deletesql, array('common_member'), false, true);
 			}
@@ -493,7 +496,7 @@ class table_common_member extends discuz_table_archive
 	}
 
 	public function range_by_uid($from, $limit) {
-		return DB::fetch_all('SELECT * FROM %t WHERE uid > %d ORDER BY uid LIMIT %d', array($this->_table, $from, $limit), $this->_pk);
+		return DB::fetch_all('SELECT * FROM %t WHERE uid >= %d ORDER BY uid LIMIT %d', array($this->_table, $from, $limit), $this->_pk);
 	}
 }
 

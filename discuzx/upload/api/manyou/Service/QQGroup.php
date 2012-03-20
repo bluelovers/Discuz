@@ -4,7 +4,7 @@
  *		[Discuz!] (C)2001-2099 Comsenz Inc.
  *		This is NOT a freeware, use is subject to license terms
  *
- *		$Id: QQGroup.php 28369 2012-02-28 07:54:27Z songlixin $
+ *		$Id: QQGroup.php 28558 2012-03-05 02:59:09Z yexinhao $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -12,9 +12,8 @@ if(!defined('IN_DISCUZ')) {
 }
 
 class Cloud_Service_QQGroup {
-	protected static $util;
-	protected static $siteId;
-	protected static $siteKey;
+
+	protected $_util;
 
 	protected static $_instance;
 
@@ -23,30 +22,33 @@ class Cloud_Service_QQGroup {
 
 		if (!(self::$_instance instanceof self)) {
 			self::$_instance = new self();
-			self::$siteId = $_G['setting']['my_siteid'];
-			self::$siteKey = $_G['setting']['my_sitekey'];
-			self::$util = Cloud::loadClass('Service_Util');
 		}
 
 		return self::$_instance;
 	}
 
+	public function __construct() {
+
+		$this->_util = Cloud::loadClass('Service_Util');
+	}
+
 	public function iframeUrl($tid, $title, $content) {
 		global $_G;
+
 		if (!$_G['adminid']) {
 			return false;
-        }
-        $title = rawurlencode($title);
-        $content = rawurlencode($content);
+		}
 
 		$url = 'http://qun.discuz.qq.com/feed/push?';
 		$params = array(
-			's_id' => self::$siteId,
-            't_id' => $tid,
-            's_url' => $_G['siteurl'],
-        );
-        $signUrl = self::$util->generateSiteSignUrl($params);
+			't_id' => $tid,
+			's_url' => $_G['siteurl'],
+			'title' => $title,
+			'content' => $content
+		);
 
-		return $url . 'title=' . $title . '&content=' . $content . '&' . $signUrl;
+		$signUrl = $this->_util->generateSiteSignUrl($params);
+
+		return $url . $signUrl;
 	}
 }

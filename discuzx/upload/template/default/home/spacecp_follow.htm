@@ -62,6 +62,7 @@
 			$('note_{$tid}').focus();
 			function succeedhandle_$_GET['handlekey'](url, message, param) {
 				succeedhandle_fastpost(url, message, param);
+				showCreditPrompt();
 			}
 		</script>
 	<!--{else}-->
@@ -110,6 +111,7 @@
 			$('note_{$tid}').focus();
 			function succeedhandle_$_GET['handlekey'](url, message, values) {
 				$('relaybox_$_GET[feedid]').style.display = 'none';
+				showCreditPrompt();
 			}
 		</script>
 	<!--{/if}-->

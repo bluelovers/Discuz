@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cloud_connect.php 26317 2011-12-08 13:05:42Z houdelei $
+ *      $Id: cloud_connect.php 28875 2012-03-16 04:33:59Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -53,7 +53,7 @@ if($_GET['anchor'] == 'service') {
 			}
 		}
 
-		$connectrewardcredits = $connectgroup = '';
+		$connectrewardcredits = $connectgroup = $connectguestgroup = '';
 		$setting['extcredits'] = dunserialize($setting['extcredits']);
 		for($i = 0; $i <= 8; $i++) {
 			if($setting['extcredits'][$i]['available']) {
@@ -65,11 +65,13 @@ if($_GET['anchor'] == 'service') {
 		$groups = C::t('common_usergroup')->fetch_all_by_type('special');
 		foreach($groups as $group) {
 			$connectgroup .= "<option value=\"$group[groupid]\" ".($group['groupid'] == $setting['connect']['register_groupid'] ? 'selected' : '').">$group[grouptitle]</option>\n";
+			$connectguestgroup .= "<option value=\"$group[groupid]\" ".($group['groupid'] == $setting['connect']['guest_groupid'] ? 'selected' : '').">$group[grouptitle]</option>\n";
 		}
 
 		showformheader('cloud&operation=connect');
 		showtableheader();
 		showsetting('connect_setting_allow', 'connectnew[allow]', $setting['connect']['allow'], 'radio', 0, 1);
+		showsetting('setting_access_guest_connect_group', '', '', '<select name="connectnew[guest_groupid]"><option value="0">'.$lang['usergroups_system_0'].'</option>'.$connectguestgroup.'</select>');
 		showsetting('setting_access_register_connect_birthday', 'connectnew[register_birthday]', $setting['connect']['register_birthday'], 'radio');
 		showsetting('setting_access_register_connect_gender', 'connectnew[register_gender]', $setting['connect']['register_gender'], 'radio');
 		showsetting('setting_access_register_connect_uinlimit', 'connectnew[register_uinlimit]', $setting['connect']['register_uinlimit'], 'text');

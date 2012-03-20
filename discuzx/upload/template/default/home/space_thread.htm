@@ -109,9 +109,9 @@
 		
 		<!--{if $diymode && !$_G[setting][homepagestyle] }-->
 			<p class="tbmu">
-				<a href="home.php?mod=space&do=thread&view=me&from=space&type=thread" $orderactives[thread]>{lang topic}</a>
+				<a href="home.php?mod=space&uid=$space[uid]&do=thread&view=me&from=space&type=thread" $orderactives[thread]>{lang topic}</a>
 				<span class="pipe">|</span>
-				<a href="home.php?mod=space&do=thread&view=me&from=space&type=reply" $orderactives[reply]>{lang reply}</a>
+				<a href="home.php?mod=space&uid=$space[uid]&do=thread&view=me&from=space&type=reply" $orderactives[reply]>{lang reply}</a>
 			</p>
 		<!--{/if}-->
 		

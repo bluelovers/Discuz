@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_admincp.php 27617 2012-02-07 08:24:14Z monkey $
+ *      $Id: function_admincp.php 28879 2012-03-16 06:19:42Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -537,7 +537,7 @@ function showtagheader($tagname, $id, $display = FALSE, $classname = '') {
 	if(!empty($_G['showsetting_multi'])) {
 		return;
 	}
-	echo '<'.$tagname.($classname ? " class=\"$classname\"" : '').' id="'.$id.'"'.($display ? '' : ' style="display: none"').'>';
+	echo '<'.$tagname.(!isset($_G['showsetting_multi']) && $classname ? " class=\"$classname\"" : '').' id="'.$id.'"'.($display ? '' : ' style="display: none"').'>';
 }
 
 function showtitle($title, $extra = '', $multi = 1) {

@@ -98,6 +98,10 @@
 							<!--{/if}-->
 						<!--{/loop}-->
 					</ul>
+					<!--{elseif $_G[connectguest]}-->
+						<div class="ptm pbw hm">
+							{lang connect_fill_profile_to_visit}
+						</div>
 					<!--{else}-->
 						<div class="ptm pbw hm">
 							{lang my_nav_login}
@@ -168,7 +172,7 @@
 						</p>
 						<p>
 							<a href="home.php?mod=spacecp&ac=credit&showcredit=1">{lang credits}: 0</a>
-							<span class="pipe">|</span>{lang usergroup}: {lang header_qq_login_user}
+							<span class="pipe">|</span>{lang usergroup}: $_G[group][grouptitle]
 						</p>
 					</div>
 					<!--{/if}-->

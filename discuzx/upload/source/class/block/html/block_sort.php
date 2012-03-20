@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: block_sort.php 26707 2011-12-20 08:31:04Z zhangguosheng $
+ *      $Id: block_sort.php 28785 2012-03-13 03:05:22Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -141,7 +141,7 @@ class block_sort extends commonblock_html {
 		$orderby	= isset($parameter['orderby']) ? (in_array($parameter['orderby'],array('lastpost','dateline','replies','views','heats','recommends')) ? $parameter['orderby'] : 'lastpost') : 'lastpost';
 		$lastpost	= isset($parameter['lastpost']) ? intval($parameter['lastpost']) : 0;
 		$recommend	= !empty($parameter['recommend']) ? 1 : 0;
-		$sortids	= isset($parameter['sortids']) ? $parameter['sortids'] : '';
+		$sortid	= isset($parameter['sortids']) ? intval($parameter['sortids']) : '';
 
 		if($fids) {
 			$thefids = array();
@@ -164,7 +164,7 @@ class block_sort extends commonblock_html {
 		$threadtypeids = array();
 
 		$sql = ($tids ? ' AND t.tid IN ('.dimplode($tids).')' : '')
-			.($sortids ? ' AND t.sortid IN ('.dimplode($sortids).')' : '')
+			.($sortid ? ' AND t.sortid='.$sortid : '')
 			.($fids ? ' AND t.fid IN ('.dimplode($fids).')' : '')
 			.($digest ? ' AND t.digest IN ('.dimplode($digest).')' : '')
 			.($stick ? ' AND t.displayorder IN ('.dimplode($stick).')' : '')
@@ -185,7 +185,6 @@ class block_sort extends commonblock_html {
 		}
 
 		require_once libfile('function/threadsort');
-		$sortid = intval($sortids);
 		$templatearray = $sortoptionarray = array();
 		loadcache(array('threadsort_option_'.$sortid, 'threadsort_template_'.$sortid));
 		$templatearray[$sortid] = $_G['cache']['threadsort_template_'.$sortid]['block'];

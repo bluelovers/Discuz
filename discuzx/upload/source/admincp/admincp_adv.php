@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_adv.php 28113 2012-02-22 09:25:55Z svn_project_zhangjie $
+ *      $Id: admincp_adv.php 28685 2012-03-08 02:35:03Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -432,7 +432,7 @@ if($operation == 'ad') {
 			if($_FILES['advnew'.$advnew['style']]) {
 				$upload = new discuz_upload();
 				if($upload->init($_FILES['advnew'.$advnew['style']], 'common') && $upload->save(1)) {
-					$advnew[$advnew['style']]['url'] = $_G['siteurl'].$_G['setting']['attachurl'].'common/'.$upload->attach['attachment'];
+					$advnew[$advnew['style']]['url'] = (!strstr($_G['setting']['attachurl'], '://') ? $_G['siteurl'] : '').$_G['setting']['attachurl'].'common/'.$upload->attach['attachment'];
 				}
 			} else {
 				$advnew[$advnew['style']]['url'] = $_GET['advnew'.$advnew['style']];

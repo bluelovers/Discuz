@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_block.php 27332 2012-01-16 09:24:24Z zhangguosheng $
+ *      $Id: function_block.php 28669 2012-03-07 08:07:38Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -33,18 +33,13 @@ function block_script($blockclass, $script) {
 
 function block_get_batch($parameter) {
 	global $_G;
-	static $allowmem = null, $cachettl = null;
-	if($allowmem === null) {
-		$allowmem = ($cachettl = getglobal('setting/memory/diyblock')) !== null && memory('check');
-	}
-
 	$bids = $parameter && is_array($parameter) ? $parameter : ($parameter ? explode(',', $parameter) : array());
 	$bids = array_map('intval', $bids);
 	$bids = array_unique($bids);
 	$styleids = array();
 
 	if($bids) {
-		if($allowmem) {
+		if(C::t('common_block')->allowmem) {
 			if(($cachedata = memory('get', $bids, 'blockcache_')) !== false) {
 				foreach ($cachedata as $bid => $block) {
 					$_G['block'][$bid] = $block;
@@ -110,8 +105,8 @@ function block_get_batch($parameter) {
 			$block['param'] = $block['param'] ? dunserialize($block['param']) : array();
 			$_G['block'][$bid] = $block;
 
-			if($allowmem) {
-				memory('set', 'blockcache_'.$bid, $_G['block'][$bid], $cachettl);
+			if(C::t('common_block')->allowmem) {
+				memory('set', 'blockcache_'.$bid, $_G['block'][$bid], C::t('common_block')->cache_ttl);
 			}
 
 		}
@@ -165,7 +160,8 @@ function block_fetch_content($bid, $isjscall=false, $forceupdate=false) {
 
 	$hidediv = $isjscall || $block['blocktype'];
 
-	if($allowmem && empty($block['hidedisplay']) && empty($block['nocache']) && ($str = memory('get', 'blockcache_'.$bid.'_'.($isjscall ? 'js' : 'htm'))) !== false) {
+	$_cache_key = 'blockcache_'.($isjscall ? 'js' : 'htm').'_'.$bid;
+	if($allowmem && empty($block['hidedisplay']) && empty($block['nocache']) && ($str = memory('get', $_cache_key)) !== false) {
 
 	} else {
 
@@ -183,7 +179,7 @@ function block_fetch_content($bid, $isjscall=false, $forceupdate=false) {
 		}
 
 		if($allowmem && empty($block['hidedisplay']) && empty($block['nocache'])) {
-			memory('set', 'blockcache_'.$bid.'_'.($isjscall ? 'js' : 'htm'), $str, $cachettl);
+			memory('set', $_cache_key, $str, C::t('common_block')->cache_ttl);
 		}
 	}
 
@@ -199,20 +195,12 @@ function block_fetch_content($bid, $isjscall=false, $forceupdate=false) {
 	return !empty($block['hidedisplay']) ? '' : $str;
 }
 
-function block_memory_clear($bid) {
-	if(memory('check')) {
-		memory('rm', 'blockcache_'.$bid.'');
-		memory('rm', 'blockcache_'.$bid.'_htm');
-		memory('rm', 'blockcache_'.$bid.'_js');
-	}
-}
-
 function block_updatecache($bid, $forceupdate=false) {
 	global $_G;
 	if((isset($_G['block'][$bid]['cachetime']) && $_G['block'][$bid]['cachetime'] < 0) || !$forceupdate && discuz_process::islocked('block_update_cache', 5)) {
 		return false;
 	}
-	block_memory_clear($bid);
+	C::t('common_block')->clear_cache($bid);
 	$block = empty($_G['block'][$bid])?array():$_G['block'][$bid];
 	if(!$block) {
 		return false;
@@ -263,11 +251,11 @@ function block_updatecache($bid, $forceupdate=false) {
 		C::t('common_block')->update($bid, array('dateline'=>TIMESTAMP+999999, 'cachetime'=>0));
 		$_G['block'][$bid]['dateline'] = TIMESTAMP+999999;
 	}
-	if(($cachettl = getglobal('setting/memory/diyblock')) !== null && memory('check')) {
-		memory('set', 'blockcache_'.$bid, $_G['block'][$bid], $cachettl);
+	if(C::t('common_block')->allowmem) {
+		memory('set', 'blockcache_'.$bid, $_G['block'][$bid], C::t('common_block')->cache_ttl);
 		$styleid = $_G['block'][$bid]['styleid'];
 		if($styleid && $_G['blockstyle_'.$styleid]) {
-			memory('set', 'blockstylecache_'.$styleid, $_G['blockstyle_'.$styleid], $cachettl);
+			memory('set', 'blockstylecache_'.$styleid, $_G['blockstyle_'.$styleid], C::t('common_block')->cache_ttl);
 		}
 	}
 	discuz_process::unlock('block_update_cache');
@@ -862,6 +850,7 @@ function blockclass_cache() {
 			$dirs[$filename] = $dir.$filename.'/';
 		}
 	}
+	ksort($dirs);
 	foreach($dirs as $name=>$dir) {
 		$blockclass = $blockconvert = array();
 		if(file_exists($dir.'blockclass.php')) {

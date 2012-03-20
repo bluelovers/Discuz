@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: member_connect.php 27581 2012-02-07 02:03:31Z svn_project_zhangjie $
+ *      $Id: member_connect.php 28674 2012-03-07 09:49:51Z houdelei $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -27,6 +27,8 @@ if($_GET['action'] == 'login') { // debug 已有账号，绑定我的账号走此分支
 	$ctl_obj->setting = $_G['setting'];
 	$ctl_obj->setting['seccodestatus'] = 0;
 
+	$ctl_obj->connect_guest = $connect_guest;
+
 	$ctl_obj->extrafile = libfile('member/connect_logging', 'module');
 	$ctl_obj->template = 'member/login';
 	$ctl_obj->on_login();
@@ -34,9 +36,11 @@ if($_GET['action'] == 'login') { // debug 已有账号，绑定我的账号走此分支
 } else { // debug 完善我的资料，即添加个新的论坛账号走此分支
 
 	$_G['qc']['connect_auth_hash'] = $_GET['con_auth_hash'];
-	$auth_code = authcode($_G['qc']['connect_auth_hash']);
-	$auth_code = explode('|', $auth_code);
-	$conopenid = authcode($auth_code[2]);
+	if(!$_G['qc']['connect_auth_hash']) {
+		$_G['qc']['connect_auth_hash'] = $_G['cookie']['con_auth_hash'];
+	}
+
+	$conopenid = authcode($_G['qc']['connect_auth_hash']);
 
 	$ctl_obj = new register_ctl();
 	$ctl_obj->setting = $_G['setting'];
@@ -75,6 +79,8 @@ if($_GET['action'] == 'login') { // debug 已有账号，绑定我的账号走此分支
 
 	$ctl_obj->setting['sendregisterurl'] = false;
 
+	$ctl_obj->connect_guest = $connect_guest;
+
 	loadcache(array('fields_connect_register', 'profilesetting'));
 	foreach($_G['cache']['fields_connect_register'] as $field => $data) {
 		unset($_G['cache']['fields_register'][$field]);
@@ -97,6 +103,13 @@ if($_GET['action'] == 'login') { // debug 已有账号，绑定我的账号走此分支
 	$ctl_obj->setting['ignorepassword'] = 1;
 	$ctl_obj->setting['checkuinlimit'] = 1;
 	$ctl_obj->setting['strongpw'] = 0;
+	$ctl_obj->setting['pwlength'] = 0;
+
+	if($_GET['ac'] == 'bind') {
+		$ctl_obj->setting['reglinkname'] = lang('plugin/qqconnect', 'connect_register_bind');
+	} else {
+		$ctl_obj->setting['reglinkname'] = lang('plugin/qqconnect', 'connect_register_profile');
+	}
 
 	$ctl_obj->extrafile = libfile('member/connect_register', 'module');
 	$ctl_obj->template = 'member/register';

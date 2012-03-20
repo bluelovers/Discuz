@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_home_comment.php 27895 2012-02-16 07:26:42Z chenmengshu $
+ *      $Id: table_home_comment.php 28826 2012-03-14 07:45:14Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -84,11 +84,11 @@ class table_home_comment extends discuz_table
 		return DB::result_first('SELECT COUNT(*) FROM %t WHERE '.$cidsql.' id=%d AND idtype=%s', array($this->_table, $id, $idtype));
 	}
 
-	public function fetch_all_by_id_idtype($id, $idtype, $start, $limit, $cid = '') {
+	public function fetch_all_by_id_idtype($id, $idtype, $start, $limit, $cid = '', $order = '') {
 		if($cid) {
 			$cidsql = DB::field('cid', $cid). ' AND ';
 		}
-		return DB::fetch_all('SELECT * FROM %t WHERE '.$cidsql.' id=%d AND idtype=%s ORDER BY dateline DESC %i', array($this->_table, $id, $idtype, DB::limit($start, $limit)));
+		return DB::fetch_all('SELECT * FROM %t WHERE '.$cidsql.' id=%d AND idtype=%s ORDER BY '.DB::order('dateline', $order).' %i', array($this->_table, $id, $idtype, DB::limit($start, $limit)));
 	}
 
 	public function fetch_latest_by_authorid($uid, $cid) {

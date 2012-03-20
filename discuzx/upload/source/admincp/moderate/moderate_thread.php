@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: moderate_thread.php 26399 2011-12-12 08:54:05Z svn_project_zhangjie $
+ *      $Id: moderate_thread.php 28571 2012-03-05 06:07:38Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -139,7 +139,7 @@ if(!submitcheck('modsubmit') && !$_GET['fast']) {
 		} else {
 			$thread_censor_text = '';
 		}
-		$forumname = $_G['cache']['forum'][$thread['fid']]['name'];
+		$forumname = $_G['cache']['forums'][$thread['fid']]['name'];
 		showtagheader('tbody', '', true, 'hover');
 		showtablerow("id=\"mod_$thread[tid]_row1\"", array("id=\"mod_$thread[tid]_row1_op\" rowspan=\"3\" class=\"rowform threadopt\" style=\"width:80px;\"", '', 'width="120"', 'width="120"', 'width="55"'), array(
 			"<ul class=\"nofloat\"><li><input class=\"radio\" type=\"radio\" name=\"moderate[$thread[tid]]\" id=\"mod_$thread[tid]_1\" value=\"validate\" onclick=\"mod_setbg($thread[tid], 'validate');\"><label for=\"mod_$thread[tid]_1\">$lang[validate]</label></li><li><input class=\"radio\" type=\"radio\" name=\"moderate[$thread[tid]]\" id=\"mod_$thread[tid]_2\" value=\"delete\" onclick=\"mod_setbg($thread[tid], 'delete');\"><label for=\"mod_$thread[tid]_2\">$lang[delete]</label></li><li><input class=\"radio\" type=\"radio\" name=\"moderate[$thread[tid]]\" id=\"mod_$thread[tid]_3\" value=\"ignore\" onclick=\"mod_setbg($thread[tid], 'ignore');\"><label for=\"mod_$thread[tid]_3\">$lang[ignore]</label></li></ul>",
