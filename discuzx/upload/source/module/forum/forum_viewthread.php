@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_viewthread.php 23584 2011-07-26 10:02:19Z zhangguosheng $
+ *      $Id: forum_viewthread.php 26645 2011-12-19 02:44:06Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -19,6 +19,8 @@ $thread = & $_G['forum_thread'];
 $forum = & $_G['forum'];
 
 if(!$_G['forum_thread'] || !$_G['forum']) {
+	my_thread_log('redelete', array('tid' => $_G['gp_tid']));
+
 	showmessage('thread_nonexistence');
 
 }
@@ -58,7 +60,7 @@ if(!empty($_G['gp_extra'])) {
 	foreach($extra as $_k => $_v) {
 		if(preg_match('/^\w+$/', $_k)) {
 			if(!is_array($_v)) {
-				$_G['gp_extra'][] = $_k.'='.$_v;
+				$_G['gp_extra'][] = $_k.'='.rawurlencode($_v);
 			} else {
 				$_G['gp_extra'][] = http_build_query(array($_k => $_v));
 			}
@@ -98,6 +100,7 @@ if($_G['gp_from'] == 'portal') {
 	}
 	$nav = get_groupnav($_G['forum']);
 	$navigation = ' <em>&rsaquo;</em> <a href="group.php">'.$_G['setting']['navs'][3]['navname'].'</a> '.$nav['nav'];
+	$upnavlink = 'forum.php?mod=forumdisplay&fid='.$_G['fid'].($_G['gp_extra'] && !IS_ROBOT ? '&'.$_G['gp_extra'] : '');
 	$_G['grouptypeid'] = $_G['forum']['fup'];
 
 } else {
@@ -582,6 +585,9 @@ if($postusers) {
 			$verifyadd
 			WHERE m.uid IN (".dimplode(array_keys($postusers)).")");
 	while($postuser = DB::fetch($query)) {
+		if(strtotime($postuser['regdate']) + $postuser['oltime'] * 3600 > TIMESTAMP) {
+			$postuser['oltime'] = 0;
+		}
 		$postuser['privacy'] = unserialize($postuser['privacy']);
 		unset($postuser['privacy']['feed'], $postuser['privacy']['view']);
 		$postusers[$postuser['uid']] = $postuser;
@@ -1048,8 +1054,12 @@ function viewthread_custominfo($post) {
 				$extcredit = $_G['setting']['extcredits'][$i];
 				$v = '<dt>'.($extcredit['img'] ? $extcredit['img'].' ' : '').$extcredit['title'].'</dt><dd>'.$post['extcredits'.$i].' '.$extcredit['unit'].'</dd>';
 			} elseif(substr($key, 0, 6) == 'field_') {
+				$field = substr($key, 6);
+				if(!empty($post['privacy']['profile'][$field])) {
+					continue;
+				}
 				require_once libfile('function/profile');
-				$v = profile_show(substr($key, 6), $post);
+				$v = profile_show($field, $post);
 				if($v) {
 					$v = '<dt>'.$_G['cache']['custominfo']['profile'][$key][0].'</dt><dd title="'.htmlspecialchars(strip_tags($v)).'">'.$v.'</dd>';
 				}

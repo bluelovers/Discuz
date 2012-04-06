@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_message.php 22889 2011-05-30 07:31:11Z monkey $
+ *      $Id: lang_message.php 25643 2011-11-16 09:54:51Z liulanbo $
  *
  *      This file is automatically generate
  */
@@ -116,6 +116,7 @@ $lang = array (
   'post_poll_option_toomany' => '抱歉，您的投票選項超過 {maxpolloptions} 個',
   'reward_credits_between' => '抱歉，懸賞積分必須在 {minrewardprice} 與 {maxrewardprice} 之間',
   'reward_credits_shortage' => '抱歉，積分餘額不足',
+  'reward_credits_closed' => '交易積分被關閉，請聯繫管理員。',
   'activity_fromtime_please' => '抱歉，活動開始時間不能為空',
   'activity_sort_please' => '抱歉，活動所屬類別不能為空',
   'activity_address_please' => '抱歉，活動地點不能為空',

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cloud_connect.php 22747 2011-05-19 04:11:31Z yexinhao $
+ *      $Id: cloud_connect.php 24520 2011-09-23 02:08:15Z yangli $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -102,6 +102,9 @@ if($_G['gp_anchor'] == 'service') {
 		showtagfooter('tbody');
 		showsetting('connect_setting_turl_allow', 'connectnew[turl_allow]', $setting['connect']['turl_allow'], 'radio', 0, 1);
 		showsetting('connect_setting_turl_qq', 'connectnew[turl_qq]', $setting['connect']['turl_qq'], 'text');
+		showtagfooter('tbody');
+		showsetting('connect_setting_qshare_allow', 'connectnew[qshare_allow]', $setting['connect']['qshare_allow'], 'radio', 0, 1);
+		showsetting('connect_setting_qshare_appkey', 'connectnew[qshare_appkey]', $setting['connect']['qshare_appkey'], 'text');
 		showtagfooter('tbody');
 		showsubmit('connectsubmit');
 		showtablefooter();

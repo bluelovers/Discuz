@@ -563,12 +563,7 @@
 		<a href="javascript:;" onclick="display('unbind');{if $_G[member][conisregister]}$('newpassword1').focus();{/if}" class="xi2">{lang qqconnect:connect_config_unbind}</a>
 	</h2>
 
-	<!--{if $_G['connect']['is_oauth_user'] && !$_G['cookie']['client_token']}-->
-		<div id="unbind" class="ptm pbm" style="display:none;">
-			<p>{lang qqconnect:connect_config_unbind_desc4}</p>
-			<p>{lang qqconnect:connect_config_unbind_desc5}</p>
-		</div>
-	<!--{elseif $_G[member][conisregister]}-->
+	<!--{if $_G[member][conisregister]}-->
 		<div id="unbind" style="display:none;">
 			<form action="connect.php?mod=config" method="post" autocomplete="off">
 				<input type="hidden" name="formhash" value="{FORMHASH}">

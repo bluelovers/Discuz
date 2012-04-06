@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: install_lang.php 22362 2011-05-04 08:12:56Z congyushuai $
+ *      $Id: install_lang.php 24422 2011-09-19 08:08:54Z svn_project_zhangjie $
  */
 
 define('UC_VERNAME', '中文版');
@@ -165,6 +165,9 @@ $lang = array(
 
 	'install_in_processed' => '正在安裝...',
 	'install_succeed' => '安裝成功，點擊進入',
+	'install_cloud' => '安裝成功，歡迎開通Discuz!雲平台<br>Discuz!雲平台致力於幫助站長提高網站流量，增強網站運營能力，增加網站收入。<br>Discuz!雲平台目前免費提供了QQ互聯、騰訊分析、縱橫搜索、社區QQ群、漫遊應用、SOSO表情服務。Discuz!雲平台將陸續提供更多優質服務項目。<br>開通Discuz!平台之前，請確保您的網站（Discuz!、UCHome或SupeSite）已經升級到Discuz!X2。',
+	'to_install_cloud' => '到後台開通',
+	'to_index' => '暫不開通',
 
 	'init_credits_karma' => '威望',
 	'init_credits_money' => '金錢',

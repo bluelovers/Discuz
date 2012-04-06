@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: common_extra.js 22925 2011-06-01 10:23:08Z liulanbo $
+	$Id: common_extra.js 25470 2011-11-10 08:54:19Z zhangguosheng $
 */
 
 function _relatedlinks(rlinkmsgid) {
@@ -25,7 +25,7 @@ function _relatedlinks(rlinkmsgid) {
 	});
 	var relatedid = new Array();
 	msg = msg.replace(/(^|>)([^<]+)(?=<|$)/ig, function($1, $2, $3) {
-		for(var j = 0; j > -1; j++) {
+		for(var j = 0; j < relatedlink.length; j++) {
 			if(relatedlink[j] && !relatedid[j]) {
 				var ra = '<a href="'+relatedlink[j]['surl']+'" target="_blank" class="relatedlink">'+relatedlink[j]['sname']+'</a>';
 				var $rtmp = $3;
@@ -33,8 +33,6 @@ function _relatedlinks(rlinkmsgid) {
 				if($3 != $rtmp) {
 					relatedid[j] = 1;
 				}
-			} else {
-				break;
 			}
 		}
 		return $2 + $3;
@@ -136,7 +134,7 @@ function _setDoodle(fid, oid, url, tid, from) {
 	}
 }
 
-function _showdistrict(container, elems, totallevel, changelevel) {
+function _showdistrict(container, elems, totallevel, changelevel, containertype) {
 	var getdid = function(elem) {
 		var op = elem.options[elem.selectedIndex];
 		return op['did'] || op.getAttribute('did') || '0';
@@ -145,9 +143,9 @@ function _showdistrict(container, elems, totallevel, changelevel) {
 	var cid = changelevel >= 2 && elems[1] && $(elems[1]) ? getdid($(elems[1])) : 0;
 	var did = changelevel >= 3 && elems[2] && $(elems[2]) ? getdid($(elems[2])) : 0;
 	var coid = changelevel >= 4 && elems[3] && $(elems[3]) ? getdid($(elems[3])) : 0;
-	var url = "home.php?mod=misc&ac=ajax&op=district&container="+container
+	var url = "home.php?mod=misc&ac=ajax&op=district&container="+container+"&containertype="+containertype
 		+"&province="+elems[0]+"&city="+elems[1]+"&district="+elems[2]+"&community="+elems[3]
-		+"&pid="+pid + "&cid="+cid+"&did="+did+"&coid="+coid+'&level='+totallevel+'&handlekey='+container+'&inajax=1'+(isUndefined(changelevel) ? '&showdefault=1' : '');
+		+"&pid="+pid + "&cid="+cid+"&did="+did+"&coid="+coid+'&level='+totallevel+'&handlekey='+container+'&inajax=1'+(!changelevel ? '&showdefault=1' : '');
 	ajaxget(url, container, '');
 }
 
@@ -616,13 +614,13 @@ function slideshow(el) {
 		var showindex = 0,i = 0;
 		if(index == 'down') {
 			showindex = this.index + 1;
-			if(showindex >= this.length) {
+			if(showindex > this.length) {
 				this.runRoll();
 			} else {
 				for (i = 0; i < this.slidestep; i++) {
 					if(showindex >= this.length) showindex = 0;
 					this.index = this.index - this.slidenum + 1;
-					if(this.index < 0) this.index = this.length - Math.abs(this.index);
+					if(this.index < 0) this.index = this.length + this.index;
 					this.active(showindex);
 					showindex++;
 				}
@@ -676,7 +674,11 @@ function slideshow(el) {
 	};
 	this.run = function() {
 		var index = this.index + 1 < this.length ? this.index + 1 : 0;
-		this.active(index);
+		if(!this.slidenum && !this.slidestep) {
+			this.active(index);
+		} else {
+			this.activeByStep('down');
+		}
 		var ss = this;
 		this.timer = setTimeout(function(){
 			ss.run();
@@ -685,9 +687,9 @@ function slideshow(el) {
 
 	this.runRoll = function() {
 		for(var i = 0; i < this.slidenum; i++) {
-			if(this.slideshows[i] && typeof this.slideshows[i].style != 'undefined') this.slideshows[i].style.display = "block";
+			if(this.slideshows[i] && typeof this.slideshows[i].style != 'undefined') this.slideshows[i].style.display = 'block';
 			for(var j=0,L=this.slideother.length; j<L; j++) {
-				this.slideother[j].childNodes[i].style.display = "block";
+				this.slideother[j].childNodes[i].style.display = 'block';
 			}
 		}
 		this.index = this.slidenum - 1;
@@ -768,11 +770,11 @@ function slidexactive(step) {
 	var xactivei = null, slideboxid = null,currentslideele = null;
 	currentslideele = hasClass(aim, 'slidebarup') || hasClass(aim, 'slidebardown') || hasClass(parent, 'slidebar') ? aim : null;
 	while(parent && parent != document.body) {
-		if(!currentslideele && hasClass(parent.parentNode, 'slidebar')) {
+		if(!currentslideele && hasClass(parent, 'slidebar')) {
 			currentslideele = parent;
 		}
-		if(!currentslideele && (hasClass(parent.parentNode, 'slidebarup') || hasClass(parent.parentNode, 'slidebardown'))) {
-			currentslideele = parent.parentNode;
+		if(!currentslideele && (hasClass(parent, 'slidebarup') || hasClass(parent, 'slidebardown'))) {
+			currentslideele = parent;
 		}
 		if(hasClass(parent, 'slidebox')) {
 			slideboxid = parent.id;
@@ -871,7 +873,6 @@ function _showPrompt(ctrlid, evt, msg, timeout) {
 		$(menuid).style.top = (parseInt($(menuid).style.top) - 100) + 'px';
 	}
 }
-
 function _showCreditPrompt() {
 	var notice = getcookie('creditnotice').split('D');
 	var basev = getcookie('creditbase').split('D');

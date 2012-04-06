@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: moderate_thread.php 23091 2011-06-17 04:32:43Z zhangguosheng $
+ *      $Id: moderate_thread.php 24018 2011-08-22 02:28:39Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -319,7 +319,7 @@ if(!submitcheck('modsubmit') && !$_G['gp_fast']) {
 		echo callback_js($_G['gp_tid']);
 		exit;
 	} else {
-		cpmsg('moderate_threads_succeed', "action=moderate&operation=threads&page=$page&filter=$filter&modfid=$modfid", 'succeed', array('validates' => $validates, 'ignores' => $ignores, 'recycles' => $recycles, 'deletes' => $deletes));
+		cpmsg('moderate_threads_succeed', "action=moderate&operation=threads&page=$page&filter=$filter&modfid=$modfid&username={$_G['gp_username']}&title={$_G['gp_title']}&tpp={$_G['gp_tpp']}&showcensor=$showcensor&dateline={$_G['gp_dateline']}", 'succeed', array('validates' => $validates, 'ignores' => $ignores, 'recycles' => $recycles, 'deletes' => $deletes));
 	}
 
 }

@@ -10,7 +10,7 @@
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
-
+$_GET['type'] = in_array($_GET['type'], array("thread", "forum", "group", "blog", "album", "article", "all")) ? $_GET['type'] : 'all';
 if($_GET['op'] == 'delete') {
 
 	if($_G['gp_checkall']) {
@@ -27,7 +27,7 @@ if($_GET['op'] == 'delete') {
 
 		if(submitcheck('deletesubmit')) {
 			DB::query('DELETE FROM '.DB::table('home_favorite')." WHERE favid='$favid'");
-			showmessage('do_success', 'home.php?mod=space&uid='.$_G['uid'].'&do=favorite&view=me&type='.$_GET['type'].'&quickforward=1', array('favid' => $favid, 'id' => $thevalue['id']), array('showdialog'=>1, 'showmsg' => true, 'closetime' => true));
+			showmessage('do_success', 'home.php?mod=space&uid='.$_G['uid'].'&do=favorite&view=me&type='.$_GET['type'].'&quickforward=1', array('favid' => $favid, 'id' => $thevalue['id']), array('showdialog'=>1, 'showmsg' => true, 'closetime' => true, 'locationtime' => 3));
 		}
 	}
 

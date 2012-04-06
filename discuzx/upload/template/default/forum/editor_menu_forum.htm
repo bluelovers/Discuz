@@ -112,13 +112,19 @@
 				<!--{if $_G['setting']['homestatus'] && $_G['group']['allowupload']}-->
 					<label><input type="checkbox" name="selectallimg" class="pc" value="1" onchange="selectAllSaveImg(this.checked);" onpropertychange="selectAllSaveImg(this.checked);" />{lang attachment_select_attach_image}</label>
 					<br />{lang save_selected_pic}:
-					<select name="uploadalbum" onclick="if(!this.value) {$('newalbum').style.display = ''} else {$('newalbum').style.display = 'none'}">
+					<select name="uploadalbum" onclick="if(!this.value) {$('createalbum').style.display = ''} else {$('createalbum').style.display = 'none'}">
 						<!--{loop $albumlist $album}-->
 							<option value="$album[albumid]">$album[albumname]</option>
 						<!--{/loop}-->
 						<option value="">+{lang create_new_album}</option>
 					</select>
-					<br /><input type="text" name="newalbum" id="newalbum" class="px mtn" size="35" value="" style="display:none" />
+					<br />
+					<div id="createalbum" style="display:none">
+						<!--{if !empty($_G['cache']['albumcategory'])}-->
+						<!--{eval echo category_showselect('album', 'albumcatid', !$_G['setting']['albumcategoryrequired'] ? true : false, $_GET['catid']);}-->&nbsp;
+						<!--{/if}-->
+						<input type="text" name="newalbum" class="px mtn" size="35" value="" />
+					</div>
 				<!--{/if}-->
 				<p class="notice">{lang e_img_insertphoto}</p>
 			</p>

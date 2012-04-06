@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_members.php 23577 2011-07-26 07:16:24Z zhangguosheng $
+ *      $Id: admincp_members.php 25615 2011-11-16 07:14:10Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -28,6 +28,7 @@ foreach($search_condition as $k => $v) {
 		unset($search_condition[$k]);
 	}
 }
+$search_condition = searchcondition($search_condition);
 
 if($operation == 'search') {
 
@@ -328,7 +329,7 @@ EOF;
 
 	} else {
 
-		if(!$search_condition) {
+		if(!$search_condition && empty($_G['gp_uidarray'])) {
 			cpmsg('members_no_find_deluser', '', 'error');
 		}
 
@@ -1590,6 +1591,7 @@ EOF;
 					}
 				}
 				$membercount['posts'] = 0;
+				$membercount['threads'] = 0;
 			}
 			if(in_array('blog', $_G['gp_clear'])) {
 				$blogids = array();
@@ -1804,7 +1806,7 @@ EOF;
 	}
 
 	if(!empty($_G['setting']['connect']['allow']) && $do == 'bindlog') {
-		$member = DB::fetch_first("SELECT m.uid, m.username, mqc.conuin
+		$member = DB::fetch_first("SELECT m.uid, m.username, mqc.conopenid
 			FROM ".DB::table('common_member')." m
 			LEFT JOIN ".DB::table('common_member_connect')." mqc USING(uid)
 			WHERE $condition");
@@ -1812,10 +1814,10 @@ EOF;
 			array('connect_member_info', 'members&operation=edit&uid='.$member['uid'],  0),
 			array('connect_member_bindlog', 'members&operation=edit&do=bindlog&uid='.$member['uid'],  1),
 		));
-		if($member['conuin']) {
+		if($member['conopenid']) {
 			$query = DB::query("SELECT cml.*, m.username FROM ".DB::table('connect_memberbindlog')." cml
 				LEFT JOIN ".DB::table('common_member')." m ON m.uid=cml.uid
-				WHERE cml.uin='$member[conuin]' ORDER BY cml.dateline DESC");
+				WHERE cml.uin='$member[conopenid]' ORDER BY cml.dateline DESC");
 			showtableheader();
 			showtitle('connect_member_bindlog_uin');
 			showsubtitle(array('connect_member_bindlog_username', 'connect_member_bindlog_date', 'connect_member_bindlog_type'));
@@ -2038,7 +2040,7 @@ EOF;
 				updatecache('connect_blacklist');
 			} elseif(!$member['uinblack'] && !empty($_G['gp_uinblack'])) {
 				connectunbind($member);
-				DB::insert('common_uin_black', array('uin' => $member['conuin'], 'uid' => $uid, 'dateline' => TIMESTAMP), false, true);
+				DB::insert('common_uin_black', array('uin' => $member['conopenid'], 'uid' => $uid, 'dateline' => TIMESTAMP), false, true);
 				updatecache('connect_blacklist');
 			}
 			if($member['conisbind'] && !$member['conisregister'] && !empty($_G['gp_connectunbind'])) {
@@ -2727,10 +2729,10 @@ function showsearchform($operation = '') {
 			showsetting($value['title'], '', '', '<select class="txt" name="gender">'.$select.'</select>');
 		} elseif($fieldid == 'birthcity') {
 			$elems = array('birthprovince', 'birthcity', 'birthdist', 'birthcommunity');
-			showsetting($value['title'], '', '', '<div id="birthdistrictbox">'.showdistrict(array(0,0,0,0), $elems, 'birthdistrictbox', 1).'</div>');
+			showsetting($value['title'], '', '', '<div id="birthdistrictbox">'.showdistrict(array(0,0,0,0), $elems, 'birthdistrictbox', 1, 'birth').'</div>');
 		} elseif($fieldid == 'residecity') {
 			$elems = array('resideprovince', 'residecity', 'residedist', 'residecommunity');
-			showsetting($value['title'], '', '', '<div id="residedistrictbox">'.showdistrict(array(0,0,0,0), $elems, 'residedistrictbox', 1).'</div>');
+			showsetting($value['title'], '', '', '<div id="residedistrictbox">'.showdistrict(array(0,0,0,0), $elems, 'residedistrictbox', 1, 'reside').'</div>');
 		} elseif($fieldid == 'constellation') {
 			$select = "<option value=\"\">".cplang('nolimit')."</option>\n";
 			for($i=1; $i<=12; $i++) {
@@ -2763,6 +2765,12 @@ function showsearchform($operation = '') {
 	showtablefooter();
 	showformfooter();
 	showtagfooter('div');
+}
+
+function searchcondition($condition) {
+	include_once libfile('class/membersearch');
+	$ms = new membersearch();
+	return $ms->filtercondition($condition);
 }
 
 function searchmembers($condition, $limit=2000, $start=0) {
@@ -3109,7 +3117,7 @@ function connectunbind($member) {
 	require_once libfile('function/connect');
 	connect_user_unbind($member['conuin'], 1);
 
-	DB::query("INSERT INTO ".DB::table('connect_memberbindlog')." (uid, uin, type, dateline) VALUES ('$member[uid]', '$member[conuin]', '2', '$_G[timestamp]')");
+	DB::query("INSERT INTO ".DB::table('connect_memberbindlog')." (uid, uin, type, dateline) VALUES ('$member[uid]', '$member[conopenid]', '2', '$_G[timestamp]')");
 	DB::update('common_member', array('conisbind' => '0'), "uid='$member[uid]'");
 	DB::delete('common_member_connect', "uid='$member[uid]'");
 }

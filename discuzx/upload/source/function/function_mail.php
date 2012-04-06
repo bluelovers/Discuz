@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_mail.php 19339 2010-12-28 06:56:27Z zhengqingpeng $
+ *      $Id: function_mail.php 26347 2011-12-09 08:19:04Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -72,7 +72,7 @@ EOT;
 
 	} elseif($_G['setting']['mail']['mailsend'] == 2) {
 
-		if(!$fp = fsockopen($_G['setting']['mail']['server'], $_G['setting']['mail']['port'], $errno, $errstr, 30)) {
+		if(!$fp = fsocketopen($_G['setting']['mail']['server'], $_G['setting']['mail']['port'], $errno, $errstr, 30)) {
 			runlog('SMTP', "({$_G[setting][mail][server]}:{$_G[setting][mail][port]}) CONNECT - Unable to connect to the SMTP server", 0);
 			return false;
 		}

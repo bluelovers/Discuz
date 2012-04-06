@@ -71,7 +71,9 @@
 						<td class="o">&nbsp;</td>
 						<td>&nbsp;</td>
 						<td class="by">{lang author}</td>
-						<td class="num">IP</td>
+						<!--{if $_G['forum']['ismoderator'] && $_G['group']['allowviewip']}-->
+							<td class="num">IP</td>
+						<!--{/if}-->
 						<td class="by">{lang ishtmlon}</td>
 						<td class="by">{lang dateline}</td>
 					</tr>
@@ -93,7 +95,9 @@
 										<a href="home.php?mod=space&uid=$post[authorid]" target="_blank">{lang anonymous}</a>
 									<!--{/if}-->
 								</td>
-								<td class="num">$post[useip]</td>
+								<!--{if $_G['forum']['ismoderator'] && $_G['group']['allowviewip']}-->
+									<td class="num">$post[useip]</td>
+								<!--{/if}-->
 								<td class="by">
 									<!--{if $post[htmlon]}-->{lang yes}<!--{else}-->{lang no}<!--{/if}-->
 								</td>

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: Manyou.php 23642 2011-08-01 01:20:25Z yexinhao $
+ *      $Id: Manyou.php 26590 2011-12-16 03:20:04Z yangli $
  */
 
 define('MY_FRIEND_NUM_LIMIT', 2000);
@@ -44,7 +44,11 @@ class Manyou {
 			$response = $this->_processServerRequest();
 		}
 		@ob_end_clean();
-		@ob_start();
+		if(function_exists('ob_gzhandler')) {
+			@ob_start('ob_gzhandler');
+		} else {
+			@ob_start();
+		}
 		echo serialize($this->_formatLocalResponse($response));
 		exit;
 	}
@@ -598,7 +602,7 @@ class SearchHelper {
 				DB::table('forum_forum'), $where);
 		$query = DB::query($sql);
 		while($forum = DB::fetch($query)) {
-			$result['data'][$forum['fid']] = self::_convertForum($forum);
+			$result['data'][$forum['fid']] = SearchHelper::_convertForum($forum);
 		}
 
 		if (!$fIds) {
@@ -828,7 +832,7 @@ class SearchHelper {
 			$query = DB::query($sql);
 			while($thread = DB::fetch($query)) {
 				$thread['pid'] = $threadPosts[$thread['tid']]['pId'];
-				$result[$thread['tid']] = self::convertThread($thread);
+				$result[$thread['tid']] = SearchHelper::convertThread($thread);
 			}
 		}
 		return $result;
@@ -843,7 +847,7 @@ class SearchHelper {
 						  );
 			$query = DB::query($sql);
 			while($post = DB::fetch($query)) {
-				$result[$post['tid']] = self::convertPost($post);
+				$result[$post['tid']] = SearchHelper::convertPost($post);
 			}
 		}
 		return $result;
@@ -865,7 +869,7 @@ class SearchHelper {
 		$tableNum = count($tables);
 		$res = $data = $_tableInfo = array();
 		for($i = 0; $i < $tableNum; $i++) {
-			$_threads = self::preGetThreads(DB::table($tables[$i]), $tIds);
+			$_threads = SearchHelper::preGetThreads(DB::table($tables[$i]), $tIds);
 			if ($_threads) {
 				if (!$data) {
 					$data = $_threads;
@@ -885,7 +889,7 @@ class SearchHelper {
 				$threadIds[$postTableId][] = $tId;
 			}
 
-			$threadPosts = self::getThreadPosts($threadIds);
+			$threadPosts = SearchHelper::getThreadPosts($threadIds);
 			foreach($data as $tId => $thread) {
 				$data[$tId]['pId'] = $threadPosts[$tId]['pId'];
 			}
@@ -1046,11 +1050,15 @@ class SearchHelper {
 	}
 
 	function getPollInfo($tIds) {
+        if (!is_array($tIds) || count($tIds) <= 0) {
+            return array();
+        }
+
 		$sql = 'SELECT * FROM ' . DB::table('forum_polloption') . ' WHERE tid IN (' . implode(',', $tIds) . ')';
 		$result = array();
 		$query = DB::query($sql);
 		while($row = DB::fetch($query)) {
-			$result[$row['tid']][$row['polloptionid']] = self::convertPoll($row);
+			$result[$row['tid']][$row['polloptionid']] = SearchHelper::convertPoll($row);
 		}
 		return $result;
 

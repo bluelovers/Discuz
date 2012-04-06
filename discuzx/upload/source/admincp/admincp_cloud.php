@@ -4,7 +4,7 @@
  *	  [Discuz!] (C)2001-2099 Comsenz Inc.
  *	  This is NOT a freeware, use is subject to license terms
  *
- *	  $Id: admincp_cloud.php 23925 2011-08-16 12:03:49Z yexinhao $
+ *	  $Id: admincp_cloud.php 24682 2011-10-08 03:16:16Z yexinhao $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -23,7 +23,9 @@ if(empty($admincp) || !is_object($admincp) || !$admincp->isfounder) {
 $adminscript = ADMINSCRIPT;
 
 $cloudDomain = 'http://cp.discuz.qq.com';
-if($operation != 'doctor') {
+if($operation == 'doctor' || $operation == 'siteinfo') {
+	$cloudstatus = checkcloudstatus(false);
+} else {
 	$cloudstatus = checkcloudstatus();
 }
 $forceOpen = $_GET['force_open'] == 1 ? true : false;
@@ -41,8 +43,9 @@ if(!$operation || $operation == 'open') {
 		$step = max(1, intval($_G['gp_step']));
 		$type = $cloudstatus == 'upgrade' ? 'upgrade' : 'open';
 
-
 		if($step == 1) {
+
+			cloud_init_uniqueid();
 
 			if($cloudstatus == 'upgrade' || ($cloudstatus == 'cloud' &&  $forceOpen)) {
 				shownav('navcloud', 'menu_cloud_upgrade');
@@ -67,7 +70,7 @@ if(!$operation || $operation == 'open') {
 				</div>
 				<div style="display:none;" id="title"></div>';
 
-			showformheader("", 'onsubmit="return submitForm();"');
+			showformheader('', 'onsubmit="return submitForm();"');
 
 			if($cloudstatus == 'upgrade' || ($cloudstatus == 'cloud' &&  $forceOpen)) {
 				echo '<div style="margin-top:10px; color: red; padding-left: 10px;" id="manyou_update_tips"></div>';
@@ -88,9 +91,9 @@ if(!$operation || $operation == 'open') {
 
 			echo '
 				<div id="siteInfo" style="display:none;;">
-				<h3 class="flb"><em>'.cplang('message_title').'</em><span><a href="javascript:;" class="flbc" onclick="hideWindow(\'null\');" title="'.cplang('close').'">'.cplang('close').'</a></span></h3>';
+				<h3 class="flb"><em>'.cplang('message_title').'</em><span><a href="javascript:;" class="flbc" onclick="hideWindow(\'open_cloud\');" title="'.cplang('close').'">'.cplang('close').'</a></span></h3>';
 
-			showformheader("cloud&operation=open&step=2".(($cloudstatus == 'cloud' && $forceOpen) ? '&force_open=1' : ''), '');
+			showformheader('cloud&operation=open&step=2'.(($cloudstatus == 'cloud' && $forceOpen) ? '&force_open=1' : ''), '');
 
 			echo '
 				<div class="c">
@@ -241,14 +244,14 @@ function manyouSync() {
 	$mySiteId = empty($_G['setting']['my_siteid'])?'':$_G['setting']['my_siteid'];
 	$siteName = $_G['setting']['bbname'];
 	$siteUrl = $_G['siteurl'];
-	$ucUrl = $_G['setting']['ucenterurl'];
+	$ucUrl = rtrim($_G['setting']['ucenterurl'], '/').'/';
 	$siteCharset = $_G['charset'];
 	$siteTimeZone = $_G['setting']['timeoffset'];
 	$mySiteKey = empty($_G['setting']['my_sitekey'])?'':$_G['setting']['my_sitekey'];
 	$siteKey = DB::result_first("SELECT svalue FROM ".DB::table('common_setting')." WHERE skey='siteuniqueid'");
 	$siteLanguage = $_G['config']['output']['language'];
 	$siteVersion = $_G['setting']['version'];
-	$myVersion = '0.3';
+	$myVersion = cloud_get_api_version();
 	$productType = 'DISCUZX';
 	$siteRealNameEnable = '';
 	$siteRealAvatarEnable = '';
@@ -260,7 +263,7 @@ function manyouSync() {
 	$siteName = urlencode($siteName);
 
 	$register = false;
-    $postString = sprintf('action=%s&productType=%s&key=%s&mySiteId=%d&siteName=%s&siteUrl=%s&ucUrl=%s&siteCharset=%s&siteTimeZone=%s&siteEnableRealName=%s&siteEnableRealAvatar=%s&siteKey=%s&siteLanguage=%s&siteVersion=%s&myVersion=%s&siteEnableApp=%s&from=cloud', 'siteRefresh', $productType, $key, $mySiteId, $siteName, $siteUrl, $ucUrl, $siteCharset, $siteTimeZone, $siteRealNameEnable, $siteRealAvatarEnable, $siteKey, $siteLanguage, $siteVersion, $myVersion, $siteEnableApp);
+	$postString = sprintf('action=%s&productType=%s&key=%s&mySiteId=%d&siteName=%s&siteUrl=%s&ucUrl=%s&siteCharset=%s&siteTimeZone=%s&siteEnableRealName=%s&siteEnableRealAvatar=%s&siteKey=%s&siteLanguage=%s&siteVersion=%s&myVersion=%s&siteEnableApp=%s&from=cloud', 'siteRefresh', $productType, $key, $mySiteId, $siteName, $siteUrl, $ucUrl, $siteCharset, $siteTimeZone, $siteRealNameEnable, $siteRealAvatarEnable, $siteKey, $siteLanguage, $siteVersion, $myVersion, $siteEnableApp);
 
 	$response = @dfsockopen($my_url, 0, $postString, '', false, $setting['my_ip']);
 	$res = unserialize($response);

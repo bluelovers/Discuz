@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_core.php 23641 2011-07-29 08:21:13Z monkey $
+ *      $Id: class_core.php 26293 2011-12-08 03:10:51Z zhangguosheng $
  */
 
 define('IN_DISCUZ', true);
@@ -240,12 +240,21 @@ class discuz_core {
 			$this->var['gp_'.$k] = $v;
 		}
 
+		if(isset($this->var['gp_page'])) {
+			$this->var['gp_page'] = rawurlencode($this->var['gp_page']);
+		}
+
 		$this->var['mod'] = empty($this->var['gp_mod']) ? '' : htmlspecialchars($this->var['gp_mod']);
 		$this->var['inajax'] = empty($this->var['gp_inajax']) ? 0 : (empty($this->var['config']['output']['ajaxvalidate']) ? 1 : ($_SERVER['REQUEST_METHOD'] == 'GET' && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest' || $_SERVER['REQUEST_METHOD'] == 'POST' ? 1 : 0));
 		$this->var['page'] = empty($this->var['gp_page']) ? 1 : max(1, intval($this->var['gp_page']));
 		$this->var['sid'] = $this->var['cookie']['sid'] = isset($this->var['cookie']['sid']) ? htmlspecialchars($this->var['cookie']['sid']) : '';
 		$this->var['gp_handlekey'] = !empty($this->var['gp_handlekey']) && preg_match('/^\w+$/', $this->var['gp_handlekey']) ? $this->var['gp_handlekey'] : '';
 
+		if(empty($this->var['cookie']['saltkey'])) {
+			$this->var['cookie']['saltkey'] = random(8);
+			dsetcookie('saltkey', $this->var['cookie']['saltkey'], 86400 * 30, 1, 1);
+		}
+		$this->var['authkey'] = md5($this->var['config']['security']['authkey'].$this->var['cookie']['saltkey']);
 	}
 
 	function _init_config() {
@@ -286,7 +295,6 @@ class discuz_core {
 			$this->var['config']['cookie']['cookiepath'] = '/'.$this->var['config']['cookie']['cookiepath'];
 		}
 		$this->var['config']['cookie']['cookiepre'] = $this->var['config']['cookie']['cookiepre'].substr(md5($this->var['config']['cookie']['cookiepath'].'|'.$this->var['config']['cookie']['cookiedomain']), 0, 4).'_';
-		$this->var['authkey'] = md5($_config['security']['authkey'].$_SERVER['HTTP_USER_AGENT']);
 
 	}
 
@@ -473,7 +481,7 @@ class discuz_core {
 				if($this->var['uid']) {
 					sysmessage('user_banned', null);
 				} elseif((!defined('ALLOWGUEST') || !ALLOWGUEST) && !in_array(CURSCRIPT, array('member', 'api')) && !$this->var['inajax']) {
-					dheader('location: member.php?mod=logging&action=login&referer='.rawurlencode($_SERVER['REQUEST_URI']));
+					dheader('location: member.php?mod=logging&action=login&referer='.rawurlencode($this->var['siteurl'].$this->var['basefilename'].($_SERVER['QUERY_STRING'] ? '?'.$_SERVER['QUERY_STRING'] : '')));
 				}
 			}
 			if($this->var['member']['status'] == -1) {

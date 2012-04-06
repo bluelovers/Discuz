@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_initsys.php 22591 2011-05-13 08:14:41Z monkey $
+ *      $Id: misc_initsys.php 26464 2011-12-13 08:34:25Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -31,7 +31,7 @@ if($_G['config']['output']['tplrefresh']) {
 	$tpl->close();
 }
 
-$plugins = array('qqconnect', 'cloudstat', 'soso_smilies');
+$plugins = array('qqconnect', 'cloudstat', 'soso_smilies', 'cloudsearch');
 
 require_once libfile('function/plugin');
 require_once libfile('function/admincp');
@@ -41,16 +41,26 @@ foreach($plugins as $pluginid) {
 	if(!file_exists($importfile)) {
 		continue;
 	}
+	$importtxt = @implode('', file($importfile));
+	$pluginarray = getimportdata('Discuz! Plugin', $importtxt);
 	$plugin = DB::fetch_first("SELECT identifier, modules FROM ".DB::table('common_plugin')." WHERE identifier='$pluginid' LIMIT 1");
 	if($plugin) {
 		$modules = unserialize($plugin['modules']);
 		if($modules['system'] == 2) {
+			if($pluginarray['plugin']['version'] != $plugin['version']) {
+				pluginupgrade($pluginarray, '');
+				if($pluginarray['upgradefile']) {
+					$plugindir = DISCUZ_ROOT.'./source/plugin/'.$pluginarray['plugin']['directory'];
+					if(file_exists($plugindir.'/'.$pluginarray['upgradefile'])) {
+						@include_once $plugindir.'/'.$pluginarray['upgradefile'];
+					}
+				}
+			}
 			continue;
 		}
 		DB::delete('common_plugin', "identifier='$pluginid'");
 	}
-	$importtxt = @implode('', file($importfile));
-	$pluginarray = getimportdata('Discuz! Plugin', $importtxt);
+
 	$pluginarray['plugin']['modules'] = unserialize(dstripslashes($pluginarray['plugin']['modules']));
 	$pluginarray['plugin']['modules']['system'] = 2;
 	$pluginarray['plugin']['modules'] = addslashes(serialize($pluginarray['plugin']['modules']));

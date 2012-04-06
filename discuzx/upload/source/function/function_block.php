@@ -4,8 +4,12 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_block.php 22934 2011-06-02 06:17:44Z zhangguosheng $
+ *      $Id: function_block.php 26635 2011-12-19 01:59:13Z zhangguosheng $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 function block_script($blockclass, $script) {
 	global $_G;
@@ -390,7 +394,7 @@ function block_template($bid) {
 								$picflag = 0; //common_block_pic表中的picflag標識（0本地，1遠程）
 								$_G['block_makethumb'] = true;
 							}
-							if($_G['block_akethumb']) {
+							if($_G['block_makethumb']) {
 								DB::update('common_block_item', array('makethumb'=>1, 'thumbpath' => $thumbpath), $where);
 								$thumbdata = array('bid' => $block['bid'], 'itemid' => $blockitem['itemid'], 'pic' => $thumbpath, 'picflag' => $picflag, 'type' => '0');
 								DB::insert('common_block_pic', $thumbdata);
@@ -535,13 +539,14 @@ function block_makeform($blocksetting, $values){
 					$districthtml .= $values[$fieldid].'<input type="hidden" name="parameter['.$fieldid.']" value="'.$values[$fieldid].'" /> ';
 				}
 			}
+			$containertype = strpos($setting['title'], 'birthcity') !== false ? 'birth' : 'reside';
 			$containerid = 'randomid_'.(++$randomid);
 			if($districthtml) {
 				$s .= $districthtml;
-				$s .= '&nbsp;&nbsp;<a href="javascript:;" onclick="showdistrict(\''.$containerid.'\', ['.dimplode($elems).'], '.count($elems).'); return false;">'.lang('spacecp', 'profile_edit').'</a>';
+				$s .= '&nbsp;&nbsp;<a href="javascript:;" onclick="showdistrict(\''.$containerid.'\', ['.dimplode($elems).'], '.count($elems).', \'\', \''.$containertype.'\'); return false;">'.lang('spacecp', 'profile_edit').'</a>';
 				$s .= '<p id="'.$containerid.'"></p>';
 			} else {
-				$s .= "<div id=\"$containerid\">".showdistrict($vals, $elems, $containerid).'</div>';
+				$s .= "<div id=\"$containerid\">".showdistrict($vals, $elems, $containerid, null, $containertype).'</div>';
 			}
 		} elseif($type == 'file') {
 			$s .= '<input type="'.$type.'" name="'.$varname.'" class="pf" value="'.dhtmlspecialchars($value).'" />';
@@ -748,7 +753,7 @@ function block_getdiyurl($tplname, $diymod = false) {
 						break;
 					case 'viewthread' :
 						$flag = $id ? 0 : 1;
-						$mod .= '&tid='.$id;
+						$mod = 'forumdisplay&fid='.$id;
 						break;
 					case 'list' :
 						$flag = $id ? 0 : 1;

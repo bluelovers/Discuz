@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_profile.php 22256 2011-04-27 01:52:25Z monkey $
+ *      $Id: space_profile.php 26640 2011-12-19 02:31:59Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -80,7 +80,9 @@ if($space['sellercredit']){
 $space['attachsize'] = formatsize($space['attachsize']);
 
 $space['timeoffset'] = empty($space['timeoffset']) ? '9999' : $space['timeoffset'];
-
+if(strtotime($space['regdate']) + $space['oltime'] * 3600 > TIMESTAMP) {
+	$space['oltime'] = 0;
+}
 require_once libfile('function/friend');
 $isfriend = friend_check($space['uid'], 1);
 
@@ -111,6 +113,10 @@ foreach($_G['cache']['profilesetting'] as $fieldid => $field) {
 		if($val !== false) {
 			if($fieldid == 'realname' && $_G['uid'] != $space['uid'] && !ckrealname(1)) {
 				continue;
+			}
+			if($field['formtype'] == 'file' && $val) {
+				$imgurl = getglobal('setting/attachurl').'./profile/'.$val;
+				$val = '<span><a href="'.$imgurl.'" target="_blank"><img src="'.$imgurl.'"  style="max-width: 500px;" /></a></span>';
 			}
 			if($val == '')  $val = '-';
 			$profiles[$fieldid] = array('title'=>$field['title'], 'value'=>$val);

@@ -4,8 +4,12 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_portal.php 14914 2010-08-17 03:24:34Z zhangguosheng $
+ *      $Id: function_portal.php 26635 2011-12-19 01:59:13Z zhangguosheng $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 function category_remake($catid) {
 	global $_G;

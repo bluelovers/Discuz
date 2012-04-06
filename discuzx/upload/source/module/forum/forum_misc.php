@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_misc.php 23918 2011-08-16 08:25:11Z monkey $
+ *      $Id: forum_misc.php 25648 2011-11-16 10:47:45Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -269,13 +269,22 @@ if($_G['gp_action'] == 'paysucceed') {
 
 	$posttable = getposttablebytid($_G['tid']);
 	$pidappend = intval($_G['gp_pid']);
-	$post = DB::fetch_first("SELECT pid, tid, fid, message, authorid, author, bbcodeoff FROM ".DB::table($posttable)." WHERE pid='$pidappend'");
+	$post = DB::fetch_first("SELECT pid, tid, fid, message, authorid, author, bbcodeoff, first FROM ".DB::table($posttable)." WHERE pid='$pidappend'");
 	if($post['authorid'] != $_G['uid']) {
 		showmessage('postappend_only_yourself');
 	}
 	if(submitcheck('postappendsubmit')) {
 		$message = censor($_G['gp_postappendmessage']);
+		$sppos = 0;
+		if($post['first'] && strexists($post['message'], chr(0).chr(0).chr(0))) {
+			$sppos = strpos($post['message'], chr(0).chr(0).chr(0));
+			$specialextra = substr($post['message'], $sppos + 3);
+			$post['message'] = substr($post['message'], 0, $sppos);
+		}
 		$message = addslashes($post['message'])."\n\n[b]".lang('forum/misc', 'postappend_content')." (".dgmdate(TIMESTAMP)."):[/b]\n$message";
+		if($sppos) {
+			$message .= chr(0).chr(0).chr(0).$specialextra;
+		}
 		require_once libfile('function/post');
 		$bbcodeoff = checkbbcodes($message, 0);
 		DB::update($posttable, array(
@@ -463,11 +472,9 @@ if($_G['gp_action'] == 'votepoll' && submitcheck('pollsubmit', 1)) {
 		$feed['idtype'] = 'tid';
 		postfeed($feed);
 	}
-	$posttable = getposttablebytid($_G['tid']);
-	$pid = DB::result_first("SELECT pid FROM ".DB::table($posttable)." WHERE tid='$_G[tid]' AND first='1'");
 
 	if(!empty($_G['inajax'])) {
-		dheader("location: forum.php?mod=viewthread&tid=$_G[tid]&viewpid=$pid&inajax=1");
+		showmessage('thread_poll_succeed', "forum.php?mod=viewthread&tid=$_G[tid]".($_G['gp_from'] ? '&from='.$_G['gp_from'] : ''), array(), array('location' => true));
 	} else {
 		showmessage('thread_poll_succeed', "forum.php?mod=viewthread&tid=$_G[tid]".($_G['gp_from'] ? '&from='.$_G['gp_from'] : ''));
 	}
@@ -613,7 +620,7 @@ if($_G['gp_action'] == 'votepoll' && submitcheck('pollsubmit', 1)) {
 		if(!empty($sub_self_credit)) {
 			updatemembercount($_G['uid'], $sub_self_credit, 1, 'RSC', $_G['gp_pid']);
 		}
-		DB::query("UPDATE ".DB::table($posttable)." SET rate=rate+($rate), ratetimes=ratetimes+$ratetimes WHERE pid='$_G[gp_pid]'");
+		DB::query("UPDATE ".DB::table($posttable)." SET rate=rate+($rate), ratetimes=ratetimes+'$ratetimes' WHERE pid='$_G[gp_pid]'");
 		if($post['first']) {
 			$threadrate = intval(@($post['rate'] + $rate) / abs($post['rate'] + $rate));
 			DB::query("UPDATE ".DB::table('forum_thread')." SET rate='$threadrate' WHERE tid='$_G[tid]'");
@@ -737,7 +744,7 @@ if($_G['gp_action'] == 'votepoll' && submitcheck('pollsubmit', 1)) {
 					'reason' => stripslashes($reason),
 				));
 			}
-			DB::query("UPDATE ".DB::table($posttable)." SET rate=rate+($rate), ratetimes=ratetimes-$ratetimes WHERE pid='$_G[gp_pid]'");
+			DB::query("UPDATE ".DB::table($posttable)." SET rate=rate+($rate), ratetimes=ratetimes-'$ratetimes' WHERE pid='$_G[gp_pid]'");
 			if($post['first']) {
 				$threadrate = @intval(@($post['rate'] + $rate) / abs($post['rate'] + $rate));
 				DB::query("UPDATE ".DB::table('forum_thread')." SET rate='$threadrate' WHERE tid='$_G[tid]'");
@@ -965,6 +972,9 @@ if($_G['gp_action'] == 'votepoll' && submitcheck('pollsubmit', 1)) {
 
 				foreach($_POST as $key => $value) {
 					if(empty($_G['cache']['profilesetting'][$key])) continue;
+					if(is_array($value)) {
+						$value = implode(',', $value);
+					}
 					$value = cutstr(dhtmlspecialchars(trim($value)), 100, '.');
 					if(empty($value) && $key != 'residedist' && $key != 'residecommunity') {
 						showmessage('activity_exile_field');
@@ -1207,7 +1217,7 @@ if($_G['gp_action'] == 'votepoll' && submitcheck('pollsubmit', 1)) {
 	$activity['starttimefrom'] = dgmdate($activity['starttimefrom'], 'dt');
 	$activity['starttimeto'] = $activity['starttimeto'] ? dgmdate($activity['starttimeto'], 'dt') : 0;
 	$activity['expiration'] = $activity['expiration'] ? dgmdate($activity['expiration'], 'dt') : 0;
-	$activity['message'] = preg_replace('/\[.+?\]/', '', $activity['message']);
+	$activity['message'] = trim(preg_replace('/\[.+?\]/', '', $activity['message']));
 	$applynumbers = DB::result_first("SELECT COUNT(*) FROM ".DB::table('forum_activityapply')." WHERE tid='$_G[tid]' AND verified='1'");
 
 	$applylist = array();

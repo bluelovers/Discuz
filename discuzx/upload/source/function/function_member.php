@@ -218,10 +218,10 @@ function getinvite() {
 	$cookiecount = count($cookies);
 	if($cookiecount == 2 || $_G['gp_invitecode']) {
 		$id = intval($cookies[0]);
-		$code = $cookies[1];
+		$code = trim($cookies[1]);
 		if($_G['gp_invitecode']) {
 			$query = DB::query("SELECT * FROM ".DB::table('common_invite')." WHERE code='$_G[gp_invitecode]'");
-			$code = $_G['gp_invitecode'];
+			$code = trim($_G['gp_invitecode']);
 		} else {
 			$query = DB::query("SELECT * FROM ".DB::table('common_invite')." WHERE id='$id'");
 		}
@@ -234,7 +234,7 @@ function getinvite() {
 		}
 	} elseif($cookiecount == 3) {
 		$uid = intval($cookies[0]);
-		$code = $cookies[1];
+		$code = trim($cookies[1]);
 		$appid = intval($cookies[2]);
 
 		$invite_code = space_key($uid, $appid);

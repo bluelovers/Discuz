@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: connect_login.php 23492 2011-07-20 07:02:33Z zhengqingpeng $
+ *      $Id: connect_login.php 25825 2011-11-23 06:28:44Z houdelei $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -50,6 +50,10 @@ if($op == 'init') {
 		$params['type'] = $_G['gp_type'];
 	}
 
+	if(defined('IN_MOBILE')) {
+		$params['source'] = 'mobile';
+	}
+
 	$redirect = $_G['connect']['url'] . '/oauth/authorize?'.cloud_http_build_query($params, '', '&');
 	dheader('Location:' . $redirect);
 
@@ -90,7 +94,7 @@ if($op == 'init') {
 	}
 
 	loadcache('connect_blacklist');
-	if(in_array($conuin, $_G['cache']['connect_blacklist'])) {
+	if(in_array($conopenid, $_G['cache']['connect_blacklist'])) {
 		$params = array(
 			'oauth_token' => $request_token,
 			'oauth_consumer_key' => $_G['setting']['connectappid']
@@ -125,7 +129,7 @@ if($op == 'init') {
 		$connect_member = DB::fetch_first("SELECT uid, conuin, conuinsecret, conopenid FROM ".DB::table('common_member_connect')." WHERE conuin='$old_conuin'");
 	}
 	if(empty($connect_member)) {
-		$connect_member = DB::fetch_first("SELECT uid, conuin, conuinsecret, conopenid FROM ".DB::table('common_member_connect')." WHERE conuin='$conuin'");
+		$connect_member = DB::fetch_first("SELECT uid, conuin, conuinsecret, conopenid FROM ".DB::table('common_member_connect')." WHERE conopenid='$conopenid'");
 	}
 	if($connect_member) {
 		$member = DB::fetch_first("SELECT uid, conisbind FROM ".DB::table('common_member')." WHERE uid='$connect_member[uid]'");
@@ -155,14 +159,10 @@ if($op == 'init') {
 
 		$current_connect_member = DB::fetch_first("SELECT * FROM ".DB::table('common_member_connect')." WHERE uid='$_G[uid]'");
 		if($current_connect_member) {
-			if($current_connect_member['conuinsecret'] && $current_connect_member['conuin'] != $conuin) {
+			if($current_connect_member['conuinsecret'] && $current_connect_member['conopenid'] != $conopenid) {
 				showmessage('qqconnect:connect_register_bind_already', $referer);
 			}
-			if(empty($connect_member['conuinsecret']) || empty($connect_member['conopenid']) || $connect_member['conuinsecret'] != $conuinsecret) {
-				DB::query("UPDATE ".DB::table('common_member_connect')." SET conuin='$conuin', conuinsecret='$conuinsecret', conopenid='$conopenid', conispublishfeed='$conispublishfeed', conispublisht='$conispublisht', conisregister='0', conisfeed='$user_auth_fields' WHERE uid='$_G[uid]'");
-			} else {
-				DB::query("UPDATE ".DB::table('common_member_connect')." SET conispublishfeed='$conispublishfeed', conispublisht='$conispublisht', conisregister='0', conisfeed='$user_auth_fields' WHERE uid='$_G[uid]'");
-			}
+			DB::query("UPDATE ".DB::table('common_member_connect')." SET conuin='$conuin', conuinsecret='$conuinsecret', conopenid='$conopenid', conispublishfeed='$conispublishfeed', conispublisht='$conispublisht', conisregister='0', conisfeed='$user_auth_fields' WHERE uid='$_G[uid]'");
 		} else {
 			DB::query("INSERT INTO ".DB::table('common_member_connect')." (uid, conuin, conuinsecret, conopenid, conispublishfeed, conispublisht, conisregister, conisfeed) VALUES ('$_G[uid]', '$conuin', '$conuinsecret', '$conopenid', '$conispublishfeed', '$conispublisht', '0', '$user_auth_fields')");
 		}
@@ -175,22 +175,19 @@ if($op == 'init') {
 		dsetcookie('connect_login', 1, 31536000);
 		dsetcookie('connect_is_bind', '1', 31536000);
 		dsetcookie('connect_uin', $conopenid, 31536000);
+		dsetcookie('stats_qc_reg', 3, 86400);
 		if($is_feed) {
 			dsetcookie('connect_synpost_tip', 1, 31536000);
 		}
 
-		DB::query("INSERT INTO ".DB::table('connect_memberbindlog')." (uid, uin, type, dateline) VALUES ('$_G[uid]', '$conuin', '1', '$_G[timestamp]')");
+		DB::query("INSERT INTO ".DB::table('connect_memberbindlog')." (uid, uin, type, dateline) VALUES ('$_G[uid]', '$conopenid', '1', '$_G[timestamp]')");
 
 		showmessage('qqconnect:connect_register_bind_success', $referer);
 
 	} else {
 
 		if($connect_member) {
-			if(empty($connect_member['conuinsecret']) || empty($connect_member['conopenid']) || $connect_member['conuinsecret'] != $conuinsecret) {
-				DB::query("UPDATE ".DB::table('common_member_connect')." SET conuin='$conuin', conuinsecret='$conuinsecret', conopenid='$conopenid', conispublishfeed='$conispublishfeed', conispublisht='$conispublisht', conisfeed='$user_auth_fields' WHERE uid='$connect_member[uid]'");
-			} else {
-				DB::query("UPDATE ".DB::table('common_member_connect')." SET conisfeed='$user_auth_fields' WHERE uid='$connect_member[uid]'");
-			}
+			DB::query("UPDATE ".DB::table('common_member_connect')." SET conuin='$conuin', conuinsecret='$conuinsecret', conopenid='$conopenid', conisfeed='$user_auth_fields' WHERE uid='$connect_member[uid]'");
 
 			$params['mod'] = 'login';
 			connect_login($connect_member);
@@ -206,6 +203,7 @@ if($op == 'init') {
 				$ucsynlogin = uc_user_synlogin($_G['uid']);
 			}
 
+			dsetcookie('stats_qc_login', 3, 86400);
 			showmessage('login_succeed', $referer, $param, array('extrajs' => $ucsynlogin));
 
 		} else {
@@ -270,12 +268,7 @@ function connect_login($connect_member) {
 	dsetcookie('connect_login', 1, $cookietime);
 	dsetcookie('connect_is_bind', '1', 31536000);
 	dsetcookie('connect_uin', $connect_member['conopenid'], 31536000);
-
-	include_once libfile('function/stat');
-	updatestat('login', 1);
-
-	updatecreditbyaction('daylogin', $_G['uid']);
-	checkusergroup($_G['uid']);
 	return true;
 }
+
 ?>

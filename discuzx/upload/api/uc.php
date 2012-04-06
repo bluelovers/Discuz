@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: uc.php 22959 2011-06-09 02:19:29Z svn_project_zhangjie $
+ *      $Id: uc.php 25684 2011-11-17 08:45:40Z monkey $
  */
 
 error_reporting(0);
@@ -71,12 +71,7 @@ if(!defined('IN_UC')) {
 		exit(API_RETURN_FAILED);
 	}
 } else {
-	define('DISCUZ_ROOT', $app['extra']['apppath']);
-	require_once DISCUZ_ROOT.'./config/config_global.php';
-	require_once DISCUZ_ROOT.'./source/class/class_core.php';
-	$discuz = new db_mysql();
-	$discuz->set_config($_config['db']);
-	$discuz->connect();
+	exit;
 }
 
 class uc_note {

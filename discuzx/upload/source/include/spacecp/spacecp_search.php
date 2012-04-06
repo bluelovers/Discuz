@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_search.php 20818 2011-03-04 08:21:11Z monkey $
+ *      $Id: spacecp_search.php 24331 2011-09-08 08:29:58Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -136,8 +136,8 @@ if(!empty($_GET['searchsubmit']) || !empty($_GET['searchmode'])) {
 	$marryarr = array($space['marry'] => ' selected');
 
 	include_once libfile('function/profile');
-	$birthcityhtml = showdistrict(array(0,0), array('birthprovince', 'birthcity'), 'birthcitybox');
-	$residecityhtml = showdistrict(array(0,0, 0, 0), array('resideprovince', 'residecity', 'residedist', 'residecommunity'), 'residecitybox');
+	$birthcityhtml = showdistrict(array(0,0), array('birthprovince', 'birthcity'), 'birthcitybox', null, 'birth');
+	$residecityhtml = showdistrict(array(0,0, 0, 0), array('resideprovince', 'residecity', 'residedist', 'residecommunity'), 'residecitybox', null, 'reside');
 
 	foreach ($fields as $fkey => $fvalue) {
 		if(empty($fvalue['choices'])) {

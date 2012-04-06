@@ -795,7 +795,7 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 		Level:			Function
 		Explain:		spvimg,spi 為活動、商品公用部分
 		Author:			dfox
-		Last Modify:	Pony 11053010
+		Last Modify:	Pony 11082510
 	*/
 	.act {}
 		.act .c { line-height: 28px; font-size: 14px; }
@@ -809,9 +809,10 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 			dl.nums {}
 				.spi dl.nums dt { padding-top: 15px; }
 				.spi dl.nums dd em { font-size: 26px; }
-		.actl { table-layout: fixed; margin: 10px 0; width: 320px; border-top: 3px solid {COMMONBORDER}; }
+		.actl { table-layout: fixed; width: 320px; border-top: 3px solid {COMMONBORDER}; }
 			.actl th, .actl td { padding: 8px 2px; border-top: 1px dashed {COMMONBORDER}; }
 			.actl th { width: 60px; }
+		.actfm { height: auto !important; height: 220px; max-height: 220px; overflow-x: hidden; overflow-y: auto; }
 		.actl_pop { overflow: auto; max-width: 200px; max-height: 300px; }
 			.ie6 .actl_pop { width: 200px !important; height: expression(this.offsetHeight > 300 ? 300 : 'auto'); }
 			.actl_pop li { display: block; padding: 3px 0; border-bottom: 1px dashed {COMMONBORDER}; }

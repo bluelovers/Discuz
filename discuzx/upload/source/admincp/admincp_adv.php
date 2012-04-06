@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_adv.php 21777 2011-04-12 03:12:54Z zhengqingpeng $
+ *      $Id: admincp_adv.php 24783 2011-10-11 07:45:32Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -150,7 +150,7 @@ if($operation == 'ad') {
 		$endtimecheck = array($endtime => 'selected="selected"');
 		$orderbycheck = array($orderby => 'selected="selected"');
 
-		$targetselect = '<select name="target"><option>'.$lang['adv_targets'].'</option>';
+		$targetselect = '<select name="target"><option value="">'.$lang['adv_targets'].'</option>';
 		foreach($defaulttargets as $v) {
 			$targetselect .= '<option value="'.$v.'"'.($v == $target ? ' selected="selected"' : '').'>'.$lang['adv_edit_targets_'.$v].'</option>';
 		}
@@ -463,11 +463,7 @@ if($operation == 'ad') {
 		updatecache('advs');
 		updatecache('setting');
 
-		if($operation == 'edit') {
-			cpmsg('adv_succeed', dreferer(), 'succeed');
-		} else {
-			cpmsg('adv_succeed', 'action=adv&operation=edit&advid='.$advid.$extra, 'succeed');
-		}
+		cpmsg('adv_succeed', 'action=adv&operation=edit&advid='.$advid.$extra, 'succeed');
 
 	}
 

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: member_connect.php 22826 2011-05-25 01:00:41Z monkey $
+ *      $Id: member_connect.php 24072 2011-08-23 11:23:43Z yangli $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -39,7 +39,7 @@ if($_G['gp_action'] == 'login') {
 	$_G['qc']['connect_auth_hash'] = $connect_params['auth_hash'];
 	$auth_code = authcode($_G['qc']['connect_auth_hash']);
 	$auth_code = explode('|', $auth_code);
-	$conuin = authcode($auth_code[0]);
+	$conopenid = authcode($auth_code[2]);
 
 	$ctl_obj = new register_ctl();
 	$ctl_obj->setting = $_G['setting'];
@@ -49,7 +49,7 @@ if($_G['gp_action'] == 'login') {
 	}
 
 	$_G['setting']['regclosed'] = $_G['setting']['regconnect'] && !$_G['setting']['regstatus'];
-	$_G['qc']['uinlimit'] = $_G['setting']['connect']['register_uinlimit'] && DB::result_first("SELECT COUNT(DISTINCT uid) FROM ".DB::table('connect_memberbindlog')." WHERE uin='$conuin' AND type='1'") >= $_G['setting']['connect']['register_uinlimit'];
+	$_G['qc']['uinlimit'] = $_G['setting']['connect']['register_uinlimit'] && DB::result_first("SELECT COUNT(DISTINCT uid) FROM ".DB::table('connect_memberbindlog')." WHERE uin='$conopenid' AND type='1'") >= $_G['setting']['connect']['register_uinlimit'];
 	if($_G['qc']['uinlimit']) {
 		$_G['setting']['regconnect'] = false;
 	}

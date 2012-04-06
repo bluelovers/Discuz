@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portalcp_block.php 22707 2011-05-18 02:35:56Z zhangguosheng $
+ *      $Id: portalcp_block.php 26659 2011-12-19 05:44:20Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -520,7 +520,7 @@ if($op == 'block') {
 		$item['itemtype'] = !empty($_POST['locked']) ? '1' : '2';
 		$item['title'] = htmlspecialchars($_POST['title']);
 		$item['url'] = $_POST['url'];
-		$item['summary'] = $_POST['summary'];
+		$item['summary'] = cutstr($_POST['summary'], $block['param']['summarylength'], '');
 		if($_FILES['pic']['tmp_name']) {
 			$result = pic_upload($_FILES['pic'], 'portal');
 			$item['pic'] = 'portal/'.$result['pic'];
@@ -538,8 +538,11 @@ if($op == 'block') {
 			} else {
 				$item['picflag'] = intval($_POST['picflag']);
 			}
-			$item['pic'] = $pic;
-			$item['makethumb'] = 0;
+			if($item['pic'] != $pic) {
+				$item['pic'] = $pic;
+				$item['makethumb'] = 0;
+				$item['thumbpath'] = block_thumbpath($block, $item);
+			}
 		}
 		unset($item['oldpic']);
 		$item['showstyle'] = $_POST['showstyle']['title_b'] || $_POST['showstyle']['title_i'] || $_POST['showstyle']['title_u'] || $_POST['showstyle']['title_c'] ? dstripslashes($_POST['showstyle']) : array();
@@ -561,6 +564,8 @@ if($op == 'block') {
 			$item['fields']['fulltitle'] = $item['title'];
 		}
 		$item['fields']	= addslashes(serialize($item['fields']));
+
+		$item['title'] = cutstr($item['title'], $block['param']['titlelength'], '');
 
 		if(submitcheck('itemsubmit')) {
 

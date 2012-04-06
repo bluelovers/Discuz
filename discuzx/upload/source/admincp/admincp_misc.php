@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_misc.php 21860 2011-04-14 06:45:25Z monkey $
+ *      $Id: admincp_misc.php 25638 2011-11-16 09:26:19Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -547,6 +547,9 @@ var rowtypedata = [
 		if(!empty($_G['gp_censorkeyword'])) {
 			$censorkeyword = str_replace(array('%', '_'), array('\%', '\_'), $_G['gp_censorkeyword']);
 			$sqladd .= " AND find LIKE '%{$censorkeyword}%'";
+			if($_POST['censorkeyword']) {
+				$page = 1;
+			}
 		}
 
 		$ppp = 50;

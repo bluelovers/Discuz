@@ -4,8 +4,12 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_seccode.php 14304 2010-08-10 07:14:50Z monkey $
+ *      $Id: function_seccode.php 26635 2011-12-19 01:59:13Z zhangguosheng $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 function make_seccode($idhash){
 	global $_G;

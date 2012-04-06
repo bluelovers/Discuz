@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: modcp_thread.php 21309 2011-03-23 02:07:26Z liulanbo $
+ *      $Id: modcp_thread.php 26269 2011-12-07 09:03:36Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_MODCP')) {
@@ -187,23 +187,39 @@ if($op == 'post') {
 		$prune = array('forums' => array(), 'thread' => array());
 
 		if($pids = dimplode($_G['gp_delete'])) {
+			$result = $modsession->get($cachekey);
+			$result['pids'] = explode(',', $result['pids']);
+			$keys = array_flip($result['pids']);
+
 			$query = DB::query('SELECT fid, tid, pid, first, authorid FROM '.DB::table(getposttable($posttableid)).' WHERE '."pid IN ($pids) $fidadd");
 			while($post = DB::fetch($query)) {
-				$prune['forums'][] = $post['fid'];
+				$prune['forums'][$post['fid']] = $post['fid'];
 				@$prune['thread'][$post['tid']]++;
-				$pidsdelete[$post['pid']] = $post['pid'];
+				$pidsdelete[$post['fid']][$post['pid']] = $post['pid'];
 				if($post['first']) {
-					$tidsdelete[$post['tid']] = $post['tid'];
+					$tidsdelete[$post['fid']][$post['tid']] = $post['tid'];
 				}
+				$key = $keys[$post['pid']];
+				unset($result['pids'][$key]);
 			}
+			$result['pids'] = implode(',', $result['pids']);
+			$result['count'] = count($result['pids']);
+			$modsession->set($cachekey, $result, true);
+			unset($result);
 		}
 
 		if($pidsdelete) {
 			require_once libfile('function/post');
 			require_once libfile('function/delete');
-			$deletedposts = deletepost($pidsdelete, 'pid', !getgpc('nocredit'), $posttableid);
-			$deletedthreads = deletethread($tidsdelete, !getgpc('nocredit'));
-
+			$forums = array();
+			$query = DB::query('SELECT fid, recyclebin FROM '.DB::table('forum_forum')." WHERE fid IN (".dimplode($prune['forums']).")");
+			while($value = DB::fetch($query)) {
+				$forums[$value['fid']] = $value;
+			}
+			foreach($pidsdelete as $fid => $pids) {
+				$deletedposts = deletepost($pids, 'pid', !getgpc('nocredit'), $posttableid, $forums[$fid]['recyclebin']);
+				$deletedthreads = deletethread($tidsdelete[$fid], false, !getgpc('nocredit'), $forums[$fid]['recyclebin']);
+			}
 			if(count($prune['thread']) < 50) {
 				foreach($prune['thread'] as $tid => $decrease) {
 					updatethreadcount($tid);
@@ -214,7 +230,7 @@ if($op == 'post') {
 					$repliesarray[$decrease][] = $tid;
 				}
 				foreach($repliesarray as $decrease => $tidarray) {
-					DB::query("UPDATE ".DB::table('forum_thread')." SET replies=replies-$decrease WHERE tid IN (".implode(',', $tidarray).")");
+					DB::query("UPDATE ".DB::table('forum_thread')." SET replies=replies-'$decrease' WHERE tid IN (".implode(',', $tidarray).")");
 				}
 			}
 
@@ -234,7 +250,7 @@ if($op == 'post') {
 			return ;
 		}
 
-		$sql = '';
+		$sql = " AND invisible='0'";
 
 		if($threadoption == 1) {
 			$sql .= " AND first='1'";
