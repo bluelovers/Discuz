@@ -9,11 +9,11 @@
 
 $lang = array
 (
-	'group_normal_member' => 'è®¾ä¸ºæ™®é€šæˆå‘˜',
-	'group_goaway' => 'è¸¢å‡ºç¾¤ç»„',
-	'group_demise_message_title' => "æŠŠ{$_G[setting][navs][3][navname]}{forum}æˆåŠŸè½¬è®©ç»™ä½ äº†ã€‚",
-	'group_demise_message_body' => "æˆ‘çš„{$_G[setting][navs][3][navname]}{forum}æˆåŠŸè½¬è®©ç»™ä½ äº†ï¼Œ[url={siteurl}forum.php?mod=group&fid={fid}]ç‚¹è¿™é‡ŒæŸ¥çœ‹{$_G[setting][navs][3][navname]}[/url]",
-	'group_join' => 'åŠ å…¥{groupname}ç¾¤ç»„',
+	'group_normal_member' => 'ÉèÎªÆÕÍ¨³ÉÔ±',
+	'group_goaway' => 'Ìß³öÈº×é',
+	'group_demise_message_title' => "°Ñ{$_G[setting][navs][3][navname]}{forum}³É¹¦×ªÈÃ¸øÄãÁË¡£",
+	'group_demise_message_body' => "ÎÒµÄ{$_G[setting][navs][3][navname]}{forum}³É¹¦×ªÈÃ¸øÄãÁË£¬[url={siteurl}forum.php?mod=group&fid={fid}]µãÕâÀï²é¿´{$_G[setting][navs][3][navname]}[/url]",
+	'group_join' => '¼ÓÈë{groupname}Èº×é',
 );
 
 ?>

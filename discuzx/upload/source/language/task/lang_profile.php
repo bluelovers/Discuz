@@ -9,29 +9,29 @@
 
 $lang = array
 (
-	'profile_name' => 'å®Œå–„ç”¨æˆ·èµ„æ–™ä»»åŠ¡',
-	'profile_desc' => 'å®Œå–„æŒ‡å®šçš„ç”¨æˆ·èµ„æ–™èŽ·å¾—ç›¸åº”çš„å¥–åŠ±',
+	'profile_name' => 'ÍêÉÆÓÃ»§×ÊÁÏÈÎÎñ',
+	'profile_desc' => 'ÍêÉÆÖ¸¶¨µÄÓÃ»§×ÊÁÏ»ñµÃÏàÓ¦µÄ½±Àø',
 
 	'profile_fields' => array(
-		'mp.realname' => 'å§“å',
-		'mp.gender' => 'æ€§åˆ«',
-		'mp.birthyear' => 'ç”Ÿæ—¥(å¹´)',
-		'mp.birthmonth' => 'ç”Ÿæ—¥(æœˆ)',
-		'mp.birthday' => 'ç”Ÿæ—¥(æ—¥)',
-		'mp.bloodtype' => 'è¡€åž‹',
-		'mp.affectivestatus' => 'æƒ…æ„ŸçŠ¶æ€',
-		'mp.birthprovince' => 'å®¶ä¹¡(çœ)',
-		'mp.birthcity' => 'å®¶ä¹¡(å¸‚)',
-		'mp.resideprovince' => 'å±…ä½åœ°(çœ)',
-		'mp.residecity' => 'å±…ä½åœ°(å¸‚)'
+		'mp.realname' => 'ÐÕÃû',
+		'mp.gender' => 'ÐÔ±ð',
+		'mp.birthyear' => 'ÉúÈÕ(Äê)',
+		'mp.birthmonth' => 'ÉúÈÕ(ÔÂ)',
+		'mp.birthday' => 'ÉúÈÕ(ÈÕ)',
+		'mp.bloodtype' => 'ÑªÐÍ',
+		'mp.affectivestatus' => 'Çé¸Ð×´Ì¬',
+		'mp.birthprovince' => '¼ÒÏç(Ê¡)',
+		'mp.birthcity' => '¼ÒÏç(ÊÐ)',
+		'mp.resideprovince' => '¾Ó×¡µØ(Ê¡)',
+		'mp.residecity' => '¾Ó×¡µØ(ÊÐ)'
 	),
 
-	'profile_view' => '<strong>æ‚¨è¿˜æœ‰ä»¥ä¸‹ä¸ªäººèµ„æ–™é¡¹éœ€è¦è¡¥å……å®Œæ•´ï¼š</strong><br>
+	'profile_view' => '<strong>Äú»¹ÓÐÒÔÏÂ¸öÈË×ÊÁÏÏîÐèÒª²¹³äÍêÕû£º</strong><br>
 		<span style="color:red;">{profiles}</span><br><br>
-		<strong>è¯·æŒ‰ç…§ä»¥ä¸‹çš„è¯´æ˜Žæ¥å®Œæˆæœ¬ä»»åŠ¡ï¼š</strong>
+		<strong>Çë°´ÕÕÒÔÏÂµÄËµÃ÷À´Íê³É±¾ÈÎÎñ£º</strong>
 		<ul>
-		<li><a href="home.php?mod=spacecp&ac=profile" target="_blank" class="xi2">ç‚¹å‡»è¿™é‡Œæ‰“å¼€ä¸ªäººèµ„æ–™è®¾ç½®é¡µé¢</a></li>
-		<li>åœ¨æ–°æ‰“å¼€çš„è®¾ç½®é¡µé¢ä¸­ï¼Œå°†ä¸Šè¿°ä¸ªäººèµ„æ–™è¡¥å……å®Œæ•´</li>
+		<li><a href="home.php?mod=spacecp&ac=profile" target="_blank" class="xi2">µã»÷ÕâÀï´ò¿ª¸öÈË×ÊÁÏÉèÖÃÒ³Ãæ</a></li>
+		<li>ÔÚÐÂ´ò¿ªµÄÉèÖÃÒ³ÃæÖÐ£¬½«ÉÏÊö¸öÈË×ÊÁÏ²¹³äÍêÕû</li>
 		</ul>',
 );
 

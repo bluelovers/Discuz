@@ -97,11 +97,11 @@ function ajaxShowAPIStatus(apiType, ips) {
 		var apiTdFirst = document.createElement('td');
 		apiTdFirst.className = 'td24';
 		if (!apiType || apiType == 1) {
-			apiTdFirst.innerHTML = '<strong>äº‘å¹³å°å…¶ä»–æ¥å£æµ‹è¯•</strong>';
+			apiTdFirst.innerHTML = '<strong>ÔÆÆ½Ì¨ÆäËû½Ó¿Ú²âÊÔ</strong>';
 		} else if (apiType == 2) {
-			apiTdFirst.innerHTML = '<strong>æ¼«æ¸¸å…¶ä»–æ¥å£æµ‹è¯•</strong>';
+			apiTdFirst.innerHTML = '<strong>ÂşÓÎÆäËû½Ó¿Ú²âÊÔ</strong>';
 		} else if (apiType == 3) {
-			apiTdFirst.innerHTML = '<strong>QQäº’è”æ¥å£æµ‹è¯•</strong>';
+			apiTdFirst.innerHTML = '<strong>QQ»¥Áª½Ó¿Ú²âÊÔ</strong>';
 		}
 
 		var apiTdSecond = document.createElement('td');

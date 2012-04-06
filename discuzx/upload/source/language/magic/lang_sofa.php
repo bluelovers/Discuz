@@ -9,18 +9,18 @@
 
 $lang = array
 (
-	'sofa_name' => 'æŠ¢æ²™å‘',
-	'sofa_desc' => 'å¯ä»¥æŠ¢å¤ºæŒ‡å®šä¸»é¢˜çš„æ²™å‘',
-	'sofa_forum' => 'å…è®¸ä½¿ç”¨æœ¬é“å…·çš„ç‰ˆå—',
-	'sofa_info' => 'æŠ¢å¤ºæŒ‡å®šçš„ä¸»é¢˜çš„æ²™å‘ï¼Œè¯·è¾“å…¥ä¸»é¢˜çš„ ID',
-	'sofa_info_nonexistence' => 'è¯·æŒ‡å®šè¦æŠ¢æ²™å‘çš„ä¸»é¢˜',
-	'sofa_succeed' => 'ä½ å·²æˆåŠŸæŠ¢å¤ºäº†æœ¬ä¸»é¢˜çš„æ²™å‘ä½ç½®',
-	'sofa_info_noperm' => 'å¯¹ä¸èµ·ï¼Œä¸»é¢˜æ‰€åœ¨ç‰ˆå—ä¸å…è®¸ä½¿ç”¨æœ¬é“å…·',
-	'sofa_info_user_noperm' => 'å¯¹ä¸èµ·ï¼Œä½ ä¸èƒ½å¯¹æ­¤äººä½¿ç”¨æœ¬é“å…·',
-	'sofa_info_sofaexistence' => 'ä½ æ¥æ™šäº†ï¼Œæœ¬ä¸»é¢˜å·²ç»è¢«å…¶ä»–äººæŠ¢è¿‡æ²™å‘äº†',
-	'sofa_text' => 'O(âˆ©_âˆ©)Oå“ˆå“ˆ~ï¼Œæ²™å‘æ˜¯æˆ‘çš„å•¦\n[color=gray]{actor} äºŽ {time} ä½¿ç”¨ {magicname} æŠ¢å¤ºæœ¬å¸–æ²™å‘[/color]',
+	'sofa_name' => 'ÇÀÉ³·¢',
+	'sofa_desc' => '¿ÉÒÔÇÀ¶áÖ¸¶¨Ö÷ÌâµÄÉ³·¢',
+	'sofa_forum' => 'ÔÊÐíÊ¹ÓÃ±¾µÀ¾ßµÄ°æ¿é',
+	'sofa_info' => 'ÇÀ¶áÖ¸¶¨µÄÖ÷ÌâµÄÉ³·¢£¬ÇëÊäÈëÖ÷ÌâµÄ ID',
+	'sofa_info_nonexistence' => 'ÇëÖ¸¶¨ÒªÇÀÉ³·¢µÄÖ÷Ìâ',
+	'sofa_succeed' => 'ÄãÒÑ³É¹¦ÇÀ¶áÁË±¾Ö÷ÌâµÄÉ³·¢Î»ÖÃ',
+	'sofa_info_noperm' => '¶Ô²»Æð£¬Ö÷ÌâËùÔÚ°æ¿é²»ÔÊÐíÊ¹ÓÃ±¾µÀ¾ß',
+	'sofa_info_user_noperm' => '¶Ô²»Æð£¬Äã²»ÄÜ¶Ô´ËÈËÊ¹ÓÃ±¾µÀ¾ß',
+	'sofa_info_sofaexistence' => 'ÄãÀ´ÍíÁË£¬±¾Ö÷ÌâÒÑ¾­±»ÆäËûÈËÇÀ¹ýÉ³·¢ÁË',
+	'sofa_text' => 'O(¡É_¡É)O¹þ¹þ~£¬É³·¢ÊÇÎÒµÄÀ²\n[color=gray]{actor} ÓÚ {time} Ê¹ÓÃ {magicname} ÇÀ¶á±¾ÌûÉ³·¢[/color]',
 
-	'sofa_notification' => 'ä½ çš„ä¸»é¢˜ {subject} è¢« {actor} ä½¿ç”¨äº† {magicname} æŠ¢å¤ºäº†æ²™å‘ï¼Œ<a href="forum.php?mod=viewthread&tid={tid}">å¿«åŽ»çœ‹çœ‹å§ï¼</a>',
+	'sofa_notification' => 'ÄãµÄÖ÷Ìâ {subject} ±» {actor} Ê¹ÓÃÁË {magicname} ÇÀ¶áÁËÉ³·¢£¬<a href="forum.php?mod=viewthread&tid={tid}">¿ìÈ¥¿´¿´°É£¡</a>',
 );
 
 ?>

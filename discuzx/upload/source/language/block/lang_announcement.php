@@ -9,11 +9,11 @@
 
 $lang = array
 (
-	'announcement_type' => '鍏憡绫诲瀷',
-	'announcement_type_text' => '鏂囧瓧鍏憡',
-	'announcement_type_link' => '缃戠珯閾炬帴',
-	'announcement_titlelength' => '鏍囬闀垮害',
-	'announcement_summarylength' => '鍐呭闀垮害',
-	'announcement_startrow' => '璧峰浣嶇疆',
+	'announcement_type' => '公告类型',
+	'announcement_type_text' => '文字公告',
+	'announcement_type_link' => '网站链接',
+	'announcement_titlelength' => '标题长度',
+	'announcement_summarylength' => '内容长度',
+	'announcement_startrow' => '起始位置',
 );
 ?>

@@ -21,7 +21,7 @@ if(empty($_G['gp_ftn_formhash']) || empty($_G['uid']) || empty($_G['gp_filesize'
         include template('xf_storage:cross');
     }
 } elseif($_G['gp_ftn_formhash'] != ftn_formhash()){
-	exit;//showmessage('æ“ä½œè¶…æ—¶æˆ–è€…æ•°æ®æ¥æºé”™è¯¯','','error');
+	exit;//showmessage('²Ù×÷³¬Ê±»òÕßÊı¾İÀ´Ô´´íÎó','','error');
 }
 
 

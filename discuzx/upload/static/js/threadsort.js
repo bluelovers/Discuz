@@ -109,7 +109,7 @@ function changeselectthreadsort(selectchoiceoptionid, optionid, type) {
 	if((choicesarr[sselectchoiceoptionid]['slevel'] == 1 || type == 'search') && choicesarr[sselectchoiceoptionid]['scount'] == 1) {
 		nameid = name + ' ' + id;
 	}
-	var selectoption = '<select' + nameid + ' class="ps vm" onchange="changeselectthreadsort(this.value, \'' + optionid + '\'' + issearch + ');checkoption(\'' + forum_optionlist[soptionid]['sidentifier'] + '\', \'' + forum_optionlist[soptionid]['srequired'] + '\', \'' + forum_optionlist[soptionid]['stype'] + '\')"><option value="0">è¯·é€‰æ‹©</option>';
+	var selectoption = '<select' + nameid + ' class="ps vm" onchange="changeselectthreadsort(this.value, \'' + optionid + '\'' + issearch + ');checkoption(\'' + forum_optionlist[soptionid]['sidentifier'] + '\', \'' + forum_optionlist[soptionid]['srequired'] + '\', \'' + forum_optionlist[soptionid]['stype'] + '\')"><option value="0">ÇëÑ¡Ôñ</option>';
 	for(var i in choicesarr) {
 		nameid = '';
 		if((choicesarr[sselectchoiceoptionid]['slevel'] == 1 || type == 'search') && choicesarr[i]['scount'] == choicesarr[sselectchoiceoptionid]['scount']) {
@@ -126,7 +126,7 @@ function changeselectthreadsort(selectchoiceoptionid, optionid, type) {
 			if(parseInt(choicesarr[i]['scount']) >= (parseInt(choicesarr[sselectchoiceoptionid]['scount']) + parseInt(choicesarr[sselectchoiceoptionid]['slevel']))) {
 				break;
 			}
-			selectoption += '</select>' + "\r\n" + '<select' + nameid + ' class="ps vm" onchange="changeselectthreadsort(this.value, \'' + optionid + '\'' + issearch + ');checkoption(\'' + forum_optionlist[soptionid]['sidentifier'] + '\', \'' + forum_optionlist[soptionid]['srequired'] + '\', \'' + forum_optionlist[soptionid]['stype'] + '\')"><option value="0">è¯·é€‰æ‹©</option>';
+			selectoption += '</select>' + "\r\n" + '<select' + nameid + ' class="ps vm" onchange="changeselectthreadsort(this.value, \'' + optionid + '\'' + issearch + ');checkoption(\'' + forum_optionlist[soptionid]['sidentifier'] + '\', \'' + forum_optionlist[soptionid]['srequired'] + '\', \'' + forum_optionlist[soptionid]['stype'] + '\')"><option value="0">ÇëÑ¡Ôñ</option>';
 
 			lastcount = parseInt(choicesarr[i]['scount']);
 		}
@@ -159,10 +159,10 @@ function checkoption(identifier, required, checktype, checkmaxnum, checkminnum, 
 
 	if(checktype == 'select') {
 		if(required != '0' && $('typeoption_' + identifier) == null) {
-			warning(ce, 'å¿…å¡«é¡¹ç›®æ²¡æœ‰å¡«å†™');
+			warning(ce, '±ØÌîÏîÄ¿Ã»ÓÐÌîÐ´');
 			return false;
 		} else if(required == '0' && ($('typeoption_' + identifier) == null || $('typeoption_' + identifier).value == '0')) {
-			ce.innerHTML = '<img src="' + IMGDIR + '/check_error.gif" width="16" height="16" class="vm" /> è¯·é€‰æ‹©ä¸‹ä¸€çº§';
+			ce.innerHTML = '<img src="' + IMGDIR + '/check_error.gif" width="16" height="16" class="vm" /> ÇëÑ¡ÔñÏÂÒ»¼¶';
 			ce.className = "warning";
 			return true;
 		}
@@ -176,7 +176,7 @@ function checkoption(identifier, required, checktype, checkmaxnum, checkminnum, 
 
 	if(required != '0') {
 		if(checkvalue == '' || checkvalue == '0') {
-			warning(ce, 'å¿…å¡«é¡¹ç›®æ²¡æœ‰å¡«å†™');
+			warning(ce, '±ØÌîÏîÄ¿Ã»ÓÐÌîÐ´');
 			return false;
 		} else {
 			ce.innerHTML = '<img src="' + IMGDIR + '/check_right.gif" width="16" height="16" class="vm" />';
@@ -185,20 +185,20 @@ function checkoption(identifier, required, checktype, checkmaxnum, checkminnum, 
 
 	if(checkvalue) {
 		if((checktype == 'number' || checktype == 'range') && isNaN(checkvalue)) {
-			warning(ce, 'æ•°å­—å¡«å†™ä¸æ­£ç¡®');
+			warning(ce, 'Êý×ÖÌîÐ´²»ÕýÈ·');
 			return false;
 		} else if(checktype == 'email' && !(/^[\-\.\w]+@[\.\-\w]+(\.\w+)+$/.test(checkvalue))) {
-			warning(ce, 'é‚®ä»¶åœ°å€ä¸æ­£ç¡®');
+			warning(ce, 'ÓÊ¼þµØÖ·²»ÕýÈ·');
 			return false;
 		} else if((checktype == 'text' || checktype == 'textarea') && checkmaxlength != '0' && mb_strlen(checkvalue) > checkmaxlength) {
-			warning(ce, 'å¡«å†™é¡¹ç›®é•¿åº¦è¿‡é•¿');
+			warning(ce, 'ÌîÐ´ÏîÄ¿³¤¶È¹ý³¤');
 			return false;
 		} else if((checktype == 'number' || checktype == 'range')) {
 			if(checkmaxnum != '0' && parseInt(checkvalue) > parseInt(checkmaxnum)) {
-				warning(ce, 'å¤§äºŽè®¾ç½®æœ€å¤§å€¼');
+				warning(ce, '´óÓÚÉèÖÃ×î´óÖµ');
 				return false;
 			} else if(checkminnum != '0' && parseInt(checkvalue) < parseInt(checkminnum)) {
-				warning(ce, 'å°äºŽè®¾ç½®æœ€å°å€¼');
+				warning(ce, 'Ð¡ÓÚÉèÖÃ×îÐ¡Öµ');
 				return false;
 			}
 		} else {

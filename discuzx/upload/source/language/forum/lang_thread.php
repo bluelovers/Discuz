@@ -12,7 +12,7 @@ if(!defined('IN_DISCUZ')) {
 }
 
 $lang = array (
-	  'forum_archive' => '存档',
+	  'forum_archive' => '�浵',
 
 
 );

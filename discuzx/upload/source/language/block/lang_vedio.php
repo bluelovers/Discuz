@@ -9,8 +9,8 @@
 
 $lang = array
 (
-	'vedio_url' => 'è§†é¢‘åœ°å€',
-	'vedio_width' => 'è§†é¢‘å®½åº¦',
-	'vedio_height' => 'è§†é¢‘é«˜åº¦',
+	'vedio_url' => 'ÊÓÆµµØÖ·',
+	'vedio_width' => 'ÊÓÆµ¿í¶È',
+	'vedio_height' => 'ÊÓÆµ¸ß¶È',
 );
 ?>

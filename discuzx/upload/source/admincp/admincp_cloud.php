@@ -119,7 +119,7 @@ var cloudApiIp = '';
 var dialogHtml = '';
 var getMsg = false;
 
-var millisec = 10 * 1000; //10Áßí
+var millisec = 10 * 1000; //10√Î
 var expirationText = '{$lang['cloud_time_out']}';
 expirationTimeout = setTimeout("expiration()", millisec);
 </script>

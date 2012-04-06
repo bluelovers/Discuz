@@ -88,7 +88,7 @@ while ($space = $db_source->fetch_array($query)) {
 	}
 
 	if(empty($home['extcredits']['credit']) || empty($home['extcredits']['experience'])) {
-		showmessage("å‘ç”Ÿé”™è¯¯ï¼Œè¯·é…ç½®ç§¯åˆ†å¯¹åº”å…³ç³»ä¿¡æ¯");
+		showmessage("·¢Éú´íÎó£¬ÇëÅäÖÃ»ý·Ö¶ÔÓ¦¹ØÏµÐÅÏ¢");
 	}
 
 	$setarr[$home['extcredits']['credit']] = $space['credit'] + intval($newspace[$home['extcredits']['credit']]);
@@ -205,7 +205,7 @@ while ($space = $db_source->fetch_array($query)) {
 }
 
 if($nextid) {
-	showmessage("ç»§ç»­è½¬æ¢æ•°æ®è¡¨ {$oldpre}space uid> $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
+	showmessage("¼ÌÐø×ª»»Êý¾Ý±í {$oldpre}space uid> $nextid", "index.php?a=$action&source=$source&prg=$curprg&start=$nextid");
 }
 
 function getupdatesql($setarr) {

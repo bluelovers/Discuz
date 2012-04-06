@@ -9,6 +9,6 @@
 
 $lang = array
 (
-	'blank_content' => 'HTMLä»£ç ',
+	'blank_content' => 'HTML´úÂë',
 );
 ?>

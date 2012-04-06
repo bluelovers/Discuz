@@ -9,10 +9,10 @@
 
 $lang = array
 (
-	'forumtree_name' => 'ç‰ˆå—æ ‘å½¢åˆ—è¡¨',
-	'forumtree_desc' => 'æ ‘å½¢æ˜¾ç¤ºç‰ˆå—åˆ—è¡¨',
-	'forumtree_fids' => 'æ˜¾ç¤ºçš„ç‰ˆå—',
-	'forumtree_fids_comment' => 'è®¾ç½®å…è®¸æ˜¾ç¤ºçš„ç‰ˆå—ï¼Œç•™ç©ºä¸ºæ˜¾ç¤ºæ‰€æœ‰ç‰ˆå—',
+	'forumtree_name' => '°æ¿éÊ÷ÐÎÁÐ±í',
+	'forumtree_desc' => 'Ê÷ÐÎÏÔÊ¾°æ¿éÁÐ±í',
+	'forumtree_fids' => 'ÏÔÊ¾µÄ°æ¿é',
+	'forumtree_fids_comment' => 'ÉèÖÃÔÊÐíÏÔÊ¾µÄ°æ¿é£¬Áô¿ÕÎªÏÔÊ¾ËùÓÐ°æ¿é',
 );
 
 ?>

@@ -13,7 +13,7 @@ if(!defined('IN_COMSENZ')) {
 
 define('SOFT_NAME', 'Discuz!');
 
-define('INSTALL_LANG', 'SC_UTF8');
+define('INSTALL_LANG', 'SC_GBK');
 
 define('CONFIG', './config/config_global.php');
 define('CONFIG_UC', './config/config_ucenter.php');
@@ -23,8 +23,8 @@ $lockfile = ROOT_PATH.'./data/install.lock';
 
 @include ROOT_PATH.CONFIG;
 
-define('CHARSET', 'utf-8');
-define('DBCHARSET', 'utf8');
+define('CHARSET', 'gbk');
+define('DBCHARSET', 'gbk');
 
 define('ORIG_TABLEPRE', 'pre_');
 
@@ -149,7 +149,7 @@ $serialize_sql_setting = array (
     1 =>
     array (
       'img' => '',
-      'title' => 'å¨æœ›',
+      'title' => 'ÍþÍû',
       'unit' => '',
       'ratio' => 0,
       'available' => '1',
@@ -160,7 +160,7 @@ $serialize_sql_setting = array (
     2 =>
     array (
       'img' => '',
-      'title' => 'é‡‘é’±',
+      'title' => '½ðÇ®',
       'unit' => '',
       'ratio' => 0,
       'available' => '1',
@@ -171,7 +171,7 @@ $serialize_sql_setting = array (
     3 =>
     array (
       'img' => '',
-      'title' => 'è´¡çŒ®',
+      'title' => '¹±Ï×',
       'unit' => '',
       'ratio' => 0,
       'available' => '1',
@@ -237,16 +237,16 @@ $serialize_sql_setting = array (
   ),
   'postnocustom' =>
   array (
-    0 => 'æ¥¼ä¸»',
-    1 => 'æ²™å‘',
-    2 => 'æ¿å‡³',
-    3 => 'åœ°æ¿',
+    0 => 'Â¥Ö÷',
+    1 => 'É³·¢',
+    2 => '°åµÊ',
+    3 => 'µØ°å',
   ),
   'recommendthread' =>
   array (
     'status' => '0',
-    'addtext' => 'æ”¯æŒ',
-    'subtracttext' => 'åå¯¹',
+    'addtext' => 'Ö§³Ö',
+    'subtracttext' => '·´¶Ô',
     'defaultshow' => '1',
     'daycount' => '0',
     'ownthread' => '0',
@@ -254,34 +254,34 @@ $serialize_sql_setting = array (
   ),
   'seotitle' =>
   array (
-    'portal' => 'é—¨æˆ·',
-    'forum' => 'è®ºå›',
-    'group' => 'ç¾¤ç»„',
-    'home' => 'å®¶å›­',
-    'userapp' => 'åº”ç”¨',
+    'portal' => 'ÃÅ»§',
+    'forum' => 'ÂÛÌ³',
+    'group' => 'Èº×é',
+    'home' => '¼ÒÔ°',
+    'userapp' => 'Ó¦ÓÃ',
   ),
   'activityfield' =>
   array (
-    'realname' => 'çœŸå®žå§“å',
-    'mobile' => 'æ‰‹æœº',
-    'qq' => 'QQå·',
+    'realname' => 'ÕæÊµÐÕÃû',
+    'mobile' => 'ÊÖ»ú',
+    'qq' => 'QQºÅ',
   ),
   'article_tags' =>
   array (
-    1 => 'åŽŸåˆ›',
-    2 => 'çƒ­ç‚¹',
-    3 => 'ç»„å›¾',
-    4 => 'çˆ†æ–™',
-    5 => 'å¤´æ¡',
-    6 => 'å¹»ç¯',
-    7 => 'æ»šåŠ¨',
-    8 => 'æŽ¨è',
+    1 => 'Ô­´´',
+    2 => 'ÈÈµã',
+    3 => '×éÍ¼',
+    4 => '±¬ÁÏ',
+    5 => 'Í·Ìõ',
+    6 => '»ÃµÆ',
+    7 => '¹ö¶¯',
+    8 => 'ÍÆ¼ö',
   ),
   'verify' =>
   array (
     6 =>
     array (
-      'title' => 'å®žåè®¤è¯',
+      'title' => 'ÊµÃûÈÏÖ¤',
       'available' => '0',
       'showicon' => '0',
       'viewrealname' => '0',
@@ -314,7 +314,7 @@ $serialize_sql_setting = array (
     ),
     7 =>
     array (
-      'title' => 'è§†é¢‘è®¤è¯',
+      'title' => 'ÊÓÆµÈÏÖ¤',
       'available' => '0',
       'showicon' => '0',
       'viewvideophoto' => '0',
@@ -323,7 +323,7 @@ $serialize_sql_setting = array (
   ),
   'focus' =>
   array (
-    'title' => 'ç«™é•¿æŽ¨è',
+    'title' => 'Õ¾³¤ÍÆ¼ö',
     'data' =>
     array (
     ),
@@ -335,7 +335,7 @@ $serialize_sql_setting = array (
     array (
       'available' => 1,
       'displayorder' => 0,
-      'title' => 'åŸºæœ¬èµ„æ–™',
+      'title' => '»ù±¾×ÊÁÏ',
       'field' =>
       array (
         'realname' => 'realname',
@@ -359,7 +359,7 @@ $serialize_sql_setting = array (
     ),
     'contact' =>
     array (
-      'title' => 'è”ç³»æ–¹å¼',
+      'title' => 'ÁªÏµ·½Ê½',
       'available' => '1',
       'displayorder' => '1',
       'field' =>
@@ -377,7 +377,7 @@ $serialize_sql_setting = array (
     array (
       'available' => 1,
       'displayorder' => 2,
-      'title' => 'æ•™è‚²æƒ…å†µ',
+      'title' => '½ÌÓýÇé¿ö',
       'field' =>
       array (
         'graduateschool' => 'graduateschool',
@@ -388,7 +388,7 @@ $serialize_sql_setting = array (
     array (
       'available' => 1,
       'displayorder' => 3,
-      'title' => 'å·¥ä½œæƒ…å†µ',
+      'title' => '¹¤×÷Çé¿ö',
       'field' =>
       array (
         'occupation' => 'occupation',
@@ -399,7 +399,7 @@ $serialize_sql_setting = array (
     ),
     'info' =>
     array (
-      'title' => 'ä¸ªäººä¿¡æ¯',
+      'title' => '¸öÈËÐÅÏ¢',
       'available' => '1',
       'displayorder' => '4',
       'field' =>

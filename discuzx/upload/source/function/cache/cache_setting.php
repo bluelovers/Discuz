@@ -381,7 +381,7 @@ function build_cache_setting() {
 	}
 
 	$defaultcurhost = empty($_G['setting']['domain']['app']['default']) ? '{CURHOST}' : $_G['setting']['domain']['app']['default'];
-	$output = array('str'=>array(), 'preg' => array()); //strä¸ºäºŒçº§åŸŸåçš„æŸ¥æ‰¾å’Œæ›¿æ¢ï¼Œpregä¸ºrewriteå’Œé»˜è®¤åŸŸåçš„æŸ¥æ‰¾å’Œæ›¿æ¢
+	$output = array('str'=>array(), 'preg' => array()); //strÎª¶ş¼¶ÓòÃûµÄ²éÕÒºÍÌæ»»£¬pregÎªrewriteºÍÄ¬ÈÏÓòÃûµÄ²éÕÒºÍÌæ»»
 	$_G['domain'] = array();
 	if(is_array($_G['setting']['domain']['app'])) {
 		$apps = $_G['setting']['domain']['app'];

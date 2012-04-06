@@ -50,7 +50,7 @@ function addFormEvent(formid, focus){
 	};
 	formNode[stmp[1]].onblur = function () {
 		if(formNode[stmp[1]].value == '') {
-			errormessage(formNode[stmp[1]].id, 'è¯·å¡«å†™å¯†ç ');
+			errormessage(formNode[stmp[1]].id, 'ÇëÌîĞ´ÃÜÂë');
 		}else{
 			errormessage(formNode[stmp[1]].id, 'succeed');
 		}
@@ -58,7 +58,7 @@ function addFormEvent(formid, focus){
 	};
 	formNode[stmp[2]].onblur = function () {
 		if(formNode[stmp[2]].value == '') {
-			errormessage(formNode[stmp[2]].id, 'è¯·å†æ¬¡è¾“å…¥å¯†ç ');
+			errormessage(formNode[stmp[2]].id, 'ÇëÔÙ´ÎÊäÈëÃÜÂë');
 		}
 		checkpassword(formNode[stmp[1]].id, formNode[stmp[2]].id);
 	};
@@ -73,7 +73,7 @@ function addFormEvent(formid, focus){
 	};
 	formNode[stmp[3]].onblur = function () {
 		if(formNode[stmp[3]].value == '') {
-			errormessage(formNode[stmp[3]].id, 'è¯·è¾“å…¥é‚®ç®±åœ°å€');
+			errormessage(formNode[stmp[3]].id, 'ÇëÊäÈëÓÊÏäµØÖ·');
 		}
 		emailMenuOp(3, null, formNode[stmp[3]].id);
 	};
@@ -103,7 +103,7 @@ function showbirthday(){
 	var el = $('birthday');
 	var birthday = el.value;
 	el.length=0;
-	el.options.add(new Option('æ—¥', ''));
+	el.options.add(new Option('ÈÕ', ''));
 	for(var i=0;i<28;i++){
 		el.options.add(new Option(i+1, i+1));
 	}
@@ -232,12 +232,12 @@ function checkusername(id) {
 		lastusername = username;
 	}
 	if(username.match(/<|"/ig)) {
-		errormessage(id, 'ç”¨æˆ·ååŒ…å«æ•æ„Ÿå­—ç¬¦');
+		errormessage(id, 'ÓÃ»§Ãû°üº¬Ãô¸Ğ×Ö·û');
 		return;
 	}
 	var unlen = username.replace(/[^\x00-\xff]/g, "**").length;
 	if(unlen < 3 || unlen > 15) {
-		errormessage(id, unlen < 3 ? 'ç”¨æˆ·åå°äº 3 ä¸ªå­—ç¬¦' : 'ç”¨æˆ·åè¶…è¿‡ 15 ä¸ªå­—ç¬¦');
+		errormessage(id, unlen < 3 ? 'ÓÃ»§ÃûĞ¡ÓÚ 3 ¸ö×Ö·û' : 'ÓÃ»§Ãû³¬¹ı 15 ¸ö×Ö·û');
 		return;
 	}
 	var x = new Ajax();
@@ -253,7 +253,7 @@ function checkpassword(id1, id2) {
 	}
 	errormessage(id2);
 	if($(id1).value != $(id2).value) {
-		errormessage(id2, 'ä¸¤æ¬¡è¾“å…¥çš„å¯†ç ä¸ä¸€è‡´');
+		errormessage(id2, 'Á½´ÎÊäÈëµÄÃÜÂë²»Ò»ÖÂ');
 	} else {
 		errormessage(id2, 'succeed');
 	}
@@ -268,7 +268,7 @@ function checkemail(id) {
 		lastemail = email;
 	}
 	if(email.match(/<|"/ig)) {
-		errormessage(id, 'Email åŒ…å«æ•æ„Ÿå­—ç¬¦');
+		errormessage(id, 'Email °üº¬Ãô¸Ğ×Ö·û');
 		return;
 	}
 	var x = new Ajax();
@@ -287,7 +287,7 @@ function checkinvite() {
 		lastinvitecode = invitecode;
 	}
 	if(invitecode.match(/<|"/ig)) {
-		errormessage('invitecode', 'é‚€è¯·ç åŒ…å«æ•æ„Ÿå­—ç¬¦');
+		errormessage('invitecode', 'ÑûÇëÂë°üº¬Ãô¸Ğ×Ö·û');
 		return;
 	}
 	var x = new Ajax();

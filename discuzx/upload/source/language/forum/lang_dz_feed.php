@@ -9,48 +9,48 @@
 
 $lang = array
 (
-	'feed_thread_pin_title' =>		'{actor} å‘è¡¨çš„ä¸»é¢˜ {subject} è¢« {operater} ç½®é¡¶',
+	'feed_thread_pin_title' =>		'{actor} ·¢±íµÄÖ÷Ìâ {subject} ±» {operater} ÖÃ¶¥',
 
-	'feed_thread_digest_title' =>		'{actor} å‘è¡¨çš„ä¸»é¢˜ {subject} è¢« {operater} åŠ ç²¾',
+	'feed_thread_digest_title' =>		'{actor} ·¢±íµÄÖ÷Ìâ {subject} ±» {operater} ¼Ó¾«',
 
-	'feed_thread_highlight_title' =>	'{actor} å‘è¡¨çš„ä¸»é¢˜ {subject} è¢« {operater} é«˜äº®',
+	'feed_thread_highlight_title' =>	'{actor} ·¢±íµÄÖ÷Ìâ {subject} ±» {operater} ¸ßÁÁ',
 
-	'feed_thread_del_title' =>		'{actor} å‘è¡¨çš„ä¸»é¢˜ {subject} è¢« {operater} åˆ é™¤',
+	'feed_thread_del_title' =>		'{actor} ·¢±íµÄÖ÷Ìâ {subject} ±» {operater} É¾³ý',
 
-	'feed_thread_move_title' =>		'{actor} å‘è¡¨çš„ä¸»é¢˜ {subject} è¢« {operater} ç§»åŠ¨',
+	'feed_thread_move_title' =>		'{actor} ·¢±íµÄÖ÷Ìâ {subject} ±» {operater} ÒÆ¶¯',
 
-	'feed_thread_views_title' =>		'{actor} å‘è¡¨çš„ä¸»é¢˜ {subject} æŸ¥çœ‹æ•°è¶…è¿‡äº† {count}',
+	'feed_thread_views_title' =>		'{actor} ·¢±íµÄÖ÷Ìâ {subject} ²é¿´Êý³¬¹ýÁË {count}',
 
-	'feed_thread_replies_title' =>		'{actor} å‘è¡¨çš„ä¸»é¢˜ {subject} å›žå¤æ•°è¶…è¿‡äº† {count}',
+	'feed_thread_replies_title' =>		'{actor} ·¢±íµÄÖ÷Ìâ {subject} »Ø¸´Êý³¬¹ýÁË {count}',
 
-	'feed_thread_rate_title' =>		'{actor} å‘è¡¨çš„ä¸»é¢˜ {subject} è¯„åˆ†è¶…è¿‡äº† {count}',
+	'feed_thread_rate_title' =>		'{actor} ·¢±íµÄÖ÷Ìâ {subject} ÆÀ·Ö³¬¹ýÁË {count}',
 
-	'feed_thread_magic_title' =>		'{actor} å‘è¡¨çš„ä¸»é¢˜ {subject} è¢« {operater} ä½¿ç”¨äº† {magiccard}',
+	'feed_thread_magic_title' =>		'{actor} ·¢±íµÄÖ÷Ìâ {subject} ±» {operater} Ê¹ÓÃÁË {magiccard}',
 
-	'feed_thread_recommend_title' =>	'{actor} å‘è¡¨çš„ä¸»é¢˜ {subject} è¢«ç‰ˆä¸»æŽ¨è',
+	'feed_thread_recommend_title' =>	'{actor} ·¢±íµÄÖ÷Ìâ {subject} ±»°æÖ÷ÍÆ¼ö',
 
-	'feed_post_rate_title' =>		'{actor} åœ¨ {thread} çš„å›žå¤è¯„åˆ†è¶…è¿‡äº†{count}',
+	'feed_post_rate_title' =>		'{actor} ÔÚ {thread} µÄ»Ø¸´ÆÀ·Ö³¬¹ýÁË{count}',
 
-	'feed_post_magic_title' =>		'{actor} åœ¨ {thread} çš„å›žå¤è¢« {operater} ä½¿ç”¨äº† {magiccard}',
+	'feed_post_magic_title' =>		'{actor} ÔÚ {thread} µÄ»Ø¸´±» {operater} Ê¹ÓÃÁË {magiccard}',
 
-	'feed_user_profile_title' =>		'{actor} æ›´æ–°äº†è‡ªå·±çš„ä¸ªäººèµ„æ–™',
+	'feed_user_profile_title' =>		'{actor} ¸üÐÂÁË×Ô¼ºµÄ¸öÈË×ÊÁÏ',
 
-	'feed_user_usergroup_title' =>		'{actor} çš„ç”¨æˆ·ç»„å‡çº§ä¸º {usergroup}',
+	'feed_user_usergroup_title' =>		'{actor} µÄÓÃ»§×éÉý¼¶Îª {usergroup}',
 
-	'feed_user_credit_title' =>		'{actor} çš„æ€»ç§¯åˆ†è¾¾åˆ° {count}',
+	'feed_user_credit_title' =>		'{actor} µÄ×Ü»ý·Ö´ïµ½ {count}',
 
-	'feed_user_threads_title' =>		'{actor} å‘è¡¨çš„ä¸»é¢˜æ•°è¾¾åˆ° {count}',
+	'feed_user_threads_title' =>		'{actor} ·¢±íµÄÖ÷ÌâÊý´ïµ½ {count}',
 
-	'feed_user_posts_title' =>		'{actor} çš„å‘å¸–æ•°è¾¾åˆ° {count}',
+	'feed_user_posts_title' =>		'{actor} µÄ·¢ÌûÊý´ïµ½ {count}',
 
-	'feed_user_digest_title' =>		'{actor} çš„ç²¾åŽå¸–æ•°è¾¾åˆ° {count}',
+	'feed_user_digest_title' =>		'{actor} µÄ¾«»ªÌûÊý´ïµ½ {count}',
 
-	'feed_user_medal_title' =>		'{actor} å¾—åˆ°å‹‹ç«  {medal} å¥–åŠ±',
+	'feed_user_medal_title' =>		'{actor} µÃµ½Ñ«ÕÂ {medal} ½±Àø',
 
-	'feed_announce_title' =>		'å…¬å‘Š: {subject}',
+	'feed_announce_title' =>		'¹«¸æ: {subject}',
 	'feed_announce_body' =>			'{message}',
 
-	'you' => 'ä½ ',
+	'you' => 'Äã',
 
 );
 

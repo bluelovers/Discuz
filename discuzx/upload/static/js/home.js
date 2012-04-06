@@ -51,7 +51,7 @@ function blogAddOption(sid, aid) {
 		obj.value="new:" + newOption;
 		return true;
 	} else {
-		alert('åˆ†ç±»åä¸èƒ½ä¸ºç©ºï¼');
+		alert('·ÖÀàÃû²»ÄÜÎª¿Õ£¡');
 		return false;
 	}
 }
@@ -93,7 +93,7 @@ function resizeImg(id,size) {
 					zoomDiv.style.position = 'relative';
 					zoomDiv.style.cursor = 'pointer';
 
-					this.title = 'ç‚¹å‡»å›¾ç‰‡ï¼Œåœ¨æ–°çª—å£æ˜¾ç¤ºåŸå§‹å°ºå¯¸';
+					this.title = 'µã»÷Í¼Æ¬£¬ÔÚĞÂ´°¿ÚÏÔÊ¾Ô­Ê¼³ß´ç';
 
 					var zoom = document.createElement('img');
 					zoom.src = 'image/zoom.gif';
@@ -131,14 +131,14 @@ function ischeck(id, prefix) {
 	for(var i = 0; i < form.elements.length; i++) {
 		var e = form.elements[i];
 		if(e.name.match(prefix) && e.checked) {
-			if(confirm("æ‚¨ç¡®å®šè¦æ‰§è¡Œæœ¬æ“ä½œå—ï¼Ÿ")) {
+			if(confirm("ÄúÈ·¶¨ÒªÖ´ĞĞ±¾²Ù×÷Âğ£¿")) {
 				return true;
 			} else {
 				return false;
 			}
 		}
 	}
-	alert('è¯·é€‰æ‹©è¦æ“ä½œçš„å¯¹è±¡');
+	alert('ÇëÑ¡ÔñÒª²Ù×÷µÄ¶ÔÏó');
 	return false;
 }
 
@@ -183,7 +183,7 @@ function insertWebImg(obj) {
 		insertImage(obj.value);
 		obj.value = 'http://';
 	} else {
-		alert('å›¾ç‰‡åœ°å€ä¸æ­£ç¡®');
+		alert('Í¼Æ¬µØÖ·²»ÕıÈ·');
 	}
 }
 
@@ -286,7 +286,7 @@ function showFlash(host, flashvar, obj, shareid) {
 	var flashHtml = videoFlash;
 	var videoMp3 = true;
 	if('' == flashvar) {
-		alert('éŸ³ä¹åœ°å€é”™è¯¯ï¼Œä¸èƒ½ä¸ºç©º');
+		alert('ÒôÀÖµØÖ·´íÎó£¬²»ÄÜÎª¿Õ');
 		return false;
 	}
 	if('music' == host) {
@@ -327,7 +327,7 @@ function showFlash(host, flashvar, obj, shareid) {
 		obj.style.display = 'none';
 		var hideObj = document.createElement('div');
 		hideObj.id = 'flash_hide_' + shareid;
-		var nodetxt = document.createTextNode("æ”¶èµ·");
+		var nodetxt = document.createTextNode("ÊÕÆğ");
 		hideObj.appendChild(nodetxt);
 		obj.parentNode.insertBefore(hideObj, obj);
 		hideObj.style.cursor = 'pointer';
@@ -350,7 +350,7 @@ function userapp_open() {
 	x.get('home.php?mod=spacecp&ac=common&op=getuserapp&inajax=1', function(s){
 		$('my_userapp').innerHTML = s;
 		$('a_app_more').className = 'fold';
-		$('a_app_more').innerHTML = 'æ”¶èµ·';
+		$('a_app_more').innerHTML = 'ÊÕÆğ';
 		$('a_app_more').onclick = function() {
 			userapp_close();
 		};
@@ -362,7 +362,7 @@ function userapp_close() {
 	x.get('home.php?mod=spacecp&ac=common&op=getuserapp&subop=off&inajax=1', function(s){
 		$('my_userapp').innerHTML = s;
 		$('a_app_more').className = 'unfold';
-		$('a_app_more').innerHTML = 'å±•å¼€';
+		$('a_app_more').innerHTML = 'Õ¹¿ª';
 		$('a_app_more').onclick = function() {
 			userapp_open();
 		};
@@ -753,7 +753,7 @@ function poke_send(id, result) {
 }
 function myfriend_post(uid) {
 	if($('friend_'+uid)) {
-		$('friend_'+uid).innerHTML = '<p>ä½ ä»¬ç°åœ¨æ˜¯å¥½å‹äº†ï¼Œæ¥ä¸‹æ¥ï¼Œæ‚¨è¿˜å¯ä»¥ï¼š<a href="home.php?mod=space&do=wall&uid='+uid+'" class="xi2" target="_blank">ç»™TAç•™è¨€</a> ï¼Œæˆ–è€… <a href="home.php?mod=spacecp&ac=poke&op=send&uid='+uid+'&handlekey=propokehk_'+uid+'" id="a_poke_'+uid+'" class="xi2" onclick="showWindow(this.id, this.href, \'get\', 0, {\'ctrlid\':this.id,\'pos\':\'13\'});">æ‰“ä¸ªæ‹›å‘¼</a></p>';
+		$('friend_'+uid).innerHTML = '<p>ÄãÃÇÏÖÔÚÊÇºÃÓÑÁË£¬½ÓÏÂÀ´£¬Äú»¹¿ÉÒÔ£º<a href="home.php?mod=space&do=wall&uid='+uid+'" class="xi2" target="_blank">¸øTAÁôÑÔ</a> £¬»òÕß <a href="home.php?mod=spacecp&ac=poke&op=send&uid='+uid+'&handlekey=propokehk_'+uid+'" id="a_poke_'+uid+'" class="xi2" onclick="showWindow(this.id, this.href, \'get\', 0, {\'ctrlid\':this.id,\'pos\':\'13\'});">´ò¸öÕĞºô</a></p>';
 	}
 	showCreditPrompt();
 }
@@ -798,7 +798,7 @@ function docomment_get(doid, key) {
 	$(showid).className = 'cmt brm';
 	ajaxget('home.php?mod=spacecp&ac=doing&op=getcomment&handlekey=msg_'+doid+'&doid='+doid+'&key='+key, showid);
 	if($(opid)) {
-		$(opid).innerHTML = 'æ”¶èµ·';
+		$(opid).innerHTML = 'ÊÕÆğ';
 		$(opid).onclick = function() {
 			docomment_colse(doid, key);
 		}
@@ -813,7 +813,7 @@ function docomment_colse(doid, key) {
 	$(showid).style.display = 'none';
 	$(showid).style.className = '';
 
-	$(opid).innerHTML = 'å›å¤';
+	$(opid).innerHTML = '»Ø¸´';
 	$(opid).onclick = function() {
 		docomment_get(doid, key);
 	}
@@ -842,7 +842,7 @@ function docomment_form_close(doid, id, key) {
 	if(!liObj.length) {
 		$(key+'_'+doid).style.display = 'none';
 		if($(opid)) {
-			$(opid).innerHTML = 'å›å¤';
+			$(opid).innerHTML = '»Ø¸´';
 			$(opid).onclick = function () {
 				docomment_get(doid, key);
 			}
@@ -857,7 +857,7 @@ function feedcomment_get(feedid) {
 	$(showid).style.display = '';
 	ajaxget('home.php?mod=spacecp&ac=feed&op=getcomment&feedid='+feedid+'&handlekey=feedhk_'+feedid, showid);
 	if($(opid) != null) {
-		$(opid).innerHTML = 'æ”¶èµ·';
+		$(opid).innerHTML = 'ÊÕÆğ';
 		$(opid).onclick = function() {
 			feedcomment_close(feedid);
 		}
@@ -886,7 +886,7 @@ function feedcomment_close(feedid) {
 	$(showid).style.display = 'none';
 	$(showid).style.className = '';
 
-	$(opid).innerHTML = 'è¯„è®º';
+	$(opid).innerHTML = 'ÆÀÂÛ';
 	$(opid).onclick = function() {
 		feedcomment_get(feedid);
 	}
@@ -905,7 +905,7 @@ function feed_more_show(feedid) {
 	$(showid).style.display = '';
 	$(showid).className = 'sub_doing';
 
-	$(opid).innerHTML = '&laquo; æ”¶èµ·åˆ—è¡¨';
+	$(opid).innerHTML = '&laquo; ÊÕÆğÁĞ±í';
 	$(opid).onclick = function() {
 		feed_more_close(feedid);
 	}
@@ -917,7 +917,7 @@ function feed_more_close(feedid) {
 
 	$(showid).style.display = 'none';
 
-	$(opid).innerHTML = '&raquo; æ›´å¤šåŠ¨æ€';
+	$(opid).innerHTML = '&raquo; ¸ü¶à¶¯Ì¬';
 	$(opid).onclick = function() {
 		feed_more_show(feedid);
 	}
@@ -958,7 +958,7 @@ function showbirthday(){
 	var el = $('birthday');
 	var birthday = el.value;
 	el.length=0;
-	el.options.add(new Option('æ—¥', ''));
+	el.options.add(new Option('ÈÕ', ''));
 	for(var i=0;i<28;i++){
 		el.options.add(new Option(i+1, i+1));
 	}

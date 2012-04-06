@@ -11,8 +11,8 @@ if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
-$allowdiy = false; //diy权限:$_G['group']['allowdiy'] || $_G['group']['allowaddtopic'] && $topic['uid'] == $_G['uid'] || $_G['group']['allowmanagetopic']
-$ref = $_G['gp_diy'] == 'yes';//DIY模式中
+$allowdiy = false; //diyȨ��:$_G['group']['allowdiy'] || $_G['group']['allowaddtopic'] && $topic['uid'] == $_G['uid'] || $_G['group']['allowmanagetopic']
+$ref = $_G['gp_diy'] == 'yes';//DIYģʽ��
 if(!$ref && $_G['gp_action'] == 'get') {
 	if($_G['gp_type'] == 'index') {
 		if($_G['group']['allowdiy']) {

@@ -28,7 +28,7 @@ class usercontrol extends base {
 		$this->load('user');
 	}
 
-	// -1 æœªå¼€å¯
+	// -1 Î´¿ªÆô
 	function onsynlogin() {
 		$this->init_input();
 		$uid = $this->input('uid');

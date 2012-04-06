@@ -9,16 +9,16 @@
 
 $lang = array
 (
-	'checkonline_name' => 'é›·è¾¾å¡',
-	'checkonline_desc' => 'æŸ¥çœ‹æŸä¸ªç”¨æˆ·æ˜¯å¦åœ¨çº¿',
-	'checkonline_targetuser' => 'ä½ è¦æŸ¥çœ‹è°æ˜¯å¦åœ¨çº¿',
-	'checkonline_info_nonexistence' => 'è¯·è¾“å…¥ç”¨æˆ·å',
-	'checkonline_hidden_message' => '{username} å½“å‰éšèº«ï¼Œæœ€åŽæ´»åŠ¨æ—¶é—´æ˜¯ {time}',
-	'checkonline_online_message' => '{username} å½“å‰åœ¨çº¿ï¼Œæœ€åŽæ´»åŠ¨æ—¶é—´æ˜¯ {time}',
-	'checkonline_offline_message' => '{username} å½“å‰ç¦»çº¿',
-	'checkonline_info_noperm' => 'å¯¹ä¸èµ·ï¼Œä½ æ— æƒæŸ¥çœ‹æ­¤äººçš„ IP',
+	'checkonline_name' => 'À×´ï¿¨',
+	'checkonline_desc' => '²é¿´Ä³¸öÓÃ»§ÊÇ·ñÔÚÏß',
+	'checkonline_targetuser' => 'ÄãÒª²é¿´Ë­ÊÇ·ñÔÚÏß',
+	'checkonline_info_nonexistence' => 'ÇëÊäÈëÓÃ»§Ãû',
+	'checkonline_hidden_message' => '{username} µ±Ç°ÒþÉí£¬×îºó»î¶¯Ê±¼äÊÇ {time}',
+	'checkonline_online_message' => '{username} µ±Ç°ÔÚÏß£¬×îºó»î¶¯Ê±¼äÊÇ {time}',
+	'checkonline_offline_message' => '{username} µ±Ç°ÀëÏß',
+	'checkonline_info_noperm' => '¶Ô²»Æð£¬ÄãÎÞÈ¨²é¿´´ËÈËµÄ IP',
 
-	'checkonline_notification' => 'æœ‰äººä½¿ç”¨äº†{magicname}æ£€æŸ¥ä½ æ˜¯å¦åœ¨çº¿',
+	'checkonline_notification' => 'ÓÐÈËÊ¹ÓÃÁË{magicname}¼ì²éÄãÊÇ·ñÔÚÏß',
 );
 
 ?>

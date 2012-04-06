@@ -282,7 +282,7 @@ function Ajax(recvType, waitId) {
 
 	var aj = new Object();
 
-	aj.loading = 'è¯·ç¨å€™...';
+	aj.loading = 'ÇëÉÔºò...';
 	aj.recvType = recvType ? recvType : 'XML';
 	aj.waitId = waitId ? $(waitId) : null;
 
@@ -347,7 +347,7 @@ function Ajax(recvType, waitId) {
 				aj.resultHandle(aj.XMLHttpRequest.responseText, aj);
 			} else if(aj.recvType == 'XML') {
 				if(!aj.XMLHttpRequest.responseXML || !aj.XMLHttpRequest.responseXML.lastChild || aj.XMLHttpRequest.responseXML.lastChild.localName == 'parsererror') {
-					aj.resultHandle('<a href="' + aj.targetUrl + '" target="_blank" style="color:red">å†…éƒ¨é”™è¯¯ï¼Œæ— æ³•æ˜¾ç¤ºæ­¤å†…å®¹</a>' , aj);
+					aj.resultHandle('<a href="' + aj.targetUrl + '" target="_blank" style="color:red">ÄÚ²¿´íÎó£¬ÎŞ·¨ÏÔÊ¾´ËÄÚÈİ</a>' , aj);
 				} else {
 					aj.resultHandle(aj.XMLHttpRequest.responseXML.lastChild.firstChild.nodeValue, aj);
 				}
@@ -652,7 +652,7 @@ function ajaxpost(formid, showid, waitid, showidclass, submitbtn, recall) {
 				try {
 					s = $(ajaxframeid).contentWindow.document.documentElement.firstChild.nodeValue;
 				} catch(e) {
-					s = 'å†…éƒ¨é”™è¯¯ï¼Œæ— æ³•æ˜¾ç¤ºæ­¤å†…å®¹';
+					s = 'ÄÚ²¿´íÎó£¬ÎŞ·¨ÏÔÊ¾´ËÄÚÈİ';
 				}
 			}
 		}
@@ -795,7 +795,7 @@ function showPreview(val, id) {
 
 function showloading(display, waiting) {
 	var display = display ? display : 'block';
-	var waiting = waiting ? waiting : 'è¯·ç¨å€™...';
+	var waiting = waiting ? waiting : 'ÇëÉÔºò...';
 	$('ajaxwaitid').innerHTML = waiting;
 	$('ajaxwaitid').style.display = display;
 }
@@ -1328,7 +1328,7 @@ function showDialog(msg, mode, t, func, cover, funccancel, leftmsg, confirmtxt, 
 	mode = in_array(mode, ['confirm', 'notice', 'info', 'right']) ? mode : 'alert';
 	var menuid = 'fwin_dialog';
 	var menuObj = $(menuid);
-	confirmtxtdefault = 'ç¡®å®š';
+	confirmtxtdefault = 'È·¶¨';
 	closetime = isUndefined(closetime) ? '' : closetime;
 	closefunc = function () {
 		if(typeof func == 'function') func();
@@ -1336,17 +1336,17 @@ function showDialog(msg, mode, t, func, cover, funccancel, leftmsg, confirmtxt, 
 		hideMenu(menuid, 'dialog');
 	};
 	if(closetime) {
-		leftmsg = closetime + ' ç§’åçª—å£å…³é—­';
+		leftmsg = closetime + ' Ãëºó´°¿Ú¹Ø±Õ';
 		showDialogST = setTimeout(closefunc, closetime * 1000);
 	}
 	locationtime = isUndefined(locationtime) ? '' : locationtime;
 	if(locationtime) {
-		leftmsg = locationtime + ' ç§’åé¡µé¢è·³è½¬';
+		leftmsg = locationtime + ' ÃëºóÒ³ÃæÌø×ª';
 		showDialogST = setTimeout(closefunc, locationtime * 1000);
-		confirmtxtdefault = 'ç«‹å³è·³è½¬';
+		confirmtxtdefault = 'Á¢¼´Ìø×ª';
 	}
 	confirmtxt = confirmtxt ? confirmtxt : confirmtxtdefault;
-	canceltxt = canceltxt ? canceltxt : 'å–æ¶ˆ';
+	canceltxt = canceltxt ? canceltxt : 'È¡Ïû';
 
 	if(menuObj) hideMenu('fwin_dialog', 'dialog');
 	menuObj = document.createElement('div');
@@ -1359,8 +1359,8 @@ function showDialog(msg, mode, t, func, cover, funccancel, leftmsg, confirmtxt, 
 		hidedom = '<style type="text/css">object{visibility:hidden;}</style>';
 	}
 	var s = hidedom + '<table cellpadding="0" cellspacing="0" class="fwin"><tr><td class="t_l"></td><td class="t_c"></td><td class="t_r"></td></tr><tr><td class="m_l">&nbsp;&nbsp;</td><td class="m_c"><h3 class="flb"><em>';
-	s += t ? t : 'æç¤ºä¿¡æ¯';
-	s += '</em><span><a href="javascript:;" id="fwin_dialog_close" class="flbc" onclick="hideMenu(\'' + menuid + '\', \'dialog\')" title="å…³é—­">å…³é—­</a></span></h3>';
+	s += t ? t : 'ÌáÊ¾ĞÅÏ¢';
+	s += '</em><span><a href="javascript:;" id="fwin_dialog_close" class="flbc" onclick="hideMenu(\'' + menuid + '\', \'dialog\')" title="¹Ø±Õ">¹Ø±Õ</a></span></h3>';
 	if(mode == 'info') {
 		s += msg ? msg : '';
 	} else {
@@ -1417,7 +1417,7 @@ function showWindow(k, url, mode, cache, menuv) {
 			ajaxpost(url, 'fwin_content_' + k, '', '', '', function() {initMenu();show();});
 		}
 		if(parseInt(BROWSER.ie) != 6) {
-			loadingst = setTimeout(function() {showDialog('', 'info', '<img src="' + IMGDIR + '/loading.gif"> è¯·ç¨å€™...')}, 500);
+			loadingst = setTimeout(function() {showDialog('', 'info', '<img src="' + IMGDIR + '/loading.gif"> ÇëÉÔºò...')}, 500);
 		}
 	};
 	var initMenu = function() {
@@ -1475,7 +1475,7 @@ function showError(msg) {
 	var p = /<script[^\>]*?>([^\x00]*?)<\/script>/ig;
 	msg = msg.replace(p, '');
 	if(msg !== '') {
-		showDialog(msg, 'alert', 'é”™è¯¯ä¿¡æ¯', null, true, null, '', '', '', 3);
+		showDialog(msg, 'alert', '´íÎóĞÅÏ¢', null, true, null, '', '', '', 3);
 	}
 }
 
@@ -1833,14 +1833,14 @@ function initSearchmenu(searchform, cloudSearchUrl) {
 	var tclass = searchtxt.className;
 	searchtxt.className = tclass + ' xg1';
 	searchtxt.onfocus = function () {
-		if(searchtxt.value == 'è¯·è¾“å…¥æœç´¢å†…å®¹') {
+		if(searchtxt.value == 'ÇëÊäÈëËÑË÷ÄÚÈİ') {
 			searchtxt.value = '';
 			searchtxt.className = tclass;
 		}
 	};
 	searchtxt.onblur = function () {
 		if(searchtxt.value == '' ) {
-			searchtxt.value = 'è¯·è¾“å…¥æœç´¢å†…å®¹';
+			searchtxt.value = 'ÇëÊäÈëËÑË÷ÄÚÈİ';
 			searchtxt.className = tclass + ' xg1';
 		}
 	};
@@ -1889,7 +1889,7 @@ function initSearchmenu(searchform, cloudSearchUrl) {
 }
 
 function searchFocus(obj) {
-	if(obj.value == 'è¯·è¾“å…¥æœç´¢å†…å®¹') {
+	if(obj.value == 'ÇëÊäÈëËÑË÷ÄÚÈİ') {
 		obj.value = '';
 	}
 	if($('cloudsearchquery') != null) {
@@ -1985,7 +1985,7 @@ function noticeTitle() {
 
 function noticeTitleFlash() {
 	if(NOTICETITLE.flashNumber < 5 || NOTICETITLE.flashNumber > 4 && !NOTICETITLE['State']) {
-		document.title = (NOTICETITLE['State'] ? 'ã€ã€€ã€€ã€€ã€‘' : 'ã€æ–°æé†’ã€‘') + NOTICETITLE['oldTitle'];
+		document.title = (NOTICETITLE['State'] ? '¡¾¡¡¡¡¡¡¡¿' : '¡¾ĞÂÌáĞÑ¡¿') + NOTICETITLE['oldTitle'];
 		NOTICETITLE['State'] = !NOTICETITLE['State'];
 	}
 	NOTICETITLE.flashNumber = NOTICETITLE.flashNumber < NOTICETITLE.sleep ? ++NOTICETITLE.flashNumber : 0;
@@ -2040,7 +2040,7 @@ function addFavorite(url, title) {
 		try {
 			window.sidebar.addPanel(title, url, '');
         	} catch (e) {
-			showDialog("è¯·æŒ‰ Ctrl+D é”®æ·»åŠ åˆ°æ”¶è—å¤¹", 'notice');
+			showDialog("Çë°´ Ctrl+D ¼üÌí¼Óµ½ÊÕ²Ø¼Ğ", 'notice');
 		}
 	}
 }
@@ -2050,7 +2050,7 @@ function setHomepage(sURL) {
 		document.body.style.behavior = 'url(#default#homepage)';
 		document.body.setHomePage(sURL);
 	} else {
-		showDialog("é IE æµè§ˆå™¨è¯·æ‰‹åŠ¨å°†æœ¬ç«™è®¾ä¸ºé¦–é¡µ", 'notice');
+		showDialog("·Ç IE ä¯ÀÀÆ÷ÇëÊÖ¶¯½«±¾Õ¾ÉèÎªÊ×Ò³", 'notice');
 		doane();
 	}
 }

@@ -9,9 +9,9 @@
 
 $lang = array
 (
-	'downdateline_name' => 'æ—¶å…‰æœº',
-	'downdateline_desc' => 'æŠŠè‡ªå·±æ—¥å¿—çš„å‘å¸ƒæ—¶é—´ä¿®æ”¹ä¸ºè¿‡åŽ»',
-	'downdateline_info' => 'æŠŠè‡ªå·±æ—¥å¿—çš„å‘å¸ƒæ—¶é—´ä¿®æ”¹ä¸ºè¿‡åŽ»',
+	'downdateline_name' => 'Ê±¹â»ú',
+	'downdateline_desc' => '°Ñ×Ô¼ºÈÕÖ¾µÄ·¢²¼Ê±¼äÐÞ¸ÄÎª¹ýÈ¥',
+	'downdateline_info' => '°Ñ×Ô¼ºÈÕÖ¾µÄ·¢²¼Ê±¼äÐÞ¸ÄÎª¹ýÈ¥',
 );
 
 ?>

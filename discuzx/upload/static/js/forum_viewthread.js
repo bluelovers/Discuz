@@ -66,7 +66,7 @@ function attachimglstshow(pid, islazy) {
 					continue;
 				}
 				imagelist += '<div class="pattimg">' +
-					'<a class="pattimg_zoom" href="javascript:;" onclick="zoom($(\'aimg_' + aimgcount[pid][i] + '\'), attachimggetsrc(\'aimg_' + aimgcount[pid][i] + '\'))" title="ç‚¹å‡»æ”¾å¤§">ç‚¹å‡»æ”¾å¤§</a>' +
+					'<a class="pattimg_zoom" href="javascript:;" onclick="zoom($(\'aimg_' + aimgcount[pid][i] + '\'), attachimggetsrc(\'aimg_' + aimgcount[pid][i] + '\'))" title="µã»÷·Å´ó">µã»÷·Å´ó</a>' +
 					'<img ' + (islazy ? 'file' : 'src') + '="forum.php?mod=image&aid=' + aimgcount[pid][i] + '&size=100x100&key=' + imagelistkey + '&atid=' + tid + '" width="100" height="100" /></div>';
 			}
 			if($('imagelistthumb_' + pid)) {
@@ -162,7 +162,7 @@ function parsetag(pid) {
 }
 
 function setanswer(pid, from){
-	if(confirm('æ‚¨ç¡®è®¤è¦æŠŠè¯¥å›å¤é€‰ä¸ºâ€œæœ€ä½³ç­”æ¡ˆâ€å—ï¼Ÿ')){
+	if(confirm('ÄúÈ·ÈÏÒª°Ñ¸Ã»Ø¸´Ñ¡Îª¡°×î¼Ñ´ğ°¸¡±Âğ£¿')){
 		if(BROWSER.ie) {
 			doane(event);
 		}
@@ -235,7 +235,7 @@ function succeedhandle_fastpost(locationhref, message, param) {
 		$('fastpostreturn').className = '';
 	} else {
 		if(!message) {
-			message = 'æœ¬ç‰ˆå›å¸–éœ€è¦å®¡æ ¸ï¼Œæ‚¨çš„å¸–å­å°†åœ¨é€šè¿‡å®¡æ ¸åæ˜¾ç¤º';
+			message = '±¾°æ»ØÌûĞèÒªÉóºË£¬ÄúµÄÌû×Ó½«ÔÚÍ¨¹ıÉóºËºóÏÔÊ¾';
 		}
 		$('post_new').style.display = $('fastpostmessage').value = $('fastpostreturn').className = '';
 		$('fastpostreturn').innerHTML = message;
@@ -368,16 +368,16 @@ function toggleRatelogCollapse(tarId, ctrlObj) {
 	if($(tarId).className == 'rate') {
 		$(tarId).className = 'rate rate_collapse';
 		setcookie('ratecollapse', 1, 2592000);
-		ctrlObj.innerHTML = 'å±•å¼€';
+		ctrlObj.innerHTML = 'Õ¹¿ª';
 	} else {
 		$(tarId).className = 'rate';
 		setcookie('ratecollapse', 0, -2592000);
-		ctrlObj.innerHTML = 'æ”¶èµ·';
+		ctrlObj.innerHTML = 'ÊÕÆğ';
 	}
 }
 
 function copyThreadUrl(obj) {
-	setCopy($('thread_subject').innerHTML.replace(/&amp;/g, '&') + '\n' + obj.href + '\n', 'å¸–å­åœ°å€å·²ç»å¤åˆ¶åˆ°å‰ªè´´æ¿');
+	setCopy($('thread_subject').innerHTML.replace(/&amp;/g, '&') + '\n' + obj.href + '\n', 'Ìû×ÓµØÖ·ÒÑ¾­¸´ÖÆµ½¼ôÌù°å');
 	return false;
 }
 
@@ -387,11 +387,11 @@ function replyNotice() {
 	var status = replynotice.getAttribute("status");
 	if(status == 1) {
 		replynotice.href = newurl + 'receive';
-		replynotice.innerHTML = 'æ¥æ”¶å›å¤é€šçŸ¥';
+		replynotice.innerHTML = '½ÓÊÕ»Ø¸´Í¨Öª';
 		replynotice.setAttribute("status", 0);
 	} else {
 		replynotice.href = newurl + 'ignore';
-		replynotice.innerHTML = 'å–æ¶ˆå›å¤é€šçŸ¥';
+		replynotice.innerHTML = 'È¡Ïû»Ø¸´Í¨Öª';
 		replynotice.setAttribute("status", 1);
 	}
 }
@@ -404,13 +404,13 @@ function connect_share(connect_share_url, connect_uin) {
 		if(connect_uin) {
 			setTimeout(function () {
 				if(!connect_share_loaded) {
-					showDialog('åˆ†äº«æœåŠ¡è¿æ¥å¤±è´¥ï¼Œè¯·ç¨åå†è¯•ã€‚', 'notice');
+					showDialog('·ÖÏí·şÎñÁ¬½ÓÊ§°Ü£¬ÇëÉÔºóÔÙÊÔ¡£', 'notice');
 					$('append_parent').removeChild($('connect_load_js'));
 				}
 			}, 5000);
 			connect_load(connect_share_url);
 		} else {
-			showDialog($('connect_share_unbind').innerHTML, 'info', 'è¯·å…ˆç»‘å®šQQè´¦å·');
+			showDialog($('connect_share_unbind').innerHTML, 'info', 'ÇëÏÈ°ó¶¨QQÕËºÅ');
 		}
 		return false;
 	}
@@ -433,7 +433,7 @@ function connect_show_dialog(title, html, type) {
 function connect_get_thread() {
 	connect_thread_info.subject = $('connect_thread_title').value;
 	if ($('postmessage_' + connect_thread_info.post_id)) {
-		connect_thread_info.html_content = preg_replace(["'"], ['%27'], encodeURIComponent(preg_replace(['æœ¬å¸–æœ€åç”± .*? äº .*? ç¼–è¾‘','&nbsp;','<em onclick="copycode\\(\\$\\(\'code0\'\\)\\);">å¤åˆ¶ä»£ç </em>'], ['',' ', ''], $('postmessage_' + connect_thread_info.post_id).innerHTML)));
+		connect_thread_info.html_content = preg_replace(["'"], ['%27'], encodeURIComponent(preg_replace(['±¾Ìû×îºóÓÉ .*? ÓÚ .*? ±à¼­','&nbsp;','<em onclick="copycode\\(\\$\\(\'code0\'\\)\\);">¸´ÖÆ´úÂë</em>'], ['',' ', ''], $('postmessage_' + connect_thread_info.post_id).innerHTML)));
 	}
 	return connect_thread_info;
 }

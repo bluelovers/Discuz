@@ -403,7 +403,7 @@ function loadforum() {
 	if(!$fid && getgpc('gid')) {
 		$fid = intval(getgpc('gid'));
 	}
-	if(!empty($_G['gp_archiver'])) {//X1.5çš„Archiverå…¼å®¹
+	if(!empty($_G['gp_archiver'])) {//X1.5µÄArchiver¼æÈÝ
 		if($fid) {
 			dheader('location: archiver/?fid-'.$fid.'.html');
 		} elseif($tid) {

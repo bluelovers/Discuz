@@ -5,7 +5,7 @@
  *		This is NOT a freeware, use is subject to license terms
  *
  *		$Id: function_ftn.php 29038 2012-03-23 06:22:39Z songlixin $
- *		æ—‹é£ä¸Šä¼ ä¸‹è½½ï¼Œéœ€è¦çš„å‡½æ•°
+ *		Ğı·çÉÏ´«ÏÂÔØ£¬ĞèÒªµÄº¯Êı
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -55,7 +55,7 @@ function make_downloadurl($sha1,$filesize,$filename) {
 	global $_G;
 
 
-	$filename = trim($filename,' "'); // Discuz! é»˜è®¤çš„filenameä¸¤ä¾§ä¼šåŠ ä¸Š åŒå¼•å·
+	$filename = trim($filename,' "'); // Discuz! Ä¬ÈÏµÄfilenameÁ½²à»á¼ÓÉÏ Ë«ÒıºÅ
 	$filename = diconv($filename,CHARSET,'UTF-8');
 	$filename = str2hex($filename);
 

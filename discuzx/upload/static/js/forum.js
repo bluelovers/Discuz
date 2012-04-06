@@ -165,7 +165,7 @@ function announcement() {
 }
 
 function removeindexheats() {
-	return confirm('æ‚¨ç¡®è®¤è¦æŠŠæ­¤ä¸»é¢˜ä»çƒ­ç‚¹ä¸»é¢˜ä¸­ç§»é™¤ä¹ˆï¼Ÿ');
+	return confirm('ÄúÈ·ÈÏÒª°Ñ´ËÖ÷Ìâ´ÓÈÈµãÖ÷ÌâÖĞÒÆ³ıÃ´£¿');
 }
 
 function showTypes(id, mod) {
@@ -175,7 +175,7 @@ function showTypes(id, mod) {
 	mod = isUndefined(mod) ? 1 : mod;
 	var baseh = o.getElementsByTagName('li')[0].offsetHeight * 2;
 	var tmph = o.offsetHeight;
-	var lang = ['å±•å¼€', 'æ”¶èµ·'];
+	var lang = ['Õ¹¿ª', 'ÊÕÆğ'];
 	var cls = ['unfold', 'fold'];
 	if(tmph > baseh) {
 		var octrl = document.createElement('li');
@@ -216,14 +216,14 @@ function fastpostvalidate(theform, noajaxpost) {
 		}
 	}
 	if(theform.message.value == '' && theform.subject.value == '') {
-		s = 'æŠ±æ­‰ï¼Œæ‚¨å°šæœªè¾“å…¥æ ‡é¢˜æˆ–å†…å®¹';
+		s = '±§Ç¸£¬ÄúÉĞÎ´ÊäÈë±êÌâ»òÄÚÈİ';
 		theform.message.focus();
 	} else if(mb_strlen(theform.subject.value) > 80) {
-		s = 'æ‚¨çš„æ ‡é¢˜è¶…è¿‡ 80 ä¸ªå­—ç¬¦çš„é™åˆ¶';
+		s = 'ÄúµÄ±êÌâ³¬¹ı 80 ¸ö×Ö·ûµÄÏŞÖÆ';
 		theform.subject.focus();
 	}
 	if(!disablepostctrl && ((postminchars != 0 && mb_strlen(theform.message.value) < postminchars) || (postmaxchars != 0 && mb_strlen(theform.message.value) > postmaxchars))) {
-		s = 'æ‚¨çš„å¸–å­é•¿åº¦ä¸ç¬¦åˆè¦æ±‚ã€‚\n\nå½“å‰é•¿åº¦: ' + mb_strlen(theform.message.value) + ' ' + 'å­—èŠ‚\nç³»ç»Ÿé™åˆ¶: ' + postminchars + ' åˆ° ' + postmaxchars + ' å­—èŠ‚';
+		s = 'ÄúµÄÌû×Ó³¤¶È²»·ûºÏÒªÇó¡£\n\nµ±Ç°³¤¶È: ' + mb_strlen(theform.message.value) + ' ' + '×Ö½Ú\nÏµÍ³ÏŞÖÆ: ' + postminchars + ' µ½ ' + postmaxchars + ' ×Ö½Ú';
 	}
 	if(s) {
 		showError(s);
@@ -282,12 +282,12 @@ function loadData(quiet, formobj) {
 
 	if(in_array((data = trim(data)), ['', 'null', 'false', null, false])) {
 		if(!quiet) {
-			showDialog('æ²¡æœ‰å¯ä»¥æ¢å¤çš„æ•°æ®ï¼', 'info');
+			showDialog('Ã»ÓĞ¿ÉÒÔ»Ö¸´µÄÊı¾İ£¡', 'info');
 		}
 		return;
 	}
 
-	if(!quiet && !confirm('æ­¤æ“ä½œå°†è¦†ç›–å½“å‰å¸–å­å†…å®¹ï¼Œç¡®å®šè¦æ¢å¤æ•°æ®å—ï¼Ÿ')) {
+	if(!quiet && !confirm('´Ë²Ù×÷½«¸²¸Çµ±Ç°Ìû×ÓÄÚÈİ£¬È·¶¨Òª»Ö¸´Êı¾İÂğ£¿')) {
 		return;
 	}
 
@@ -382,7 +382,7 @@ function checkForumnew(fid, lasttime) {
 			}
 			removetbodyrow(table, 'forumnewshow');
 			var colspan = table.getElementsByTagName('tbody')[0].rows[0].children.length;
-			var checknew = {'tid':'', 'thread':{'common':{'className':'', 'val':'<a href="javascript:void(0);" onclick="ajaxget(\'forum.php?mod=ajax&action=forumchecknew&fid=' + fid+ '&time='+lasttime+'&uncheck=1&inajax=yes\', \'forumnew\');">æœ‰æ–°å›å¤çš„ä¸»é¢˜ï¼Œç‚¹å‡»æŸ¥çœ‹', 'colspan': colspan }}};
+			var checknew = {'tid':'', 'thread':{'common':{'className':'', 'val':'<a href="javascript:void(0);" onclick="ajaxget(\'forum.php?mod=ajax&action=forumchecknew&fid=' + fid+ '&time='+lasttime+'&uncheck=1&inajax=yes\', \'forumnew\');">ÓĞĞÂ»Ø¸´µÄÖ÷Ìâ£¬µã»÷²é¿´', 'colspan': colspan }}};
 			addtbodyrow(table, ['tbody'], ['forumnewshow'], 'separatorline', checknew);
 		} else {
 			if(checkForumcount < 50) {

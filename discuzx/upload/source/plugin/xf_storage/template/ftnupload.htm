@@ -27,7 +27,7 @@ _attachEvent($('e_attach'),'click',function(e){
     });
 
 
-if(BROWSER.firefox && window.HTMLElement) {   //ä¸º firefox å¢åŠ  innerText æ–¹æ³•
+if(BROWSER.firefox && window.HTMLElement) {   //Îª firefox Ôö¼Ó innerText ·½·¨
     HTMLElement.prototype.__defineGetter__("innerText", function(){
         var anyString = "";
         var childS = this.childNodes;
@@ -99,7 +99,7 @@ function loadiframe(url,iframeid,time,force){
                 },time);
         }
     }
-    //é¡µé¢åŠ è½½ç›‘æ§ 60s for IE only
+    //Ò³Ãæ¼ÓÔØ¼à¿Ø 60s for IE only
     if(BROWSER.ie){
             var linster = setTimeout(function()
             {

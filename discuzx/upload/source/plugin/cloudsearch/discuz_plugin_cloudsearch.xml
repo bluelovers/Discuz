@@ -6,7 +6,7 @@
 		<item id="plugin">
 			<item id="available"><![CDATA[1]]></item>
 			<item id="adminid"><![CDATA[1]]></item>
-			<item id="name"><![CDATA[绾垫í鎼滅储]]></item>
+			<item id="name"><![CDATA[纵横搜索]]></item>
 			<item id="identifier"><![CDATA[cloudsearch]]></item>
 			<item id="description"><![CDATA[]]></item>
 			<item id="datatables"><![CDATA[]]></item>
@@ -31,9 +31,9 @@
 		<item id="version"><![CDATA[X2]]></item>
 		<item id="language">
 			<item id="templatelang">
-				<item id="hottopic"><![CDATA[鐑棬璇濋]]></item>
-				<item id="rel_recommend"><![CDATA[鐩稿叧鎺ㄨ崘]]></item>
-				<item id="rel_thread"><![CDATA[鐩稿叧甯栧瓙]]></item>
+				<item id="hottopic"><![CDATA[热门话题]]></item>
+				<item id="rel_recommend"><![CDATA[相关推荐]]></item>
+				<item id="rel_thread"><![CDATA[相关帖子]]></item>
 			</item>
 		</item>
 	</item>
