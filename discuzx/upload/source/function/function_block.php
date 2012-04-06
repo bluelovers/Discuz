@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_block.php 26635 2011-12-19 01:59:13Z zhangguosheng $
+ *      $Id: function_block.php 27231 2012-01-11 09:35:50Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -349,7 +349,6 @@ function block_template($bid) {
 				} elseif($field['datatype'] == 'date') {
 					$replacevalue = dgmdate($replacevalue, $block['dateuformat'] ? 'u' : $block['dateformat'], '9999', $block['dateuformat'] ? $block['dateformat'] : '');
 				} elseif($field['datatype'] == 'title') {//title
-					$replacevalue = stripslashes($replacevalue);
 					$searcharr[] = '{title-title}';
 					$replacearr[] = !empty($blockitem['fields']['fulltitle']) ? $blockitem['fields']['fulltitle'] : htmlspecialchars($replacevalue);
 					$searcharr[] = '{alt-title}';
@@ -358,7 +357,6 @@ function block_template($bid) {
 						$replacevalue = '<font style="'.$style.'">'.$replacevalue.'</font>';
 					}
 				} elseif($field['datatype'] == 'summary') {//summary
-					$replacevalue = stripslashes($replacevalue);
 					if($blockitem['showstyle'] && ($style = block_showstyle($blockitem['showstyle'], 'summary'))) {
 						$replacevalue = '<font style="'.$style.'">'.$replacevalue.'</font>';
 					}
@@ -420,7 +418,7 @@ function block_template($bid) {
 		}// foreach($block['itemlist'] as $itemid=>$blockitem) {
 
 		foreach($dynamicparts as $value) {
-			$template = stripslashes(preg_replace($value[0], preg_quote($value[1]), $template));
+			$template = preg_replace($value[0], $value[1], $template);
 		}
 	}
 	$template = preg_replace('/\s*\[(order\d{0,1})=\w+\](.*?)\[\/\\1\]\s*/is', '', $template);

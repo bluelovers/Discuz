@@ -443,6 +443,7 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 				.fromg { visibility: hidden; }
 				.ie6 .fromg, tr:hover .fromg { visibility: visible; }
 			.tl .icn { padding-left: 5px; width: 25px; text-align: left; }
+				.tl .icn a:hover { text-decoration: none; }
 			.tl .new {}
 			.tl .comm {}
 			.tl .frm { width: 150px; }

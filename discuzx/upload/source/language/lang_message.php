@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_message.php 25643 2011-11-16 09:54:51Z liulanbo $
+ *      $Id: lang_message.php 26938 2011-12-28 02:37:54Z svn_project_zhangjie $
  *
  *      This file is automatically generate
  */
@@ -282,6 +282,7 @@ $lang = array (
   'thread_closed' => '該帖子已被關閉，不能評論！',
   'postcomment_error' => '抱歉，您不能點評此帖或帖子尚未找到',
   'postappend_only_yourself' => '只能在自己的帖子後補充內容',
+  'postappend_not_open' => '抱歉，版塊沒有開啟帖子補充功能',
   'postappend_add_succeed' => '添加成功 ',
   'replynotice_success_1' => '接收設置成功 ',
   'replynotice_success_0' => '取消設置成功 ',

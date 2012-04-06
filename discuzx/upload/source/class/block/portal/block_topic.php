@@ -114,7 +114,7 @@ class block_topic {
 		if($uids) {
 			$wherearr[] = 'uid IN ('.dimplode($uids).')';
 		}
-		if($style['getpic'] || $picrequired) {
+		if($picrequired) {
 			$wherearr[] = "cover != ''";
 		}
 		$wherearr[] = "closed = '0'";

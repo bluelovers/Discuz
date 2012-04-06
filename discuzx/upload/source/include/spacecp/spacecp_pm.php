@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_pm.php 22139 2011-04-22 06:24:53Z monkey $
+ *      $Id: spacecp_pm.php 27369 2012-01-18 10:29:12Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -360,7 +360,7 @@ if($_GET['op'] == 'checknewpm') {
 
 		$pmreportcontent = lang('spacecp', 'pm_report_content', array('reporterid' => $_G['uid'], 'reportername' => $_G['username'], 'uid' => $pm['authorid'], 'username' => $pm['author'], 'message' => $pm['message']));
 		foreach($pmreportuser as $key => $value) {
-			notification_add($value, 'pmreport', $pmreportcontent, array(), 0);
+			notification_add($value, 'pmreport', 'pmreportcontent', array('pmreportcontent' => $pmreportcontent), 0);
 		}
 		showmessage('do_success', dreferer(), array(), array('showdialog'=>1, 'showmsg' => true, 'closetime' => true));
 	}

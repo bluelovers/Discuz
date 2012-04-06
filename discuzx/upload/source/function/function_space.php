@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_space.php 26514 2011-12-14 07:31:51Z svn_project_zhangjie $
+ *      $Id: function_space.php 28102 2012-02-22 08:34:06Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -557,7 +557,11 @@ function getblockhtml($blockname,$parameters = array()) {
 			}
 			$html = !$html ? '<p class="emp">'.lang('space','block_myapp_no_content').($space['self'] ? lang('space', 'block_myapp_no_content_publish', $space) : '').'</p>' : '<ul class="'.$listclass.'">'.$html.'</ul>';
 			break;
-		default:
+		case 'block1':
+		case 'block2':
+		case 'block3':
+		case 'block4':
+		case 'block5':
 
 			if($space['self']) {
 				$_G['space_group'] = $_G['group'];
@@ -584,6 +588,9 @@ function getblockhtml($blockname,$parameters = array()) {
 			if (empty ($parameters['content'])) $parameters['content'] = lang('space',$blockname);
 			$html .= $parameters['content'];
 			break;
+
+		default:
+			return false;
 	}
 
 	if (isset($parameters['title'])) {

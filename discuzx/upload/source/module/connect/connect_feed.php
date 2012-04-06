@@ -4,7 +4,7 @@
  *	  [Discuz!] (C)2001-2099 Comsenz Inc.
  *	  This is NOT a freeware, use is subject to license terms
  *
- *	  $Id: connect_feed.php 24072 2011-08-23 11:23:43Z yangli $
+ *	  $Id: connect_feed.php 27623 2012-02-07 13:34:12Z zhouxiaobo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -29,9 +29,9 @@ if ($op == 'new') {
 
 	connect_merge_member();
 
-	$posttable = getposttablebytid($tid);
-	$post = DB::fetch_first("SELECT * FROM ".DB::table($posttable)." WHERE tid = '$tid' AND first='1' AND invisible='0'");
 	$thread = DB::fetch_first("SELECT * FROM ".DB::table('forum_thread')." WHERE tid = '$tid' AND displayorder >= 0");
+	$posttable = 'forum_post'.($thread['posttableid'] ? "_$thread[posttableid]" : '');
+	$post = DB::fetch_first("SELECT * FROM ".DB::table($posttable)." WHERE tid = '$tid' AND first='1' AND invisible='0'");
 
 	$f_type = trim(intval($_G['gp_type']));
 

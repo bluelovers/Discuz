@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_misc.php 25648 2011-11-16 10:47:45Z svn_project_zhangjie $
+ *      $Id: forum_misc.php 28933 2012-03-20 03:50:33Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -135,14 +135,19 @@ if($_G['gp_action'] == 'paysucceed') {
 
 		foreach($aids as $aid) {
 			$updateauthor = 1;
+			$authorEarn = $prices[$aid][1];
 			if($_G['setting']['maxincperthread'] > 0) {
 				$extcredit = 'extcredits'.$_G['setting']['creditstransextra'][1];
-				if((DB::result_first("SELECT SUM($extcredit) FROM ".DB::table('common_credit_log')." WHERE relatedid='$aid' AND uid='$attach[uid]' AND operation='SAC'")) > $_G['setting']['maxincperthread']) {
+				$logcredit = (DB::result_first("SELECT SUM($extcredit) FROM ".DB::table('common_credit_log')." WHERE relatedid='$aid' AND uid='$attach[uid]' AND operation='SAC'"));
+				if($logcredit >= $_G['setting']['maxincperthread']) {
 					$updateauthor = 0;
+					$authorEarn = 0;
+				} else {
+					$authorEarn = min($_G['setting']['maxincperthread'] - $logcredit, $prices[$aid][1]);
 				}
 			}
 			if($updateauthor) {
-				updatemembercount($attach['uid'], array($_G['setting']['creditstransextra'][1] => $prices[$aid][1]), 1, 'SAC', $aid);
+				updatemembercount($attach['uid'], array($_G['setting']['creditstransextra'][1] => $authorEarn), 1, 'SAC', $aid);
 			}
 			updatemembercount($_G['uid'], array($_G['setting']['creditstransextra'][1] => -$prices[$aid][0]), 1, 'BAC', $aid);
 
@@ -180,7 +185,7 @@ if($_G['gp_action'] == 'paysucceed') {
 
 } elseif($_G['gp_action'] == 'upload') {
 
-	$type = !empty($_G['gp_type']) ? $_G['gp_type'] : 'image';
+	$type = !empty($_G['gp_type']) && in_array($_G['gp_type'], array('image', 'file')) ? $_G['gp_type'] : 'image';
 	$attachexts = $imgexts = '';
 	$_G['group']['allowpostattach'] = $_G['forum']['allowpostattach'] != -1 && ($_G['forum']['allowpostattach'] == 1 || (!$_G['forum']['postattachperm'] && $_G['group']['allowpostattach']) || ($_G['forum']['postattachperm'] && forumperm($_G['forum']['postattachperm'])));
 	$_G['group']['allowpostimage'] = $_G['forum']['allowpostimage'] != -1 && ($_G['forum']['allowpostimage'] == 1 || (!$_G['forum']['postimageperm'] && $_G['group']['allowpostattach']) || ($_G['forum']['postimageperm'] && forumperm($_G['forum']['postimageperm'])));
@@ -267,6 +272,9 @@ if($_G['gp_action'] == 'paysucceed') {
 
 } elseif($_G['gp_action'] == 'postappend') {
 
+	if(!$_G['forum']['allowappend']) {
+		showmessage('postappend_not_open');
+	}
 	$posttable = getposttablebytid($_G['tid']);
 	$pidappend = intval($_G['gp_pid']);
 	$post = DB::fetch_first("SELECT pid, tid, fid, message, authorid, author, bbcodeoff, first FROM ".DB::table($posttable)." WHERE pid='$pidappend'");
@@ -836,14 +844,18 @@ if($_G['gp_action'] == 'votepoll' && submitcheck('pollsubmit', 1)) {
 	} else {
 
 		$updateauthor = true;
+		$authorEarn = $thread['netprice'];
 		if($_G['setting']['maxincperthread'] > 0) {
 			$extcredit = 'extcredits'.$_G['setting']['creditstransextra'][1];
-			if((DB::result_first("SELECT SUM($extcredit) FROM ".DB::table('common_credit_log')." WHERE uid='$thread[authorid]' AND operation='STC' AND relatedid='$_G[tid]'")) > $_G['setting']['maxincperthread']) {
+			$logcredit = (DB::result_first("SELECT SUM($extcredit) FROM ".DB::table('common_credit_log')." WHERE uid='$thread[authorid]' AND operation='STC' AND relatedid='$_G[tid]'"));
+			if($logcredit > $_G['setting']['maxincperthread']) {
 				$updateauthor = false;
+			} else {
+				$authorEarn = min($_G['setting']['maxincperthread'] - $logcredit, $thread['netprice']);
 			}
 		}
 		if($updateauthor) {
-			updatemembercount($thread['authorid'], array($_G['setting']['creditstransextra'][1] => $thread['netprice']), 1, 'STC', $_G['tid']);
+			updatemembercount($thread['authorid'], array($_G['setting']['creditstransextra'][1] => $authorEarn), 1, 'STC', $_G['tid']);
 		}
 		updatemembercount($_G['uid'], array($_G['setting']['creditstransextra'][1] => -$thread['price']), 1, 'BTC', $_G['tid']);
 

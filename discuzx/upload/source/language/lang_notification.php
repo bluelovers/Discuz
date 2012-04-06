@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_notification.php 22303 2011-04-29 02:42:08Z maruitao $
+ *      $Id: lang_notification.php 27369 2012-01-18 10:29:12Z svn_project_zhangjie $
  */
 
 $lang = array
@@ -199,6 +199,8 @@ $lang = array
 	'magics_receive' => '您收到 {actor} 送給您的道具 {magicname}
 <p class="summary">{actor} 說：<span>{msg}</span></p>
 <p class="mbn"><a href="home.php?mod=magic" target="_blank">回贈道具</a><span class="pipe">|</span><a href="home.php?mod=magic&action=mybox" target="_blank">查看我的道具箱</a></p>',
+
+	'pmreportcontent' => '{pmreportcontent}',
 
 );
 

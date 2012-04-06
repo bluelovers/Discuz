@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: home.js 22765 2011-05-20 03:06:12Z zhengqingpeng $
+	$Id: home.js 27046 2011-12-31 03:20:15Z svn_project_zhangjie $
 */
 
 var note_step = 0;
@@ -598,6 +598,7 @@ function wall_add(id) {
 function share_add(sid) {
 	var obj = $('share_ul');
 	var newli = document.createElement("li");
+	newli.id = 'share_' + sid + '_li';
 	var x = new Ajax();
 	x.get('home.php?mod=misc&ac=ajax&op=share&inajax=1&sid='+sid, function(s){
 		newli.innerHTML = s;

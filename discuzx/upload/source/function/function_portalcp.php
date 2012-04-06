@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_portalcp.php 26652 2011-12-19 03:48:27Z zhangguosheng $
+ *      $Id: function_portalcp.php 28956 2012-03-20 10:15:37Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -891,23 +891,6 @@ function check_articleperm($catid, $aid = 0, $article = array(), $isverify = fal
 	} else {
 		return 'article_edit_nopermission';
 	}
-}
-
-function getportalarticletplname($catid, $primaltplname = ''){
-	global $_G;
-	loadcache('portalcategory');
-	$oldcatid = $catid;
-	$portalcategory = $_G['cache']['portalcategory'];
-	while(!empty($catid)) {
-		if(!empty($portalcategory[$catid]['articleprimaltplname'])) {
-			$primaltplname = $portalcategory[$catid]['articleprimaltplname'];
-			break;
-		} else {
-			$catid = $portalcategory[$catid]['upid'];
-		}
-	}
-	$catid = empty($catid) ? $oldcatid : $catid;
-	return array($catid, $primaltplname);
 }
 
 function addportalarticlecomment($id, $message, $idtype = 'aid') {

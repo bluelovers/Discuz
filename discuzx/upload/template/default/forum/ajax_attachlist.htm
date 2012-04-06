@@ -5,13 +5,13 @@
 			<td class="attswf">
 				<p id="attach$attach[aid]">
 					<span>$attach[filetype] <a href="javascript:;" class="xi2" id="attachname$attach[aid]" isimage="{if $attach['isimage']}1{else}0{/if}" onclick="{if $attach['isimage']}insertAttachimgTag('$attach[aid]'){else}insertAttachTag('$attach[aid]'){/if};doane(event);" title="{lang upload_msg}">{$attach[filename]}</a></span>
-					<!--{if $_G['setting']['allowattachurl']}-->
+					<!--{if $_G['setting']['allowattachurl'] && empty($attach['sha1'])}-->
 						<a href="javascript:;" class="atturl" title="{lang e_attach_url}" onclick="insertText('attach://$attach[aid].{echo fileext($attach[filenametitle])}');doane(event);"><img src="{IMGDIR}/attachurl.gif" /></a>
 						<!--{if ($attachmcode = parseattachmedia($attach))}--><a href="javascript:;" class="atturl" title="{lang e_attach_mediacode}" onclick="insertText('$attachmcode');doane(event);"><img src="{IMGDIR}/attachmediacode.gif" /></a><!--{/if}-->
 					<!--{/if}-->
 					<!--{if $attach['pid']}-->
 						<input type="hidden" name="attachupdate[{$attach[aid]}]" id="attachupdate{$attach[aid]}" size="2" />&nbsp;
-						<!--{if !empty($allowuploadnum)}--><a href="javascript:;" onclick="uploadWindow(function (aid, url, name){$('attachupdate$attach[aid]').value = aid;$('attachname$attach[aid]').title = '';$('attachname$attach[aid]').innerHTML = name;}, 'file');return false;">{lang update}</a></span><!--{/if}-->
+						<!--{if !empty($allowuploadnum)}--><a href="javascript:;" onclick="<!--{if !empty($attach['sha1'])}-->showDialog('{lang xf_storage:update_tips}', 'notice', '{lang xf_storage:notice_name}', null, 0);return false;<!--{/if}-->uploadWindow(function (aid, url, name){$('attachupdate$attach[aid]').value = aid;$('attachname$attach[aid]').title = '';$('attachname$attach[aid]').innerHTML = name;}, 'file');return false;">{lang update}</a></span><!--{/if}-->
 					<!--{/if}-->
 				</p>
 				<span id="attachupdate$attach[aid]"></span>

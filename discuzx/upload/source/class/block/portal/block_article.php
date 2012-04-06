@@ -250,7 +250,7 @@ class block_article {
 			$catid = array_unique($catid);
 			$wheres[] = 'at.catid IN ('.dimplode($catid).')';
 		}
-		if($style['getpic'] || $picrequired) {
+		if($picrequired) {
 			$wheres[] = "at.pic != ''";
 		}
 		if($publishdateline) {

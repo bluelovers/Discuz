@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portalcp_upload.php 21495 2011-03-28 09:23:45Z zhangguosheng $
+ *      $Id: portalcp_upload.php 27927 2012-02-17 01:51:13Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -152,7 +152,7 @@ if($attachs) {
 	if($downremotefile && $imagereplace) {
 		$string = preg_replace(array("/\<(script|style|iframe)[^\>]*?\>.*?\<\/(\\1)\>/si", "/\<!*(--|doctype|html|head|meta|link|body)[^\>]*?\>/si"), '', $string);
 		$string = str_replace($imagereplace['oldimageurl'], $imagereplace['newimageurl'], $string);
-		$string = str_replace(array("\r", "\n", "\r\n"), '', addcslashes($string, '/"\\'));
+		$string = str_replace(array("\r", "\n", "\r\n"), '', addcslashes($string, '/"\\\''));
 		print <<<EOF
 		<script type="text/javascript">
 			var f = parent.window.frames["uchome-ifrHtmlEditor"].window.frames["HtmlEditor"];

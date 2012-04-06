@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: connect_config.php 24072 2011-08-23 11:23:43Z yangli $
+ *      $Id: connect_config.php 27578 2012-02-06 07:13:45Z houdelei $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -33,9 +33,10 @@ if(submitcheck('connectsubmit')) {
 	} elseif($op == 'unbind') {
 
 		require_once libfile('function/connect');
-		connect_merge_member();
 
 		$connect_member = DB::fetch_first("SELECT * FROM ".DB::table('common_member_connect')." WHERE uid='$_G[uid]'");
+		$_G['member'] = array_merge($_G['member'], $connect_member);
+
 		if ($connect_member['conuinsecret']) {
 
 			if($_G['member']['conisregister']) {
@@ -92,6 +93,30 @@ if(submitcheck('connectsubmit')) {
 	if($_G[inajax] && $op == 'synconfig') {
 		DB::query("UPDATE ".DB::table('common_member_connect')." SET conispublishfeed='0', conispublisht='0' WHERE uid='$_G[uid]'");
 		dsetcookie('connect_synpost_tip');
+
+	} elseif($op == 'weibosign') {
+		require_once libfile('function/connect');
+		connect_merge_member();
+
+		if($_G['member']['conuin'] && $_G['member']['conuinsecret']) {
+
+			$arr = array();
+			$arr['oauth_consumer_key'] = $_G['setting']['connectappid'];
+			$arr['oauth_nonce'] = mt_rand();
+			$arr['oauth_timestamp'] = TIMESTAMP;
+			$arr['oauth_signature_method'] = 'HMAC_SHA1';
+			$arr['oauth_token'] = $_G['member']['conuin'];
+			ksort($arr);
+			$arr['oauth_signature'] = connect_get_oauth_signature('http://api.discuz.qq.com/connect/getSignature', $arr, 'GET', $_G['member']['conuinsecret']);
+			$result = connect_output_php('http://api.discuz.qq.com/connect/getSignature?' . cloud_http_build_query($arr, '', '&'));
+			if ($result['status'] == 0) {
+				connect_ajax_ouput_message('[wb=' . $result['result']['username'] . ']' . $result['result']['signature_url'] . '[/wb]', 0);
+			} else {
+				connect_ajax_ouput_message('connect_wbsign_no_account', $result['status']);
+			}
+		} else {
+			connect_ajax_ouput_message('connect_wbsign_no_bind', -1);
+		}
 
 	} else {
 		dheader('location: home.php?mod=spacecp&ac=plugin&id=qqconnect:spacecp');

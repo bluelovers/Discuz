@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: connect_login.php 25825 2011-11-23 06:28:44Z houdelei $
+ *      $Id: connect_login.php 29185 2012-03-28 07:01:36Z liudongdong $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -99,7 +99,7 @@ if($op == 'init') {
 			'oauth_token' => $request_token,
 			'oauth_consumer_key' => $_G['setting']['connectappid']
 		);
-		$change_qq_url = $_G['connect']['change_qq_url'];
+		$change_qq_url = $_G['connect']['discuz_change_qq_url'];
 		showmessage('qqconnect:connect_uin_in_blacklist', $referer, array('changeqqurl' => $change_qq_url));
 	}
 
@@ -196,7 +196,7 @@ if($op == 'init') {
 			$usergroups = $_G['cache']['usergroups'][$_G['groupid']]['grouptitle'];
 			$param = array('username' => $_G['member']['username'], 'usergroup' => $_G['group']['grouptitle']);
 
-			DB::query("UPDATE ".DB::table('common_member_status')." SET lastip='".$_G['clientip']."', lastvisit='".time()."' WHERE uid='$connect_member[uid]'");
+			DB::query("UPDATE ".DB::table('common_member_status')." SET lastip='".$_G['clientip']."', lastvisit='".time()."', lastactivity='".time()."' WHERE uid='$connect_member[uid]'");
 			$ucsynlogin = '';
 			if($_G['setting']['allowsynlogin']) {
 				loaducenter();

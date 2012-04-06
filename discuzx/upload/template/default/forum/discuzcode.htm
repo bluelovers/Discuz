@@ -1,4 +1,6 @@
 {eval
+include_once libfile('function/ftn');
+
 function tpl_hide_credits_hidden($creditsrequire) {
 global $_G;
 }
@@ -61,6 +63,8 @@ $attach['refcheck'] = (!$attach['remote'] && $_G['setting']['attachrefcheck']) |
 $aidencode = packaids($attach);
 $widthcode = attachwidth($attach['width']);
 $is_archive = $_G['forum_thread']['is_archived'] ? "&fid=".$_G['fid']."&archiveid=".$_G[forum_thread][archiveid] : '';
+//qqdl
+$qqdlurl = make_qqdl_url($attach['sha1'],$attach['filename']);
 }
 <!--{block return}-->
 <ignore_js_op>
@@ -94,6 +98,13 @@ $is_archive = $_G['forum_thread']['is_archived'] ? "&fid=".$_G['fid']."&archivei
 				<!--{/if}-->
 			</p>
 			<!--{if $attach['description']}--><p class="xg2">{$attach[description]}</p><!--{/if}-->
+			<!--{if $attach['sha1'] && (!$attach['price'] || $attach['payed'])}-->
+			<script type='text/javascript'>
+				appendscript('http://x.soso.com/js/xf/xflib.js','','','utf-8');
+			</script>
+			<style type="text/css">.tattl {height:84px;}</style>
+			<p class="xg2"><a href="javascript:;" QHref="{$qqdlurl}" class="ftn_qqdl" onclick="OnDownloadClick_Simple(this, event, 21504);ajaxget('forum.php?mod=attachment{$is_archive}&aid=$aidencode','','',null,null);return false;" oncontextmenu="OnContextClick(this, event)">{lang xf_storage:download_xf}</a></p>
+			<!--{/if}-->
 		</dd>
 	</dl>
 </ignore_js_op>
@@ -179,6 +190,8 @@ $aidencode = packaids($attach);
 $widthcode = attachwidth($attach['width']);
 $is_archive = $_G['forum_thread']['is_archived'] ? '&fid='.$_G['fid'].'&archiveid='.$_G[forum_thread][archiveid] : '';
 $attachthumb = getimgthumbname($attach['attachment']);
+//qqdlurl
+$qqdlurl = make_qqdl_url($attach['sha1'],$attach['filename']);
 }
 <!--{block return}-->
 <ignore_js_op>
@@ -211,6 +224,12 @@ $attachthumb = getimgthumbname($attach['attachment']);
 				<a href="forum.php?mod=misc&action=attachpay&aid=$attach[aid]&tid=$attach[tid]" onclick="showWindow('attachpay', this.href)">$attach[filename]</a>
 			<!--{/if}-->
 			<em class="xg1">($attach[attachsize], {lang downloads}: $attach[downloads]<!--{if $attach['price']}-->, {lang price}: $attach[price] {$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][1]][unit]}{$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][1]][title]}<!--{/if}-->)
+			<!--{if $attach['sha1'] && (!$attach['price'] || $attach['payed'])}-->
+			<script type='text/javascript'>
+				appendscript('http://x.soso.com/js/xf/xflib.js','','','utf-8');
+			</script>
+			<a href="javascript:;" QHref="{$qqdlurl}" class="ftn_qqdl" onclick="OnDownloadClick_Simple(this, event, 21504);ajaxget('forum.php?mod=attachment{$is_archive}&aid=$aidencode','','',null,null);return false;" oncontextmenu="OnContextClick(this, event)">{lang xf_storage:download_xf}</a><br>
+			<!--{/if}-->
 			</em>
 		</span>
 		<div class="tip tip_4" id="attach_$attach[aid]_menu" style="position: absolute; display: none">

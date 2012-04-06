@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: index.php 23108 2011-06-20 03:20:28Z zhangguosheng $
+ *      $Id: index.php 27142 2012-01-06 09:18:45Z zhangguosheng $
  */
 
 define('IN_API', true);
@@ -35,7 +35,7 @@ class discuz_remote {
 		$this->core->init_session = false;
 		$this->core->init_misc = false;
 		$this->core->init_mobile = false;
-		$this->core->init_memory = false;
+		$this->core->init_memory = true;
 
 		$this->core->init();
 

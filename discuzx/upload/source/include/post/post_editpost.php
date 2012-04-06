@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: post_editpost.php 25514 2011-11-14 02:37:37Z monkey $
+ *      $Id: post_editpost.php 29004 2012-03-22 04:04:58Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -616,9 +616,9 @@ if(!submitcheck('editsubmit')) {
 
 			DB::query("UPDATE ".DB::table('forum_thread')." SET typeid='$typeid', sortid='$sortid', subject='$subject', readperm='$readperm', price='$price' $closedadd $authoradd $polladd $replycreditadd".($_G['forum_auditstatuson'] && $audit == 1 ? ",displayorder='0', moderated='1'" : ",displayorder='$displayorder'").", status='$thread[status]' WHERE tid='$_G[tid]'", 'UNBUFFERED');
 
-			$_G['tid'] > 1 && DB::query("UPDATE ".DB::table('forum_thread')." SET subject='$subject' WHERE closed='$_G[tid]'", 'UNBUFFERED');
+			$thread['closed'] > 1 && DB::query("UPDATE ".DB::table('forum_thread')." SET subject='$subject' WHERE tid='$thread[closed]'", 'UNBUFFERED');
 
-			$tagstr = modthreadtag($_G['gp_tags'], $_G[tid]);
+			$tagstr = modthreadtag($_G['gp_tags'], $_G['tid']);
 
 		} else {
 
@@ -716,11 +716,13 @@ if(!submitcheck('editsubmit')) {
 
 		if($special == 4 && $isfirstpost && $_G['group']['allowpostactivity']) {
 			$activityaid = DB::result_first("SELECT aid FROM ".DB::table('forum_activity')." WHERE tid='$_G[tid]'");
-			if($activityaid != $_G['gp_activityaid']) {
+			if($activityaid && $activityaid != $_G['gp_activityaid']) {
 				$attach = DB::fetch_first("SELECT attachment, thumb, remote, aid FROM ".DB::table(getattachtablebytid($_G['tid']))." WHERE aid='$activityaid'");
 				DB::query("DELETE FROM ".DB::table('forum_attachment')." WHERE aid='$activityaid'");
 				DB::query("DELETE FROM ".DB::table(getattachtablebytid($_G['tid']))." WHERE aid='$activityaid'");
 				dunlink($attach);
+			}
+			if($_G['gp_activityaid']) {
 				$threadimageaid = $_G['gp_activityaid'];
 				convertunusedattach($_G['gp_activityaid'], $_G['tid'], $pid);
 				DB::query("UPDATE ".DB::table('forum_activity')." SET aid='$_G[gp_activityaid]' WHERE tid='$_G[tid]'");

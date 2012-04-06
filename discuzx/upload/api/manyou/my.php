@@ -4,12 +4,12 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: my.php 26590 2011-12-16 03:20:04Z yangli $
+ *      $Id: my.php 28993 2012-03-22 01:54:47Z songlixin $
  */
 
 define('IN_API', true);
 define('CURSCRIPT', 'api');
-
+define('DISABLEDEFENSE', true);
 require_once('../../source/class/class_core.php');
 require_once('../../source/function/function_home.php');
 
@@ -23,31 +23,40 @@ $discuz->init_user = false;
 $discuz->init_session = false;
 
 $discuz->init();
+$discuz->timezone_set($_G['setting']['timeoffset']);
 
 require_once DISCUZ_ROOT . './api/manyou/Manyou.php';
 
 class My extends Manyou {
 
-	function onSiteGetAllUsers($from, $userNum, $friendNum = 2000, $isExtra) {
-		$totalNum = getcount('common_member', '');
+	function onSiteGetAllUsers($from, $userNum, $friendNum = 500, $isExtra) {
 
-		$sql = 'SELECT s.*
-				FROM %s s
-				ORDER BY s.uid
-				LIMIT %d, %d';
-		$sql = sprintf($sql, DB::table('common_member'), $from, $userNum);
-		$query = DB::query($sql);
+		$result = array();
+		if ($userNum <= 0) {
+			$totalNum = getcount('common_member', '');
+			$sql = sprintf('SELECT MAX(uid) AS uid FROM %s', DB::table('common_member'));
+			$query = DB::query($sql);
+			$row = DB::fetch($query);
+			$maxUId = $row['uid'];
+			$result['totalNum'] = $totalNum;
+			$result['maxUId'] = $maxUId;
+		} else {
+			$sql = 'SELECT s.*
+					FROM %s s WHERE s.uid >= %d
+					ORDER BY s.uid
+					LIMIT %d';
+			$sql = sprintf($sql, DB::table('common_member'), $from, $userNum);
+			$query = DB::query($sql);
 
-		$spaces = $uIds = array();
-		while($row = DB::fetch($query)) {
-			$spaces[$row['uid']] = $row;
-			$uIds[] = $row['uid'];
+			$spaces = $uIds = array();
+			while($row = DB::fetch($query)) {
+				$spaces[$row['uid']] = $row;
+				$uIds[] = $row['uid'];
+			}
+
+			$users = $this->getUsers($uIds, $spaces, true, $isExtra, true, $friendNum, true);
+			$result['users'] = $users;
 		}
-
-		$users = $this->getUsers($uIds, $spaces, true, $isExtra, true, $friendNum, true);
-		$result = array('totalNum' => $totalNum,
-				'users' => $users
-				);
 		return $result;
 	}
 
@@ -939,10 +948,12 @@ class My extends Manyou {
 			}
 		}
 
+		$totalFriendsNum = 0;
 		$sql = sprintf('SELECT * FROM %s WHERE uid IN (%s)', DB::table('common_member_count'), implode(', ', $uIds));
 		$query = DB::query($sql);
 		while($row = DB::fetch($query)) {
 			$spaces[$row['uid']] = array_merge($spaces[$row['uid']], $row);
+			$totalFriendsNum += $row['friends'];
 		}
 
 		$sql = sprintf('SELECT * FROM %s WHERE uid IN (%s)', DB::table('common_member_field_home'), implode(', ', $uIds));
@@ -974,10 +985,20 @@ class My extends Manyou {
 
 		$friends = array();
 		if ($isReturnFriends) {
-			$sql = sprintf('SELECT * FROM %s WHERE uid IN (%s)', DB::table('home_friend'), implode(', ', $uIds));
-			$query = DB::query($sql);
-			while($row = DB::fetch($query)) {
-				$friends[$row['uid']][] = $row;
+			if ($totalFriendsNum <= 10000) {
+				$sql = sprintf('SELECT * FROM %s WHERE uid IN (%s)', DB::table('home_friend'), implode(', ', $uIds));
+				$query = DB::query($sql);
+				while($row = DB::fetch($query)) {
+					$friends[$row['uid']][] = $row;
+				}
+			} else {
+				foreach ($uIds as $uId) {
+					$sql = sprintf('SELECT * FROM %s WHERE uid = %d', DB::table('home_friend'), $uId);
+					$query = DB::query($sql);
+					while ($row = DB::fetch($query)) {
+						$friends[$uId][] = $row;
+					}
+				}
 			}
 		}
 
@@ -2366,7 +2387,16 @@ class My extends Manyou {
 		}
 
 		return $result;
+        }
+
+	function onStorageSetConfig($data) {
+	    if ($data['xf_storage_enc_key']) {
+	        DB::query("REPLACE INTO " . DB::table('common_setting') . " (`skey`, `svalue`) VALUES ('xf_storage_enc_key', '" . $data['xf_storage_enc_key'] . "')");
+	        return true;
+	    }
+	    return false;
 	}
+
 
 	function _addAdv($adv) {
 		global $_G;
@@ -2452,6 +2482,29 @@ class My extends Manyou {
 		return $advnew['code'];
 	}
 
+
+	function onSecuritySetEvilPost($data) {
+		require_once libfile('function/sec');
+		$results = array();
+		foreach ($data as $evilPost) {
+
+			$results[] = handleEvilPost($evilPost['tid'], $evilPost['pid'], $evilPost['evilType'], $evilPost['evilLevel']);
+		}
+
+		return $results;
+	}
+
+
+	function onSecuritySetEvilUser($data) {
+	    require_once libfile('function/sec');
+		$results = array();
+
+		foreach ($data as $evilUser) {
+
+			$results[] = handleEvilUser($evilUser['uid'], $evilUser['evilType'], $evilUser['evilLevel']);
+		}
+		return $results;
+	}
 }
 
 $siteId = $_G['setting']['my_siteid'];

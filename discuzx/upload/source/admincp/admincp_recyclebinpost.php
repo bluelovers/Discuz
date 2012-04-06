@@ -4,7 +4,7 @@
 	[Discuz!] (C)2001-2007 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: admincp_recyclebinpost.php 25454 2011-11-10 06:10:24Z zhengqingpeng $
+	$Id: admincp_recyclebinpost.php 28159 2012-02-23 07:08:33Z songlixin $
 */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -49,6 +49,7 @@ $lpp = empty($_G['gp_lpp']) ? 20 : $_G['gp_lpp'];
 $start = ($page - 1) * $lpp;
 $start_limit = ($page - 1) * $lpp;
 $multi = '';
+$innersql = '';
 
 if(!$operation) {
 	shownav('topic', 'nav_recyclebinpost');
@@ -81,6 +82,11 @@ if(!$operation) {
 	$pstarttime = $_G['gp_pstarttime'];
 	$pendtime = $_G['gp_pendtime'];
 	$searchsubmit = $_G['gp_searchsubmit'];
+	require_once libfile('function/cloud');
+	$secStatus = getcloudappstatus('security', 0);
+	if($secStatus){
+		$security = $_G['gp_security'];
+	}
 
 	require_once libfile('function/forumlist');
 
@@ -115,12 +121,15 @@ EOT;
 	showsetting('recyclebinpost_search_keyword', 'keywords', $keywords, 'text');
 	showsetting('recyclebin_search_post_time', array('pstarttime', 'pendtime'), array($pstarttime, $pendtime), 'daterange');
 	showsetting('postsplit', '', '', getposttableselect());
+	if($secStatus){
+		showsetting('recyclebin_search_security_post','security', $security, 'radio');
+	}
 	showsubmit('searchsubmit');
 	showtablefooter();
 	showformfooter();
 	showtagfooter('div');
 
-	if(submitcheck('searchsubmit')) {
+	if(submitcheck('searchsubmit', 1)) {
 
 		$sql = '';
 		$sql .= $inforum			? " AND fid='$inforum'" : '';
@@ -137,7 +146,12 @@ EOT;
 			$sql .= " AND ($sqlkeywords)";
 		}
 
-		$postlistcount = DB::result_first("SELECT COUNT(*) FROM ".DB::table(getposttable($posttableid))." WHERE invisible='-5' $sql");
+		if($secStatus && $security){
+			$innersql = " INNER JOIN ".DB::table('security_evilpost')." s ON t.pid = s.pid ";
+			$sql .= " AND s.type = '0'";
+		}
+
+		$postlistcount = DB::result_first("SELECT COUNT(*) FROM ".DB::table(getposttable($posttableid))." t $innersql WHERE invisible='-5' $sql");
 
 		showtagheader('div', 'postlist', $searchsubmit);
 		showformheader('recyclebinpost&operation=search&frame=no', 'target="rbframe"', 'rbform');
@@ -199,11 +213,11 @@ EOT;
 }
 
 function recyclebinpostshowpostlist($sql, $start_limit, $lpp) {
-	global $_G, $lang, $posttableid;
+	global $_G, $lang, $posttableid, $innersql;
 
 	$tids = $fids = array();
 
-	$query = DB::query("SELECT message, useip, attachment, htmlon, smileyoff, bbcodeoff, pid, tid, fid, author, dateline, subject, authorid, anonymous FROM ".DB::table(getposttable($posttableid))."
+	$query = DB::query("SELECT t.message, t.useip, t.attachment, t.htmlon, t.smileyoff, t.bbcodeoff, t.pid, t.tid, t.fid, t.author, t.dateline, t.subject, t.authorid, t.anonymous FROM ".DB::table(getposttable($posttableid))." t $innersql
 		WHERE invisible='-5' $sql ORDER BY dateline DESC LIMIT $start_limit, $lpp");
 	while($post = DB::fetch($query)) {
 		$postlist[] = $post;

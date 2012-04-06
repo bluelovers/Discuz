@@ -1,0 +1,19 @@
+<!--{template common/header_ajax}-->
+
+<form action="plugin.php?id=security:unlock" method="POST" id="security">
+<h3 class="flb"><em>{lang security:unlock_title}</em><!--{if $_G[inajax]}--><span><a href="javascript:;" class="flbc" onclick="hideWindow('$_G['gp_handlekey']');" title="{lang close}">{lang close}</a></span><!--{/if}--></h3>
+<input type="hidden" name="formhash" id="formhash" value="{FORMHASH}" >
+
+<div class="c altw">
+<!--{eval $seccodecheck = 1;}-->
+<!--{block sectpl}--><div class="rfm"><table><tr><th><sec>: </th><td><sec><br /><sec></td></tr></table></div><!--{/block}-->
+<!--{template common/seccheck}-->
+</div>
+
+<p class="o pns">
+    <button type="submit" name="securitysubmit" class="pn pnc" value="yes"><em>{lang security:unlock}</em></button>
+</p>
+
+</form>
+
+<!--{template common/footer_ajax}-->

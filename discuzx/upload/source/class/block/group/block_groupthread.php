@@ -47,8 +47,7 @@ class block_groupthread {
 					array(4, 'groupthread_special_4'),
 					array(5, 'groupthread_special_5'),
 					array(0, 'groupthread_special_0'),
-				),
-				'default' => array('0')
+				)
 			),
 			'rewardstatus' => array(
 				'title' => 'groupthread_special_reward',
@@ -295,7 +294,7 @@ class block_groupthread {
 		$sqlfield = '';
 		$sqlfrom = "FROM `".DB::table('forum_thread')."` t";
 		$joinmethod = empty($tids) ? 'INNER' : 'LEFT';
-		if($style['getpic'] || $picrequired) {
+		if($picrequired) {
 			$sqlfrom .= " $joinmethod JOIN `".DB::table('forum_threadimage')."` ti ON t.tid=ti.tid AND ti.tid>0";
 			$sqlfield = ', ti.attachment as attachmenturl, ti.remote';
 		}

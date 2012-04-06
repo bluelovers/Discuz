@@ -19,7 +19,7 @@
 		<input type="hidden" name="srhlocality" value="$_G['basescript']::{CURMODULE}" />
 		<!--{if !empty($searchparams[1])}-->
 			<!--{loop $searchparams[1] $key $value}-->
-			<!--{eval $srchotquery .= '&' . $key . '=' . $value;}-->
+			<!--{eval $srchotquery .= '&' . $key . '=' . rawurlencode($value);}-->
 			<input type="hidden" name="$key" value="$value" />
 			<!--{/loop}-->
 			<input type="hidden" name="source" value="discuz" />

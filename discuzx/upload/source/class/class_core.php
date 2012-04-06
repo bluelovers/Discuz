@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_core.php 26293 2011-12-08 03:10:51Z zhangguosheng $
+ *      $Id: class_core.php 27386 2012-01-19 10:06:34Z zhengqingpeng $
  */
 
 define('IN_DISCUZ', true);
@@ -304,7 +304,7 @@ class discuz_core {
 			$this->_xss_check();
 		}
 
-		if($this->config['security']['attackevasive'] && (!defined('CURSCRIPT') || !in_array($this->var['mod'], array('seccode', 'secqaa', 'swfupload')))) {
+		if($this->config['security']['attackevasive'] && (!defined('CURSCRIPT') || !in_array($this->var['mod'], array('seccode', 'secqaa', 'swfupload')) && !defined('DISABLEDEFENSE'))) {
 			require_once libfile('misc/security', 'include');
 		}
 

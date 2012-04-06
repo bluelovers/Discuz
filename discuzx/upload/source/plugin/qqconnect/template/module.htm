@@ -652,4 +652,57 @@ $connect_email = str_replace("'", "\'", $_G['qc']['connect_email']);
 {eval
 }
 
+function tpl_spacecp_profile_bottom() {
+	global $_G;
+}
+<!--{block return}-->
+	<script type="text/javascript">
+	function connect_handle_get_weibosign(response, ajax) {
+		// 返回值形如: errCode=XX&result=XX
+		if (typeof(response) == "string" && response.indexOf("&") > 0) {
+
+			var errCode = response.substring(0, response.indexOf("&"));
+			errCode = errCode.substring(errCode.indexOf("=") + 1);
+
+			var result = response.substring(response.indexOf("&") + 1);
+			result = result.substring(result.indexOf("=") + 1);
+
+			response = {"errCode" : errCode, "result" : result};
+		} else {
+			return false;
+		}
+
+		if (response.errCode == '0') {
+			seditor_insertunit('sightml', response.result);
+		} 
+		else if (response.errCode == '-1'){
+			// 請求失敗
+			showDialog('{lang qqconnect:connect_wbsign_no_account}');
+		} else {
+			// 未開通微博
+			showDialog('{lang qqconnect:connect_wbsign_no_bind}');
+		}
+	}
+	
+	function connect_get_weibosign() {
+		var sign_url = '{$_G['siteurl']}connect.php?mod=config&op=weibosign';
+		var get_weibosign_ajax = Ajax("HTML", null);
+		get_weibosign_ajax.get(sign_url, connect_handle_get_weibosign);
+	}
+	
+	if($('sightmlsml')) {
+			var a = document.createElement('a');
+			a.href = 'javascript:void(0);';
+			a.style.background = 'url(' + STATICURL + 'image/common/weibo.png) no-repeat 0 2px';
+			a.onmouseover = function () { showTip(this); };
+			a.onclick = connect_get_weibosign;
+			a.setAttribute('tip', '{lang qqconnect:connect_wbsign_tip}');
+			$('sightmlsml').parentNode.appendChild(a);
+	}
+	</script>
+<!--{/block}-->
+<!--{eval return $return;}-->
+{eval
+}
+
 }

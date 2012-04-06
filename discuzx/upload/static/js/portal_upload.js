@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: portal_upload.js 18682 2010-12-01 03:35:10Z zhangguosheng $
+	$Id: portal_upload.js 27926 2012-02-17 01:36:25Z svn_project_zhangjie $
 */
 
 var nowid = 0;
@@ -59,6 +59,9 @@ function insertAttach(id) {
 function deleteAttach(attachid, url) {
 	ajaxget(url);
 	$('attach_list_' + attachid).style.display = 'none';
+	if($('setconver' + attachid).checked) {
+		$('conver').value = '';
+	}
 }
 
 function setConver(attach) {

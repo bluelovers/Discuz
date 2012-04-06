@@ -14,7 +14,7 @@
 			<input type="hidden" name="formhash" value="{FORMHASH}" />
 			<input type="hidden" name="mod" id="sc_mod" value="title" />
 			<input type="hidden" name="srhfid" value="$_G[fid]" />
-			<input type="hidden" name="srhlocality" value="$_G['basescript']::{$_G['gp_do']}" />
+			<input type="hidden" name="srhlocality" value="$_G['basescript']::{CURMODULE}" />
 			<!--{if !empty($searchparams[1])}-->
 				<!--{loop $searchparams[1] $key $value}-->
 				<input type="hidden" name="$key" value="$value" />

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_setting.php 23009 2011-06-14 02:23:53Z monkey $
+ *      $Id: cache_setting.php 28947 2012-03-20 08:53:08Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -67,9 +67,10 @@ function build_cache_setting() {
 						$setting['svalue'][$key][$k] = max(0, intval($v));
 					}
 				}
-			}
-			if($setting['skey'] == 'ftp') {
+			} elseif($setting['skey'] == 'ftp') {
 				$setting['svalue']['attachurl'] .= substr($setting['svalue']['attachurl'], -1, 1) != '/' ? '/' : '';
+			} elseif($setting['skey'] == 'inviteconfig') {
+				$setting['svalue']['invitecodeprompt'] = stripslashes($setting['svalue']['invitecodeprompt']);
 			}
 		}
 		$_G['setting'][$setting['skey']] = $data[$setting['skey']] = $setting['svalue'];

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_profile.php 24010 2011-08-19 07:35:13Z zhengqingpeng $
+ *      $Id: spacecp_profile.php 27348 2012-01-17 07:34:00Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -303,6 +303,10 @@ if(submitcheck('profilesubmit')) {
 	}
 
 	loaducenter();
+	if($emailnew != $_G['member']['email']) {
+		include_once libfile('function/member');
+		checkemail($emailnew);
+	}
 	$ucresult = uc_user_edit($_G['username'], $_G['gp_oldpassword'], $_G['gp_newpassword'], $emailnew != $_G['member']['email'] ? $emailnew : '', $ignorepassword, $_G['gp_questionidnew'], $_G['gp_answernew']);
 	if($ucresult == -1) {
 		showmessage('profile_passwd_wrong', '', array(), array('return' => true));

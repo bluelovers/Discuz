@@ -4,7 +4,7 @@ if(!defined('IN_DISCUZ')) {
 }
 
 $threadlist = '';
-$orderby = $_G['gp_orderby'];
+$_GET['orderby'] = $orderby = in_array($_GET['orderby'], array('thisweek', 'thismonth', 'today', 'all')) ? $_GET['orderby'] : '';
 $navname = $_G['setting']['navs'][8]['navname'];
 switch($_G['gp_view']) {
 	case 'replies':

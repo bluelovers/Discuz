@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_recyclebin.php 26389 2011-12-12 07:23:37Z svn_project_zhangjie $
+ *      $Id: admincp_recyclebin.php 28159 2012-02-23 07:08:33Z songlixin $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -112,6 +112,11 @@ if(!$operation) {
 		$mendtime = $_G['gp_mendtime'];
 		$searchsubmit = $_G['gp_searchsubmit'];
 
+		require_once libfile('function/cloud');
+		$secStatus = getcloudappstatus('security', 0);
+		if($secStatus){
+			$security = $_G['gp_security'];
+		}
 		require_once libfile('function/forumlist');
 
 		$forumselect = '<select name="inforum"><option value="">&nbsp;&nbsp;> '.$lang['select'].'</option>'.
@@ -146,12 +151,15 @@ EOT;
 		showsetting('recyclebin_search_admin', 'admins', $admins, 'text');
 		showsetting('recyclebin_search_post_time', array('pstarttime', 'pendtime'), array($pstarttime, $pendtime), 'daterange');
 		showsetting('recyclebin_search_mod_time', array('mstarttime', 'mendtime'), array($mstarttime, $mendtime), 'daterange');
+		if($secStatus){
+			showsetting('recyclebin_search_security_thread','security', $security, 'radio');
+		}
 		showsubmit('searchsubmit');
 		showtablefooter();
 		showformfooter();
 		showtagfooter('div');
 
-		if(submitcheck('searchsubmit')) {
+		if(submitcheck('searchsubmit', 1)) {
 
 			$sql = '';
 			if($inforum == 'groupthread') {
@@ -175,8 +183,14 @@ EOT;
 				$sql .= " AND ($sqlkeywords)";
 			}
 
+			$innersql = '';
+			if($secStatus && $security){
+				$innersql = " INNER JOIN ".DB::table('security_evilpost')." s ON t.tid = s.tid ";
+				$sql .= " AND s.type = '1'";
+			}
+
 			$threadcount = DB::result_first("SELECT COUNT(*)
-				FROM ".DB::table('forum_thread')." t
+				FROM ".DB::table('forum_thread')." t $innersql
 				LEFT JOIN ".DB::table('forum_threadmod')." tm ON tm.tid=t.tid
 				WHERE t.displayorder='-1' AND tm.action='DEL' $sql");
 
@@ -184,7 +198,7 @@ EOT;
 			$query = DB::query("SELECT f.name AS forumname, f.allowsmilies, f.allowhtml, f.allowbbcode, f.allowimgcode,
 				t.tid, t.fid, t.authorid, t.author, t.subject, t.views, t.replies, t.dateline, t.posttableid,
 				tm.uid AS moduid, tm.username AS modusername, tm.dateline AS moddateline, tm.action AS modaction, tm.reason
-				FROM ".DB::table('forum_thread')." t
+				FROM ".DB::table('forum_thread')." t $innersql
 				LEFT JOIN ".DB::table('forum_threadmod')." tm ON tm.tid=t.tid
 				LEFT JOIN ".DB::table('forum_forum')." f ON f.fid=t.fid
 				WHERE t.displayorder='-1' AND tm.action='DEL' $sql

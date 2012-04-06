@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: modcp_thread.php 26269 2011-12-07 09:03:36Z zhengqingpeng $
+ *      $Id: modcp_thread.php 27049 2011-12-31 04:04:41Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_MODCP')) {
@@ -194,10 +194,12 @@ if($op == 'post') {
 			$query = DB::query('SELECT fid, tid, pid, first, authorid FROM '.DB::table(getposttable($posttableid)).' WHERE '."pid IN ($pids) $fidadd");
 			while($post = DB::fetch($query)) {
 				$prune['forums'][$post['fid']] = $post['fid'];
-				@$prune['thread'][$post['tid']]++;
 				$pidsdelete[$post['fid']][$post['pid']] = $post['pid'];
+				$pids_tids[$post['pid']] = $post['tid'];
 				if($post['first']) {
-					$tidsdelete[$post['fid']][$post['tid']] = $post['tid'];
+					$tidsdelete[$post['pid']] = $post['tid'];
+				} else {
+					@$prune['thread'][$post['tid']]++;
 				}
 				$key = $keys[$post['pid']];
 				unset($result['pids'][$key]);
@@ -217,8 +219,15 @@ if($op == 'post') {
 				$forums[$value['fid']] = $value;
 			}
 			foreach($pidsdelete as $fid => $pids) {
-				$deletedposts = deletepost($pids, 'pid', !getgpc('nocredit'), $posttableid, $forums[$fid]['recyclebin']);
-				$deletedthreads = deletethread($tidsdelete[$fid], false, !getgpc('nocredit'), $forums[$fid]['recyclebin']);
+				foreach($pids as $pid) {
+					if(!$tidsdelete[$pid]) {
+						$deletedposts = deletepost($pid, 'pid', !getgpc('nocredit'), $posttableid, $forums[$fid]['recyclebin']);
+						updatemodlog($pids_tids[$pid], 'DLP');
+					} else {
+						$deletedthreads = deletethread($tidsdelete[$pid], false, !getgpc('nocredit'), $forums[$fid]['recyclebin']);
+						updatemodlog($tidsdelete[$pid], 'DEL');
+					}
+				}
 			}
 			if(count($prune['thread']) < 50) {
 				foreach($prune['thread'] as $tid => $decrease) {

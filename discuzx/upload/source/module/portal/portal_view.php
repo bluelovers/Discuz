@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portal_view.php 26641 2011-12-19 02:32:31Z zhangguosheng $
+ *      $Id: portal_view.php 27953 2012-02-17 07:05:46Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -86,13 +86,10 @@ if($article['idtype'] == 'tid' || $content['idtype']=='pid') {
 		$attachtags = $aimgs = array();
 		$firstpost['message'] = $content['content'];
 		if($firstpost['attachment']) {
-			if($_G['group']['allowgetattach'] || $_G['group']['allowgetimage']) {
-				$attachpids .= ",$firstpost[pid]";
-				if(preg_match_all("/\[attach\](\d+)\[\/attach\]/i", $firstpost['message'], $matchaids)) {
-					$attachtags[$firstpost['pid']] = $matchaids[1];
-				}
-			} else {
-				$firstpost['message'] = preg_replace("/\[attach\](\d+)\[\/attach\]/i", '', $firstpost['message']);
+			$_G['group']['allowgetimage'] = 1;
+			$attachpids .= ",$firstpost[pid]";
+			if(preg_match_all("/\[attach\](\d+)\[\/attach\]/i", $firstpost['message'], $matchaids)) {
+				$attachtags[$firstpost['pid']] = $matchaids[1];
 			}
 		}
 

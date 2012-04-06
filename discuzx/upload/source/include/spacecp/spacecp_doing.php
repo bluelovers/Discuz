@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_doing.php 22037 2011-04-20 08:34:44Z cnteacher $
+ *      $Id: spacecp_doing.php 27232 2012-01-11 10:00:04Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -64,7 +64,12 @@ if(submitcheck('addsubmit')) {
 	DB::update('common_member_field_home', $setarr, "uid='$_G[uid]'");
 
 	if($_POST['to_signhtml'] && $_G['group']['maxsigsize']) {
-		$signhtml = cutstr(strip_tags($message), $_G['group']['maxsigsize']);
+		if($_G['group']['maxsigsize'] < 200) {
+			$signhtml = getstr($message, $_G['group']['maxsigsize'], 0, 0, 1);
+			$signhtml = preg_replace("/\<br.*?\>/i", ' ', $signhtml);
+		} else {
+			$signhtml = $message;
+		}
 		DB::update('common_member_field_forum', array('sightml'=>$signhtml), "uid='$_G[uid]'");
 	}
 

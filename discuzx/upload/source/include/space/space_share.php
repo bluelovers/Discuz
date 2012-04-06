@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_share.php 22285 2011-04-28 03:28:42Z zhengqingpeng $
+ *      $Id: space_share.php 28048 2012-02-21 09:29:40Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -127,8 +127,7 @@ if($id) {
 		}
 	}
 	dsetcookie('home_diymode', $diymode);
-	$_G['gp_type'] = empty($_G['gp_type']) ? 'all' : $_G['gp_type'];
-	$navtitle = lang('core', 'title_share_'.$_G['gp_type']);
+	$navtitle = lang('core', 'title_share_'.$_GET['type']);
 	$navtitle .= lang('core', 'title_share');
 	if($space['username']) {
 		$navtitle = lang('space', 'sb_sharing', array('who' => $space['username']));

@@ -1,6 +1,11 @@
 {eval
 function tpl_cloudsearch_index_top($recwords, $searchparams, $srchotquery) {
-}
+if($recwords) {
+$recwords_tmp = $recwords;
+$recwords = array();
+foreach ($recwords_tmp as $k => $v) {
+$recwords[$k+1] = $v;
+}{eval }}{eval }}
 <!--{block return}-->
 	<!--{if is_array($recwords) && count($recwords) > 0}-->
 	<div class="bm bmw fl bmb">
@@ -8,23 +13,26 @@ function tpl_cloudsearch_index_top($recwords, $searchparams, $srchotquery) {
 			<span class="y"></span>
 			<h2>{lang cloudsearch:hottopic}</h2>
 		</div>
-		<style>
-		.filter { padding: 10px; border-bottom: none; font-size: 12px; color: #999; }
+        <style>
+        .filter { padding: 10px; border-bottom: none; font-size: 12px; color: #999; }
 		.filter ul {}
-		.filter li { float: left; margin-right: 16px; height: 22px; line-height: 22px; white-space:nowrap; }
+		.filter li { float: left; margin-right: 16px; height: 22px; line-height: 22px; white-space:nowrap; width:12.5%; }
 		.filter li a { margin-right: 2px; text-decoration: none; color: #369; }
+		.filter li.clewcolor a { background:url("source/plugin/cloudsearch/template/keyword_hot.gif") no-repeat 100% 2px; margin-right: 2px; text-decoration: none; color: #F00; padding-right:18px; }
 		.filter li a:hover { text-decoration: underline; }
 		.filter li a:visited { text-decoration: none; color: #666; }
-		.filter .number { color: #666;} 
-		</style>
+        .filter li.clewcolor a:visited { text-decoration: none; color: #F00; }
+		.filter .number { color: #666; } 
+		.filter li.clewcolor .number { color:#F00; }
+        </style>
 		<div class="filter">
 			<ul class="cl">
 			<!--{loop $recwords $key $recword}-->
 			<!--{if !empty($searchparams[0])}-->
 				<!--{if empty($recword[3])}-->
-					<li><a href="$searchparams[0]?q=$recword[0]&source=word.hotopicf.<!--{$key+1}{$srchotquery}-->&num=$recword[2]" target="_blank">$recword[0]<span class="number">($recword[2])</span></a></li>
+					<li><a href="$searchparams[0]?q=$recword[0]&source=word.hotopicf.{$key}{$srchotquery}&num=$recword[2]" target="_blank">$recword[0]<span class="number">($recword[2])</span></a></li>
 				<!--{else}-->
-					<li class="clewcolor"><a href="$searchparams[0]?q=$recword[0]&source=word.hotopicf.<!--{$key+1}{$srchotquery}-->&num=$recword[2]" target="_blank">$recword[0]<span class="number">($recword[2])</span></a></li>
+					<li class="clewcolor"><a href="$searchparams[0]?q=$recword[0]&source=word.hotopicf.{$key}{$srchotquery}&num=$recword[2]" target="_blank">$recword[0]<span class="number">($recword[2])</span></a></li>
 				<!--{/if}-->
 			<!--{else}-->
 				<!--{if empty($recword[3])}-->
@@ -72,7 +80,7 @@ $rel_title = urlencode($_G['forum_thread']['subject']);
 	var searchDomain = "$searchDomain";
 	var srchotquery = "$srchotquery";
 	</script>
-	<script type="text/javascript" type="text/javascript" src="http://cache.soso.com/30d/js/discuz/relate_subject.js"></script>
+	<script type="text/javascript" src="http://cache.soso.com/30d/js/discuz/relate_subject.js" charset="UTF-8"></script>
 	<!--{/if}-->
 <!--{/block}-->
 <!--{eval return $return;}-->

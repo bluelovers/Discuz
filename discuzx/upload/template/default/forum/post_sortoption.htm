@@ -79,6 +79,9 @@
 						<!--{/if}-->
 						</div>
 						<script type="text/javascript" reload="1">
+							<!--{if $option['value']['url']}-->
+							ATTACHORIMAGE = 1;
+							<!--{/if}-->
 							function sortaid_{$option[identifier]}_upload(aid, url) {
 								$('sortaid_{$option[identifier]}_url').value = url;
 								updatesortattach(aid, url, '{$_G['setting']['attachurl']}forum', '{$option[identifier]}');

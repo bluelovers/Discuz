@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portalcp_diy.php 21270 2011-03-22 01:57:51Z zhangguosheng $
+ *      $Id: portalcp_diy.php 28956 2012-03-20 10:15:37Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -98,19 +98,14 @@ if (submitcheck('uploadsubmit')) {
 		showmessage('do_success');
 	}
 	$istopic = $iscategory = $isarticle = false;
-	if ($template == 'portal/portal_topic_content') {
+	if($template == 'portal/portal_topic_content') {
 		$template = gettopictplname($clonefile);
 		$istopic = true;
 	} elseif ($template == 'portal/list') {
 		$template = getportalcategorytplname($clonefile);
 		$iscategory = true;
 	} elseif ($template == 'portal/view') {
-		$arr = getportalarticletplname($clonefile, $template);
-		if($clonefile != $arr[0]) {
-			$clonefile = $arr[0];
-			$targettplname = $template.'_'.$clonefile;
-		}
-		$template = $arr[1];
+		$template = getportalarticletplname($clonefile, $template);
 		$isarticle = true;
 	}
 
@@ -418,6 +413,19 @@ function getportalcategorytplname($catid) {
 	$catid = max(0,intval($catid));
 	$category = DB::fetch_first("SELECT * FROM ".DB::table('portal_category')." WHERE catid='$catid'");
 	return !empty($category) && !empty($category['primaltplname']) ? $category['primaltplname'] : 'portal/list';
+}
+
+function getportalarticletplname($catid, $primaltplname = ''){
+	if(($catid = intval($catid))) {
+		if(($category = DB::fetch_first("SELECT * FROM ".DB::table('portal_category')." WHERE catid='$catid'"))) {
+			$primaltplname = $category['articleprimaltplname'];
+		}
+		if(empty($primaltplname)) {
+			$primaltplname = 'portal/view';
+			DB::update('portal_category', array('articleprimaltplname' => $primaltplname), array('catid' => $catid));
+		}
+	}
+	return $primaltplname;
 }
 
 function getdiyxmlname($filename, $path) {

@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: common_extra.js 25470 2011-11-10 08:54:19Z zhangguosheng $
+	$Id: common_extra.js 27453 2012-02-01 06:54:54Z svn_project_zhangjie $
 */
 
 function _relatedlinks(rlinkmsgid) {
@@ -1101,10 +1101,8 @@ function _createPalette(colorid, id, func) {
 		dom.innerHTML = iframe;
 		$('append_parent').appendChild(dom);
 	}
-	var base = document.getElementsByTagName('base');
-	var baseurl = base && base > 0 ? base[0].getAttribute('href') : '';
 	func = !func ? '' : '|' + func;
-	window.frames["c"+colorid+"_frame"].location.href = baseurl+STATICURL+"image/admincp/getcolor.htm?c"+colorid+"|"+id+func;
+	window.frames["c"+colorid+"_frame"].location.href = STATICURL+"image/admincp/getcolor.htm?c"+colorid+"|"+id+func;
 	showMenu({'ctrlid':'c'+colorid});
 	var iframeid = "c"+colorid+"_menu";
 	_attachEvent(window, 'scroll', function(){hideMenu(iframeid);});

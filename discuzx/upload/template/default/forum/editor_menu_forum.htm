@@ -120,7 +120,7 @@
 					</select>
 					<br />
 					<div id="createalbum" style="display:none">
-						<!--{if !empty($_G['cache']['albumcategory'])}-->
+						<!--{if $_G['setting']['albumcategorystat'] && !empty($_G['cache']['albumcategory'])}-->
 						<!--{eval echo category_showselect('album', 'albumcatid', !$_G['setting']['albumcategoryrequired'] ? true : false, $_GET['catid']);}-->&nbsp;
 						<!--{/if}-->
 						<input type="text" name="newalbum" class="px mtn" size="35" value="" />

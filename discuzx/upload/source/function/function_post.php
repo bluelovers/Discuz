@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_post.php 26654 2011-12-19 04:04:38Z zhengqingpeng $
+ *      $Id: function_post.php 29223 2012-03-29 09:10:48Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -24,7 +24,7 @@ function getattach($pid, $posttime = 0, $aids = '') {
 				$aidsnew[] = intval($aid);
 			}
 		}
-		$aids = "aid IN (".dimplode($aidsnew).") AND";
+		$aids = "a.aid IN (".dimplode($aidsnew).") AND";
 	} else {
 		$aids = '';
 	}

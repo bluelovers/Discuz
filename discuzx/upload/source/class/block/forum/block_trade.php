@@ -252,7 +252,7 @@ class block_trade {
 				$posttable = $key == 0 ? 'forum_post' : 'forum_post_'.$key;
 				$query = DB::query("SELECT pid, message FROM ".DB::table($posttable)." WHERE pid IN  (".dimplode($var).")");
 				while($result = DB::fetch($query)) {
-					$list[$result['pid']]['summary'] = messagecutstr($result['message'], $messagelength);
+					$list[$result['pid']]['summary'] = messagecutstr($result['message'], $summarylength);
 				}
 			}
 

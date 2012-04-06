@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: post_newreply.php 23960 2011-08-17 10:45:16Z zhengqingpeng $
+ *      $Id: post_newreply.php 27374 2012-01-19 04:43:04Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -328,7 +328,7 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 	$smileyoff = checksmilies($message, !empty($_G['gp_smileyoff']));
 	$parseurloff = !empty($_G['gp_parseurloff']);
 	$htmlon = $_G['group']['allowhtml'] && !empty($_G['gp_htmlon']) ? 1 : 0;
-	$usesig = !empty($_G['gp_usesig']) ? 1 : ($_G['uid'] && $_G['group']['maxsigsize'] ? 1 : 0);
+	$usesig = !empty($_G['gp_usesig']) && $_G['group']['maxsigsize'] ? 1 : 0;
 
 	$isanonymous = $_G['group']['allowanonymous'] && !empty($_G['gp_isanonymous'])? 1 : 0;
 	$author = empty($isanonymous) ? $_G['username'] : '';
@@ -435,7 +435,7 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 		));
 	}
 
-	if($thread['replycredit'] > 0 && $thread['authorid'] != $_G['uid'] && $_G['uid']) {
+	if($thread['replycredit'] > 0 && !$modnewreplies && $thread['authorid'] != $_G['uid'] && $_G['uid']) {
 
 		$replycredit_rule = DB::fetch_first("SELECT * FROM ".DB::table('forum_replycredit')." WHERE tid = '$_G[tid]' LIMIT 1");
 		if(!empty($replycredit_rule['times'])) {

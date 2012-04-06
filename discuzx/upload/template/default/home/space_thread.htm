@@ -124,7 +124,7 @@
 						<!--{loop $list $thread}-->
 						<tr{if $actives[me] && $viewtype=='reply' || $viewtype=='postcomment'} class="bw0_all"{/if}>
 							<td class="icn">
-								<a href="forum.php?mod=viewthread&tid=$thread[tid]&highlight=$index[keywords]" title="{lang open_new_window}" target="_blank">
+								<a href="forum.php?mod=viewthread&tid=$thread[tid]" title="{lang open_new_window}" target="_blank">
 								<!--{if $thread[folder] == 'lock'}-->
 									<img src="{IMGDIR}/folder_lock.gif" />
 								<!--{elseif $thread['special'] == 1}-->

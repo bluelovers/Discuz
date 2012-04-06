@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_forum.php 25846 2011-11-24 02:44:59Z chenmengshu $
+ *      $Id: function_forum.php 28432 2012-02-29 09:57:55Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -449,7 +449,7 @@ function loadforum() {
 			$archiveid = !empty($_G['gp_archiveid']) ? intval($_G['gp_archiveid']) : null;
 			$_G['thread'] = get_thread_by_tid($tid, '*', '', $archiveid);
 			if(!$_G['forum_auditstatuson'] && !empty($_G['thread'])
-					&& !($_G['thread']['displayorder'] >= 0 || (in_array($_G['thread']['displayorder'], array(-4,-3,-2)) && $_G['thread']['authorid'] == $_G['uid']))) {
+					&& !($_G['thread']['displayorder'] >= 0 || (in_array($_G['thread']['displayorder'], array(-4,-3,-2)) && $_G['uid'] && $_G['thread']['authorid'] == $_G['uid']))) {
 				$_G['thread'] = null;
 			}
 

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_smilies.php 19831 2011-01-19 07:54:16Z monkey $
+ *      $Id: admincp_smilies.php 26875 2011-12-27 03:30:35Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -50,7 +50,7 @@ if(!$operation) {
 		$dirfilter = array();
 		$query = DB::query("SELECT * FROM ".DB::table('forum_imagetype')." WHERE type='smiley' ORDER BY displayorder");
 		while($type = DB::fetch($query)) {
-			$squery = DB::query("SELECT COUNT(*) FROM ".DB::table('common_smiley')." WHERE typeid='$type[typeid]'");
+			$squery = DB::query("SELECT COUNT(*) FROM ".DB::table('common_smiley')." WHERE type='smiley' AND typeid='$type[typeid]'");
 			$smiliesnum = DB::result($squery, 0);
 			showtablerow('', array('class="td25"', 'class="td28"'), array(
 				"<input class=\"checkbox\" type=\"checkbox\" name=\"delete[]\" value=\"$type[typeid]\" ".($smiliesnum ? 'disabled' : '').">",

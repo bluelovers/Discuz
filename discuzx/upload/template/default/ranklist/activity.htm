@@ -17,15 +17,15 @@
 		<div class="bm bw0">
 			<h1 class="mt">{lang ranklist_activity}</h1>
 			<ul class="tb cl">
-				<li{if $_G[gp_view] == 'heats'} class="a"{/if}><a href="misc.php?mod=ranklist&type=activity&view=heats&orderby=$_G['gp_orderby']">{lang ranklist_hot}</a></li>
-				<li{if $_G[gp_view] == 'favtimes'} class="a"{/if}><a href="misc.php?mod=ranklist&type=activity&view=favtimes&orderby=$_G['gp_orderby']">{lang ranklist_favorite}</a></li>
-				<li{if $_G[gp_view] == 'sharetimes'} class="a"{/if}><a href="misc.php?mod=ranklist&type=activity&view=sharetimes&orderby=$_G['gp_orderby']">{lang ranklist_share}</a></li>
+				<li{if $_G[gp_view] == 'heats'} class="a"{/if}><a href="misc.php?mod=ranklist&type=activity&view=heats&orderby=$orderby">{lang ranklist_hot}</a></li>
+				<li{if $_G[gp_view] == 'favtimes'} class="a"{/if}><a href="misc.php?mod=ranklist&type=activity&view=favtimes&orderby=$orderby">{lang ranklist_favorite}</a></li>
+				<li{if $_G[gp_view] == 'sharetimes'} class="a"{/if}><a href="misc.php?mod=ranklist&type=activity&view=sharetimes&orderby=$orderby">{lang ranklist_share}</a></li>
 			</ul>
 			<p id="before" class="tbmu">
-				<a href="misc.php?mod=ranklist&type=activity&view=$_G[gp_view]&orderby=thismonth" id="2592000" {if $_G['gp_orderby'] == 'thismonth'}class="a"{/if} />{lang ranklist_month}</a><span class="pipe">|</span>
-				<a href="misc.php?mod=ranklist&type=activity&view=$_G[gp_view]&orderby=thisweek" id="604800" {if $_G['gp_orderby'] == 'thisweek'}class="a"{/if} />{lang ranklist_week}</a><span class="pipe">|</span>
-				<a href="misc.php?mod=ranklist&type=activity&view=$_G[gp_view]&orderby=today" id="86400" {if $_G['gp_orderby'] == 'today'}class="a"{/if} />{lang ranklist_today}</a><span class="pipe">|</span>
-				<a href="misc.php?mod=ranklist&type=activity&view=$_G[gp_view]&orderby=all" id="all" {if $_G['gp_orderby'] == 'all'}class="a"{/if} />{lang all}</a>
+				<a href="misc.php?mod=ranklist&type=activity&view=$_G[gp_view]&orderby=thismonth" id="2592000" {if $orderby == 'thismonth'}class="a"{/if} />{lang ranklist_month}</a><span class="pipe">|</span>
+				<a href="misc.php?mod=ranklist&type=activity&view=$_G[gp_view]&orderby=thisweek" id="604800" {if $orderby == 'thisweek'}class="a"{/if} />{lang ranklist_week}</a><span class="pipe">|</span>
+				<a href="misc.php?mod=ranklist&type=activity&view=$_G[gp_view]&orderby=today" id="86400" {if $orderby == 'today'}class="a"{/if} />{lang ranklist_today}</a><span class="pipe">|</span>
+				<a href="misc.php?mod=ranklist&type=activity&view=$_G[gp_view]&orderby=all" id="all" {if $orderby == 'all'}class="a"{/if} />{lang all}</a>
 			</p>
 			<!--{if $activitylist}-->
 				<table cellpadding="0" cellspacing="0" class="acl">

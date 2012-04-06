@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_attachment.php 23252 2011-06-28 09:34:48Z monkey $
+ *      $Id: forum_attachment.php 29038 2012-03-23 06:22:39Z songlixin $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -227,6 +227,19 @@ if($readmod == 4 && !empty($_SERVER['HTTP_RANGE'])) {
 
 if($attach['remote'] && !$_G['setting']['ftp']['hideurl'] && $isimage) {
 	dheader('location:'.$_G['setting']['ftp']['attachurl'].'forum/'.$attach['attachment']);
+} else {
+	if($attach['sha1'] && $attach['attachment'] == '') {
+		if($_G['gp_inajax']){ //qqdl 鏈接更新數
+			include template('common/header');
+			include template('common/footer');
+			exit;
+        }
+        require_once libfile('function/ftn');
+		$downurl = make_downloadurl($attach['sha1'],$attach['filesize'],$attach['filename']);
+		dheader('location:'.$downurl);
+	} else {
+		dheader('Content-Disposition: attachment; filename='.$attach['filename']);
+	}
 }
 
 $filesize = !$attach['remote'] ? filesize($filename) : $attach['filesize'];

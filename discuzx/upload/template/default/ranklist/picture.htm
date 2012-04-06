@@ -17,19 +17,19 @@
 		<div class="bm bw0">
 			<h1 class="mt">{lang ranklist_picture}</h1>
 			<ul class="tb cl">
-				<li{if $_G[gp_view] == 'hot'} class="a"{/if}><a href="misc.php?mod=ranklist&type=picture&view=hot&orderby=$_G['gp_orderby']">{lang hot_pic_ranklist}</a></li>
+				<li{if $_G[gp_view] == 'hot'} class="a"{/if}><a href="misc.php?mod=ranklist&type=picture&view=hot&orderby=$orderby">{lang hot_pic_ranklist}</a></li>
 				<!--{if $clicks}-->
 				<!--{loop $clicks $key $value}-->
-				<li{if $_G[gp_view] == $key} class="a"{/if}><a href="misc.php?mod=ranklist&type=picture&view=$key&orderby=$_G['gp_orderby']">$value[name]{lang ranklist}</a></li>
+				<li{if $_G[gp_view] == $key} class="a"{/if}><a href="misc.php?mod=ranklist&type=picture&view=$key&orderby=$orderby">$value[name]{lang ranklist}</a></li>
 				<!--{/loop}-->
 				<!--{/if}-->
-				<li{if $_G[gp_view] == 'sharetimes'} class="a"{/if}><a href="misc.php?mod=ranklist&type=picture&view=sharetimes&orderby=$_G['gp_orderby']">{lang ranklist_share}</a></li>
+				<li{if $_G[gp_view] == 'sharetimes'} class="a"{/if}><a href="misc.php?mod=ranklist&type=picture&view=sharetimes&orderby=$orderby">{lang ranklist_share}</a></li>
 			</ul>
 			<p id="before" class="tbmu">
-				<a href="misc.php?mod=ranklist&type=picture&view=$_G[gp_view]&orderby=thismonth" id="2592000" {if $_G['gp_orderby'] == 'thismonth'}class="a"{/if} />{lang ranklist_month}</a><span class="pipe">|</span>
-				<a href="misc.php?mod=ranklist&type=picture&view=$_G[gp_view]&orderby=thisweek" id="604800" {if $_G['gp_orderby'] == 'thisweek'}class="a"{/if} />{lang ranklist_week}</a><span class="pipe">|</span>
-				<a href="misc.php?mod=ranklist&type=picture&view=$_G[gp_view]&orderby=today" id="86400" {if $_G['gp_orderby'] == 'today'}class="a"{/if} />{lang ranklist_today}</a><span class="pipe">|</span>
-				<a href="misc.php?mod=ranklist&type=picture&view=$_G[gp_view]&orderby=all" id="all" {if $_G['gp_orderby'] == 'all'}class="a"{/if} />{lang all}</a>
+				<a href="misc.php?mod=ranklist&type=picture&view=$_G[gp_view]&orderby=thismonth" id="2592000" {if $orderby == 'thismonth'}class="a"{/if} />{lang ranklist_month}</a><span class="pipe">|</span>
+				<a href="misc.php?mod=ranklist&type=picture&view=$_G[gp_view]&orderby=thisweek" id="604800" {if $orderby == 'thisweek'}class="a"{/if} />{lang ranklist_week}</a><span class="pipe">|</span>
+				<a href="misc.php?mod=ranklist&type=picture&view=$_G[gp_view]&orderby=today" id="86400" {if $orderby == 'today'}class="a"{/if} />{lang ranklist_today}</a><span class="pipe">|</span>
+				<a href="misc.php?mod=ranklist&type=picture&view=$_G[gp_view]&orderby=all" id="all" {if $orderby == 'all'}class="a"{/if} />{lang all}</a>
 			</p>
 			<!--{if $picturelist}-->
 				<ul class="ptw ml mla cl">

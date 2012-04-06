@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_trade.php 20095 2011-02-14 09:32:12Z liulanbo $
+ *      $Id: forum_trade.php 27353 2012-01-17 08:03:54Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -35,7 +35,7 @@ if(!empty($orderid)) {
 	$language = lang('forum/misc');
 
 	$tradelog = daddslashes(DB::fetch_first("SELECT * FROM ".DB::table('forum_tradelog')." WHERE orderid='$orderid'"), 1);
-	if(empty($tradelog) || $_G['uid'] != $tradelog['sellerid'] && $_G['uid'] != $tradelog['buyerid']) {
+	if(!$_G['forum_auditstatuson'] && (empty($tradelog) || $_G['uid'] != $tradelog['sellerid'] && $_G['uid'] != $tradelog['buyerid'])) {
 		showmessage('undefined_action', NULL);
 	}
 

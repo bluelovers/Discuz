@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: editor.js 25628 2011-11-16 08:41:21Z chenmengshu $
+	$Id: editor.js 27008 2011-12-30 01:39:09Z monkey $
 */
 
 var editorcurrentheight = 400, editorminheight = 400, savedataInterval = 30, editbox = null, editwin = null, editdoc = null, editcss = null, savedatat = null, savedatac = 0, autosave = 1, framemObj = null, cursor = -1, stack = [], initialized = false, postSubmited = false, editorcontroltop = false, editorcontrolwidth = false, editorcontrolheight = false, editorisfull = 0, fulloldheight = 0, savesimplodemode = null;
@@ -602,6 +602,8 @@ function getCaret() {
 		checkFocus();
 		var sel = document.selection.createRange();
 		editbox.sel = sel;
+		editdoc._selectionStart = editdoc.selectionStart;
+		editdoc._selectionEnd = editdoc.selectionEnd;
 	}
 }
 
@@ -1256,6 +1258,12 @@ function insertText(text, movestart, moveend, select, sel) {
 		}
 	} else {
 		if(!isUndefined(editdoc.selectionStart)) {
+			if(editdoc._selectionStart) {
+				editdoc.selectionStart = editdoc._selectionStart;
+				editdoc.selectionEnd = editdoc._selectionEnd;
+				editdoc._selectionStart = 0;
+				editdoc._selectionEnd = 0;
+			}
 			var opn = editdoc.selectionStart + 0;
 			editdoc.value = editdoc.value.substr(0, editdoc.selectionStart) + text + editdoc.value.substr(editdoc.selectionEnd);
 

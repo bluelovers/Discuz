@@ -3,7 +3,7 @@
    [Discuz!] (C)2001-2009 Comsenz Inc.
    This is NOT a freeware, use is subject to license terms
 
-   $Id: connect.php 24707 2011-10-09 02:48:26Z yangli $
+   $Id: connect.php 29182 2012-03-28 06:28:42Z liudongdong $
 */
 
 define('IN_CONNECT', 1);
@@ -31,7 +31,7 @@ if(!in_array($mod, array('config', 'login', 'feed', 'check'))) {
 }
 
 if(!$_G['setting']['connect']['allow']) {
-	showmessage('qqconnect_closed');
+	showmessage('qqconnect:qqconnect_closed');
 }
 
 define('CURMODULE', $mod);

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portalcp_article.php 7701 2010-04-12 06:01:33Z zhengqingpeng $
+ *      $Id: portalcp_category.php 26941 2011-12-28 02:49:46Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -22,7 +22,7 @@ $perpagearr = array(20, 30,40, 50, 100);
 $_GET['type'] = isset($_GET['type']) && in_array($_GET['type'], array('unrecommend', 'recommended', 'me')) ? $_GET['type'] : 'all';
 $perpage = isset($_GET['perpage']) && in_array($_GET['perpage'], $perpagearr) ? $_GET['perpage'] : 20;
 $typearr[$_GET['type']] = 'class="a"';
-$theurl = "portal.php?mod=portalcp&ac=category&catid=$catid&perpage=$perpage&type=$_GET[type]";
+$theurl = "portal.php?mod=portalcp&ac=category&catid=$catid&perpage=$perpage&type=$_GET[type]&formhash=".FORMHASH."&searchkey=".urlencode($_GET['searchkey']);
 
 $allowmanage = checkperm('allowmanagearticle');
 $allowpost = checkperm('allowpostarticle');

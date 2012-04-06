@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: update.php 23795 2011-08-10 05:45:06Z cnteacher $
+ *      $Id: update.php 27663 2012-02-09 04:59:02Z monkey $
  */
 
 include_once('../source/class/class_core.php');
@@ -1288,7 +1288,7 @@ if($_GET['step'] == 'start') {
 				$threadimage = DB::fetch_first("SELECT attachment, remote FROM ".DB::table(getattachtablebytid($row['tid']))." WHERE pid='$row[pid]' AND isimage IN ('1', '-1') ORDER BY width DESC LIMIT 1");
 				if($threadimage['attachment']) {
 					$threadimage = daddslashes($threadimage);
-					$insertsql[] = "('$row[tid]', '$threadimage[attachment]', '$threadimage[remote]')";
+					$insertsql[$row['tid']] = "('$row[tid]', '$threadimage[attachment]', '$threadimage[remote]')";
 				}
 			}
 			if($insertsql) {

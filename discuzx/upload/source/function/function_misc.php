@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_misc.php 26292 2011-12-08 03:07:00Z zhengqingpeng $
+ *      $Id: function_misc.php 27060 2012-01-04 01:32:05Z songlixin $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -256,11 +256,12 @@ function procthread($thread, $timeformat = 'd') {
 	if($postsnum  > $_G['ppp']) {
 		$posts = $postsnum;
 		$topicpages = ceil($posts / $_G['ppp']);
+		$domain = 'http://'.($_G['setting']['domain']['app']['forum'] ? $_G['setting']['domain']['app']['forum'] : ($_G['setting']['domain']['app']['default'] ? $_G['setting']['domain']['app']['default'] : '')).'/';
 		for($i = 1; $i <= $topicpages; $i++) {
 			if(!in_array('forum_viewthread', $_G['setting']['rewritestatus'])) {
 				$pagelinks .= '<a href="forum.php?mod=viewthread&tid='.$thread['tid'].'&page='.$i.($_G['gp_from'] ? '&from='.$_G['gp_from'] : '').'" target="_blank">'.$i.'</a> ';
 			} else {
-				$pagelinks .= '<a href="'.rewriteoutput('forum_viewthread', 1, '', $thread['tid'], $i, '', '').'" target="_blank">'.$i.'</a> ';
+				$pagelinks .= '<a href="'.rewriteoutput('forum_viewthread', 1, $domain, $thread['tid'], $i, '', '').'" target="_blank">'.$i.'</a> ';
 			}
 			if($i == 6) {
 				$i = $topicpages + 1;
@@ -270,7 +271,7 @@ function procthread($thread, $timeformat = 'd') {
 			if(!in_array('forum_viewthread', $_G['setting']['rewritestatus'])) {
 				$pagelinks .= ' .. <a href="forum.php?mod=viewthread&tid='.$thread['tid'].'&page='.$topicpages.'" target="_blank">'.$topicpages.'</a> ';
 			} else {
-				$pagelinks .= ' .. <a href="'.rewriteoutput('forum_viewthread', 1, '', $thread['tid'], $topicpages, '', '').'" target="_blank">'.$topicpages.'</a> ';
+				$pagelinks .= ' .. <a href="'.rewriteoutput('forum_viewthread', 1, $domain, $thread['tid'], $topicpages, '', '').'" target="_blank">'.$topicpages.'</a> ';
 			}
 		}
 		$thread['multipage'] = '... '.$pagelinks;
@@ -370,6 +371,14 @@ function acpmsg($message, $url = '', $type = '', $extra = '') {
 
 function savebanlog($username, $origgroupid, $newgroupid, $expiration, $reason) {
 	global $_G;
+	if (isset($_G['gp_formhash']) && $_G['gp_bannew']) {
+		require_once libfile('function/sec');
+		if ($newgroupid < 4 || $newgroupid >= 10) {
+			updateMemberRecover($username);
+		} else {
+			logBannedMember($username, $reason);
+		}
+	}
 	writelog('banlog', dhtmlspecialchars("$_G[timestamp]\t{$_G[member][username]}\t$_G[groupid]\t$_G[clientip]\t$username\t$origgroupid\t$newgroupid\t$expiration\t$reason"));
 }
 
@@ -407,6 +416,8 @@ function undeletethreads($tids) {
 	global $_G;
 	$threadsundel = 0;
 	if($tids && is_array($tids)) {
+		require_once libfile('function/sec');
+		updateThreadOperate($tids, 1);
 		foreach($tids as $t) {
 			my_thread_log('restore', array('tid' => $t));
 		}
@@ -470,6 +481,8 @@ function recyclebinpostundelete($undeletepids, $posttableid = false) {
 	if(empty($undeletepids)) {
 		return $postsundel;
 	}
+	require_once libfile('function/sec');
+	updatePostOperate($undeletepids, 1);
 
 	foreach($undeletepids as $pid) {
 		my_post_log('restore', array('pid' => $pid));

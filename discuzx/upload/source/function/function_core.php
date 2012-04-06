@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_core.php 26648 2011-12-19 03:03:50Z zhangguosheng $
+ *      $Id: function_core.php 29089 2012-03-26 10:23:28Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -385,7 +385,7 @@ function dstrpos($string, &$arr, $returnvalue = false) {
 }
 
 function isemail($email) {
-	return strlen($email) > 6 && preg_match("/^[\w\-\.]+@[\w\-\.]+(\.\w+)+$/", $email);
+	return strlen($email) > 6 && preg_match("/^([A-Za-z0-9\-_.+]+)@([A-Za-z0-9\-]+[.][A-Za-z0-9\-.]+)$/", $email);
 }
 
 function quescrypt($questionid, $answer) {
@@ -528,8 +528,9 @@ function template($file, $templateid = 0, $tpldir = '', $gettplfile = 0, $primal
 			$preend = '_diy_preview';
 			$_G['gp_preview'] = !empty($_G['gp_preview']) ? $_G['gp_preview'] : '';
 			$curtplname = $oldfile;
-			if(isset($_G['cache']['diytemplatename'.$_G['basescript']])) {
-				$diytemplatename = &$_G['cache']['diytemplatename'.$_G['basescript']];
+			$basescript = $_G['mod'] == 'viewthread' && !empty($_G['thread']) ? 'forum' : $_G['basescript'];
+			if(isset($_G['cache']['diytemplatename'.$basescript])) {
+				$diytemplatename = &$_G['cache']['diytemplatename'.$basescript];
 			} else {
 				$diytemplatename = &$_G['cache']['diytemplatename'];
 			}
@@ -577,7 +578,10 @@ function template($file, $templateid = 0, $tpldir = '', $gettplfile = 0, $primal
 		$file = 'mobile/'.$oldfile;
 	}
 
-	$tplfile = ($tpldir ? $tpldir.'/' : './template/').$file.'.htm';
+	if(!$tpldir) {
+		$tpldir = './template/default';
+	}
+	$tplfile = $tpldir.'/'.$file.'.htm';
 
 	$file == 'common/header' && defined('CURMODULE') && CURMODULE && $file = 'common/header_'.$_G['basescript'].'_'.CURMODULE;
 
@@ -609,7 +613,7 @@ function template($file, $templateid = 0, $tpldir = '', $gettplfile = 0, $primal
 
 	$cachefile = './data/template/'.(defined('STYLEID') ? STYLEID.'_' : '_').$templateid.'_'.str_replace('/', '_', $file).'.tpl.php';
 
-	if($templateid != 1 && !file_exists(DISCUZ_ROOT.$tplfile)) {
+	if($templateid != 1 && !file_exists(DISCUZ_ROOT.$tplfile) && !file_exists(DISCUZ_ROOT.($tplfile = $tpldir.$filebak.'.htm'))) {
 		$tplfile = './template/default/'.$filebak.'.htm';
 	}
 
@@ -675,7 +679,7 @@ function loadcache($cachenames, $force = false) {
 		foreach($cachedata as $cname => $data) {
 			if($cname == 'setting') {
 				$_G['setting'] = $data;
-			} elseif(strpos($cname, 'usergroup_'.$_G['groupid']) !== false) {
+			} elseif($cname == 'usergroup_'.$_G['groupid']) {
 				$_G['cache'][$cname] = $_G['group'] = $data;
 			} elseif($cname == 'style_default') {
 				$_G['cache'][$cname] = $_G['style'] = $data;
@@ -1119,6 +1123,8 @@ function output() {
 	if(defined('IN_MOBILE')) {
 		mobileoutput();
 	}
+	include_once libfile('function/cloud');
+	show();
 	$havedomain = implode('', $_G['setting']['domain']['app']);
 	if($_G['setting']['rewritestatus'] || !empty($havedomain)) {
 		$content = ob_get_contents();
@@ -1633,7 +1639,7 @@ function censor($message, $modword = NULL, $return = FALSE) {
 	require_once libfile('class/censor');
 	$censor = discuz_censor::instance();
 	$censor->check($message, $modword);
-	if($censor->modbanned() && $_G['group']['ignorecensor']) {
+	if($censor->modbanned() && !$_G['group']['ignorecensor']) {
 		$wordbanned = implode(', ', $censor->words_found);
 		if($return) {
 			return array('message' => lang('message', 'word_banned', array('wordbanned' => $wordbanned)));
@@ -1655,7 +1661,7 @@ function censor($message, $modword = NULL, $return = FALSE) {
 					$message = str_replace('[url]'.$urllist[0][$key].'[/url]', $urllist[0][$key], $message);
 					$message = preg_replace(
 						array(
-							"@\[url=".preg_quote($urllist[0][$key],'@')."\](.*?)\[/url\]@is",
+							"@\[url=.*?".preg_quote($urllist[0][$key],'@').".*?\](.*?)\[/url\]@is",
 							"@href=('|\")".preg_quote($urllist[0][$key],'@')."\\1@is",
 							"@\[url\](.*?".preg_quote($urllist[0][$key],'@').".*?)\[/url\]@is",
 						),
@@ -1748,7 +1754,7 @@ function stripsearchkey($string) {
 
 function dmkdir($dir, $mode = 0777, $makeindex = TRUE){
 	if(!is_dir($dir)) {
-		dmkdir(dirname($dir));
+		dmkdir(dirname($dir), $mode, $makeindex);
 		@mkdir($dir, $mode);
 		if(!empty($makeindex)) {
 			@touch($dir.'/index.html'); @chmod($dir.'/index.html', 0777);
@@ -2338,7 +2344,7 @@ function get_url_list($message) {
 	$return = array();
 
 	(strpos($message, '[/img]') || strpos($message, '[/flash]')) && $message = preg_replace("/\[img[^\]]*\]\s*([^\[\<\r\n]+?)\s*\[\/img\]|\[flash[^\]]*\]\s*([^\[\<\r\n]+?)\s*\[\/flash\]/is", '', $message);
-	if(preg_match_all("/((https?|ftp|gopher|news|telnet|rtsp|mms|callto):\/\/|www\.)([a-z0-9\/\-_+=.~!%@?#%&;:$\\()|]+\s*)/i", $message, $urllist)) {
+	if(preg_match_all("/((https?|ftp|gopher|news|telnet|rtsp|mms|callto|bctp|thunder|qqdl|synacast){1}:\/\/|www\.)[^\[\]\"']+/i", $message, $urllist)) {
 		foreach($urllist[0] as $key => $val) {
 			$val = trim($val);
 			$return[0][$key] = $val;

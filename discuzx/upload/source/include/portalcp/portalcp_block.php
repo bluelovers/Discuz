@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portalcp_block.php 26659 2011-12-19 05:44:20Z zhangguosheng $
+ *      $Id: portalcp_block.php 27354 2012-01-17 08:58:18Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -520,6 +520,8 @@ if($op == 'block') {
 		$item['itemtype'] = !empty($_POST['locked']) ? '1' : '2';
 		$item['title'] = htmlspecialchars($_POST['title']);
 		$item['url'] = $_POST['url'];
+		$block['param']['summarylength'] = empty($block['param']['summarylength']) ? 80 : $block['param']['summarylength'];
+		$block['param']['titlelength'] = empty($block['param']['titlelength']) ? 40 : $block['param']['titlelength'];
 		$item['summary'] = cutstr($_POST['summary'], $block['param']['summarylength'], '');
 		if($_FILES['pic']['tmp_name']) {
 			$result = pic_upload($_FILES['pic'], 'portal');

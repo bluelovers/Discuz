@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: api_tenpay.php 22450 2011-05-09 06:47:27Z liulanbo $
+ *      $Id: api_tenpay.php 29120 2012-03-27 04:47:51Z monkey $
  */
 
 
@@ -43,7 +43,7 @@ class RequestHandler {
 	}
 
 	function RequestHandler() {
-		$this->gateUrl = "http://service.tenpay.com/cgi-bin/v3.0/payservice.cgi";
+		$this->gateUrl = "https://www.tenpay.com/cgi-bin/med/show_opentrans.cgi";
 		$this->key = "";
 		$this->parameters = array();
 		$this->debugInfo = "";
@@ -207,7 +207,7 @@ class MediPayRequestHandler extends RequestHandler {
 	}
 
 	function MediPayRequestHandler() {
-		$this->setGateURL("http://service.tenpay.com/cgi-bin/v3.0/payservice.cgi");
+		$this->setGateURL("https://www.tenpay.com/cgi-bin/med/show_opentrans.cgi");
 	}
 
 	function init() {
@@ -502,11 +502,17 @@ function trade_notifycheck($type) {
 	global $_G;
 
 	if(DISCUZ_TENPAY_DIRECT && ($type == 'credit' || $type == 'invite')) {
+		if(!DISCUZ_SECURITYCODE) {
+			exit('Access Denied');
+		}
 		$resHandler = new ResponseHandler();
 		$resHandler->setKey(DISCUZ_SECURITYCODE);
 
 		$resHandler->setParameter("pay_time", "");
 	} else {
+		if(!DISCUZ_TENPAY_OPENTRANS_KEY) {
+			exit('Access Denied');
+		}
 		$resHandler = new MediPayResponseHandler();
 		$resHandler->setKey(DISCUZ_TENPAY_OPENTRANS_KEY);
 	}

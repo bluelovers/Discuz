@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admin.php 23290 2011-07-04 01:29:24Z cnteacher $
+ *      $Id: admin.php 28030 2012-02-21 05:43:34Z monkey $
  */
 
 define('IN_ADMINCP', TRUE);
@@ -30,10 +30,10 @@ $admincp->core  = & $discuz;
 $admincp->init();
 
 
-$admincp_actions_founder = array('templates', 'db', 'founder', 'postsplit', 'threadsplit');
+$admincp_actions_founder = array('templates', 'db', 'founder', 'postsplit', 'threadsplit', 'cloudaddons');
 $admincp_actions_normal = array('index', 'setting', 'members', 'profilefields', 'admingroup', 'usergroups',
 	'forums', 'threadtypes', 'threads', 'moderate', 'attach', 'smilies', 'recyclebin', 'recyclebinpost', 'prune',
-	'styles', 'addons', 'plugins', 'tasks', 'magics', 'medals', 'google', 'announce', 'faq', 'ec',
+	'styles', 'plugins', 'tasks', 'magics', 'medals', 'google', 'announce', 'faq', 'ec',
 	'tradelog', 'jswizard', 'project', 'counter', 'misc', 'adv', 'logs', 'tools', 'portalperm',
 	'checktools', 'search', 'upgrade', 'article', 'block', 'blockstyle', 'blockxml', 'portalcategory', 'blogcategory', 'albumcategory', 'topic', 'credits',
 	'doing', 'group', 'blog', 'feed', 'album', 'pic', 'comment', 'share', 'click', 'specialuser', 'postsplit', 'threadsplit', 'report',

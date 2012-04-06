@@ -1,10 +1,10 @@
 <?php
 
 /**
- *      [Discuz!] (C)2001-2099 Comsenz Inc.
- *      This is NOT a freeware, use is subject to license terms
+ *		[Discuz!] (C)2001-2099 Comsenz Inc.
+ *		This is NOT a freeware, use is subject to license terms
  *
- *      $Id: Manyou.php 26590 2011-12-16 03:20:04Z yangli $
+ *		$Id: Manyou.php 28952 2012-03-20 09:18:17Z songlixin $
  */
 
 define('MY_FRIEND_NUM_LIMIT', 2000);
@@ -210,7 +210,7 @@ EOT;
 					}
 				}
 			} else {
-				$res['result']  = $data->getResult();
+				$res['result']	= $data->getResult();
 			}
 		} else {
 			$res['errCode'] = $data->getErrno();
@@ -292,7 +292,7 @@ EOT;
 		return new ErrorResponse('2', 'Method not implemented.');
 	}
 
-	function onUserApplicationAdd($uId, $appId, $appName, $privacy, $allowSideNav, $allowFeed, $allowProfileLink,  $defaultBoxType, $defaultMYML, $defaultProfileLink, $version, $displayMethod, $displayOrder = null, $userPanelArea = null, $canvasTitle = null,  $isFullscreen = null , $displayUserPanel = null, $additionalStatus = null) {
+	function onUserApplicationAdd($uId, $appId, $appName, $privacy, $allowSideNav, $allowFeed, $allowProfileLink,  $defaultBoxType, $defaultMYML, $defaultProfileLink, $version, $displayMethod, $displayOrder = null, $userPanelArea = null, $canvasTitle = null,	$isFullscreen = null , $displayUserPanel = null, $additionalStatus = null) {
 		return new ErrorResponse('2', 'Method not implemented.');
 	}
 
@@ -340,7 +340,7 @@ EOT;
 		return new ErrorResponse('2', 'Method not implemented.');
 	}
 
-	function onApplicationUpdate($appId, $appName, $version, $displayMethod, $displayOrder = null, $userPanelArea = null, $canvasTitle = null,  $isFullscreen = null, $displayUserPanel = null, $additionalStatus = null) {
+	function onApplicationUpdate($appId, $appName, $version, $displayMethod, $displayOrder = null, $userPanelArea = null, $canvasTitle = null,	$isFullscreen = null, $displayUserPanel = null, $additionalStatus = null) {
 		return new ErrorResponse('2', 'Method not implemented.');
 	}
 
@@ -746,9 +746,9 @@ class SearchHelper {
 					'pid'		=> 'pId',
 					'isgroup' => 'isGroup',
 					'posttableid' => 'postTableId',
-					'favtimes'  => 'favoriteTimes',
+					'favtimes'	=> 'favoriteTimes',
 					'sharetimes'=> 'shareTimes',
-					'icon'  => 'icon',
+					'icon'	=> 'icon',
 					);
 		$map2 = array(
 					'dateline'	=> 'createdTime',
@@ -1050,9 +1050,9 @@ class SearchHelper {
 	}
 
 	function getPollInfo($tIds) {
-        if (!is_array($tIds) || count($tIds) <= 0) {
-            return array();
-        }
+		if (!is_array($tIds) || count($tIds) <= 0) {
+			return array();
+		}
 
 		$sql = 'SELECT * FROM ' . DB::table('forum_polloption') . ' WHERE tid IN (' . implode(',', $tIds) . ')';
 		$result = array();
@@ -1183,7 +1183,24 @@ class Cloud_Client {
 	function _callMethod($method, $args) {
 		$this->errno = 0;
 		$this->errmsg = '';
-		$url = $this->url;
+		$avgDomain = explode('.', $method);
+		switch ($avgDomain[0]) {
+			case 'site':
+				$url = 'http://api.discuz.qq.com/site_cloud.php';
+				break;
+			case 'qqgroup':
+				$url = 'http://api.discuz.qq.com/site_qqgroup.php';
+				break;
+			case 'connect':
+				$url = 'http://api.discuz.qq.com/site_connect.php';
+				break;
+			case 'security':
+				$url = 'http://api.discuz.qq.com/site_security.php';
+				break;
+			default:
+				$url = $this->url;
+		}
+
 
 		$params = array();
 		$params['sId'] = $this->sId;
@@ -1339,6 +1356,78 @@ class Cloud_Client {
 		return $this->_callMethod('connect.sync', array('qzoneLikeQQ' => $qzoneLikeQQ, 'mblogFollowQQ' => $mblogQQ));
 	}
 
+
+	function securityReportUserRegister($batchData) {
+		global $_G;
+
+		$data = array(
+					  'sId' => $this->sId,
+					  );
+
+		$data['data'] = $batchData;
+		return $this->_callMethod('security.user.register', $data);
+	}
+
+	function securityReportUserLogin($batchData) {
+
+		global $_G;
+
+		$data = array(
+					  'sId' => $this->sId,
+					  );
+
+		$data['data'] = $batchData;
+		return $this->_callMethod('security.user.login', $data);
+	}
+
+	function securityReportPost($batchData) {
+
+		global $_G;
+
+		$data = array(
+					  'sId' => $this->sId,
+					  );
+
+		$data['data'] = $batchData;
+
+		return $this->_callMethod('security.post.handlePost', $data);
+	}
+
+	function securityReportDelPost($batchData) {
+		global $_G;
+
+		$data = array(
+			'sId' => $this->sId,
+		);
+		$data['data'] = $batchData;
+
+		return $this->_callMethod('security.post.del', $data);
+	}
+
+	function securityReportBanUser($batchData) {
+		global $_G;
+
+		$data = array(
+			'sId' => $this->sId,
+		);
+		$data['data'] = $batchData;
+
+		return $this->_callMethod('security.user.ban', $data);
+	}
+
+	function securityReportOperation($sSiteUid, $operateType, $results, $operateTime, $extra = array()) {
+
+		$data = array(
+					  'sId' => $this->sId,
+					  'sSiteUid' => $sSiteUid,
+					  'operateType' => $operateType,
+					  'operateTime' => $operateTime,
+					  'results' => $results,
+					  'extra' => $extra
+					  );
+		return $this->_callMethod('security.sitemaster.handleOperation', $data);
+	}
+
 }
 
 class Discuz_Cloud_Client {
@@ -1484,6 +1573,99 @@ class Discuz_Cloud_Client {
 		return $data;
 	}
 
+}
+
+class Security_Cloud_Client {
+
+	function Security_Cloud_Client($debug = false) {
+
+		if(!defined('IN_DISCUZ')) {
+			exit('Access Denied');
+		}
+
+		global $_G;
+
+		require_once DISCUZ_ROOT.'./source/discuz_version.php';
+
+		$this->siteId = !empty($_G['setting']['my_siteid']) ? $_G['setting']['my_siteid'] : '';
+		$this->siteKey = !empty($_G['setting']['my_sitekey']) ? $_G['setting']['my_sitekey'] : '';
+		$this->siteUrl = $_G['siteurl'];
+
+		require_once libfile('function/cloud');
+		$this->apiVersion = cloud_get_api_version();
+
+		$this->siteUid = $_G['member']['uid'];
+
+		$this->Client = new Cloud_Client($this->siteId, $this->siteKey);
+
+		if ($debug) {
+			$this->Client->debug = true;
+			$this->debug = true;
+		}
+
+		if ($_G['setting']['cloud_api_ip']) {
+			$this->Client->cloudApiIp = $_G['setting']['cloud_api_ip'];
+		}
+
+	}
+
+
+	function securityReportUserRegister($batchData) {
+
+		$data = $this->Client->securityReportUserRegister($batchData);
+
+		$this->errno = $this->Client->errno;
+		$this->errmsg = $this->Client->errmsg;
+
+		return $data;
+	}
+
+	function securityReportUserLogin($batchData) {
+
+		$data = $this->Client->securityReportUserLogin($batchData);
+
+		$this->errno = $this->Client->errno;
+		$this->errmsg = $this->Client->errmsg;
+
+		return $data;
+	}
+
+
+	function securityReportPost($batchData) {
+
+		$data = $this->Client->securityReportPost($batchData);
+
+		$this->errno = $this->Client->errno;
+		$this->errmsg = $this->Client->errmsg;
+
+		return $data;
+	}
+
+	function securityReportDelPost($batchData) {
+		$data = $this->Client->securityReportDelPost($batchData);
+
+		$this->errno = $this->Client->errno;
+		$this->errmsg = $this->Client->errmsg;
+		return $data;
+	}
+
+	function securityReportBanUser($batchData) {
+		$data = $this->Client->securityReportBanUser($batchData);
+
+		$this->errno = $this->Client->errno;
+		$this->errmsg = $this->Client->errmsg;
+		return $data;
+	}
+
+	function securityReportOperation($operateType, $results, $operateTime, $extra = array()) {
+
+		$data = $this->Client->securityReportOperation($this->siteUid, $operateType, $results, $operateTime, $extra);
+
+		$this->errno = $this->Client->errno;
+		$this->errmsg = $this->Client->errmsg;
+
+		return $data;
+	}
 }
 
 ?>

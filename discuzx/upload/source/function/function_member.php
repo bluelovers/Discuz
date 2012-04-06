@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_login.php 12578 2010-07-09 15:41:43Z zhangguosheng $
+ *      $Id: function_member.php 27351 2012-01-17 07:43:08Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -282,4 +282,21 @@ function clearcookies() {
 	$_G['username'] = $_G['member']['password'] = '';
 }
 
+function checkemail($email) {
+
+	$email = strtolower(trim($email));
+	if(strlen($email) > 32) {
+		showmessage('profile_email_illegal', '', array(), array('handle' => false));
+	}
+	loaducenter();
+	$ucresult = uc_user_checkemail($email);
+
+	if($ucresult == -4) {
+		showmessage('profile_email_illegal', '', array(), array('handle' => false));
+	} elseif($ucresult == -5) {
+		showmessage('profile_email_domain_illegal', '', array(), array('handle' => false));
+	} elseif($ucresult == -6) {
+		showmessage('profile_email_duplicate', '', array(), array('handle' => false));
+	}
+}
 ?>

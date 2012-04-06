@@ -96,6 +96,7 @@ class uccode {
 	}
 
 	function parseemail($email, $text) {
+		$text = str_replace('\"', '"', $text);
 		if(!$email && preg_match("/\s*([a-z0-9\-_.+]+)@([a-z0-9\-_]+[.][a-z0-9\-_.]+)\s*/i", $text, $matches)) {
 			$email = trim($matches[0]);
 			return '<a href="mailto:'.$email.'">'.$email.'</a>';

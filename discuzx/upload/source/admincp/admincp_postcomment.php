@@ -144,10 +144,10 @@ if(submitcheck('searchsubmit') || $newlist) {
 		$or = '';
 		$message = explode(',', str_replace(' ', '', $message));
 
-		for($i = 0; $i < count($message); $i++) {
+		for($i = 0, $l = count($message); $i < $l; $i++) {
 			if(preg_match("/\{(\d+)\}/", $message[$i])) {
 				$message[$i] = preg_replace("/\\\{(\d+)\\\}/", ".{0,\\1}", preg_quote($message[$i], '/'));
-				$message .= " $or c.comment REGEXP '".$message[$i]."'";
+				$sqlmessage .= " $or c.comment REGEXP '".$message[$i]."'";
 			} else {
 				$sqlmessage .= " $or c.comment LIKE '%".$message[$i]."%'";
 			}

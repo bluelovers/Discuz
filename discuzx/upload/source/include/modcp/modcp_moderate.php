@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: modcp_moderate.php 22329 2011-05-03 01:43:03Z monkey $
+ *      $Id: modcp_moderate.php 27554 2012-02-06 02:46:43Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_MODCP')) {
@@ -232,7 +232,7 @@ if($op == 'replies') {
 			$recyclebinpids = '0';
 			$pids = array();
 			while($post = DB::fetch($query)) {
-				if($modforums['recyclebin'][$post['fid']]) {
+				if($modforums['recyclebins'][$post['fid']]) {
 					$recyclebinpids .= ','.$post['pid'];
 				} else {
 					$pids[] = $post['pid'];
@@ -391,7 +391,7 @@ if($op == 'replies') {
 			$recyclebintids = '0';
 			$query = DB::query("SELECT tid, fid, authorid, subject FROM ".DB::table('forum_thread')." WHERE tid IN ($ids) AND displayorder='$pstat' AND ".($modfidsadd ? $modfidsadd : '1'));
 			while($thread = DB::fetch($query)) {
-				if($modforums['recyclebin'][$thread['fid']]) {
+				if($modforums['recyclebins'][$thread['fid']]) {
 					$recyclebintids .= ','.$thread['tid'];
 				} else {
 					$deletetids[] = $thread['tid'];

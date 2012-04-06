@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_tradelog.php 22192 2011-04-26 01:36:29Z monkey $
+ *      $Id: admincp_tradelog.php 27353 2012-01-17 08:03:54Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -55,7 +55,7 @@ while($tradelog = DB::fetch($query)) {
 		$tradelog['price'],
 		$tradelog['credit'],
 		$tradelog['tax'],
-		'<a target="_blank" href="forum.php?mod=trade&orderid='.$tradelog['orderid'].'">'.$tradelog['status'].'<br />'.$tradelog['lastupdate']
+		'<a target="_blank" href="forum.php?mod=trade&orderid='.$tradelog['orderid'].'&tid='.$tradelog['tid'].'&modthreadkey='.modauthkey($tradelog['tid']).'">'.$tradelog['status'].'<br />'.$tradelog['lastupdate']
 	));
 }
 

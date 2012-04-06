@@ -48,11 +48,11 @@ if ($pluginop == 'config') {
 
 	$_G['gp_share_url'] = $_G['connect']['discuz_new_share_url'];
 
-	$posttable = getposttablebytid($tid);
-	$post = DB::fetch_first("SELECT * FROM ".DB::table($posttable)." WHERE tid = '$tid' AND first='1' AND invisible='0'");
 	$thread = DB::fetch_first("SELECT * FROM ".DB::table('forum_thread')." WHERE tid = '$tid' AND displayorder >= 0");
+	$posttable = 'forum_post'.($thread['posttableid'] ? "_$thread[posttableid]" : '');
+	$post = DB::fetch_first("SELECT * FROM ".DB::table($posttable)." WHERE tid = '$tid' AND first='1' AND invisible='0'");
 
-	if ($_G['group']['allowgetimage'] && $thread['price'] == 0) {
+	if ($_G['group']['allowgetimage'] && $thread['price'] == 0 && $post['pid']) {
 		connect_parse_bbcode($post['message'], $thread['fid'], $post['pid'], $post['htmlon'], $attach_images);
 		if ($attach_images && is_array($attach_images)) {
 			$_G['gp_share_images'] = array_slice($attach_images, 0, 3);
@@ -75,52 +75,59 @@ if ($pluginop == 'config') {
 
 	connect_merge_member();
 
-	$api_url = $_G['connect']['api_url'] . '/connect/share/new';
-
-	$extra = array();
-	$extra['oauth_token'] = $_G['member']['conuin'];
-	$sig_params = connect_get_oauth_signature_params($extra);
-	$oauth_token_secret = $_G['member']['conuinsecret'];
-	$sig_params['oauth_signature'] = connect_get_oauth_signature($api_url, $sig_params, 'POST', $oauth_token_secret);
-
-	$params['sh_type'] = $sh_type;
-	$params['subject'] = $_G['gp_subject'];
-	$params['share_subject'] = $_G['gp_share_subject'];
-	$params['thread_id'] = $_G['gp_thread_id'];
-	$params['author'] = $_G['gp_author'];
-	$params['author_id'] = $_G['gp_author_id'];
-	$params['forum_id'] = $_G['gp_forum_id'];
-	$params['p_id'] = $_G['gp_post_id'];
-	$parmas['u_id'] = $_G['uid'];
-	$params['reason'] = $_G['gp_reason'];
-	$params['content'] = $_G['gp_html_content'];
-	$params['client_ip'] = $_G['clientip'];
-	$params['attach_images'] = $_G['gp_attach_image'];
-	$params = array_merge($sig_params, $params);
-
-	$response = connect_output_php($api_url . '?', cloud_http_build_query($params, '', '&'));
-	if(!isset($response['status'])) {
-		$code = 100;
-		connect_errlog($code, lang('connect', 'connect_errlog_server_no_response'));
-		$message = lang('connect', 'server_busy');
+	if (!$_G['member']['conuinsecret']) {
+		$message = lang('plugin/qqconnect', 'connect_access_token_out_of_date_share');
 	} else {
-		if ($response['status'] == 0) {
-			$code = $response['status'];
-			if ($sh_type == 2) {
-				$message = lang('connect', 'broadcast_success');
-			} else {
-				$message = lang('connect', 'share_success');
-			}
-		} else {
+
+		$api_url = $_G['connect']['api_url'] . '/connect/share/new';
+
+		$extra = array();
+		$extra['oauth_token'] = $_G['member']['conuin'];
+		$sig_params = connect_get_oauth_signature_params($extra);
+		$oauth_token_secret = $_G['member']['conuinsecret'];
+		$sig_params['oauth_signature'] = connect_get_oauth_signature($api_url, $sig_params, 'POST', $oauth_token_secret);
+
+		$params['sh_type'] = $sh_type;
+		$params['subject'] = $_G['gp_subject'];
+		$params['share_subject'] = $_G['gp_share_subject'];
+		$params['thread_id'] = $_G['gp_thread_id'];
+		$params['author'] = $_G['gp_author'];
+		$params['author_id'] = $_G['gp_author_id'];
+		$params['forum_id'] = $_G['gp_forum_id'];
+		$params['p_id'] = $_G['gp_post_id'];
+		$parmas['u_id'] = $_G['uid'];
+		$params['reason'] = $_G['gp_reason'];
+		$params['content'] = $_G['gp_html_content'];
+		$params['client_ip'] = $_G['clientip'];
+		$params['attach_images'] = $_G['gp_attach_image'];
+		$params = array_merge($sig_params, $params);
+
+		$response = connect_output_php($api_url . '?', cloud_http_build_query($params, '', '&'));
+		if(!isset($response['status'])) {
+			$code = 100;
+			connect_errlog($code, lang('connect', 'connect_errlog_server_no_response'));
 			$message = lang('connect', 'server_busy');
-			$code = $response['status'];
-			if ($response['status'] == 6022 || $response['status'] == 6023 || $response['status'] == 6029) {
-				$message = $response['result'];
-				connect_errlog($code, $message);
-			} elseif ($response['status'] == 20000) {
-				$message = lang('connect', 'user_unauthorized');
-			} elseif ($response['status'] == 30000) {
-				$message = lang('connect', 'weibo_account_not_signup');
+		} else {
+			if ($response['status'] == 0) {
+				$code = $response['status'];
+				if ($sh_type == 2) {
+					$message = lang('connect', 'broadcast_success');
+				} else {
+					$message = lang('connect', 'share_success');
+				}
+			} else {
+				$message = lang('connect', 'server_busy');
+				$code = $response['status'];
+				if ($response['status'] == 6022 || $response['status'] == 6023 || $response['status'] == 6029) {
+					$message = $response['result'];
+					connect_errlog($code, $message);
+				} elseif ($response['status'] == 20000) {
+					$message = lang('connect', 'user_unauthorized');
+				} elseif ($response['status'] == 30000) {
+					$message = lang('connect', 'weibo_account_not_signup');
+				} elseif ($response['status'] == 40000) {
+					$message = lang('plugin/qqconnect', 'connect_access_token_out_of_date_share');
+				}
 			}
 		}
 	}

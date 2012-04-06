@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_comment.php 20616 2011-03-01 01:05:56Z monkey $
+ *      $Id: admincp_comment.php 29125 2012-03-27 06:21:23Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -309,10 +309,10 @@ EOT;
 			$or = '';
 			$subject = explode(',', str_replace(' ', '', $subject));
 
-			for($i = 0; $i < count($subject); $i++) {
+			for($i = 0, $l = count($subject); $i < $l; $i++) {
 				if(preg_match("/\{(\d+)\}/", $subject[$i])) {
 					$subject[$i] = preg_replace("/\\\{(\d+)\\\}/", ".{0,\\1}", preg_quote($subject[$i], '/'));
-					$subject .= " $or title REGEXP '".$subject[$i]."'";
+					$sqlsubject .= " $or title REGEXP '".$subject[$i]."'";
 				} else {
 					$sqlsubject .= " $or title LIKE '%".$subject[$i]."%'";
 				}
@@ -373,10 +373,10 @@ EOT;
 			$or = '';
 			$message = explode(',', str_replace(' ', '', $message));
 
-			for($i = 0; $i < count($message); $i++) {
+			for($i = 0, $l = count($message); $i < $l; $i++) {
 				if(preg_match("/\{(\d+)\}/", $message[$i])) {
 					$message[$i] = preg_replace("/\\\{(\d+)\\\}/", ".{0,\\1}", preg_quote($message[$i], '/'));
-					$message .= " $or c.message REGEXP '".$message[$i]."'";
+					$sqlmessage .= " $or c.message REGEXP '".$message[$i]."'";
 				} else {
 					$sqlmessage .= " $or c.message LIKE '%".$message[$i]."%'";
 				}

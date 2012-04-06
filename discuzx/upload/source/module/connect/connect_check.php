@@ -4,7 +4,7 @@
  *	  [Discuz!] (C)2001-2009 Comsenz Inc.
  *	  This is NOT a freeware, use is subject to license terms
  *
- *	  $Id$
+ *	  $Id: connect_check.php 27643 2012-02-08 11:20:46Z zhouxiaobo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -15,78 +15,27 @@ require_once libfile('function/connect');
 require_once libfile('function/cloud');
 
 $op = !empty($_G['gp_op']) ? $_G['gp_op'] : '';
-if (!in_array($op, array('token', 'cookie'))) {
+if (!in_array($op, array('cookie'))) {
 	connect_ajax_ouput_message('0', '1');
 }
 
-if ($op == 'token') {
+if ($op == 'cookie') {
+	$settings = array();
+	$query = DB::query("SELECT skey, svalue FROM ".DB::table('common_setting')." WHERE skey IN ('connect_login_times', 'connect_login_report_date')");
+	while ($setting = DB::fetch($query)) {
+		$settings[$setting['skey']] = $setting['svalue'];
+	}
 
-	connect_merge_member();
-
-	if($_G['setting']['connect']['allow'] && !$_G['cookie']['connect_check_token'] && $_G['member']['conuinsecret']) {
-
-		dsetcookie('connect_check_token', '1', 14400);
-
-		$api_url = $_G['connect']['api_url'] . '/connect/discuz/validateToken';
-
-		$extra = array(
-			'oauth_token' => $_G['member']['conuin'],
-		);
-		$sig_params = connect_get_oauth_signature_params($extra);
-		$oauth_token_secret = $_G['member']['conuinsecret'];
-		$sig_params['oauth_signature'] = connect_get_oauth_signature($api_url, $sig_params, 'POST', $oauth_token_secret);
-
-		$params = array(
-			'client_ip' => $_G['clientip'],
-			'response_type' => 'PHP',
-		);
-
-		$params = array_merge($sig_params, $params);
-		$response = connect_output_php($api_url . '?', cloud_http_build_query($params, '', '&'));
-		if(isset($response['status']) && ($response['status'] === 2024 || $response['status'] === 2025)) {
-
-			DB::query('UPDATE '.DB::table('common_member_connect')." SET conuinsecret='' WHERE conopenid='".$_G['member']['conopenid']."'");
-
-			connect_ajax_ouput_message('2', '0');
+	if ($settings['connect_login_times'] && (empty($settings['connect_login_report_date']) || dgmdate(TIMESTAMP, 'Y-m-d') != $settings['connect_login_report_date'])) {
+		if (!discuz_process::islocked('connect_login_report', 600)) {
+			$result = connect_cookie_login_report($settings['connect_login_times']);
+			if (isset($result['status']) && $result['status'] == 0) {
+				DB::query("REPLACE INTO ".DB::table('common_setting')." (`skey`, `svalue`)
+				VALUES ('connect_login_times', '0'), ('connect_login_report_date', '".dgmdate(TIMESTAMP, 'Y-m-d')."')");
+			}
 		}
+		discuz_process::unlock('connect_login_report');
 	}
 
-	connect_ajax_ouput_message('0', '2');
-
-} elseif ($op == 'cookie') {
-
-	$now = time();
-	$life = 86400;
-	$response = '';
-	$api_url = $_G['connect']['api_url'].'/connect/discuz/cookieReport';
-	$params = connect_cookie_login_params();
-
-	if($params) {
-		$last_report_time = getcookie('connect_last_report_time');
-        $current_date = date('Y-m-d');
-
-        if(getcookie('connect_report_times')) {
-            $retry = intval(getcookie('connect_report_times'));
-        } else {
-            $retry = 1;
-        }
-
-        if($last_report_time == $current_date) {
-            if($retry <= 4) {
-                $response = connect_output_php($api_url.'?', cloud_http_build_query($params, '', '&'));
-                $retry++;
-            }
-        } else {
-            $response = connect_output_php($api_url.'?', cloud_http_build_query($params, '', '&'));
-            dsetcookie('connect_last_report_time', $current_date, $life);
-            $retry = 1;
-        }
-
-        if($response['status'] === 0) {
-        	$retry = 5;
-        }
-
-		dsetcookie('connect_report_times', $retry, $life);
-	}
 }
 ?>

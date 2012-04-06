@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_admincp_msg.php 22879 2011-05-29 06:49:24Z monkey $
+ *      $Id: lang_admincp_msg.php 28743 2012-03-09 11:32:46Z monkey $
  *
  *      This file is automatically generate
  */
@@ -565,6 +565,21 @@ $lang = array (
   'moderate_shares_succeed' => '審核操作成功，共 {validates} 個分享被通過，{ignores} 個分享被忽略，{deletes} 個分享被刪除',
 
   'moderate_threads_succeed' => '審核操作成功，共 {validates} 個主題被通過，{ignores} 個主題被忽略，{recycles} 個主題被放入回收站，{deletes} 個主題被刪除',
+
+  'cloudaddons_validator_error' => '校驗失敗，你無法下載此應用',
+  'cloudaddons_downloading' => '應用 {addonid} 下載中，請稍候 ......',
+  'cloudaddons_download_error' => '數據下載錯誤',
+  'cloudaddons_download_write_error' => '文件無法下載，請確認 "data/download/" 目錄是否可寫',
+  'cloudaddons_installing' => '應用 {addonid} 安裝中，請稍候......',
+  'cloudaddons_install_error' => '你不能安裝此應用({ErrorCode})',
+  'cloudaddons_install_files_changed' => '以下文件丟失或者被修改過，是否繼續覆蓋？<br /><br />{files}',
+  'cloudaddons_pack_installed' => '擴展安裝完畢',
+  'cloudaddons_genuine_message' => '對不起，您安裝的不是正版應用，安裝程序無法繼續執行<br /><br /><a href="admin.php?action=cloudaddons&id={addonid}">點擊這裡安裝正版應用</a>',
+  'cloudaddons_file_read_error' => '文件讀取錯誤，請重試',
+  'cloudaddons_file_write_error' => '文件寫入錯誤，請重試',
+  'cloudaddons_ftp_path_error' => '站點 FTP 路徑錯誤，請重新填寫',
+  'cloudaddons_check_write_error' => '"data/download/" 或 "data/addonmd5/" 目錄無法創建或寫入，這將會導致應用無法安裝，請檢查服務器環境',
+  'cloudaddons_check_url_fopen_error' => '您的服務器無法訪問應用中心，這將會導致應用無法安裝。請聯繫您的服務商或者網站技術人員，確保您的服務器能夠正常訪問 addon.discuz.com',
 );
 
 ?>

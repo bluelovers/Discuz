@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_portalcategory.php 21674 2011-04-07 08:09:05Z zhangguosheng $
+ *      $Id: admincp_portalcategory.php 28706 2012-03-08 08:10:04Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_DISCUZ')) {
@@ -332,7 +332,7 @@ SCRIPT;
 	}
 
 } elseif($operation == 'move') {
-
+	$_GET['catid'] = intval($_GET['catid']);
 	if(!$_GET['catid'] || !$portalcategory[$_GET['catid']]) {
 		cpmsg('portalcategory_catgory_not_found', '', 'error');
 	}
@@ -371,13 +371,14 @@ SCRIPT;
 		cpmsg('portalcategory_move_succeed', 'action=portalcategory', 'succeed');
 	}
 } elseif($operation == 'edit' || $operation == 'add') {
-
+	$_GET['catid'] = intval($_GET['catid']);
 	if($_GET['catid'] && !$portalcategory[$_GET['catid']]) {
 		cpmsg('portalcategory_catgory_not_found', '', 'error');
 	}
 
 	$cate = $_GET['catid'] ? $portalcategory[$_GET['catid']] : array();
 	if($operation == 'add') {
+		$_G['gp_upid'] = $_GET['upid'] = intval($_GET['upid']);
 		if($_G['gp_upid']) {
 			$cate['level'] = $portalcategory[$_G['gp_upid']] ? $portalcategory[$_G['gp_upid']]['level']+1 : 0;
 			$cate['upid'] = intval($_G['gp_upid']);
@@ -802,7 +803,8 @@ function deleteportalcategory($ids) {
 	$tplpermission = & template_permission::instance();
 	$templates = array();
 	foreach($ids as $id) {
-		$templates[] = 'portal/list_'.$id;
+		$templates[] = 'portal/list_'.$id;;
+		$templates[] = 'portal/view_'.$id;
 	}
 	$tplpermission->delete_allperm_by_tplname($templates);
 	$categorypermission = & portal_category::instance();
@@ -818,6 +820,10 @@ function deleteportalcategory($ids) {
 		@unlink(DISCUZ_ROOT.'./data/diy/portal/list_'.$id.'.htm');
 		@unlink(DISCUZ_ROOT.'./data/diy/portal/list_'.$id.'.htm.bak');
 		@unlink(DISCUZ_ROOT.'./data/diy/portal/list_'.$id.'_diy_preview.htm');
+		$tpls[] = 'portal/view_'.$id;
+		@unlink(DISCUZ_ROOT.'./data/diy/portal/view_'.$id.'.htm');
+		@unlink(DISCUZ_ROOT.'./data/diy/portal/view_'.$id.'.htm.bak');
+		@unlink(DISCUZ_ROOT.'./data/diy/portal/view_'.$id.'_diy_preview.htm');
 	}
 	if(in_array($_G['setting']['defaultindex'], $defaultindex)) {
 		DB::insert('common_setting', array('skey' => 'defaultindex', 'svalue' => ''), 0, 1);

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_importdata.php 20638 2011-03-01 03:26:36Z congyushuai $
+ *      $Id: function_importdata.php 28030 2012-02-21 05:43:34Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -38,11 +38,14 @@ function import_styles($ignoreversion = 1, $dir = '', $restoreid = 0, $updatecac
 	if(!isset($dir)) {
 		$stylearrays = array(getimportdata('Discuz! Style'));
 	} else {
+		require_once libfile('function/cloudaddons');
 		if(!$restoreid) {
 			$dir = str_replace(array('/', '\\'), '', $dir);
 			$templatedir = DISCUZ_ROOT.'./template/'.$dir;
+			cloudaddons_validator($dir.'.template');
 		} else {
 			$templatedir = DISCUZ_ROOT.$dir;
+			cloudaddons_validator(basename($dir).'.template');
 		}
 		$searchdir = dir($templatedir);
 		$stylearrays = array();

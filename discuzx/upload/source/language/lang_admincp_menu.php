@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_admincp_menu.php 21679 2011-04-08 04:13:12Z congyushuai $
+ *      $Id: lang_admincp_menu.php 29171 2012-03-28 02:59:31Z monkey $
  */
 
 $lang = array
@@ -17,7 +17,7 @@ $lang = array
 	'header_user' => '用戶',
 	'header_topic' => '內容',
 	'header_extended' => '運營',
-	'header_plugin' => '插件',
+	'header_plugin' => '應用',
 	'header_style' => '界面',
 	'header_adv' => '廣告',
 	'header_tools' => '工具',
@@ -28,7 +28,7 @@ $lang = array
 	'header_portal' => '門戶',
 	'header_group' => '群組',
 	'header_founder' => '站長',
-	'header_addons' => '擴展中心',
+	'header_cloudaddons' => '應用中心',
 
 
 	'menu_home' => '管理中心首頁',
@@ -119,7 +119,7 @@ $lang = array
 	'menu_founder_permgrouplist' => '編輯權限 - {perm}',
 	'menu_founder_memberperm' => '編輯團隊成員 - {username}',
 
-	'menu_addons' => '擴展中心',
+	'menu_addons' => '應用中心',
 	'menu_plugins' => '插件',
 	'menu_tasks' => '站點任務',
 	'menu_magics' => '道具中心',

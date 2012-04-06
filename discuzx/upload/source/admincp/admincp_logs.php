@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_logs.php 21195 2011-03-18 06:55:50Z congyushuai $
+ *      $Id: admincp_logs.php 27854 2012-02-15 11:12:37Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -31,7 +31,7 @@ if($logfiles) {
 		list($_G['gp_day'], $_G['gp_num']) = explode('_', $_G['gp_day']);
 		$logs = file(($_G['gp_day'] ? $logdir.$_G['gp_day'].'_'.$operation.'log'.($_G['gp_num'] ? '_'.$_G['gp_num'] : '').'.php' : $logdir.$lastlog));
 	} else {
-		$logs = file($logdir.$operation.'log_'.$_G['gp_day'].'.php');
+		$logs = file($logdir.$_G['gp_day'].'_'.$operation.'log'.'.php');
 	}
 }
 
@@ -67,7 +67,7 @@ if($logfiles) {
 		list($date, $logtype, $num) = explode('_', $logfile);
 		if(is_numeric($date)) {
 			$num = intval($num);
-			$sel .= '<option value="'.$date.'_'.$num.'"'.($date.'_'.$num == $_G['gp_day'].'_'.$_G['gp_num'] ? ' selected="selected"' : '').'>'.($num ? '&nbsp;&nbsp;'.$date.' '.cplang('logs_archive').' '.$num : $date).'</option>';
+			$sel .= '<option value="'.$date.'_'.$num.'"'.($date.'_'.$num == $_G['gp_day'].'_'.intval($_G['gp_num']) ? ' selected="selected"' : '').'>'.($num ? '&nbsp;&nbsp;'.$date.' '.cplang('logs_archive').' '.$num : $date).'</option>';
 		} else {
 			list($logtype) = explode('.', $logtype);
 			$sel .= '<option value="'.$logtype.'"'.($logtype == $_G['gp_day'] ? ' selected="selected"' : '').'>'.$logtype.'</option>';

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_blog.php 22995 2011-06-13 03:15:57Z zhangguosheng $
+ *      $Id: admincp_blog.php 27940 2012-02-17 03:04:38Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -293,7 +293,7 @@ if(submitcheck('searchsubmit', 1) || $newlist) {
 				), TRUE);
 			}
 			$blogcount = DB::result_first("SELECT count(*) FROM ".DB::table('home_blog')." b LEFT JOIN ".DB::table('home_blogfield')." bf USING(blogid) WHERE 1 $sql");
-			$multi = multi($blogcount, $perpage, $page, ADMINSCRIPT."?action=blog$muticondition");
+			$multi = multi($blogcount, $perpage, $page, ADMINSCRIPT."?action=blog".($perpage ? '&perpage='.$perpage : '').$muticondition);
 		} else {
 			$blogcount = 0;
 			$query = DB::query("SELECT b.blogid FROM ".DB::table('home_blog')." b LEFT JOIN ".DB::table('home_blogfield')." bf USING(blogid) WHERE 1 $sql");

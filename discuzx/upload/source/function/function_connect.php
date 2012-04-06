@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_connect.php 25886 2011-11-24 09:31:56Z monkey $
+ *      $Id: function_connect.php 27641 2012-02-08 09:51:14Z zhouxiaobo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -109,6 +109,26 @@ _attachEvent(window, 'load', connect_ajax_check_token);
 EOF;
 
 	return $js;
+}
+
+function connect_cookie_login_report($loginTimes) {
+	global $_G;
+
+	$response = '';
+	if ($loginTimes) {
+		$api_url = $_G['connect']['api_url'].'/connect/discuz/batchCookieReport';
+		$params = array (
+			'oauth_consumer_key' => $_G['setting']['connectappid'],
+			'login_times' => $loginTimes,
+			'date' => dgmdate(TIMESTAMP - 86400, 'Y-m-d'),
+			'ts' => TIMESTAMP,
+		);
+		$params['sig'] = connect_get_sig($params, connect_get_sig_key());
+
+		$response = connect_output_php($api_url.'?', cloud_http_build_query($params, '', '&'));
+	}
+
+	return $response;
 }
 
 function connect_cookie_login_params() {
@@ -248,8 +268,9 @@ function connect_feed_remove($tid) {
 		return false;
 	}
 
-	if($feedlog['status'] != 4) {
-		DB :: query("UPDATE ".DB :: table('connect_feedlog')." SET status='4' WHERE tid='$tid'");
+	if(!getstatus($feedlog['status'], 4)) {
+        $feedlog['status'] = setstatus(4, 1, $feedlog['status']);
+		DB :: query("UPDATE ".DB :: table('connect_feedlog')." SET status='{$feedlog['status']}' WHERE tid='$tid'");
 	}
 
 	$params = array (
@@ -475,6 +496,10 @@ function connect_urlencode($value) {
 function connect_merge_member() {
 	global $_G;
 
+	if (!$_G['member']['conisbind']) {
+		return false;
+	}
+
 	$connect_member = DB::fetch_first("SELECT * FROM ".DB::table('common_member_connect')." WHERE uid='$_G[uid]'");
 	if ($connect_member) {
 		$_G['member'] = array_merge($_G['member'], $connect_member);
@@ -509,6 +534,8 @@ function connect_auth_field($is_user_info, $is_feed) {
 }
 
 function connect_errlog($errno, $error) {
+	return true;
+
 	global $_G;
 	writelog('errorlog', $_G['timestamp']."\t[QQConnect]".$errno." ".$error);
 }
@@ -529,7 +556,7 @@ function connect_parse_bbcode($bbcode, $fId, $pId, $isHtml, &$attachImages) {
 function connect_parse_attach($content, $fId, $pId, &$attachImages) {
 	global $_G;
 
-	$permissions = connect_get_user_group_permissions(array(7));
+	$permissions = connect_get_user_group_permissions(array(7), $fId);
 	$visitorPermission = $permissions[7];
 
 	$attachIds = array();
@@ -569,7 +596,7 @@ function connect_parse_attach_tag($attachId, $attachNames) {
 	return '';
 }
 
-function connect_get_user_group_permissions($userGroupIds) {
+function connect_get_user_group_permissions($userGroupIds, $fId) {
 	global $_G;
 
 	$fields = array (
@@ -595,50 +622,50 @@ function connect_get_user_group_permissions($userGroupIds) {
 		}
 	}
 
-	$query = DB :: query("SELECT ff.* FROM ".DB :: table('forum_forum')." f
-			INNER JOIN ".DB :: table('forum_forumfield')." ff USING(fid) WHERE f.status='1'");
-	while ($row = DB :: fetch($query)) {
-		$allowViewGroupIds = array ();
-		if($row['viewperm']) {
-			$allowViewGroupIds = explode("\t", $row['viewperm']);
+	$row = DB :: fetch_first("SELECT ff.* FROM ".DB :: table('forum_forum')." f
+			INNER JOIN ".DB :: table('forum_forumfield')." ff USING(fid) WHERE f.fid='$fId' AND f.status='1'");
+
+	$allowViewGroupIds = array ();
+	if($row['viewperm']) {
+		$allowViewGroupIds = explode("\t", $row['viewperm']);
+	}
+	$allowViewAttachGroupIds = array ();
+	if($row['getattachperm']) {
+		$allowViewAttachGroupIds = explode("\t", $row['getattachperm']);
+	}
+	foreach ($userGroups as $gid => $_v) {
+		if($row['password']) {
+			$userGroups[$gid]['forbidForumIds'][] = $row['fid'];
+			continue;
 		}
-		$allowViewAttachGroupIds = array ();
-		if($row['getattachperm']) {
-			$allowViewAttachGroupIds = explode("\t", $row['getattachperm']);
-		}
-		foreach ($userGroups as $gid => $_v) {
-			if($row['password']) {
+		$perm = unserialize($row['formulaperm']);
+		if(is_array($perm)) {
+			if($perm[0] || $perm[1] || $perm['users']) {
 				$userGroups[$gid]['forbidForumIds'][] = $row['fid'];
 				continue;
 			}
-			$perm = unserialize($row['formulaperm']);
-			if(is_array($perm)) {
-				if($perm[0] || $perm[1] || $perm['users']) {
-					$userGroups[$gid]['forbidForumIds'][] = $row['fid'];
-					continue;
-				}
-			}
-			if(!$allowViewGroupIds) {
-				$userGroups[$gid]['allowForumIds'][] = $row['fid'];
-			}
-			elseif(!in_array($gid, $allowViewGroupIds)) {
-				$userGroups[$gid]['forbidForumIds'][] = $row['fid'];
-			}
-			elseif(in_array($gid, $allowViewGroupIds)) {
-				$userGroups[$gid]['allowForumIds'][] = $row['fid'];
-				$userGroups[$gid]['specifyAllowForumIds'][] = $row['fid'];
-			}
-			if(!$allowViewAttachGroupIds) {
-				$userGroups[$gid]['allowViewAttachForumIds'][] = $row['fid'];
-			}
-			elseif(!in_array($gid, $allowViewAttachGroupIds)) {
-				$userGroups[$gid]['forbidViewAttachForumIds'][] = $row['fid'];
-			}
-			elseif(in_array($gid, $allowViewGroupIds)) {
-				$userGroups[$gid]['allowViewAttachForumIds'][] = $row['fid'];
-			}
+		}
+		if(!$allowViewGroupIds) {
+			$userGroups[$gid]['allowForumIds'][] = $row['fid'];
+		}
+		elseif(!in_array($gid, $allowViewGroupIds)) {
+			$userGroups[$gid]['forbidForumIds'][] = $row['fid'];
+		}
+		elseif(in_array($gid, $allowViewGroupIds)) {
+			$userGroups[$gid]['allowForumIds'][] = $row['fid'];
+			$userGroups[$gid]['specifyAllowForumIds'][] = $row['fid'];
+		}
+		if(!$allowViewAttachGroupIds) {
+			$userGroups[$gid]['allowViewAttachForumIds'][] = $row['fid'];
+		}
+		elseif(!in_array($gid, $allowViewAttachGroupIds)) {
+			$userGroups[$gid]['forbidViewAttachForumIds'][] = $row['fid'];
+		}
+		elseif(in_array($gid, $allowViewGroupIds)) {
+			$userGroups[$gid]['allowViewAttachForumIds'][] = $row['fid'];
 		}
 	}
+
 	return $userGroups;
 }
 

@@ -197,7 +197,7 @@ class block_blog {
 			$wheres[] = "b.dateline >= '$timestamp'";
 		}
 		$tablesql = $fieldsql = '';
-		if($style['getpic'] || $style['getsummary'] || $picrequired) {
+		if($style['getsummary'] || $picrequired) {
 			if($picrequired) {
 				$wheres[] = "bf.pic != ''";
 			}

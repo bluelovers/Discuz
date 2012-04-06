@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_group.php 22214 2011-04-26 06:50:55Z liulanbo $
+ *      $Id: forum_group.php 27724 2012-02-13 06:57:34Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -274,7 +274,8 @@ if($action == 'index') {
 	if($allowbuildgroup < 1) {
 		showmessage('group_create_max_failed');
 	}
-
+	$_GET['fupid'] = intval($_GET['fupid']);
+	$_GET['groupid'] = intval($_GET['groupid']);
 	if(!submitcheck('createsubmit')) {
 		$groupselect = get_groupselect(getgpc('fupid'), getgpc('groupid'));
 	} else {

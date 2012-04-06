@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_styles.php 22614 2011-05-16 02:15:52Z monkey $
+ *      $Id: admincp_styles.php 28030 2012-02-21 05:43:34Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -182,7 +182,8 @@ if($operation == 'admin') {
 		shownav('style', 'styles_admin');
 		showsubmenu('styles_admin', array(
 			array('admin', 'styles', '1'),
-			array('import', 'styles&operation=import', '0')
+			array('import', 'styles&operation=import', '0'),
+			array('cloudaddons_style_link', 'cloudaddons')
 		));
 		showtips('styles_admin_tips');
 		showformheader('styles');
@@ -252,6 +253,11 @@ if($operation == 'admin') {
 						unset($tplids[$style['templateid']]);
 					}
 					if($tplids) {
+						require_once libfile('function/cloudaddons');
+						$query = DB::query("SELECT directory FROM ".DB::table('common_template')." WHERE templateid IN (".dimplode($tplids).")");
+						while($tpl = DB::fetch($query)) {
+							cloudaddons_uninstall(basename($tpl['directory']).'.template', $tpl['directory']);
+						}
 						DB::query("DELETE FROM ".DB::table('common_template')." WHERE templateid IN (".dimplode($tplids).")");
 					}
 				}
@@ -280,7 +286,8 @@ if($operation == 'admin') {
 		shownav('style', 'styles_admin');
 		showsubmenu('styles_admin', array(
 			array('admin', 'styles', '0'),
-			array('import', 'styles&operation=import', '1')
+			array('import', 'styles&operation=import', '1'),
+			array('cloudaddons_style_link', 'cloudaddons')
 		));
 		showformheader('styles&operation=import', 'enctype');
 		showtableheader('styles_import');

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_menu.php 21972 2011-04-19 02:51:52Z monkey $
+ *      $Id: admincp_menu.php 29171 2012-03-28 02:59:31Z monkey $
  */
 
 global $_G;
@@ -194,7 +194,7 @@ if(file_exists($menudir = DISCUZ_ROOT.'./source/admincp/menu')) {
 
 if($isfounder) {
 	$menu['plugin'] = array(
-		array('menu_addons', 'addons'),
+		array('menu_addons', 'cloudaddons'),
 		array('menu_plugins', 'plugins'),
 	);
 }

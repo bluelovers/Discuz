@@ -124,12 +124,28 @@ class plugin_qqconnect extends plugin_qqconnect_base {
 			$footerjs .= connect_feed_resend_js();
 		}
 
-		connect_merge_member();
-		if(!$_G['cookie']['connect_check_token'] && $_G['member']['conuinsecret']) {
-			$footerjs .= connect_check_token_js();
+		if ($_G['member']['conisbind']) {
+			connect_merge_member();
+			if($_G['member']['conuinsecret'] && ($_G['cookie']['connect_last_report_time'] != dgmdate(TIMESTAMP, 'Y-m-d'))) {
+				$connect_login_times = DB::result_first("SELECT skey FROM ".DB::table('common_setting')." WHERE skey='connect_login_times'");
+				if ($connect_login_times) {
+					DB::query("UPDATE ".DB::table('common_setting')." SET svalue=svalue+1 WHERE skey='connect_login_times'");
+				} else {
+					DB::query("INSERT INTO ".DB::table('common_setting')." SET skey='connect_login_times', svalue='1'");
+				}
+				$current_date = dgmdate(TIMESTAMP, 'Y-m-d');
+				$life = 86400;
+				dsetcookie('connect_last_report_time', $current_date, $life);
+			}
 		}
 
-		if($_G['member']['conuinsecret'] && ($_G['cookie']['connect_last_report_time'] != date('Y-m-d') || $_G['cookie']['connect_report_times'] <= 4)) {
+		$settings = array();
+		$query = DB::query("SELECT skey, svalue FROM ".DB::table('common_setting')." WHERE skey IN ('connect_login_times', 'connect_login_report_date')");
+		while ($setting = DB::fetch($query)) {
+			$settings[$setting['skey']] = $setting['svalue'];
+		}
+
+		if ($settings['connect_login_times'] && (empty($settings['connect_login_report_date']) || dgmdate(TIMESTAMP, 'Y-m-d') != $settings['connect_login_report_date'])) {
 			$footerjs .= connect_cookie_login_js();
 		}
 
@@ -205,68 +221,53 @@ class plugin_qqconnect extends plugin_qqconnect_base {
 			return;
 		}
 		global $_G;
-		if(empty($_G['gp_connect_publish_feed']) || $_G['gp_action'] == 'reply' || substr($param['param'][0], -8) != '_succeed' || $_G['gp_action'] == 'edit' && !$GLOBALS['isfirstpost'] || !$this->_allowconnectfeed()) {
+		if($_G['gp_action'] == 'reply' || substr($param['param'][0], -8) != '_succeed' || $_G['gp_action'] == 'edit' && !$GLOBALS['isfirstpost'] || !$this->_allowconnectfeed() && !$this->_allowconnectt() || empty($_G['gp_connect_publish_feed']) && empty($_G['gp_connect_publish_t'])) {
 			return;
 		}
 
+		$newstatus = 0;
+		if ($_G['gp_connect_publish_feed'] && $this->_allowconnectfeed()) {
+			$newstatus = setstatus(1, 1, $newstatus);
+		}
+
+		if ($_G['gp_connect_publish_t'] && $this->_allowconnectt()) {
+			$newstatus = setstatus(3, 1, $newstatus);
+		}
 		$tid = $param['param'][2]['tid'];
-		DB::query("REPLACE INTO ".DB::table('connect_feedlog')." (tid, uid, lastpublished, dateline, status) VALUES ('$tid', '$_G[uid]', '0', '$_G[timestamp]', '1')");
-	}
-
-	function _post_tlog_message($param) {
-		if(!$this->allow) {
-			return;
-		}
-		global $_G;
-		if(empty($_G['gp_connect_publish_t']) || $_G['gp_action'] == 'reply' || substr($param['param'][0], -8) != '_succeed' || $_G['gp_action'] == 'edit' && !$GLOBALS['isfirstpost'] || !$this->_allowconnectt()) {
-			return;
-		}
-
-		$tid = $param['param'][2]['tid'];
-		DB::query("REPLACE INTO ".DB::table('connect_tlog')." (tid, uid, lastpublished, dateline, status) VALUES ('$tid', '$_G[uid]', '0', '$_G[timestamp]', '1')");
+		DB::query("REPLACE INTO ".DB::table('connect_feedlog')." (tid, uid, lastpublished, dateline, status) VALUES ('$tid', '$_G[uid]', '0', '$_G[timestamp]', '$newstatus')");
 	}
 
 	function _viewthread_share_method_output() {
-		global $_G;
+		global $_G, $postlist;
 
 		require_once libfile('function/connect');
 
-		if($GLOBALS['page'] == 1 && $_G['forum_firstpid'] && $GLOBALS['postlist'][$_G['forum_firstpid']]['invisible'] == 0) {
-			$_G['connect']['feed_js'] = $_G['connect']['t_js'] = false;
-			if(!getstatus($_G['forum_thread']['status'], 7) && $_G['forum_thread']['displayorder'] >= 0) {
-				$feedlogstatus = false;
+		if($GLOBALS['page'] == 1 && $_G['forum_firstpid'] && $GLOBALS['postlist'][$_G['forum_firstpid']]['invisible'] == 0 && TIMESTAMP - $_G['forum_thread']['dateline'] < 43200) {
+			$_G['connect']['feed_js'] = $_G['connect']['t_js'] = $feedlogstatus = $tlogstatus = false;
+			if((!getstatus($_G['forum_thread']['status'], 7) || !getstatus($_G['forum_thread']['status'], 8))
+				 && $_G['forum_thread']['displayorder'] >= 0 && $_G['member']['conisbind']
+				 && $_G['uid'] == $_G['forum_thread']['authorid']) {
 				$_G['connect']['feed_log'] = DB::fetch_first("SELECT * FROM ".DB::table('connect_feedlog')." WHERE tid='$_G[tid]'");
 				if($_G['connect']['feed_log']) {
 					$_G['connect']['feed_interval'] = 300;
 					$_G['connect']['feed_publish_max'] = 1000;
-					if($_G['connect']['feed_log'] && $_G['member']['conisbind'] && $_G['uid'] == $_G['forum_thread']['authorid']) {
-						if($_G['connect']['feed_log']['status'] == 1 || ($_G['connect']['feed_log']['status'] == 2
-							&& TIMESTAMP - $_G['connect']['feed_log']['lastpublished'] > $_G['connect']['feed_interval']
-							&& $_G['connect']['feed_log']['publishtimes'] < $_G['connect']['feed_publish_max'])) {
-							DB::query("UPDATE ".DB::table('connect_feedlog')." SET status='2', lastpublished='$_G[timestamp]', publishtimes=publishtimes+1 WHERE tid='$_G[tid]' AND status!=4");
-							$_G['connect']['feed_js'] = $feedlogstatus = true;
-						}
+					if(getstatus($_G['connect']['feed_log']['status'], 1) || (getstatus($_G['connect']['feed_log']['status'], 2)
+						&& TIMESTAMP - $_G['connect']['feed_log']['lastpublished'] > $_G['connect']['feed_interval']
+						&& $_G['connect']['feed_log']['publishtimes'] < $_G['connect']['feed_publish_max'])) {
+						$_G['connect']['feed_js'] = $feedlogstatus = true;
 					}
-				} else {
-					$feedlogstatus = false;
-				}
-			}
 
-			if(!getstatus($_G['forum_thread']['status'], 8) && $_G['forum_thread']['displayorder'] >= 0) {
-				$_G['connect']['t_log'] = DB::fetch_first("SELECT * FROM ".DB::table('connect_tlog')." WHERE tid='$_G[tid]'");
-				if($_G['connect']['t_log']) {
-					$_G['connect']['t_interval'] = 300;
-					$_G['connect']['t_publish_max'] = 1000;
-					if($_G['connect']['t_log'] && $_G['member']['conisbind'] && $_G['uid'] == $_G['forum_thread']['authorid']) {
-						if($_G['connect']['t_log']['status'] == 1 || ($_G['connect']['t_log']['status'] == 2
-							&& TIMESTAMP - $_G['connect']['t_log']['lastpublished'] > $_G['connect']['t_interval']
-							&& $_G['connect']['t_log']['publishtimes'] < $_G['connect']['t_publish_max'])) {
-							DB::query("UPDATE ".DB::table('connect_tlog')." SET status='2', lastpublished='$_G[timestamp]', publishtimes=publishtimes+1 WHERE tid='$_G[tid]' AND status!=4");
-							$_G['connect']['t_js'] = $tlogstatus = true;
-						}
+					if(getstatus($_G['connect']['feed_log']['status'], 3) || (getstatus($_G['connect']['feed_log']['status'], 4)
+						&& TIMESTAMP - $_G['connect']['feed_log']['lastpublished'] > $_G['connect']['feed_interval']
+						&& $_G['connect']['feed_log']['publishtimes'] < $_G['connect']['feed_publish_max'])) {
+						$_G['connect']['t_js'] = $tlogstatus = true;
 					}
-				} else {
-					$tlogstatus = false;
+
+					if($feedlogstatus || $tlogstatus) {
+						$status = $feedlogstatus ? setstatus(2, 1, $status) : $status;
+						$status = $tlogstatus ? setstatus(4, 1, $status) : $status;
+						DB::query("UPDATE ".DB::table('connect_feedlog')." SET status='$status', lastpublished='$_G[timestamp]', publishtimes=publishtimes+1 WHERE tid='$_G[tid]'");
+					}
 				}
 			}
 
@@ -309,21 +310,28 @@ class plugin_qqconnect extends plugin_qqconnect_base {
 				$extrajs = connect_output_javascript($jsurl);
 			}
 
-			if (!$_G['member']['conisbind'] && $_G['group']['allowgetimage'] && $_G['thread']['price'] == 0) {
-				if ($_G['connect']['first_post']['message']) {
-					require_once libfile('function/connect');
-					$post['html_content'] = connect_parse_bbcode($_G['connect']['first_post']['message'], $_G['connect']['first_post']['fid'], $_G['connect']['first_post']['pid'], $_G['connect']['first_post']['htmlon'], $attach_images);
-					if($attach_images && is_array($attach_images)) {
-						$attach_images = array_slice($attach_images, 0, 3);
-						$share_images = array();
-						foreach ($attach_images as $attach_image) {
-							$share_images[] = urlencode($attach_image['big']);
-						}
-						$_G['connect']['share_images'] = implode('|', $share_images);
-						unset($share_images);
-					}
-				}
+			if (trim($_G['forum']['viewperm'])) {
+				$allowViewPermGroupIds = explode("\t", trim($_G['forum']['viewperm']));
 			}
+			if (trim($_G['forum']['getattachperm'])) {
+				$allowViewAttachGroupIds = explode("\t", trim($_G['forum']['getattachperm']));
+			}
+			$bigWidth = '400';
+			$bigHeight = '400';
+			$share_images = array();
+			foreach ($postlist[$_G['connect']['first_post']['pid']]['attachments'] as $attachment) {
+				if ($attachment['isimage'] == 0 || $attachment['price'] > 0
+					|| $attachment['readperm'] > $_G['group']['readaccess']
+					|| ($allowViewPermGroupIds && !in_array($_G['groupid'], $allowViewPermGroupIds))
+					|| ($allowViewAttachGroupIds && !in_array($_G['groupid'], $allowViewAttachGroupIds))) {
+					continue;
+				}
+				$key = md5($attachment['aid'].'|'.$bigWidth.'|'.$bigHeight);
+				$bigImageURL = $_G['siteurl'] . 'forum.php?mod=image&aid='.$attachment['aid'] . '&size=' . $bigWidth . 'x' . $bigHeight . '&key=' . rawurlencode($key) . '&type=fixnone&nocache=1';
+				$share_images[] = urlencode($bigImageURL);
+			}
+			$_G['connect']['share_images'] = implode('|', $share_images);
+
 			connect_merge_member();
 			return tpl_viewthread_share_method().$extrajs;
 		}
@@ -418,10 +426,6 @@ class plugin_qqconnect_forum extends plugin_qqconnect {
 		return $this->_post_feedlog_message($param);
 	}
 
-	function post_tlog_message($param) {
-		return $this->_post_tlog_message($param);
-	}
-
 	function viewthread_share_method_output() {
 		return $this->_viewthread_share_method_output();
 	}
@@ -454,10 +458,6 @@ class plugin_qqconnect_group extends plugin_qqconnect {
 		return $this->_post_feedlog_message($param);
 	}
 
-	function post_tlog_message($param) {
-		return $this->_post_tlog_message($param);
-	}
-
 	function viewthread_share_method_output() {
 		return $this->_viewthread_share_method_output();
 	}
@@ -481,39 +481,10 @@ class plugin_qqconnect_home extends plugin_qqconnect {
 			$_G['group']['maxsigsize'] = $_G['group']['maxsigsize'] < 200 ? 200 : $_G['group']['maxsigsize'];
 			return;
 		}
+
 		if($_G['uid'] && $_G['setting']['connect']['allow']) {
-
-			require_once libfile('function/connect');
-			connect_merge_member();
-
-			if($_G['member']['conuin'] && $_G['member']['conuinsecret']) {
-
-				$arr = array();
-				$arr['oauth_consumer_key'] = $_G['setting']['connectappid'];
-				$arr['oauth_nonce'] = mt_rand();
-				$arr['oauth_timestamp'] = TIMESTAMP;
-				$arr['oauth_signature_method'] = 'HMAC_SHA1';
-				$arr['oauth_token'] = $_G['member']['conuin'];
-				ksort($arr);
-				$arr['oauth_signature'] = connect_get_oauth_signature('http://cp.discuz.qq.com/connect/getSignature', $arr, 'GET', $_G['member']['conuinsecret']);
-				$result = connect_output_php('http://cp.discuz.qq.com/connect/getSignature?' . http_build_query($arr, '', '&'));
-				if($result['status'] == 0) {
-					$js = 'a.onclick = function () { seditor_insertunit(\'sightml\', \'[wb='.$result['result']['username'].']'.$result['result']['signature_url'].'[/wb]\'); };';
-				} else {
-					$js = 'a.onclick = function () { showDialog(\''.lang('plugin/qqconnect', 'connect_wbsign_no_account').'\'); };';
-				}
-			} else {
-				$js = 'a.onclick = function () { showDialog(\''.lang('plugin/qqconnect', 'connect_wbsign_no_bind').'\'); };';
-			}
-			return '<script type="text/javascript">if($(\'sightmlsml\')) {'.
-				'var a = document.createElement(\'a\');a.href = \'javascript:;\';a.style.background = \'url(\' + STATICURL + \'image/common/weibo.png) no-repeat 0 2px\';'.
-				'a.onmouseover = function () { showTip(this); };a.setAttribute(\'tip\', \''.lang('plugin/qqconnect', 'connect_wbsign_tip').'\');'.
-				$js.
-				'$(\'sightmlsml\').parentNode.appendChild(a);'.
-				'}</script>';
-
+			return tpl_spacecp_profile_bottom();
 		}
-
 	}
 }
 

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_delete.php 26671 2011-12-19 08:32:13Z zhengqingpeng $
+ *      $Id: function_delete.php 29030 2012-03-23 02:35:21Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -17,6 +17,9 @@ function deletemember($uids, $delpost = true) {
 	if(!$uids) {
 		return;
 	}
+	require_once libfile('function/sec');
+	updateMemberOperate($uids, 2);
+
 	if($delpost) {
 		deleteattach($uids, 'uid');
 		deletepost($uids, 'authorid');
@@ -633,7 +636,7 @@ function deletepics($picids) {
 	DB::delete('home_feed', "id IN (".dimplode($newids).") AND idtype='picid'");
 	DB::delete('home_clickuser', "id IN (".dimplode($newids).") AND idtype='picid'");
 	DB::delete('common_moderate', "id IN (".dimplode($newids).") AND idtype='picid'");
-	DB::delete('common_moderate', "id IN (".dimplode($newsids).") AND idtype='picid_cid'");
+	DB::delete('common_moderate', "id IN (".dimplode($newids).") AND idtype='picid_cid'");
 
 	if($sizes) {
 		foreach ($sizes as $uid => $setarr) {
@@ -691,7 +694,9 @@ function deletealbums($albumids) {
 		$sizes[$value['uid']] = $sizes[$value['uid']] + $value['size'];
 	}
 
-	DB::query("DELETE FROM ".DB::table('home_pic')." WHERE albumid IN (".dimplode($newids).")");
+	if($picids) {
+		deletepics($picids);
+	}
 	DB::query("DELETE FROM ".DB::table('home_album')." WHERE albumid IN (".dimplode($newids).")");
 	DB::query("DELETE FROM ".DB::table('home_feed')." WHERE id IN (".dimplode($newids).") AND idtype='albumid'");
 	if($picids) DB::query("DELETE FROM ".DB::table('home_clickuser')." WHERE id IN (".dimplode($picids).") AND idtype='picid'");
@@ -702,10 +707,6 @@ function deletealbums($albumids) {
 			$albumnum = $counts[$uid]['albums'] ? $counts[$uid]['albums'] : 0;
 			updatemembercount($uid, array('albums' => $albumnum, 'attachsize' => -$attachsize), false);
 		}
-	}
-
-	if($pics) {
-		deletepicfiles($pics);
 	}
 
 	return $dels;

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: post_newthread.php 22852 2011-05-26 04:15:24Z monkey $
+ *      $Id: post_newthread.php 28920 2012-03-20 01:44:27Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -427,7 +427,7 @@ if(!submitcheck('topicsubmit', 0, $seccodecheck, $secqaacheck)) {
 		foreach($_G['forum_optiondata'] as $optionid => $value) {
 			if($value) {
 				$filedname .= $separator.$_G['forum_optionlist'][$optionid]['identifier'];
-				$valuelist .= $separator."'$value'";
+				$valuelist .= $separator."'".daddslashes($value)."'";
 				$separator = ' ,';
 			}
 
@@ -437,7 +437,7 @@ if(!submitcheck('topicsubmit', 0, $seccodecheck, $secqaacheck)) {
 			}
 
 			DB::query("INSERT INTO ".DB::table('forum_typeoptionvar')." (sortid, tid, fid, optionid, value, expiration)
-				VALUES ('$sortid', '$tid', '$_G[fid]', '$optionid', '$value', '".($typeexpiration ? TIMESTAMP + $typeexpiration : 0)."')");
+				VALUES ('$sortid', '$tid', '$_G[fid]', '$optionid', '".daddslashes($value)."', '".($typeexpiration ? TIMESTAMP + $typeexpiration : 0)."')");
 		}
 
 		if($filedname && $valuelist) {
@@ -563,7 +563,7 @@ if(!submitcheck('topicsubmit', 0, $seccodecheck, $secqaacheck)) {
 		);
 
 		if(!empty($_G['gp_addfeed']) && $_G['forum']['allowfeed'] && !$isanonymous) {
-			$message = !$price ? $message : '';
+			$message = !($price || $readperm) ? $message : '';
 			if($special == 0) {
 				$feed['icon'] = 'thread';
 				$feed['title_template'] = 'feed_thread_title';

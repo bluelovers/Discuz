@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: install_function.php 26347 2011-12-09 08:19:04Z svn_project_zhangjie $
+ *      $Id: install_function.php 29180 2012-03-28 06:23:30Z svn_project_zhangjie $
  */
 
 if(!defined('IN_COMSENZ')) {
@@ -1191,7 +1191,7 @@ function install_uc_server() {
 	$pathinfo['dirname'] = substr($pathinfo['dirname'], 0, -8);
 	$appurl = 'http://'.preg_replace("/\:\d+/", '', $_SERVER['HTTP_HOST']).($_SERVER['SERVER_PORT'] && $_SERVER['SERVER_PORT'] != 80 ? ':'.$_SERVER['SERVER_PORT'] : '').$pathinfo['dirname'];
 	$ucapi = $appurl.'/uc_server';
-	$ucip = '127.0.0.1';
+	$ucip = '';
 	$app_tagtemplates = 'apptagtemplates[template]='.urlencode('<a href="{url}" target="_blank">{subject}</a>').'&'.
 		'apptagtemplates[fields][subject]='.urlencode($lang['tagtemplates_subject']).'&'.
 		'apptagtemplates[fields][uid]='.urlencode($lang['tagtemplates_uid']).'&'.

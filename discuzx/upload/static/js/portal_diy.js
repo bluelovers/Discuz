@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: portal_diy.js 22076 2011-04-21 06:22:09Z zhangguosheng $
+	$Id: portal_diy.js 27875 2012-02-16 04:24:34Z zhangguosheng $
 */
 
 var drag = new Drag();
@@ -454,9 +454,16 @@ drag.extend({
 				title.removeChild(arrDel[i]);
 			}
 		} else {
-			var className = obj instanceof Tab ? this.tabClass : obj instanceof Frame ? 'frame' : obj instanceof Block ? 'block' : '';
+			var titleClassName = '';
+			if(obj instanceof Tab) {
+				titleClassName = 'tab-';
+			} else if(obj instanceof Frame) {
+				titleClassName = 'frame-';
+			} else if(obj instanceof Block) {
+				titleClassName = 'block';
+			}
 			title = document.createElement('div');
-			title.className = className + 'title' + ' '+ this.titleClass;
+			title.className = titleClassName + 'title' + ' '+ this.titleClass;
 			ele.insertBefore(title,ele.firstChild);
 		}
 		if (!first) {

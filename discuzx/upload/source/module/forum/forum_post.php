@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_post.php 26654 2011-12-19 04:04:38Z zhengqingpeng $
+ *      $Id: forum_post.php 26885 2011-12-27 05:45:04Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -351,7 +351,7 @@ if($_G['gp_action'] == 'reply') {
 if($special == 4) {
 	$_G['setting']['activityfield'] = $_G['setting']['activityfield'] ? unserialize($_G['setting']['activityfield']) : array();
 }
-if($_G['setting']['homestatus'] && $_G['group']['allowupload'] && !empty($_G['cache']['albumcategory'])) {
+if($_G['setting']['homestatus'] && $_G['group']['allowupload'] && $_G['setting']['albumcategorystat'] && !empty($_G['cache']['albumcategory'])) {
 	require_once libfile('function/portalcp');
 }
 $navtitle = lang('core', 'title_'.$_G['gp_action'].'_post');

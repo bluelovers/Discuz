@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cloud_doctor.php 24733 2011-10-10 01:52:31Z zhouguoqiang $
+ *      $Id: cloud_doctor.php 29038 2012-03-23 06:22:39Z songlixin $
  */
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
@@ -148,14 +148,6 @@ if(submitcheck('setidkeysubmit')) {
 	showtitle('cloud_doctor_title_result');
 
 	showtablerow('', array('class="td24"'), array(
-		'<strong>'.cplang('cloud_doctor_php_ini_separator').'</strong>',
-		cloudSeparatorOutputCheck() ? $lang['cloud_doctor_result_success'].' '.$lang['cloud_doctor_php_ini_separator_true'] : $lang['cloud_doctor_result_failure'].$lang['cloud_doctor_php_ini_separator_false']
-	));
-	showtablerow('', array('class="td24"'), array(
-		'<strong>'.cplang('cloud_doctor_fsockopen_function').'</strong>',
-		function_exists('fsockopen') ? $lang['cloud_doctor_result_success'].' '.$lang['available'] : $lang['cloud_doctor_result_failure'].$lang['cloud_doctor_function_disable']
-	));
-	showtablerow('', array('class="td24"'), array(
 		'<strong>'.cplang('cloud_doctor_gethostbyname_function').'</strong>',
 		function_exists('gethostbyname') ? $lang['cloud_doctor_result_success'].' '.$lang['available'] : $lang['cloud_doctor_result_failure'].$lang['cloud_doctor_function_disable']
 	));
@@ -213,14 +205,14 @@ if(submitcheck('setidkeysubmit')) {
 
 function cloudShowPlugin() {
 	$plugins = array();
-	$query = DB::query("SELECT pluginid, available, name, identifier, modules, version FROM ".DB::table('common_plugin')." WHERE identifier IN ('qqconnect', 'cloudstat', 'soso_smilies', 'cloudsearch')");
+	$query = DB::query("SELECT pluginid, available, name, identifier, modules, version FROM ".DB::table('common_plugin')." WHERE identifier IN ('qqconnect', 'cloudstat', 'soso_smilies', 'cloudsearch', 'security', 'xf_storage')");
 	while($plugin = DB::fetch($query)) {
 		$plugins[$plugin['identifier']] = $plugin;
 	}
 
 	showtablerow('', array('class="td24"'), array(
 		'<strong>'.cplang('cloud_doctor_system_plugin_status').'</strong>',
-		count($plugins) >= 4 ? cplang('cloud_doctor_result_success').' '.cplang('available').' '.cplang('cloud_doctor_system_plugin_list') : cplang('cloud_doctor_result_failure').cplang('cloud_doctor_system_plugin_status_false')
+		count($plugins) >= 6 ? cplang('cloud_doctor_result_success').' '.cplang('available').' '.cplang('cloud_doctor_system_plugin_list') : cplang('cloud_doctor_result_failure').cplang('cloud_doctor_system_plugin_status_false')
 	));
 	foreach($plugins as $plugin) {
 		$moduleStatus = cplang('cloud_doctor_plugin_module_error');

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_admincp.php 25238 2011-11-02 02:28:34Z zhangguosheng $
+ *      $Id: lang_admincp.php 28030 2012-02-21 05:43:34Z monkey $
  */
 
 
@@ -1866,6 +1866,17 @@ $lang = array
 	'setting_attach_remote_minsize' => '附件尺寸下限',
 	'setting_attach_remote_minsize_comment' => '單位：KB，只有尺寸大於當前設置的附件才使用遠程附件功能，0 或留空為不限制',
 	'setting_attach_remote_ftpcheck' => '檢測遠程附件設置',
+
+	'setting_ftp_remote_-100' => '當前服務器 PHP 沒有安裝 FTP 擴展模塊或 FTP 函數被禁用',
+	'setting_ftp_remote_-101' => '嘗試連接到 FTP 服務器失敗，請檢查 FTP 服務器地址和端口號設置是否正確',
+	'setting_ftp_remote_-102' => '嘗試連接到 FTP 服務器失敗，請檢查 FTP 服務器地址和端口號設置是否正確',
+	'setting_ftp_remote_-103' => '嘗試登錄到 FTP 服務器失敗，請檢查 FTP 帳號密碼設置是否正確',
+	'setting_ftp_remote_-104' => '嘗試切換目錄失敗，請檢查站點目錄設置是否正確',
+	'setting_ftp_remote_-105' => '嘗試創建目錄失敗，請檢查站點目錄設置是否正確，並檢查 FTP 帳號是否具有創建目錄的權限',
+	'setting_ftp_remote_-106' => '嘗試上傳文件失敗，請檢查站點目錄是否具有上傳文件的權限',
+	'setting_ftp_remote_-107' => '嘗試上傳文件失敗，請檢查 FTP 帳號是否具有上傳文件的權限，如果確認權限正常，請嘗試使用被動模式(pasv)連接',
+	'setting_attach_ftp_dir' => '站點根目錄',
+	'setting_attach_ftp_dir_comment' => '站點根目錄的絕對路徑或相對於 FTP 主目錄的相對路徑，結尾不要加斜槓「/」，「.」表示 FTP 主目錄',
 
 	'setting_attach_remote_-100' => '當前服務器 PHP 沒有安裝 FTP 擴展模塊或 FTP 函數被禁用',
 	'setting_attach_remote_-101' => '遠程附件功能未開啟',
@@ -6130,6 +6141,11 @@ $lang = array
 
 	'import_data_invalid' => '數據無法識別，請返回',
 	'import_data_typeinvalid' => '數據類型錯誤，請返回',
+
+	'cloudaddons_ftp_setting' => '站點 FTP 設置',
+	'cloudaddons_unwriteabledirs' => '站點 {basedir} 目錄下的以下目錄不可寫，無法在線安裝此應用，請填寫本站點的 FTP 連接參數(本設置不會被保存):<br />{unwriteabledirs}',
+	'cloudaddons_plugin_link' => '獲取更多插件',
+	'cloudaddons_style_link' => '獲取更多風格',
 
 
 	'rewrite_message' => '<h1>Apache Web Server(獨立主機用戶)</h1>
