@@ -229,7 +229,7 @@ if($attach['remote'] && !$_G['setting']['ftp']['hideurl'] && $isimage) {
 	dheader('location:'.$_G['setting']['ftp']['attachurl'].'forum/'.$attach['attachment']);
 } else {
 	if($attach['sha1'] && $attach['attachment'] == '') {
-		if($_G['gp_inajax']){ //qqdl 鏈接更新數
+		if($_G['gp_inajax']){ //qqdl 链接更新数
 			include template('common/header');
 			include template('common/footer');
 			exit;

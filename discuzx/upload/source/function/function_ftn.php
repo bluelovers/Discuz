@@ -5,7 +5,7 @@
  *		This is NOT a freeware, use is subject to license terms
  *
  *		$Id: function_ftn.php 29038 2012-03-23 06:22:39Z songlixin $
- *		旋風上傳下載，需要的函數
+ *		旋风上传下载，需要的函数
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -55,7 +55,7 @@ function make_downloadurl($sha1,$filesize,$filename) {
 	global $_G;
 
 
-	$filename = trim($filename,' "'); // Discuz! 默認的filename兩側會加上 雙引號
+	$filename = trim($filename,' "'); // Discuz! 默认的filename两侧会加上 双引号
 	$filename = diconv($filename,CHARSET,'UTF-8');
 	$filename = str2hex($filename);
 

@@ -37,20 +37,20 @@ function seditor_menu(seditorkey, tag) {
 	if(!$(menuid)) {
 		switch(tag) {
 			case 'url':
-				str = '請輸入鏈接地址:<br /><input type="text" id="' + ctrlid + '_param_1" sautocomplete="off" style="width: 98%" value="" class="px" />' +
-					'<br />請輸入鏈接文字:<br /><input type="text" id="' + ctrlid + '_param_2" style="width: 98%" value="" class="px" />';
+				str = '请输入链接地址:<br /><input type="text" id="' + ctrlid + '_param_1" sautocomplete="off" style="width: 98%" value="" class="px" />' +
+					'<br />请输入链接文字:<br /><input type="text" id="' + ctrlid + '_param_2" style="width: 98%" value="" class="px" />';
 				submitstr = "$('" + ctrlid + "_param_2').value !== '' ? seditor_insertunit('" + seditorkey + "', '[url='+$('" + ctrlid + "_param_1').value+']'+$('" + ctrlid + "_param_2').value, '[/url]', null, 1) : seditor_insertunit('" + seditorkey + "', '[url]'+$('" + ctrlid + "_param_1').value, '[/url]', null, 1);hideMenu();";
 				break;
 			case 'code':
 			case 'quote':
-				var tagl = {'quote' : '請輸入要插入的引用', 'code' : '請輸入要插入的代碼'};
+				var tagl = {'quote' : '请输入要插入的引用', 'code' : '请输入要插入的代码'};
 					str = tagl[tag] + ':<br /><textarea id="' + ctrlid + '_param_1" style="width: 98%" cols="50" rows="5" class="txtarea"></textarea>';
 				submitstr = "seditor_insertunit('" + seditorkey + "', '[" + tag + "]'+$('" + ctrlid + "_param_1').value, '[/" + tag + "]', null, 1);hideMenu();";
 				break;
 			case 'img':
-				str = '請輸入圖片地址:<br /><input type="text" id="' + ctrlid + '_param_1" style="width: 98%" value="" class="px" onchange="loadimgsize(this.value, \'' + seditorkey + '\',\'' + tag + '\')" />' +
-					'<p class="mtm">寬(可選): <input type="text" id="' + ctrlid + '_param_2" style="width: 15%" value="" class="px" /> &nbsp;' +
-					'高(可選): <input type="text" id="' + ctrlid + '_param_3" style="width: 15%" value="" class="px" /></p>';
+				str = '请输入图片地址:<br /><input type="text" id="' + ctrlid + '_param_1" style="width: 98%" value="" class="px" onchange="loadimgsize(this.value, \'' + seditorkey + '\',\'' + tag + '\')" />' +
+					'<p class="mtm">宽(可选): <input type="text" id="' + ctrlid + '_param_2" style="width: 15%" value="" class="px" /> &nbsp;' +
+					'高(可选): <input type="text" id="' + ctrlid + '_param_3" style="width: 15%" value="" class="px" /></p>';
 				submitstr = "seditor_insertunit('" + seditorkey + "', '[img' + ($('" + ctrlid + "_param_2').value !== '' && $('" + ctrlid + "_param_3').value !== '' ? '='+$('" + ctrlid + "_param_2').value+','+$('" + ctrlid + "_param_3').value : '')+']'+$('" + ctrlid + "_param_1').value, '[/img]', null, 1);hideMenu();";
 				break;
 		}
@@ -60,7 +60,7 @@ function seditor_menu(seditorkey, tag) {
 		menu.className = 'p_pof upf';
 		menu.style.width = '270px';
 		$('append_parent').appendChild(menu);
-		menu.innerHTML = '<span class="y"><a onclick="hideMenu()" class="flbc" href="javascript:;">關閉</a></span><div class="p_opt cl"><form onsubmit="' + submitstr + ';return false;" autocomplete="off"><div>' + str + '</div><div class="pns mtn"><button type="submit" id="' + ctrlid + '_submit" class="pn pnc"><strong>提交</strong></button><button type="button" onClick="hideMenu()" class="pn"><em>取消</em></button></div></form></div>';
+		menu.innerHTML = '<span class="y"><a onclick="hideMenu()" class="flbc" href="javascript:;">关闭</a></span><div class="p_opt cl"><form onsubmit="' + submitstr + ';return false;" autocomplete="off"><div>' + str + '</div><div class="pns mtn"><button type="submit" id="' + ctrlid + '_submit" class="pn pnc"><strong>提交</strong></button><button type="button" onClick="hideMenu()" class="pn"><em>取消</em></button></div></form></div>';
 	}
 	showMenu({'ctrlid':ctrlid,'evt':'click','duration':3,'cache':0,'drag':1});
 }

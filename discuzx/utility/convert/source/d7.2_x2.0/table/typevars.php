@@ -32,7 +32,7 @@ while ($data = $db_source->fetch_array($query)) {
 }
 
 if($next) {
-	showmessage("繼續轉換數據表 ".$table_source." $start 至 ".($start+$limit)." 行", "index.php?a=$action&source=$source&prg=$curprg&start=".($start + $limit));
+	showmessage("继续转换数据表 ".$table_source." $start 至 ".($start+$limit)." 行", "index.php?a=$action&source=$source&prg=$curprg&start=".($start + $limit));
 } else {
 	if(!$db_target->result_first("SELECT count(*) FROM $table_target WHERE search > 2 LIMIT 1")) {
 		$db_target->query("UPDATE $table_target SET search = '3' WHERE search = '1'");

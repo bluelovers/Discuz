@@ -576,10 +576,10 @@ function config_edit() {
 
 function authcode($string, $operation = 'DECODE', $key = '', $expiry = 0) {
 
-	$ckey_length = 4;	// 隨機密鑰長度 取值 0-32;
-				// 加入隨機密鑰，可以令密文無任何規律，即便是原文和密鑰完全相同，加密結果也會每次不同，增大破解難度。
-				// 取值越大，密文變動規律越大，密文變化 = 16 的 $ckey_length 次方
-				// 當此值為 0 時，則不產生隨機密鑰
+	$ckey_length = 4;	// 随机密钥长度 取值 0-32;
+				// 加入随机密钥，可以令密文无任何规律，即便是原文和密钥完全相同，加密结果也会每次不同，增大破解难度。
+				// 取值越大，密文变动规律越大，密文变化 = 16 的 $ckey_length 次方
+				// 当此值为 0 时，则不产生随机密钥
 
 	$key = md5($key ? $key : UC_KEY);
 	$keya = md5(substr($key, 0, 16));
@@ -706,7 +706,7 @@ function insertconfig($s, $find, $replace) {
 	if(preg_match($find, $s)) {
 		$s = preg_replace($find, $replace, $s);
 	} else {
-		// 插入到最後一行
+		// 插入到最后一行
 		$s .= "\r\n".$replace;
 	}
 	return $s;
@@ -973,13 +973,13 @@ function check_adminuser($username, $password, $email) {
 	$error = '';
 	$uid = uc_user_register($username, $password, $email);
 	/*
-	-1 : 用戶名不合法
-	-2 : 包含不允許註冊的詞語
-	-3 : 用戶名已經存在
-	-4 : email 格式有誤
-	-5 : email 不允許註冊
-	-6 : 該 email 已經被註冊
-	>1 : 表示成功，數值為 UID
+	-1 : 用户名不合法
+	-2 : 包含不允许注册的词语
+	-3 : 用户名已经存在
+	-4 : email 格式有误
+	-5 : email 不允许注册
+	-6 : 该 email 已经被注册
+	>1 : 表示成功，数值为 UID
 	*/
 	if($uid == -1 || $uid == -2) {
 		$error = 'admin_username_invalid';

@@ -9,7 +9,7 @@
 
 $lang = array
 (
-	'adv_title' => '或者輸入名稱',
-	'adv_adv' => '選擇廣告',
+	'adv_title' => '或者输入名称',
+	'adv_adv' => '选择广告',
 );
 ?>

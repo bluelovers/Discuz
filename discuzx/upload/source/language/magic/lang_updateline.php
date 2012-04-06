@@ -10,8 +10,8 @@
 $lang = array
 (
 	'updateline_name' => '救生圈',
-	'updateline_desc' => '把自己日誌的發佈時間更新為當前時間',
-	'updateline_info' => '把自己日誌的發佈時間更新為當前時間',
+	'updateline_desc' => '把自己日志的发布时间更新为当前时间',
+	'updateline_info' => '把自己日志的发布时间更新为当前时间',
 );
 
 ?>

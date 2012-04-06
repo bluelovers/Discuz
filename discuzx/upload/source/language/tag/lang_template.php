@@ -10,19 +10,19 @@
  */
 
 $lang = array (
-  'no_tag' => '還沒有任何標籤',
-  'tag' => '標籤',
-  'blog_read' => '次閱讀',
-  'blog_replay' => '個評論',
-  'empty_tags' => '沒有此標籤，您可以繼續搜索或者<a href="misc.php?mod=tag" title="返回標籤首頁">返回標籤首頁</a>',
-  'forum' => '版塊',
-  'hot' => '熱度',
-  'lastpost' => '最後發表',
-  'no_content' => '沒有相關內容',
-  'personal_category' => '個人分類',
-  'related_blog' => '相關日誌',
-  'related_thread' => '相關帖子',
-  'replies' => '回復/查看',
+  'no_tag' => '还没有任何标签',
+  'tag' => '标签',
+  'blog_read' => '次阅读',
+  'blog_replay' => '个评论',
+  'empty_tags' => '没有此标签，您可以继续搜索或者<a href="misc.php?mod=tag" title="返回标签首页">返回标签首页</a>',
+  'forum' => '版块',
+  'hot' => '热度',
+  'lastpost' => '最后发表',
+  'no_content' => '没有相关内容',
+  'personal_category' => '个人分类',
+  'related_blog' => '相关日志',
+  'related_thread' => '相关帖子',
+  'replies' => '回复/查看',
 );
 
 ?>

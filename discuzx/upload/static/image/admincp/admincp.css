@@ -2,7 +2,7 @@
 
 *{ word-wrap:break-word; outline:none; }
 body{ background:#FFF; text-align:center; }
-body, td, input, textarea, select, button{ color:#555; font:12px "Lucida Grande", Verdana, Lucida, Helvetica, Arial, 'mingliu', sans-serif; }
+body, td, input, textarea, select, button{ color:#555; font:12px "Lucida Grande", Verdana, Lucida, Helvetica, Arial, 'Simsun', sans-serif; }
 body, ul, dl, dd, p, h1, h2, h3, h4, h5, h6, form, fieldset { margin:0; padding:0; }
 ul{ list-style:none; }
 h1, h2, h3, h4, h5, h6{ font-size:12px; }
@@ -434,7 +434,7 @@ a.faq { background: url(faq.gif) no-repeat 0 2px; padding:1px; margin-left:10px;
 .header, .header td, .header th{ border-top: 1px dotted #DEEFFB; font-weight: 700; }
 .smallefont{font-size: 11px}
 
-/* 彈窗 */
+/* 弹窗 */
 .fwin { text-align: left; background: #FFF; }
 .t_l, .t_c, .t_r, .m_l, .m_r, .b_l, .b_c, .b_r { overflow: hidden; background: #000; opacity: 0.2; filter: alpha(opacity=20); }
 .t_l, .t_r, .b_l, .b_r { width: 10px; height: 10px; line-height: 10px; font-size: 0; }
@@ -467,14 +467,14 @@ a.faq { background: url(faq.gif) no-repeat 0 2px; padding:1px; margin-left:10px;
 .fwin .ss em { background: #eee; width: 16px; line-height: 18px; display: block; float: left; margin: 2px; cursor: pointer; padding-left: 7px;}
 .fwin .ss em.a { background: #09f; color: #FFF;}
 
-/* .cl --> Clear 自動閉合 */
+/* .cl --> Clear 自动闭合 */
 .cl:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
 .cl { zoom: 1; }
 
 .preview { margin-bottom: 8px; width: 570px; height: 340px; border: 1px solid #09C; box-shadow: 3px 3px 3px #EEE; -moz-box-shadow: 3px 3px 3px #EEE; -webkit-box-shadow: 3px 3px 3px #EEE; -o-box-shadow: 3px 3px 3px #EEE; }
 
 
-/*氣泡信息 by dfox */
+/*气泡信息 by dfox */
 .prmm { margin-left: -27px; padding-top: 10px; width: 250px; background: transparent url(pm_ntc.gif) no-repeat 0 0; text-align: left; opacity: 0.98; }
 	.prmc { padding-bottom: 10px; background: transparent url(pm_ntc.gif) no-repeat -250px 100%; }
 		.prmm ul { padding: 0 10px; border: solid #91C8E2; border-width: 0 2px; background: #FFF; }
@@ -484,7 +484,7 @@ a.faq { background: url(faq.gif) no-repeat 0 2px; padding:1px; margin-left:10px;
 	.up .prmc { padding-top: 5px; padding-bottom: 0; background-position: -650px 0; }
 		.up li { border-bottom: none; line-height: 160%; }
 
-/* 通用的表單樣式 */
+/* 通用的表单样式 */
 	.tfm { width: 100%; }
 		.tfm caption, .tfm th, .tfm td { padding: 10px 2px; }
 			.tfm caption h2 { font-size: 16px; }
@@ -503,7 +503,7 @@ a.faq { background: url(faq.gif) no-repeat 0 2px; padding:1px; margin-left:10px;
 	.bn .tfm caption, .bn .tfm th, .bn .tfm td { padding-top: 5px; padding-bottom: 5px; }
 		.bn .tfm th { font-weight: 400; }
 
-/* 普通數據列表 datatable by michael */
+/* 普通数据列表 datatable by michael */
 
 .dt { border-top: 1px solid #CDCDCD; width: 100%; }
 	.dt th { background: #F2F2F2; }
@@ -512,7 +512,7 @@ a.faq { background: url(faq.gif) no-repeat 0 2px; padding:1px; margin-left:10px;
 	.dt .px { height: 16px !important; font-size: 12px; }
 
 
-/* 外邊距 Margin，三組從窄到寬，級別分別為：n, m, w */
+/* 外边距 Margin，三组从窄到宽，级别分别为：n, m, w */
 	.mtn { margin-top: 5px !important; }
 	.mbn { margin-bottom: 5px !important; }
 	.mtm { margin-top: 10px !important; }

@@ -50,7 +50,7 @@ function addFormEvent(formid, focus){
 	};
 	formNode[stmp[1]].onblur = function () {
 		if(formNode[stmp[1]].value == '') {
-			errormessage(formNode[stmp[1]].id, '請填寫密碼');
+			errormessage(formNode[stmp[1]].id, '请填写密码');
 		}else{
 			errormessage(formNode[stmp[1]].id, 'succeed');
 		}
@@ -58,7 +58,7 @@ function addFormEvent(formid, focus){
 	};
 	formNode[stmp[2]].onblur = function () {
 		if(formNode[stmp[2]].value == '') {
-			errormessage(formNode[stmp[2]].id, '請再次輸入密碼');
+			errormessage(formNode[stmp[2]].id, '请再次输入密码');
 		}
 		checkpassword(formNode[stmp[1]].id, formNode[stmp[2]].id);
 	};
@@ -73,7 +73,7 @@ function addFormEvent(formid, focus){
 	};
 	formNode[stmp[3]].onblur = function () {
 		if(formNode[stmp[3]].value == '') {
-			errormessage(formNode[stmp[3]].id, '請輸入郵箱地址');
+			errormessage(formNode[stmp[3]].id, '请输入邮箱地址');
 		}
 		emailMenuOp(3, null, formNode[stmp[3]].id);
 	};
@@ -232,12 +232,12 @@ function checkusername(id) {
 		lastusername = username;
 	}
 	if(username.match(/<|"/ig)) {
-		errormessage(id, '用戶名包含敏感字符');
+		errormessage(id, '用户名包含敏感字符');
 		return;
 	}
 	var unlen = username.replace(/[^\x00-\xff]/g, "**").length;
 	if(unlen < 3 || unlen > 15) {
-		errormessage(id, unlen < 3 ? '用戶名小於 3 個字符' : '用戶名超過 15 個字符');
+		errormessage(id, unlen < 3 ? '用户名小于 3 个字符' : '用户名超过 15 个字符');
 		return;
 	}
 	var x = new Ajax();
@@ -253,7 +253,7 @@ function checkpassword(id1, id2) {
 	}
 	errormessage(id2);
 	if($(id1).value != $(id2).value) {
-		errormessage(id2, '兩次輸入的密碼不一致');
+		errormessage(id2, '两次输入的密码不一致');
 	} else {
 		errormessage(id2, 'succeed');
 	}
@@ -287,7 +287,7 @@ function checkinvite() {
 		lastinvitecode = invitecode;
 	}
 	if(invitecode.match(/<|"/ig)) {
-		errormessage('invitecode', '邀請碼包含敏感字符');
+		errormessage('invitecode', '邀请码包含敏感字符');
 		return;
 	}
 	var x = new Ajax();

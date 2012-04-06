@@ -384,12 +384,12 @@ function block_template($bid) {
 								$ftp = & discuz_ftp::instance();
 								$ftp->connect();
 								if($ftp->connectid && $ftp->ftp_size($thumbpath) > 0 || ($return = $image->Thumb($replacevalue, $thumbpath, $block['picwidth'], $block['picheight'], 2) && $ftp->upload($_G['setting']['attachurl'].'/'.$thumbpath, $thumbpath))) {
-									$picflag = 1; //common_block_pic表中的picflag標識（0本地，1遠程）
+									$picflag = 1; //common_block_pic表中的picflag标识（0本地，1远程）
 									$_G['block_makethumb'] = true;
 									@unlink($_G['setting']['attachdir'].'./'.$thumbpath);
 								}
 							} elseif(file_exists($_G['setting']['attachdir'].$thumbpath) || ($return = $image->Thumb($replacevalue, $thumbpath, $block['picwidth'], $block['picheight'], 2))) {
-								$picflag = 0; //common_block_pic表中的picflag標識（0本地，1遠程）
+								$picflag = 0; //common_block_pic表中的picflag标识（0本地，1远程）
 								$_G['block_makethumb'] = true;
 							}
 							if($_G['block_makethumb']) {
@@ -631,7 +631,7 @@ function block_updateitem($bid, $items=array()) {
 			$curitem['displayorder'] = $i;
 
 			$curitem['makethumb'] = 0;
-			if($block['picwidth'] && $block['picheight'] && $curitem['picflag']) { //picflag=0為url地址
+			if($block['picwidth'] && $block['picheight'] && $curitem['picflag']) { //picflag=0为url地址
 				$thumbpath = empty($curitem['thumbpath']) ? block_thumbpath($block, $curitem) : $curitem['thumbpath'];
 				if($_G['setting']['ftp']['on']) {
 					if(empty($ftp) || empty($ftp->connectid)) {

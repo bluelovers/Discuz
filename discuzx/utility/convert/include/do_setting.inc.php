@@ -12,7 +12,7 @@ $sfile = DISCUZ_ROOT.'./source/'.$source.'/setting.ini';
 if(!submitcheck('submit')) {
 	show_form_header();
 	show_table_header();
-	show_table_row(array(array('colspan="3"', '編輯配置文件 source/'.$source.'/setting.ini')), 'title');
+	show_table_row(array(array('colspan="3"', '编辑配置文件 source/'.$source.'/setting.ini')), 'title');
 
 	foreach ($setting as $key => $value) {
 		if(is_array($value) && !empty($value)) {
@@ -21,7 +21,7 @@ if(!submitcheck('submit')) {
 			foreach ($value as $k => $v) {
 				show_table_row(	array(
 				lang($k),
-				array('class="bg2" width="70%"', '<input type="text" size="40" name="newsetting['.$key.']['.$k.']" value="'.htmlspecialchars($v).'"'.$disabled.'>'.($disabled ? ' 只讀' : ''))
+				array('class="bg2" width="70%"', '<input type="text" size="40" name="newsetting['.$key.']['.$k.']" value="'.htmlspecialchars($v).'"'.$disabled.'>'.($disabled ? ' 只读' : ''))
 				), 'bg2'
 				);
 			}
@@ -56,10 +56,10 @@ if(!submitcheck('submit')) {
 		if($fp = @fopen($sfile, 'w')) {
 			fwrite($fp, implode("\n", $lines));
 			fclose($fp);
-			showmessage('設置已經更新完畢並成功保存', 'index.php', '', 1000);
+			showmessage('设置已经更新完毕并成功保存', 'index.php', '', 1000);
 		} else {
-			showmessage('該設置文件為只讀文件，無法保存，請返回');
+			showmessage('该设置文件为只读文件，无法保存，请返回');
 		}
 	}
-	showmessage('您沒有改變任何設置', 'index.php', '', 1000);
+	showmessage('您没有改变任何设置', 'index.php', '', 1000);
 }

@@ -9,7 +9,7 @@
 
 $lang = array
 (
-	'myapp_titlelength' => '名稱長度',
+	'myapp_titlelength' => '名称长度',
 	'myapp_startrow' => '起始位置',
 );
 ?>

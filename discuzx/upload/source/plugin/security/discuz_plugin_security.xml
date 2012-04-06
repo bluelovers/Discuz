@@ -6,7 +6,7 @@
 		<item id="plugin">
 			<item id="available"><![CDATA[1]]></item>
 			<item id="adminid"><![CDATA[1]]></item>
-			<item id="name"><![CDATA[防水牆]]></item>
+			<item id="name"><![CDATA[防水墙]]></item>
 			<item id="identifier"><![CDATA[security]]></item>
 			<item id="description"><![CDATA[]]></item>
 			<item id="datatables"><![CDATA[]]></item>
@@ -45,14 +45,14 @@
 		<item id="upgradefile"><![CDATA[upgrade.php]]></item>
 		<item id="language">
 			<item id="scriptlang">
-				<item id="banuser_tips_qq"><![CDATA[抱歉，您的帳號被系統禁言，您可以綁定QQ解除禁言狀態。<a href="connect.php?mod=login&op=init">綁定QQ</a>]]></item>
-				<item id="banuser_tips_seccode"><![CDATA[抱歉，您的帳號被系統禁言，您可以點擊<a href="#" onclick="showWindow('security','plugin.php?id=security:unlock')">這裡</a>解除禁言操作。]]></item>
+				<item id="banuser_tips_qq"><![CDATA[抱歉，您的帐号被系统禁言，您可以绑定QQ解除禁言状态。<a href="connect.php?mod=login&op=init">绑定QQ</a>]]></item>
+				<item id="banuser_tips_seccode"><![CDATA[抱歉，您的帐号被系统禁言，您可以点击<a href="#" onclick="showWindow('security','plugin.php?id=security:unlock')">这里</a>解除禁言操作。]]></item>
 				<item id="unlock_success"><![CDATA[解禁成功！]]></item>
-				<item id="wrongcode"><![CDATA[驗證碼驗證失敗，無法解禁。]]></item>
-				<item id="title"><![CDATA[防水牆保衛網站遠離侵害]]></item>
+				<item id="wrongcode"><![CDATA[验证码验证失败，无法解禁。]]></item>
+				<item id="title"><![CDATA[防水墙保卫网站远离侵害]]></item>
 			</item>
 			<item id="templatelang">
-				<item id="unlock_title"><![CDATA[請輸入驗證碼，解除禁言狀態]]></item>
+				<item id="unlock_title"><![CDATA[请输入验证码，解除禁言状态]]></item>
 				<item id="unlock"><![CDATA[解禁]]></item>
 			</item>
 		</item>

@@ -21,7 +21,7 @@ if(empty($_G['gp_ftn_formhash']) || empty($_G['uid']) || empty($_G['gp_filesize'
         include template('xf_storage:cross');
     }
 } elseif($_G['gp_ftn_formhash'] != ftn_formhash()){
-	exit;//showmessage('操作超時或者數據來源錯誤','','error');
+	exit;//showmessage('操作超时或者数据来源错误','','error');
 }
 
 

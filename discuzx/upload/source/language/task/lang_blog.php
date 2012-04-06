@@ -9,12 +9,12 @@
 
 $lang = array
 (
-	'blog_name' => '發表日誌任務',
-	'blog_desc' => '發表日誌即可完成任務，獲得相應的獎勵',
-	'blog_view' => '<strong>請按照以下的說明來參與本任務：</strong>
+	'blog_name' => '发表日志任务',
+	'blog_desc' => '发表日志即可完成任务，获得相应的奖励',
+	'blog_view' => '<strong>请按照以下的说明来参与本任务：</strong>
 		<ul>
-		<li>1. <a href="home.php?mod=spacecp&ac=blog" target="_blank">新窗口打開發表日誌頁面</a></li>
-		<li>2. 在新打開的頁面中，書寫自己的第一篇日誌，並進行發佈</li>
+		<li>1. <a href="home.php?mod=spacecp&ac=blog" target="_blank">新窗口打开发表日志页面</a></li>
+		<li>2. 在新打开的页面中，书写自己的第一篇日志，并进行发布</li>
 		</ul>',
 );
 

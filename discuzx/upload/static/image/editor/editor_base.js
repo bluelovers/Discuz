@@ -40,10 +40,10 @@ function renewContent() {
 		}
 	};
 
-	if(window.confirm('您確定要恢復上次保存?')) {
+	if(window.confirm('您确定要恢复上次保存?')) {
 		var data = loadUserdata('home');
 		if(in_array((data = trim(data)), ['', 'null', 'false', null, false])) {
-			parent.showDialog('沒有可以恢復的數據！');
+			parent.showDialog('没有可以恢复的数据！');
 			return;
 		}
 		var data = data.split(/\x09\x09/);
@@ -206,13 +206,13 @@ function format(type, para){
 	if(!gIsIE){
 		switch(type){
 			case "Cut":
-				sAlert = "您的瀏覽器安全設置不允許編輯器自動執行剪切操作,請使用鍵盤快捷鍵(Ctrl+X)來完成";
+				sAlert = "您的浏览器安全设置不允许编辑器自动执行剪切操作,请使用键盘快捷键(Ctrl+X)来完成";
 				break;
 			case "Copy":
-				sAlert = "您的瀏覽器安全設置不允許編輯器自動執行拷貝操作,請使用鍵盤快捷鍵(Ctrl+C)來完成";
+				sAlert = "您的浏览器安全设置不允许编辑器自动执行拷贝操作,请使用键盘快捷键(Ctrl+C)来完成";
 				break;
 			case "Paste":
-				sAlert = "您的瀏覽器安全設置不允許編輯器自動執行粘貼操作,請使用鍵盤快捷鍵(Ctrl+V)來完成";
+				sAlert = "您的浏览器安全设置不允许编辑器自动执行粘贴操作,请使用键盘快捷键(Ctrl+V)来完成";
 				break;
 		}
 	}
@@ -296,7 +296,7 @@ function doodleBox(event, id) {
 	if(parent.$('uchome-ttHtmlEditor') != null) {
 		parent.showWindow(id, 'home.php?mod=magic&mid=doodle&showid=blog_doodle&target=uchome-ttHtmlEditor&from=editor');
 	} else {
-		alert("找不到塗鴉板初始化數據");
+		alert("找不到涂鸦板初始化数据");
 	}
 }
 function backColor(e){
@@ -494,7 +494,7 @@ function fSetModeTip(obj){
 		dv.style.padding = "2px";
 		dv.style.border = "1px #000000 solid";
 		dv.style.backgroundColor = "#FFFFCC";
-		dv.innerHTML = "編輯源碼";
+		dv.innerHTML = "编辑源码";
 		document.body.appendChild(dv);
 	}else{
 		dvModeTip.style.display = "";
@@ -612,7 +612,7 @@ function changeEditType(flag, ev){
 			}
 			ev = ev || event;
 			if(ev){
-				if(window.confirm("轉換為純文本時將會遺失某些格式。\n您確定要繼續嗎？")){
+				if(window.confirm("转换为纯文本时将会遗失某些格式。\n您确定要继续吗？")){
 					$('uchome-editstatus').value = 'text';
 					sub1();
 				}else{

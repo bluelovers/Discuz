@@ -10,16 +10,16 @@
 $lang = array
 (
 	'anonymouspost_name' => '匿名卡',
-	'anonymouspost_desc' => '在指定的地方，讓自己的名字顯示為匿名。',
-	'anonymouspost_num' => '擁有個數: {magicnum}',
-	'anonymouspost_forum' => '允許使用本道具的版塊',
-	'anonymouspost_info' => '將自己的帖子設置為匿名身份，請輸入帖子的 ID',
-	'anonymouspost_info_nonexistence' => '請指定要匿名的帖子',
-	'anonymouspost_succeed' => '成功設置為匿名',
-	'anonymouspost_use_error' => '參數錯誤，不能在此處使用本道具。',
-	'anonymouspost_info_noperm' => '對不起，主題所在版塊不允許使用本道具',
-	'anonymouspost_info_user_noperm' => '對不起，你不能對此人使用本道具',
-	'anonymouspost_once_limit' => '已經是匿名狀態了，不能重複使用本道具。',
+	'anonymouspost_desc' => '在指定的地方，让自己的名字显示为匿名。',
+	'anonymouspost_num' => '拥有个数: {magicnum}',
+	'anonymouspost_forum' => '允许使用本道具的版块',
+	'anonymouspost_info' => '将自己的帖子设置为匿名身份，请输入帖子的 ID',
+	'anonymouspost_info_nonexistence' => '请指定要匿名的帖子',
+	'anonymouspost_succeed' => '成功设置为匿名',
+	'anonymouspost_use_error' => '参数错误，不能在此处使用本道具。',
+	'anonymouspost_info_noperm' => '对不起，主题所在版块不允许使用本道具',
+	'anonymouspost_info_user_noperm' => '对不起，你不能对此人使用本道具',
+	'anonymouspost_once_limit' => '已经是匿名状态了，不能重复使用本道具。',
 );
 
 ?>

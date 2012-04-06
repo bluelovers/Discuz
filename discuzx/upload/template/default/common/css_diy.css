@@ -1,4 +1,4 @@
-/* 判斷：當打開 DIY 面板時加載 */
+/* 判断：当打开 DIY 面板时加载 */
 body { padding-top: 170px; }
 #controlpanel { color: #000;position: fixed; top: 0; left: 0; z-index: 200; width: 100%; border-bottom: 1px solid #999; background: #F5F5F5 url({STATICURL}image/diy/cp-bg.png) repeat-x 0 0; }
 	* html #controlpanel { position: absolute; top: expression(offsetParent.scrollTop); }
@@ -155,14 +155,14 @@ dl.diy dt { margin-top: -10px; margin-bottom: 10px; padding-bottom: 5px; border-
 	.borderul .bordera, .borderul label { display: none; }
 	.borderul label.y { display: inline; }
 
-/* 彈窗 by Pony */
+/* 弹窗 by Pony */
 .diywin .px { vertical-align: middle; }
 .diywin td { padding: 2px 0; }
 .diywin .tfm caption, .diywin .tfm th, .diywin .tfm td { padding: 5px 2px; }
-/* 個人導航小樣式 */
+/* 个人导航小样式 */
 .mininv { width: 450px; height: 30px; border: 1px dotted #09F; }
 
-/* 個人空間和網站DIY共用的部分樣式 */
+/* 个人空间和网站DIY共用的部分样式 */
 .hide { display: none; }
 .frame,.tab,.block { position: relative; zoom:1; min-height: 20px; }
 .edit { position: absolute; top: 0; right: 0; z-index: 199; padding: 0 5px; background: red; line-height: 26px; color: #FFF; cursor: pointer; }

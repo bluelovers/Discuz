@@ -27,7 +27,7 @@ _attachEvent($('e_attach'),'click',function(e){
     });
 
 
-if(BROWSER.firefox && window.HTMLElement) {   //為 firefox 增加 innerText 方法
+if(BROWSER.firefox && window.HTMLElement) {   //为 firefox 增加 innerText 方法
     HTMLElement.prototype.__defineGetter__("innerText", function(){
         var anyString = "";
         var childS = this.childNodes;
@@ -99,7 +99,7 @@ function loadiframe(url,iframeid,time,force){
                 },time);
         }
     }
-    //頁面加載監控 60s for IE only
+    //页面加载监控 60s for IE only
     if(BROWSER.ie){
             var linster = setTimeout(function()
             {

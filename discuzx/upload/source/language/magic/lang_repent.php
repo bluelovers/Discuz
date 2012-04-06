@@ -10,14 +10,14 @@
 $lang = array
 (
 	'repent_name' => '悔悟卡',
-	'repent_desc' => '可以刪除自己的帖子',
-	'repent_forum' => '允許使用本道具的版塊',
-	'repent_info' => '刪除自己的帖子，請輸入帖子的 ID',
-	'repent_info_nonexistence' => '請指定要刪除的帖子',
-	'repent_succeed' => '你操作的帖子已刪除',
-	'repent_info_noperm' => '對不起，主題所在版塊不允許使用本道具',
-	'repent_info_user_noperm' => '對不起，你只能刪除自己的帖子',
-	'repent_do_not_rushreply' => '不能在搶樓帖中使用此道具',
+	'repent_desc' => '可以删除自己的帖子',
+	'repent_forum' => '允许使用本道具的版块',
+	'repent_info' => '删除自己的帖子，请输入帖子的 ID',
+	'repent_info_nonexistence' => '请指定要删除的帖子',
+	'repent_succeed' => '你操作的帖子已删除',
+	'repent_info_noperm' => '对不起，主题所在版块不允许使用本道具',
+	'repent_info_user_noperm' => '对不起，你只能删除自己的帖子',
+	'repent_do_not_rushreply' => '不能在抢楼帖中使用此道具',
 );
 
 ?>

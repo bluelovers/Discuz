@@ -29,7 +29,7 @@ class usercontrol extends base {
 		$this->app = $this->cache['apps'][UC_APPID];
 	}
 
-	// -1 未開啟
+	// -1 未开启
 	function onsynlogin() {
 		$this->init_input();
 		$uid = $this->input('uid');

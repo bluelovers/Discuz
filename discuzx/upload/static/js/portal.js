@@ -68,7 +68,7 @@ function block_pushitem(bid, itemid) {
 }
 
 function block_delete_item(bid, itemid, itemtype, itemfrom, from) {
-	var msg = itemtype==1 ? '您確定要刪除該數據嗎？' : '您確定要屏蔽該數據嗎？';
+	var msg = itemtype==1 ? '您确定要删除该数据吗？' : '您确定要屏蔽该数据吗？';
 	if(confirm(msg)) {
 		var url = 'portal.php?mod=portalcp&ac=block&op=remove&bid='+bid+'&itemid='+itemid;
 		if(itemfrom=='ajax') {
@@ -142,7 +142,7 @@ function recommenditem_check() {
 		document.forms['recommendform'].action = document.forms['recommendform'].action+'&bid='+sel.value;
 		return true;
 	} else {
-		alert("請選擇一個模塊！");
+		alert("请选择一个模块！");
 		return false;
 	}
 }
@@ -210,10 +210,10 @@ function blockSetCacheTime(timer) {
 function toggleSettingShow() {
 	if(!$('tbody_setting').style.display) {
 		$('tbody_setting').style.display = 'none';
-		$('a_setting_show').innerHTML = '展開設置項';
+		$('a_setting_show').innerHTML = '展开设置项';
 	} else {
 		$('tbody_setting').style.display = '';
-		$('a_setting_show').innerHTML = '收起設置項';
+		$('a_setting_show').innerHTML = '收起设置项';
 	}
 	doane();
 }
@@ -221,16 +221,16 @@ function switchSetting() {
 	var checked = $('isblank').checked;
 	if(checked) {
 		$('tbody_setting').style.display = 'none';
-		$('a_setting_show').innerHTML = '展開設置項';
+		$('a_setting_show').innerHTML = '展开设置项';
 	} else {
 		$('tbody_setting').style.display = '';
-		$('a_setting_show').innerHTML = '收起設置項';
+		$('a_setting_show').innerHTML = '收起设置项';
 	}
 }
 
 function checkblockname(form) {
 	if(!(trim(form.name.value) > '')) {
-		showDialog('模塊標識不能為空', 'error', null, function(){form.name.focus();});
+		showDialog('模块标识不能为空', 'error', null, function(){form.name.focus();});
 		return false;
 	}
 	if(form.summary && form.summary.value) {
@@ -238,7 +238,7 @@ function checkblockname(form) {
 		if(tag) {
 			showBlockSummary();
 			form.summary.focus();
-			showDialog('自定義內容錯誤，HTML代碼：'+tag+' 標籤不匹配', 'error', null, function(){form.summary.select();});
+			showDialog('自定义内容错误，HTML代码：'+tag+' 标签不匹配', 'error', null, function(){form.summary.select();});
 			return false;
 		}
 	}
@@ -274,7 +274,7 @@ function blockCheckTag(summary, returnValue) {
 				if(returnValue) {
 					return tag;
 				} else {
-					showDialog('HTML代碼：'+tag+' 標籤不匹配', 'error', null, fn, true, fn);
+					showDialog('HTML代码：'+tag+' 标签不匹配', 'error', null, fn, true, fn);
 					return false;
 				}
 			}
@@ -299,7 +299,7 @@ function hideBlockSummary() {
 
 function blockconver(ele,bid) {
 	if(ele && bid) {
-		if(confirm('你確定要轉換模塊的類型從 '+ele.options[0].innerHTML+' 到 '+ele.options[ele.selectedIndex].innerHTML)) {
+		if(confirm('你确定要转换模块的类型从 '+ele.options[0].innerHTML+' 到 '+ele.options[ele.selectedIndex].innerHTML)) {
 			ajaxget('portal.php?mod=portalcp&ac=block&op=convert&bid='+bid+'&toblockclass='+ele.value,'blockshow');
 		} else {
 			ele.selectedIndex = 0;

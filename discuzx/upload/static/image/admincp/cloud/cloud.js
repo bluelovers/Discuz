@@ -97,11 +97,11 @@ function ajaxShowAPIStatus(apiType, ips) {
 		var apiTdFirst = document.createElement('td');
 		apiTdFirst.className = 'td24';
 		if (!apiType || apiType == 1) {
-			apiTdFirst.innerHTML = '<strong>雲平台其他接口測試</strong>';
+			apiTdFirst.innerHTML = '<strong>云平台其他接口测试</strong>';
 		} else if (apiType == 2) {
-			apiTdFirst.innerHTML = '<strong>漫遊其他接口測試</strong>';
+			apiTdFirst.innerHTML = '<strong>漫游其他接口测试</strong>';
 		} else if (apiType == 3) {
-			apiTdFirst.innerHTML = '<strong>QQ互聯接口測試</strong>';
+			apiTdFirst.innerHTML = '<strong>QQ互联接口测试</strong>';
 		}
 
 		var apiTdSecond = document.createElement('td');

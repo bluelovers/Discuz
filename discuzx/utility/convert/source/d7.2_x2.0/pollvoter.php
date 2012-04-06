@@ -41,6 +41,6 @@ while($row = $db_source->fetch_array($query)) {
 
 $nextpstep = $pstep + 1;
 if($continue) {
-	showmessage("繼續轉換數據表 ".$table_source."，已轉換 $total 條記錄。", "index.php?a=$action&source=$source&prg=$curprg&pstep=$nextpstep&total=$total");
+	showmessage("继续转换数据表 ".$table_source."，已转换 $total 条记录。", "index.php?a=$action&source=$source&prg=$curprg&pstep=$nextpstep&total=$total");
 }
 ?>

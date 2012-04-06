@@ -9,15 +9,15 @@
 
 $lang = array
 (
-	'headerbanner_name' => '全局 頁頭通欄廣告',
-	'headerbanner_desc' => '展現方式: 頁頭通欄廣告顯示於頁面上方，通常使用 960x60 圖片或 Flash 的形式。當前頁面有多個頁頭通欄廣告時，系統會隨機選取其中之一顯示。<br />價值分析: 由於能夠在頁面打開的第一時間將廣告內容展現於最醒目的位置，因此成為了網頁中價位最高、最適合進行商業宣傳或品牌推廣的廣告類型之一。',
-	'headerbanner_index' => '首頁',
-	'headerbanner_fids' => '投放版塊',
-	'headerbanner_fids_comment' => '設置廣告投放的論壇版塊，當廣告投放範圍中包含「論壇」時有效',
-	'headerbanner_groups' => '投放群組分類',
-	'headerbanner_groups_comment' => '設置廣告投放的群組分類，當廣告投放範圍中包含「群組」時有效',
-	'headerbanner_category' => '投放門戶頻道',
-	'headerbanner_category_comment' => '設置廣告投放的頻道分類，當廣告投放範圍中包含「門戶」時有效',
+	'headerbanner_name' => '全局 页头通栏广告',
+	'headerbanner_desc' => '展现方式: 页头通栏广告显示于页面上方，通常使用 960x60 图片或 Flash 的形式。当前页面有多个页头通栏广告时，系统会随机选取其中之一显示。<br />价值分析: 由于能够在页面打开的第一时间将广告内容展现于最醒目的位置，因此成为了网页中价位最高、最适合进行商业宣传或品牌推广的广告类型之一。',
+	'headerbanner_index' => '首页',
+	'headerbanner_fids' => '投放版块',
+	'headerbanner_fids_comment' => '设置广告投放的论坛版块，当广告投放范围中包含“论坛”时有效',
+	'headerbanner_groups' => '投放群组分类',
+	'headerbanner_groups_comment' => '设置广告投放的群组分类，当广告投放范围中包含“群组”时有效',
+	'headerbanner_category' => '投放门户频道',
+	'headerbanner_category_comment' => '设置广告投放的频道分类，当广告投放范围中包含“门户”时有效',
 );
 
 ?>

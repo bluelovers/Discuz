@@ -676,10 +676,10 @@ function tpl_spacecp_profile_bottom() {
 			seditor_insertunit('sightml', response.result);
 		} 
 		else if (response.errCode == '-1'){
-			// 請求失敗
+			// 请求失败
 			showDialog('{lang qqconnect:connect_wbsign_no_account}');
 		} else {
-			// 未開通微博
+			// 未开通微博
 			showDialog('{lang qqconnect:connect_wbsign_no_bind}');
 		}
 	}

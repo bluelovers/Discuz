@@ -9,8 +9,8 @@ var drag = new Drag();
 drag.extend({
 
 	setDefalutMenu : function () {
-		this.addMenu('default', '刪除', 'drag.removeBlock(event)');
-		this.addMenu('block', '屬性', 'drag.openBlockEdit(event)');
+		this.addMenu('default', '删除', 'drag.removeBlock(event)');
+		this.addMenu('block', '属性', 'drag.openBlockEdit(event)');
 	},
 	removeBlock : function (e) {
 		if ( typeof e !== 'string') {
@@ -19,7 +19,7 @@ drag.extend({
 		} else {
 			id = e;
 		}
-		if (!confirm('您確實要刪除嗎,刪除以後將不可恢復')) return false;
+		if (!confirm('您确实要删除吗,删除以后将不可恢复')) return false;
 		$(id).parentNode.removeChild($(id));
 		var el = $('chk'+id);
 		if (el != null) el.className = '';
@@ -63,7 +63,7 @@ drag.extend({
 					el  = document.createElement("div");
 					el.className = drag.blockClass + ' ' + drag.moveableObject;
 					el.id = blockname;
-					s = s.replace(/\<script.*\<\/script\>/ig,'<font color="red"> [javascript腳本保存後顯示] </font>');
+					s = s.replace(/\<script.*\<\/script\>/ig,'<font color="red"> [javascript脚本保存后显示] </font>');
 					el.innerHTML = s;
 					var id = drag.data['diypage'][0]['columns']['frame1_left']['children'][0]['name'];
 					$('frame1_left').insertBefore(el,$(id));
@@ -191,7 +191,7 @@ spaceDiy.extend({
 			if (!$('infoedit')) {
 				var dom = document.createElement('em');
 				dom.id = 'infoedit';
-				dom.innerHTML = '編輯';
+				dom.innerHTML = '编辑';
 				$('spacename').appendChild(dom);
 			}
 			$('spaceinfoshow').onmousedown = function () {spaceDiy.showEditSpaceInfo();};
@@ -208,7 +208,7 @@ spaceDiy.extend({
 		var nv = $('editnvinfo');
 		if(!nv) {
 			var dom = document.createElement('div');
-			dom.innerHTML = '<span id="editnvinfo" class="edit" style="background-color:#336699;" onclick="spaceDiy.opNvEditInfo();">設置</span>';
+			dom.innerHTML = '<span id="editnvinfo" class="edit" style="background-color:#336699;" onclick="spaceDiy.opNvEditInfo();">设置</span>';
 			$('nv').appendChild(dom.childNodes[0]);
 		} else {
 			nv.style.display = '';

@@ -28,7 +28,7 @@ class usercontrol extends base {
 		$this->load('user');
 	}
 
-	// -1 未開啟
+	// -1 未开启
 	function onsynlogin() {
 		$this->init_input();
 		$uid = $this->input('uid');
