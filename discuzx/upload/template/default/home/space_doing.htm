@@ -1,0 +1,135 @@
+<!--{if empty($diymode)}-->
+<!--{template common/header}-->
+
+<div id="pt" class="bm cl">
+	<!--{subtemplate common/simplesearchform}-->
+	<div class="z">
+		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
+		<a href="home.php">$_G[setting][navs][4][navname]</a> <em>&rsaquo;</em>
+		<a href="home.php?mod=space&do=doing">{lang doing}</a>
+		<!--{if $_GET['view']=='me'}-->
+		 <em>&rsaquo;</em> <a href="home.php?mod=space&uid=$space[uid]&do=doing&view=me">{$space[username]}{lang somebody_doing}</a>
+		<!--{/if}-->
+	</div>
+</div>
+
+<style id="diy_style" type="text/css"></style>
+<div class="wp">
+	<!--[diy=diy1]--><div id="diy1" class="area"></div><!--[/diy]-->
+</div>
+
+<div id="ct" class="ct2_a wp cl">
+	<div class="mn">
+		<!--[diy=diycontenttop]--><div id="diycontenttop" class="area"></div><!--[/diy]-->
+		<div class="bm bw0">
+		<div class="bn gsh" style="display: none;">
+			<h2>{lang doing_search}</h2>
+			<form method="get" autocomplete="off" action="home.php" class="pns">
+				<input type="hidden" name="searchmode" value="1" />
+				<input type="hidden" name="do" value="doing" />
+				<input type="hidden" name="mod" value="space" />
+				<input type="hidden" name="view" value="$_GET[view]" />
+				<input type="hidden" name="searchsubmit" value="1" />
+				<input type="text" name="searchkey" class="px vm" size="15" value="{lang doing_enter_keywords}" onclick="if(this.value=='{lang doing_enter_keywords}')this.value='';" />
+				<button type="submit" class="pn vm"><em>{lang search}</em></button>
+			</form>
+		</div>
+		<!--{hook/space_doing_top}-->
+
+		<!--{if (!$_G['uid'] && !$space[uid]) || $space[self]}-->
+			<h1 class="mt"><img alt="doing" src="{STATICURL}image/feed/doing.gif" class="vm" /> {lang doing}</h1>
+		<!--{/if}-->
+
+		<!--{if $space[self]}-->
+			<div>
+				<!--{template home/space_doing_form}-->
+				<!--{hook/space_doing_bottom}-->
+				<ul class="tb cl">
+					<li$actives[we]><a href="home.php?mod=space&do=$do&view=we">{lang me_friend_doing}</a></li>
+					<li$actives[me]><a href="home.php?mod=space&do=$do&view=me">{lang doing_view_me}</a></li>
+					<li$actives[all]><a href="home.php?mod=space&do=$do&view=all">{lang view_all}</a></li>
+				</ul>
+			</div>
+		<!--{else}-->
+			<!--{eval
+				$_G['home_tpl_spacemenus'][] = "<a href=\"home.php?mod=space&uid=$space[uid]&do=doing&view=me\">{lang doing_they}</a>";
+			}-->
+			<!--{template home/space_menu}-->
+			<p class="tbmu">{lang doing_orderby_time}</p>
+		<!--{/if}-->
+
+		<!--{if $searchkey}-->
+			<p class="tbmu">{lang doing_search_record} <span style="color: red; font-weight: 700;">$searchkey</span> {lang doing_record_list}</p>
+		<!--{/if}-->
+
+<!--{else}-->
+<!--{template home/space_header}-->
+	<div id="ct" class="ct2 wp cl">
+		<div class="mn">
+			<div class="bm">
+				<div class="bm_h cl">
+					<h1 class="mt">{lang doing}</h1>
+				</div>
+				<div class="bm_c">
+				<!--{if $space[self]}--><!--{template home/space_doing_form}--><!--{/if}-->
+<!--{/if}-->
+
+
+		<!--{if $dolist}-->
+			<div class="xld {if empty($diymode)}xlda{/if}">
+			<!--{loop $dolist $dv}-->
+			<!--{eval $doid = $dv[doid];}-->
+			<!--{eval $_G[gp_key] = $key = random(8);}-->
+				<dl id="{$key}dl{$doid}" class="pbn bbda cl">
+					<!--{if empty($diymode)}--><dd class="m avt"><a href="home.php?mod=space&uid=$dv[uid]" c="1"><!--{avatar($dv[uid],small)}--></a></dd><!--{/if}-->
+					<dd class="{if empty($diymode)}ptm{else}ptw{/if} xs2">
+					<!--{if empty($diymode)}--><a href="home.php?mod=space&uid=$dv[uid]">$dv[username]</a>: <!--{/if}--><span>$dv[message]</span> <!--{if $dv[status] == 1}--> <span style="font-weight: bold;">({lang moderate_need})</span><!--{/if}-->
+					</dd>
+					<!--{eval $list = $clist[$doid];}-->
+					<dd class="cmt brm" id="{$key}_$doid"{if empty($list) || !$showdoinglist[$doid]} style="display:none;"{/if}>
+						<span id="{$key}_form_{$doid}_0"></span>
+						<!--{template home/space_doing_li}-->
+					</dd>
+					<dd class="ptn xg1">
+						<span class="y"><!--{date($dv['dateline'], 'u')}--></span>
+						<a href="javascript:;" onclick="docomment_form($doid, 0, '$key');">{lang reply}</a><!--{if $dv[uid]==$_G[uid]}--><span class="pipe">|</span><a href="home.php?mod=spacecp&ac=doing&op=delete&doid=$doid&id=$dv[id]&handlekey=doinghk_{$doid}_$dv[id]" id="{$key}_doing_delete_{$doid}_{$dv[id]}" onclick="showWindow(this.id, this.href, 'get', 0);">{lang delete}</a><!--{/if}-->
+
+						<!--{if checkperm('managedoing')}-->
+						<span class="pipe">IP: $dv[ip]</span>
+						<!--{/if}-->
+					</dd>
+				</dl>
+			<!--{/loop}-->
+			<!--{if $pricount}-->
+				<p class="mtm">{lang hide_doing}</p>
+			<!--{/if}-->
+			</div>
+			<!--{if $multi}--><div class="pgs cl mtm">$multi</div><!--{/if}-->
+		<!--{else}-->
+			<p class="emp">{lang doing_no_replay}<!--{if $space[self]}-->{lang doing_now}<!--{/if}--></p>
+		<!--{/if}-->
+
+
+<!--{if empty($diymode)}-->
+		</div>
+		<!--[diy=diycontentbottom]--><div id="diycontentbottom" class="area"></div><!--[/diy]-->
+	</div>
+	<div class="appl">
+		<!--{subtemplate common/userabout}-->
+	</div>
+</div>
+
+<div class="wp mtn">
+	<!--[diy=diy3]--><div id="diy3" class="area"></div><!--[/diy]-->
+</div>
+
+<!--{else}-->
+			</div>
+		</div>
+	</div>
+	<div class="sd">
+		<!--{subtemplate home/space_userabout}-->
+	</div>
+</div>
+<!--{/if}-->
+<!--{template common/footer}-->

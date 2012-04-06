@@ -1,0 +1,28 @@
+.stepstat{ *margin-bottom:0px; width: 100%; border-bottom: 1px dotted #D0E3F7; background: #F2F9FD; overflow: hidden; clear: both; }
+	.stepstat li{ float:left; margin-right:0px; padding: 0 6px; height: 24px; line-height: 24px; color:#999; }
+	.stepstat li span { margin-left: 12px; color:#999; }
+	.stepstat .current{ color:#090; font-weight: 700; }
+
+.pn {
+	background: url("../../common/pn.png") repeat-x scroll 0 0 #E5E5E5;
+	border: 1px solid #999999;
+	box-shadow: 0 1px 0 #E5E5E5;
+	cursor: pointer;
+	height: 23px;
+	margin-right: 3px;
+	overflow: hidden;
+	padding: 0;
+	vertical-align: middle;
+}
+.pnc, a.pnc {
+	background-color: #0066CC;
+	background-position: 0 -48px;
+	border-color: #235994;
+	color: #FFFFFF !important;
+}
+
+.pn em, .pn span, .pn strong {
+	line-height: 21px;
+	padding: 0 10px;
+}
+

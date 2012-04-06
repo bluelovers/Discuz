@@ -1,0 +1,22 @@
+<!--{if !empty($blocks)}-->
+	<tr>
+		<td class="xw1">{lang select_block}</td>
+	</tr>
+	<tr>
+		<td valign="top" style="padding:0">
+			<ul class="xl xl2 cl">
+			<!--{loop $blocks $block}-->
+			<li {if !$block[favorite]}onmouseover="display('bfav_$block[bid]');" onmouseout="display('bfav_$block[bid]');"{/if}>
+				<span style="cursor:pointer;text-decoration:underline"{if $op=='recommend'} onclick="if($('recommendto')){$('recommendto').value=(this.innerText ? this.innerText : this.textContent);}recommenditem_byblock('$block[bid]', '$_GET[id]', '$_GET[idtype]')"{/if}>$block[name]</span>
+				<a href="javascript:;" id="bfav_$block[bid]" onclick="blockFavorite($block[bid]);"{if !$block[favorite]} style="visibility:hidden"{/if}><!--{if $block[favorite]}--><img src="{IMGDIR}/fav.gif" alt="fav" title="{lang block_cancel_favorite}" class="favmark" /><!--{else}--><img src="{IMGDIR}/fav_grey.gif" alt="normal" title="{lang block_favorite}" class="favmark" /><!--{/if}--></a>
+			</li>
+			<!--{/loop}-->
+			</ul>
+			<!--{if $multi}--><div class="pgs mtm cl">$multi</div><!--{/if}-->
+		</td>
+	</tr>
+<!--{else}-->
+	<tr>
+		<td><p class="emp">{lang has_no_block}</p></td>
+	</tr>
+<!--{/if}-->

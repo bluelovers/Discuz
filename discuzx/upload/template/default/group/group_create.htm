@@ -1,0 +1,93 @@
+<div class="bm bml" id="main_messaqge">
+	<div class="bm_h cl">		
+		<h1 class="xs2">{lang group_create_new}</h1>
+	</div>
+	<div class="bm_c">
+		<form method="post" autocomplete="off" name="groupform" id="groupform" class="s_clear" onsubmit="checkCategory();ajaxpost('groupform', 'returnmessage4', 'returnmessage4', 'onerror');return false;" action="forum.php?mod=group&action=create">
+			<input type="hidden" name="formhash" value="{FORMHASH}" />
+			<input type="hidden" name="referer" value="{echo dreferer()}" />
+			<input type="hidden" name="handlekey" value="creategroup" />
+			<table cellspacing="0" cellpadding="0" class="tfm" summary="{lang group_create}">
+				<tbody>
+					<tr>
+						<th>&nbsp;</th>
+						<td>
+							<style type="text/css">
+								#returnmessage4 { display: none; color: {NOTICETEXT}; font-weight: bold; }
+								#returnmessage4.onerror { display: block; }
+							</style>
+							<p id="returnmessage4"></p>
+						</td>
+					</tr>
+					<tr>
+						<th><strong class="rq y">*</strong>{lang group_name}:</th>
+						<td>
+							<input type="text" name="name" id="name" class="px" size="36" tabindex="1" value="" autocomplete="off" onBlur="checkgroupname()" tabindex="1" />
+							<span id="groupnamecheck" class="xi1"></span>
+						</td>
+					</tr>
+					<tr>
+						<th><strong class="rq y">*</strong>{lang group_category}:</th>
+						<td>
+							<select name="" tabindex="2" class="ps" onchange="ajaxget('forum.php?mod=ajax&action=secondgroup&fupid='+ this.value, 'secondgroup');">
+								<option value="0">{lang choose_please}</option>
+								$groupselect[first]
+							</select>
+							<em id="secondgroup"><select name="fup" id="fup" class="ps" ><option value="">{lang option_required}</option></select></em>
+							<span id="groupcategorycheck" class="xi1"></span>
+						</td>
+					</tr>
+					<tr>
+						<th>{lang group_description}:</th>
+						<td><textarea rows="4" cols="40" name="descriptionnew" tabindex="3" class="pt"></textarea></td>
+					</tr>
+					<tr>
+						<th><strong class="rq y">*</strong>{lang group_perm_visit}:</th>
+						<td>
+							<label class="lb"><input type="radio" name="gviewperm" class="pr" tabindex="4" value="1" checked="checked" />{lang group_perm_all_user}</label>
+							<label class="lb"><input type="radio" name="gviewperm" class="pr" value="0" />{lang group_perm_member_only}</label>
+						</td>
+					</tr>
+					<tr>
+						<th><strong class="rq y">*</strong>{lang group_join_type}:</th>
+						<td>
+							<label class="lb"><input type="radio" name="jointype" class="pr" tabindex="5" value="0" checked="checked" />{lang group_join_type_free}</label>
+							<label class="lb"><input type="radio" name="jointype" class="pr" value="2" />{lang group_join_type_moderate}</label>
+							<label class="lb"><input type="radio" name="jointype" class="pr" value="1" />{lang group_join_type_invite}</label>
+						</td>
+					</tr>
+					<tr>
+						<th>&nbsp;</th>
+						<td>
+							<input type="hidden" name="createsubmit" value="true"><button type="submit" class="pn pnc" tabindex="6"><strong>{lang create}</strong></button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+	function checkgroupname() {
+		var groupname = trim($('name').value);
+		ajaxget('forum.php?mod=ajax&forumcheck=1&infloat=creategroup&handlekey=creategroup&action=checkgroupname&groupname=' + (BROWSER.ie && document.charset == 'utf-8' ? encodeURIComponent(groupname) : groupname), 'groupnamecheck');
+	}
+	function succeedhandle_creategroup(locationhref, message) {
+		showDialog(message, 'notice', '', 'location.href="' + locationhref + '"');
+	}
+	function checkCategory(){
+		var groupcategory = trim($('fup').value);
+		if(groupcategory == ''){
+			$('groupcategorycheck').innerHTML = '{lang group_create_selete_categroy}';
+			return false;
+		} else {
+			$('groupcategorycheck').innerHTML = '';
+		}
+	}
+	<!--{if $_G['gp_fupid']}-->
+			ajaxget('forum.php?mod=ajax&action=secondgroup&fupid=$_G[gp_fupid]<!--{if $_G[gp_groupid]}-->&groupid=$_G[gp_groupid]<!--{/if}-->', 'secondgroup');
+	<!--{/if}-->
+	if($('name')) {
+		$('name').focus();
+	}
+</script>

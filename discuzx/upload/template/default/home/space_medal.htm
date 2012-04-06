@@ -1,0 +1,121 @@
+<!--{subtemplate common/header}-->
+<div id="pt" class="bm cl">
+	<!--{subtemplate common/simplesearchform}-->
+	<div class="z">
+		<a href="./" class="nvhm" title="{lang homepage}">$_G['setting']['bbname']</a> <em>&rsaquo;</em>
+		<a href="home.php?mod=medal">{lang medals}</a>
+	</div>
+</div>
+
+<div id="ct" class="ct2_a wp cl">
+	<div class="mn">
+		<div class="bm bw0">
+			<h1 class="mt">
+				<img src="{STATICURL}image/feed/medal.gif" alt="{lang medals_list}" class="vm" />
+				<!--{if $_G[gp_action] == 'log'}-->{lang my_medals}
+				<!--{else}-->{lang medals_center}<!--{/if}-->
+			</h1>
+
+			<!--{if empty($_G[gp_action])}-->
+				<form method="post" autocomplete="off" action="home.php?mod=medal&action=apply&medalsubmit=yes">
+				<input type="hidden" name="formhash" value="{FORMHASH}" />
+				<input type="hidden" name="medalid" value="" />
+
+				<!--{if $medallist}-->
+					<table cellspacing="0" cellpadding="0" class="mdl dt">
+						<!--{loop $medallist $key $medal}-->
+						<tr>
+							<td class="m"><img src="{STATICURL}image/common/$medal[image]" alt="$medal[name]" /></td>
+							<td class="xw1">$medal[name]</td>
+							<td class="xg1" title="$medal[description]">$medal[description]</td>
+							<td>
+								<!--{if $medal[expiration]}-->
+									{lang expire} $medal[expiration] {lang days},
+								<!--{/if}-->
+								<!--{if $medal[permission]}-->
+									$medal[permission]
+								<!--{else}-->
+									<!--{if $medal[type] == 0}-->
+										{lang medals_type_0}
+									<!--{elseif $medal[type] == 1}-->
+										{lang medals_type_1}
+									<!--{elseif $medal[type] == 2}-->
+										{lang medals_type_2}
+									<!--{/if}-->
+								<!--{/if}-->
+							</td>
+							<td{if $medal[type] && $_G['uid']} width="60"{/if}>
+							<!--{if $medal[type] && $_G['uid']}-->
+								<button type="button" class="pn" onclick="this.form.medalid.value = '$medal[medalid]';this.form.submit();return false;">
+									<em><!--{if !$medal[permission]}-->{lang medals_apply}<!--{else}-->{lang medals_draw}<!--{/if}--></em>
+								</button>
+							<!--{/if}-->
+							</td>
+						</tr>
+						<!--{/loop}-->
+					</table>
+				<!--{else}-->
+					<!--{if $medallogs}-->
+						<p class="emp">{lang medals_nonexistence}</p>
+					<!--{else}-->
+						<p class="emp">{lang medals_noavailable}</p>
+					<!--{/if}-->
+				<!--{/if}-->
+				</form>
+
+				<!--{if $lastmedals}-->
+					<h3 class="tbmu">{lang medals_record}</h3>
+					<ul class="el pbw mbw">
+						<!--{loop $lastmedals $lastmedal}-->
+						<li>
+							<a href="home.php?mod=space&uid=$lastmedal[uid]" class="t"><!--{avatar($lastmedal[uid],small)}--></a>
+							<a href="home.php?mod=space&uid=$lastmedal[uid]" class="xi2">$lastmedal[username]</a> {lang medals_message1} $lastmedal[dateline] {lang medals_message2} <strong>$medallist[$lastmedal['medalid']]['name']</strong> {lang medals}
+						</li>
+						<!--{/loop}-->
+					</ul>
+				<!--{/if}-->
+			<!--{elseif $_G[gp_action] == 'log'}-->
+
+				<!--{if $mymedals}-->
+					<ul class="ml mlm mdlow mtw cl">
+						<!--{loop $mymedals $mymedal}-->
+						<li>
+							<img src="{STATICURL}image/common/$mymedal[image]" alt="$mymedal[name]" />
+							<p class="mtn"><strong>$mymedal[name]</strong></p>
+						</li>
+						<!--{/loop}-->
+					</ul>
+				<!--{/if}-->
+
+				<!--{if $medallogs}-->
+					<h3 class="tbmu">{lang medals_record}</h3>
+					<ul class="el pbw mbw">
+						<!--{loop $medallogs $medallog}-->
+						<li style="padding-left:10px;">
+							<!--{if $medallog['type'] == 2 || $medallog['type'] == 3}-->
+								{lang medals_message3} $medallog[dateline] {lang medals_message4} <strong>$medallog[name]</strong> {lang medals},<!--{if $medallog['type'] == 2}-->{lang medals_operation_2}<!--{elseif $medallog['type'] == 3}-->{lang medals_operation_3}<!--{/if}-->
+							<!--{elseif $medallog['type'] != 2 && $medallog['type'] != 3}-->
+								{lang medals_message3} $medallog[dateline] {lang medals_message5} <strong>$medallog[name]</strong> {lang medals},<!--{if $medallog[expiration]}-->{lang expire}: $medallog[expiration]<!--{else}-->{lang medals_noexpire}<!--{/if}-->
+							<!--{/if}-->
+						</li>
+						<!--{/loop}-->
+					</ul>
+					<!--{if $multipage}--><div class="pgs cl mtm">$multipage</div><!--{/if}-->
+				<!--{else}-->
+					<p class="emp">{lang medals_nonexistence_own}</p>
+				<!--{/if}-->
+			<!--{/if}-->
+		</div>
+	</div>
+	<div class="appl">
+		<div class="tbn">
+			<h2 class="mt bbda">{lang medals}</h2>
+			<ul>
+				<li{if empty($_G[gp_action])} class="a"{/if}><a href="home.php?mod=medal">{lang medals_center}</a></li>
+				<li{if $_G[gp_action] == 'log'} class="a"{/if}><a href="home.php?mod=medal&action=log">{lang my_medals}</a></li>
+			</ul>
+		</div>
+	</div>
+</div>
+
+<!--{template common/footer}-->

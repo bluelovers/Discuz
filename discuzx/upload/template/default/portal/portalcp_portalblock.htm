@@ -1,0 +1,180 @@
+<!--{template common/header}-->
+<!--{if !$_G[inajax]}-->
+<div id="pt" class="bm cl">
+	<div class="z">
+		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em> 
+		<a href="$_G[setting][navs][1][filename]">{lang portal}</a> <em>&rsaquo;</em>
+		<a href="portal.php?mod=portalcp"><!--{if $_G['setting']['portalstatus'] }-->{lang portal_manage}<!--{else}-->{lang portal_block_manage}<!--{/if}--></a> <em>&rsaquo;</em>
+		{lang block_management}
+	</div>
+</div>
+
+<div id="ct" class="ct2_a wp cl">
+	<div class="mn">
+		<h1 class="mt">{lang block_management}</h1>
+		<div class="bm bw0">
+			<div id="block_selection">
+<!--{/if}-->
+
+<!--{if $op=='recommend'}-->
+	<!--{if $_GET['getdata']}-->
+		<!--{subtemplate portal/portalcp_pageblock}-->
+	<!--{else}-->
+		<h3 class="flb">
+			<em id="return_$_G[gp_handlekey]">{lang push}</em>
+			<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="hideWindow('$_G[gp_handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
+		</h3>
+		<script type="text/javascript" src="{$_G[setting][jspath]}portal.js?{VERHASH}"></script>
+		<form id="recommendform" method="post" enctype="multipart/form-data" action="portal.php?mod=portalcp&ac=block&op=recommend&id=$_GET[id]&idtype=$_GET[idtype]" onsubmit="if(recommenditem_check()) { ajaxpost('recommendform','return_$_G[gp_handlekey]','return_$_G[gp_handlekey]','onerror');} return false;">
+			<div class="c">
+				<p>
+					<!--{if $tpls}-->
+					{lang block_page}:
+					<select name="targettplname" id="rtargettplname"class="ps vm" onchange="$('rsearchkey').value='';listblock_bypage('$_G[gp_id]', '$_G[gp_idtype]')">
+						<option value="">{lang all_page}</option>
+						<!--{loop $tpls $tpl $tplname}-->
+							<option value="$tpl"{if $tpl == $_GET['targettplname']}selected{/if}>$tplname</option>
+						<!--{/loop}-->
+					</select>&nbsp;
+					<!--{/if}-->
+					{lang block_id}:
+					<input type="text" class="px vm" name="searchkey" id="rsearchkey" value="$_GET[searchkey]" />&nbsp;
+					<button type="button" class="pn vm" onclick="listblock_bypage('$_G[gp_id]', '$_G[gp_idtype]')"><em>{lang find}</em></button>
+				</p>
+				<div{if $_G[inajax]} style="width:500px;height:300px;overflow-x:hidden;overflow-y:auto;"{/if}>
+				<input type="hidden" name="recommend_bid" id="recommend_bid" value="" />
+				<input type="hidden" name="recommend_thread_pid" id="recommend_thread_pid" value="$_G[gp_pid]" />
+					<table class="tfm">
+						<tbody id="itemeditarea">
+							<!--{subtemplate portal/portalcp_pageblock}-->
+						</tbody>
+						<tbody id="olditemeditarea" style="display:none;"></tbody>
+					</table>
+				</div>
+			</div>
+			<p class="o pns">
+				<input type="hidden" name="formhash" value="{FORMHASH}" />
+				<input type="hidden" name="recommendsubmit" value="1" />
+				<input type="hidden" name="handlekey" value="$_G['gp_handlekey']" />
+				<input type="hidden" name="referer" value="{echo dreferer()}">
+				<!--{if ($_G['gp_idtype'] == 'tid' || $_G['gp_idtype'] == 'gtid')}-->
+				<input type="hidden" class="px vm" name="recommendto" id="recommendto" value="" />&nbsp;
+				<label for="showrecommendtip"><input type="checkbox" name="showrecommendtip" id="showrecommendtip" class="pc" fwin="mods" value="1">{lang show_push}</label>&nbsp;
+				<!--{/if}-->
+				<button type="submit" class="pn pnc" value="true"><strong>{lang submit}</strong></button>
+			</p>
+		</form>
+		<script type="text/javascript" reload="1">
+			function errorhandle_recommenditem(message) {
+				var editarea = $('itemeditarea');
+				ajaxinnerhtml(editarea, '<tr><td>&nbsp;</td><td>' + message + '</td></tr>');
+			}
+			ajaxupdateevents($('itemeditarea'));
+		</script>
+	<!--{/if}-->
+
+<!--{else}-->
+	<form action="portal.php?mod=portalcp&ac=portalblock&op=$op" method="get" class="mbm">
+		<input type="hidden" name="mod" value="portalcp" />
+		<input type="hidden" name="ac" value="portalblock" />
+		<input type="hidden" name="op" value="search" />
+		<!--{if $tpls}-->
+		{lang block_page}:
+		<select name="targettplname" class="vm" onchange="this.form.submit();">
+			<option value="">{lang all_page}</option>
+			<!--{loop $tpls $tpl $tplname}-->
+				<option value="$tpl"{if $tpl == $_GET['targettplname']}selected{/if}>$tplname</option>
+			<!--{/loop}-->
+		</select>&nbsp;
+		<!--{/if}-->
+		{lang block_id}:
+		<input type="text" class="px vm" name="searchkey" id="searchkey" value="$_GET[searchkey]" />&nbsp;
+		<button type="submit" class="pn vm"><em>{lang find}</em></button>
+	</form>
+
+<!--{if !empty($_GET['targettplname'])}-->
+	<p>
+		{lang view_select_mod}<a href="portal.php?mod=portalcp&ac=portalblock" class="xi2">{lang click_return_list}</a>
+	</p>
+<!--{/if}-->
+	<!--{if $blocks}-->
+		<!--{if $op == 'getblocklist'}-->
+		<form action="portal.php?mod=portalcp&ac=portalblock&op=updateblock" method="post">
+		<!--{/if}-->
+			<table class="dt mtm">
+				<tr>
+					<th width="50">&nbsp;</th>
+					<th width="260">{lang block_id}</th>
+					<th>{lang mod_category}</th>
+					<th>{lang block_data_source}</th>
+					<th>{lang block_page}</th>
+					<th width="120">{lang block_operation}</th>
+				</tr>
+				<!--{loop $blocks $block}-->
+				<tr>
+					<!--{if $op == 'getblocklist'}-->
+					<td><!--{if $block['cachetime']}--><input type="checkbox" name="bids[]" class="pc" value="$block[bid]" /><!--{/if}--></td>
+					<!--{eval $updatetime = $block['cachetime'] ? $block['cachetime'] - (TIMESTAMP - $block['dateline']) : false;}-->
+					<td title="{if $updatetime > 0 }$updatetime{lang block_not_in_updateline}{elseif $updatetime !== false }{lang block_in_updateline}{else}{/if}"{if !$block[favorite]} onmouseover="display('bfav_$block[bid]');" onmouseout="display('bfav_$block[bid]');"{/if}>$block[name] <a href="javascript:;" id="bfav_$block[bid]" onclick="blockFavorite($block[bid]);"{if !$block[favorite]} style="visibility:hidden"{/if}><!--{if $block[favorite]}--><img src="{IMGDIR}/fav.gif" alt="fav" title="{lang block_cancel_favorite}" class="favmark" /><!--{else}--><img src="{IMGDIR}/fav_grey.gif" alt="normal" title="{lang block_favorite}" class="favmark" /><!--{/if}--></a></td>
+					<!--{else}-->
+					<td{if !$block[favorite]} onmouseover="display('bfav_$block[bid]');" onmouseout="display('bfav_$block[bid]');"{/if}>$block[name] <a href="javascript:;" id="bfav_$block[bid]" onclick="blockFavorite($block[bid]);"{if !$block[favorite]} style="visibility:hidden"{/if}><!--{if $block[favorite]}--><img src="{IMGDIR}/fav.gif" alt="fav" title="{lang block_cancel_favorite}" class="favmark" /><!--{else}--><img src="{IMGDIR}/fav_grey.gif" alt="normal" title="{lang block_favorite}" class="favmark" /><!--{/if}--></a></td>
+					<!--{/if}-->
+					<td>$block[blockclassname]</td>
+					<td>$block[datasrc]</td>
+					<!--{eval $page = empty($block['page']) ? {lang unused} : implode('<br/>' ,$block['page']);}-->
+					<td>$page</td>
+					<td>
+						<!--{if $block['perm']['allowproperty']}-->
+						<a href="portal.php?mod=portalcp&ac=block&op=block&bid=$block[bid]" target="_blank">{lang property}</a>
+						<!--{else}-->
+						{lang unoperation}
+						<!--{/if}-->
+						<!--{if $block['perm']['allowdata']}-->
+						<a href="portal.php?mod=portalcp&ac=block&op=data&bid=$block[bid]" target="_blank">{lang data}</a>
+						<!--{else}-->
+						{lang unoperation}
+						<!--{/if}-->
+						<!--{if $block['isrecommendable']}-->
+						<a href="portal.php?mod=portalcp&ac=blockdata&op=manage&searchkey=%23$block[bid]" target="_blank">{lang moderate}</a>
+						<a href="portal.php?mod=portalcp&ac=block&op=itemdata&bid=$block[bid]" target="_blank">{lang block_itemdata}</a>
+						<!--{else}-->
+						{lang unoperation}
+						{lang unoperation}
+						<!--{/if}-->
+					</td>
+				</tr>
+				<!--{/loop}-->
+				<!--{if $op == 'getblocklist'}-->
+				<tr>
+					<td>
+						<label for="chkall"><input type="checkbox" name="chkall" id="chkall" class="pc" onclick="checkall(this.form, 'bids')" />{lang select_all}</label>
+					</td>
+					<td colspan="5">
+						<input type="hidden" name="portalcpblocksubmit" value="1" />
+						<input type="hidden" name="formhash" value="{FORMHASH}" />
+						<button type="submit" value="true" name="submit" class="pn"><em>{lang push_updateblock}</em></button>
+						<img src="{IMGDIR}/faq.gif" alt="Tip" class="vm" onmouseover="showTip(this)" tip="{lang push_updateblock_tips}" />
+					</td>
+				</tr>
+				<!--{/if}-->
+			</table>
+			<!--{if $multi}--><div class="pgs mtn cl">$multi</div><!--{/if}-->
+		<!--{if $op == 'getblocklist'}-->
+		</form>
+		<!--{/if}-->
+		
+	<!--{else}-->
+		<p class="emp">{lang block_no_managable}</p>
+	<!--{/if}-->
+<!--{/if}-->
+
+<!--{if !$_G[inajax]}-->
+			</div>
+		</div>
+	</div>
+	<div class="appl">
+		<!--{subtemplate portal/portalcp_nav}-->
+	</div>
+</div>
+<!--{/if}-->
+<!--{template common/footer}-->

@@ -1,0 +1,105 @@
+<script type="text/javascript">
+var postminchars = parseInt('$_G['setting']['minpostsize']');
+var postmaxchars = parseInt('$_G['setting']['maxpostsize']');
+var disablepostctrl = parseInt('{$_G['group']['disablepostctrl']}');
+</script>
+
+<div id="f_pst" class="pl{if empty($_G[gp_from])} bm bmw{/if}">
+<form method="post" autocomplete="off" id="fastpostform" action="forum.php?mod=post&action=reply&fid=$_G[fid]&tid=$_G[tid]&extra=$_G[gp_extra]&replysubmit=yes{if $_G['gp_ordertype'] != 1}&infloat=yes&handlekey=fastpost{/if}{if $_G[gp_from]}&from=$_G[gp_from]{/if}"{if $_G['gp_ordertype'] != 1} onSubmit="return fastpostvalidate(this)"{/if}>
+	<!--{if empty($_G[gp_from])}-->
+	<table cellspacing="0" cellpadding="0">
+		<tr>
+			<td class="pls">
+				<!--{if $_G['uid']}--><div class="avatar"><!--{echo avatar($_G['uid'])}--></div><!--{/if}-->
+				<!--{hook/viewthread_fastpost_side}-->
+			</td>
+			<td class="plc">
+	<!--{/if}-->
+	<!--{hook/viewthread_fastpost_content}-->
+
+	<span id="fastpostreturn"></span>
+
+	<!--{if $_G[forum_thread][special] == 5 && empty($firststand)}-->
+	<div class="pbt cl">
+		<div class="ftid sslt">
+			<select id="stand" name="stand">
+				<option value="">{lang debate_viewpoint}</option>
+				<option value="0">{lang debate_neutral}</option>
+				<option value="1">{lang debate_square}</option>
+				<option value="2">{lang debate_opponent}</option>
+			</select>
+		</div>
+		<script type="text/javascript">simulateSelect('stand');</script>
+	</div>
+	<!--{/if}-->
+
+	<div class="cl">
+		<!--{if empty($_G[gp_from]) && $_G[setting][fastsmilies]}--><div id="fastsmiliesdiv" class="y"><div id="fastsmiliesdiv_data"><div id="fastsmilies"></div></div></div><!--{/if}-->
+		<div{if empty($_G[gp_from]) && $_G[setting][fastsmilies]} class="hasfsl"{/if} id="fastposteditor">
+			<div class="tedt{if !($_G[forum_thread][special] == 5 && empty($firststand))} mtn{/if}">
+				<div class="bar">
+					<span class="y">
+						<!--{hook/viewthread_fastpost_func_extra}-->
+						<a href="forum.php?mod=post&action=reply&fid=$_G[fid]&tid=$_G[tid]{if $_G[gp_from]}&from=$_G[gp_from]{/if}" onclick="return switchAdvanceMode(this.href)">{lang post_advancemode}</a>
+					</span>
+					<!--{eval $seditor = array('fastpost', array('bold', 'color', 'img', 'link', 'quote', 'code', 'smilies'), !$_G['uid'] ? 1 : 0, $allowpostattach ? '<span class="pipe z">|</span><span onclick="fastUload()" class="cur1 z">{lang e_attach_title}</span>' : '');}-->
+					<!--{hook/viewthread_fastpost_ctrl_extra}-->
+					<!--{subtemplate common/seditor}-->
+				</div>
+				<div class="area">
+					<!--{if $allowpostreply}-->
+						<textarea rows="6" cols="80" name="message" id="fastpostmessage" onKeyDown="seditor_ctlent(event, {if $_G['gp_ordertype'] != 1}'fastpostvalidate($(\'fastpostform\'))'{else}'$(\'fastpostform\').submit()'{/if});" tabindex="4" class="pt"></textarea>
+					<!--{elseif !$_G['uid']}-->
+						<div class="pt hm">{lang login_to_reply} <a href="member.php?mod=logging&action=login" onclick="showWindow('login', this.href)" class="xi2">{lang login}</a> | <a href="member.php?mod={$_G[setting][regname]}" class="xi2">$_G['setting']['reglinkname']</a> <!--{hook/global_login_text}--></div>
+					<!--{/if}-->
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--{if $allowpostreply && checkperm('seccode') && ($secqaacheck || $seccodecheck)}-->
+		<!--{block sectpl}--><sec> <span id="sec<hash>" onclick="showMenu(this.id)"><sec></span><div id="sec<hash>_menu" class="p_pop p_opt" style="display:none"><sec></div><!--{/block}-->
+		<div class="mtm sec"><!--{subtemplate common/seccheck}--></div>
+	<!--{/if}-->
+
+	<!--{if $allowpostattach}-->
+		<script type="text/javascript">
+		var editorid = '';
+		var ATTACHNUM = {'imageused':0,'imageunused':0,'attachused':0,'attachunused':0}, ATTACHUNUSEDAID = new Array(), IMGUNUSEDAID = new Array();
+		</script>
+
+		<input type="hidden" name="posttime" id="posttime" value="{TIMESTAMP}" />
+		<div class="upfl{if empty($_G[gp_from]) && $_G[setting][fastsmilies]} hasfsl{/if}">
+			<table cellpadding="0" cellspacing="0" border="0" id="attach_tblheader" style="display: none;">
+				<tr>
+					<td>{lang e_attach_insert}</td>
+					<td class="atds">{lang description}</td>
+					<!--{if $_G['group']['allowsetattachperm']}-->
+					<td class="attv">
+						{lang readperm}
+						<img src="{IMGDIR}/faq.gif" alt="Tip" class="vm" onmouseover="showTip(this)" tip="{lang post_select_usergroup_readacces}" />
+					</td>
+					<!--{/if}-->
+					<!--{if $_G['group']['maxprice']}--><td class="attpr">{$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][1]][title]}</td><!--{/if}-->
+					<td class="attc"></td>
+				</tr>
+			</table>
+			<div id="attachlist"></div>
+		</div>
+	<!--{/if}-->
+
+	<input type="hidden" name="formhash" value="{FORMHASH}" />
+	<input type="hidden" name="subject" value="" />
+	<p class="ptm pnpost">
+		<button {if $allowpostreply}type="submit" {elseif !$_G['uid']}type="button" onclick="showWindow('login', 'member.php?mod=logging&action=login&guestmessage=yes')" {/if}name="replysubmit" id="fastpostsubmit" class="pn pnc vm" value="replysubmit" tabindex="5"><strong>{lang post_newreply}</strong></button>
+		<!--{if $_G['gp_ordertype'] != 1 && empty($_G[gp_from])}-->
+		<label for="fastpostrefresh"><input id="fastpostrefresh" type="checkbox" class="pc" />{lang post_fastreply_gotolast}</label>
+		<script type="text/javascript">if(getcookie('fastpostrefresh') == 1) {$('fastpostrefresh').checked=true;}</script>
+		<!--{/if}-->
+	</p>
+	<!--{if empty($_G[gp_from])}-->
+			</td>
+		</tr>
+	</table>
+	<!--{/if}-->
+</form>
+</div>

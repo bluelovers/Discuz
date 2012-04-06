@@ -1,0 +1,46 @@
+<!--{loop $theclass[fields] $fieldname $field}-->
+<tr{if empty($showfields[$fieldname])} style="display:none;"{/if}>
+	<th>$field[name]</th>
+	<td>
+	<!--{if $field[formtype]=='title'}-->
+		<input type="text" name="title" class="px" value="$itemfields[title]" />
+		<div class="ss mtn">
+			<em $showstylearr[title_b] id="span_title_b"  onclick="block_showstyle('title_b')"><b>B</b></em>
+			<input type="hidden" id="value_title_b" name="showstyle[title_b]" value="$blockitem[showstyle][title_b]" />
+			<em $showstylearr[title_i] id="span_title_i"  onclick="block_showstyle('title_i')"><i>I</i></em>
+			<input type="hidden" id="value_title_i" name="showstyle[title_i]" value="$blockitem[showstyle][title_i]" />
+			<em $showstylearr[title_u] id="span_title_u"  onclick="block_showstyle('title_u')"><u>U</u></em>
+			<input type="hidden" id="value_title_u" name="showstyle[title_u]" value="$blockitem[showstyle][title_u]" />
+			<input type="text" name="showstyle[title_c]" id="title_color_value" class="px p_fre vm" size="6" value="$blockitem[showstyle][title_c]" /><input type="button" id="ctitlepb" class="pn colorwd" onclick="createPalette('titlepb', 'title_color_value');" value="" style="background-color: {$blockitem['showstyle']['title_c']}" />
+		</div>
+	<!--{elseif $field[formtype]=='summary'}-->
+		<textarea name="summary" class="pt">$itemfields[summary]</textarea>
+		<div class="ss mtn">
+			<em $showstylearr[summary_b] id="span_summary_b"  onclick="block_showstyle('summary_b')"><b>B</b></em>
+			<input type="hidden" id="value_summary_b" name="showstyle[summary_b]" value="$blockitem[showstyle][summary_b]" />
+			<em $showstylearr[summary_i] id="span_summary_i"  onclick="block_showstyle('summary_i')"><i>I</i></em>
+			<input type="hidden" id="value_summary_i" name="showstyle[summary_i]" value="$blockitem[showstyle][summary_i]" />
+			<em $showstylearr[summary_u] id="span_summary_u"  onclick="block_showstyle('summary_u')"><u>U</u></em>
+			<input type="hidden" id="value_summary_u" name="showstyle[summary_u]" value="$blockitem[showstyle][summary_u]" />
+			<input type="text" name="showstyle[summary_c]" id="summary_color_value" class="px p_fre vm" size="6" value="$blockitem[showstyle][summary_c]" /><input type="button" id="csummarypb" class="pn colorwd" value="" onclick="createPalette('summarypb', 'summary_color_value');" style="background-color: {$blockitem['showstyle']['summary_c']}" />
+		</div>
+	<!--{elseif $field[formtype] == 'textarea'}-->
+	<textarea name="$fieldname" class="pt">$itemfields[$fieldname]</textarea>
+	<!--{elseif $field[formtype] == 'pic'}-->
+	<label for="picway_remote"><input type="radio" class="pr" id="picway_remote" name="picway" onclick="showpicedit()" checked="checked" />{lang remote}</label> 
+	<label for="picway_upload"><input type="radio" class="pr" id="picway_upload" name="picway" onclick="showpicedit()" />{lang upload}</label><br />
+	<input type="text" name="pic" class="px" id="pic_remote" value="$itemfields[oldpic]" style="display: block" />
+	<input type="hidden" name="picflag" value="$itemfields[picflag]" />
+	<input type="file" name="pic" class="pf" id="pic_upload" style="display: none" />
+	<!--{if $itemfields[pic]}-->
+	<br />
+	<a href="$itemfields[pic]" target="_blank" title="{lang view_image_original}"><img src="$itemfields[pic]"{if $itemfields['picflag']} onerror="this.src='{$_G[setting][attachurl]}$itemfields[oldpic]';this.parentNode.href=this.src;"{/if} alt="" width="80" height="80" /></a>
+	<!--{/if}-->
+	<!--{elseif $field[formtype] == 'date'}-->
+	<input type="text" class="px" name="$fieldname" value="$itemfields[$fieldname]" onclick="showcalendar(event, this, true)" />
+	<!--{else}-->
+	<input type="text" class="px" name="$fieldname" value="$itemfields[$fieldname]" />
+	<!--{/if}-->
+	</td>
+</tr>
+<!--{/loop}-->
