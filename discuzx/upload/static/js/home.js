@@ -1,8 +1,8 @@
 /*
-	[Discuz!] (C)2001-2009 Comsenz Inc.
+	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: home.js 27046 2011-12-31 03:20:15Z svn_project_zhangjie $
+	$Id: home.js 27410 2012-01-30 09:53:20Z zhengqingpeng $
 */
 
 var note_step = 0;
@@ -642,6 +642,10 @@ function comment_edit(cid) {
 	var x = new Ajax();
 	x.get('home.php?mod=misc&ac=ajax&op=comment&inajax=1&cid='+ cid, function(s){
 		obj.innerHTML = s;
+		var elems = selector('dd[class~=magicflicker]');
+		for(var i=0; i<elems.length; i++){
+			magicColor(elems[i]);
+		}
 	});
 }
 function comment_delete(cid) {
@@ -753,7 +757,7 @@ function poke_send(id, result) {
 }
 function myfriend_post(uid) {
 	if($('friend_'+uid)) {
-		$('friend_'+uid).innerHTML = '<p>你们现在是好友了，接下来，您还可以：<a href="home.php?mod=space&do=wall&uid='+uid+'" class="xi2" target="_blank">给TA留言</a> ，或者 <a href="home.php?mod=spacecp&ac=poke&op=send&uid='+uid+'&handlekey=propokehk_'+uid+'" id="a_poke_'+uid+'" class="xi2" onclick="showWindow(this.id, this.href, \'get\', 0, {\'ctrlid\':this.id,\'pos\':\'13\'});">打个招呼</a></p>';
+		$('friend_'+uid).innerHTML = '<p>您们现在是好友了，接下来，您还可以：<a href="home.php?mod=space&do=wall&uid='+uid+'" class="xi2" target="_blank">给TA留言</a> ，或者 <a href="home.php?mod=spacecp&ac=poke&op=send&uid='+uid+'&handlekey=propokehk_'+uid+'" id="a_poke_'+uid+'" class="xi2" onclick="showWindow(this.id, this.href, \'get\', 0, {\'ctrlid\':this.id,\'pos\':\'13\'});">打个招呼</a></p>';
 	}
 	showCreditPrompt();
 }
@@ -769,13 +773,6 @@ function mtag_join(tagid, result) {
 	}
 }
 
-function picView(albumid) {
-	if(albumid == 'none') {
-		$('albumpic_body').innerHTML = '';
-	} else {
-		ajaxget('home.php?mod=misc&ac=ajax&op=album&id='+albumid+'&ajaxdiv=albumpic_body', 'albumpic_body');
-	}
-}
 function resend_mail(mid) {
 	if(mid) {
 		var obj = $('sendmail_'+ mid +'_li');
@@ -1159,4 +1156,8 @@ function checkSynSignature() {
 		$('syn_signature').className = 'syn_signature_check';
 		$('to_signhtml').value = '1';
 	}
+}
+
+function searchpostbyusername(keyword, srchuname) {
+	window.location.href = 'search.php?mod=forum&srchtxt=' + keyword + '&srchuname=' + srchuname + '&searchsubmit=yes';
 }

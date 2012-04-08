@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: magic_money.php 7830 2010-04-14 02:22:32Z monkey $
+ *      $Id: magic_updateline.php 26749 2011-12-22 07:38:37Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -31,19 +31,19 @@ class magic_updateline {
 	function usesubmit() {
 		global $_G;
 
-		$id = intval($_G['gp_id']);
-		$idtype = $_G['gp_idtype'];
+		$id = intval($_GET['id']);
+		$idtype = $_GET['idtype'];
 
 		magic_check_idtype($id, $idtype);
 
 		$tablename = gettablebyidtype($idtype);
-		DB::query("UPDATE ".DB::table($tablename)." SET dateline = '$_G[timestamp]' WHERE $idtype = '$id' AND uid = '$_G[uid]'");
+		C::t($tablename)->update_dateline_by_id_idtype_uid($id, $idtype, $_G['timestamp'], $_G['uid']);
 
-		DB::query("UPDATE ".DB::table('home_feed')." SET dateline = '$_G[timestamp]' WHERE id = '$id' AND idtype = '$idtype' AND uid = '$_G[uid]'");
+		C::t('home_feed')->update($id, array('dateline'=>$_G['timestamp']), $idtype, $_G['uid']);
 
 		usemagic($this->magic['magicid'], $this->magic['num']);
 		updatemagiclog($this->magic['magicid'], '2', '1', '0', '0', $idtype, $id);
-		showmessage('magics_use_success', '', array('magicname'=>$_G['setting']['magics']['updateline']), array('showdialog' => 1));
+		showmessage('magics_use_success', '', array('magicname'=>$_G['setting']['magics']['updateline']), array('alert' => 'right', 'showdialog' => 1));
 	}
 
 	function show() {

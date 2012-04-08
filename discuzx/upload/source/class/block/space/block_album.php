@@ -4,13 +4,13 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: block_album.php 10025 2010-05-06 04:18:22Z xupeng $
+ *      $Id: block_album.php 25525 2011-11-14 04:39:11Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
-class block_album {
+class block_album extends discuz_block {
 	var $setting = array();
 	function block_album() {
 		$this->setting = array(
@@ -61,6 +61,7 @@ class block_album {
 
 	function fields() {
 		return array(
+				'id' => array('name' => lang('blockclass', 'blockclass_field_id'), 'formtype' => 'text', 'datatype' => 'int'),
 				'url' => array('name' => lang('blockclass', 'blockclass_album_field_url'), 'formtype' => 'text', 'datatype' => 'string'),
 				'title' => array('name' => lang('blockclass', 'blockclass_album_field_title'), 'formtype' => 'title', 'datatype' => 'title'),
 				'pic' => array('name' => lang('blockclass', 'blockclass_album_field_pic'), 'formtype' => 'pic', 'datatype' => 'pic'),
@@ -100,9 +101,6 @@ class block_album {
 		return $settings;
 	}
 
-	function cookparameter($parameter) {
-		return $parameter;
-	}
 
 	function getdata($style, $parameter) {
 		global $_G;
@@ -119,24 +117,9 @@ class block_album {
 		$bannedids = !empty($parameter['bannedids']) ? explode(',', $parameter['bannedids']) : array();
 
 		$list = array();
-		$wheres = array();
-		if($aids) {
-			$wheres[] = 'albumid IN ('.dimplode($aids).')';
-		}
-		if($bannedids) {
-			$wheres[]  = 'albumid NOT IN ('.dimplode($bannedids).')';
-		}
-		if($uids) {
-			$wheres[] = 'uid IN ('.dimplode($uids).')';
-		}
-		if($catid && !in_array('0', $catid)) {
-			$wheres[] = 'catid IN ('.dimplode($catid).')';
-		}
-		$wheres[] = "friend = '0'";
-		$wheresql = $wheres ? implode(' AND ', $wheres) : '1';
-		$sql = "SELECT * FROM ".DB::table('home_album')." WHERE $wheresql ORDER BY $orderby DESC";
-		$query = DB::query($sql." LIMIT $startrow,$items;");
-		while($data = DB::fetch($query)) {
+
+		$query = C::t('home_album')->fetch_all_by_block($aids, $bannedids, $uids, $catid, $startrow, $items, $orderby);
+		foreach($query as $data) {
 			$list[] = array(
 				'id' => $data['albumid'],
 				'idtype' => 'albumid',

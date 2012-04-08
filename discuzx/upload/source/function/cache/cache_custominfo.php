@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_custominfo.php 19640 2011-01-12 08:24:22Z monkey $
+ *      $Id: cache_custominfo.php 26112 2011-12-02 03:06:01Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -12,13 +12,8 @@ if(!defined('IN_DISCUZ')) {
 }
 
 function build_cache_custominfo() {
-	$data = array();
-	$query = DB::query("SELECT * FROM ".DB::table('common_setting')." WHERE skey IN ('extcredits', 'customauthorinfo', 'postno', 'postnocustom')");
 
-	while($setting = DB::fetch($query)) {
-		$data[$setting['skey']] = $setting['svalue'];
-	}
-
+	$data = C::t('common_setting')->fetch_all(array('extcredits', 'customauthorinfo', 'postno', 'postnocustom'));
 	$data['customauthorinfo'] = unserialize($data['customauthorinfo']);
 	$data['customauthorinfo'] = $data['customauthorinfo'][0];
 	$data['fieldsadd'] = '';
@@ -43,8 +38,7 @@ function build_cache_custominfo() {
 	$data['setting'] = $order;
 
 	$profile = array();
-	$query = DB::query("SELECT * FROM ".DB::table('common_member_profile_setting')." WHERE available='1' AND showinthread='1' ORDER BY displayorder");
-	while($field = DB::fetch($query)) {
+	foreach(C::t('common_member_profile_setting')->fetch_all_by_available_showinthread(1, 1) as $field) {
 		$data['fieldsadd'] .= ', mp.'.$field['fieldid'].' AS '.$field['fieldid'];
 		$profile['field_'.$field['fieldid']] = array($field['title'], $field['fieldid']);
 	}
@@ -61,7 +55,7 @@ function build_cache_custominfo() {
 	unset($data['customauthorinfo'], $data['postno'], $data['postnocustom'], $data['extcredits']);
 	$data['postno'] = $postnocustomnew;
 
-	save_syscache('custominfo', $data);
+	savecache('custominfo', $data);
 }
 
 ?>

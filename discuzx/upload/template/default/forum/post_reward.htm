@@ -1,5 +1,5 @@
 <div class="exfm cl">
-	<!--{if $_G[gp_action] == 'newthread'}-->
+	<!--{if $_GET[action] == 'newthread'}-->
 		<label for="rewardprice">{lang reward_price}: </label>
 		<input type="text" name="rewardprice" id="rewardprice" class="px pxs" size="6" onkeyup="getrealprice(this.value)" value="{$_G['group']['minrewardprice']}" tabindex="1" />
 		{$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][2]][unit]}{$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][2]][title]}
@@ -9,7 +9,7 @@
 			<!--{if $_G['group']['maxrewardprice'] > 0}-->, {lang reward_price_max} {$_G['group']['maxrewardprice']} {$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][2]][unit]}<!--{/if}-->
 			, {lang you_have} <!--{echo getuserprofile('extcredits'.$_G['setting']['creditstransextra'][2]);}--> {$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][2]][unit]}{$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][2]][title]}
 		</p>
-	<!--{elseif $_G[gp_action] == 'edit'}-->
+	<!--{elseif $_GET[action] == 'edit'}-->
 		<!--{if $isorigauthor}-->
 			<!--{if $thread['price'] > 0}-->
 				<label for="rewardprice">{lang reward_price}:</label>
@@ -45,7 +45,7 @@ function getrealprice(price){
 		n = Math.ceil(parseInt(price) + price * $_G['setting']['creditstax']);
 		if(price > 32767) {
 			$('realprice').innerHTML = '<b>{lang reward_price_overflow}</b>';
-		}<!--{if $_G[gp_action] == 'edit'}-->	else if(price < $rewardprice) {
+		}<!--{if $_GET[action] == 'edit'}-->	else if(price < $rewardprice) {
 			$('realprice').innerHTML = '<b>{lang reward_cant_fall}</b>';
 		}<!--{/if}--> else if(price < $_G['group']['minrewardprice'] || ($_G['group']['maxrewardprice'] > 0 && price > $_G['group']['maxrewardprice'])) {
 			$('realprice').innerHTML = '<b>{lang reward_price_bound}</b>';

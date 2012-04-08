@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_ajax.php 27348 2012-01-17 07:34:00Z svn_project_zhangjie $
+ *      $Id: forum_ajax.php 29166 2012-03-28 02:37:09Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -12,10 +12,10 @@ if(!defined('IN_DISCUZ')) {
 }
 define('NOROBOT', TRUE);
 
-if($_G['gp_action'] == 'checkusername') {
+if($_GET['action'] == 'checkusername') {
 
 
-	$username = trim($_G['gp_username']);
+	$username = trim($_GET['username']);
 	$usernamelen = dstrlen($username);
 	if($usernamelen < 3) {
 		showmessage('profile_username_tooshort', '', array(), array('handle' => false));
@@ -31,27 +31,31 @@ if($_G['gp_action'] == 'checkusername') {
 	} elseif($ucresult == -2) {
 		showmessage('profile_username_protect', '', array(), array('handle' => false));
 	} elseif($ucresult == -3) {
-		if(DB::result_first("SELECT uid FROM ".DB::table('common_member')." WHERE username='$username'")) {
+		if(C::t('common_member')->fetch_by_username($username) || C::t('common_member_archive')->fetch_by_username($username)) {
 			showmessage('register_check_found', '', array(), array('handle' => false));
 		} else {
 			showmessage('register_activation', '', array(), array('handle' => false));
 		}
 	}
 
-} elseif($_G['gp_action'] == 'checkemail') {
+	$censorexp = '/^('.str_replace(array('\\*', "\r\n", ' '), array('.*', '|', ''), preg_quote(($_G['setting']['censoruser'] = trim($_G['setting']['censoruser'])), '/')).')$/i';
+	if($_G['setting']['censoruser'] && @preg_match($censorexp, $username)) {
+		showmessage('profile_username_protect', '', array(), array('handle' => false));
+	}
+
+} elseif($_GET['action'] == 'checkemail') {
 
 	require_once libfile('function/member');
-	checkemail($_G['gp_email']);
+	checkemail($_GET['email']);
 
-} elseif($_G['gp_action'] == 'checkinvitecode') {
+} elseif($_GET['action'] == 'checkinvitecode') {
 
-	$invitecode = trim($_G['gp_invitecode']);
+	$invitecode = trim($_GET['invitecode']);
 	if(!$invitecode) {
 		showmessage('no_invitation_code', '', array(), array('handle' => false));
 	}
 	$result = array();
-	$query = DB::query("SELECT * FROM ".DB::table('common_invite')." WHERE code='$invitecode'");
-	if($invite = DB::fetch($query)) {
+	if($invite = C::t('common_invite')->fetch_by_code($invitecode)) {
 		if(empty($invite['fuid']) && (empty($invite['endtime']) || $_G['timestamp'] < $invite['endtime'])) {
 			$result['uid'] = $invite['uid'];
 			$result['id'] = $invite['id'];
@@ -62,17 +66,19 @@ if($_G['gp_action'] == 'checkusername') {
 		showmessage('wrong_invitation_code', '', array(), array('handle' => false));
 	}
 
-} elseif($_G['gp_action'] == 'checkuserexists') {
+} elseif($_GET['action'] == 'checkuserexists') {
 
-	$check = DB::result_first("SELECT uid FROM ".DB::table('common_member')." WHERE username='".trim($_G['gp_username'])."'");
-	$check ? showmessage('<img src="'.$_G['style']['imgdir'].'/check_right.gif" width="13" height="13">', '', array(), array('msgtype' => 3))
-		: showmessage('username_nonexistence', '', array(), array('msgtype' => 3));
+	if(C::t('common_member')->fetch_by_username(trim($_GET['username'])) || C::t('common_member_archive')->fetch_by_username(trim($_GET['username']))) {
+		showmessage('<img src="'.$_G['style']['imgdir'].'/check_right.gif" width="13" height="13">', '', array(), array('msgtype' => 3));
+	} else {
+		showmessage('username_nonexistence', '', array(), array('msgtype' => 3));
+	}
 
-} elseif($_G['gp_action'] == 'attachlist') {
+} elseif($_GET['action'] == 'attachlist') {
 
 	require_once libfile('function/post');
 	loadcache('groupreadaccess');
-	$attachlist = getattach($_G['gp_pid'], intval($_G['gp_posttime']), $_G['gp_aids']);
+	$attachlist = getattach($_GET['pid'], intval($_GET['posttime']), $_GET['aids']);
 	$attachlist = $attachlist['attachs']['unused'];
 	$_G['group']['maxprice'] = isset($_G['setting']['extcredits'][$_G['setting']['creditstrans']]) ? $_G['group']['maxprice'] : 0;
 
@@ -80,11 +86,10 @@ if($_G['gp_action'] == 'checkusername') {
 	include template('forum/ajax_attachlist');
 	include template('common/footer_ajax');
 	dexit();
-
-} elseif($_G['gp_action'] == 'imagelist') {
+} elseif($_GET['action'] == 'imagelist') {
 
 	require_once libfile('function/post');
-	$attachlist = getattach($_G['gp_pid'], intval($_G['gp_posttime']), $_G['gp_aids']);
+	$attachlist = getattach($_GET['pid'], intval($_GET['posttime']), $_GET['aids']);
 	$imagelist = $attachlist['imgattachs']['unused'];
 
 	include template('common/header_ajax');
@@ -92,15 +97,25 @@ if($_G['gp_action'] == 'checkusername') {
 	include template('common/footer_ajax');
 	dexit();
 
-} elseif($_G['gp_action'] == 'deleteattach') {
+} elseif($_GET['action'] == 'get_rushreply_membernum') {
+	$tid = intval($_GET['tid']);
+	if($tid) {
+		$membernum = C::t('forum_post')->count_author_by_tid($tid);
+		showmessage('thread_reshreply_membernum', '', array('membernum' => intval($membernum - 1)), array('alert' => 'info'));
+	}
+	dexit();
+} elseif($_GET['action'] == 'deleteattach') {
 
 	$count = 0;
-	if($_G['gp_aids']) {
-		foreach($_G['gp_aids'] as $aid) {
-			$attach = DB::fetch_first("SELECT * FROM ".DB::table(getattachtablebyaid($aid))." WHERE aid='$aid'");
-			if($attach && ($attach['pid'] && $attach['pid'] == $_G['gp_pid'] && $_G['uid'] == $attach['uid'] || $_G['forum']['ismoderator'] || !$attach['pid'] && $_G['uid'] == $attach['uid'])) {
-				DB::delete(getattachtablebyaid($aid), "aid='$aid'");
-				DB::delete('forum_attachment', "aid='$aid'");
+	if($_GET['aids']) {
+		foreach($_GET['aids'] as $aid) {
+			$attach = C::t('forum_attachment_n')->fetch('aid:'.$aid, $aid);
+			if($attach && ($attach['pid'] && $attach['pid'] == $_GET['pid'] && $_G['uid'] == $attach['uid'])) {
+				updatecreditbyaction('postattach', $attach['uid'], array(), '', -1, 1, $_G['fid']);
+			}
+			if($attach && ($attach['pid'] && $attach['pid'] == $_GET['pid'] && $_G['uid'] == $attach['uid'] || $_G['forum']['ismoderator'] || !$attach['pid'] && $_G['uid'] == $attach['uid'])) {
+				C::t('forum_attachment_n')->delete('aid:'.$aid, $aid);
+				C::t('forum_attachment')->delete($aid);
 				dunlink($attach);
 				$count++;
 			}
@@ -111,20 +126,20 @@ if($_G['gp_action'] == 'checkusername') {
 	include template('common/footer_ajax');
 	dexit();
 
-} elseif($_G['gp_action'] == 'secondgroup') {
+} elseif($_GET['action'] == 'secondgroup') {
 
 	require_once libfile('function/group');
-	$groupselect = get_groupselect($_G['gp_fupid'], $_G['gp_groupid']);
+	$groupselect = get_groupselect($_GET['fupid'], $_GET['groupid']);
 	include template('common/header_ajax');
 	include template('forum/ajax_secondgroup');
 	include template('common/footer_ajax');
 	dexit();
 
-} elseif($_G['gp_action'] == 'displaysearch_adv') {
-	$display = $_G['gp_display'] == 1 ? 1 : '';
+} elseif($_GET['action'] == 'displaysearch_adv') {
+	$display = $_GET['display'] == 1 ? 1 : '';
 	dsetcookie('displaysearch_adv', $display);
-} elseif($_G['gp_action'] == 'checkgroupname') {
-	$groupname = stripslashes(trim($_G['gp_groupname']));
+} elseif($_GET['action'] == 'checkgroupname') {
+	$groupname = trim($_GET['groupname']);
 	if(empty($groupname)) {
 		showmessage('group_name_empty', '', array(), array('msgtype' => 3));
 	}
@@ -132,17 +147,17 @@ if($_G['gp_action'] == 'checkusername') {
 	if($tmpname != $groupname) {
 		showmessage('group_name_oversize', '', array(), array('msgtype' => 3));
 	}
-	if(DB::result_first("SELECT fid FROM ".DB::table('forum_forum')." WHERE name='".addslashes($groupname)."'")) {
+	if(C::t('forum_forum')->fetch_fid_by_name($groupname)) {
 		showmessage('group_name_exist', '', array(), array('msgtype' => 3));
 	}
 	showmessage('', '', array(), array('msgtype' => 3));
 	include template('common/header_ajax');
 	include template('common/footer_ajax');
 	dexit();
-} elseif($_G['gp_action'] == 'getthreadtypes') {
+} elseif($_GET['action'] == 'getthreadtypes') {
 	include template('common/header_ajax');
-	if(empty($_G['gp_selectname'])) $_G['gp_selectname'] = 'threadtypeid';
-	echo '<select name="'.$_G['gp_selectname'].'">';
+	if(empty($_GET['selectname'])) $_GET['selectname'] = 'threadtypeid';
+	echo '<select name="'.$_GET['selectname'].'">';
 	if(!empty($_G['forum']['threadtypes']['types'])) {
 		if(!$_G['forum']['threadtypes']['required']) {
 			echo '<option value="0"></option>';
@@ -158,80 +173,64 @@ if($_G['gp_action'] == 'checkusername') {
 	}
 	echo '</select>';
 	include template('common/footer_ajax');
-} elseif($_G['gp_action'] == 'getimage') {
-	$_G['gp_aid'] = intval($_G['gp_aid']);
-	$image = DB::fetch_first('SELECT * FROM '.DB::table(getattachtablebyaid($_G['gp_aid']))." WHERE aid='$_G[gp_aid]' AND isimage='1'");
+} elseif($_GET['action'] == 'getimage') {
+	$_GET['aid'] = intval($_GET['aid']);
+	$image = C::t('forum_attachment_n')->fetch('aid:'.$_GET['aid'], $_GET['aid'], 1);
 	include template('common/header_ajax');
 	if($image['aid']) {
 		echo '<img src="'.getforumimg($image['aid'], 1, 300, 300, 'fixnone').'" id="image_'.$image['aid'].'" onclick="insertAttachimgTag(\''.$image['aid'].'\')" width="'.($image['width'] < 110 ? $image['width'] : 110).'" cwidth="'.($image['width'] < 300 ? $image['width'] : 300).'" />';
 	}
 	include template('common/footer_ajax');
 	dexit();
-} elseif($_G['gp_action'] == 'setthreadcover') {
-	$aid = intval($_G['gp_aid']);
+} elseif($_GET['action'] == 'setthreadcover') {
+	$aid = intval($_GET['aid']);
+	$imgurl = $_GET['imgurl'];
 	require_once libfile('function/post');
-	if($_G['forum'] && $aid) {
-		$threadimage = DB::fetch_first("SELECT tid, pid, attachment, remote FROM ".DB::table(getattachtablebyaid($aid))." WHERE aid='$aid'");
-		if($threadimage['tid'] && $threadimage['pid']) {
-			$firstpost = DB::result_first("SELECT first FROM ".DB::table(getposttablebytid($threadimage['tid']))." WHERE pid='$threadimage[pid]'");
-			if(empty($firstpost)) {
-				$trade_aid = DB::result_first("SELECT aid FROM ".DB::table('forum_trade')." WHERE pid='$threadimage[pid]'");
-				if($trade_aid == $aid ) {
-					$firstpost = 1;
-				}
-			}
-
+	if($_G['forum'] && ($aid || $imgurl)) {
+		if($imgurl) {
+			$tid = intval($_GET['tid']);
+			$pid = intval($_GET['pid']);
 		} else {
-			$firstpost = 0;
+			$threadimage = C::t('forum_attachment_n')->fetch('aid:'.$aid, $aid);
+			$tid = $threadimage['tid'];
+			$pid = $threadimage['pid'];
 		}
-		if(empty($firstpost)) {
-			showmessage('set_cover_faild', '', array(), array('closetime' => 3));
+
+		if($tid && $pid) {
+			$thread =get_thread_by_tid($tid);
+		} else {
+			$thread = array();
 		}
-		if(setthreadcover(0, 0, $aid)) {
-			$threadimage = daddslashes($threadimage);
-			DB::delete('forum_threadimage', "tid='$threadimage[tid]'");
-			DB::insert('forum_threadimage', array(
-				'tid' => $threadimage['tid'],
-				'attachment' => $threadimage['attachment'],
-				'remote' => $threadimage['remote'],
-			));
-			showmessage('set_cover_succeed', '', array(), array('alert' => 'right', 'closetime' => 1));
+		if(empty($thread) || (!$_G['forum']['ismoderator'] && $_G['uid'] != $thread['authorid'])) {
+			if($_GET['newthread']) {
+				showmessage('set_cover_faild', '', array(), array('msgtype' => 3));
+			} else {
+				showmessage('set_cover_faild', '', array(), array('closetime' => 3));
+			}
+		}
+		if(setthreadcover($pid, $tid, $aid, 0, $imgurl)) {
+			if(empty($imgurl)) {
+				C::t('forum_threadimage')->delete_by_tid($threadimage['tid']);
+				C::t('forum_threadimage')->insert(array(
+					'tid' => $threadimage['tid'],
+					'attachment' => $threadimage['attachment'],
+					'remote' => $threadimage['remote'],
+				));
+			}
+			if($_GET['newthread']) {
+				showmessage('set_cover_succeed', '', array(), array('msgtype' => 3));
+			} else {
+				showmessage('set_cover_succeed', '', array(), array('alert' => 'right', 'closetime' => 1));
+			}
 		}
 	}
-	showmessage('set_cover_faild', '', array(), array('closetime' => 3));
-
-} elseif($_G['gp_action'] == 'editor') {
-	$editorid = 'e';
-	$_G['setting']['editoroptions'] = str_pad(decbin($_G['setting']['editoroptions']), 2, 0, STR_PAD_LEFT);
-	$editormode = $_G['setting']['editoroptions']{0};
-	$allowswitcheditor = $_G['setting']['editoroptions']{1};
-	$editor = array(
-		'editormode' => $editormode,
-		'allowswitcheditor' => $allowswitcheditor,
-		'allowhtml' => 0,
-		'allowsmilies' => $_G['forum']['allowsmilies'],
-		'allowbbcode' => $_G['forum']['allowbbcode'],
-		'allowimgcode' => $_G['forum']['allowimgcode'],
-		'allowcustombbcode' => 0,
-		'allowchecklength' => 0,
-		'allowtopicreset' => 0,
-		'allowresize' => 1,
-		'textarea' => 'message',
-		'simplemode' => !isset($_G['cookie']['editormode_'.$editorid]) ? $_G['setting']['editoroptions']{2} : $_G['cookie']['editormode_'.$editorid],
-	);
-	loadcache('bbcodes_display');
-
-	$_G['forum']['allowpostattach'] = isset($_G['forum']['allowpostattach']) ? $_G['forum']['allowpostattach'] : '';
-	$allowpostattach = $_G['forum']['allowpostattach'] != -1 && ($_G['forum']['allowpostattach'] == 1 || (!$_G['forum']['postattachperm'] && $_G['group']['allowpostattach']) || ($_G['forum']['postattachperm'] && forumperm($_G['forum']['postattachperm'])));
-	if(!$allowpostattach) {
-		$_G['forum']['allowpostimage'] = isset($_G['forum']['allowpostimage']) ? $_G['forum']['allowpostimage'] : '';
-		$allowpostattach = $_G['forum']['allowpostimage'] != -1 && ($_G['forum']['allowpostimage'] == 1 || (!$_G['forum']['postimageperm'] && $_G['group']['allowpostimage']) || ($_G['forum']['postimageperm'] && forumperm($_G['forum']['postimageperm'])));
+	if($_GET['newthread']) {
+		showmessage('set_cover_faild', '', array(), array('msgtype' => 3));
+	} else {
+		showmessage('set_cover_faild', '', array(), array('closetime' => 3));
 	}
 
-	include template('forum/editor_ajax');
-	exit;
-
-} elseif($_G['gp_action'] == 'updateattachlimit') {
+} elseif($_GET['action'] == 'updateattachlimit') {
 
 	$_G['forum']['allowpostattach'] = isset($_G['forum']['allowpostattach']) ? $_G['forum']['allowpostattach'] : '';
 	$_G['group']['allowpostattach'] = $_G['forum']['allowpostattach'] != -1 && ($_G['forum']['allowpostattach'] == 1 || (!$_G['forum']['postattachperm'] && $_G['group']['allowpostattach']) || ($_G['forum']['postattachperm'] && forumperm($_G['forum']['postattachperm'])));
@@ -261,12 +260,14 @@ if($_G['gp_action'] == 'checkusername') {
 	include template('common/footer_ajax');
 	exit;
 
-} elseif($_G['gp_action'] == 'forumchecknew' && !empty($_G['gp_fid']) && !empty($_G['gp_time'])) {
-	$fid = intval($_G['gp_fid']);
-	$time = intval($_G['gp_time']);
+} elseif($_GET['action'] == 'forumchecknew' && !empty($_GET['fid']) && !empty($_GET['time'])) {
+	$fid = intval($_GET['fid']);
+	$time = intval($_GET['time']);
 
-	if(!$_G['gp_uncheck']) {
-		if($lastpost_str = DB::result_first("SELECT lastpost FROM ".DB::table('forum_forum')." WHERE fid = '$fid' LIMIT 1")) {
+	if(!$_GET['uncheck']) {
+		$foruminfo = C::t('forum_forum')->fetch($fid);
+		$lastpost_str = $foruminfo['lastpost'];
+		if($lastpost_str) {
 			$lastpost = explode("\t", $lastpost_str);
 			unset($lastpost_str);
 		}
@@ -275,14 +276,13 @@ if($_G['gp_action'] == 'checkusername') {
 		include template('common/footer_ajax');
 		exit;
 	} else {
-		$forum_field = DB::fetch_first("SELECT threadtypes AS tt, threadsorts AS ts FROM ".DB::table('forum_forumfield')." WHERE fid = '$fid' LIMIT 1");
-		$forum_field['threadtypes'] = unserialize($forum_field['tt']);
-		$forum_field['threadsorts'] = unserialize($forum_field['ts']);
-		unset($forum_field['tt'], $forum_field['ts']);
+		$query = C::t('forum_forumfield')->fetch($fid);
+		$forum_field['threadtypes'] = dunserialize($query['threadtypes']);
+		$forum_field['threadsorts'] = dunserialize($query['threadsorts']);
+		unset($query);
 		$forum_field = daddslashes($forum_field);
 		$todaytime = strtotime(dgmdate(TIMESTAMP, 'Ymd'));
-		$query = DB::query("SELECT * FROM ".DB::table('forum_thread')." WHERE fid = '$fid' AND displayorder = 0 AND lastpost > '$time'  AND lastpost < '".TIMESTAMP."' ORDER BY lastpost DESC LIMIT 100");
-		while($thread = DB::fetch($query)) {
+		foreach(C::t('forum_thread')->fetch_all_by_fid_lastpost($fid, $time, TIMESTAMP) as $thread) {
 			list($thread['subject'], $thread['author'], $thread['lastposter']) = daddslashes(array($thread['subject'], $thread['author'], $thread['lastposter']));
 			$thread['dateline'] = $thread['dateline'] > $todaytime ? "<span class=\"xi1\">".dgmdate($thread['dateline'], 'd')."</span>" : "<span>".dgmdate($thread['dateline'], 'd')."</span>";
 			$thread['lastpost'] = dgmdate($thread['lastpost']);
@@ -317,11 +317,10 @@ if($_G['gp_action'] == 'checkusername') {
 		include template('forum/ajax_threadlist');
 
 	}
-} elseif($_G['gp_action'] == 'downremoteimg') {
-	$_G['gp_message'] = dstripslashes($_G['gp_message']);
-	$_G['gp_message'] = str_replace(array("\r", "\n"), array($_G['gp_wysiwyg'] ? '<br />' : '', "\\n"), $_G['gp_message']);
-	preg_match_all("/\[img\]\s*([^\[\<\r\n]+?)\s*\[\/img\]|\[img=\d{1,4}[x|\,]\d{1,4}\]\s*([^\[\<\r\n]+?)\s*\[\/img\]/is", $_G['gp_message'], $image1, PREG_SET_ORDER);
-	preg_match_all("/\<img.+src=('|\"|)?(.*)(\\1)([\s].*)?\>/ismUe", $_G['gp_message'], $image2, PREG_SET_ORDER);
+} elseif($_GET['action'] == 'downremoteimg') {
+	$_GET['message'] = str_replace(array("\r", "\n"), array($_GET['wysiwyg'] ? '<br />' : '', "\\n"), $_GET['message']);
+	preg_match_all("/\[img\]\s*([^\[\<\r\n]+?)\s*\[\/img\]|\[img=\d{1,4}[x|\,]\d{1,4}\]\s*([^\[\<\r\n]+?)\s*\[\/img\]/is", $_GET['message'], $image1, PREG_SET_ORDER);
+	preg_match_all("/\<img.+src=('|\"|)?(.*)(\\1)([\s].*)?\>/ismUe", $_GET['message'], $image2, PREG_SET_ORDER);
 	$temp = $aids = $existentimg = array();
 	if(is_array($image1) && !empty($image1)) {
 		foreach($image1 as $value) {
@@ -341,7 +340,6 @@ if($_G['gp_action'] == 'checkusername') {
 	}
 	require_once libfile('class/image');
 	if(is_array($temp) && !empty($temp)) {
-		require_once libfile('class/upload');
 		$upload = new discuz_upload();
 		$attachaids = array();
 
@@ -388,9 +386,15 @@ if($_G['gp_action'] == 'checkusername') {
 					$upload->attach = $attach;
 					$thumb = $width = 0;
 					if($upload->attach['isimage']) {
+						if($_G['setting']['thumbsource'] && $_G['setting']['sourcewidth'] && $_G['setting']['sourceheight']) {
+							$image = new image();
+							$thumb = $image->Thumb($upload->attach['target'], '', $_G['setting']['sourcewidth'], $_G['setting']['sourceheight'], 1, 1) ? 1 : 0;
+							$width = $image->imginfo['width'];
+							$upload->attach['size'] = $image->imginfo['size'];
+						}
 						if($_G['setting']['thumbstatus']) {
 							$image = new image();
-							$thumb = $image->Thumb($upload->attach['target'], '', $_G['setting']['thumbwidth'], $_G['setting']['thumbheight'], $_G['setting']['thumbstatus'], $_G['setting']['thumbsource']) ? 1 : 0;
+							$thumb = $image->Thumb($upload->attach['target'], '', $_G['setting']['thumbwidth'], $_G['setting']['thumbheight'], $_G['setting']['thumbstatus'], 0) ? 1 : 0;
 							$width = $image->imginfo['width'];
 						}
 						if($_G['setting']['thumbsource'] || !$_G['setting']['thumbstatus']) {
@@ -406,7 +410,7 @@ if($_G['gp_action'] == 'checkusername') {
 					$setarr = array(
 						'aid' => $aid,
 						'dateline' => $_G['timestamp'],
-						'filename' => daddslashes($upload->attach['name']),
+						'filename' => $upload->attach['name'],
 						'filesize' => $upload->attach['size'],
 						'attachment' => $upload->attach['attachment'],
 						'isimage' => $upload->attach['isimage'],
@@ -415,7 +419,7 @@ if($_G['gp_action'] == 'checkusername') {
 						'remote' => '0',
 						'width' => $width
 					);
-					DB::insert("forum_attachment_unused", $setarr);
+					C::t("forum_attachment_unused")->insert($setarr);
 					$attachaids[$hash] = $imagereplace['newimageurl'][] = '[attachimg]'.$aid.'[/attachimg]';
 
 				} else {
@@ -426,17 +430,232 @@ if($_G['gp_action'] == 'checkusername') {
 		if(!empty($aids)) {
 			require_once libfile('function/post');
 		}
-		$_G['gp_message'] = str_replace($imagereplace['oldimageurl'], $imagereplace['newimageurl'], $_G['gp_message']);
-		$_G['gp_message'] = addcslashes($_G['gp_message'], '/"');
+		$_GET['message'] = str_replace($imagereplace['oldimageurl'], $imagereplace['newimageurl'], $_GET['message']);
+		$_GET['message'] = addcslashes($_GET['message'], '/"');
 
 	}
 	print <<<EOF
 		<script type="text/javascript">
 			parent.ATTACHORIMAGE = 1;
-			parent.updateDownImageList('$_G[gp_message]');
+			parent.updateDownImageList('$_GET[message]');
 		</script>
 EOF;
 	dexit();
+} elseif($_GET['action'] == 'exif') {
+	$exif = C::t('forum_attachment_exif')->fetch($_GET['aid']);
+	$s = $exif['exif'];
+	if(!$s) {
+		require_once libfile('function/attachment');
+		$s = getattachexif($_GET['aid']);
+		C::t('forum_attachment_exif')->insert($_GET['aid'], $s);
+	}
+	include template('common/header_ajax');
+	echo $s;
+	include template('common/footer_ajax');
+	exit;
+} elseif($_GET['action'] == 'getthreadclass') {
+	$fid = intval($_GET['fid']);
+	$threadclass = '';
+	if($fid) {
+		$option = array();
+		$forumfield = C::t('forum_forumfield')->fetch($fid);
+		if(!empty($forumfield['threadtypes'])) {
+			foreach(C::t('forum_threadclass')->fetch_all_by_fid($fid) as $tc) {
+				$option[] = '<option value="'.$tc['typeid'].'">'.$tc['name'].'</option>';
+			}
+			if(!empty($option)) {
+				$threadclass .= '<option value="">'.lang('forum/template', 'modcp_select_threadclass').'</option>';
+				$threadclass .= implode('', $option);
+			}
+		}
+	}
+
+	if(!empty($threadclass)) {
+		$threadclass = '<select name="typeid" id="typeid" width="168" class="ps">'.$threadclass.'</select>';
+	}
+	include template('common/header_ajax');
+	echo $threadclass;
+	include template('common/footer_ajax');
+	exit;
+
+} elseif($_GET['action'] == 'forumjump') {
+	require_once libfile('function/forumlist');
+	$favforums = C::t('home_favorite')->fetch_all_by_uid_idtype($_G['uid'], 'fid');
+	$visitedforums = array();
+	if($_G['cookie']['visitedfid']) {
+		loadcache('forums');
+		foreach(explode('D', $_G['cookie']['visitedfid']) as $fid) {
+			$visitedforums[$fid] = $_G['cache']['forums'][$fid]['name'];
+		}
+	}
+	$forumlist = forumselect(FALSE, 1);
+	include template('forum/ajax_forumlist');
+} elseif($_GET['action'] == 'quickreply') {
+	$tid = intval($_GET['tid']);
+	$fid = intval($_GET['fid']);
+	$list = C::t('forum_post')->fetch_all_by_tid('tid:'.$tid, $tid, true, 'DESC', 0, 10, null, 0);
+	loadcache('smilies');
+	foreach($list as $pid => $post) {
+		if($post['first']) {
+			unset($list[$pid]);
+		} else {
+			$post['message'] = preg_replace($_G['cache']['smilies']['searcharray'], '', $post['message']);
+			$post['message'] = preg_replace("/\{\:soso_((e\d+)|(_\d+_\d))\:\}/e", '', $post['message']);
+			$list[$pid]['message'] = cutstr(preg_replace("/\[.+?\]/ies", '', $post['message']), 300) ;
+		}
+	}
+	krsort($list);
+	$seccodecheck = ($_G['setting']['seccodestatus'] & 4) && (!$_G['setting']['seccodedata']['minposts'] || getuserprofile('posts') < $_G['setting']['seccodedata']['minposts']);
+	$secqaacheck = $_G['setting']['secqaa']['status'] & 2 && (!$_G['setting']['secqaa']['minposts'] || getuserprofile('posts') < $_G['setting']['secqaa']['minposts']);
+
+	include template('forum/ajax_quickreply');
+} elseif($_GET['action'] == 'getpost') {
+	$tid = intval($_GET['tid']);
+	$fid = intval($_GET['fid']);
+	$pid = intval($_GET['pid']);
+	$thread = C::t('forum_thread')->fetch($tid);
+	$post = C::t('forum_post')->fetch($thread['posttableid'], $pid);
+	include template('forum/ajax_followpost');
+} elseif($_GET['action'] == 'quickclear') {
+	$uid = intval($_GET['uid']);
+	if($_G['adminid'] != 1) {
+		showmessage('quickclear_noperm');
+	}
+	include_once libfile('function/misc');
+	include_once libfile('function/member');
+
+	if(!submitcheck('qclearsubmit')) {
+		$crimenum_avatar = crime('getcount', $uid, 'crime_avatar');
+		$crimenum_sightml = crime('getcount', $uid, 'crime_sightml');
+		$crimenum_customstatus = crime('getcount', $uid, 'crime_customstatus');
+		$crimeauthor = getuserbyuid($uid);
+		$crimeauthor = $crimeauthor['username'];
+
+		include template('forum/ajax');
+	} else {
+		if(empty($_GET['operations'])) {
+			showmessage('quickclear_need_operation');
+		}
+		$reason = checkreasonpm();
+		$allowop = array('avatar', 'sightml', 'customstatus');
+		$cleartype = array();
+		if(in_array('avatar', $_GET['operations'])) {
+			C::t('common_member')->update($uid, array('avatarstatus'=>0));
+			loaducenter();
+			uc_user_deleteavatar($uid);
+			$cleartype[] = lang('forum/misc', 'avatar');
+			crime('recordaction', $uid, 'crime_avatar', lang('forum/misc', 'crime_reason', array('reason' => $reason)));
+		}
+		if(in_array('sightml', $_GET['operations'])) {
+			C::t('common_member_field_forum')->update($uid, array('sightml' => ''), 'UNBUFFERED');
+			$cleartype[] = lang('forum/misc', 'signature');
+			crime('recordaction', $uid, 'crime_sightml', lang('forum/misc', 'crime_reason', array('reason' => $reason)));
+		}
+		if(in_array('customstatus', $_GET['operations'])) {
+			C::t('common_member_field_forum')->update($uid, array('customstatus' => ''), 'UNBUFFERED');
+			$cleartype[] = lang('forum/misc', 'custom_title');
+			crime('recordaction', $uid, 'crime_customstatus', lang('forum/misc', 'crime_reason', array('reason' => $reason)));
+		}
+		if(($_G['group']['reasonpm'] == 2 || $_G['group']['reasonpm'] == 3) || !empty($_GET['sendreasonpm'])) {
+			sendreasonpm(array('authorid' => $uid), 'reason_quickclear', array(
+				'cleartype' => implode(',', $cleartype),
+				'reason' => $reason,
+			));
+		}
+		showmessage('quickclear_success', $_POST['redirect'], array(), array('showdialog'=>1, 'closetime' => true, 'msgtype' => 2, 'locationtime' => 1));
+	}
+} elseif($_GET['action'] == 'getpostfeed') {
+	$tid = intval($_GET['tid']);
+	$pid = intval($_GET['pid']);
+	$flag = intval($_GET['flag']);
+	$feed = $thread = array();
+	if($tid) {
+		$thread = C::t('forum_thread')->fetch($tid);
+		if($flag) {
+			$post = C::t('forum_post')->fetch($thread['posttableid'], $pid);
+			require_once libfile('function/discuzcode');
+			require_once libfile('function/followcode');
+			$post['message'] = followcode($post['message'], $tid, $pid);
+		} else {
+			if(!isset($_G['cache']['forums'])) {
+				loadcache('forums');
+			}
+			$feedid = intval($_GET['feedid']);
+			$feed = C::t('forum_threadpreview')->fetch($tid);
+			if($feedid) {
+				$feed = array_merge($feed, C::t('home_follow_feed')->fetch_by_feedid($feedid));
+			}
+			$post['message'] = $feed['content'];
+		}
+	}
+	include template('forum/ajax_followpost');
+
+} elseif($_GET['action'] == 'setnav') {
+	if($_G['adminid'] != 1) {
+		showmessage('quickclear_noperm');
+	}
+	$allowfuntype = array('portal', 'group', 'follow', 'collection', 'guide', 'feed', 'blog', 'doing', 'album', 'share', 'wall', 'homepage', 'ranklist');
+	$type = in_array($_GET['type'], $allowfuntype) ? trim($_GET['type']) : '';
+	$do = in_array($_GET['do'], array('open', 'close')) ? $_GET['do'] : 'close';
+	if(!submitcheck('funcsubmit')) {
+		$navtitle = lang('spacecp', $do == 'open' ? 'select_the_navigation_position' : 'close_module', array('type' => lang('spacecp', $type)));
+		$closeprompt = lang('spacecp', 'close_module', array('type' => lang('spacecp', $type)));
+		include template('forum/ajax');
+	} else {
+		if(!empty($type)) {
+			$funkey = $type.'status';
+			$funstatus = $do == 'open' ? 1 : 0;
+			if($type != 'homepage') {
+				$identifier = array('portal' => 1, 'group' => 3, 'feed' => 4, 'ranklist' => 8, 'follow' => 9, 'guide' => 10, 'collection' => 11, 'blog' => 12, 'album' => 13, 'share' => 14, 'doing' => 15);
+				$navdata = array('available' => -1);
+				$navtype = $do == 'open' ? array() : array(0, 3);
+				if(in_array($type, array('blog', 'album', 'share', 'doing', 'follow'))) {
+					$navtype[] = 2;
+				}
+				if($do == 'open') {
+					if($_GET['location']['header']) {
+						$navtype[] = 0;
+						$navdata['available'] = 1;
+					}
+					if($_GET['location']['quick']) {
+						$navtype[] = 3;
+						$navdata['available'] = 1;
+					}
+					$navdata['available'] = $navdata['available'] == 1 ? 1 : 0;
+					if(empty($_GET['location']['header']) || empty($_GET['location']['quick'])) {
+						C::t('common_nav')->update_by_navtype_type_identifier(array(0, 2, 3), 0, array("$type", "$identifier[$type]"), array('available' => 0));
+					}
+				}
+				if($navtype) {
+					C::t('common_nav')->update_by_navtype_type_identifier($navtype, 0, array("$type", "$identifier[$type]"), $navdata);
+					if(in_array($type, array('blog', 'album', 'share', 'doing', 'follow')) && !$navdata['available']) {
+						C::t('common_nav')->update_by_navtype_type_identifier(array(2), 0, array("$type"), array('available' => 1));
+					}
+				}
+			}
+			C::t('common_setting')->update($funkey, $funstatus);
+
+			$setting[$funkey] = $funstatus;
+			include libfile('function/cache');
+			updatecache('setting');
+		}
+		showmessage('do_success', dreferer(), array(), array('header'=>true));
+	}
+	exit;
+}
+
+function tmpiconv($s, $d, $str) {
+	if(is_array($str)) {
+		foreach($str as $k => $v) {
+			$str[$k] = tmpiconv($s, $d, $v);
+		}
+	} else {
+		$str = iconv($s, $d, $str);
+	}
+	return $str;
+}
+function modifynav($type, $flag) {
+
 }
 
 showmessage('succeed', '', array(), array('handle' => false));

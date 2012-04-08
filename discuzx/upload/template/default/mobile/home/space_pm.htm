@@ -3,8 +3,8 @@
 <div class="box"><a href="{if $forcefid}forum.php?mod=forumdisplay{$forcefid}{else}forum.php{/if}" title="{lang return_forum}">{lang return_forum}</a><span class="pipe">|</span> <a href="home.php?mod=space&do=pm" title="{lang send_pm}" class="xw1">{lang pm_center}</a> <span class="pipe">|</span><a href="home.php?mod=spacecp&ac=pm" title="{lang send_pm}">{lang send_pm}</a></div>
 
 <div class="bm mtn">
-<!--{if in_array($filter, array('privatepm')) || in_array($_G[gp_subop], array('view'))}-->
-<div class="bm_h"><!--{if in_array($_G[gp_subop], array('view'))}--><a href="javascript:history.back();">[{lang back}]</a><!--{if $membernum >= 2 && $subject}-->{$membernum}{lang pm_members_message}:$subject<!--{elseif $tousername}-->{lang pm_with}{$tousername}{lang pm_totail}<!--{/if}--><!--{else}-->{lang pm}<!--{/if}--></div>
+<!--{if in_array($filter, array('privatepm')) || in_array($_GET[subop], array('view'))}-->
+<div class="bm_h"><!--{if in_array($_GET[subop], array('view'))}--><a href="javascript:history.back();">[{lang back}]</a><!--{if $membernum >= 2 && $subject}-->{$membernum}{lang pm_members_message}:$subject<!--{elseif $tousername}-->{lang pm_with}{$tousername}{lang pm_totail}<!--{/if}--><!--{else}-->{lang pm}<!--{/if}--></div>
 <!--{if in_array($filter, array('privatepm'))}-->
     <!--{loop $list $key $value}-->
     <div class="bm_c">
@@ -24,7 +24,7 @@
         </p>
     </div>
     <!--{/loop}-->
-<!--{elseif in_array($_G[gp_subop], array('view'))}-->
+<!--{elseif in_array($_GET[subop], array('view'))}-->
 	<!--{if $list}-->
 		<!--{loop $list $key $value}-->
 			<!--{subtemplate home/space_pm_node}-->

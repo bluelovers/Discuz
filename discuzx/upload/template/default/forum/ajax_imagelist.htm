@@ -1,9 +1,13 @@
 <!--{if $imagelist}-->
+	<!--{if $_GET[type] != 'single'}-->
 	<!--{eval $i = 0;}-->
 	<table cellspacing="2" cellpadding="2" class="imgl"><tr>
+	<!--{/if}-->
 	<!--{loop $imagelist $image}-->
 		<!--{eval $i++;}-->
+		<!--{if $_GET[type] != 'single'}-->
 		<td valign="bottom" id="image_td_$image[aid]" width="25%">
+		<!--{/if}-->
 			<a href="javascript:;" title="$image[filename]" id="imageattach$image[aid]"><img src="{echo getforumimg($image[aid], 1, 300, 300, 'fixnone')}" id="image_$image[aid]" onclick="insertAttachimgTag('$image[aid]');doane(event);" width="{if $image[width] < 110}$image[width]{else}110{/if}" cwidth="{if $image[width] < 300}$image[width]{else}300{/if}" /></a>
 			<p class="mtn mbn xi2">
 				<!--{if $attach['pid']}-->
@@ -21,14 +25,16 @@
 					<input type="text" name="attachnew[{$image[aid]}][description]" class="px" style="display: none" id="image_desc_$image[aid]" />
 				<!--{/if}-->
 			</p>
-			<!--{if $_G['setting']['homestatus'] && $_G['group']['allowupload']}-->
+			<!--{if helper_access::check_module('album') && $_G['group']['allowupload']}-->
 				<p class="mtn"><!--{if !$attach[pid]}--><input type="hidden" class="pc" id="albumaid_$image[aid]" name="albumaid[]" value="" /><label for="albumaidchk_$image[aid]"><input id="albumaidchk_$image[aid]" type="checkbox" class="pc" onclick="$('albumaid_$image[aid]').value=this.checked?this.value:''" value="$image[aid]" />{lang save_to_album}</label><!--{/if}--></p>
 			<!--{/if}-->
 		</td>
-		<!--{if $i % 4 == 0 && isset($imagelist[$i])}--></tr><tr><!--{/if}-->
+		<!--{if $_GET[type] != 'single' && $i % 4 == 0 && isset($imagelist[$i])}--></tr><tr><!--{/if}-->
 	<!--{/loop}-->
+	<!--{if $_GET[type] != 'single'}-->
 	<!--{if ($imgpad = $i % 4) > 0}--><!--{echo str_repeat('<td width="25%"></td>', 4 - $imgpad);}--><!--{/if}-->
 	</tr></table>
+	<!--{/if}-->
 	<!--{if $_G[inajax]}-->
 		<script type="text/javascript" reload="1">
 		ATTACHNUM['imageunused'] += <!--{echo count($imagelist)}-->;

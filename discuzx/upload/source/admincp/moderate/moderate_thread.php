@@ -4,22 +4,22 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: moderate_thread.php 24018 2011-08-22 02:28:39Z svn_project_zhangjie $
+ *      $Id: moderate_thread.php 28954 2012-03-20 09:23:02Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
 }
 
-if(!submitcheck('modsubmit') && !$_G['gp_fast']) {
+if(!submitcheck('modsubmit') && !$_GET['fast']) {
 
 	require_once libfile('function/discuzcode');
 
-	$select[$_G['gp_tpp']] = $_G['gp_tpp'] ? "selected='selected'" : '';
+	$select[$_GET['tpp']] = $_GET['tpp'] ? "selected='selected'" : '';
 	$tpp_options = "<option value='20' $select[20]>20</option><option value='50' $select[50]>50</option><option value='100' $select[100]>100</option>";
-	$tpp = !empty($_G['gp_tpp']) ? $_G['gp_tpp'] : '20';
+	$tpp = !empty($_GET['tpp']) ? $_GET['tpp'] : '20';
 	$start_limit = ($page - 1) * $tpp;
-	$dateline = $_G['gp_dateline'] ? $_G['gp_dateline'] : '604800';
+	$dateline = $_GET['dateline'] ? $_GET['dateline'] : '604800';
 	$dateline_options = '';
 	foreach(array('all', '604800', '2592000', '7776000') as $v) {
 		$selected = '';
@@ -36,8 +36,8 @@ if(!submitcheck('modsubmit') && !$_G['gp_fast']) {
 	showtableheader('search');
 	showtablerow('', array('width="60"', 'width="160"', 'width="60"'),
 		array(
-			cplang('username'), "<input size=\"15\" name=\"username\" type=\"text\" value=\"$_G[gp_username]\" />",
-			cplang('moderate_title_keyword'), "<input size=\"15\" name=\"title\" type=\"text\" value=\"$_G[gp_title]\" />",
+			cplang('username'), "<input size=\"15\" name=\"username\" type=\"text\" value=\"$_GET[username]\" />",
+			cplang('moderate_title_keyword'), "<input size=\"15\" name=\"title\" type=\"text\" value=\"$_GET[title]\" />",
 		)
 	);
         showtablerow('', array('width="60"', 'width="160"', 'width="60"'),
@@ -54,45 +54,38 @@ if(!submitcheck('modsubmit') && !$_G['gp_fast']) {
 	showtablefooter();
 	showtableheader();
 
-	$sqlwhere = '';
-	if(!empty($_G['gp_username'])) {
-		$sqlwhere .= " AND t.author='{$_G['gp_username']}'";
+	$title = '';
+	if(!empty($_GET['title'])) {
+		$title = str_replace(array('_', '%'), array('\_', '\%'), $_GET['title']);
 	}
-	if(!empty($_G['gp_title'])) {
-		$title = str_replace(array('_', '%'), array('\_', '\%'), $_G['gp_title']);
-		$sqlwhere .= " AND t.subject LIKE '%{$title}%'";
-	}
-	$datesql = '';
 	if(!empty($dateline) && $dateline != 'all') {
-		$datesql = " AND m.dateline>'".(TIMESTAMP - $dateline)."'";
+		$srcdate = TIMESTAMP - $dateline;
 	}
-	$modcount = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_moderate')." m
-			LEFT JOIN ".DB::table('forum_thread')." t ON t.tid=m.id WHERE m.idtype='tid' AND m.status='$moderatestatus' $datesql $fidadd[and] $fidadd[t]$fidadd[fids] ".($modfid == '-1' ? " AND t.isgroup='1'": '')."$sqlwhere");
+
+
+	$fids = $modfid && $modfid != -1 ? $modfid : 0;
+	$isgroup = $modfid == -1 ? 1 : -1;
+	$modcount = 0;
+	$moderates = C::t('common_moderate')->fetch_all_by_idtype('tid', $moderatestatus, $srcdate);
+	if(!empty($moderates)) {
+		$modcount = C::t('forum_thread')->count_by_tid_fid(array_keys($moderates), $fids, $isgroup, $_GET['username'], $title);
+	}
+
 	$start_limit = ($page - 1) * $tpp;
-	$query = DB::query("SELECT f.name AS forumname, f.allowsmilies, f.allowhtml, f.allowbbcode, f.allowimgcode, t.tid, t.fid, t.posttableid, t.sortid, t.authorid, t.author, t.subject, t.dateline
-		FROM ".DB::table('common_moderate')." m
-			LEFT JOIN ".DB::table('forum_thread')." t ON t.tid=m.id
-			LEFT JOIN ".DB::table('forum_forum')." f ON f.fid=t.fid
-		WHERE m.idtype='tid' AND m.status='$moderatestatus' $datesql $fidadd[and] $fidadd[t]$fidadd[fids] ".($modfid == '-1' ? " AND t.isgroup='1'": '')." $sqlwhere
-		ORDER BY m.dateline DESC
-		LIMIT $start_limit, $tpp");
-	$tids = $threadlist = array();
-	while($thread = DB::fetch($query)) {
-		$tids[$thread['posttableid']][] = $thread['tid'];
-		$threadlist[$thread['tid']] = $thread;
-	}
-	if($tids) {
-		foreach($tids as $posttableid => $tid) {
-			$query = DB::query("SELECT tid, pid, message, useip, attachment, htmlon, smileyoff, bbcodeoff FROM ".DB::table(getposttable($posttableid))." WHERE tid IN (".dimplode($tid).") AND first='1'");
-			while($post = DB::fetch($query)) {
-				$threadlist[$post['tid']] = array_merge($threadlist[$post['tid']], $post);
+	if($modcount) {
+		$threadlist = C::t('forum_thread')->fetch_all_by_tid_fid(array_keys($moderates), $fids, $isgroup, $_GET['username'], $title, $start_limit, $tpp);
+		$tids = C::t('forum_thread')->get_posttableid();
+		if($tids) {
+			foreach($tids as $posttableid => $tid) {
+				foreach(C::t('forum_post')->fetch_all_by_tid($posttableid, $tid, true, '', 0, 0, 1) as $post) {
+					$threadlist[$post['tid']] = array_merge($threadlist[$post['tid']], $post);
+				}
 			}
 		}
+		$multipage = multi($modcount, $tpp, $page, ADMINSCRIPT."?action=moderate&operation=threads&filter=$filter&modfid=$modfid&dateline={$_GET['dateline']}&username={$_GET['username']}&title={$_GET['title']}&tpp=$tpp&showcensor=$showcensor");
 	}
-	$multipage = multi($modcount, $tpp, $page, ADMINSCRIPT."?action=moderate&operation=threads&filter=$filter&modfid=$modfid&dateline={$_G['gp_dateline']}&username={$_G['gp_username']}&title={$_G['gp_title']}&tpp=$tpp&showcensor=$showcensor");
-
 	echo '<p class="margintop marginbot"><a href="javascript:;" onclick="expandall();">'.cplang('moderate_all_expand').'</a> &nbsp;<a href="javascript:;" onclick="foldall();">'.cplang('moderate_all_fold').'</a><p>';
-
+	loadcache('forums');
 	require_once libfile('function/misc');
 	foreach($threadlist as $thread) {
 		$threadsortinfo = '';
@@ -107,7 +100,6 @@ if(!submitcheck('modsubmit') && !$_G['gp_fast']) {
 
 		$thread['dateline'] = dgmdate($thread['dateline']);
 		$thread['message'] = discuzcode($thread['message'], $thread['smileyoff'], $thread['bbcodeoff']);
-		require_once libfile('class/censor');
 		$censor = & discuz_censor::instance();
 		$censor->highlight = '#FF0000';
 		if($showcensor) {
@@ -124,8 +116,7 @@ if(!submitcheck('modsubmit') && !$_G['gp_fast']) {
 		if($thread['attachment']) {
 			require_once libfile('function/attachment');
 
-			$queryattach = DB::query("SELECT aid, filename, filesize, attachment, isimage, remote FROM ".DB::table(getattachtablebytid($thread['tid']))." WHERE tid='$thread[tid]'");
-			while($attach = DB::fetch($queryattach)) {
+			foreach(C::t('forum_attachment_n')->fetch_all_by_id('tid:'.$thread['tid'], 'tid', $thread['tid']) as $attach) {
 				$_G['setting']['attachurl'] = $attach['remote'] ? $_G['setting']['ftp']['attachurl'] : $_G['setting']['attachurl'];
 				$attach['url'] = $attach['isimage']
 						? " $attach[filename] (".sizecount($attach['filesize']).")<br /><br /><img src=\"".$_G['setting']['attachurl']."forum/$attach[attachment]\" onload=\"if(this.width > 400) {this.resized=true; this.width=400;}\">"
@@ -148,11 +139,12 @@ if(!submitcheck('modsubmit') && !$_G['gp_fast']) {
 		} else {
 			$thread_censor_text = '';
 		}
+		$forumname = $_G['cache']['forums'][$thread['fid']]['name'];
 		showtagheader('tbody', '', true, 'hover');
 		showtablerow("id=\"mod_$thread[tid]_row1\"", array("id=\"mod_$thread[tid]_row1_op\" rowspan=\"3\" class=\"rowform threadopt\" style=\"width:80px;\"", '', 'width="120"', 'width="120"', 'width="55"'), array(
 			"<ul class=\"nofloat\"><li><input class=\"radio\" type=\"radio\" name=\"moderate[$thread[tid]]\" id=\"mod_$thread[tid]_1\" value=\"validate\" onclick=\"mod_setbg($thread[tid], 'validate');\"><label for=\"mod_$thread[tid]_1\">$lang[validate]</label></li><li><input class=\"radio\" type=\"radio\" name=\"moderate[$thread[tid]]\" id=\"mod_$thread[tid]_2\" value=\"delete\" onclick=\"mod_setbg($thread[tid], 'delete');\"><label for=\"mod_$thread[tid]_2\">$lang[delete]</label></li><li><input class=\"radio\" type=\"radio\" name=\"moderate[$thread[tid]]\" id=\"mod_$thread[tid]_3\" value=\"ignore\" onclick=\"mod_setbg($thread[tid], 'ignore');\"><label for=\"mod_$thread[tid]_3\">$lang[ignore]</label></li></ul>",
 			"<h3><a href=\"javascript:;\" onclick=\"display_toggle('$thread[tid]');\">$thread[subject]</a> $thread_censor_text</h3><p>$thread[useip]</p>",
-			"<a target=\"_blank\" href=\"forum.php?mod=forumdisplay&fid=$thread[fid]\">$thread[forumname]</a>",
+			"<a target=\"_blank\" href=\"forum.php?mod=forumdisplay&fid=$thread[fid]\">$forumname</a>",
 			"<p><a target=\"_blank\" href=\"".ADMINSCRIPT."?action=members&operation=search&uid=$thread[authorid]&submit=yes\">$thread[author]</a></p> <p>$thread[dateline]</p>",
 			"<a target=\"_blank\" href=\"forum.php?mod=viewthread&tid=$thread[tid]&modthreadkey=$thread[modthreadkey]\">$lang[view]</a>&nbsp;<a href=\"forum.php?mod=post&action=edit&fid=$thread[fid]&tid=$thread[tid]&pid=$thread[pid]&modthreadkey=$thread[modthreadkey]\" target=\"_blank\">$lang[edit]</a>",
 		));
@@ -177,32 +169,21 @@ if(!submitcheck('modsubmit') && !$_G['gp_fast']) {
 		}
 	}
 
-	if($_G['gp_apply_all']) {
-		$apply_all_action = $_G['gp_apply_all'];
-		$sqlwhere = '1';
-		if($modfid > 0) {
-			$sqlwhere .= " AND fid='$modfid'";
-		}
+	if($_GET['apply_all']) {
+		$apply_all_action = $_GET['apply_all'];
+		$author = $dateline = $isgroup = $displayorder = null;
 		if($filter == 'ignore') {
-			$sqlwhere .= " AND displayorder='-3'";
+			$displayorder = -3;
 		} else {
-			$sqlwhere .= " AND displayorder='-2'";
+			$displayorder = -2;
 		}
 		if($modfid == -1) {
-			$sqlwhere .= " AND isgroup='1'";
+			$isgroup = 1;
 		}
-		if(!empty($_G['gp_dateline']) && $_G['gp_dateline'] != 'all') {
-			$sqlwhere .= " AND dateline>'{$_G['gp_dateline']}'";
+		if(!empty($_GET['dateline']) && $_GET['dateline'] != 'all') {
+			$dateline = $_GET['dateline'];
 		}
-		if(!empty($_G['gp_username'])) {
-			$sqlwhere .= " AND author='{$_G['gp_username']}'";
-		}
-		if(!empty($_G['gp_title'])) {
-			$title = str_replace(array('_', '%'), array('\_', '\%'), $_G['gp_title']);
-			$sqlwhere .= " AND subject LIKE '%{$title}%'";
-		}
-		$query = DB::query("SELECT tid FROM ".DB::table('forum_thread')." WHERE $sqlwhere");
-		while($thread = DB::fetch($query)) {
+		foreach(C::t('forum_thread')->fetch_all_moderate($modfid, $displayorder, $isgroup, $dateline, $_GET['username'], $_GET['title']) as $thread) {
 			switch($apply_all_action) {
 				case 'validate':
 					$moderation['validate'][] = $thread['tid'];
@@ -218,39 +199,41 @@ if(!submitcheck('modsubmit') && !$_G['gp_fast']) {
 	}
 
 	if($moderation['ignore']) {
-		$ignoretids = '\''.implode('\',\'', $moderation['ignore']).'\'';
-		DB::query("UPDATE ".DB::table('forum_thread')." SET displayorder='-3' WHERE tid IN ($ignoretids) AND displayorder='-2'");
-		$ignores = DB::affected_rows();
+		$ignores = C::t('forum_thread')->update_displayorder_by_tid_displayorder($moderation['ignore'], -2, -3);
 		updatemoderate('tid', $moderation['ignore'], 1);
 	}
 
 	if($moderation['delete']) {
 		$deletetids = array();
-		$recyclebintids = '0';
-		$query = DB::query("SELECT tid, fid, authorid, subject FROM ".DB::table('forum_thread')." t WHERE t.tid IN ('".implode('\',\'', $moderation['delete'])."') AND displayorder='$displayorder' $fidadd[and]$fidadd[fids]");
-		while($thread = DB::fetch($query)) {
-			my_thread_log('delete', array('tid' => $thread['tid']));
+		$recyclebintids = array();
+		$log_handler = Cloud::loadClass('Cloud_Service_SearchHelper');
+		foreach(C::t('forum_thread')->fetch_all_by_tid_displayorder($moderation['delete'], $displayorder, '>=', $fidadd[fids]) as $thread) {
+			$log_handler->myThreadLog('delete', array('tid' => $thread['tid']));
+
 			if($recyclebins[$thread['fid']]) {
-				$recyclebintids .= ','.$thread['tid'];
+				$recyclebintids[] = $thread['tid'];
 			} else {
 				$deletetids[] = $thread['tid'];
 			}
 			$pm = 'pm_'.$thread['tid'];
-			if(isset($_G['gp_'.$pm]) && $_G['gp_'.$pm] <> '' && $thread['authorid']) {
+			if($thread['authorid'] && $thread['authorid'] != $_G['uid']) {
 				$pmlist[] = array(
 					'action' => 'modthreads_delete',
-					'notevar' => array('threadsubject' => $thread['subject'], 'reason' => stripslashes($_G['gp_'.$pm])),
+					'notevar' => array('threadsubject' => $thread['subject'], 'reason' => $_GET[''.$pm]),
 					'authorid' => $thread['authorid'],
 				);
 			}
 		}
 
 		if($recyclebintids) {
-			DB::query("UPDATE ".DB::table('forum_thread')." SET displayorder='-1', moderated='1' WHERE tid IN ($recyclebintids)");
-			$recycles = DB::affected_rows();
+			$recycles = C::t('forum_thread')->update($recyclebintids, array('displayorder' => -1, 'moderated' => 1));
 			updatemodworks('MOD', $recycles);
 
-			updatepost(array('invisible' => '-1'), "tid IN ($recyclebintids)");
+			loadcache('posttableids');
+			$posttableids = $_G['cache']['posttableids'] ? $_G['cache']['posttableids'] : array('0');
+			foreach($posttableids as $id) {
+				C::t('forum_post')->update_by_tid($id, $recyclebintids, array('invisible' => '-1'));
+			}
 			updatemodlog($recyclebintids, 'DEL');
 		}
 
@@ -262,19 +245,19 @@ if(!submitcheck('modsubmit') && !$_G['gp_fast']) {
 	if($moderation['validate']) {
 		require_once libfile('function/forum');
 		$forums = array();
-		$validatetids = '\''.implode('\',\'', $moderation['validate']).'\'';
 
 		$tids = $authoridarray = $moderatedthread = array();
-		$query = DB::query("SELECT t.fid, t.tid, t.authorid, t.subject, t.author, t.dateline, t.posttableid FROM ".DB::table('forum_thread')." t
-			WHERE t.tid IN ($validatetids) $fidadd[and]$fidadd[t]$fidadd[fids]");
-		while($thread = DB::fetch($query)) {
-			$posttable = $thread['posttableid'] ? "forum_post_{$thread['posttableid']}" : 'forum_post';
-			$poststatus = DB::result_first("SELECT status FROM ".DB::table($posttable)." WHERE tid='$thread[tid]' AND first='1'");
+		$log_handler = Cloud::loadClass('Cloud_Service_SearchHelper');
+		foreach(C::t('forum_thread')->fetch_all_by_tid_fid($moderation['validate'], $fidadd['fids']) as $thread) {
+			$poststatus = C::t('forum_post')->fetch_threadpost_by_tid_invisible($thread['tid']);
+			$poststatus = $poststatus['status'];
 			$tids[] = $thread['tid'];
-			my_thread_log('validate', array('tid' => $thread['tid']));
+
+			$log_handler->myThreadLog('validate', array('tid' => $thread['tid']));
+
 			if(getstatus($poststatus, 3) == 0) {
 				updatepostcredits('+', $thread['authorid'], 'post', $thread['fid']);
-				$attachcount = DB::result_first("SELECT COUNT(*) FROM ".DB::table(getattachtablebytid($thread['tid']))." WHERE tid='$thread[tid]'");
+				$attachcount = C::t('forum_attachment_n')->count_by_id('tid:'.$thread['tid'], 'tid', $thread['tid']);
 				updatecreditbyaction('postattach', $thread['authorid'], array(), '', $attachcount, 1, $thread['fid']);
 			}
 
@@ -282,10 +265,10 @@ if(!submitcheck('modsubmit') && !$_G['gp_fast']) {
 			$validatedthreads[] = $thread;
 
 			$pm = 'pm_'.$thread['tid'];
-			if(isset($_G['gp_'.$pm]) && $_G['gp_'.$pm] <> '' && $thread['authorid']) {
+			if($thread['authorid'] && $thread['authorid'] != $_G['uid']) {
 				$pmlist[] = array(
 					'action' => 'modthreads_validate',
-					'notevar' => array('tid' => $thread['tid'], 'threadsubject' => $thread['subject'], 'reason' => dhtmlspecialchars($_G['gp_'.$pm])),
+					'notevar' => array('tid' => $thread['tid'], 'threadsubject' => $thread['subject'], 'reason' => dhtmlspecialchars($_GET[''.$pm])),
 					'authorid' => $thread['authorid'],
 				);
 			}
@@ -294,10 +277,13 @@ if(!submitcheck('modsubmit') && !$_G['gp_fast']) {
 		if($tids) {
 
 			$tidstr = dimplode($tids);
-			$validates = DB::query("UPDATE ".DB::table(getposttable())." SET status='4' WHERE tid IN ($tidstr) AND status='0' AND invisible='-2'");
-			updatepost(array('invisible' => '0'), "tid IN ($tidstr) AND first='1'");
-			DB::query("UPDATE ".DB::table('forum_thread')." SET displayorder='0', moderated='1' WHERE tid IN ($tidstr)");
-			$validates = DB::affected_rows();
+			C::t('forum_post')->update_by_tid(0, $tids, array('status' => 4), false, false, null, -2, 0);
+			loadcache('posttableids');
+			$posttableids = $_G['cache']['posttableids'] ? $_G['cache']['posttableids'] : array('0');
+			foreach($posttableids as $id) {
+				C::t('forum_post')->update_by_tid($id, $tids, array('invisible' => '0'), false, false, 1);
+			}
+			$validates = C::t('forum_thread')->update($tids, array('displayorder' => 0, 'moderated' => 1));
 
 			foreach(array_unique($forums) as $fid) {
 				updateforumcount($fid);
@@ -315,11 +301,11 @@ if(!submitcheck('modsubmit') && !$_G['gp_fast']) {
 			notification_add($pm['authorid'], 'system', $pm['action'], $pm['notevar'], 1);
 		}
 	}
-	if($_G['gp_fast']) {
-		echo callback_js($_G['gp_tid']);
+	if($_GET['fast']) {
+		echo callback_js($_GET['tid']);
 		exit;
 	} else {
-		cpmsg('moderate_threads_succeed', "action=moderate&operation=threads&page=$page&filter=$filter&modfid=$modfid&username={$_G['gp_username']}&title={$_G['gp_title']}&tpp={$_G['gp_tpp']}&showcensor=$showcensor&dateline={$_G['gp_dateline']}", 'succeed', array('validates' => $validates, 'ignores' => $ignores, 'recycles' => $recycles, 'deletes' => $deletes));
+		cpmsg('moderate_threads_succeed', "action=moderate&operation=threads&page=$page&filter=$filter&modfid=$modfid&username={$_GET['username']}&title={$_GET['title']}&tpp={$_GET['tpp']}&showcensor=$showcensor&dateline={$_GET['dateline']}", 'succeed', array('validates' => $validates, 'ignores' => $ignores, 'recycles' => $recycles, 'deletes' => $deletes));
 	}
 
 }

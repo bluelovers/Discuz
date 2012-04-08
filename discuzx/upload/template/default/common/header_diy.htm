@@ -10,6 +10,7 @@
 .subtitle { margin: 0 4px; }
 	.frame-tab .title .move-span { float: left; margin: 0 3px 0 0; padding: 0; width: 100px; border-bottom: none; cursor: pointer; }
 	#samplepanel { background: #FFF; }
+.block-name { display: block; visibility: hidden; background: #000; color: #FFF; position: absolute; top: 5px; left: 5px; padding: 2px; opacity: 0.85; filter: alpha(opacity=85); z-index: 1; }
 </style>
 <div id="button_more_menu" class="p_pop" style="display: none;">
 	<ul>
@@ -75,6 +76,8 @@
 
 <form method="post" autocomplete="off" name="diyform" id="diyform" action="$_G[siteurl]portal.php?mod=portalcp&ac=diy">
 <input type="hidden" name="template" value="$_G['style']['tplfile']" />
+<input type="hidden" name="tpldirectory" value="$_G['style']['tpldirectory']" />
+<input type="hidden" name="diysign" value="{echo dsign({$_G['style']['tpldirectory']}.{$_G['style']['tplfile']})}" />
 <input type="hidden" name="prefile" id="prefile" value="$_G['style']['prefile']" />
 <input type="hidden" name="savemod" value="$_G['style']['tplsavemod']" />
 <input type="hidden" name="spacecss" value="" />

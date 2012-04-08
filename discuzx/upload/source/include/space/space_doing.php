@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_doing.php 19158 2010-12-20 08:21:50Z zhengqingpeng $
+ *      $Id: space_doing.php 29155 2012-03-27 10:39:12Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -41,24 +41,23 @@ $f_index = '';
 $diymode = 0;
 if($_GET['view'] == 'all') {
 
-	$wheresql = "1";
-	$f_index = 'USE INDEX(dateline)';
+	$f_index = 'dateline';
 
 } elseif($_GET['view'] == 'we') {
 
 	space_merge($space, 'field_home');
 	if($space['feedfriend']) {
-		$wheresql = "uid IN ($space[feedfriend],$space[uid])";
-		$f_index = 'USE INDEX(dateline)';
+		$uids = array_merge(explode(',', $space['feedfriend']), array($space['uid']));
+		$f_index = 'dateline';
 	} else {
-		$wheresql = "uid='$space[uid]'";
+		$uids = array($space['uid']);
 	}
 
 } else {
 
 	if($_GET['from'] == 'space') $diymode = 1;
 
-	$wheresql = "uid='$space[uid]'";
+	$uids = $_GET['highlight'] ? array() : array($space['uid']);
 }
 $actives = array($_GET['view'] =>' class="a"');
 
@@ -69,24 +68,19 @@ $pricount = 0;
 if($doid) {
 	$count = 1;
 	$f_index = '';
-	$wheresql = "doid='$doid'";
 	$theurl .= "&doid=$doid";
 }
 
 if($searchkey = stripsearchkey($_GET['searchkey'])) {
-	$wheresql .= " AND message LIKE '%$searchkey%'";
 	$searchkey = dhtmlspecialchars($searchkey);
 }
 
 if(empty($count)) {
-	$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('home_doing')." WHERE $wheresql"), 0);
+	$count = C::t('home_doing')->fetch_all_search($start, $perpage, 3, $uids, '', $searchkey, '', '' ,'', 1, $doid, $f_index);
 }
 if($count) {
-	$query = DB::query("SELECT * FROM ".DB::table('home_doing')." $f_index
-		WHERE $wheresql
-		ORDER BY dateline DESC
-		LIMIT $start,$perpage");
-	while ($value = DB::fetch($query)) {
+	$query = C::t('home_doing')->fetch_all_search($start, $perpage, 1, $uids, '', $searchkey, '', '' ,'', 1, $doid, $f_index);
+	foreach($query as $value) {
 		if($value['status'] == 0 || $value['uid'] == $_G['uid'] || $_G['adminid'] == 1) {
 			$doids[] = $value['doid'];
 			$dolist[] = $value;
@@ -110,12 +104,10 @@ if($doid) {
 
 if($doids) {
 
-	require_once libfile('class/tree');
-	$tree = new tree();
+	$tree = new lib_tree();
 
 	$values = array();
-	$query = DB::query("SELECT * FROM ".DB::table('home_docomment')." FORCE INDEX(dateline) WHERE doid IN (".dimplode($doids).") ORDER BY dateline");
-	while ($value = DB::fetch($query)) {
+	foreach(C::t('home_docomment')->fetch_all_by_doid($doids) as $value) {
 		$newdoids[$value['doid']] = $value['doid'];
 		if(empty($value['upid'])) {
 			$value['upid'] = "do$value[doid]";
@@ -154,9 +146,9 @@ $multi = multi($count, $perpage, $page, $theurl);
 
 dsetcookie('home_diymode', $diymode);
 if($_G['uid']) {
-	if($_G['gp_view'] == 'all') {
+	if($_GET['view'] == 'all') {
 		$navtitle = lang('core', 'title_view_all').lang('core', 'title_doing');
-	} elseif($_G['gp_view'] == 'me') {
+	} elseif($_GET['view'] == 'me') {
 		$navtitle = lang('core', 'title_doing_view_me');
 	} else {
 		$navtitle = lang('core', 'title_me_friend_doing');

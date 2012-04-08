@@ -4,8 +4,12 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_interthread.php 6752 2010-03-25 08:47:54Z cnteacher $
+ *      $Id: lang_interthread.php 27449 2012-02-01 05:32:35Z zhangguosheng $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 $lang = array
 (
@@ -15,6 +19,8 @@ $lang = array
 	'interthread_fids_comment' => '设置广告投放的论坛版块，当广告投放范围中包含“论坛”时有效',
 	'interthread_groups' => '投放群组分类',
 	'interthread_groups_comment' => '设置广告投放的群组分类，当广告投放范围中包含“群组”时有效',
+	'interthread_pnumber' => '广告显示楼层',
+	'interthread_pnumber_comment' => '选项 #1 #2 #3 ... 表示帖子楼层，可以按住 CTRL 多选，默认只投放 1 楼',
 );
 
 ?>

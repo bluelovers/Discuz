@@ -3,8 +3,10 @@
 			<!--{hook/spacecp_privacy_top}-->
 			<ul class="tb cl">
 				<li$opactives[base]><a href="home.php?mod=spacecp&ac=privacy&op=base">{lang personal_privacy_settings}</a></li>
+				<!--{if helper_access::check_module('feed')}-->
 				<li$opactives[feed]><a href="home.php?mod=spacecp&ac=privacy&op=feed">{lang personal_feed_settings}</a></li>
 				<li$opactives[filter]><a href="home.php?mod=spacecp&ac=privacy&op=filter">{lang feed_filter}</a></li>
+				<!--{/if}-->
 			</ul>
 			<form method="post" autocomplete="off" action="home.php?mod=spacecp&ac=privacy&op=$operation">
 				<input type="hidden" name="formhash" value="{FORMHASH}" />
@@ -12,17 +14,7 @@
 			<!--{if $operation == 'base'}-->
 				<p class="tbmu mbm">{lang you_control_see_content}</p>
 				<table cellspacing="0" cellpadding="0" class="tfm">
-					<tr>
-						<th>{lang personal_main_page}</th>
-						<td>
-							<select name="privacy[view][index]">
-								<option value="0"$sels[view][index][0]>{lang open_privacy}</option>
-								<option value="1"$sels[view][index][1]>{lang friend_privacy}</option>
-								<option value="2"$sels[view][index][2]>{lang secrecy}</option>
-								<option value="3"$sels[view][index][3]>{lang privacy_register}</option>
-							</select>
-						</td>
-					</tr>
+
 					<tr>
 						<th>{lang friend_list}</th>
 						<td>
@@ -34,6 +26,7 @@
 							</select>
 						</td>
 					</tr>
+					<!--{if helper_access::check_module('wall')}-->
 					<tr>
 						<th>{lang message_board}</th>
 						<td>
@@ -45,6 +38,8 @@
 							</select>
 						</td>
 					</tr>
+					<!--{/if}-->
+					<!--{if helper_access::check_module('feed')}-->
 					<tr>
 						<th>{lang personal_feed}</th>
 						<td>
@@ -55,6 +50,8 @@
 							</select>
 						</td>
 					</tr>
+					<!--{/if}-->
+					<!--{if helper_access::check_module('doing')}-->
 					<tr>
 						<th>{lang doing}</th>
 						<td>
@@ -66,6 +63,8 @@
 							<p class="d">{lang privacy_setting_message}<br />{lang site_might_your_log}</p>
 						</td>
 					</tr>
+					<!--{/if}-->
+					<!--{if helper_access::check_module('blog')}-->
 					<tr>
 						<th>{lang blog}</th>
 						<td>
@@ -77,6 +76,8 @@
 							<p class="d">{lang privacy_setting_message}<br />{lang view_right_setting_effective}</p>
 						</td>
 					</tr>
+					<!--{/if}-->
+					<!--{if helper_access::check_module('album')}-->
 					<tr>
 						<th>{lang album}</th>
 						<td>
@@ -88,6 +89,8 @@
 							<p class="d">{lang privacy_setting_message}<br />{lang view_right_setting_effective}</p>
 						</td>
 					</tr>
+					<!--{/if}-->
+					<!--{if helper_access::check_module('share')}-->
 					<tr>
 						<th>{lang share}</th>
 						<td>
@@ -99,6 +102,7 @@
 							<p class="d">{lang privacy_setting_message}<br />{lang view_right_setting_effective}</p>
 						</td>
 					</tr>
+					<!--{/if}-->
 					<!--{if $_G['setting'][videophoto] && $space[videophotostatus]}-->
 					<tr>
 						<th>&nbsp;</th>

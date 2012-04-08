@@ -41,15 +41,26 @@ var fid = parseInt('$_G[fid]');
 								<!--{hook/forumdisplay_fastpost_func_extra}-->
 								<a href="forum.php?mod=post&action=newthread&fid=$_G[fid]" onclick="switchAdvanceMode(this.href);doane(event);">{lang post_advancemode}</a>
 							</span>
-							<!--{eval $seditor = array('fastpost', array('bold', 'color', 'img', 'link', 'quote', 'code', 'smilies'), !$_G['uid'] ? 1 : 0, $allowpostattach ? '<span class="pipe z">|</span><span onclick="fastUload()" class="cur1 z">{lang e_attach_title}</span>' : '');}-->
+							<!--{eval $seditor = array('fastpost', array('at', 'bold', 'color', 'img', 'link', 'quote', 'code', 'smilies'), !$allowfastpost ? 1 : 0, $allowpostattach && $allowfastpost ? '<span class="pipe z">|</span><span id="spanButtonPlaceholder">'.lang('template', 'upload').'</span>' : '');}-->
 							<!--{hook/forumdisplay_fastpost_ctrl_extra}-->
 							<!--{subtemplate common/seditor}-->
 						</div>
 						<div class="area">
-							<!--{if $fastpost}-->
-								<textarea rows="6" cols="80" name="message" id="fastpostmessage" onKeyDown="seditor_ctlent(event, '$(\'fastpostform\').submit()');" tabindex="12" class="pt"></textarea>
-							<!--{elseif !$_G['uid']}-->
-								<div class="pt hm">{lang login_to_post} <a href="member.php?mod=logging&action=login" onclick="showWindow('login', this.href)" class="xi2">{lang login}</a> | <a href="member.php?mod={$_G[setting][regname]}" class="xi2">$_G['setting']['reglinkname']</a> <!--{hook/global_login_text}--></div>
+							<!--{if $allowfastpost}-->
+								<textarea rows="6" cols="80" name="message" id="fastpostmessage" onKeyDown="seditor_ctlent(event, '$(\'fastpostsubmit\').click()');" tabindex="12" class="pt"></textarea>
+							<!--{else}-->
+								<div class="pt hm">
+									<!--{if !$_G['uid']}-->
+										<!--{if !$_G['connectguest']}-->
+											{lang login_to_post} <a href="member.php?mod=logging&action=login" onclick="showWindow('login', this.href)" class="xi2">{lang login}</a> | <a href="member.php?mod={$_G[setting][regname]}" class="xi2">$_G['setting']['reglinkname']</a>
+										<!--{else}-->
+											{lang connect_fill_profile_to_post}
+										<!--{/if}-->
+									<!--{else}-->
+										{lang no_permission_to_post}<a href="javascript:;" onclick="$('newspecial').onclick()" class="xi2">{lang click_to_show_reason}</a>
+									<!--{/if}-->
+									<!--{hook/global_login_text}-->
+								</div>
 							<!--{/if}-->
 						</div>
 					</div>
@@ -69,8 +80,13 @@ var fid = parseInt('$_G[fid]');
 				var ATTACHNUM = {'imageused':0,'imageunused':0,'attachused':0,'attachunused':0}, ATTACHUNUSEDAID = new Array(), IMGUNUSEDAID = new Array();
 				</script>
 
+				<script type="text/javascript" src="{$_G[setting][jspath]}swfupload.js?{VERHASH}"></script>
+				<script type="text/javascript" src="{$_G[setting][jspath]}swfupload.queue.js?{VERHASH}"></script>
+				<script type="text/javascript" src="{$_G[setting][jspath]}handlers.js?{VERHASH}"></script>
+				<script type="text/javascript" src="{$_G[setting][jspath]}fileprogress.js?{VERHASH}"></script>
+
 				<input type="hidden" name="posttime" id="posttime" value="{TIMESTAMP}" />
-				<div class="upfl{if empty($_G[gp_from]) && $_G[setting][fastsmilies]} hasfsl{/if}">
+				<div class="upfl{if empty($_GET[from]) && $_G[setting][fastsmilies]} hasfsl{/if}">
 					<table cellpadding="0" cellspacing="0" border="0" width="100%" id="attach_tblheader" style="display: none">
 						<tr>
 							<td>{lang e_attach_insert}</td>
@@ -85,7 +101,51 @@ var fid = parseInt('$_G[fid]');
 							<td class="attc"></td>
 						</tr>
 					</table>
-					<div id="attachlist"></div>
+					<div class="fieldset flash" id="attachlist"></div>
+				<script type="text/javascript">
+					var upload = new SWFUpload({
+						upload_url: "{$_G[siteurl]}misc.php?mod=swfupload&action=swfupload&operation=upload&fid=$_G[fid]",
+						post_params: {"uid" : "$_G[uid]", "hash":"$swfconfig[hash]"},
+						file_size_limit : "$swfconfig[max]",
+						file_types : "$swfconfig[attachexts][ext]",
+						file_types_description : "$swfconfig[attachexts][depict]",
+						file_upload_limit : $swfconfig['limit'],
+						file_queue_limit : 0,
+						swfupload_preload_handler : preLoad,
+						swfupload_load_failed_handler : loadFailed,
+						file_dialog_start_handler : fileDialogStart,
+						file_queued_handler : fileQueued,
+						file_queue_error_handler : fileQueueError,
+						file_dialog_complete_handler : fileDialogComplete,
+						upload_start_handler : uploadStart,
+						upload_progress_handler : uploadProgress,
+						upload_error_handler : uploadError,
+						upload_success_handler : uploadSuccess,
+						upload_complete_handler : uploadComplete,
+						button_image_url : "{IMGDIR}/uploadbutton_small.png",
+						button_placeholder_id : "spanButtonPlaceholder",
+						button_width: 17,
+						button_height: 25,
+						button_cursor:SWFUpload.CURSOR.HAND,
+						button_window_mode: "transparent",
+
+						custom_settings : {
+							progressTarget : "attachlist",
+							uploadSource: 'forum',
+							uploadType: 'attach',
+							<!--{if $swfconfig['maxsizeperday']}-->
+							maxSizePerDay: $swfconfig['maxsizeperday'],
+							<!--{/if}-->
+							<!--{if $swfconfig['maxattachnum']}-->
+							maxAttachNum: $swfconfig['maxattachnum'],
+							<!--{/if}-->
+							uploadFrom: 'fastpost'
+						},
+						debug: false
+					});
+
+				</script>
+
 				</div>
 			<!--{/if}-->
 
@@ -97,6 +157,9 @@ var fid = parseInt('$_G[fid]');
 						{lang post_sync_method}:
 						<!--{hook/forumdisplay_fastpost_sync_method}-->
 					</span>
+				<!--{/if}-->
+				<!--{if helper_access::check_module('follow')}-->
+				<label><input type="checkbox" name="adddynamic" value="1" {if $_G['forum']['allowfeed'] && !$_G[tid] && empty($_G['forum']['viewperm'])}checked="checked"{/if} />{lang post_relay}</label>
 				<!--{/if}-->
 			</p>
 		</form>

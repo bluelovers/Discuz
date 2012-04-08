@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_comment.php 20630 2011-03-01 02:45:58Z congyushuai $
+ *      $Id: function_comment.php 28115 2012-02-22 09:47:40Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -14,17 +14,34 @@ if(!defined('IN_DISCUZ')) {
 function add_comment($message, $id, $idtype, $cid = 0) {
 	global $_G, $bbcode;
 
-	$summay = getstr($message, 150, 1, 1, 0, -1);
+	$allowcomment = false;
+	switch($idtype) {
+		case 'uid':
+			$allowcomment = helper_access::check_module('wall');
+			break;
+		case 'picid':
+			$allowcomment = helper_access::check_module('album');
+			break;
+		case 'blogid':
+			$allowcomment = helper_access::check_module('blog');
+			break;
+		case 'sid':
+			$allowcomment = helper_access::check_module('share');
+			break;
+	}
+	if(!$allowcomment) {
+		showmessage('quickclear_noperm');
+	}
+	$summay = getstr($message, 150, 0, 0, 0, -1);
 
 
 	$comment = array();
 	if($cid) {
-		$query = DB::query("SELECT * FROM ".DB::table('home_comment')." WHERE cid='$cid' AND id='$id' AND idtype='$idtype'");
-		$comment = DB::fetch($query);
+		$comment = C::t('home_comment')->fetch_by_id_idtype($id, $idtype, $cid);
 		if($comment && $comment['authorid'] != $_G['uid']) {
 			$comment['message'] = preg_replace("/\<div class=\"quote\"\>\<blockquote\>.*?\<\/blockquote\>\<\/div\>/is", '', $comment['message']);
 			$comment['message'] = $bbcode->html2bbcode($comment['message']);
-			$message = addslashes("<div class=\"quote\"><blockquote><b>".$comment['author']."</b>: ".getstr($comment['message'], 150, 0, 0, 2, 1).'</blockquote></div>').$message;
+			$message = ("<div class=\"quote\"><blockquote><b>".$comment['author']."</b>: ".getstr($comment['message'], 150, 0, 0, 2, 1).'</blockquote></div>').$message;
 			if($comment['idtype'] == 'uid') {
 				$id = $comment['authorid'];
 			}
@@ -39,27 +56,23 @@ function add_comment($message, $id, $idtype, $cid = 0) {
 
 	switch($idtype) {
 		case 'uid':
-			$tospace = getspace($id);
+			$tospace = getuserbyuid($id);
 			$stattype = 'wall';
 			break;
 		case 'picid':
-			$query = DB::query("SELECT p.*, pf.hotuser
-				FROM ".DB::table('home_pic')." p
-				LEFT JOIN ".DB::table('home_picfield')." pf
-				USING(picid)
-				WHERE p.picid='$id'");
-			$pic = DB::fetch($query);
+			$pic = C::t('home_pic')->fetch($id);
 			if(empty($pic)) {
 				showmessage('view_images_do_not_exist');
 			}
-
-			$tospace = getspace($pic['uid']);
+			$picfield = C::t('home_picfield')->fetch($id);
+			$pic['hotuser'] = $picfield['hotuser'];
+			$tospace = getuserbyuid($pic['uid']);
 
 			$album = array();
 			if($pic['albumid']) {
-				$query = DB::query("SELECT * FROM ".DB::table('home_album')." WHERE albumid='$pic[albumid]'");
-				if(!$album = DB::fetch($query)) {
-					DB::update('home_pic', array('albumid'=>0), array('albumid'=>$pic['albumid']));
+				$query = C::t('home_album')->fetch($pic['albumid']);
+				if(!$query['albumid']) {
+					C::t('home_pic')->update_for_albumid($albumid, array('albumid' => 0));
 				}
 			}
 
@@ -77,16 +90,15 @@ function add_comment($message, $id, $idtype, $cid = 0) {
 			$stattype = 'piccomment';
 			break;
 		case 'blogid':
-			$query = DB::query("SELECT b.*, bf.target_ids, bf.hotuser
-				FROM ".DB::table('home_blog')." b
-				LEFT JOIN ".DB::table('home_blogfield')." bf USING(blogid)
-				WHERE b.blogid='$id'");
-			$blog = DB::fetch($query);
+			$blog = array_merge(
+				C::t('home_blog')->fetch($id),
+				C::t('home_blogfield')->fetch_targetids_by_blogid($id)
+			);
 			if(empty($blog)) {
 				showmessage('view_to_info_did_not_exist');
 			}
 
-			$tospace = getspace($blog['uid']);
+			$tospace = getuserbyuid($blog['uid']);
 
 			if(!ckfriend($blog['uid'], $blog['friend'], $blog['target_ids'])) {
 				showmessage('no_privilege_ckfriend_blog');
@@ -109,13 +121,12 @@ function add_comment($message, $id, $idtype, $cid = 0) {
 			$stattype = 'blogcomment';
 			break;
 		case 'sid':
-			$query = DB::query("SELECT * FROM ".DB::table('home_share')." WHERE sid='$id'");
-			$share = DB::fetch($query);
+			$share = C::t('home_share')->fetch($id);
 			if(empty($share)) {
 				showmessage('sharing_does_not_exist');
 			}
 
-			$tospace = getspace($share['uid']);
+			$tospace = getuserbyuid($share['uid']);
 
 			$hotarr = array('sid', $share['sid'], $share['hotuser']);
 			$stattype = 'sharecomment';
@@ -164,7 +175,7 @@ function add_comment($message, $id, $idtype, $cid = 0) {
 			$fs['friend'] = $album['friend'];
 			break;
 		case 'blogid':
-			DB::query("UPDATE ".DB::table('home_blog')." SET replynum=replynum+1 WHERE blogid='$id'");
+			C::t('home_blog')->increase($id, 0, array('replynum'=>1));
 			$fs['title_template'] = 'feed_comment_blog';
 			$fs['title_data'] = array('touser'=>"<a href=\"home.php?mod=space&uid=$tospace[uid]\">".$tospace['username']."</a>", 'blog'=>"<a href=\"home.php?mod=space&uid=$tospace[uid]&do=blog&id=$id\">$blog[subject]</a>");
 			$fs['target_ids'] = $blog['target_ids'];
@@ -194,7 +205,7 @@ function add_comment($message, $id, $idtype, $cid = 0) {
 		'ip' => $_G['clientip'],
 		'status' => $comment_status,
 	);
-	$cid = DB::insert('home_comment', $setarr, 1);
+	$cid = C::t('home_comment')->insert($setarr, true);
 
 	$action = 'comment';
 	$becomment = 'getcomment';
@@ -308,7 +319,7 @@ function add_comment($message, $id, $idtype, $cid = 0) {
 		}
 	}
 
-	DB::update('common_member_status', array('lastpost' => $_G['timestamp']), array('uid' => $_G['uid']));
+	C::t('common_member_status')->update($_G['uid'], array('lastpost' => $_G['timestamp']), 'UNBUFFERED');
 	$magvalues['cid'] = $cid;
 
 	return array('cid' => $cid, 'msg' => $msg, 'magvalues' => $magvalues);

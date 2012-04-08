@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_misc.php 25638 2011-11-16 09:26:19Z liulanbo $
+ *      $Id: admincp_misc.php 28372 2012-02-28 08:15:06Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -25,16 +25,14 @@ if($operation == 'onlinelist') {
 		showsubtitle(array('', 'display_order', 'usergroup', 'usergroups_title', 'misc_onlinelist_image'));
 
 		$listarray = array();
-		$query = DB::query("SELECT * FROM ".DB::table('forum_onlinelist'));
-		while($list = DB::fetch($query)) {
+		foreach(C::t('forum_onlinelist')->range() as $list) {
 			$list['title'] = dhtmlspecialchars($list['title']);
 			$listarray[$list['groupid']] = $list;
 		}
 
 		$onlinelist = '';
-		$query = DB::query("SELECT groupid, grouptitle FROM ".DB::table('common_usergroup'));
-		$group = array('groupid' => 0, 'grouptitle' => 'Member');
-		do {
+		$query = array_merge(array(0 => array('groupid' => 0, 'grouptitle' => 'Member')), C::t('common_usergroup')->range());
+		foreach($query as $group) {
 			$id = $group['groupid'];
 			showtablerow('', array('class="td25"', 'class="td23 td28"', 'class="td24"', 'class="td24"', 'class="td21 td26"'), array(
 				$listarray[$id]['url'] ? " <img src=\"static/image/common/{$listarray[$id]['url']}\">" : '',
@@ -44,7 +42,7 @@ if($operation == 'onlinelist') {
 				'<input type="text" class="txt" name="urlnew['.$id.']" value="'.$listarray[$id]['url'].'" size="20" />'
 			));
 
-		} while($group = DB::fetch($query));
+		}
 
 		showsubmit('onlinesubmit', 'submit', 'td');
 		showtablefooter();
@@ -52,18 +50,18 @@ if($operation == 'onlinelist') {
 
 	} else {
 
-		if(is_array($_G['gp_urlnew'])) {
-			DB::query("DELETE FROM ".DB::table('forum_onlinelist')."");
-			foreach($_G['gp_urlnew'] as $id => $url) {
+		if(is_array($_GET['urlnew'])) {
+			C::t('forum_onlinelist')->delete_all();
+			foreach($_GET['urlnew'] as $id => $url) {
 				$url = trim($url);
 				if($id == 0 || $url) {
 					$data = array(
 						'groupid' => $id,
-						'displayorder' => $_G['gp_displayordernew'][$id],
-						'title' => $_G['gp_titlenew'][$id],
+						'displayorder' => $_GET['displayordernew'][$id],
+						'title' => $_GET['titlenew'][$id],
 						'url' => $url,
 					);
-					DB::insert('forum_onlinelist', $data);
+					C::t('forum_onlinelist')->insert($data);
 				}
 			}
 		}
@@ -86,7 +84,11 @@ var rowtypedata = [
 		[1,'<input type="text" class="txt" name="newname[]" size="15">'],
 		[1,'<input type="text" class="txt" name="newurl[]" size="20">'],
 		[1,'<input type="text" class="txt" name="newdescription[]" size="30">', 'td26'],
-		[1,'<input type="text" class="txt" name="newlogo[]" size="20">']
+		[1,'<input type="text" class="txt" name="newlogo[]" size="20">'],
+		[1,'<input type="checkbox" name="newportal[{n}]" value="1" class="checkbox">'],
+		[1,'<input type="checkbox" name="newforum[{n}]" value="1" class="checkbox">'],
+		[1,'<input type="checkbox" name="newgroup[{n}]" value="1" class="checkbox">'],
+		[1,'<input type="checkbox" name="newhome[{n}]" value="1" class="checkbox">']
 	]
 ]
 </script>
@@ -103,8 +105,8 @@ var rowtypedata = [
 			'<input class="checkbox" type="checkbox" name="groupall" onclick="checkAll(\'prefix\', this.form, \'group\', \'groupall\')">',
 			'<input class="checkbox" type="checkbox" name="homeall" onclick="checkAll(\'prefix\', this.form, \'home\', \'homeall\')">'));
 
-		$query = DB::query("SELECT * FROM ".DB::table('common_friendlink')." ORDER BY displayorder");
-		while($forumlink = DB::fetch($query)) {
+		$query = C::t('common_friendlink')->fetch_all_by_displayorder();
+		foreach ($query as $forumlink) {
 			$type = sprintf('%04b', $forumlink['type']);
 			showtablerow('', array('class="td25"', 'class="td28"', '', '', 'class="td26"'), array(
 				'<input type="checkbox" class="checkbox" name="delete[]" value="'.$forumlink['id'].'" />',
@@ -127,37 +129,37 @@ var rowtypedata = [
 
 	} else {
 
-		if($_G['gp_delete']) {
-			DB::delete('common_friendlink', "id IN (".dimplode($_G['gp_delete']).")");
+		if($_GET['delete']) {
+			C::t('common_friendlink')->delete($_GET['delete']);
 		}
 
-		if(is_array($_G['gp_name'])) {
-			foreach($_G['gp_name'] as $id => $val) {
-				$type_str = intval($_G['gp_portal'][$id]).intval($_G['gp_forum'][$id]).intval($_G['gp_group'][$id]).intval($_G['gp_home'][$id]);
+		if(is_array($_GET['name'])) {
+			foreach($_GET['name'] as $id => $val) {
+				$type_str = intval($_GET['portal'][$id]).intval($_GET['forum'][$id]).intval($_GET['group'][$id]).intval($_GET['home'][$id]);
 				$type_str = intval($type_str, '2');
-				DB::update('common_friendlink', array(
-					'displayorder' => $_G['gp_displayorder'][$id],
-					'name' => $_G['gp_name'][$id],
-					'url' => $_G['gp_url'][$id],
-					'description' => $_G['gp_description'][$id],
-					'logo' => $_G['gp_logo'][$id],
+				$query = C::t('common_friendlink')->update($id, array(
+					'displayorder' => $_GET['displayorder'][$id],
+					'name' => $_GET['name'][$id],
+					'url' => $_GET['url'][$id],
+					'description' => $_GET['description'][$id],
+					'logo' => $_GET['logo'][$id],
 					'type' => $type_str,
-				), array(
-					'id' => $id,
 				));
 			}
 		}
 
-		if(is_array($_G['gp_newname'])) {
-			foreach($_G['gp_newname'] as $key => $value) {
+		if(is_array($_GET['newname'])) {
+			foreach($_GET['newname'] as $key => $value) {
 				if($value) {
-					DB::insert('common_friendlink', array(
-						'displayorder' => $_G['gp_newdisplayorder'][$key],
+					$type_str = intval($_GET['newportal'][$key]).intval($_GET['newforum'][$key]).intval($_GET['newgroup'][$key]).intval($_GET['newhome'][$key]);
+					$type_str = intval($type_str, '2');
+					C::t('common_friendlink')->insert(array(
+						'displayorder' => $_GET['newdisplayorder'][$key],
 						'name' => $value,
-						'url' => $_G['gp_newurl'][$key],
-						'description' => $_G['gp_newdescription'][$key],
-						'logo' => $_G['gp_newlogo'][$key],
-						'type' => 0,
+						'url' => $_GET['newurl'][$key],
+						'description' => $_GET['newdescription'][$key],
+						'logo' => $_GET['newlogo'][$key],
+						'type' => $type_str,
 					));
 				}
 			}
@@ -179,10 +181,10 @@ var rowtypedata = [
 		[1,'', 'td25'],
 		[1,'<input type="text" class="txt" name="newname[]" size="15">'],
 		[1,'<input type="text" name="newurl[]" size="50">'],
-		[1,'<input class="checkbox" type="checkbox" value="1" name="newarticle[]">'],
-		[1,'<input class="checkbox" type="checkbox" value="1" name="newforum[]">'],
-		[1,'<input class="checkbox" type="checkbox" value="1" name="newgroup[]">'],
-		[1,'<input class="checkbox" type="checkbox" value="1" name="newblog[]">']
+		[1,'<input class="checkbox" type="checkbox" value="1" name="newarticle[{n}]">'],
+		[1,'<input class="checkbox" type="checkbox" value="1" name="newforum[{n}]">'],
+		[1,'<input class="checkbox" type="checkbox" value="1" name="newgroup[{n}]">'],
+		[1,'<input class="checkbox" type="checkbox" value="1" name="newblog[{n}]">']
 	]
 ]
 </script>
@@ -191,12 +193,20 @@ var rowtypedata = [
 		shownav('extended', 'misc_relatedlink');
 		showsubmenu('nav_misc_relatedlink');
 		showtips('misc_relatedlink_tips');
+		$tdstyle = array('width="50"', 'width="120"', 'width="330"', 'width="50"', 'width="80"', 'width="80"', '');
 		showformheader('misc&operation=relatedlink');
 		showtableheader();
-		showsubtitle(array('', 'misc_relatedlink_edit_name', 'misc_relatedlink_edit_url', '<input class="checkbox" type="checkbox" name="articleall" onclick="checkAll(\'prefix\', this.form, \'article\', \'articleall\')">'.cplang('misc_relatedlink_extent_article'), '<input class="checkbox" type="checkbox" name="forumall" onclick="checkAll(\'prefix\', this.form, \'forum\', \'forumall\')">'.cplang('misc_relatedlink_extent_forum'), '<input class="checkbox" type="checkbox" name="groupall" onclick="checkAll(\'prefix\', this.form, \'group\', \'groupall\')">'.cplang('misc_relatedlink_extent_group'),'<input class="checkbox" type="checkbox" name="blogall" onclick="checkAll(\'prefix\', this.form, \'blog\', \'blogall\')">'.cplang('misc_relatedlink_extent_blog')));
+		showsetting('misc_relatedlink_status', 'relatedlinkstatus', $_G['setting']['relatedlinkstatus'], 'radio');
+		showtablefooter();
+		showtableheader('', '', 'id="relatedlink_header"');
+		showsubtitle(array('', 'misc_relatedlink_edit_name', 'misc_relatedlink_edit_url', 'misc_relatedlink_extent_article', 'misc_relatedlink_extent_forum', 'misc_relatedlink_extent_group', 'misc_relatedlink_extent_blog'), 'header tbm', $tdstyle);
+		showtablefooter();
+		echo '<script type="text/javascript">floatbottom(\'relatedlink_header\');</script>';
+		showtableheader();
+		showsubtitle(array('', 'misc_relatedlink_edit_name', 'misc_relatedlink_edit_url', '<label><input class="checkbox" type="checkbox" name="articleall" onclick="checkAll(\'prefix\', this.form, \'article\', \'articleall\')">'.cplang('misc_relatedlink_extent_article').'</label>', '<label><input class="checkbox" type="checkbox" name="forumall" onclick="checkAll(\'prefix\', this.form, \'forum\', \'forumall\')">'.cplang('misc_relatedlink_extent_forum').'</label>', '<label><input class="checkbox" type="checkbox" name="groupall" onclick="checkAll(\'prefix\', this.form, \'group\', \'groupall\')">'.cplang('misc_relatedlink_extent_group').'</label>', '<label><input class="checkbox" type="checkbox" name="blogall" onclick="checkAll(\'prefix\', this.form, \'blog\', \'blogall\')">'.cplang('misc_relatedlink_extent_blog').'</label>'), 'header', $tdstyle);
 
-		$query = DB::query("SELECT * FROM ".DB::table('common_relatedlink')." ORDER BY id DESC");
-		while($link = DB::fetch($query)) {
+		$query = C::t('common_relatedlink')->range(0, 0, 'DESC');
+		foreach($query as $link) {
 			$extent = sprintf('%04b', $link['extent']);
 			showtablerow('', array('class="td25"', '', '', 'class="td26"', 'class="td26"', 'class="td26"', ''), array(
 				'<input type="checkbox" class="checkbox" name="delete[]" value="'.$link['id'].'" />',
@@ -216,46 +226,44 @@ var rowtypedata = [
 
 	} else {
 
-		if($_G['gp_delete']) {
-			DB::delete('common_relatedlink', "id IN (".dimplode($_G['gp_delete']).")");
+		if($_GET['delete']) {
+			C::t('common_relatedlink')->delete($_GET['delete']);
 		}
 
-		if(is_array($_G['gp_name'])) {
-			foreach($_G['gp_name'] as $id => $val) {
-				$extent_str = intval($_G['gp_article'][$id]).intval($_G['gp_forum'][$id]).intval($_G['gp_group'][$id]).intval($_G['gp_blog'][$id]);
+		if(is_array($_GET['name'])) {
+			foreach($_GET['name'] as $id => $val) {
+				$extent_str = intval($_GET['article'][$id]).intval($_GET['forum'][$id]).intval($_GET['group'][$id]).intval($_GET['blog'][$id]);
 				$extent_str = intval($extent_str, '2');
-				DB::update('common_relatedlink', array(
-					'name' => $_G['gp_name'][$id],
-					'url' => $_G['gp_url'][$id],
+				C::t('common_relatedlink')->update($id, array(
+					'name' => $_GET['name'][$id],
+					'url' => $_GET['url'][$id],
 					'extent' => $extent_str,
-				), array(
-					'id' => $id,
 				));
 			}
 		}
 
-		if(is_array($_G['gp_newname'])) {
-			foreach($_G['gp_newname'] as $key => $value) {
+		if(is_array($_GET['newname'])) {
+			foreach($_GET['newname'] as $key => $value) {
 				if($value) {
-					$extent_str = intval($_G['gp_newarticle'][$key]).intval($_G['gp_newforum'][$key]).intval($_G['gp_newgroup'][$key]).intval($_G['gp_newblog'][$key]);
+					$extent_str = intval($_GET['newarticle'][$key]).intval($_GET['newforum'][$key]).intval($_GET['newgroup'][$key]).intval($_GET['newblog'][$key]);
 					$extent_str = intval($extent_str, '2');
-					DB::insert('common_relatedlink', array(
+					C::t('common_relatedlink')->insert(array(
 						'name' => $value,
-						'url' => $_G['gp_newurl'][$key],
+						'url' => $_GET['newurl'][$key],
 						'extent' => $extent_str,
 					));
 				}
 			}
 		}
-
-		updatecache('relatedlink');
+		C::t('common_setting')->update('relatedlinkstatus', $_GET['relatedlinkstatus']);
+		updatecache(array('relatedlink','setting'));
 		cpmsg('relatedlink_succeed', 'action=misc&operation=relatedlink', 'succeed');
 
 	}
 
 } elseif($operation == 'bbcode') {
 
-	$edit = $_G['gp_edit'];
+	$edit = $_GET['edit'];
 	if(!submitcheck('bbcodessubmit') && !$edit) {
 		shownav('style', 'setting_editor');
 
@@ -268,8 +276,7 @@ var rowtypedata = [
 		showformheader('misc&operation=bbcode');
 		showtableheader('', 'fixpadding');
 		showsubtitle(array('', 'misc_bbcode_tag', 'available', 'display', 'display_order', 'misc_bbcode_icon', 'misc_bbcode_icon_file', ''));
-		$query = DB::query("SELECT * FROM ".DB::table('forum_bbcode')." ORDER BY displayorder");
-		while($bbcode = DB::fetch($query)) {
+		foreach(C::t('forum_bbcode')->fetch_all_by_available_icon() as $bbcode) {
 			showtablerow('', array('class="td25"', 'class="td21"', 'class="td25"', 'class="td25"', 'class="td28 td24"', 'class="td25"', 'class="td21"'), array(
 				"<input class=\"checkbox\" type=\"checkbox\" name=\"delete[]\" value=\"$bbcode[id]\">",
 				"<input type=\"text\" class=\"txt\" size=\"15\" name=\"tagnew[$bbcode[id]]\" value=\"$bbcode[tag]\">",
@@ -297,48 +304,53 @@ var rowtypedata = [
 
 	} elseif(submitcheck('bbcodessubmit')) {
 
-		$delete = $_G['gp_delete'];
+		$delete = $_GET['delete'];
 		if(is_array($delete)) {
-			$ids = '\''.implode('\',\'', $delete).'\'';
-			DB::query("DELETE FROM	".DB::table('forum_bbcode')." WHERE id IN ($ids)");
+			C::t('forum_bbcode')->delete($delete);
 		}
 
-		$tagnew = $_G['gp_tagnew'];
-		$displaynew = $_G['gp_displaynew'];
-		$displayordernew = $_G['gp_displayordernew'];
-		$iconnew = $_G['gp_iconnew'];
+		$tagnew = $_GET['tagnew'];
+		$displaynew = $_GET['displaynew'];
+		$displayordernew = $_GET['displayordernew'];
+		$iconnew = $_GET['iconnew'];
 		if(is_array($tagnew)) {
 			$custom_ids = array();
-			$query = DB::query("SELECT id FROM ".DB::table('forum_bbcode'));
-			while($bbcode = DB::fetch($query)) {
+			foreach(C::t('forum_bbcode')->fetch_all_by_available_icon() as $bbcode) {
 				$custom_ids[] = $bbcode['id'];
 			}
-			$availablenew = $_G['gp_availablenew'];
+			$availablenew = $_GET['availablenew'];
 			foreach($tagnew as $id => $val) {
 				if(in_array($id, $custom_ids) && !preg_match("/^[0-9a-z]+$/i", $tagnew[$id]) && strlen($tagnew[$id]) < 20) {
 					cpmsg('dzcode_edit_tag_invalid', '', 'error');
 				}
 				$availablenew[$id] = in_array($id, $custom_ids) ? $availablenew[$id] : 1;
 				$availablenew[$id] = $availablenew[$id] && $displaynew[$id] ? 2 : $availablenew[$id];
-				$sqladd = in_array($id, $custom_ids) ? ", tag='$tagnew[$id]', icon='$iconnew[$id]'" : '';
-				DB::query("UPDATE ".DB::table('forum_bbcode')." SET available='$availablenew[$id]', displayorder='$displayordernew[$id]' $sqladd WHERE id='$id'");
+				$data = array(
+						'available' => $availablenew[$id],
+						'displayorder' => $displayordernew[$id]
+					);
+				if(in_array($id, $custom_ids)) {
+					$data['tag'] = $tagnew[$id];
+					$data['icon'] = $iconnew[$id];
+				}
+				C::t('forum_bbcode')->update($id, $data);
 			}
 		}
 
-		$newtag = $_G['gp_newtag'];
+		$newtag = $_GET['newtag'];
 		if($newtag != '') {
 			if(!preg_match("/^[0-9a-z]+$/i", $newtag && strlen($newtag) < 20)) {
 				cpmsg('dzcode_edit_tag_invalid', '', 'error');
 			}
 			$data = array(
 				'tag' => $newtag,
-				'icon' => $_G['gp_newicon'],
+				'icon' => $_GET['newicon'],
 				'available' => 0,
-				'displayorder' => $_G['gp_newdisplayorder'],
+				'displayorder' => $_GET['newdisplayorder'],
 				'params' => 1,
 				'nest' => 1,
 			);
-			DB::insert('forum_bbcode', $data);
+			C::t('forum_bbcode')->insert($data);
 		}
 
 		updatecache(array('bbcodes', 'bbcodes_display'));
@@ -346,7 +358,7 @@ var rowtypedata = [
 
 	} elseif($edit) {
 
-		$bbcode = DB::fetch_first("SELECT * FROM ".DB::table('forum_bbcode')." WHERE id='$edit'");
+		$bbcode = C::t('forum_bbcode')->fetch($edit);
 		if(!$bbcode) {
 			cpmsg('bbcode_not_found', '', 'error');
 		}
@@ -354,9 +366,9 @@ var rowtypedata = [
 		if(!submitcheck('editsubmit')) {
 
 			$bbcode['perm'] = explode("\t", $bbcode['perm']);
-			$query = DB::query("SELECT type, groupid, grouptitle, radminid FROM ".DB::table('common_usergroup')." ORDER BY (creditshigher<>'0' || creditslower<>'0'), creditslower, groupid");
+			$query = C::t('common_usergroup')->range_orderby_credit();
 			$groupselect = array();
-			while($group = DB::fetch($query)) {
+			foreach($query as $group) {
 				$group['type'] = $group['type'] == 'special' && $group['radminid'] ? 'specialadmin' : $group['type'];
 				$groupselect[$group['type']] .= '<option value="'.$group['groupid'].'"'.(@in_array($group['groupid'], $bbcode['perm']) ? ' selected' : '').'>'.$group['grouptitle'].'</option>';
 			}
@@ -386,14 +398,14 @@ var rowtypedata = [
 
 		} else {
 
-			$tagnew = trim($_G['gp_tagnew']);
-			$paramsnew = $_G['gp_paramsnew'];
-			$nestnew = $_G['gp_nestnew'];
-			$replacementnew = $_G['gp_replacementnew'];
-			$examplenew = $_G['gp_examplenew'];
-			$explanationnew = $_G['gp_explanationnew'];
-			$promptnew = $_G['gp_promptnew'];
-			$permnew = implode("\t", $_G['gp_permnew']);
+			$tagnew = trim($_GET['tagnew']);
+			$paramsnew = $_GET['paramsnew'];
+			$nestnew = $_GET['nestnew'];
+			$replacementnew = $_GET['replacementnew'];
+			$examplenew = $_GET['examplenew'];
+			$explanationnew = $_GET['explanationnew'];
+			$promptnew = $_GET['promptnew'];
+			$permnew = implode("\t", $_GET['permnew']);
 
 			if(!preg_match("/^[0-9a-z]+$/i", $tagnew)) {
 				cpmsg('dzcode_edit_tag_invalid', '', 'error');
@@ -402,8 +414,7 @@ var rowtypedata = [
 			}
 			$promptnew = trim(str_replace(array("\t", "\r", "\n"), array('', '', "\t"), $promptnew));
 
-			DB::query("UPDATE ".DB::table('forum_bbcode')." SET tag='$tagnew', replacement='$replacementnew', example='$examplenew', explanation='$explanationnew', params='$paramsnew', prompt='$promptnew', nest='$nestnew', perm='$permnew' WHERE id='$edit'");
-
+			C::t('forum_bbcode')->update($edit, array('tag'=>$tagnew, 'replacement'=>$replacementnew, 'example'=>$examplenew, 'explanation'=>$explanationnew, 'params'=>$paramsnew, 'prompt'=>$promptnew, 'nest'=>$nestnew, 'perm'=>$permnew));
 			updatecache(array('bbcodes', 'bbcodes_display'));
 			cpmsg('dzcode_edit_succeed', 'action=misc&operation=bbcode', 'succeed');
 
@@ -414,7 +425,7 @@ var rowtypedata = [
 
 	$ppp = 30;
 
-	$addcensors = isset($_G['gp_addcensors']) ? trim($_G['gp_addcensors']) : '';
+	$addcensors = isset($_GET['addcensors']) ? trim($_GET['addcensors']) : '';
 
 	if($do == 'export') {
 
@@ -424,13 +435,11 @@ var rowtypedata = [
 		dheader('Content-Encoding: none');
 		dheader('Content-Disposition: attachment; filename=CensorWords.txt');
 		dheader('Content-Type: text/plain');
-		$query = DB::query("SELECT * FROM ".DB::table('common_word_type'));
-		while($result = DB::fetch($query)) {
+		foreach(C::t('common_word_type')->fetch_all() as $result) {
 			$result['used'] = 0;
 			$word_type[$result['id']] = $result;
 		}
-		$query = DB::query("SELECT find, replacement, type FROM ".DB::table('common_word')." ORDER BY type ASC, find ASC");
-		while($censor = DB::fetch($query)) {
+		foreach(C::t('common_word')->fetch_all_order_type_find() as $censor) {
 			$censor['replacement'] = str_replace('*', '', $censor['replacement']) <> '' ? $censor['replacement'] : '';
 			if($word_type[$censor['type']]['used'] == 0 && $word_type[$censor['type']]) {
 				if($temp_type == 1) {
@@ -440,7 +449,7 @@ var rowtypedata = [
 				$temp_type = 1;
 				$word_type[$censor['type']]['used'] = 1;
 			}
-			echo $censor['find'].($censor['replacement'] != '' ? '='.dstripslashes($censor['replacement']) : '')."\n";
+			echo $censor['find'].($censor['replacement'] != '' ? '='.$censor['replacement'] : '')."\n";
 		}
 		if($temp_type == 1) {
 			echo "[/type]\n";
@@ -451,14 +460,12 @@ var rowtypedata = [
 
 	} elseif(submitcheck('addcensorsubmit') && $addcensors != '') {
 		$oldwords = array();
-		if($_G['adminid'] == 1 && $_G['gp_overwrite'] == 2) {
-			DB::query("TRUNCATE ".DB::table('common_word')."");
+		if($_G['adminid'] == 1 && $_GET['overwrite'] == 2) {
+			C::t('common_word')->truncate();
 		} else {
-			$query = DB::query("SELECT find, admin FROM ".DB::table('common_word'));
-			while($censor = DB::fetch($query)) {
+			foreach(C::t('common_word')->fetch_all() as $censor) {
 				$oldwords[md5($censor['find'])] = $censor['admin'];
 			}
-			DB::free_result($query);
 		}
 		$typesearch = "\[type\:(.+?)\](.+?)\[\/type\]";
 		preg_match_all("/($typesearch)/is", $addcensors, $wordmatch);
@@ -467,10 +474,11 @@ var rowtypedata = [
 		foreach($wordmatch[3] AS $key => $val) {
 			$word_type = 0;
 			if($wordmatch[2][$key] && !$wordtype_used[$key]) {
-				if(!$word_type = DB::result_first("SELECT id FROM ".DB::table('common_word_type')." WHERE typename = '{$wordmatch[2][$key]}'")) {
-					$wordmatch[2][$key] = daddslashes($wordmatch[2][$key]);
-					DB::insert('common_word_type', array('typename' => $wordmatch[2][$key]), true);
-					$word_type = DB::insert_id();
+				$row = C::t('common_word_type')->fetch_by_typename($wordmatch[2][$key]);
+				if(empty($row)) {
+					$word_type = C::t('common_word_type')->insert(array('typename' => $wordmatch[2][$key]), true);
+				} else {
+					$word_type = $row['id'];
 				}
 				$wordtype_used[$key] = 1;
 			}
@@ -486,22 +494,22 @@ var rowtypedata = [
 					}
 					continue;
 				} elseif(isset($oldwords[md5($newfind)])) {
-					if($_G['gp_overwrite'] && ($_G['adminid'] == 1 || $oldwords[md5($newfind)] == $_G['member']['username'])) {
+					if($_GET['overwrite'] && ($_G['adminid'] == 1 || $oldwords[md5($newfind)] == $_G['member']['username'])) {
 						$updatecount ++;
-						DB::update('common_word', array(
+						C::t('common_word')->update_by_find($newfind, array(
 							'replacement' => $newreplace,
-							'type' => ($word_type ? $word_type : (intval($_G['gp_wordtype_select']) ? intval($_G['gp_wordtype_select']) : 0))
-						), "`find`='$newfind'");
+							'type' => ($word_type ? $word_type : (intval($_GET['wordtype_select']) ? intval($_GET['wordtype_select']) : 0))
+						));
 					} else {
 						$ignorecount ++;
 					}
 				} else {
 					$newcount ++;
-					DB::insert('common_word', array(
+					C::t('common_word')->insert(array(
 						'admin' => $_G['username'],
 						'find' => $newfind,
 						'replacement' => $newreplace,
-						'type' => ($word_type ? $word_type : (intval($_G['gp_wordtype_select']) ? intval($_G['gp_wordtype_select']) : 0))
+						'type' => ($word_type ? $word_type : (intval($_GET['wordtype_select']) ? intval($_GET['wordtype_select']) : 0))
 					));
 					$oldwords[md5($newfind)] = $_G['member']['username'];
 				}
@@ -514,59 +522,52 @@ var rowtypedata = [
 		cpmsg('censor_batch_add_succeed', "action=misc&operation=censor&anchor=import", 'succeed', array('newcount' => $newcount, 'updatecount' => $updatecount, 'ignorecount' => $ignorecount));
 
 	} elseif(submitcheck('wordtypesubmit')) {
-		if(is_array($_G['gp_delete'])) {
-			$del_ids = dimplode($_G['gp_delete']);
-			DB::query("DELETE FROM ".DB::table('common_word_type')." WHERE id IN (".$del_ids.")");
-			DB::query("UPDATE ".DB::table('common_word')." SET type = 0 WHERE type IN (".$del_ids.")");
+		if(is_array($_GET['delete'])) {
+			$_GET['delete'] = array_map('intval', (array)$_GET['delete']);
+			C::t('common_word_type')->delete($_GET['delete']);
+			C::t('common_word')->update_by_type($_GET['delete'], array('type'=>0));
 		}
-		if(is_array($_G['gp_typename'])) {
-			foreach($_G['gp_typename'] AS $key => $val) {
-				if(!$_G['gp_delete'][$key] && !empty($val)) {
+		if(is_array($_GET['typename'])) {
+			foreach($_GET['typename'] AS $key => $val) {
+				if(!$_GET['delete'][$key] && !empty($val)) {
 					DB::update("common_word_type", array('typename' => $val), "`id` = '$key'");
 				}
 			}
 		}
-		if($_G['gp_newtypename']) {
-			foreach($_G['gp_newtypename'] AS $key => $val) {
+		if($_GET['newtypename']) {
+			foreach($_GET['newtypename'] AS $key => $val) {
 				$val = trim($val);
 				if(!empty($val)) {
-					$sqladd .= $sqladd ? ",('{$val}')" : "('{$val}')";
+					C::t('common_word_type')->insert(array('typename' => $val));
 				}
-			}
-			if($sqladd) {
-				DB::query("INSERT INTO ".DB::table('common_word_type')."(typename)VALUES $sqladd");
 			}
 		}
 		cpmsg('censor_wordtype_edit', 'action=misc&operation=censor&anchor=wordtype', 'succeed');
 	} elseif(!submitcheck('censorsubmit')) {
-		$sqladd = '1';
-		if(!empty($_G['gp_censor_search_type'])) {
-			$sqladd .= " AND type = '{$_G['gp_censor_search_type']}'";
+		$ftype = $ffind = null;
+		if(!empty($_GET['censor_search_type'])) {
+			$ftype = $_GET['censor_search_type'];
 		}
 
-		if(!empty($_G['gp_censorkeyword'])) {
-			$censorkeyword = str_replace(array('%', '_'), array('\%', '\_'), $_G['gp_censorkeyword']);
-			$sqladd .= " AND find LIKE '%{$censorkeyword}%'";
-			if($_POST['censorkeyword']) {
-				$page = 1;
-			}
+		$ffind = !empty($_GET['censorkeyword']) ? $_GET['censorkeyword'] : null;
+		if($_POST['censorkeyword']) {
+			$page = 1;
 		}
 
 		$ppp = 50;
 		$startlimit = ($page - 1) * $ppp;
 
-		$query = DB::query("SELECT * FROM ".DB::table('common_word_type'));
-		while($result = DB::fetch($query)) {
+		foreach(C::t('common_word_type')->fetch_all() as $result) {
 			$result['typename'] = dhtmlspecialchars($result['typename']);
 			$word_type[$result['id']] = $result;
 			$word_type_option .= "<option value=\"{$result['id']}\">{$result['typename']}</option>";
-			if(!empty($_G['gp_censor_search_type'])) {
-				$word_type_option_search .= "<option value=\"{$result['id']}\"".($_G['gp_censor_search_type'] == $result['id'] ? 'selected' : '' ).">{$result['typename']}</option>";
+			if(!empty($_GET['censor_search_type'])) {
+				$word_type_option_search .= "<option value=\"{$result['id']}\"".($_GET['censor_search_type'] == $result['id'] ? 'selected' : '' ).">{$result['typename']}</option>";
 			}
 		}
 
 		shownav('topic', 'nav_posting_censor');
-		$anchor = in_array($_G['gp_anchor'], array('list', 'import', 'wordtype', 'showanchor')) ? $_G['gp_anchor'] : 'list';
+		$anchor = in_array($_GET['anchor'], array('list', 'import', 'wordtype', 'showanchor')) ? $_GET['anchor'] : 'list';
 		showsubmenuanchors('nav_posting_censor', array(
 			array('admin', 'list', $anchor == 'list'),
 			array('misc_censor_batch_add', 'import', $anchor == 'import'),
@@ -579,7 +580,7 @@ var rowtypedata = [
 		showtagheader('div', 'list', $anchor == 'list');
 		showformheader("misc&operation=censor&page=$page", '', 'keywordsearch');
 		showtableheader();
-		echo '<br /><br /><form method="post">'. $lang['keywords'].': <input type="text" name="censorkeyword" value="'.$_G['gp_censorkeyword'].'" /> &nbsp; <select name="censor_search_type"><option value = "">'.cplang("misc_censor_wordtype_search").'</option><option value="0">'.cplang('misc_censor_word_default_typename').'</option>'.($word_type_option_search ? $word_type_option_search : $word_type_option).'</select> &nbsp;<input type="submit" name="censor_search" value="'.$lang[search].'" class="btn" /> </form>';
+		echo '<br /><br /><form method="post">'. $lang['keywords'].': <input type="text" name="censorkeyword" value="'.$_GET['censorkeyword'].'" /> &nbsp; <select name="censor_search_type"><option value = "">'.cplang("misc_censor_wordtype_search").'</option><option value="0">'.cplang('misc_censor_word_default_typename').'</option>'.($word_type_option_search ? $word_type_option_search : $word_type_option).'</select> &nbsp;<input type="submit" name="censor_search" value="'.$lang[search].'" class="btn" /> </form>';
 		showtablefooter();
 
 		showformheader("misc&operation=censor&page=$page", '', 'listform');
@@ -587,12 +588,11 @@ var rowtypedata = [
 		showsubtitle(array('', 'misc_censor_word', 'misc_censor_replacement', 'misc_censor_type', 'operator'));
 
 		$multipage = '';
-		$totalcount = DB::result_first("SELECT count(*) FROM ".DB::table('common_word')." WHERE $sqladd");
+		$totalcount = C::t('common_word')->count_by_type_find($ftype, $ffind);
 		if($totalcount) {
 			$multipage = multi($totalcount, $ppp, $page, ADMINSCRIPT."?action=misc&operation=censor".($censorkeyword ? "&censorkeyword=".$censorkeyword : '' ));
-			$query = DB::query("SELECT * FROM ".DB::table('common_word')." WHERE $sqladd ORDER BY find ASC LIMIT $startlimit, $ppp");
-			while($censor =	DB::fetch($query)) {
-				$censor['replacement'] = dstripslashes($censor['replacement']);
+			foreach(C::t('common_word')->fetch_all_by_type_find($ftype, $ffind, $startlimit, $ppp) as $censor) {
+				$censor['replacement'] = $censor['replacement'];
 				$censor['replacement'] = dhtmlspecialchars($censor['replacement']);
 				$censor['find'] = dhtmlspecialchars($censor['find']);
 				$disabled = $_G['adminid'] != 1 && $censor['admin'] != $_G['member']['username'] ? 'disabled' : NULL;
@@ -678,9 +678,8 @@ EOT;
 		showformheader("misc&operation=censor", 'fixpadding');
 		showtableheader('', 'fixpadding', 'wordtypeform');
 		showsubtitle(array('', 'misc_censor_wordtype_name'));
-		if($wordtypecount = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_word_type'))) {
-			$query = DB::query("SELECT * FROM ".DB::table('common_word_type'));
-			while($result = DB::fetch($query)) {
+		if($wordtypecount = C::t('common_word_type')->count()) {
+			foreach(C::t('common_word_type')->fetch_all() as $result) {
 				showtablerow('', array('class="td25"', ''), array("<input class=\"checkbox\" type=\"checkbox\" name=\"delete[]\" value=\"{$result['id']}\" $disabled>", "<input type=\"text\" class=\"txt\" size=\"10\" name=\"typename[{$result['id']}]\" value=\"{$result['typename']}\">"));
 			}
 		}
@@ -693,31 +692,31 @@ EOT;
 
 	} else {
 
-		if($ids = dimplode($_G['gp_delete'])) {
+		if($ids = dimplode($_GET['delete'])) {
 			DB::delete('common_word', "id IN ($ids) AND ('{$_G['adminid']}'='1' OR admin='{$_G['username']}')");
 		}
 
-		if(is_array($_G['gp_find'])) {
-			foreach($_G['gp_find'] as $id => $val) {
-				$_G['gp_find'][$id]  = $val = trim(str_replace('=', '', $_G['gp_find'][$id]));
+		if(is_array($_GET['find'])) {
+			foreach($_GET['find'] as $id => $val) {
+				$_GET['find'][$id]  = $val = trim(str_replace('=', '', $_GET['find'][$id]));
 				if(strlen($val) < 3) {
 					cpmsg('censor_keywords_tooshort', '', 'error');
 				}
-				$_G['gp_replace'][$id] = $_G['gp_replace'][$id] == '{REPLACE}' ? $_G['gp_replacecontent'][$id] : $_G['gp_replace'][$id];
-				$_G['gp_replace'][$id] = daddslashes(str_replace("\\\'", '\'', $_G['gp_replace'][$id]), 1);
+				$_GET['replace'][$id] = $_GET['replace'][$id] == '{REPLACE}' ? $_GET['replacecontent'][$id] : $_GET['replace'][$id];
+				$_GET['replace'][$id] = daddslashes(str_replace("\\\'", '\'', $_GET['replace'][$id]), 1);
 				DB::update('common_word', array(
-					'find' => $_G['gp_find'][$id],
-					'replacement' => $_G['gp_replace'][$id],
-					'type' => $_G['gp_wordtype_select'][$id],
+					'find' => $_GET['find'][$id],
+					'replacement' => $_GET['replace'][$id],
+					'type' => $_GET['wordtype_select'][$id],
 				), "id='$id' AND ('{$_G['adminid']}'='1' OR admin='{$_G['username']}')");
 			}
 		}
 
-		$newfind_array = !empty($_G['gp_newfind']) ? $_G['gp_newfind'] : array();
-		$newreplace_array = !empty($_G['gp_newreplace']) ? $_G['gp_newreplace'] : array();
-		$newreplacecontent_array = !empty($_G['gp_newreplacecontent']) ? $_G['gp_newreplacecontent'] : array();
-		$newwordtype = !empty($_G['gp_newwordtype']) ? $_G['gp_newwordtype'] : array();
-		$newtypename = !empty($_G['gp_newtypename']) ? $_G['gp_newtypename'] : array();
+		$newfind_array = !empty($_GET['newfind']) ? $_GET['newfind'] : array();
+		$newreplace_array = !empty($_GET['newreplace']) ? $_GET['newreplace'] : array();
+		$newreplacecontent_array = !empty($_GET['newreplacecontent']) ? $_GET['newreplacecontent'] : array();
+		$newwordtype = !empty($_GET['newwordtype']) ? $_GET['newwordtype'] : array();
+		$newtypename = !empty($_GET['newtypename']) ? $_GET['newtypename'] : array();
 
 		foreach($newfind_array as $key => $value) {
 			$newfind = trim(str_replace('=', '', $newfind_array[$key]));
@@ -741,17 +740,13 @@ EOT;
 
 				if($newwordtype[$key] == 0) {
 					if(!empty($newtypename[$key])) {
-						$newtypename[$key] = daddslashes($newtypename[$key]);
-						$newwordtype[$key] = DB::insert('common_word_type', array(
-							'typename' => $newtypename[$key]
-						), true);
+						$newwordtype[$key] = C::t('common_word_type')->insert(array('typename' => $newtypename[$key]), true);
 					}
 				}
-
-				if($oldcenser = DB::fetch_first("SELECT admin FROM ".DB::table('common_word')." WHERE find='$newfind'")) {
+				if($oldcenser = C::t('common_word')->fetch_by_find($newfind)) {
 					cpmsg('censor_keywords_existence', '', 'error');
 				} else {
-					DB::insert('common_word', array(
+					C::t('common_word')->insert(array(
 						'admin' => $_G['username'],
 						'find' => $newfind,
 						'replacement' => $newreplace,
@@ -770,7 +765,7 @@ EOT;
 
 	if(!submitcheck('stampsubmit')) {
 
-		$anchor = in_array($_G['gp_anchor'], array('list', 'llist', 'add')) ? $_G['gp_anchor'] : 'list';
+		$anchor = in_array($_GET['anchor'], array('list', 'llist', 'add')) ? $_GET['anchor'] : 'list';
 		shownav('style', 'nav_thread_stamp');
 		showsubmenuanchors('nav_thread_stamp', array(
 			array('misc_stamp_thread', 'list', $anchor == 'list'),
@@ -786,15 +781,13 @@ EOT;
 		showsubtitle(array('', 'misc_stamp_id', 'misc_stamp_name', 'smilies_edit_image', 'smilies_edit_filename', 'misc_stamp_icon', 'misc_stamp_option'));
 
 		$imgfilter = $stamplist = $stamplistfiles = $stampicons = array();
-		$query = DB::query("SELECT * FROM ".DB::table('common_smiley')." WHERE type='stamplist' ORDER BY displayorder");
-		while($smiley =	DB::fetch($query)) {
+		foreach(C::t('common_smiley')->fetch_all_by_type('stamplist') as $smiley) {
 			$stamplistfiles[$smiley['url']] = $smiley['id'];
 			$stampicons[$smiley['url']] = $smiley['typeid'];
 			$stamplist[] = $smiley;
 		}
 		$tselect = '<select><option value="0">'.cplang('none').'</option><option value="1">'.cplang('misc_stamp_option_stick').'</option><option value="2">'.cplang('misc_stamp_option_digest').'</option><option value="3">'.cplang('misc_stamp_option_recommend').'</option><option value="4">'.cplang('misc_stamp_option_recommendto').'</option></select>';
-		$query = DB::query("SELECT * FROM ".DB::table('common_smiley')." WHERE type='stamp' ORDER BY displayorder");
-		while($smiley =	DB::fetch($query)) {
+		foreach(C::t('common_smiley')->fetch_all_by_type('stamp') as $smiley) {
 			$s = $r = array();
 			$s[] = '<select>';
 			$r[] = '<select name="typeidnew['.$smiley['id'].']">';
@@ -888,66 +881,66 @@ EOT;
 
 	} else {
 
-		if($ids = dimplode($_G['gp_delete'])) {
-			DB::delete('common_smiley', "id IN ($ids)");
+		if($_GET['delete']) {
+			C::t('common_smiley')->delete($_GET['delete']);
 		}
 
-		if(is_array($_G['gp_displayorder'])) {
+		if(is_array($_GET['displayorder'])) {
 			$typeidset = array();
-			foreach($_G['gp_displayorder'] as $id => $val) {
-				$_G['gp_displayorder'][$id] = intval($_G['gp_displayorder'][$id]);
-				if($_G['gp_displayorder'][$id] >= 0 && $_G['gp_displayorder'][$id] < 100) {
+			foreach($_GET['displayorder'] as $id => $val) {
+				$_GET['displayorder'][$id] = intval($_GET['displayorder'][$id]);
+				if($_GET['displayorder'][$id] >= 0 && $_GET['displayorder'][$id] < 100) {
 					$typeidadd = '';
-					if($_G['gp_typeidnew'][$id]) {
-						if(!isset($typeidset[$_G['gp_typeidnew'][$id]])) {
-							$_G['gp_typeidnew'][$id] = $_G['gp_typeidnew'][$id] > 0 ? $_G['gp_typeidnew'][$id] : 0;
-							$typeidadd = ",typeid='{$_G['gp_typeidnew'][$id]}'";
-							$typeidset[$_G['gp_typeidnew'][$id]] = TRUE;
+					if($_GET['typeidnew'][$id]) {
+						if(!isset($typeidset[$_GET['typeidnew'][$id]])) {
+							$_GET['typeidnew'][$id] = $_GET['typeidnew'][$id] > 0 ? $_GET['typeidnew'][$id] : 0;
+							$typeidadd = ",typeid='{$_GET['typeidnew'][$id]}'";
+							$typeidset[$_GET['typeidnew'][$id]] = TRUE;
 						} else {
-							$_G['gp_typeidnew'][$id] = 0;
+							$_GET['typeidnew'][$id] = 0;
 						}
 					}
-					DB::update('common_smiley', array(
-						'displayorder' => $_G['gp_displayorder'][$id],
-						'code' => $_G['gp_code'][$id],
-						'typeid' => $_G['gp_typeidnew'][$id],
-					), "id='$id'");
+					C::t('common_smiley')->update($id, array(
+						'displayorder' => $_GET['displayorder'][$id],
+						'code' => $_GET['code'][$id],
+						'typeid' => $_GET['typeidnew'][$id],
+					));
 				}
 			}
 		}
 
-		if(is_array($_G['gp_addurl'])) {
-			$count = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_smiley')." WHERE type IN ('stamp','stamplist')");
+		if(is_array($_GET['addurl'])) {
+			$count = C::t('common_smiley')->count_by_type(array('stamp','stamplist'));
 			if($count < 100) {
-				foreach($_G['gp_addurl'] as $k => $v) {
-					if($_G['gp_addcheck'][$k] && $_G['gp_addcode'][$k]) {
+				foreach($_GET['addurl'] as $k => $v) {
+					if($_GET['addcheck'][$k] && $_GET['addcode'][$k]) {
 						$count++;
 
-						DB::insert('common_smiley', array(
+						C::t('common_smiley')->insert(array(
 							'displayorder' => '0',
-							'type' => (!$_G['gp_addtype'][$k] ? 'stamp' : 'stamplist'),
-							'url' => $_G['gp_addurl'][$k],
-							'code' => $_G['gp_addcode'][$k],
+							'type' => (!$_GET['addtype'][$k] ? 'stamp' : 'stamplist'),
+							'url' => $_GET['addurl'][$k],
+							'code' => $_GET['addcode'][$k],
 						));
 					}
 				}
 			}
 		}
 
-		DB::update('common_smiley', array('typeid' => 0), "type='stamplist'");
-		if(is_array($_G['gp_stampicon'])) {
-			foreach($_G['gp_stampicon'] as $k => $v) {
-				if($_G['gp_typeidnew'][$k]) {
+		C::t('common_smiley')->update_by_type('stamplist', array('typeid' => 0));
+		if(is_array($_GET['stampicon'])) {
+			foreach($_GET['stampicon'] as $k => $v) {
+				if($_GET['typeidnew'][$k]) {
 					$k = 0;
 				}
-				DB::update('common_smiley', array('typeid' => $k), "id='$v' AND type='stamplist'");
+				C::t('common_smiley')->update_by_id_type($v, 'stamplist', array('typeid' => $k));
 			}
 		}
 
 		updatecache('stamps');
 		updatecache('stamptypeid');
 
-		cpmsg('thread_stamp_succeed', "action=misc&operation=stamp&anchor=$_G[gp_anchor]", 'succeed');
+		cpmsg('thread_stamp_succeed', "action=misc&operation=stamp&anchor=$_GET[anchor]", 'succeed');
 	}
 
 } elseif($operation == 'attachtype') {
@@ -955,7 +948,7 @@ EOT;
 	if(!submitcheck('typesubmit')) {
 
 		$attachtypes = '';
-		$query = DB::query("SELECT * FROM ".DB::table('forum_attachtype'));
+		$query = DB::query("SELECT * FROM ".DB::table('forum_attachtype')." WHERE fid='0'");
 		while($type = DB::fetch($query)) {
 			$type['maxsize'] = round($type['maxsize'] / 1024);
 			$attachtypes .= showtablerow('', array('class="td25"', 'class="td24"'), array(
@@ -982,7 +975,7 @@ var rowtypedata = [
 		showtips('misc_attachtype_tips');
 		showformheader('misc&operation=attachtype');
 		showtableheader();
-		showtablerow('class="partition"', array('class="td25"'), array('', cplang('misc_attachtype_ext'), cplang('misc_attachtype_maxsize')));
+		showtablerow('class="partition"', array('class="td25"', 'class="td24"'), array('', cplang('misc_attachtype_ext'), cplang('misc_attachtype_maxsize')));
 		echo $attachtypes;
 		echo '<tr><td></td><td colspan="2"><div><a href="###" onclick="addrow(this, 0)" class="addtr">'.$lang['misc_attachtype_add'].'</a></div></tr>';
 		showsubmit('typesubmit', 'submit', 'del');
@@ -991,40 +984,42 @@ var rowtypedata = [
 
 	} else {
 
-		if($ids = dimplode($_G['gp_delete'])) {
-			DB::delete('forum_attachtype', "id IN ($ids)");
+		if($ids = dimplode($_GET['delete'])) {
+			DB::delete('forum_attachtype', "id IN ($ids) AND fid='0'");
 		}
 
-		if(is_array($_G['gp_extension'])) {
-			foreach($_G['gp_extension'] as $id => $val) {
+		if(is_array($_GET['extension'])) {
+			foreach($_GET['extension'] as $id => $val) {
 				DB::update('forum_attachtype', array(
-					'extension' => $_G['gp_extension'][$id],
-					'maxsize' => $_G['gp_maxsize'][$id] * 1024,
+					'extension' => $_GET['extension'][$id],
+					'maxsize' => $_GET['maxsize'][$id] * 1024,
 				), "id='$id'");
 			}
 		}
 
-		if(is_array($_G['gp_newextension'])) {
-			foreach($_G['gp_newextension'] as $key => $value) {
+		if(is_array($_GET['newextension'])) {
+			foreach($_GET['newextension'] as $key => $value) {
 				if($newextension1 = trim($value)) {
-					if(DB::result_first("SELECT id FROM ".DB::table('forum_attachtype')." WHERE extension='$newextension1'")) {
+					if(C::t('forum_attachtype')->count_by_extension_fid($newextension1, 0)) {
 						cpmsg('attachtypes_duplicate', '', 'error');
 					}
-					DB::insert('forum_attachtype', array(
+					C::t('forum_attachtype')->insert(array(
 						'extension' => $newextension1,
-						'maxsize' => $_G['gp_newmaxsize'][$key] * 1024,
+						'maxsize' => $_GET['newmaxsize'][$key] * 1024,
+						'fid' => 0
 					));
 				}
 			}
 		}
 
+		updatecache('attachtype');
 		cpmsg('attachtypes_succeed', 'action=misc&operation=attachtype', 'succeed');
 
 	}
 
 } elseif($operation == 'cron') {
 
-	if(empty($_G['gp_edit']) && empty($_G['gp_run'])) {
+	if(empty($_GET['edit']) && empty($_GET['run'])) {
 
 		if(!submitcheck('cronssubmit')) {
 
@@ -1088,24 +1083,24 @@ var rowtypedata = [
 
 		} else {
 
-			if($ids = dimplode($_G['gp_delete'])) {
+			if($ids = dimplode($_GET['delete'])) {
 				DB::delete('common_cron', "cronid IN ($ids) AND type='user'");
 			}
 
-			if(is_array($_G['gp_namenew'])) {
-				foreach($_G['gp_namenew'] as $id => $name) {
+			if(is_array($_GET['namenew'])) {
+				foreach($_GET['namenew'] as $id => $name) {
 					$newcron = array(
-						'name' => dhtmlspecialchars($_G['gp_namenew'][$id]),
-						'available' => $_G['gp_availablenew'][$id]
+						'name' => dhtmlspecialchars($_GET['namenew'][$id]),
+						'available' => $_GET['availablenew'][$id]
 					);
-					if(empty($_G['gp_availablenew'][$id])) {
+					if(empty($_GET['availablenew'][$id])) {
 						$newcron['nextrun'] = '0';
 					}
 					DB::update('common_cron', $newcron, "cronid='$id'");
 				}
 			}
 
-			if($newname = trim($_G['gp_newname'])) {
+			if($newname = trim($_GET['newname'])) {
 				DB::insert('common_cron', array(
 					'name' => dhtmlspecialchars($newname),
 					'type' => 'user',
@@ -1135,7 +1130,7 @@ var rowtypedata = [
 
 	} else {
 
-		$cronid = empty($_G['gp_run']) ? $_G['gp_edit'] : $_G['gp_run'];
+		$cronid = empty($_GET['run']) ? $_GET['edit'] : $_GET['run'];
 		$cron = DB::fetch_first("SELECT * FROM ".DB::table('common_cron')." WHERE cronid='$cronid'");
 		if(!$cron) {
 			cpmsg('cron_not_found', '', 'error');
@@ -1144,7 +1139,7 @@ var rowtypedata = [
 		$cronminute = str_replace("\t", ',', $cron['minute']);
 		$cron['minute'] = explode("\t", $cron['minute']);
 
-		if(!empty($_G['gp_edit'])) {
+		if(!empty($_GET['edit'])) {
 
 			if(!submitcheck('editsubmit')) {
 
@@ -1180,9 +1175,9 @@ var rowtypedata = [
 
 			} else {
 
-				$daynew = $_G['gp_weekdaynew'] != -1 ? -1 : $_G['gp_daynew'];
-				if(strpos($_G['gp_minutenew'], ',') !== FALSE) {
-					$minutenew = explode(',', $_G['gp_minutenew']);
+				$daynew = $_GET['weekdaynew'] != -1 ? -1 : $_GET['daynew'];
+				if(strpos($_GET['minutenew'], ',') !== FALSE) {
+					$minutenew = explode(',', $_GET['minutenew']);
 					foreach($minutenew as $key => $val) {
 						$minutenew[$key] = $val = intval($val);
 						if($val < 0 || $var > 59) {
@@ -1192,28 +1187,26 @@ var rowtypedata = [
 					$minutenew = array_slice(array_unique($minutenew), 0, 12);
 					$minutenew = implode("\t", $minutenew);
 				} else {
-					$minutenew = intval($_G['gp_minutenew']);
+					$minutenew = intval($_GET['minutenew']);
 					$minutenew = $minutenew >= 0 && $minutenew < 60 ? $minutenew : '';
 				}
 
-				if(preg_match("/[\\\\\/\:\*\?\"\<\>\|]+/", $_G['gp_filenamenew'])) {
+				if(preg_match("/[\\\\\/\:\*\?\"\<\>\|]+/", $_GET['filenamenew'])) {
 					cpmsg('crons_filename_illegal', '', 'error');
-				} elseif(!is_readable(DISCUZ_ROOT.($cronfile = "./source/include/cron/{$_G['gp_filenamenew']}"))) {
+				} elseif(!is_readable(DISCUZ_ROOT.($cronfile = "./source/include/cron/{$_GET['filenamenew']}"))) {
 					cpmsg('crons_filename_invalid', '', 'error', array('cronfile' => $cronfile));
-				} elseif($_G['gp_weekdaynew'] == -1 && $daynew == -1 && $_G['gp_hournew'] == -1 && $minutenew === '') {
+				} elseif($_GET['weekdaynew'] == -1 && $daynew == -1 && $_GET['hournew'] == -1 && $minutenew === '') {
 					cpmsg('crons_time_invalid', '', 'error');
 				}
 
 				DB::update('common_cron', array(
-					'weekday' => $_G['gp_weekdaynew'],
+					'weekday' => $_GET['weekdaynew'],
 					'day' => $daynew,
-					'hour' => $_G['gp_hournew'],
+					'hour' => $_GET['hournew'],
 					'minute' => $minutenew,
-					'filename' => trim($_G['gp_filenamenew']),
+					'filename' => trim($_GET['filenamenew']),
 				), "cronid='$cronid'");
 
-				updatecache('crons');
-				require_once libfile('class/cron');
 				discuz_cron::run($cronid);
 
 				cpmsg('crons_succeed', 'action=misc&operation=cron', 'succeed');
@@ -1225,7 +1218,6 @@ var rowtypedata = [
 			if(!file_exists(DISCUZ_ROOT.($cronfile = "./source/include/cron/$cron[filename]"))) {
 				cpmsg('crons_run_invalid', '', 'error', array('cronfile' => $cronfile));
 			} else {
-				require_once libfile('class/cron');
 				discuz_cron::run($cron['cronid']);
 				cpmsg('crons_run_succeed', 'action=misc&operation=cron', 'succeed');
 			}
@@ -1238,9 +1230,7 @@ var rowtypedata = [
 
 	require_once libfile('function/post');
 
-	$focus = DB::result_first("SELECT svalue FROM ".DB::table('common_setting')." WHERE skey='focus'");
-	$focus = unserialize($focus);
-
+	$focus = C::t('common_setting')->fetch('focus', true);
 	$focus_position_array = array(
 		array('portal', cplang('misc_focus_position_portal')),
 		array('home', cplang('misc_focus_position_home')),
@@ -1286,18 +1276,15 @@ var rowtypedata = [
 			$newfocus['title'] = $focus['title'];
 			$newfocus['data'] = array();
 			if(isset($focus['data']) && is_array($focus['data'])) foreach($focus['data'] as $k => $v) {
-				if(is_array($_G['gp_delete']) && in_array($k, $_G['gp_delete'])) {
+				if(is_array($_GET['delete']) && in_array($k, $_GET['delete'])) {
 					unset($focus['data'][$k]);
 				} else {
-					$v['available'] = $_G['gp_available'][$k] ? 1 : 0;
+					$v['available'] = $_GET['available'][$k] ? 1 : 0;
 					$newfocus['data'][$k] = $v;
 				}
 			}
 			$newfocus['cookie'] = $focus['cookie'];
-			DB::insert('common_setting', array(
-				'skey' => 'focus',
-				'svalue' => addslashes(serialize(dstripslashes($newfocus))),
-			), false, true);
+			C::t('common_setting')->update('focus', $newfocus);
 			updatecache(array('setting', 'focus'));
 
 			cpmsg('focus_update_succeed', 'action=misc&operation=focus', 'succeed');
@@ -1332,29 +1319,26 @@ var rowtypedata = [
 
 		} else {
 
-			if($_G['gp_focus_url'] && $_G['gp_focus_subject'] && $_G['gp_focus_summary']) {
+			if($_GET['focus_url'] && $_GET['focus_subject'] && $_GET['focus_summary']) {
 
 				if(is_array($focus['data'])) {
 					foreach($focus['data'] as $item) {
-						if($item['url'] == $_G['gp_focus_url']) {
+						if($item['url'] == $_GET['focus_url']) {
 							cpmsg('focus_topic_exists', 'action=misc&operation=focus', 'error');
 						}
 					}
 				}
 				$focus['data'][] = array(
-					'url' => $_G['gp_focus_url'],
+					'url' => $_GET['focus_url'],
 					'available' => '1',
-					'subject' => cutstr($_G['gp_focus_subject'], 80),
-					'summary' => $_G['gp_focus_summary'],
-					'image' => $_G['gp_focus_image'],
+					'subject' => cutstr($_GET['focus_subject'], 80),
+					'summary' => $_GET['focus_summary'],
+					'image' => $_GET['focus_image'],
 					'aid' => 0,
-					'filename' => basename($_G['gp_focus_image']),
-					'position' => $_G['gp_focus_position'],
+					'filename' => basename($_GET['focus_image']),
+					'position' => $_GET['focus_position'],
 				);
-				DB::insert('common_setting', array(
-					'skey' => 'focus',
-					'svalue' => addslashes(serialize(dstripslashes($focus))),
-				), false, true);
+				C::t('common_setting')->update('focus', $focus);
 				updatecache(array('setting', 'focus'));
 			} else {
 				cpmsg('focus_topic_addrequired', '', 'error');
@@ -1365,7 +1349,7 @@ var rowtypedata = [
 		}
 
 	} elseif($do == 'edit') {
-		$id = intval($_G['gp_id']);
+		$id = intval($_GET['id']);
 		if(!$item = $focus['data'][$id]) {
 			cpmsg('focus_topic_noexists', 'action=misc&operation=focus', 'error');
 		}
@@ -1392,28 +1376,25 @@ var rowtypedata = [
 
 		} else {
 
-			if($_G['gp_focus_url'] && $_G['gp_focus_subject'] && $_G['gp_focus_summary']) {
+			if($_GET['focus_url'] && $_GET['focus_subject'] && $_GET['focus_summary']) {
 				if($item['type'] == 'thread') {
-					$_G['gp_focus_url'] = $item['url'];
+					$_GET['focus_url'] = $item['url'];
 				} else {
-					$focus_filename = basename($_G['gp_focus_image']);
+					$focus_filename = basename($_GET['focus_image']);
 				}
 				$item = array(
-					'url' => $_G['gp_focus_url'],
+					'url' => $_GET['focus_url'],
 					'tid' => $item['tid'],
 					'available' => '1',
-					'subject' => cutstr($_G['gp_focus_subject'], 80),
-					'summary' => $_G['gp_focus_summary'],
-					'image' => $_G['gp_focus_image'],
+					'subject' => cutstr($_GET['focus_subject'], 80),
+					'summary' => $_GET['focus_summary'],
+					'image' => $_GET['focus_image'],
 					'aid' => 0,
 					'filename' => $focus_filename,
-					'position' => $_G['gp_focus_position'],
+					'position' => $_GET['focus_position'],
 				);
 				$focus['data'][$id] = $item;
-				DB::insert('common_setting', array(
-					'skey' => 'focus',
-					'svalue' => addslashes(serialize(dstripslashes($focus)))
-				), false, true);
+				C::t('common_setting')->update('focus', $focus);
 				updatecache(array('setting', 'focus'));
 			}
 
@@ -1441,14 +1422,11 @@ var rowtypedata = [
 
 		} else {
 
-			$focus['title'] = trim($_G['gp_focus_title']);
+			$focus['title'] = trim($_GET['focus_title']);
 			$focus['title'] = empty($focus['title']) ? cplang('misc_focus') : $focus['title'];
-			$focus['cookie'] = trim(intval($_G['gp_focus_cookie']));
+			$focus['cookie'] = trim(intval($_GET['focus_cookie']));
 			$focus['cookie'] = empty($focus['cookie']) ? 0 : $focus['cookie'];
-			DB::insert('common_setting', array(
-				'skey' => 'focus',
-				'svalue' => addslashes(serialize(dstripslashes($focus)))
-			), false, true);
+			C::t('common_setting')->update('focus', $focus);
 			updatecache(array('setting', 'focus'));
 
 			cpmsg('focus_conf_succeed', 'action=misc&operation=focus&do=config', 'succeed');
@@ -1465,7 +1443,7 @@ var rowtypedata = [
 		$key = dfsockopen($url);
 		$newstatdisable = $key == $statkey ? 0 : 1;
 		if($newstatdisable != $statdisable) {
-			DB::query("REPLACE ".DB::table('common_setting')." SET skey='statdisable', svalue='$newstatdisable'");
+			C::t('common_setting')->update('statdisable', $newstatdisable);
 			require_once libfile('function/cache');
 			updatecache('setting');
 		}
@@ -1477,11 +1455,10 @@ var rowtypedata = [
 		if(!submitcheck('optionsubmit')) {
 			$mpp = 10;
 			$startlimit = ($page - 1) * $mpp;
-			$num = DB::result_first("SELECT count(*) FROM ".DB::table('common_admincp_cmenu')." WHERE uid='$_G[uid]' AND sort='1'");
+			$num = C::t('common_admincp_cmenu')->count_by_uid($_G['uid']);
 			$multipage = multi($num, $mpp, $page, ADMINSCRIPT.'?action=misc&operation=custommenu');
 			$optionlist = $ajaxoptionlist = '';
-			$query = DB::query("SELECT id, title, displayorder, url FROM ".DB::table('common_admincp_cmenu')." WHERE uid='$_G[uid]' AND sort='1' ORDER BY displayorder, dateline DESC, clicks DESC LIMIT $startlimit, $mpp");
-			while($custom = DB::fetch($query)) {
+			foreach(C::t('common_admincp_cmenu')->fetch_all_by_uid($_G['uid'], $startlimit, $mpp) as $custom) {
 				$custom['url'] = rawurldecode($custom['url']);
 				$optionlist .= showtablerow('', array('class="td25"', 'class="td28"', '', 'class="td26"'), array(
 					"<input type=\"checkbox\" class=\"checkbox\" name=\"delete[]\" value=\"$custom[id]\">",
@@ -1517,23 +1494,29 @@ EOT;
 
 		} else {
 
-			if($ids = dimplode($_G['gp_delete'])) {
-				DB::query("DELETE FROM ".DB::table('common_admincp_cmenu')." WHERE id IN ($ids) AND uid='$_G[uid]'");
+			if($ids = dimplode($_GET['delete'])) {
+				C::t('common_admincp_cmenu')->delete($_GET['delete'], $_G['uid']);
 			}
 
-			if(is_array($_G['gp_titlenew'])) {
-				foreach($_G['gp_titlenew'] as $id => $title) {
-					$_G['gp_urlnew'][$id] = rawurlencode($_G['gp_urlnew'][$id]);
-					$title = dhtmlspecialchars($_G['gp_langnew'][$id] && lang($_G['gp_langnew'][$id], false) ? $_G['gp_langnew'][$id] : $title);
-					$ordernew = intval($_G['gp_displayordernew'][$id]);
-					DB::query("UPDATE ".DB::table('common_admincp_cmenu')." SET title='$title', displayorder='$ordernew', url='".dhtmlspecialchars($_G['gp_urlnew'][$id])."' WHERE id='$id'");
+			if(is_array($_GET['titlenew'])) {
+				foreach($_GET['titlenew'] as $id => $title) {
+					$_GET['urlnew'][$id] = rawurlencode($_GET['urlnew'][$id]);
+					$title = dhtmlspecialchars($_GET['langnew'][$id] && lang($_GET['langnew'][$id], false) ? $_GET['langnew'][$id] : $title);
+					$ordernew = intval($_GET['displayordernew'][$id]);
+					C::t('common_admincp_cmenu')->update($id, array('title' => $title, 'displayorder' => $ordernew, 'url' => dhtmlspecialchars($_GET['urlnew'][$id])));
 				}
 			}
 
-			if(is_array($_G['gp_newtitle'])) {
-				foreach($_G['gp_newtitle'] as $k => $v) {
-					$_G['gp_urlnew'][$k] = rawurlencode($_G['gp_urlnew'][$k]);
-					DB::query("INSERT INTO ".DB::table('common_admincp_cmenu')." (title, displayorder, url, sort, uid) VALUES ('".dhtmlspecialchars($v)."', '".intval($_G['gp_newdisplayorder'][$k])."', '".dhtmlspecialchars($_G['gp_newurl'][$k])."', '1', '$_G[uid]')");
+			if(is_array($_GET['newtitle'])) {
+				foreach($_GET['newtitle'] as $k => $v) {
+					$_GET['urlnew'][$k] = rawurlencode($_GET['urlnew'][$k]);
+					C::t('common_admincp_cmenu')->insert(array(
+						'title' => dhtmlspecialchars($v),
+						'displayorder' => intval($_GET['newdisplayorder'][$k]),
+						'url' => dhtmlspecialchars($_GET['newurl'][$k]),
+						'sort' => 1,
+						'uid' => $_G['uid'],
+					));
 				}
 			}
 
@@ -1544,10 +1527,10 @@ EOT;
 
 	} elseif($do == 'add') {
 
-		if($_G['gp_title'] && $_G['gp_url']) {
-			admincustom($_G['gp_title'], dhtmlspecialchars($_G['gp_url']), 1);
+		if($_GET['title'] && $_GET['url']) {
+			admincustom($_GET['title'], dhtmlspecialchars($_GET['url']), 1);
 			updatemenu('index');
-			cpmsg('custommenu_add_succeed', rawurldecode($_G['gp_url']), 'succeed', array('title' => cplang($_G['gp_title'])));
+			cpmsg('custommenu_add_succeed', rawurldecode($_GET['url']), 'succeed', array('title' => cplang($_GET['title'])));
 		} else {
 			cpmsg('parameters_error', '', 'error');
 		}

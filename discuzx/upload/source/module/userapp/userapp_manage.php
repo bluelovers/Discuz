@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: userapp_manage.php 20459 2011-02-24 06:04:07Z zhengqingpeng $
+ *      $Id: userapp_manage.php 25889 2011-11-24 09:52:20Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -24,14 +24,14 @@ if(submitcheck('ordersubmit')) {
 	foreach($_POST['order'] as $key => $appid) {
 		$appid = intval($appid);
 		if($_G['my_userapp'][$appid]['menuorder'] != $displayorder) {
-			DB::update('home_userapp', array('menuorder'=>$displayorder), array('uid'=>$space['uid'], 'appid'=>$appid));
+			C::t('home_userapp')->update_by_uid_appid($_G['uid'], $appid, array('menuorder'=>$displayorder));
 		}
 		$displayorder--;
 	}
 
 	$_POST['menunum'] = abs(intval($_POST['menunum']));
 	if($_POST['menunum']) {
-		DB::update('common_member_field_home', array('menunum'=>$_POST['menunum']), array('uid'=>$_G['uid']));
+		C::t('common_member_field_home')->update($_G['uid'], array('menunum' => $_POST['menunum']));
 	}
 
 	showmessage('do_success', 'userapp.php?mod=manage&ac=menu');
@@ -79,8 +79,11 @@ if($_GET['ac'] == 'menu' && $my_suffix == '/userapp/list') {
 			if($value['displayorder']>$max_order) $max_order = $value['displayorder'];
 		}
 	}
-	$query = DB::query("SELECT ua.*, my.iconstatus, my.userpanelarea, my.flag FROM ".DB::table('home_userapp')." ua LEFT JOIN ".DB::table('common_myapp')." my USING(appid) WHERE ua.uid='$_G[uid]' AND ua.allowsidenav='0' ORDER BY ua.menuorder DESC");
-	while($value = DB::fetch($query)) {
+	$userapps = C::t('home_userapp')->fetch_all_by_uid_appid($_G['uid'], 0, 'menuorder');
+	foreach($userapps as $value) {
+		if($value['allowsidenav'] != 0) {
+			continue;
+		}
 		if(!isset($my_userapp[$value['appid']]) && !isset($my_default_userapp[$value['appid']]) && $value['flag'] != -1) {
 			if($value['flag'] == 1) {
 				$my_default_userapp[$value['appid']] = $value;

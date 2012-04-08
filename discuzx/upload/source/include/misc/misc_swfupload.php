@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_swfupload.php 25228 2011-11-01 06:00:54Z zhengqingpeng $
+ *      $Id: misc_swfupload.php 25756 2011-11-22 02:47:45Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -23,11 +23,11 @@ if(!empty($_POST['uid'])) {
 	if(empty($_G['uid']) || $_POST['hash'] != md5($_G['uid'].UC_KEY)) {
 		exit();
 	}
-	$_G['member'] = DB::fetch_first("SELECT * FROM ".DB::table('common_member')." WHERE uid='$_G[uid]' LIMIT 1");
-	$_G['username'] = addslashes($_G['member']['username']);
+	$member = getuserbyuid($_G['uid']);
+	$_G['username'] = addslashes($member['username']);
 
-	loadcache('usergroup_'.$_G['member']['groupid']);
-	$_G['group'] = $_G['cache']['usergroup_'.$_G['member']['groupid']];
+	loadcache('usergroup_'.$member['groupid']);
+	$_G['group'] = $_G['cache']['usergroup_'.$member['groupid']];
 
 } elseif (empty($_G['uid'])) {
 	showmessage('to_login', null, array(), array('showmsg' => true, 'login' => 1));
@@ -41,7 +41,7 @@ if($op == "finish") {
 		album_update_pic($albumid);
 	}
 
-	$space = getspace($_G['uid']);
+	$space = getuserbyuid($_G['uid']);
 
 	if(ckprivacy('upload', 'feed')) {
 		require_once libfile('function/feed');
@@ -113,8 +113,7 @@ if($op == "finish") {
 	$dosave = true;
 
 	if($op == "doodle") {
-		$query = DB::query('SELECT mm.* FROM '.DB::table('common_magic').' cm LEFT JOIN '.DB::table('common_member_magic')." mm ON mm.uid = '$_G[uid]' AND mm.magicid = cm.magicid WHERE cm.identifier = 'doodle'");
-		$magic = DB::fetch($query);
+		$magic = C::t('common_magic')->fetch_member_magic($_G['uid'], 'doodle');
 		if(empty($magic) || $magic['num'] < 1) {
 			$uploadfiles = -8;
 			$dosave = false;

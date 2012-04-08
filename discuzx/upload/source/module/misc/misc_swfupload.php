@@ -4,89 +4,143 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_swfupload.php 18303 2010-11-18 09:56:38Z zhengqingpeng $
+ *      $Id: misc_swfupload.php 29000 2012-03-22 03:52:01Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
-if($_G['gp_operation'] == 'config') {
-
-	$swfhash = md5(substr(md5($_G['config']['security']['authkey']), 8).$_G['uid']);
-	$xmllang = lang('forum/swfupload');
-	$imageexts = array('jpg','jpeg','gif','png','bmp');
-	$forumattachextensions = '';
-	if(!empty($_G['gp_fid'])) {
-		$forum = DB::fetch_first("SELECT ff.attachextensions, f.status, f.level FROM ".DB::table('forum_forumfield')." ff LEFT JOIN ".DB::table('forum_forum')." f ON f.fid=ff.fid WHERE ff.fid='$_G[gp_fid]'");
-		if($forum['status'] == 3 && $forum['level'] && $postpolicy = DB::result_first("SELECT postpolicy FROM ".DB::table('forum_grouplevel')." WHERE levelid='$forum[level]'")) {
-			$postpolicy = unserialize($postpolicy);
-			$forumattachextensions = $postpolicy['attachextensions'];
-		} else {
-			$forumattachextensions = $forum['attachextensions'];
-		}
+$_G['uid'] = intval($_POST['uid']);
+if((empty($_G['uid']) && $_GET['operation'] != 'upload') || $_POST['hash'] != md5(substr(md5($_G['config']['security']['authkey']), 8).$_G['uid'])) {
+	exit();
+} else {
+	if($_G['uid']) {
+		$_G['member'] = getuserbyuid($_G['uid']);
 	}
-	$notallow = array();
-	$extendtype = '';
-	$query = DB::query("SELECT extension, maxsize FROM ".DB::table('forum_attachtype'));
-	while($type = DB::fetch($query)) {
-		if($type['maxsize'] == 0) {
-			$notallow[] = $type['extension'];
-		} else {
-			$extendtype .= "<extendType extension=\"".strtolower($type['extension'])."\">$type[maxsize]</extendType>";
-		}
-	}
-	$_G['group']['attachextensions'] = !$forumattachextensions ? $_G['group']['attachextensions'] : $forumattachextensions;
-	if($_G['group']['attachextensions'] !== '') {
-		$_G['group']['attachextensions'] = str_replace(' ', '', $_G['group']['attachextensions']);
-		$exts = explode(',', $_G['group']['attachextensions']);
-		if($_G['gp_type'] == 'image') {
-			$exts = array_intersect($imageexts, $exts);
-		}
-		foreach($exts as $key => $value) {
-			if(in_array($value, $notallow)) {
-				unset($exts[$key]);
-			}
-		}
-		$_G['group']['attachextensions'] = !empty($exts) ? '*.'.implode(',*.', $exts) : '';
-	} else {
-		foreach($imageexts as $key => $value) {
-			if(in_array($value, $notallow)) {
-				unset($imageexts[$key]);
-			}
-		}
-		$_G['group']['attachextensions'] = $_G['gp_type'] == 'image' ? (!empty($imageexts) ? '*.'.implode(',*.', $imageexts) : '') : '*.*';
-	}
-	$depict = $_G['gp_type'] == 'image' ? 'Image File ' : 'All Support Formats ';
-	$max = 0;
-	if(!empty($_G['group']['maxattachsize'])) {
-		$max = intval($_G['group']['maxattachsize']);
-	} else {
-		$max = @ini_get(upload_max_filesize);
-		$unit = strtolower(substr($max, -1, 1));
-		if($unit == 'k') {
-			$max = intval($max)*1024;
-		} elseif($unit == 'm') {
-			$max = intval($max)*1024*1024;
-		} elseif($unit == 'g') {
-			$max = intval($max)*1024*1024*1024;
-		}
-	}
+	$_G['groupid'] = $_G['member']['groupid'];
+	loadcache('usergroup_'.$_G['member']['groupid']);
+	$_G['group'] = $_G['cache']['usergroup_'.$_G['member']['groupid']];
+}
 
-	@header("Expires: -1");
-	@header("Cache-Control: no-store, private, post-check=0, pre-check=0, max-age=0", FALSE);
-	@header("Pragma: no-cache");
-	@header("Content-type: application/xml; charset=utf-8");
-	echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?><parameter><allowsExtend>".(!empty($_G['group']['attachextensions']) ? "<extend depict=\"$depict\">{$_G[group][attachextensions]}</extend>" : '')."</allowsExtend><language>$xmllang</language><config><userid>$_G[uid]</userid><hash>$swfhash</hash><maxupload>{$max}</maxupload>".(!empty($extendtype) ? "<limitType>$extendtype</limitType>" : "")."</config></parameter>";
+if($_GET['operation'] == 'upload') {
 
-} elseif($_G['gp_operation'] == 'upload') {
-
-	require_once libfile('class/forumupload');
-	if(empty($_G['gp_simple'])) {
+	if(empty($_GET['simple'])) {
 		$_FILES['Filedata']['name'] = addslashes(diconv(urldecode($_FILES['Filedata']['name']), 'UTF-8'));
-		$_FILES['Filedata']['type'] = $_G['gp_filetype'];
+		$_FILES['Filedata']['type'] = $_GET['filetype'];
 	}
 	$upload = new forum_upload();
+} elseif($_GET['operation'] == 'album') {
+
+
+	$showerror = true;
+	if(helper_access::check_module('album')) {
+		require_once libfile('function/spacecp');
+		if($_FILES["Filedata"]['error']) {
+			$file = lang('spacecp', 'file_is_too_big');
+		} else {
+			require_once libfile('function/home');
+			$_FILES["Filedata"]['name'] = addslashes(diconv(urldecode($_FILES["Filedata"]['name']), 'UTF-8'));
+			$file = pic_save($_FILES["Filedata"], 0, '', true, 0);
+			if(!empty($file) && is_array($file)) {
+				$url = pic_get($file['filepath'], 'album', $file['thumb'], $file['remote']);
+				$bigimg = pic_get($file['filepath'], 'album', 0, $file['remote']);
+				echo "{\"picid\":\"$file[picid]\", \"url\":\"$url\", \"bigimg\":\"$bigimg\"}";
+				$showerror = false;
+			}
+		}
+	}
+	if($showerror) {
+		echo "{\"picid\":\"0\", \"url\":\"0\", \"bigimg\":\"0\"}";
+	}
+
+
+} elseif($_GET['operation'] == 'portal') {
+
+	$aid = intval($_POST['aid']);
+	$catid = intval($_POST['catid']);
+	$msg = '';
+	$errorcode = 0;
+	require_once libfile('function/portalcp');
+	if($aid) {
+		$article = C::t('portal_article_title')->fetch($aid);
+		if(!$article) {
+			$errorcode = 1;
+		}
+
+		if(check_articleperm($catid, $aid, $article, false, true) !== true) {
+			$errorcode = 2;
+		}
+
+	} else {
+		if(check_articleperm($catid, $aid, null, false, true) !== true) {
+			$errorcode = 3;
+		}
+	}
+
+	$upload = new discuz_upload();
+
+	$_FILES["Filedata"]['name'] = addslashes(diconv(urldecode($_FILES["Filedata"]['name']), 'UTF-8'));
+	$upload->init($_FILES['Filedata'], 'portal');
+	$attach = $upload->attach;
+	if(!$upload->error()) {
+		$upload->save();
+	}
+	if($upload->error()) {
+		$errorcode = 4;
+	}
+	if(!$errorcode) {
+		if($attach['isimage'] && empty($_G['setting']['portalarticleimgthumbclosed'])) {
+			require_once libfile('class/image');
+			$image = new image();
+			$thumbimgwidth = $_G['setting']['portalarticleimgthumbwidth'] ? $_G['setting']['portalarticleimgthumbwidth'] : 300;
+			$thumbimgheight = $_G['setting']['portalarticleimgthumbheight'] ? $_G['setting']['portalarticleimgthumbheight'] : 300;
+			$attach['thumb'] = $image->Thumb($attach['target'], '', $thumbimgwidth, $thumbimgheight, 2);
+			$image->Watermark($attach['target'], '', 'portal');
+		}
+
+		if(getglobal('setting/ftp/on') && ((!$_G['setting']['ftp']['allowedexts'] && !$_G['setting']['ftp']['disallowedexts']) || ($_G['setting']['ftp']['allowedexts'] && in_array($attach['ext'], $_G['setting']['ftp']['allowedexts'])) || ($_G['setting']['ftp']['disallowedexts'] && !in_array($attach['ext'], $_G['setting']['ftp']['disallowedexts']))) && (!$_G['setting']['ftp']['minsize'] || $attach['size'] >= $_G['setting']['ftp']['minsize'] * 1024)) {
+			if(ftpcmd('upload', 'portal/'.$attach['attachment']) && (!$attach['thumb'] || ftpcmd('upload', 'portal/'.getimgthumbname($attach['attachment'])))) {
+				@unlink($_G['setting']['attachdir'].'/portal/'.$attach['attachment']);
+				@unlink($_G['setting']['attachdir'].'/portal/'.getimgthumbname($attach['attachment']));
+				$attach['remote'] = 1;
+			} else {
+				if(getglobal('setting/ftp/mirror')) {
+					@unlink($attach['target']);
+					@unlink(getimgthumbname($attach['target']));
+					$errorcode = 5;
+				}
+			}
+		}
+
+		$setarr = array(
+			'uid' => $_G['uid'],
+			'filename' => $attach['name'],
+			'attachment' => $attach['attachment'],
+			'filesize' => $attach['size'],
+			'isimage' => $attach['isimage'],
+			'thumb' => $attach['thumb'],
+			'remote' => $attach['remote'],
+			'filetype' => $attach['extension'],
+			'dateline' => $_G['timestamp'],
+			'aid' => $aid
+		);
+		$setarr['attachid'] = C::t('portal_attachment')->insert($setarr, true);
+		if($attach['isimage']) {
+			require_once libfile('function/home');
+			$smallimg = pic_get($attach['attachment'], 'portal', $attach['thumb'], $attach['remote']);
+			$bigimg = pic_get($attach['attachment'], 'portal', 0, $attach['remote']);
+			$coverstr = addslashes(serialize(array('pic'=>'portal/'.$attach['attachment'], 'thumb'=>$attach['thumb'], 'remote'=>$attach['remote'])));
+			echo "{\"aid\":$setarr[attachid], \"isimage\":$attach[isimage], \"smallimg\":\"$smallimg\", \"bigimg\":\"$bigimg\", \"errorcode\":$errorcode, \"cover\":\"$coverstr\"}";
+			exit();
+		} else {
+			$fileurl = 'portal.php?mod=attachment&id='.$attach['attachid'];
+			echo "{\"aid\":$setarr[attachid], \"isimage\":$attach[isimage], \"file\":\"$fileurl\", \"errorcode\":$errorcode}";
+			exit();
+		}
+	} else {
+		echo "{\"aid\":0, \"errorcode\":$errorcode}";
+	}
 
 }
 

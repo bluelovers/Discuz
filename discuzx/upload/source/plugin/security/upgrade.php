@@ -11,14 +11,7 @@ if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
-$data = false;
-$query = DB::query('SHOW FIELDS FROM pre_security_failedlog', '', 'SILENT');
-if($query) {
-	$data = array();
-	while($value = DB::fetch($query)) {
-		$data[$value['Field']] = $value;
-	}
-}
+$field = C::t('#security#security_failedlog')->fetch_all_field();
 $sql = '';
 if (!$field['scheduletime']) {
 	$sql .= "ALTER TABLE `pre_security_failedlog` ADD `scheduletime` INT(10) NOT NULL DEFAULT '0';\n";
@@ -55,5 +48,3 @@ $sql = sprintf($format, $name);
 runquery($sql);
 
 $finish = true;
-
-?>

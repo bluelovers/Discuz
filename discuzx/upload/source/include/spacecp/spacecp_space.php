@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_space.php 9904 2010-05-05 07:54:40Z zhengqingpeng $
+ *      $Id: spacecp_space.php 25510 2011-11-14 02:22:26Z yexinhao $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -20,7 +20,7 @@ if(submitcheck('delappsubmit')) {
 		$setarr = array('privacy' => 5);
 	}
 	$appid = intval($_POST['appid']);
-	DB::update('home_userapp', $setarr, array('uid' => $_G['uid'], 'appid' => $appid));
+	C::t('home_userapp')->update_by_uid_appid($_G['uid'], $appid, $setarr);
 	my_userapp_update($_G['uid'], $appid, $setarr['privacy'], $setarr['allowprofilelink']);
 	showmessage('do_success', dreferer());
 }

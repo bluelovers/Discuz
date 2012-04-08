@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_spacecp.php 22732 2011-05-18 09:30:07Z zhengqingpeng $
+ *      $Id: function_spacecp.php 27757 2012-02-14 03:08:15Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -26,8 +26,8 @@ function album_creat_by_id($albumid, $catid = 0) {
 	} else {
 		$albumid = intval($albumid);
 		if($albumid) {
-			$query = DB::query("SELECT albumname,friend FROM ".DB::table('home_album')." WHERE albumid='$albumid' AND uid='$_G[uid]'");
-			if($value = DB::fetch($query)) {
+			$value = C::t('home_album')->fetch_all_by_uid($_G['uid'], false, 0, 0, $albumid);
+			if($value = $value[0]) {
 				$albumname = addslashes($value['albumname']);
 				$albumfriend = $value['friend'];
 			} else {
@@ -47,20 +47,17 @@ function album_update_pic($albumid, $picid=0) {
 	global $_G;
 
 	$setarr = array();
-	if($picid) {
-		$wheresql = "AND picid='$picid'";
-	} else {
-		$wheresql = "ORDER BY picid DESC LIMIT 1";
-		$piccount = getcount('home_pic', array('albumid'=>$albumid, 'status' => '0'));
-		if(empty($piccount) && getcount('home_pic', array('albumid' => $albumid)) == 0) {
-			DB::query("DELETE FROM ".DB::table('home_album')." WHERE albumid='$albumid'");
+	if(!$picid) {
+		$piccount = C::t('home_pic')->check_albumpic($albumid, 0);
+		if(empty($piccount) && C::t('home_pic')->check_albumpic($albumid) == 0) {
+			C::t('home_album')->delete($albumid);
 			return false;
 		} else {
 			$setarr['picnum'] = $piccount;
 		}
 	}
-	$query = DB::query("SELECT * FROM ".DB::table('home_pic')." WHERE albumid='$albumid' $wheresql");
-	if(!$pic = DB::fetch($query)) {
+	$query = C::t('home_pic')->fetch_all_by_albumid($albumid, 0, 1, $picid, 1);
+	if(!$pic = $query[0]) {
 		return false;
 	}
 	$from = $pic['remote'];
@@ -95,7 +92,7 @@ function album_update_pic($albumid, $picid=0) {
 		}
 	}
 	$setarr['updatetime'] = $_G['timestamp'];
-	DB::update('home_album', $setarr, array('albumid'=>$albumid));
+	C::t('home_album')->update($albumid, $setarr);
 	return true;
 }
 
@@ -106,7 +103,6 @@ function pic_save($FILE, $albumid, $title, $iswatermark = true, $catid = 0) {
 
 	$allowpictype = array('jpg','jpeg','gif','png');
 
-	require_once libfile('class/upload');
 	$upload = new discuz_upload();
 	$upload->init($FILE, 'album');
 
@@ -119,8 +115,8 @@ function pic_save($FILE, $albumid, $title, $iswatermark = true, $catid = 0) {
 	}
 	$oldgid = $_G['groupid'];
 	if(empty($space)) {
-		$_G['member'] = $space = getspace($_G['uid']);
-		$_G['username'] = addslashes($space['username']);
+		$_G['member'] = $space = getuserbyuid($_G['uid']);
+		$_G['username'] = $space['username'];
 		$_G['groupid'] = $space['groupid'];
 	}
 	$_G['member'] = $space;
@@ -220,7 +216,7 @@ function pic_save($FILE, $albumid, $title, $iswatermark = true, $catid = 0) {
 		}
 	}
 
-	$title = getstr($title, 200, 1, 1);
+	$title = getstr($title, 200);
 	$title = censor($title);
 	if(censormod($title) || $_G['group']['allowuploadmod']) {
 		$pic_status = 1;
@@ -243,9 +239,9 @@ function pic_save($FILE, $albumid, $title, $iswatermark = true, $catid = 0) {
 		'remote' => $pic_remote,
 		'status' => $pic_status,
 	);
-	$setarr['picid'] = DB::insert('home_pic', $setarr, 1);
+	$setarr['picid'] = C::t('home_pic')->insert($setarr, 1);
 
-	DB::query("UPDATE ".DB::table('common_member_count')." SET attachsize=attachsize+{$upload->attach['size']} WHERE uid='$_G[uid]'");
+	C::t('common_member_count')->increase($_G['uid'], array('attachsize' => $upload->attach['size']));
 
 	include_once libfile('function/stat');
 	if($pic_status) {
@@ -266,7 +262,6 @@ function stream_save($strdata, $albumid = 0, $fileext = 'jpg', $name='', $title=
 	}
 	$setarr = array();
 
-	require_once libfile('class/upload');
 	$upload = new discuz_upload();
 
 	$filepath = $upload->get_target_dir('album').$upload->get_target_filename('album').'.'.$fileext;
@@ -279,8 +274,8 @@ function stream_save($strdata, $albumid = 0, $fileext = 'jpg', $name='', $title=
 			$size = filesize($newfilename);
 
 			if(empty($space)) {
-				$_G['member'] = $space = getspace($_G['uid']);
-				$_G['username'] = addslashes($space['username']);
+				$_G['member'] = $space = getuserbyuid($_G['uid']);
+				$_G['username'] = $space['username'];
 			}
 			$_G['member'] = $space;
 			loadcache('usergroup_'.$space['groupid']);
@@ -334,8 +329,8 @@ function stream_save($strdata, $albumid = 0, $fileext = 'jpg', $name='', $title=
 				}
 			}
 
-			$filename = addslashes(($name ? $name : substr(strrchr($filepath, '/'), 1)));
-			$title = getstr($title, 200, 1, 1);
+			$filename = $name ? $name : substr(strrchr($filepath, '/'), 1);
+			$title = getstr($title, 200);
 			$title = censor($title);
 			if(censormod($title) || $_G['group']['allowuploadmod']) {
 				$pic_status = 1;
@@ -364,9 +359,9 @@ function stream_save($strdata, $albumid = 0, $fileext = 'jpg', $name='', $title=
 				'remote' => $pic_remote,
 				'status' => $pic_status,
 			);
-			$setarr['picid'] = DB::insert('home_pic', $setarr, 1);
+			$setarr['picid'] = C::t('home_pic')->insert($setarr, 1);
 
-			DB::query("UPDATE ".DB::table('common_member_count')." SET attachsize=attachsize+$size WHERE uid='$_G[uid]'");
+			C::t('common_member_count')->increase($_G['uid'], array('attachsize' => $size));
 
 			include_once libfile('function/stat');
 			updatestat('pic');
@@ -382,18 +377,18 @@ function stream_save($strdata, $albumid = 0, $fileext = 'jpg', $name='', $title=
 function album_creat($arr) {
 	global $_G;
 
-	$albumid = DB::result(DB::query("SELECT albumid FROM ".DB::table('home_album')." WHERE albumname='$arr[albumname]' AND uid='$_G[uid]'"));
+	$albumid = C::t('home_album')->fetch_albumid_by_albumname_uid($arr['albumname'], $_G['uid']);
 	if($albumid) {
 		return $albumid;
 	} else {
 		$arr['uid'] = $_G['uid'];
 		$arr['username'] = $_G['username'];
 		$arr['dateline'] = $arr['updatetime'] = $_G['timestamp'];
-		$albumid = DB::insert('home_album', $arr, 1);
+		$albumid = C::t('home_album')->insert($arr, TRUE);
 
-		DB::query("UPDATE ".DB::table('common_member_count')." SET albums = albums + 1 WHERE uid = '$_G[uid]'");
+		C::t('common_member_count')->increase($_G['uid'], array('albums' => 1));
 		if(isset($arr['catid']) && $arr['catid']) {
-			DB::query("UPDATE ".DB::table('home_album_category')." SET num=num+1 WHERE catid='$arr[catid]'");
+			C::t('home_album_category')->update_num_by_catid('1', $arr['catid']);
 		}
 
 		return $albumid;
@@ -429,8 +424,8 @@ function getfilepath($fileext, $mkdir=false) {
 function getalbumpic($uid, $id) {
 	global $_G;
 
-	$query = DB::query("SELECT filepath, thumb FROM ".DB::table('home_pic')." WHERE albumid='$id' AND uid='$uid' ORDER BY thumb DESC, dateline DESC LIMIT 0,1");
-	if($pic = DB::fetch($query)) {
+	$pic = C::t('home_pic')->fetch_album_pic($id, $uid);
+	if($pic) {
 		return $pic['thumb'] ? getimgthumbname($pic['filepath']) : $pic['filepath'];
 	} else {
 		return '';
@@ -441,8 +436,8 @@ function getclassarr($uid) {
 	global $_G;
 
 	$classarr = array();
-	$query = DB::query("SELECT classid, classname FROM ".DB::table('home_class')." WHERE uid='$uid'");
-	while ($value = DB::fetch($query)) {
+	$query = C::t('home_class')->fetch_all_by_uid($uid);
+	foreach($query as $value) {
 		$classarr[$value['classid']] = $value;
 	}
 	return $classarr;
@@ -452,8 +447,8 @@ function getalbums($uid) {
 	global $_G;
 
 	$albums = array();
-	$query = DB::query("SELECT * FROM ".DB::table('home_album')." WHERE uid='$uid' ORDER BY albumid DESC");
-	while ($value = DB::fetch($query)) {
+	$query = C::t('home_album')->fetch_all_by_uid($uid, 'albumid');
+	foreach($query as $value) {
 		$albums[$value['albumid']] = $value;
 	}
 	return $albums;
@@ -474,31 +469,30 @@ function hot_update($idtype, $id, $hotuser) {
 	if($newhot == $_G['setting']['feedhotmin']) {
 		$tablename = gettablebyidtype($idtype);
 		if($tablename) {
-			$query = DB::query("SELECT uid FROM ".DB::table($tablename)." WHERE $idtype='$id'");
-			$item = DB::fetch($query);
-			updatecreditbyaction('hotinfo', $item['uid']);
+			$item = C::t($tablename)->fetch_by_id_idtype($id);
+			$itemuid = $item['uid'];
+			updatecreditbyaction('hotinfo', $itemuid);
 		}
 	}
 
 	switch ($idtype) {
 		case 'blogid':
-			DB::query("UPDATE ".DB::table('home_blogfield')." SET hotuser='$hotuser' WHERE blogid='$id'");
-			DB::query("UPDATE ".DB::table('home_blog')." SET hot=hot+1 WHERE blogid='$id'");
+			C::t('home_blogfield')->update($id, array('hotuser' => $hotuser));
+			C::t('home_blog')->increase($id, 0, array('hot' => 1));
 			break;
 		case 'picid':
-			DB::query("REPLACE INTO ".DB::table('home_picfield')." (picid, hotuser) VALUES ('$id', '$hotuser')");
-			DB::query("UPDATE ".DB::table('home_pic')." SET hot=hot+1 WHERE picid='$id'");
+			C::t('home_picfield')->insert(array('picid' => $id, 'hotuser' => $hotuser), 0, 1);
+			C::t('home_pic')->update_hot($id);
 			break;
 		case 'sid':
-			DB::query("UPDATE ".DB::table('home_share')." SET hot=hot+1, hotuser='$hotuser' WHERE sid='$id'");
+			C::t('home_share')->update_hot_by_sid($id, $hotuser);
 			break;
 		default:
 			return false;
 	}
-	$query = DB::query("SELECT feedid, friend FROM ".DB::table('home_feed')." WHERE id='$id' AND idtype='$idtype'");
-	if($feed = DB::fetch($query)) {
+	if($feed = C::t('home_feed')->fetch($id, $idtype)) {
 		if(empty($feed['friend'])) {
-			DB::query("UPDATE ".DB::table('home_feed')." SET hot=hot+1 WHERE feedid='$feed[feedid]'");
+			C::t('home_feed')->update_hot_by_feedid($feed['feedid'], 1);
 		}
 	} elseif($idtype == 'picid') {
 		require_once libfile('function/feed');
@@ -523,7 +517,7 @@ function gettablebyidtype($idtype) {
 function privacy_update() {
 	global $_G, $space;
 
-	DB::update('common_member_field_home', array('privacy'=>addslashes(serialize($space['privacy']))), array('uid'=>$_G['uid']));
+	C::t('common_member_field_home')->update($_G['uid'], array('privacy'=>serialize($space['privacy'])));
 }
 
 function ckrealname($return=0) {
@@ -600,7 +594,7 @@ function videophoto_upload($FILE, $uid) {
 function isblacklist($touid) {
 	global $_G;
 
-	return getcount('home_blacklist', array('uid'=>$touid, 'buid'=>$_G['uid']));
+	return C::t('home_blacklist')->count_by_uid_buid($touid, $_G['uid']);
 }
 
 function emailcheck_send($uid, $email) {
@@ -618,7 +612,9 @@ function emailcheck_send($uid, $email) {
 		));
 
 		require_once libfile('function/mail');
-		sendmail($email, $mailsubject, $mailmessage);
+		if(!sendmail($email, $mailsubject, $mailmessage)) {
+			runlog('sendmail', "$email sendmail failed.");
+		}
 	}
 }
 
@@ -681,4 +677,51 @@ function interval_check($type) {
 	return $waittime;
 }
 
+function geturltitle($link, $charset = '') {
+	$title = $linkcharset = '';
+	$linkstr = gzfile($link);
+	$linkstr = implode('', $linkstr);
+	if(!$charset) {
+		preg_match('/<meta [^>]*charset="?(.*)"/i', $linkstr, $linkcharset);
+		$charset = strtolower($linkcharset[1]);
+	}
+	if(!$charset) {
+		return $title;
+	}
+	if($charset != strtolower(CHARSET)) {
+		$linkstr = diconv($linkstr, $charset);
+	}
+	if(!empty($linkstr) && preg_match('/\<title\>(.*)\<\/title\>/i', $linkstr, $title)) {
+		$tmptitle = explode('_', $title[1]);
+		if($title[1] == $tmptitle[0]) {
+			$tmptitle = explode('-', $title[1]);
+		}
+		$title = trim($tmptitle[0]);
+	}
+	return $title;
+}
+
+function allowverify($vid) {
+	global $_G;
+
+	if(empty($_G['setting']['verify'])) {
+		loadcache('setting');
+	}
+	$allow = false;
+	$vid = 0 < $vid && $vid < 8 ? intval($vid) : 0;
+	if($vid) {
+		$setting = $_G['setting']['verify'][$vid];
+		if($setting['available'] && (empty($setting['groupid']) || in_array($_G['groupid'], $setting['groupid']))) {
+			$allow = true;
+		}
+	} else {
+		foreach($_G['setting']['verify'] as $key => $setting) {
+			if($setting['available'] && (empty($setting['groupid']) || in_array($_G['groupid'], $setting['groupid']))) {
+				$allow = true;
+				break;
+			}
+		}
+	}
+	return $allow;
+}
 ?>

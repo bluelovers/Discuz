@@ -1,8 +1,8 @@
 /*
-	[Discuz!] (C)2001-2009 Comsenz Inc.
+	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: portal_diy.js 27875 2012-02-16 04:24:34Z zhangguosheng $
+	$Id: portal_diy.js 29297 2012-04-01 01:59:13Z zhangguosheng $
 */
 
 var drag = new Drag();
@@ -654,17 +654,25 @@ drag.extend({
 
 		var height = Util.getFinallyStyle(bcontent, 'height');
 		bcontent.style.lineHeight = height == 'auto' ? '' : (height == '0px' ? '20px' : height);
+		var boldcontent = bcontent.innerHTML;
 		bcontent.innerHTML = '<center>正在加载内容...</center>';
 		var x = new Ajax();
 		x.get('portal.php?mod=portalcp&ac=block&op=getblock&forceupdate=1&inajax=1&bid='+bid+'&tpl='+document.diyform.template.value, function(s) {
-			var obj = document.createElement('div');
-			obj.innerHTML = s;
-			bcontent.parentNode.removeChild(bcontent);
-			$(id).innerHTML = obj.childNodes[0].innerHTML;
-			evalscript(s);
-			if(s.indexOf('runslideshow()') != -1) {runslideshow();}
-			drag.initPosition();
-			if (all) {drag.getBlocks();}
+			if(s.indexOf('errorhandle_') != -1) {
+				bcontent.innerHTML = boldcontent;
+				runslideshow();
+				showDialog('抱歉，您没有权限添加或编辑模块', 'alert');
+				doane();
+			} else {
+				var obj = document.createElement('div');
+				obj.innerHTML = s;
+				bcontent.parentNode.removeChild(bcontent);
+				$(id).innerHTML = obj.childNodes[0].innerHTML;
+				evalscript(s);
+				if(s.indexOf('runslideshow()') != -1) {runslideshow();}
+				drag.initPosition();
+				if (all) {drag.getBlocks();}
+			}
 		});
 	},
 	frameExport : function (e) {
@@ -683,6 +691,8 @@ drag.extend({
 				var dom  = document.createElement('div');
 				dom.innerHTML = '<form id="frameexport" method="post" action="" target="_blank"><input type="hidden" name="frame" value="" />\n\
 					<input type="hidden" name="tpl" value="'+document.diyform.template.value+'" />\n\
+					<input type="hidden" name="tpldirectory" value="'+document.diyform.tpldirectory.value+'" />\n\
+					<input type="hidden" name="diysign" value="'+document.diyform.diysign.value+'" />\n\
 					<input type="hidden" name="formhash" value="'+document.diyform.formhash.value+'" /><input type="hidden" name="exportsubmit" value="true"/></form>';
 				$('append_parent').appendChild(dom.childNodes[0]);
 			}
@@ -694,7 +704,7 @@ drag.extend({
 	},
 	openFrameImport : function (type) {
 		type = type || 0;
-		showWindow('showimport','portal.php?mod=portalcp&ac=diy&op=import&tpl='+document.diyform.template.value+'&type='+type, 'get');
+		showWindow('showimport','portal.php?mod=portalcp&ac=diy&op=import&tpl='+document.diyform.template.value+'&tpldirectory='+document.diyform.tpldirectory.value+'&diysign='+document.diyform.diysign.value+'&type='+type, 'get');
 	},
 	endBlockForceUpdateBatch : function () {
 		if($('allupdate')) {
@@ -729,6 +739,7 @@ drag.extend({
 		var wait = function() {
 			if($('fwin_dialog_submit')) {
 				$('fwin_dialog_submit').style.display = 'none';
+				$('fwin_dialog_cancel').className = 'pn pnc';
 				setTimeout(function(){drag.getBlocks()},500);
 			} else {
 				setTimeout(wait,100);
@@ -981,7 +992,7 @@ spaceDiy.extend({
 		this.disablePreviewButton();
 		document.diyform.optype.value = 'canceldiy';
 		var x = new Ajax();
-		x.post($('diyform').action+'&inajax=1','optype=canceldiy&diysubmit=1&template='+document.diyform.template.value+'&savemod='+document.diyform.savemod.value+'&formhash='+document.diyform.formhash.value,function(s){});
+		x.post($('diyform').action+'&inajax=1','optype=canceldiy&diysubmit=1&template='+document.diyform.template.value+'&savemod='+document.diyform.savemod.value+'&formhash='+document.diyform.formhash.value+'&tpldirectory='+document.diyform.tpldirectory.value+'&diysign='+document.diyform.diysign.value,function(s){});
 	},
 	switchBlockclass : function(blockclass) {
 		var navs = $('contentblockclass_nav').getElementsByTagName('a');

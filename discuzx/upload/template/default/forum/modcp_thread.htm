@@ -8,7 +8,7 @@
 		<li><a href="{$cpscript}?mod=modcp&action=recyclebinpost{$forcefid}" hidefocus="true">{lang mod_option_subject_recyclebinpost}</a></li>
 	</ul>
 	<script type="text/javascript" src="{$_G[setting][jspath]}calendar.js?{VERHASH}"></script>
-	<form method="post" autocomplete="off" action="{$cpscript}?mod=modcp&action=$_G[gp_action]&op=$op">
+	<form method="post" autocomplete="off" action="{$cpscript}?mod=modcp&action=$_GET[action]&op=$op">
 		<input type="hidden" name="do" value="search">
 		<input type="hidden" name="formhash" value="{FORMHASH}">
 		<div class="exfm">
@@ -17,7 +17,7 @@
 					<th width="15%">{lang mod_option_selectforum}:</th>
 					<td width="35%">
 						<span class="ftid">
-							<select name="fid" id="fid" width="168" class="ps">
+							<select name="fid" id="fid" width="168" class="ps" change="getthreadclass();">
 								<option value="">{lang modcp_select_forum}</option>
 								<!--{loop $modforums[list] $id $name}-->
 								<option value="$id" {if $id == $_G[fid]}selected{/if}>$name</option>
@@ -60,6 +60,24 @@
 					<td><input type="text" class="px" size="10" value="$result[repliesmore]" name="repliesmore"/> {lang modcp_posts_to} <input type="text" class="px" size="10" value="$result[repliesless]" name="repliesless"/> </td>
 				</tr>
 				<tr>
+					<th width="15%">{lang mod_option_selectthreadclass}:</th>
+					<td width="35%">
+						<span class="ftid" id="threadclass">
+							<select name="typeid" id="typeid" width="168" class="ps">
+								<!--{if $threadclasslist}-->
+									<option value="">{lang modcp_select_threadclass}</option>
+								<!--{loop $threadclasslist $threadclass}-->
+									<option value="$threadclass[typeid]" {if $_GET['typeid'] == $threadclass[typeid]}selected{/if}>$threadclass[name]</option>
+								<!--{/loop}-->
+								<!--{else}-->
+									<option value="">{lang none}</option>
+								<!--{/if}-->
+							</select>
+						</span>
+					</td>
+					<th></th><td></td>
+				</tr>
+				<tr>
 					<td></td>
 					<td colspan="3"><button value="true" id="searchsubmit" name="submit" class="pn" type="submit"><strong>{lang submit}</strong></button></td>
 				</tr>
@@ -76,7 +94,7 @@
 		<div id="threadlist" style="position: relative;" class="tl">
 			<form method="post" autocomplete="off" name="moderate" id="moderate" action="forum.php?mod=topicadmin&action=moderate&fid=$_G[fid]&infloat=yes&nopost=yes">
 				<input type="hidden" name="formhash" value="{FORMHASH}" />
-				<input type="hidden" name="frommodcp" value="{if empty($do)}1{else}2{/if}" />
+				<input type="hidden" name="frommodcp" value="{if $op == 'thread'}1{else}2{/if}" />
 				<table cellspacing="0" cellpadding="0">
 					<tbody class="th">
 						<tr>
@@ -176,5 +194,6 @@
 </div>
 <script type="text/javascript" reload="1">
 	simulateSelect('fid');
+	simulateSelect('typeid');
 	simulateSelect('threadoption');
 </script>

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_template.php 22155 2011-04-22 08:42:02Z monkey $
+ *      $Id: lang_template.php 29284 2012-03-31 09:42:04Z chenmengshu $
  *
  *      This file is automatically generate
  */
@@ -64,10 +64,14 @@ $lang = array (
   'search_group_result_keyword' => '结果: <em>找到相关{$_G[setting][navs][3][navname]} $groupnum 个,&nbsp;&nbsp;相关主题 $index[num] 个</em>',
   'search_group_viewgroup' => '查看{$_G[setting][navs][3][navname]}',
   'threads' => '主题',
+  'subscribe' => '订阅',
+  'comment' => '评论',
+  'lastupdate' => '最后更新',
   'return_homepage' => '返回首页',
   'visit_my_space' => '访问我的空间',
   'album' => '相册',
   'blog' => '日志',
+  'collection' => '淘帖',
   'portal' => '文章',
   'quick' => '快速',
   'search_adv' => '高级',

@@ -4,13 +4,21 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_core.php 22638 2011-05-16 06:29:59Z svn_project_zhangjie $
+ *      $Id: lang_core.php 28082 2012-02-22 06:58:29Z monkey $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 $lang = array
 (
 	'nextpage' => '下一页',
 	'prevpage' => '上一页',
+	'pageunit' => '页',
+	'total' => '共',
+	'10k' => '万',
+	'pagejumptip' => '输入页码，按回车快速跳转',
 	'date' => array(
 		'before' => '前',
 		'day' => '天',
@@ -40,7 +48,7 @@ $lang = array
 
 	'seccode_image_tips' => '输入下图中的字符<br />',
 	'seccode_image_ani_tips' => '请输入下面动画图片中的字符<br />',
-	'seccode_sound_tips' => '输入你听到的字符<br />',
+	'seccode_sound_tips' => '输入您听到的字符<br />',
 	'secqaa_tips' => '输入下面问题的答案<br />',
 
 	'fullblankspace' => '　',
@@ -173,7 +181,7 @@ $lang = array
 	'title_ranklist_group' => '群组排行',
 	'title_ranklist_app' => '应用排行',
 	'title_ranklist_index' => '全部排行',
-	'title_ranklist_index' => '排行榜',
+	'title_ranklist_rankname' => '排行榜',
 	'title_search' => '搜索',
 	'title_topic_management' => '创建专题',
 	'title_portal_management' => '门户管理',
@@ -199,9 +207,18 @@ $lang = array
 	'title_userapp_index_we' => '好友在玩什么',
 	'title_userapp_index_me' => '我在玩的',
 	'title_userapp_manage' => '{userapp}管理',
+
+	'title_collection' => '淘帖',
+	'title_collection_create' => '创建淘专辑',
+	'title_collection_edit' => '编辑淘专辑',
+	'title_collection_comment_list' => '评论列表',
+	'title_collection_followers_list' => '订阅用户列表',
+
 	'faq' => '帮助',
 	'search' => '搜索',
 	'page' => '第{page}页',
+
+	'close' => '关闭',
 );
 
 ?>

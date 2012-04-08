@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: adv_thread.php 20389 2011-02-23 02:57:06Z svn_project_zhangjie $
+ *      $Id: adv_thread.php 23660 2011-08-02 06:59:11Z maruitao $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -102,8 +102,8 @@ class adv_thread {
 			'create' => '
 				$adid = $adids[array_rand($adids)];
 				if($parameters[$adid][\'position\'] == 3) {
-					$_G[\'thread\'][\'contentmr\'] = $parameters[$adid][\'width\'] ? $parameters[$adid][\'width\'] : 120;
-					$extra = \'style="margin-left:10px;width:\'.$_G[\'thread\'][\'contentmr\'].\'px"\';
+					$_G[\'thread\'][\'contentmr\'] = $parameters[$adid][\'width\'] ? $parameters[$adid][\'width\'].\'px\' : \'auto\';
+					$extra = \'style="margin-left:10px;width:\'.$_G[\'thread\'][\'contentmr\'].\'"\';
 				}
 				$adcode = $codes[$adid];
 			',

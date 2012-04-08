@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_portalcp.php 28956 2012-03-20 10:15:37Z zhangguosheng $
+ *      $Id: function_portalcp.php 29236 2012-03-30 05:34:47Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -21,15 +21,14 @@ function get_uploadcontent($attach, $type='portal', $dotype='') {
 		$check = $attach['pic'] == $type.'/'.$attach['attachment'] ? 'checked' : $dotype;
 		$aid = $check ? $attach['aid'] : '';
 
-		$return .= '<table id="attach_list_'.$attach['attachid'].'" width="100%" class="xi2">';
-		$return .= '<td width="50" class="bbs"><a href="'.$pic.'" target="_blank"><img src="'.($small_pic ? $small_pic : $pic).'" width="40" height="40"></a></td>';
-		$return .= '<td align="right" class="bbs">';
-		$return .= '<label for="setconver'.$attach['attachid'].'"><input type="radio" name="setconver" id="setconver'.$attach['attachid'].'" class="pr" value="1" onclick=setConver(\''.addslashes(serialize(array('pic'=>$type.'/'.$attach['attachment'], 'thumb'=>$attach['thumb'], 'remote'=>$attach['remote']))).'\') '.$check.'>'.lang('portalcp', 'set_to_conver').'</label><br>';
-		if($small_pic) $return .= '<a href="javascript:void(0);" onclick="insertImage(\''.$small_pic.'\', \''.$pic.'\');return false;">'.lang('portalcp', 'insert_small_image').'</a><br>';
-		$return .= '<a href="javascript:void(0);" onclick="insertImage(\''.$pic.'\');return false;">'.lang('portalcp', 'insert_large_image').'</a><br>';
-		if($type == 'portal') $return .= '<a href="javascript:void(0);" onclick="deleteAttach(\''.$attach['attachid'].'\', \'portal.php?mod=attachment&id='.$attach['attachid'].'&aid='.$aid.'&op=delete\');return false;">'.lang('portalcp', 'delete').'</a>';
-		$return .= '</td>';
-		$return .= '</table>';
+		$return .= '<a href="javascript:;" class="opattach"><span class="opattach_ctrl">';
+		$return .= '<span onclick="insertImage(\''.$pic.'\');" class="cur1">'.lang('portalcp', 'insert_large_image').'</span>';
+		$return .= '<span class="pipe">|</span>';
+		if($small_pic) $return .= '<span onclick="insertImage(\''.$small_pic.'\', \''.$pic.'\');" class="cur1">'.lang('portalcp', 'small_image').'</span>';
+		$return .= '</span><img src="'.($small_pic ? $small_pic : $pic).'" onclick="insertImage(\''.$pic.'\');" class="cur1"></a>';
+		$return .= '<label for="setconver'.$attach['attachid'].'" class="cur1 xi2"><input type="radio" name="setconver" id="setconver'.$attach['attachid'].'" class="pr" value="1" onclick="setConver(\''.addslashes(serialize(array('pic'=>$type.'/'.$attach['attachment'], 'thumb'=>$attach['thumb'], 'remote'=>$attach['remote']))).'\') '.$check.'>'.lang('portalcp', 'set_to_conver').'</label>';
+		$return .= '<span class="pipe">|</span>';
+		if($type == 'portal') $return .= '<span class="cur1 xi2" onclick="deleteAttach(\''.$attach['attachid'].'\', \'portal.php?mod=attachment&id='.$attach['attachid'].'&aid='.$aid.'&op=delete\');">'.lang('portalcp', 'delete').'</span>';
 
 	} else {
 		$attach_url = $type == 'forum' ? 'forum.php?mod=attachment&aid='.aidencode($attach['attachid'], 1) : 'portal.php?mod=attachment&id='.$attach['attachid'];
@@ -45,16 +44,57 @@ function get_uploadcontent($attach, $type='portal', $dotype='') {
 
 }
 
+function get_upload_content($attachs, $dotype='') {
+	$html = '';
+	$dotype = $dotype ? 'checked' : '';
+	$i = 0;
+	foreach($attachs as $key => $attach) {
+		$type = $attach['from'] == 'forum' ? 'forum' : 'portal';
+		$html .= '<td id="attach_list_'.$attach['attachid'].'">';
+		if($attach['isimage']) {
+			$pic = pic_get($attach['attachment'], $type, $attach['thumb'], $attach['remote'], 0);
+			$small_pic = $attach['thumb'] ? getimgthumbname($pic) : '';
+			$check = $attach['pic'] == $type.'/'.$attach['attachment'] ? 'checked' : $dotype;
+			$aid = $check ? $attach['aid'] : '';
+
+			$html .= '<a href="javascript:;" class="opattach">';
+			$html .= '<span class="opattach_ctrl">';
+			$html .= '<span onclick="insertImage(\''.$pic.'\');" class="cur1">'.lang('portalcp', 'insert_large_image').'</span><span class="pipe">|</span>';
+			if($small_pic) $html .= '<span onclick="insertImage(\''.$small_pic.'\', \''.$pic.'\');" class="cur1">'.lang('portalcp', 'small_image').'</span>';
+			$html .= '</span><img src="'.($small_pic ? $small_pic : $pic).'" onclick="insertImage(\''.$pic.'\');" class="cur1" /></a>';
+			$html .= '<label for="setconver'.$attach['attachid'].'" class="cur1 xi2"><input type="radio" name="setconver" id="setconver'.$attach['attachid'].'" class="pr" value="1" onclick=setConver(\''.addslashes(serialize(array('pic'=>$type.'/'.$attach['attachment'], 'thumb'=>$attach['thumb'], 'remote'=>$attach['remote']))).'\') '.$check.'>'.lang('portalcp', 'set_to_conver').'</label>';
+			if($type == 'portal') {
+				$html .= '<span class="pipe">|</span><span class="cur1 xi2" onclick="deleteAttach(\''.$attach['attachid'].'\', \'portal.php?mod=attachment&id='.$attach['attachid'].'&aid='.$aid.'&op=delete\');">'.lang('portalcp', 'delete').'</span>';
+			}
+		} else {
+			$html .= '<img src="static/image/editor/editor_file_thumb.png" class="cur1" onclick="insertFile(\''.$attach['filename'].'\', \'portal.php?mod=attachment&id='.$attach['attachid'].'\');" tip="'.$attach['filename'].'" onmouseover="showTip(this);" /><br/>';
+			$html .= '<span onclick="deleteAttach(\''.$attach['attachid'].'\', \'portal.php?mod=attachment&id='.$attach['attachid'].'&op=delete\');" class="cur1 xi2">'.lang('portalcp', 'delete').'</span>';
+		}
+		$html .= '</td>';
+		$i++;
+
+		if($i % 4 == 0 && isset($attachs[$i])) {
+			$html .= '</tr><tr>';
+		}
+	}
+	if(!empty($html)) {
+		if(($imgpad = $i % 4) > 0) {
+			$html .= str_repeat('<td width="25%"></td>', 4 - $imgpad);
+		}
+
+		$html = '<table class="imgl"><tr>'.$html.'</tr></table>';
+	}
+	return $html;
+}
+
 function getallowcategory($uid){
 	global $_G;
 	$permission = array();
 	if (empty($uid)) return $permission;
 	if(getstatus($_G['member']['allowadmincp'], 2) || getstatus($_G['member']['allowadmincp'], 3)) {
 		$uid = max(0,intval($uid));
-		$query = DB::query('SELECT * FROM '.DB::table('portal_category_permission')." WHERE uid='$uid'");
-		while($value = DB::fetch($query)) {
+		foreach(C::t('portal_category_permission')->fetch_all_by_uid($uid) as $catid=>$value) {
 			if ($value['allowpublish'] || $value['allowmanage']) {
-				$catid = $value['catid'];
 				$permission[$catid] = $value;
 			}
 		}
@@ -85,10 +125,7 @@ function getallowdiytemplate($uid){
 	if (empty($uid)) return false;
 	$permission = array();
 	$uid = max(0,intval($uid));
-	$query = DB::query("SELECT tp.* FROM ".DB::table('common_template_permission')." tp WHERE tp.uid='$uid'");
-	while($value = DB::fetch($query)) {
-			$permission[$value['targettplname']] = $value;
-	}
+	$permission = C::t('common_template_permission')->fetch_all_by_uid($uid);
 	return $permission;
 }
 
@@ -98,23 +135,38 @@ function getdiytpldir($targettplname) {
 	if (substr($targettplname, 0, 13) === ($pre = 'forum/discuz_')) {
 	} elseif (substr($targettplname, 0, 19) === ($pre = 'forum/forumdisplay_')) {
 	}
-	if($pre && ($styleid = DB::result_first('SELECT styleid FROM '.DB::table('forum_forum').' WHERE fid='.intval(str_replace($pre, '', $targettplname))))) {
-		loadcache('style_'.$styleid);
-		$tpldir = $_G['cache']['tpldir'];
+	if($pre) {
+		$forum = C::t('forum_forum')->fetch(intval(str_replace($pre, '', $targettplname)));
+		if(!empty($forum['styleid'])) {
+			loadcache('style_'.$forum['styleid']);
+			$tpldir = $_G['cache']['tpldir'];
+		}
 	}
 	return $tpldir ? $tpldir : ($_G['cache']['style_default']['tpldir'] ? $_G['cache']['style_default']['tpldir'] : './template/default');
 }
 
-function save_diy_data($primaltplname, $targettplname, $data, $database = false, $optype = '') {
+function save_diy_data($tpldirectory, $primaltplname, $targettplname, $data, $database = false, $optype = '') {
 	global $_G;
 	if (empty($data) || !is_array($data)) return false;
 	checksecurity($data['spacecss']);
-	$file = getdiytpldir($primaltplname).'/'.$primaltplname.'.htm';
+	if(empty($tpldirectory)) {
+		$tpldirectory = getdiytpldir($primaltplname);
+	}
+	$isextphp = false;
+	$file = $tpldirectory.'/'.$primaltplname.'.htm';
 	if (!file_exists($file)) {
-		$file = './template/default/'.$primaltplname.'.htm';
+		$file = $tpldirectory.'/'.$primaltplname.'.php';
+		if (!file_exists($file)) {
+			$file = './template/default/'.$primaltplname.'.htm';
+		} else {
+			$isextphp = true;
+		}
 	}
 	if(!file_exists($file)) return false;
 	$content = file_get_contents(DISCUZ_ROOT.$file);
+	if($isextphp) {
+		$content = substr($content, strpos($content, "\n"));
+	}
 	$content = preg_replace("/\<\!\-\-\[name\].+?\[\/name\]\-\-\>\s+/is", '', $content);
 	$content = preg_replace("/\<script src\=\"misc\.php\?mod\=diyhelp\&action\=get.+?\>\<\/script\>/", '', $content);
 	foreach ($data['layoutdata'] as $key => $value) {
@@ -136,10 +188,10 @@ function save_diy_data($primaltplname, $targettplname, $data, $database = false,
 	if($flag) {
 		$targettplname = $targettplname.'_diy_preview';
 	} else {
-		@unlink('./data/diy/'.$targettplname.'_diy_preview.htm');
+		@unlink('./data/diy/'.$tpldirectory.'/'.$targettplname.'_diy_preview.htm');
 	}
 
-	$tplfile =DISCUZ_ROOT.'./data/diy/'.$targettplname.'.htm';
+	$tplfile =DISCUZ_ROOT.'./data/diy/'.$tpldirectory.'/'.$targettplname.'.htm';
 	$tplpath = dirname($tplfile);
 	if (!is_dir($tplpath)) {
 		dmkdir($tplpath);
@@ -148,32 +200,70 @@ function save_diy_data($primaltplname, $targettplname, $data, $database = false,
 	}
 	$r = file_put_contents($tplfile, $content);
 	if ($r && $database && !$flag) {
-		$tpldata = daddslashes(serialize($data));
-		$diytplname = getdiytplname($targettplname);
-		$diytplname = addslashes($diytplname);
-		DB::query("REPLACE INTO ".DB::table('common_diy_data')." (targettplname, primaltplname, diycontent, `name`, uid, username, dateline) VALUES ('$targettplname', '$primaltplname', '$tpldata', '$diytplname', '$_G[uid]', '$_G[username]', '".TIMESTAMP."')");
+		$diytplname = getdiytplname($targettplname, $tpldirectory);
+		C::t('common_diy_data')->insert(array(
+			'targettplname' => $targettplname,
+			'tpldirectory' => $tpldirectory,
+			'primaltplname' => $primaltplname,
+			'diycontent' => serialize($data),
+			'name' => $diytplname,
+			'uid' => $_G['uid'],
+			'username' => $_G['username'],
+			'dateline' => TIMESTAMP,
+		), false, true);
 	}
 	return $r;
 }
 
-function getdiytplname($targettplname) {
-	$diytplname = DB::result_first("SELECT name FROM ".DB::table('common_diy_data')." WHERE targettplname='$targettplname'");
-	if(empty($diytplname)) {
-		$sql = '';
-		if (substr($targettplname, 0, 27) == 'portal/portal_topic_content') {
-			$id = intval(str_replace('portal/portal_topic_content_', '', $targettplname));
-			if(!empty($id)) {
-				$sql = "SELECT title FROM ".DB::table('portal_topic')." WHERE topicid='$id'";
+
+function getdiytplnames($tpls) {
+	$arr = $ret = array();
+	foreach((array)$tpls as $targettplname) {
+		$id = $pre = '';
+		if (substr($targettplname, 0, 12) === ($pre = 'portal/list_')) {
+		} elseif (substr($targettplname, 0, 12) === ($pre = 'portal/view_')) {
+		} elseif (substr($targettplname, 0, 13) === ($pre = 'forum/discuz_')) {
+		} elseif (substr($targettplname, 0, 17) === ($pre = 'forum/viewthread_')) {
+		} elseif (substr($targettplname, 0, 19) === ($pre = 'forum/forumdisplay_')) {
+		} elseif (substr($targettplname, 0, 28) === ($pre = 'portal/portal_topic_content_')) {
+		}
+		if($pre && ($id = dintval(str_replace($pre, '', $targettplname)))) {
+			$arr[$pre][$id] = $id;
+		}
+	}
+	foreach($arr as $pre => $ids) {
+		if ($pre === 'portal/list_') {
+			foreach(C::t('portal_category')->fetch_all($ids) as $id => $value) {
+				$ret[$pre][$id] = $value['catname'];
 			}
-		} elseif (substr($targettplname, 0, 11) == 'portal/list') {
-			$id = intval(str_replace('portal/list_', '', $targettplname));
-			if(!empty($id)) {
-				$sql = "SELECT catname FROM ".DB::table('portal_category')." WHERE catid='$id'";
+		} elseif ($pre === 'portal/view_') {
+			$portal_view_name = lang('portalcp', 'portal_view_name');
+			foreach(C::t('portal_category')->fetch_all($ids) as $id => $value) {
+				$ret[$pre][$id] = $value['catname'].$portal_view_name;
+			}
+		} elseif ($pre === 'forum/forumdisplay_' || $pre === 'forum/discuz_') {
+			foreach(C::t('forum_forum')->fetch_all($ids) as $id => $value) {
+				$ret[$pre][$id] = $value['name'];
+			}
+		} elseif ($pre === 'forum/viewthread_') {
+			$forum_viewthread_name = lang('portalcp', 'forum_viewthread_name');
+			foreach(C::t('forum_forum')->fetch_all($ids) as $id => $value) {
+				$ret[$pre][$id] = $value['name'].$forum_viewthread_name;
+			}
+		} elseif ($pre === 'portal/portal_topic_content_') {
+			foreach(C::t('portal_topic')->fetch_all($ids) as $id => $value) {
+				$ret[$pre][$id] = $value['title'];
 			}
 		}
-		if(!empty($sql)) {
-			$diytplname = DB::result(DB::query($sql));
-		}
+	}
+	return $ret;
+}
+
+function getdiytplname($targettplname, $tpldirectory) {
+	$diydata = C::t('common_diy_data')->fetch($targettplname, $tpldirectory);
+	$diytplname = $diydata ? $diydata['name'] : '';
+	if(empty($diytplname) && ($data = getdiytplnames(array($targettplname)))) {
+		$diytplname = array_shift(array_shift($data));
 	}
 	return $diytplname;
 }
@@ -278,7 +368,7 @@ function gettitlehtml($title, $type) {
 		$v['color'] = trimdxtpllang($v['color']);
 		$v['src'] = trimdxtpllang($v['src']);
 		$v['href'] = trimdxtpllang($v['href']);
-		$v['text'] = htmlspecialchars(str_replace(array('{', '$'), array('{ ', '$ '), $v['text']));
+		$v['text'] = dhtmlspecialchars(str_replace(array('{', '$'), array('{ ', '$ '), $v['text']));
 		$one = "<span class=\"{$v['className']}\"";
 		$style = $color = "";
 		$style .= empty($v['font-size']) ? '' : "font-size:{$v['font-size']}px;";
@@ -351,20 +441,18 @@ function block_export($bids) {
 		return;
 	}
 	$styleids = array();
-	$query = DB::query('SELECT * FROM '.DB::table('common_block')." WHERE bid IN (".dimplode($bids).')');
-	while($value=DB::fetch($query)) {
-		$value['param'] = unserialize($value['param']);
-		if(!empty($value['blockstyle'])) $value['blockstyle'] = unserialize($value['blockstyle']);
+	foreach(C::t('common_block')->fetch_all($bids) as $value) {
+		$value['param'] = dunserialize($value['param']);
+		if(!empty($value['blockstyle'])) $value['blockstyle'] = dunserialize($value['blockstyle']);
 
 		$return['block'][$value['bid']] = $value;
 		if(!empty($value['styleid'])) $styleids[] = intval($value['styleid']);
 	}
 	if($styleids) {
 		$styleids = array_unique($styleids);
-		$query = DB::query('SELECT * FROM '.DB::table('common_block_style')." WHERE styleid IN (".dimplode($styleids).')');
-		while($value=DB::fetch($query)) {
-			$value['template'] = unserialize($value['template']);
-			if(!empty($value['fields'])) $value['fields'] = unserialize($value['fields']);
+		foreach(C::t('common_block_style')->fetch_all($styleids) as $value) {
+			$value['template'] = dunserialize($value['template']);
+			if(!empty($value['fields'])) $value['fields'] = dunserialize($value['fields']);
 			$return['style'][$value['styleid']] = $value;
 		}
 	}
@@ -376,7 +464,6 @@ function block_import($data) {
 	if(!is_array($data['block'])) {
 		return ;
 	}
-	$data = daddslashes($data);
 	$stylemapping = array();
 	if($data['style']) {
 		$hashes = $styles = array();
@@ -385,8 +472,7 @@ function block_import($data) {
 			$styles[$value['hash']] = $value['styleid'];
 		}
 		if(!empty($hashes)) {
-			$query = DB::query('SELECT styleid, hash FROM '.DB::table('common_block_style')." WHERE hash IN (".dimplode($hashes).')');
-			while($value=DB::fetch($query)) {
+			foreach(C::t('common_block_style')->fetch_all_by_hash($hashes) as $value) {
 				$id = $styles[$value['hash']];
 				$stylemapping[$id] = intval($value['styleid']);
 				unset($styles[$value['hash']]);
@@ -396,14 +482,12 @@ function block_import($data) {
 			$style = $data['style'][$id];
 			$style['styleid'] = '';
 			if(is_array($style['template'])) {
-				$style['template'] = dstripslashes($style['template']);
-				$style['template'] = addslashes(serialize($style['template']));
+				$style['template'] = serialize($style['template']);
 			}
 			if(is_array($style['fields'])) {
-				$style['fields'] = dstripslashes($style['fields']);
-				$style['fields'] = addslashes(serialize($style['fields']));
+				$style['fields'] = serialize($style['fields']);
 			}
-			$newid = DB::insert('common_block_style', $style, true);
+			$newid = C::t('common_block_style')->insert($style, true);
 			$stylemapping[$id] = $newid;
 		}
 	}
@@ -420,14 +504,12 @@ function block_import($data) {
 		$block['dateline'] = 0;
 		$block['notinherited'] = 0;
 		if(is_array($block['param'])) {
-			$block['param'] = dstripslashes($block['param']);
-			$block['param'] = addslashes(serialize($block['param']));
+			$block['param'] = serialize($block['param']);
 		}
 		if(is_array($block['blockstyle'])) {
-			$block['blockstyle'] = dstripslashes($block['blockstyle']);
-			$block['blockstyle'] = addslashes(serialize($block['blockstyle']));
+			$block['blockstyle'] = serialize($block['blockstyle']);
 		}
-		$newid = DB::insert('common_block', $block, true);
+		$newid = C::t('common_block')->insert($block, true);
 		$blockmapping[$oid] = $newid;
 	}
 	include_once libfile('function/cache');
@@ -561,10 +643,17 @@ function import_diy($file) {
 
 function checkprimaltpl($template) {
 	global $_G;
+	$tpldirectory = '';
+	if(strpos($template, ':') !== false) {
+		list($tpldirectory, $template) = explode(':', $template);
+	}
 	if(!$template || preg_match("/(\.)(exe|jsp|asp|aspx|cgi|fcgi|pl)(\.|$)/i", $template)) {
 		return 'diy_template_filename_invalid';
 	}
-	$primaltplname = DISCUZ_ROOT.$_G['cache']['style_default']['tpldir'].'/'.$template.'.htm';
+	if(strpos($tpldirectory, '..') !== false || strpos($tpldirectory, "\0") !== false) {
+		return 'diy_tpldirectory_invalid';
+	}
+	$primaltplname = (!$tpldirectory ? DISCUZ_ROOT.$_G['cache']['style_default']['tpldir'] : $tpldirectory).'/'.$template.'.htm';
 	if (!file_exists($primaltplname)) {
 		$primaltplname = DISCUZ_ROOT.'./template/default/'.$template.'.htm';
 	}
@@ -678,8 +767,8 @@ function category_get_num($type, $catid) {
 	if(! isset($_G[$type.'category_nums'])) {
 		$_G[$type.'category_nums'] = array();
 		$tables = array('portal'=>'portal_category', 'blog'=>'home_blog_category', 'album'=>'home_album_category');
-		$query = DB::query("SELECT catid, $numkey FROM ".DB::table($tables[$type]));
-		while($value=DB::fetch($query)) {
+		$query = C::t($tables[$type])->fetch_all_numkey($numkey);
+		foreach ($query as $value) {
 			$_G[$type.'category_nums'][$value['catid']] = intval($value[$numkey]);
 		}
 	}
@@ -700,9 +789,9 @@ function updatetopic($topic = ''){
 
 	$topicid = empty($topic) ? '' : $topic['topicid'];
 	include_once libfile('function/home');
-	$_POST['title'] = getstr(trim($_POST['title']), 255, 1, 1);
-	$_POST['name'] = getstr(trim($_POST['name']), 255, 1, 1);
-	$_POST['domain'] = getstr(trim($_POST['domain']), 255, 1, 1);
+	$_POST['title'] = getstr(trim($_POST['title']), 255);
+	$_POST['name'] = getstr(trim($_POST['name']), 255);
+	$_POST['domain'] = getstr(trim($_POST['domain']), 255);
 	if(empty($_POST['title'])) {
 		return 'topic_title_cannot_be_empty';
 	}
@@ -710,8 +799,7 @@ function updatetopic($topic = ''){
 		$_POST['name'] = $_POST['title'];
 	}
 	if(!$topicid || $_POST['name'] != $topic['name']) {
-		$value = DB::fetch_first('SELECT * FROM '.DB::table('portal_topic')." WHERE name = '$_POST[name]' LIMIT 1");
-		if($value) {
+		if(($value = C::t('portal_topic')->fetch_by_name($_POST['name']))) {
 			return 'topic_name_duplicated';
 		}
 	}
@@ -728,8 +816,8 @@ function updatetopic($topic = ''){
 		'title' => $_POST['title'],
 		'name' => $_POST['name'],
 		'domain' => $_POST['domain'],
-		'summary' => getstr($_POST['summary'], '', 1, 1),
-		'keyword' => getstr($_POST['keyword'], '', 1, 1),
+		'summary' => getstr($_POST['summary']),
+		'keyword' => getstr($_POST['keyword']),
 		'useheader' => $_POST['useheader'] ? '1' : '0',
 		'usefooter' => $_POST['usefooter'] ? '1' : '0',
 		'allowcomment' => $_POST['allowcomment'] ? 1 : 0,
@@ -758,8 +846,11 @@ function updatetopic($topic = ''){
 
 
 	$primaltplname = '';
-	if(empty($topicid) || empty($topic['primaltplname']) || ($topic['primaltplname'] && $topic['primaltplname'] != 'portal/'.$_POST['primaltplname'])) {
-		$primaltplname = 'portal/'.$_POST['primaltplname'];
+	if(empty($topicid) || empty($topic['primaltplname']) || ($topic['primaltplname'] && $topic['primaltplname'] != $_POST['primaltplname'])) {
+		$primaltplname = $_POST['primaltplname'];
+		if(!isset($_POST['signs'][dsign($primaltplname)])) {
+			return 'diy_sign_invalid';
+		}
 		$checktpl = checkprimaltpl($primaltplname);
 		if($checktpl !== true) {
 			return $checktpl;
@@ -768,8 +859,8 @@ function updatetopic($topic = ''){
 	}
 
 	if($topicid) {
-		DB::update('portal_topic', $setarr, array('topicid'=>$topicid));
-		DB::update('common_diy_data', array('name'=>$setarr['title']), array('targettplname'=>'portal/portal_topic_content_'.$topicid));
+		C::t('portal_topic')->update($topicid, $setarr);
+		C::t('common_diy_data')->update('portal/portal_topic_content_'.$topicid, getdiydirectory($topic['primaltplname']), array('name'=>$setarr['title']));
 	} else {
 		$setarr['uid'] = $_G['uid'];
 		$setarr['username'] = $_G['username'];
@@ -783,20 +874,27 @@ function updatetopic($topic = ''){
 	}
 
 	if(!empty($_POST['domain'])) {
-		DB::insert('common_domain', array('domain' => $_POST['domain'], 'domainroot' => addslashes($_G['setting']['domain']['root']['topic']), 'id' => $topicid, 'idtype' => 'topic'));
+		C::t('common_domain')->insert(array('domain' => $_POST['domain'], 'domainroot' => $_G['setting']['domain']['root']['topic'], 'id' => $topicid, 'idtype' => 'topic'));
 	}
 
-	if($topic['primaltplname'] != $primaltplname) {
+	$tpldirectory = '';
+	if($primaltplname && $topic['primaltplname'] != $primaltplname) {
 		$targettplname = 'portal/portal_topic_content_'.$topicid;
-		DB::update('common_diy_data',array('primaltplname'=>$primaltplname),array('targettplname'=>$targettplname));
+		if(strpos($primaltplname, ':') !== false) {
+			list($tpldirectory, $primaltplname) = explode(':', $primaltplname);
+		}
+		C::t('common_diy_data')->update($targettplname, getdiydirectory($topic['primaltplname']), array('primaltplname'=>$primaltplname, 'tpldirectory'=>$tpldirectory));
 		updatediytemplate($targettplname);
 	}
 
 	if($primaltplname && empty($topic['primaltplname'])) {
-		$content = file_get_contents(DISCUZ_ROOT.'./template/default/'.$primaltplname.'.htm');
-		$tplfile = DISCUZ_ROOT.'./data/diy/portal/portal_topic_content_'.$topicid.'.htm';
+		$tpldirectory = ($tpldirectory ? $tpldirectory : $_G['cache']['style_default']['tpldir']);
+		$content = file_get_contents(DISCUZ_ROOT.$tpldirectory.'/'.$primaltplname.'.htm');
+		$tplfile = DISCUZ_ROOT.'./data/diy/'.$tpldirectory.'/portal/portal_topic_content_'.$topicid.'.htm';
 		$tplpath = dirname($tplfile);
-		if (!is_dir($tplpath)) dmkdir($tplpath);
+		if (!is_dir($tplpath)) {
+			dmkdir($tplpath);
+		}
 		file_put_contents($tplfile, $content);
 	}
 
@@ -810,7 +908,7 @@ function addtopic($topic) {
 	global $_G;
 	$topicid = '';
 	if($topic && is_array($topic)) {
-		$topicid = DB::insert('portal_topic', $topic, true);
+		$topicid = C::t('portal_topic')->insert($topic, true);
 		if(!empty($topicid)) {
 			$diydata = array(
 				'targettplname' => 'portal/portal_topic_content_'.$topicid,
@@ -819,7 +917,7 @@ function addtopic($topic) {
 				'username' => $_G['username'],
 				'dateline' => TIMESTAMP,
 			);
-			DB::insert('common_diy_data', $diydata);
+			C::t('common_diy_data')->insert($diydata);
 		}
 	}
 	return $topicid;
@@ -839,9 +937,11 @@ function getblockperm($bid) {
 	require_once libfile('class/blockpermission');
 	$blockpermsission = & block_permission::instance();
 	$perm = $blockpermsission->get_perms_by_bid($bid, $_G['uid']);
-	$perm = $perm ? $perm[0] : '';
+	$perm = $perm ? current($perm) : '';
 	if(empty($perm)) {
-		$block = DB::fetch_first('SELECT tb.*,b.blocktype,b.uid FROM '.DB::table('common_block')." b LEFT JOIN ".DB::table('common_template_block')." tb ON b.bid=tb.bid WHERE b.bid = '$bid'");
+		if(($block = C::t('common_block')->fetch($bid))) {
+			$block = array_merge($block, C::t('common_template_block')->fetch_by_bid($bid));
+		}
 		if(empty($block['targettplname']) && empty($block['blocktype'])) {
 			if(($_G['group']['allowmanagetopic'] || ($_G['group']['allowaddtopic'] && $block['uid'] == $_G['uid']))) {
 				$perm = $allperm;
@@ -851,7 +951,7 @@ function getblockperm($bid) {
 				$perm = $allperm;
 			} elseif($_G['group']['allowaddtopic']) {
 				$id = str_replace('portal/portal_topic_content_', '', $block['targettplname']);
-				$topic = DB::fetch_first('SELECT uid FROM '.DB::table('portal_topic')." WHERE topicid='".intval($id)."'");
+				$topic = C::t('portal_topic')->fetch(intval($id));
 				if($topic['uid'] == $_G['uid']) {
 					$perm = $allperm;
 				}
@@ -864,7 +964,7 @@ function getblockperm($bid) {
 function check_articleperm($catid, $aid = 0, $article = array(), $isverify = false, $return = false) {
 	global $_G;
 
-	if(empty($catid) && empty($aid)) {
+	if(empty($catid)) {
 		if(!$return) {
 			showmessage('article_category_empty');
 		} else {
@@ -872,7 +972,7 @@ function check_articleperm($catid, $aid = 0, $article = array(), $isverify = fal
 		}
 	}
 
-	if($_G['group']['allowmanagearticle'] || (empty($aid) && $_G['group']['allowpostarticle']) || $_G['gp_modarticlekey'] == modauthkey($aid)) {
+	if($_G['group']['allowmanagearticle'] || (empty($aid) && $_G['group']['allowpostarticle']) || $_GET['modarticlekey'] == modauthkey($aid)) {
 		return true;
 	}
 
@@ -900,12 +1000,12 @@ function addportalarticlecomment($id, $message, $idtype = 'aid') {
 	if(empty($id)) {
 		return 'comment_comment_noexist';
 	}
-	$message = getstr($message, $_G['group']['allowcommentarticle'], 1, 1, 1, 0);
+	$message = getstr($message, $_G['group']['allowcommentarticle'], 0, 0, 1, 0);
 	if(strlen($message) < 2) return 'content_is_too_short';
 
 	$idtype = in_array($idtype, array('aid' ,'topicid')) ? $idtype : 'aid';
 	$tablename = $idtype == 'aid' ? 'portal_article_title' : 'portal_topic';
-	$data = DB::fetch_first("SELECT uid,allowcomment FROM ".DB::table($tablename)." WHERE $idtype='$id'");
+	$data = C::t($tablename)->fetch($id);
 	if(empty($data)) {
 		return 'comment_comment_noexist';
 	}
@@ -931,7 +1031,7 @@ function addportalarticlecomment($id, $message, $idtype = 'aid') {
 		'message' => $message
 	);
 
-	$pcid = DB::insert('portal_comment', $setarr, true);
+	$pcid = C::t('portal_comment')->insert($setarr, true);
 
 	if($comment_status == 1) {
 		updatemoderate($idtype.'_cid', $pcid);
@@ -939,8 +1039,8 @@ function addportalarticlecomment($id, $message, $idtype = 'aid') {
 		manage_addnotify($notifykey);
 	}
 	$tablename = $idtype == 'aid' ? 'portal_article_count' : 'portal_topic';
-	DB::query("UPDATE ".DB::table($tablename)." SET commentnum=commentnum+1 WHERE $idtype='$id'");
-	DB::update('common_member_status', array('lastpost' => $_G['timestamp']), array('uid' => $_G['uid']));
+	C::t($tablename)->increase($id, array('commentnum' => 1));
+	C::t('common_member_status')->update($_G['uid'], array('lastpost' => $_G['timestamp']), 'UNBUFFERED');
 
 	if($data['uid'] != $_G['uid']) {
 		updatecreditbyaction('portalcomment', 0, array(), $idtype.$id);
@@ -950,5 +1050,54 @@ function addportalarticlecomment($id, $message, $idtype = 'aid') {
 
 function trimdxtpllang($s){
 	return str_replace(array('{', '$', '<', '>'), array('{ ', '$ ', '', ''), $s);
+}
+
+function addrelatedarticle($aid, $raids) {
+	C::t('portal_article_related')->delete_by_aid_raid($aid, $aid);
+	if($raids) {
+		$relatedarr = array();
+		$relatedarr = array_map('intval', $raids);
+		$relatedarr = array_unique($relatedarr);
+		$relatedarr = array_filter($relatedarr);
+		if($relatedarr) {
+			$list = C::t('portal_article_title')->fetch_all($relatedarr);
+			C::t('portal_article_related')->insert_batch($aid, $list);
+		}
+	}
+	return true;
+}
+
+
+function getprimaltplname($filename) {
+	global $_G, $lang;
+	$tpldirectory = '';
+	if(strpos($filename, ':') !== false) {
+		list($tpldirectory, $filename) = explode(':', $filename);
+	}
+	if(empty($tpldirectory)) {
+		$tpldirectory = ($_G['cache']['style_default']['tpldir'] ? $_G['cache']['style_default']['tpldir'] : './template/default');
+	}
+	$content = @file_get_contents(DISCUZ_ROOT.$tpldirectory.'/'.$filename);
+	$name = $tpldirectory.'/'.$filename;
+	if($content) {
+		preg_match("/\<\!\-\-\[name\](.+?)\[\/name\]\-\-\>/i", trim($content), $mathes);
+		if(!empty($mathes[1])) {
+			preg_match("/^\{lang (.+?)\}$/", $mathes[1], $langs);
+			if(!empty($langs[1])) {
+				$name = !$lang[$langs[1]] ? $langs[1] : $lang[$langs[1]];
+			} else {
+				$name = dhtmlspecialchars($mathes[1]);
+			}
+		}
+	}
+	return $name;
+}
+
+function getdiydirectory($value) {
+	$directory = '';
+	if($value && strpos($value, ':') !== false) {
+		list($directory) = explode(':', $value);
+	}
+	return $directory;
 }
 ?>

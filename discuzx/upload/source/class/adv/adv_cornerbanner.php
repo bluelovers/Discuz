@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: adv_cornerbanner.php 20371 2011-02-22 09:31:03Z monkey $
+ *      $Id: adv_cornerbanner.php 26692 2011-12-20 05:27:38Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -13,7 +13,7 @@ if(!defined('IN_DISCUZ')) {
 
 class adv_cornerbanner {
 
-	var $version = '1.0';
+	var $version = '1.1';
 	var $name = 'cornerbanner_name';
 	var $description = 'cornerbanner_desc';
 	var $copyright = '<a href="http://www.comsenz.com" target="_blank">Comsenz Inc.</a>';
@@ -37,6 +37,15 @@ class adv_cornerbanner {
 				'title' => 'cornerbanner_category',
 				'type' => 'mselect',
 				'value' => array(),
+			),
+		        'disableclose' => array(
+			    'title' => 'cornerbanner_disableclose',
+			    'type' => 'mradio',
+			    'value' => array(
+			            array(0, 'cornerbanner_show'),
+				    array(1, 'cornerbanner_hidden'),
+			    ),
+			    'default' => 0,
 			),
 			'animator' => array(
 				'title' => 'cornerbanner_animator',
@@ -103,10 +112,14 @@ class adv_cornerbanner {
 				$checked = false;
 			}',
 			'create' => '
-				$adid = $adids[array_rand($adids)];
-				$aniscript = $parameter[\'animator\'] ? \'<script type="text/javascript">_attachEvent(window, \\\'load\\\', function () {var ad_corner_obj = $(\\\'ad_corner_close\\\').parentNode,ad_corner_height = ad_corner_obj.clientHeight,ad_corner_hi=0,ad_corner_si=setInterval(function () { ad_corner_obj.style.visibility=\\\'visible\\\';ad_corner_obj.style.overflow=\\\'hidden\\\';ad_corner_obj.style.height=ad_corner_hi+\\\'px\\\';ad_corner_hi+=10;if(ad_corner_height<ad_corner_hi) {ad_corner_obj.style.overflow=\\\'visible\\\';clearInterval(ad_corner_si);}}, 1);}, document);</script>\' : \'\';
-				$adcode = empty($_G[\'cookie\'][\'adclose_\'.$adid]) ? \'<p class="close" id="ad_corner_close" onclick="setcookie(\\\'adclose_\'.$adid.\'\\\', 1, 86400);this.parentNode.style.display=\\\'none\\\'"><a href="javascript:;"><img src="\'.STATICURL.\'image/common/ad_close.gif" /></a></p>\'.$codes[$adid].$aniscript : \'\';
-				$extra = \'style="\'.($parameters[$adid][\'height\'] ? \'line-height:\'.$parameters[$adid][\'height\'].\'px;height:\'.$parameters[$adid][\'height\'].\'px\' : \'\').($parameter[\'animator\'] ? \';visibility:hidden\': \'\').\'"\';
+				if(empty($parameter[\'disableclose\'])) {
+					$adid = $adids[array_rand($adids)];
+					$aniscript = $parameter[\'animator\'] ? \'<script type="text/javascript">_attachEvent(window, \\\'load\\\', function () {var ad_corner_obj = $(\\\'ad_corner_close\\\').parentNode,ad_corner_height = ad_corner_obj.clientHeight,ad_corner_hi=0,ad_corner_si=setInterval(function () { ad_corner_obj.style.visibility=\\\'visible\\\';ad_corner_obj.style.overflow=\\\'hidden\\\';ad_corner_obj.style.height=ad_corner_hi+\\\'px\\\';ad_corner_hi+=10;if(ad_corner_height<ad_corner_hi) {ad_corner_obj.style.overflow=\\\'visible\\\';clearInterval(ad_corner_si);}}, 1);}, document);</script>\' : \'\';
+					$adcode = empty($_G[\'cookie\'][\'adclose_\'.$adid]) ? \'<p class="close" id="ad_corner_close" onclick="setcookie(\\\'adclose_\'.$adid.\'\\\', 1, 86400);this.parentNode.style.display=\\\'none\\\'"><a href="javascript:;"><img src="\'.STATICURL.\'image/common/ad_close.gif" /></a></p>\'.$codes[$adid].$aniscript : \'\';
+					$extra = \'style="\'.($parameters[$adid][\'height\'] ? \'line-height:\'.$parameters[$adid][\'height\'].\'px;height:\'.$parameters[$adid][\'height\'].\'px\' : \'\').($parameter[\'animator\'] ? \';visibility:hidden\': \'\').\'"\';
+				} else {
+					$adcode = $codes[$adids[array_rand($adids)]];
+				}
 			',
 		);
 	}

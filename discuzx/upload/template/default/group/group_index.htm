@@ -1,10 +1,12 @@
 <!--{if $status != 2}-->
+	<!--{if helper_access::check_module('group')}-->
 	<div id="pgt" class="bm bw0 pgs cl">
 		<div class="pg">
 			<a href="forum.php?mod=forumdisplay&action=list&fid=$_G[fid]" class="nxt">{lang view_all_threads}</a>
 		</div>
 		<a href="javascript:;" id="newspecial" onmouseover="$('newspecial').id = 'newspecialtmp';this.id = 'newspecial';showMenu({'ctrlid':this.id})" onclick="showWindow('newthread', 'forum.php?mod=post&action=newthread&fid=$_G[fid]')" title="{lang send_posts}"><img src="{IMGDIR}/pn_post.png" alt="{lang send_posts}" /></a>
 	</div>
+	<!--{/if}-->
 	<div class="tl bm bml">
 		<div class="th">
 			<table cellpadding="0" cellspacing="0" border="0">

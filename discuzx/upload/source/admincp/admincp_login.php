@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_login.php 23799 2011-08-10 05:53:01Z cnteacher $
+ *      $Id: admincp_login.php 29236 2012-03-30 05:34:47Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -88,7 +88,7 @@ function html_login_footer($halt = true) {
 	<td colspan="2" class="footer">
 		<div class="copyright">
 			<p>Powered by <a href="http://www.discuz.net/" target="_blank">Discuz!</a> $version </p>
-			<p>&copy; 2001-2011, <a href="http://www.comsenz.com/" target="_blank">Comsenz</a> Inc.</p>
+			<p>&copy; 2001-2012, <a href="http://www.comsenz.com/" target="_blank">Comsenz</a> Inc.</p>
 		</div>
 	</td>
 </tr>
@@ -107,7 +107,7 @@ function html_login_form() {
 	$lang = lang('admincp_login');
 	$loginuser = $isguest ? '<input name="admin_username" tabindex="1" type="text" class="txt" autocomplete="off" />' : getglobal('member/username');
 	$sid = getglobal('sid');
-	$_SERVER['QUERY_STRING'] = str_replace('&amp;', '&', htmlspecialchars($_SERVER['QUERY_STRING']));
+	$_SERVER['QUERY_STRING'] = str_replace('&amp;', '&', dhtmlspecialchars($_SERVER['QUERY_STRING']));
 	$extra = ADMINSCRIPT.'?'.(getgpc('action') && getgpc('frames') ? 'frames=yes&' : '').$_SERVER['QUERY_STRING'];
 	$forcesecques = '<option value="0">'.($_G['config']['admincp']['forcesecques'] ? $lang['forcesecques'] : $lang['security_question_0']).'</option>';
 	echo <<<EOT

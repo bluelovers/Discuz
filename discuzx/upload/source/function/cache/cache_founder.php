@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_founder.php 23525 2011-07-22 04:48:57Z zhangguosheng $
+ *      $Id: cache_founder.php 25782 2011-11-22 05:29:19Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -24,29 +24,28 @@ function build_cache_founder() {
 				$fuser[] = $founder;
 			}
 		}
-		$query = DB::query('SELECT uid FROM '.DB::table('common_member').' WHERE '.($fuid ? 'uid IN ('.dimplode($fuid).')' : '0').' OR '.($fuser ? 'username IN ('.dimplode($fuser).')' : '0'));
-		while($founder = DB::fetch($query)) {
-			$allowadmincp[$founder['uid']] = $founder['uid'];
+		if($fuid) {
+			$allowadmincp = C::t('common_member')->fetch_all($fuid, false, 0);
+		}
+		if($fuser) {
+			$allowadmincp = $allowadmincp + C::t('common_member')->fetch_all_by_username($fuser);
 		}
 	}
-	$query = DB::query('SELECT uid FROM '.DB::table('common_admincp_member'));
-	while($member = DB::fetch($query)) {
-		$allowadmincp[$member['uid']] = $member['uid'];
-	}
+	$allowadmincp = $allowadmincp + C::t('common_admincp_member')->range();
 
-	$query = DB::query('SELECT uid, allowadmincp FROM '.DB::table('common_member')." WHERE allowadmincp > '0' OR uid IN (".dimplode($allowadmincp).')');
-	while($user = DB::fetch($query)) {
-		if(isset($allowadmincp[$user['uid']]) && !getstatus($user['allowadmincp'], 1)) {
-			$status1[$user['uid']] = $user['uid'];
-		} elseif(!isset($allowadmincp[$user['uid']]) && getstatus($user['allowadmincp'], 1)) {
-			$status0[$user['uid']] = $user['uid'];
+	$allallowadmincp = C::t('common_member')->fetch_all_by_allowadmincp('0', '>') + C::t('common_member')->fetch_all(array_keys($allowadmincp), false, 0);
+	foreach($allallowadmincp as $uid => $user) {
+		if(isset($allowadmincp[$uid]) && !getstatus($user['allowadmincp'], 1)) {
+			$status1[$uid] = $uid;
+		} elseif(!isset($allowadmincp[$uid]) && getstatus($user['allowadmincp'], 1)) {
+			$status0[$uid] = $uid;
 		}
 	}
 	if(!empty($status0)) {
-		DB::query('UPDATE '.DB::table('common_member').' SET allowadmincp=allowadmincp & 0xFE WHERE uid IN ('.dimplode($status0).')');
+		C::t('common_member')->clean_admincp_manage($status0);
 	}
 	if(!empty($status1)) {
-		DB::query('UPDATE '.DB::table('common_member').' SET allowadmincp=allowadmincp | 1 WHERE uid IN ('.dimplode($status1).')');
+		C::t('common_member')->update_admincp_manage($status1);
 	}
 
 }

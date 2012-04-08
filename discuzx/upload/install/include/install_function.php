@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: install_function.php 29180 2012-03-28 06:23:30Z svn_project_zhangjie $
+ *      $Id: install_function.php 29252 2012-03-31 02:03:00Z chenmengshu $
  */
 
 if(!defined('IN_COMSENZ')) {
@@ -154,7 +154,7 @@ function function_check(&$func_items) {
 	}
 }
 
-function show_env_result(&$env_items, &$dirfile_items, &$func_items) {
+function show_env_result(&$env_items, &$dirfile_items, &$func_items, &$filesock_items) {
 
 	$env_str = $file_str = $dir_str = $func_str = '';
 	$error_code = 0;
@@ -272,6 +272,25 @@ function show_env_result(&$env_items, &$dirfile_items, &$func_items) {
 				$func_str .= "<td><font color=\"red\">".lang('advice_'.$item)."</font></td>\n";
 			}
 		}
+		$func_strextra = '';
+		$filesock_disabled = 0;
+		foreach($filesock_items as $item) {
+			$status = function_exists($item);
+			$func_strextra .= "<tr>\n";
+			$func_strextra .= "<td>$item()</td>\n";
+			if($status) {
+				$func_strextra .= "<td class=\"w pdleft1\">".lang('supportted')."</td>\n";
+				$func_strextra .= "<td class=\"padleft\">".lang('none')."</td>\n";
+				break;
+			} else {
+				$filesock_disabled++;
+				$func_strextra .= "<td class=\"nw pdleft1\">".lang('unsupportted')."</td>\n";
+				$func_strextra .= "<td><font color=\"red\">".lang('advice_'.$item)."</font></td>\n";
+			}
+		}
+		if($filesock_disabled == count($filesock_items)) {
+			$error_code = ENV_CHECK_ERROR;
+		}
 		echo "<h2 class=\"title\">".lang('func_depend')."</h2>\n";
 		echo "<table class=\"tb\" style=\"margin:20px 0 20px 55px;width:90%;\">\n";
 		echo "<tr>\n";
@@ -279,7 +298,7 @@ function show_env_result(&$env_items, &$dirfile_items, &$func_items) {
 		echo "\t<th class=\"padleft\">".lang('check_result')."</th>\n";
 		echo "\t<th class=\"padleft\">".lang('suggestion')."</th>\n";
 		echo "</tr>\n";
-		echo $func_str;
+		echo $func_str.$func_strextra;
 		echo "</table>\n";
 
 		show_next_step(2, $error_code);
@@ -514,7 +533,7 @@ EOT;
 function show_footer($quit = true) {
 
 	echo <<<EOT
-		<div class="footer">&copy;2001 - 2011 <a href="http://www.comsenz.com/">Comsenz</a> Inc.</div>
+		<div class="footer">&copy;2001 - 2012 <a href="http://www.comsenz.com/">Comsenz</a> Inc.</div>
 	</div>
 </div>
 </body>
@@ -805,20 +824,51 @@ function fsocketopen($hostname, $port = 80, &$errno, &$errstr, $timeout = 15) {
 	return $fp;
 }
 
-function dfopen($url, $limit = 0, $post = '', $cookie = '', $bysocket = FALSE, $ip = '', $timeout = 15, $block = TRUE) {
+function dfopen($url, $limit = 0, $post = '', $cookie = '', $bysocket = FALSE, $ip = '', $timeout = 15, $block = TRUE, $encodetype  = 'URLENCODE', $allowcurl = TRUE) {
 	$return = '';
 	$matches = parse_url($url);
+	$scheme = $matches['scheme'];
 	$host = $matches['host'];
-	$path = $matches['path'] ? $matches['path'].(isset($matches['query']) && $matches['query'] ? '?'.$matches['query'] : '') : '/';
+	$path = $matches['path'] ? $matches['path'].($matches['query'] ? '?'.$matches['query'] : '') : '/';
 	$port = !empty($matches['port']) ? $matches['port'] : 80;
+
+	if(function_exists('curl_init') && $allowcurl) {
+		$ch = curl_init();
+		$ip && curl_setopt($ch, CURLOPT_HTTPHEADER, array("Host: ".$host));
+		curl_setopt($ch, CURLOPT_URL, $scheme.'://'.($ip ? $ip : $host).':'.$port.$path);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		if($post) {
+			curl_setopt($ch, CURLOPT_POST, 1);
+			if($encodetype == 'URLENCODE') {
+				curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+			} else {
+				parse_str($post, $postarray);
+				curl_setopt($ch, CURLOPT_POSTFIELDS, $postarray);
+			}
+		}
+		if($cookie) {
+			curl_setopt($ch, CURLOPT_COOKIE, $cookie);
+		}
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+		$data = curl_exec($ch);
+		$status = curl_getinfo($ch);
+		$errno = curl_errno($ch);
+		curl_close($ch);
+		if($errno || $status['http_code'] != 200) {
+			return;
+		} else {
+			return !$limit ? $data : substr($data, 0, $limit);
+		}
+	}
 
 	if($post) {
 		$out = "POST $path HTTP/1.0\r\n";
 		$header = "Accept: */*\r\n";
 		$header .= "Accept-Language: zh-cn\r\n";
-		$header .= "Content-Type: application/x-www-form-urlencoded\r\n";
+		$boundary = $encodetype == 'URLENCODE' ? '' : '; boundary='.trim(substr(trim($post), 2, strpos(trim($post), "\n") - 2));
+		$header .= $encodetype == 'URLENCODE' ? "Content-Type: application/x-www-form-urlencoded\r\n" : "Content-Type: multipart/form-data$boundary\r\n";
 		$header .= "User-Agent: $_SERVER[HTTP_USER_AGENT]\r\n";
-		$header .= "Host: $host\r\n";
+		$header .= "Host: $host:$port\r\n";
 		$header .= 'Content-Length: '.strlen($post)."\r\n";
 		$header .= "Connection: Close\r\n";
 		$header .= "Cache-Control: no-cache\r\n";
@@ -829,7 +879,7 @@ function dfopen($url, $limit = 0, $post = '', $cookie = '', $bysocket = FALSE, $
 		$header = "Accept: */*\r\n";
 		$header .= "Accept-Language: zh-cn\r\n";
 		$header .= "User-Agent: $_SERVER[HTTP_USER_AGENT]\r\n";
-		$header .= "Host: $host\r\n";
+		$header .= "Host: $host:$port\r\n";
 		$header .= "Connection: Close\r\n";
 		$header .= "Cookie: $cookie\r\n\r\n";
 		$out .= $header;
@@ -842,10 +892,11 @@ function dfopen($url, $limit = 0, $post = '', $cookie = '', $bysocket = FALSE, $
 				'method' => $post ? 'POST' : 'GET',
 				'header' => $header,
 				'content' => $post,
+				'timeout' => $timeout,
 			),
 		);
 		$context = stream_context_create($context);
-		$fp = @fopen($url, 'b', false, $context);
+		$fp = @fopen($scheme.'://'.($ip ? $ip : $host).':'.$port.$path, 'b', false, $context);
 		$fpflag = 1;
 	}
 
@@ -987,7 +1038,7 @@ function show_setting($setname, $varname = '', $value = '', $type = 'text|passwo
 
 	echo "\n".'<tr><th class="tbopt'.($error ? ' red' : '').'" align="left">&nbsp;'.(empty($setname) ? '' : lang($setname).':')."</th>\n<td>";
 	if($type == 'text' || $type == 'password') {
-		$value = htmlspecialchars($value);
+		$value = dhtmlspecialchars($value);
 		echo "<input type=\"$type\" name=\"$varname\" value=\"$value\" size=\"35\" class=\"txt\">";
 	} elseif(strpos($type, 'submit') !== FALSE) {
 		if(strpos($type, 'oldbtn') !== FALSE) {
@@ -1318,7 +1369,8 @@ function save_diy_data($primaltplname, $targettplname, $data, $database = false)
 	$_G['curtplbid'] = array();
 	$_G['curtplframe'] = array();
 
-	$file = '../template/default/'.$primaltplname.'.htm';
+	$tpldirectory = './template/default';
+	$file = '.'.$tpldirectory.'/'.$primaltplname.'.htm';
 	$content = file_get_contents(realpath($file));
 	foreach ($data['layoutdata'] as $key => $value) {
 		$html = '';
@@ -1332,7 +1384,7 @@ function save_diy_data($primaltplname, $targettplname, $data, $database = false)
 		$content = preg_replace("/(\<link id\=\"style_css\" rel\=\"stylesheet\" type\=\"text\/css\" href\=\").+?(\"\>)/is", "\\1".$data['style']."\\2", $content);
 	}
 
-	$tplfile =ROOT_PATH.'./data/diy/'.$targettplname.'.htm';
+	$tplfile =ROOT_PATH.'./data/diy/'.$tpldirectory.'/'.$targettplname.'.htm';
 
 	$tplpath = dirname($tplfile);
 	if (!is_dir($tplpath)) dmkdir($tplpath);
@@ -1343,15 +1395,15 @@ function save_diy_data($primaltplname, $targettplname, $data, $database = false)
 		if (!empty($_G['curtplbid'])) {
 			$values = array();
 			foreach ($_G['curtplbid'] as $bid) {
-				$values[] = "('$targettplname','$bid')";
+				$values[] = "('$targettplname', '$tpldirectory', '$bid')";
 			}
 			if (!empty($values)) {
-				$_G['db']->query("INSERT INTO ".$_G['tablepre']."common_template_block (targettplname,bid) VALUES ".implode(',', $values));
+				$_G['db']->query("INSERT INTO ".$_G['tablepre']."common_template_block (targettplname, tpldirectory, bid) VALUES ".implode(',', $values));
 			}
 		}
 
 		$tpldata = daddslashes(serialize($data));
-		$_G['db']->query("REPLACE INTO ".$_G['tablepre']."common_diy_data (targettplname, primaltplname, diycontent) VALUES ('$targettplname', '$primaltplname', '$tpldata')");
+		$_G['db']->query("REPLACE INTO ".$_G['tablepre']."common_diy_data (targettplname, tpldirectory, primaltplname, diycontent) VALUES ('$targettplname', '$tpldirectory', '$primaltplname', '$tpldata')");
 	}
 
 	return $r;
@@ -1635,13 +1687,25 @@ function dstripslashes($string) {
 }
 function dmkdir($dir, $mode = 0777){
 	if(!is_dir($dir)) {
-		dmkdir(dirname($dir));
+		dmkdir(dirname($dir), $mode);
 		@mkdir($dir, $mode);
 		@touch($dir.'/index.htm'); @chmod($dir.'/index.htm', 0777);
 	}
 	return true;
 }
-
+function dhtmlspecialchars($string) {
+	if(is_array($string)) {
+		foreach($string as $key => $val) {
+			$string[$key] = dhtmlspecialchars($val);
+		}
+	} else {
+		$string = str_replace(array('&', '"', '<', '>'), array('&amp;', '&quot;', '&lt;', '&gt;'), $string);
+		if(strpos($string, '&amp;#') !== false) {
+			$string = preg_replace('/&amp;((#(\d{3,5}|x[a-fA-F0-9]{4}));)/', '&\\1', $string);
+		}
+	}
+	return $string;
+}
 function install_extra_setting() {
 	global $db, $tablepre, $lang;
 	include ROOT_PATH.'./install/include/install_extvar.php';

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_threadtypes.php 22864 2011-05-27 03:04:15Z monkey $
+ *      $Id: admincp_threadtypes.php 29245 2012-03-30 10:59:43Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -14,14 +14,14 @@ if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 cpheader();
 
 $classoptionmenu = array();
-$query = DB::query("SELECT * FROM ".DB::table('forum_typeoption')." WHERE classid='0' ORDER BY displayorder");
 $curclassname = '';
-while($option = DB::fetch($query)) {
-	if($_G['gp_classid'] == $option['optionid']) {
+foreach(C::t('forum_typeoption')->fetch_all_by_classid(0) as $option) {
+	if($_GET['classid'] == $option['optionid']) {
 		$curclassname = $option['title'];
 	}
-	$classoptionmenu[] = array($option['title'], "threadtypes&operation=typeoption&classid=$option[optionid]", $_G['gp_classid'] == $option['optionid']);
+	$classoptionmenu[] = array($option['title'], "threadtypes&operation=typeoption&classid=$option[optionid]", $_GET['classid'] == $option['optionid']);
 }
+
 $mysql_keywords = array( 'ADD', 'ALL', 'ALTER', 'ANALYZE', 'AND', 'AS', 'ASC', 'ASENSITIVE', 'BEFORE', 'BETWEEN', 'BIGINT', 'BINARY', 'BLOB', 'BOTH', 'BY', 'CALL', 'CASCADE', 'CASE', 'CHANGE', 'CHAR', 'CHARACTER', 'CHECK', 'COLLATE', 'COLUMN', 'CONDITION', 'CONNECTION', 'CONSTRAINT', 'CONTINUE', 'CONVERT', 'CREATE', 'CROSS', 'CURRENT_DATE', 'CURRENT_TIME', 'CURRENT_TIMESTAMP', 'CURRENT_USER', 'CURSOR', 'DATABASE', 'DATABASES', 'DAY_HOUR', 'DAY_MICROSECOND', 'DAY_MINUTE', 'DAY_SECOND', 'DEC', 'DECIMAL', 'DECLARE', 'DEFAULT', 'DELAYED', 'DELETE', 'DESC', 'DESCRIBE', 'DETERMINISTIC', 'DISTINCT', 'DISTINCTROW', 'DIV', 'DOUBLE', 'DROP', 'DUAL', 'EACH', 'ELSE', 'ELSEIF', 'ENCLOSED', 'ESCAPED', 'EXISTS', 'EXIT', 'EXPLAIN', 'FALSE', 'FETCH', 'FLOAT', 'FLOAT4', 'FLOAT8', 'FOR', 'FORCE', 'FOREIGN', 'FROM', 'FULLTEXT', 'GOTO', 'GRANT', 'GROUP', 'HAVING', 'HIGH_PRIORITY', 'HOUR_MICROSECOND', 'HOUR_MINUTE', 'HOUR_SECOND', 'IF', 'IGNORE', 'IN', 'INDEX', 'INFILE', 'INNER', 'INOUT', 'INSENSITIVE', 'INSERT', 'INT', 'INT1', 'INT2', 'INT3', 'INT4', 'INT8', 'INTEGER', 'INTERVAL', 'INTO', 'IS', 'ITERATE', 'JOIN', 'KEY', 'KEYS', 'KILL', 'LABEL', 'LEADING', 'LEAVE', 'LEFT', 'LIKE', 'LIMIT', 'LINEAR', 'LINES', 'LOAD', 'LOCALTIME', 'LOCALTIMESTAMP', 'LOCK', 'LONG', 'LONGBLOB', 'LONGTEXT', 'LOOP', 'LOW_PRIORITY', 'MATCH', 'MEDIUMBLOB', 'MEDIUMINT', 'MEDIUMTEXT', 'MIDDLEINT', 'MINUTE_MICROSECOND', 'MINUTE_SECOND', 'MOD', 'MODIFIES', 'NATURAL', 'NOT', 'NO_WRITE_TO_BINLOG', 'NULL', 'NUMERIC', 'ON', 'OPTIMIZE', 'OPTION', 'OPTIONALLY', 'OR', 'ORDER', 'OUT', 'OUTER', 'OUTFILE', 'PRECISION', 'PRIMARY', 'PROCEDURE', 'PURGE', 'RAID0', 'RANGE', 'READ', 'READS', 'REAL', 'REFERENCES', 'REGEXP', 'RELEASE', 'RENAME', 'REPEAT', 'REPLACE', 'REQUIRE', 'RESTRICT', 'RETURN', 'REVOKE', 'RIGHT', 'RLIKE', 'SCHEMA', 'SCHEMAS', 'SECOND_MICROSECOND', 'SELECT', 'SENSITIVE', 'SEPARATOR', 'SET', 'SHOW', 'SMALLINT', 'SPATIAL', 'SPECIFIC', 'SQL', 'SQLEXCEPTION', 'SQLSTATE', 'SQLWARNING', 'SQL_BIG_RESULT', 'SQL_CALC_FOUND_ROWS', 'SQL_SMALL_RESULT', 'SSL', 'STARTING', 'STRAIGHT_JOIN', 'TABLE', 'TERMINATED', 'THEN', 'TINYBLOB', 'TINYINT', 'TINYTEXT', 'TO', 'TRAILING', 'TRIGGER', 'TRUE', 'UNDO', 'UNION', 'UNIQUE', 'UNLOCK', 'UNSIGNED', 'UPDATE', 'USAGE', 'USE', 'USING', 'UTC_DATE', 'UTC_TIME', 'UTC_TIMESTAMP', 'VALUES', 'VARBINARY', 'VARCHAR', 'VARCHARACTER', 'VARYING', 'WHEN', 'WHERE', 'WHILE', 'WITH', 'WRITE', 'X509', 'XOR', 'YEAR_MONTH', 'ZEROFILL', 'ACTION', 'BIT', 'DATE', 'ENUM', 'NO', 'TEXT', 'TIME');
 if(!$operation) {
 
@@ -32,9 +32,9 @@ if(!$operation) {
 	if(!submitcheck('typesubmit')) {
 
 		$forumsarray = $fidsarray = array();
-		$query = DB::query("SELECT f.fid, f.name, ff.$changetype FROM ".DB::table('forum_forum')." f , ".DB::table('forum_forumfield')." ff WHERE ff.$changetype<>'' AND f.fid=ff.fid");
-		while($forum = DB::fetch($query)) {
-			$forum[$changetype] = unserialize($forum[$changetype]);
+		$query = C::t('forum_forum')->fetch_all_for_threadsorts();
+		foreach($query as $forum) {
+			$forum[$changetype] = dunserialize($forum[$changetype]);
 			if(is_array($forum[$changetype]['types'])) {
 				foreach($forum[$changetype]['types'] as $typeid => $name) {
 					$forumsarray[$typeid][] = '<a href="'.ADMINSCRIPT.'?action=forums&operation=edit&fid='.$forum['fid'].'&anchor=threadtypes">'.$forum['name'].'</a>';
@@ -44,15 +44,18 @@ if(!$operation) {
 		}
 
 		$threadtypes = '';
-		$query = DB::query("SELECT * FROM ".DB::table('forum_threadtype')." ORDER BY displayorder");
-		while($type = DB::fetch($query)) {
-			$threadtypes .= showtablerow('', array('class="td25"', 'class="td28"', '', 'class="td29"', 'title="'.cplang('forums_threadtypes_forums_comment').'"', 'class="td25"'), array(
+		$query = C::t('forum_threadtype')->fetch_all_for_order();
+		foreach($query as $type) {
+			$tmpstr = "<a href=\"".ADMINSCRIPT."?action=threadtypes&operation=export&sortid=$type[typeid]\" class=\"act nowrap\">$lang[export]</a>";
+			$threadtypes .= showtablerow('', array('class="td25"', 'class="td28"', '', 'class="td29"', 'title="'.cplang('forums_threadtypes_forums_comment').'"'), array(
 				"<input class=\"checkbox\" type=\"checkbox\" name=\"delete[]\" value=\"$type[typeid]\">",
 				"<input type=\"text\" class=\"txt\" size=\"2\" name=\"displayordernew[$type[typeid]]\" value=\"$type[displayorder]\">",
 				"<input type=\"text\" class=\"txt\" size=\"15\" name=\"namenew[$type[typeid]]\" value=\"".dhtmlspecialchars($type['name'])."\">",
 				"<input type=\"text\" class=\"txt\" size=\"30\" name=\"descriptionnew[$type[typeid]]\" value=\"$type[description]\">",
-				is_array($forumsarray[$type['typeid']]) ? '<ul class="nowrap lineheight"><li>'.implode(',</li><li> ', $forumsarray[$type['typeid']])."</li></ul><input type=\"hidden\" name=\"fids[$type[typeid]]\" value=\"".implode(', ', $fidsarray[$type['typeid']])."\">" : '',
-				"<a href=\"".ADMINSCRIPT."?action=threadtypes&operation=sortdetail&sortid=$type[typeid]\" class=\"act nowrap\">$lang[detail]</a>"
+				is_array($forumsarray[$type['typeid']]) ? '<ul class="lineheight"><li class="left">'.implode(',&nbsp;</li><li class="left"> ', $forumsarray[$type['typeid']])."</li></ul><input type=\"hidden\" name=\"fids[$type[typeid]]\" value=\"".implode(', ', $fidsarray[$type['typeid']])."\">" : '',
+				"<a href=\"".ADMINSCRIPT."?action=threadtypes&operation=sortdetail&sortid=$type[typeid]\" class=\"act nowrap\">$lang[detail]</a>&nbsp;&nbsp;
+				<a href=\"".ADMINSCRIPT."?action=threadtypes&operation=sorttemplate&sortid=$type[typeid]\" class=\"act nowrap\">$lang[threadtype_template]</a>",
+				$tmpstr,
 			), TRUE);
 		}
 
@@ -76,11 +79,11 @@ var rowtypedata = [
 			array(array('menu' => ($curclassname ? $curclassname : 'threadtype_infotypes_option'), 'submenu' => $classoptionmenu), '', 0)
 		));
 
-		showformheader("threadtypes&");
+		showformheader("threadtypes&", 'enctype', 'threadtypeform');
 		showtableheader('');
-		showsubtitle(array('', 'display_order', 'name', 'description', 'forums_relation', ''));
+		showsubtitle(array('', 'display_order', 'name', 'description', 'forums_relation', '', ''), 'header', array('', 'width="60"', 'width="110"', 'width="210"', '', 'width="90"', 'width="60"'));
 		echo $threadtypes;
-		echo '<tr><td class="td25"></td><td colspan="5"><div><a href="###" onclick="addrow(this, 0)" class="addtr">'.$lang['threadtype_infotypes_add'].'</a></div></td>';
+		echo '<tr><td class="td25"></td><td colspan="5"><div>'.'<span class="filebtn"><input type="hidden" name="importtype" value="file" /><input type="file" name="importfile" class="pf" size="1" onchange="uploadthreadtypexml($(\'threadtypeform\'), \''.ADMINSCRIPT.'?action=threadtypes&operation=import\');" /><a class="addtr" href="JavaScript:;">'.$lang['import'].'</a></span>'.'<a href="###" onclick="addrow(this, 0)" class="addtr">'.$lang['threadtype_infotypes_add'].'</a></div></td>';
 
 		showsubmit('typesubmit', 'submit', 'del');
 		showtablefooter();
@@ -90,26 +93,26 @@ var rowtypedata = [
 
 		$updatefids = $modifiedtypes = array();
 
-		if(is_array($_G['gp_delete'])) {
+		if(is_array($_GET['delete'])) {
 
-			if($deleteids = dimplode($_G['gp_delete'])) {
-				DB::query("DELETE FROM ".DB::table('forum_typeoptionvar')." WHERE sortid IN ($deleteids)");
-				DB::query("DELETE FROM ".DB::table('forum_typevar')." WHERE sortid IN ($deleteids)");
-				DB::query("DELETE FROM ".DB::table('forum_threadtype')." WHERE typeid IN ($deleteids)");
+			if($deleteids = dimplode($_GET['delete'])) {
+				C::t('forum_typeoptionvar')->delete_by_sortid($_GET['delete']);
+				C::t('forum_typevar')->delete($_GET['delete']);
+				$affected_rows = C::t('forum_threadtype')->delete($_GET['delete']);
 			}
 
-			foreach($_G['gp_delete'] as $_G['gp_sortid']) {
-				DB::query("DROP TABLE IF EXISTS ".DB::table('forum_optionvalue')."{$_G['gp_sortid']}");
+			foreach($_GET['delete'] as $_GET['sortid']) {
+				C::t('forum_optionvalue')->drop($_GET['sortid']);
 			}
 
-			if($deleteids && DB::affected_rows()) {
-				DB::query("UPDATE ".DB::table('forum_thread')." SET typeid='0' WHERE typeid IN ($deleteids)");
-				foreach($_G['gp_delete'] as $id) {
-					if(is_array($_G['gp_namenew']) && isset($_G['gp_namenew'][$id])) {
-						unset($_G['gp_namenew'][$id]);
+			if($deleteids && $affected_rows) {
+				C::t('forum_thread')->update_sortid_by_sortid(0, $deleteids);
+				foreach($_GET['delete'] as $id) {
+					if(is_array($_GET['namenew']) && isset($_GET['namenew'][$id])) {
+						unset($_GET['namenew'][$id]);
 					}
-					if(!empty($_G['gp_fids'][$id])) {
-						foreach(explode(',', $_G['gp_fids'][$id]) as $fid) {
+					if(!empty($_GET['fids'][$id])) {
+						foreach(explode(',', $_GET['fids'][$id]) as $fid) {
 							if($fid = intval($fid)) {
 								$updatefids[$fid]['deletedids'][] = intval($id);
 							}
@@ -119,24 +122,25 @@ var rowtypedata = [
 			}
 		}
 
-		if(is_array($_G['gp_namenew']) && $_G['gp_namenew']) {
-			foreach($_G['gp_namenew'] as $typeid => $val) {
-				$_G['gp_descriptionnew'] = is_array($_G['gp_descriptionnew']) ? $_G['gp_descriptionnew'] : array();
-				DB::update('forum_threadtype', array(
-					'name' => trim($_G['gp_namenew'][$typeid]),
-					'description' => dhtmlspecialchars(trim($_G['gp_descriptionnew'][$typeid])),
-					'displayorder' => intval($_G['gp_displayordernew'][$typeid]),
+		if(is_array($_GET['namenew']) && $_GET['namenew']) {
+			foreach($_GET['namenew'] as $typeid => $val) {
+				$_GET['descriptionnew'] = is_array($_GET['descriptionnew']) ? $_GET['descriptionnew'] : array();
+				$data = array(
+					'name' => trim($_GET['namenew'][$typeid]),
+					'description' => dhtmlspecialchars(trim($_GET['descriptionnew'][$typeid])),
+					'displayorder' => intval($_GET['displayordernew'][$typeid]),
 					'special' => 1,
-				), "typeid='$typeid'");
-				if(DB::affected_rows()) {
+				);
+				$affected_rows = C::t('forum_threadtype')->update($typeid, $data);
+				if($affected_rows) {
 					$modifiedtypes[] = $typeid;
 				}
 			}
 
 			if($modifiedtypes = array_unique($modifiedtypes)) {
 				foreach($modifiedtypes as $id) {
-					if(!empty($_G['gp_fids'][$id])) {
-						foreach(explode(',', $_G['gp_fids'][$id]) as $fid) {
+					if(!empty($_GET['fids'][$id])) {
+						foreach(explode(',', $_GET['fids'][$id]) as $fid) {
 							if($fid = intval($fid)) {
 								$updatefids[$fid]['modifiedids'][] = $id;
 							}
@@ -147,10 +151,11 @@ var rowtypedata = [
 		}
 
 		if($updatefids) {
-			$query = DB::query("SELECT fid, $changetype FROM ".DB::table('forum_forumfield')." WHERE fid IN (".dimplode(array_keys($updatefids)).") AND $changetype<>''");
-			while($forum = DB::fetch($query)) {
+			$query = C::t('forum_forum')->fetch_all_info_by_fids(array_keys($updatefids));
+			foreach($query as $forum) {
+				if($forum[$changetype] == '') continue;
 				$fid = $forum['fid'];
-				$forum[$changetype] = unserialize($forum[$changetype]);
+				$forum[$changetype] = dunserialize($forum[$changetype]);
 				if($updatefids[$fid]['deletedids']) {
 					foreach($updatefids[$fid]['deletedids'] as $id) {
 						unset($forum[$changetype]['types'][$id], $forum[$changetype]['flat'][$id], $forum[$changetype]['selectbox'][$id]);
@@ -159,36 +164,33 @@ var rowtypedata = [
 				if($updatefids[$fid]['modifiedids']) {
 					foreach($updatefids[$fid]['modifiedids'] as $id) {
 						if(isset($forum[$changetype]['types'][$id])) {
-							$_G['gp_namenew'][$id] = trim(strip_tags($_G['gp_namenew'][$id]));
-							$forum[$changetype]['types'][$id] = $_G['gp_namenew'][$id];
+							$_GET['namenew'][$id] = trim(strip_tags($_GET['namenew'][$id]));
+							$forum[$changetype]['types'][$id] = $_GET['namenew'][$id];
 							if(isset($forum[$changetype]['selectbox'][$id])) {
-								$forum[$changetype]['selectbox'][$id] = $_G['gp_namenew'][$id];
+								$forum[$changetype]['selectbox'][$id] = $_GET['namenew'][$id];
 							} else {
-								$forum[$changetype]['flat'][$id] = $_G['gp_namenew'][$id];
+								$forum[$changetype]['flat'][$id] = $_GET['namenew'][$id];
 							}
 						}
 					}
 				}
-				DB::update('forum_forumfield', array(
-					$changetype => addslashes(serialize($forum[$changetype])),
-				), "fid='$fid'");
+				C::t('forum_forumfield')->update($fid, array($changetype => serialize($forum[$changetype])));
 			}
 		}
 
-		if(is_array($_G['gp_newname'])) {
-			foreach($_G['gp_newname'] as $key => $value) {
+		if(is_array($_GET['newname'])) {
+			foreach($_GET['newname'] as $key => $value) {
 				if($newname1 = trim(strip_tags($value))) {
-					$query = DB::query("SELECT typeid FROM ".DB::table('forum_threadtype')." WHERE name='$newname1'");
-					if(DB::num_rows($query)) {
+					if(C::t('forum_threadtype')->checkname($newname1)) {
 						cpmsg('forums_threadtypes_duplicate', '', 'error');
 					}
 					$data = array(
 						'name' => $newname1,
-						'description' => dhtmlspecialchars(trim($_G['gp_newdescription'][$key])),
-						'displayorder' => $_G['gp_newdisplayorder'][$key],
+						'description' => dhtmlspecialchars(trim($_GET['newdescription'][$key])),
+						'displayorder' => $_GET['newdisplayorder'][$key],
 						'special' => 1,
 					);
-					DB::insert('forum_threadtype', $data);
+					C::t('forum_threadtype')->insert($data);
 				}
 			}
 		}
@@ -201,14 +203,14 @@ var rowtypedata = [
 
 	if(!submitcheck('typeoptionsubmit')) {
 
-		if($_G['gp_classid']) {
-			if(!$typetitle = DB::result_first("SELECT title FROM ".DB::table('forum_typeoption')." WHERE optionid='{$_G['gp_classid']}'")) {
+		if($_GET['classid']) {
+			$typetitle = C::t('forum_typeoption')->fetch($_GET['classid']);
+			if(!$typetitle['title']) {
 				cpmsg('threadtype_infotypes_noexist', 'action=threadtypes', 'error');
 			}
 
 			$typeoptions = '';
-			$query = DB::query("SELECT * FROM ".DB::table('forum_typeoption')." WHERE classid='{$_G['gp_classid']}' ORDER BY displayorder");
-			while($option = DB::fetch($query)) {
+			foreach(C::t('forum_typeoption')->fetch_all_by_classid($_GET['classid']) as $option) {
 				$option['type'] = $lang['threadtype_edit_vars_type_'. $option['type']];
 				$typeoptions .= showtablerow('', array('class="td25"', 'class="td28"'), array(
 					"<input class=\"checkbox\" type=\"checkbox\" name=\"delete[]\" value=\"$option[optionid]\">",
@@ -242,8 +244,8 @@ EOT;
 			array('threadtype_infotypes_content', 'threadtypes&operation=content', 0),
 			array(array('menu' => ($curclassname ? $curclassname : 'threadtype_infotypes_option'), 'submenu' => $classoptionmenu), 1)
 		));
-		showformheader("threadtypes&operation=typeoption&typeid={$_G['gp_typeid']}");
-		showhiddenfields(array('classid' => $_G['gp_classid']));
+		showformheader("threadtypes&operation=typeoption&typeid={$_GET['typeid']}");
+		showhiddenfields(array('classid' => $_GET['classid']));
 		showtableheader();
 
 		showsubtitle(array('', 'display_order', 'name', 'threadtype_variable', 'threadtype_type', ''));
@@ -256,57 +258,56 @@ EOT;
 
 	} else {
 
-		if($ids = dimplode($_G['gp_delete'])) {
-			DB::query("DELETE FROM ".DB::table('forum_typeoption')." WHERE optionid IN ($ids)");
-			DB::query("DELETE FROM ".DB::table('forum_typevar')." WHERE optionid IN ($ids)");
+		if($ids = dimplode($_GET['delete'])) {
+			C::t('forum_typeoption')->delete($_GET['delete']);
+			C::t('forum_typevar')->delete(null, $_GET['delete']);
 		}
 
-		if(is_array($_G['gp_title'])) {
-			foreach($_G['gp_title'] as $id => $val) {
-				if(in_array(strtoupper($_G['gp_identifier'][$id]), $mysql_keywords)) {
+		if(is_array($_GET['title'])) {
+			foreach($_GET['title'] as $id => $val) {
+				if(in_array(strtoupper($_GET['identifier'][$id]), $mysql_keywords)) {
 					continue;
 				}
-				DB::update('forum_typeoption', array(
-					'displayorder' => $_G['gp_displayorder'][$id],
-					'title' => $_G['gp_title'][$id],
-					'identifier' => $_G['gp_identifier'][$id],
-				), "optionid='$id'");
+				C::t('forum_typeoption')->update($id, array(
+					'displayorder' => $_GET['displayorder'][$id],
+					'title' => $_GET['title'][$id],
+					'identifier' => $_GET['identifier'][$id],
+				));
 			}
 		}
 
-		if(is_array($_G['gp_newtitle'])) {
-			foreach($_G['gp_newtitle'] as $key => $value) {
+		if(is_array($_GET['newtitle'])) {
+			foreach($_GET['newtitle'] as $key => $value) {
 				$newtitle1 = dhtmlspecialchars(trim($value));
-				$newidentifier1 = trim($_G['gp_newidentifier'][$key]);
+				$newidentifier1 = trim($_GET['newidentifier'][$key]);
 				if($newtitle1 && $newidentifier1) {
 					if(in_array(strtoupper($newidentifier1), $mysql_keywords)) {
 						cpmsg('threadtype_infotypes_optionvariable_iskeyword', '', 'error');
 					}
-					$query = DB::query("SELECT optionid FROM ".DB::table('forum_typeoption')." WHERE identifier='$newidentifier1' LIMIT 1");
-					if(DB::num_rows($query) || strlen($newidentifier1) > 40  || !ispluginkey($newidentifier1)) {
+					if(C::t('forum_typeoption')->fetch_all_by_identifier($newidentifier1, 0, 1) || strlen($newidentifier1) > 40  || !ispluginkey($newidentifier1)) {
 						cpmsg('threadtype_infotypes_optionvariable_invalid', '', 'error');
 					}
 					$data = array(
-						'classid' => $_G['gp_classid'],
-						'displayorder' => $_G['gp_newdisplayorder'][$key],
+						'classid' => $_GET['classid'],
+						'displayorder' => $_GET['newdisplayorder'][$key],
 						'title' => $newtitle1,
 						'identifier' => $newidentifier1,
-						'type' => $_G['gp_newtype'][$key],
+						'type' => $_GET['newtype'][$key],
 					);
-					DB::insert('forum_typeoption', $data);
+					C::t('forum_typeoption')->insert($data);
 				} elseif($newtitle1 && !$newidentifier1) {
-					cpmsg('threadtype_infotypes_option_invalid', 'action=threadtypes&operation=typeoption&classid='.$_G['gp_classid'], 'error');
+					cpmsg('threadtype_infotypes_option_invalid', 'action=threadtypes&operation=typeoption&classid='.$_GET['classid'], 'error');
 				}
 			}
 		}
 		updatecache('threadsorts');
-		cpmsg('threadtype_infotypes_succeed', 'action=threadtypes&operation=typeoption&classid='.$_G['gp_classid'], 'succeed');
+		cpmsg('threadtype_infotypes_succeed', 'action=threadtypes&operation=typeoption&classid='.$_GET['classid'], 'succeed');
 
 	}
 
 } elseif($operation == 'optiondetail') {
 
-	$option = DB::fetch_first("SELECT * FROM ".DB::table('forum_typeoption')." WHERE optionid='{$_G['gp_optionid']}'");
+	$option = C::t('forum_typeoption')->fetch($_GET['optionid']);
 	if(!$option) {
 		cpmsg('typeoption_not_found', '', 'error');
 	}
@@ -327,22 +328,28 @@ EOT;
 		}
 		$typeselect .= '</select>';
 
-		$option['rules'] = unserialize($option['rules']);
-		$option['protect'] = unserialize($option['protect']);
+		$option['rules'] = dunserialize($option['rules']);
+		$option['protect'] = dunserialize($option['protect']);
 
 		$groups = $forums = array();
-		$query = DB::query("SELECT groupid, grouptitle FROM ".DB::table('common_usergroup')."");
-		while($group = DB::fetch($query)) {
+		foreach(C::t('common_usergroup')->range() as $group) {
 			$groups[] = array($group['groupid'], $group['grouptitle']);
 		}
+		$verifys = array();
+		if($_G['setting']['verify']['enabled']) {
+			foreach($_G['setting']['verify'] as $key => $verify) {
+				if($verify['available'] == 1) {
+					$verifys[] = array($key, $verify['title']);
+				}
+			}
+		}
 
-		$query = DB::query("SELECT fieldid, title FROM ".DB::table('common_member_profile_setting')." WHERE available = 1 AND formtype = 'text'");
-		while($result = DB::fetch($query)) {
+		foreach(C::t('common_member_profile_setting')->fetch_all_by_available_formtype(1, 'text') as $result) {
 			$threadtype_profile = !$threadtype_profile ? "<select id='rules[text][profile]' name='rules[text][profile]'><option value=''></option>" : $threadtype_profile."<option value='{$result[fieldid]}' ".($option['rules']['profile'] == $result['fieldid'] ? "selected='selected'" : '').">{$result[title]}</option>";
 		}
 		$threadtype_profile .= "</select>";
 
-		showformheader("threadtypes&operation=optiondetail&optionid=$_G[gp_optionid]");
+		showformheader("threadtypes&operation=optiondetail&optionid=$_GET[optionid]");
 		showtableheader();
 		showtitle('threadtype_infotypes_option_config');
 		showsetting('name', 'titlenew', $option['title'], 'text');
@@ -351,13 +358,15 @@ EOT;
 		showsetting('threadtype_edit_desc', 'descriptionnew', $option['description'], 'textarea');
 		showsetting('threadtype_unit', 'unitnew', $option['unit'], 'text');
 		showsetting('threadtype_expiration', 'expirationnew', $option['expiration'], 'radio');
-		if(in_array($option['type'], array('calendar', 'number', 'text', 'email'))) {
+		if(in_array($option['type'], array('calendar', 'number', 'text', 'email', 'textarea'))) {
 			showsetting('threadtype_protect', 'protectnew[status]', $option['protect']['status'], 'radio', 0, 1);
 			showsetting('threadtype_protect_mode', array('protectnew[mode]', array(
 				array(1, $lang['threadtype_protect_mode_pic']),
 				array(2, $lang['threadtype_protect_mode_html'])
 			)), $option['protect']['mode'], 'mradio');
 			showsetting('threadtype_protect_usergroup', array('protectnew[usergroup][]', $groups), explode("\t", $option['protect']['usergroup']), 'mselect');
+			$verifys && showsetting('threadtype_protect_verify', array('protectnew[verify][]', $verifys), explode("\t", $option['protect']['verify']), 'mselect');
+			showsetting('threadtype_protect_permprompt', 'permpromptnew', $option['permprompt'], 'textarea');
 		}
 
 		showtagheader('tbody', "style_calendar", $option['type'] == 'calendar');
@@ -426,33 +435,34 @@ EOT;
 
 	} else {
 
-		$titlenew = trim($_G['gp_titlenew']);
-		$_G['gp_identifiernew'] = trim($_G['gp_identifiernew']);
-		if(!$titlenew || !$_G['gp_identifiernew']) {
+		$titlenew = trim($_GET['titlenew']);
+		$_GET['identifiernew'] = trim($_GET['identifiernew']);
+		if(!$titlenew || !$_GET['identifiernew']) {
 			cpmsg('threadtype_infotypes_option_invalid', '', 'error');
 		}
 
-		if(in_array(strtoupper($_G['gp_identifiernew']), $mysql_keywords)) {
+		if(in_array(strtoupper($_GET['identifiernew']), $mysql_keywords)) {
 			cpmsg('threadtype_infotypes_optionvariable_iskeyword', '', 'error');
 		}
 
-		$query = DB::query("SELECT optionid FROM ".DB::table('forum_typeoption')." WHERE identifier='{$_G['gp_identifiernew']}' AND optionid<>'{$_G['gp_optionid']}' LIMIT 1");
-		if(DB::num_rows($query) || strlen($_G['gp_identifiernew']) > 40  || !ispluginkey($_G['gp_identifiernew'])) {
+		if(C::t('forum_typeoption')->fetch_all_by_identifier($_GET['identifiernew'], 0, 1, $_GET['optionid']) || strlen($_GET['identifiernew']) > 40  || !ispluginkey($_GET['identifiernew'])) {
 			cpmsg('threadtype_infotypes_optionvariable_invalid', '', 'error');
 		}
 
-		$_G['gp_protectnew']['usergroup'] = $_G['gp_protectnew']['usergroup'] ? implode("\t", $_G['gp_protectnew']['usergroup']) : '';
+		$_GET['protectnew']['usergroup'] = $_GET['protectnew']['usergroup'] ? implode("\t", $_GET['protectnew']['usergroup']) : '';
+		$_GET['protectnew']['verify'] = $_GET['protectnew']['verify'] ? implode("\t", $_GET['protectnew']['verify']) : '';
 
-		DB::update('forum_typeoption', array(
+		C::t('forum_typeoption')->update($_GET['optionid'], array(
 			'title' => $titlenew,
-			'description' => $_G['gp_descriptionnew'],
-			'identifier' => $_G['gp_identifiernew'],
-			'type' => $_G['gp_typenew'],
-			'unit' => $_G['gp_unitnew'],
-			'expiration' => $_G['gp_expirationnew'],
-			'protect' => addslashes(serialize($_G['gp_protectnew'])),
-			'rules' => addslashes(serialize($_G['gp_rules'][$_G['gp_typenew']])),
-		), "optionid='{$_G['gp_optionid']}'");
+			'description' => $_GET['descriptionnew'],
+			'identifier' => $_GET['identifiernew'],
+			'type' => $_GET['typenew'],
+			'unit' => $_GET['unitnew'],
+			'expiration' => $_GET['expirationnew'],
+			'protect' => serialize($_GET['protectnew']),
+			'rules' => serialize($_GET['rules'][$_GET['typenew']]),
+			'permprompt' => $_GET['permpromptnew'],
+		));
 
 		updatecache('threadsorts');
 		cpmsg('threadtype_infotypes_option_succeed', 'action=threadtypes&operation=typeoption&classid='.$option['classid'], 'succeed');
@@ -460,16 +470,18 @@ EOT;
 
 } elseif($operation == 'sortdetail') {
 
-	if(!submitcheck('sortdetailsubmit') && !submitcheck('sortpreviewsubmit')) {
-		$threadtype = DB::fetch_first("SELECT name, template, stemplate, ptemplate, btemplate, modelid, expiration FROM ".DB::table('forum_threadtype')." WHERE typeid='{$_G['gp_sortid']}'");
-		$threadtype['modelid'] = isset($_G['gp_modelid']) ? intval($_G['gp_modelid']) : $threadtype['modelid'];
+	if(!submitcheck('sortdetailsubmit')) {
+		$threadtype = C::t('forum_threadtype')->fetch($_GET['sortid']);
+		$threadtype['modelid'] = isset($_GET['modelid']) ? intval($_GET['modelid']) : $threadtype['modelid'];
 
 		$sortoptions = $jsoptionids = '';
 		$showoption = array();
-		$query = DB::query("SELECT t.optionid, t.displayorder, t.available, t.required, t.unchangeable, t.search, t.subjectshow, tt.title, tt.type, tt.identifier
-			FROM ".DB::table('forum_typevar')." t, ".DB::table('forum_typeoption')." tt
-			WHERE t.sortid='{$_G['gp_sortid']}' AND t.optionid=tt.optionid ORDER BY t.displayorder");
-		while($option = DB::fetch($query)) {
+		$typevararr = C::t('forum_typevar')->fetch_all_by_sortid($_GET['sortid'], 'ASC');
+		$typeoptionarr = C::t('forum_typeoption')->fetch_all(array_keys($typevararr));
+		foreach($typevararr as $option) {
+			$option['title'] = $typeoptionarr[$option['optionid']]['title'];
+			$option['type'] = $typeoptionarr[$option['optionid']]['type'];
+			$option['identifier'] = $typeoptionarr[$option['optionid']]['identifier'];
 			$jsoptionids .= "optionids.push($option[optionid]);\r\n";
 			$optiontitle[$option['identifier']] = $option['title'];
 			$showoption[$option['optionid']]['optionid'] = $option['optionid'];
@@ -483,15 +495,14 @@ EOT;
 			$showoption[$option['optionid']]['search'] = $option['search'];
 			$showoption[$option['optionid']]['subjectshow'] = $option['subjectshow'];
 		}
+		unset($typevararr, $typeoptionarr);
 
 		if($existoption && is_array($existoption)) {
-			$optionids = $comma = '';
+			$optionids = array();
 			foreach($existoption as $optionid => $val) {
-				$optionids .= $comma.$optionid;
-				$comma = '\',\'';
+				$optionids[] = $optionid;
 			}
-			$query = DB::query("SELECT * FROM ".DB::table('forum_typeoption')." WHERE optionid IN ('$optionids')");
-			while($option = DB::fetch($query)) {
+			foreach(C::t('forum_typeoption')->fetch_all($optionids) as $option) {
 				$showoption[$option['optionid']]['optionid'] = $option['optionid'];
 				$showoption[$option['optionid']]['title'] = $option['title'];
 				$showoption[$option['optionid']]['type'] = $lang['threadtype_edit_vars_type_'. $option['type']];
@@ -516,10 +527,6 @@ EOT;
 				"<input class=\"checkbox\" type=\"checkbox\" name=\"search[$option[optionid]][form]\" value=\"1\" ".(getstatus($option['search'], 1) == 1 ? 'checked' : '').">",
 				"<input class=\"checkbox\" type=\"checkbox\" name=\"search[$option[optionid]][font]\" value=\"1\" ".(getstatus($option['search'], 2) == 1 ? 'checked' : '').">",
 				"<input class=\"checkbox\" type=\"checkbox\" name=\"subjectshow[$option[optionid]]\" value=\"1\" ".($option['subjectshow'] ? 'checked' : '').">",
-				"<a href=\"###\" onclick=\"insertvar('$option[identifier]', 'typetemplate', 'message');doane(event);return false;\" class=\"act\">".$lang['threadtype_infotypes_add_template']."</a>",
-				"<a href=\"###\" onclick=\"insertvar('$option[identifier]', 'stypetemplate', 'subject');doane(event);return false;\" class=\"act\">".$lang['threadtype_infotypes_add_stemplate']."</a>",
-				"<a href=\"###\" onclick=\"insertvar('$option[identifier]', 'ptypetemplate', 'post');doane(event);return false;\" class=\"act\">".$lang['threadtype_infotypes_add_ptemplate']."</a>",
-				"<a href=\"###\" onclick=\"insertvar('$option[identifier]', 'btypetemplate', 'subject');doane(event);return false;\" class=\"act\">".$lang['threadtype_infotypes_add_btemplate']."</a>",
 				"<a href=\"".ADMINSCRIPT."?action=threadtypes&operation=optiondetail&optionid=$option[optionid]\" class=\"act\" target=\"_blank\">".$lang['edit']."</a>"
 			), TRUE);
 			$searchtitle[] = '/{('.$option['identifier'].')}/e';
@@ -536,7 +543,7 @@ EOT;
 		showsubmenu('forums_edit_threadsorts');
 		showtips('forums_edit_threadsorts_tips');
 
-		showformheader("threadtypes&operation=sortdetail&sortid={$_G['gp_sortid']}");
+		showformheader("threadtypes&operation=sortdetail&sortid={$_GET['sortid']}");
 		showtableheader('threadtype_infotypes_validity', 'nobottom');
 		showsetting('threadtype_infotypes_validity', 'typeexpiration', $threadtype['expiration'], 'radio');
 		showtablefooter();
@@ -547,55 +554,17 @@ EOT;
 		showtablefooter();
 
 		showtableheader("$threadtype[name] - $lang[threadtype_infotypes_exist_option]", 'noborder fixpadding', 'id="sortlist"');
-		showsubtitle(array('<input type="checkbox" name="chkall" id="chkall" class="checkbox" onclick="checkAll(\'prefix\', this.form,\'delete\')" /><label for="chkall">'.cplang('del').'</label>', 'display_order', 'available', 'name', 'type', 'required', 'unchangeable', 'threadtype_infotypes_formsearch', 'threadtype_infotypes_fontsearch', 'threadtype_infotypes_show', 'threadtype_infotypes_insert_template', '', ''));
+		showsubtitle(array('<input type="checkbox" name="chkall" id="chkall" class="checkbox" onclick="checkAll(\'prefix\', this.form,\'delete\')" /><label for="chkall">'.cplang('del').'</label>', 'display_order', 'available', 'name', 'type', 'required', 'unchangeable', 'threadtype_infotypes_formsearch', 'threadtype_infotypes_fontsearch', 'threadtype_infotypes_show', ''));
 		echo $sortoptions;
 		showtablefooter();
 
 ?>
 
-<a name="template"></a>
-<div class="colorbox">
-<h4 style="margin-bottom:15px;"><?php echo $threadtype['name'];?> - <?php echo $lang['threadtype_infotypes_template'];?></h4>
-<textarea cols="100" rows="15" id="typetemplate" name="typetemplate" style="width: 95%;" onkeyup="textareasize(this)"><?php echo $threadtype['template'];?></textarea>
-<br /><br />
-<h4 style="margin-bottom:15px;"><?php echo $threadtype['name'];?> - <?php echo $lang['threadtype_infotypes_stemplate'];?></h4>
-<textarea cols="100" rows="15" id="stypetemplate" name="stypetemplate" style="width: 95%;" onkeyup="textareasize(this)"><?php echo $threadtype['stemplate'];?></textarea>
-<br /><br />
-<h4 style="margin-bottom:15px;"><?php echo $threadtype['name'];?> - <?php echo $lang['threadtype_infotypes_ptemplate'];?></h4>
-<textarea cols="100" rows="15" id="ptypetemplate" name="ptypetemplate" style="width: 95%;" onkeyup="textareasize(this)"><?php echo $threadtype['ptemplate'];?></textarea>
-<br /><br />
-<h4 style="margin-bottom:15px;"><?php echo $threadtype['name'];?> - <?php echo $lang['threadtype_infotypes_btemplate'];?></h4>
-<textarea cols="100" rows="15" id="btypetemplate" name="btypetemplate" style="width: 95%;" onkeyup="textareasize(this)"><?php echo $threadtype['btemplate'];?></textarea>
-<br /><br />
-<b><?php echo $lang['threadtype_infotypes_template'];?>:</b>
-<ul class="tpllist"><?php echo $lang['threadtype_infotypes_template_tips'];?></ul>
 <input type="submit" class="btn" name="sortdetailsubmit" value="<?php echo $lang['submit'];?>">
-</div>
-
 </form>
 <script type="text/JavaScript">
 	var optionids = new Array();
 	<?php echo $jsoptionids;?>
-	function insertvar(text, focusarea, location) {
-		$(focusarea).focus();
-		selection = document.selection;
-		var commonfield = '[' + text + 'value] [' + text + 'unit]';
-		if(selection && selection.createRange) {
-			var sel = selection.createRange();
-			if(location == 'post') {
-				sel.text = '<dt><strong class="rq">[' + text + 'required]</strong>{' + text + '}</dt><dd>' + commonfield + '[' + text + 'tips] [' + text + 'description]</dd>\r\n';
-			} else {
-				sel.text = location == 'message' ? '<dt>{' + text + '}:</dt><dd>' + commonfield + ' </dd>\r\n' : '<p><em>{' + text + '}:</em>' + commonfield + '</p>';
-			}
-			sel.moveStart('character', -strlen(text));
-		} else {
-			if(location == 'post') {
-				$(focusarea).value += '<dt><strong class="rq">[' + text + 'required]</strong>{' + text + '}</dt><dd>' + commonfield + ' [' + text + 'tips] [' + text + 'description]</dd>\r\n';
-			} else {
-				$(focusarea).value += location == 'message' ? '<dt>{' + text + '}:</dt><dd>' + commonfield + '</dd>\r\n' : '<p><em>{' + text + '}:</em>' + commonfield + '</p>';
-			}
-		}
-	}
 
 	function checkedbox() {
 		var tags = $('optionlist').getElementsByTagName('input');
@@ -632,30 +601,39 @@ EOT;
 	}
 </script>
 <script type="text/JavaScript">ajaxget('<?php echo ADMINSCRIPT;?>?action=threadtypes&operation=classlist', 'classlist');</script>
-<script type="text/JavaScript">ajaxget('<?php echo ADMINSCRIPT;?>?action=threadtypes&operation=optionlist&sortid=<?php echo $_G['gp_sortid'];?>', 'optionlist', '', '', '', checkedbox);</script>
+<script type="text/JavaScript">ajaxget('<?php echo ADMINSCRIPT;?>?action=threadtypes&operation=optionlist&sortid=<?php echo $_GET['sortid'];?>', 'optionlist', '', '', '', checkedbox);</script>
 <?php
 
 	} else {
-
-		DB::update('forum_threadtype', array(
-			'special' => 1,
-			'modelid' => $_G['gp_modelid'],
-			'template' => $_G['gp_typetemplate'],
-			'stemplate' => $_G['gp_stypetemplate'],
-			'ptemplate' => $_G['gp_ptypetemplate'],
-			'btemplate' => $_G['gp_btypetemplate'],
-			'expiration' => $_G['gp_typeexpiration'],
-		), "typeid='{$_G['gp_sortid']}'");
+		$threadtype = C::t('forum_threadtype')->fetch($_GET['sortid']);
+		if($_GET['typeexpiration'] != $threadtype['expiration']) {
+			$query = C::t('forum_forum')->fetch_all_for_threadsorts();
+			$fidsarray = array();
+			foreach($query as $forum) {
+				$forum['threadsorts'] = dunserialize($forum['threadsorts']);
+				if(is_array($forum['threadsorts']['types'])) {
+					foreach($forum['threadsorts']['types'] as $typeid => $name) {
+						$typeid == $_GET['sortid'] && $fidsarray[$forum['fid']] = $forum['threadsorts'];
+					}
+				}
+			}
+			if($fidsarray) {
+				foreach($fidsarray as $changefid => $forumthreadsorts) {
+					$forumthreadsorts['expiration'][$_GET['sortid']] = $_GET['typeexpiration'];
+					C::t('forum_forumfield')->update($changefid, array('threadsorts' => serialize($forumthreadsorts)));
+				}
+			}
+		}
+		C::t('forum_threadtype')->update($_GET['sortid'], array('special' => 1, 'modelid' => $_GET['modelid'], 'expiration' => $_GET['typeexpiration']));
 
 		if(submitcheck('sortdetailsubmit')) {
 
 			$orgoption = $orgoptions = $addoption = array();
-			$query = DB::query("SELECT optionid FROM ".DB::table('forum_typevar')." WHERE sortid='{$_G['gp_sortid']}'");
-			while($orgoption = DB::fetch($query)) {
+			foreach(C::t('forum_typevar')->fetch_all_by_sortid($_GET['sortid']) as $orgoption) {
 				$orgoptions[] = $orgoption['optionid'];
 			}
 
-			$addoption = $addoption ? (array)$addoption + (array)$_G['gp_displayorder'] : (array)$_G['gp_displayorder'];
+			$addoption = $addoption ? (array)$addoption + (array)$_GET['displayorder'] : (array)$_GET['displayorder'];
 
 			@$newoptions = array_keys($addoption);
 
@@ -663,11 +641,11 @@ EOT;
 				cpmsg('threadtype_infotypes_invalid', '', 'error');
 			}
 
-			@$delete = array_merge((array)$_G['gp_delete'], array_diff($orgoptions, $newoptions));
+			@$delete = array_merge((array)$_GET['delete'], array_diff($orgoptions, $newoptions));
 
 			if($delete) {
 				if($ids = dimplode($delete)) {
-					DB::query("DELETE FROM ".DB::table('forum_typevar')." WHERE sortid='{$_G['gp_sortid']}' AND optionid IN ($ids)");
+					C::t('forum_typevar')->delete($_GET['sortid'], $delete);
 				}
 				foreach($delete as $id) {
 					unset($addoption[$id]);
@@ -678,26 +656,24 @@ EOT;
 			$create_table_sql = $separator = $create_tableoption_sql = '';
 
 			if(is_array($addoption) && !empty($addoption)) {
-				$query = DB::query("SELECT optionid, type, identifier FROM ".DB::table('forum_typeoption')." WHERE optionid IN (".dimplode(array_keys($addoption)).")");
-				while($option = DB::fetch($query)) {
+				foreach(C::t('forum_typeoption')->fetch_all(array_keys($addoption)) as $option) {
 					$insertoptionid[$option['optionid']]['type'] = $option['type'];
 					$insertoptionid[$option['optionid']]['identifier'] = $option['identifier'];
 				}
 
-				$query = DB::query("SHOW TABLES LIKE '".DB::table('forum_optionvalue')."{$_G['gp_sortid']}'");
-				if(DB::num_rows($query) != 1) {
-					$create_table_sql = "CREATE TABLE ".DB::table('forum_optionvalue')."{$_G['gp_sortid']} (";
+				if(!C::t('forum_optionvalue')->showcolumns($_GET['sortid'])) {
+					$fields = '';
 					foreach($addoption as $optionid => $option) {
 						$identifier = $insertoptionid[$optionid]['identifier'];
 						if($identifier) {
 							if(in_array($insertoptionid[$optionid]['type'], array('radio'))) {
-								$create_tableoption_sql .= "$separator$identifier smallint(6) UNSIGNED NOT NULL DEFAULT '0'\r\n";
+								$create_tableoption_sql .= "$separator$identifier smallint(6) UNSIGNED NOT NULL DEFAULT '0'";
 							} elseif(in_array($insertoptionid[$optionid]['type'], array('number', 'range'))) {
-								$create_tableoption_sql .= "$separator$identifier int(10) UNSIGNED NOT NULL DEFAULT '0'\r\n";
+								$create_tableoption_sql .= "$separator$identifier int(10) UNSIGNED NOT NULL DEFAULT '0'";
 							} elseif($insertoptionid[$optionid]['type'] == 'select') {
-								$create_tableoption_sql .= "$separator$identifier varchar(50) NOT NULL\r\n";
+								$create_tableoption_sql .= "$separator$identifier varchar(50) NOT NULL";
 							} else {
-								$create_tableoption_sql .= "$separator$identifier mediumtext NOT NULL\r\n";
+								$create_tableoption_sql .= "$separator$identifier mediumtext NOT NULL";
 							}
 							$separator = ' ,';
 							if(in_array($insertoptionid[$optionid]['type'], array('radio', 'select', 'number'))) {
@@ -705,30 +681,20 @@ EOT;
 							}
 						}
 					}
-					$create_table_sql .= ($create_tableoption_sql ? $create_tableoption_sql.',' : '')."tid mediumint(8) UNSIGNED NOT NULL DEFAULT '0',fid smallint(6) UNSIGNED NOT NULL DEFAULT '0',dateline int(10) UNSIGNED NOT NULL DEFAULT '0',expiration int(10) UNSIGNED NOT NULL DEFAULT '0',";
-					$create_table_sql .= "KEY (fid), KEY(dateline)";
+					$fields .= ($create_tableoption_sql ? $create_tableoption_sql.',' : '')."tid mediumint(8) UNSIGNED NOT NULL DEFAULT '0',fid smallint(6) UNSIGNED NOT NULL DEFAULT '0',dateline int(10) UNSIGNED NOT NULL DEFAULT '0',expiration int(10) UNSIGNED NOT NULL DEFAULT '0',";
+					$fields .= "KEY (fid), KEY(dateline)";
 					if($indexoption) {
 						foreach($indexoption as $index) {
-							$create_table_sql .= "$separator KEY $index ($index)\r\n";
+							$fields .= "$separator KEY $index ($index)";
 							$separator = ' ,';
 						}
 					}
-					$create_table_sql .= ") TYPE=MyISAM;";
+					$dbcharset = $_G['config']['db'][1]['dbcharset'];
 					$dbcharset = empty($dbcharset) ? str_replace('-','',CHARSET) : $dbcharset;
-					$db = DB::object();
-					$create_table_sql = syntablestruct($create_table_sql, $db->version() > '4.1', $dbcharset);
-					DB::query($create_table_sql);
+
+					C::t('forum_optionvalue')->create($_GET['sortid'], $fields, $dbcharset);
 				} else {
-					$tables = array();
-					$db = DB::object();
-					if($db->version() > '4.1') {
-						$query = DB::query("SHOW FULL COLUMNS FROM ".DB::table('forum_optionvalue')."{$_G['gp_sortid']}", 'SILENT');
-					} else {
-						$query = DB::query("SHOW COLUMNS FROM ".DB::table('forum_optionvalue')."{$_G['gp_sortid']}", 'SILENT');
-					}
-					while($field = @DB::fetch($query)) {
-						$tables[$field['Field']] = 1;
-					}
+					$tables = C::t('forum_optionvalue')->showcolumns($_GET['sortid']);
 
 					foreach($addoption as $optionid => $option) {
 						$identifier = $insertoptionid[$optionid]['identifier'];
@@ -743,26 +709,26 @@ EOT;
 							} else {
 								$fieldtype = 'mediumtext NOT NULL';
 							}
-							DB::query("ALTER TABLE ".DB::table('forum_optionvalue')."{$_G['gp_sortid']} ADD $fieldname $fieldtype");
+							C::t('forum_optionvalue')->alter($_GET['sortid'], "ADD $fieldname $fieldtype");
 
 							if(in_array($insertoptionid[$optionid]['type'], array('radio', 'select', 'number'))) {
-								DB::query("ALTER TABLE ".DB::table('forum_optionvalue')."{$_G['gp_sortid']} ADD INDEX ($fieldname)");
+								C::t('forum_optionvalue')->alter($_GET['sortid'], "ADD INDEX ($fieldname)");
 							}
 						}
 					}
 				}
 				foreach($addoption as $id => $val) {
-					$optionid = DB::fetch_first("SELECT optionid FROM ".DB::table('forum_typeoption')." WHERE optionid='$id'");
+					$optionid = C::t('forum_typeoption')->fetch($id);
 					if($optionid) {
 						$data = array(
-							'sortid' => $_G['gp_sortid'],
+							'sortid' => $_GET['sortid'],
 							'optionid' => $id,
 							'available' => 1,
 							'required' => intval($val),
 						);
-						DB::insert('forum_typevar', $data, 0, 0, 1);
+						C::t('forum_typevar')->insert($data, 0, 0, 1);
 						$search_bit = 0;
-						foreach($_G['gp_search'][$id] AS $key => $val) {
+						foreach($_GET['search'][$id] AS $key => $val) {
 							if($val == 1) {
 								if($key == 'font') {
 									$search_bit = setstatus(2, 1, $search_bit);
@@ -772,27 +738,168 @@ EOT;
 							}
 						}
 
-						DB::update('forum_typevar', array(
-							'displayorder' => $_G['gp_displayorder'][$id],
-							'available' => $_G['gp_available'][$id],
-							'required' => $_G['gp_required'][$id],
-							'unchangeable' => $_G['gp_unchangeable'][$id],
+						C::t('forum_typevar')->update($_GET['sortid'], $id, array(
+							'displayorder' => $_GET['displayorder'][$id],
+							'available' => $_GET['available'][$id],
+							'required' => $_GET['required'][$id],
+							'unchangeable' => $_GET['unchangeable'][$id],
 							'search' => $search_bit,
-							'subjectshow' => $_G['gp_subjectshow'][$id],
-						), "sortid='{$_G['gp_sortid']}' AND optionid='$id'");
+							'subjectshow' => $_GET['subjectshow'][$id],
+						));
 					} else {
-						DB::query("DELETE FROM ".DB::table('forum_typevar')." WHERE sortid='{$_G['gp_sortid']}' AND optionid IN ($id)");
+						C::t('forum_typevar')->delete($_GET['sortid'], $id);
 					}
 				}
 			}
 
 			updatecache('threadsorts');
-			cpmsg('threadtype_infotypes_succeed', 'action=threadtypes&operation=sortdetail&sortid='.$_G['gp_sortid'], 'succeed');
+			cpmsg('threadtype_infotypes_succeed', 'action=threadtypes&operation=sortdetail&sortid='.$_GET['sortid'], 'succeed');
 
-		} elseif(submitcheck('sortpreviewsubmit')) {
-			header("Location: $_G[siteurl]".ADMINSCRIPT."?action=threadtypes&operation=sortdetail&sortid={$_G['gp_sortid']}#template");
 		}
 
+	}
+
+} elseif($operation == 'sorttemplate') {
+
+	if(!submitcheck('sorttemplatesubmit')) {
+		$threadtype = C::t('forum_threadtype')->fetch($_GET['sortid']);
+		$showoption = '';
+		$typevararr = C::t('forum_typevar')->fetch_all_by_sortid($_GET['sortid'], 'ASC');
+		$typeoptionarr = C::t('forum_typeoption')->fetch_all(array_keys($typevararr));
+		foreach($typevararr as $option) {
+			$option['title'] = $typeoptionarr[$option['optionid']]['title'];
+			$option['type'] = $typeoptionarr[$option['optionid']]['type'];
+			$option['identifier'] = $typeoptionarr[$option['optionid']]['identifier'];
+			$showoption .= '<button onclick="settip(this, \''.$option['identifier'].'\')" type="button">'.$option['title'].'</button>&nbsp;&nbsp;';
+		}
+		unset($typevararr, $typeoptionarr);
+		showsubmenu('threadtype_infotypes', array(
+				array('threadtype_infotypes_type', 'threadtypes', 1),
+				array('threadtype_infotypes_content', 'threadtypes&operation=content', 0),
+				array(array('menu' => ($curclassname ? $curclassname : 'threadtype_infotypes_option'), 'submenu' => $classoptionmenu), '', 0)
+			));
+
+		showformheader("threadtypes&operation=sorttemplate&sortid={$_GET['sortid']}");
+		echo '<script type="text/JavaScript">var currentAnchor = \'ltype\';</script>'.
+			'<div class="itemtitle"><ul class="tab1" id="submenu">'.
+			'<li id="nav_ttype" onclick="showanchor(this)" class="current"><a href="#"><span>'.$lang['threadtype_template_viewthread'].'</span></a></li>'.
+			'<li id="nav_stype" onclick="showanchor(this)"><a href="#"><span>'.$lang['threadtype_template_forumdisplay'].'</span></a></li>'.
+			'<li id="nav_ptype" onclick="showanchor(this)"><a href="#"><span>'.$lang['threadtype_template_post'].'</span></a></li>'.
+			'<li id="nav_btype" onclick="showanchor(this)"><a href="#"><span>'.$lang['threadtype_template_diy'].'</span></a></li>'.
+			'</ul></div>';
+
+		echo '<div id="ttype">'.
+			$showoption.
+			'<div id="ttype_tip"></div>'.
+			'<br /><textarea cols="100" rows="15" id="ttypetemplate" name="typetemplate" style="width: 95%;" onkeyup="textareasize(this)">'.$threadtype['template'].'</textarea>'.
+			'</div>';
+
+		echo '<div id="stype" style="display:none">'.
+			'<button onclick="settip(this, \'subject\', \'subject/'.$lang['threadtype_template_threadtitle'].'|subject_url/'.$lang['threadtype_template_threadurl'].'|tid/'.$lang['threadtype_template_threadid'].'\')" type="button">'.$lang['threadtype_template_threadtitle'].'</button>&nbsp;&nbsp;'.
+			'<textarea id="subject_sample" style="display:none"><a href="{subject_url}">{subject}</a></textarea>'.
+			'<button onclick="settip(this, \'\', \'dateline/'.$lang['threadtype_template_dateline'].'\')" type="button">'.$lang['threadtype_template_dateline'].'</button>&nbsp;&nbsp;'.
+			'<button onclick="settip(this, \'author\', \'author/'.$lang['threadtype_template_author'].'|authorid/'.$lang['threadtype_template_authorid'].'|author_url/'.$lang['threadtype_template_authorurl'].'|avatar_small/'.$lang['threadtype_template_authoravatar'].'|author_verify/'.$lang['threadtype_template_authorverify'].'\')" type="button">'.$lang['threadtype_template_threadauthor'].'</button>&nbsp;&nbsp;'.
+			'<textarea id="author_sample" style="display:none"><a href="{author_url}">{author}</a></textarea>'.
+			'<button onclick="settip(this, \'\', \'views/'.$lang['threadtype_template_threadviews'].'\')" type="button">'.$lang['threadtype_template_threadviews'].'</button>&nbsp;&nbsp;'.
+			'<button onclick="settip(this, \'\', \'replies/'.$lang['threadtype_template_threadreplies'].'\')" type="button">'.$lang['threadtype_template_threadreplies'].'</button>&nbsp;&nbsp;'.
+			'<button onclick="settip(this, \'lastpost\', \'lastpost/'.$lang['threadtype_template_lastpostdateline'].'|lastpost_url/'.$lang['threadtype_template_lastposturl'].'|lastposter/'.$lang['threadtype_template_lastpostuser'].'|lastposter_url/'.$lang['threadtype_template_lastpostuserurl'].'\')" type="button">'.$lang['threadtype_template_lastpost'].'</button>&nbsp;&nbsp;'.
+			'<textarea id="lastpost_sample" style="display:none"><a href="{lastpost_url}">{lastpost}</a> by <a href="{lastposter_url}">{lastposter}</a></textarea>'.
+			'<button onclick="settip(this, \'typename\', \'typename/'.$lang['threadtype_template_threadtypename'].'|typename_url/'.$lang['threadtype_template_threadtypeurl'].'\')" type="button">'.$lang['threadtype_template_threadtype'].'</button>&nbsp;&nbsp;'.
+			'<textarea id="typename_sample" style="display:none"><a href="{typename_url}">{typename}</a></textarea>'.
+			'<button onclick="settip(this, \'\', \'attachment/'.$lang['threadtype_template_attachmentexist'].'\')" type="button">'.$lang['threadtype_template_attachment'].'</button>&nbsp;&nbsp'.
+			'<button onclick="settip(this, \'\', \'modcheck/'.$lang['threadtype_template_modcheck'].'\')" type="button">'.$lang['threadtype_template_threadmod'].'</button>&nbsp;&nbsp'.
+			'<button onclick="settip(this, \'loop\', \'/'.$lang['threadtype_template_loop'].'\')" type="button">[loop]...[/loop]</button>&nbsp;&nbsp;'.
+			'<textarea id="loop_sample" style="display:none">
+<table><tr><td>'.$lang['threadtype_template_title'].'</td></tr>
+[loop]<tr><td><a href="{subject_url}">{subject}</a></td></tr>[/loop]
+</table>
+			</textarea>'.
+			'<br />'.
+			$showoption.
+			'<div id="stype_tip"></div>'.
+			'<br /><textarea cols="100" rows="15" id="stypetemplate" name="stypetemplate" style="width: 95%;" onkeyup="textareasize(this)">'.$threadtype['stemplate'].'</textarea>'.
+			'</div>';
+
+		echo '<div id="ptype" style="display:none">'.
+			$showoption.
+			'<div id="ptype_tip"></div>'.
+			'<br /><textarea cols="100" rows="15" id="ptypetemplate" name="ptypetemplate" style="width: 95%;" onkeyup="textareasize(this)">'.$threadtype['ptemplate'].'</textarea>'.
+			'</div>';
+
+		echo '<div id="btype" style="display:none">'.
+			'<button onclick="settip(this, \'subject\', \'subject/'.$lang['threadtype_template_threadtitle'].'|subject_url/'.$lang['threadtype_template_threadurl'].'|tid/'.$lang['threadtype_template_threadid'].'\')" type="button">'.$lang['threadtype_template_threadtitle'].'</button>&nbsp;&nbsp;'.
+			'<button onclick="settip(this, \'\', \'dateline/'.$lang['threadtype_template_dateline'].'\')" type="button">'.$lang['threadtype_template_dateline'].'</button>&nbsp;&nbsp;'.
+			'<button onclick="settip(this, \'author\', \'author/'.$lang['threadtype_template_author'].'|authorid/'.$lang['threadtype_template_authorid'].'|author_url/'.$lang['threadtype_template_authorurl'].'|avatar_small/'.$lang['threadtype_template_authoravatar'].'|author_verify/'.$lang['threadtype_template_authorverify'].'\')" type="button">'.$lang['threadtype_template_threadauthor'].'</button>&nbsp;&nbsp;'.
+			'<button onclick="settip(this, \'\', \'views/'.$lang['threadtype_template_threadviews'].'\')" type="button">'.$lang['threadtype_template_threadviews'].'</button>&nbsp;&nbsp;'.
+			'<button onclick="settip(this, \'\', \'replies/'.$lang['threadtype_template_threadreplies'].'\')" type="button">'.$lang['threadtype_template_threadreplies'].'</button>&nbsp;&nbsp;'.
+			'<button onclick="settip(this, \'lastpost\', \'lastpost/'.$lang['threadtype_template_lastpostdateline'].'|lastpost_url/'.$lang['threadtype_template_lastposturl'].'|lastposter/'.$lang['threadtype_template_lastpostuser'].'|lastposter_url/'.$lang['threadtype_template_lastpostuserurl'].'\')" type="button">'.$lang['threadtype_template_lastpost'].'</button>&nbsp;&nbsp;'.
+			'<button onclick="settip(this, \'typename\', \'typename/'.$lang['threadtype_template_threadtypename'].'|typename_url/'.$lang['threadtype_template_threadtypeurl'].'\')" type="button">'.$lang['threadtype_template_threadtype'].'</button>&nbsp;&nbsp;'.
+			'<button onclick="settip(this, \'\', \'attachment/'.$lang['threadtype_template_attachmentexist'].'\')" type="button">'.$lang['threadtype_template_attachment'].'</button>&nbsp;&nbsp'.
+			'<button onclick="settip(this, \'loop\', \'/'.$lang['threadtype_template_loop'].'\')" type="button">[loop]...[/loop]</button>&nbsp;&nbsp;'.
+			'<br />'.
+			$showoption.
+			'<div id="btype_tip"></div>'.
+			'<br /><textarea cols="100" rows="15" id="btypetemplate" name="btypetemplate" style="width: 95%;" onkeyup="textareasize(this)">'.$threadtype['btemplate'].'</textarea>'.
+			'</div>'.
+			'<input type="submit" class="btn" name="sorttemplatesubmit" value="'.$lang['submit'].'"></form>';
+
+		echo '<script>
+		function settip(obj, id, tips) {
+			var tips = !tips ? 0 : tips.split(\'|\');
+			var tipid = obj.parentNode.id + \'_tip\', s1 = \'\', s2 = \'\', s3 = \'\';
+			if(!tips) {
+				s1 += \'<td>{\' + id + \'}</td>\';
+				s2 += \'<td>'.$lang['threadtype_template_varname'].'(\' + obj.innerHTML + \')</td>\';
+				s1 += \'<td>{\' + id + \'_value}</td>\';
+				s2 += \'<td>'.$lang['threadtype_template_varvalue'].'</td>\';
+				s1 += \'<td>{\' + id + \'_unit}</td>\';
+				s2 += \'<td>'.$lang['threadtype_template_varunit'].'</td>\';
+				if(obj.parentNode.id == \'ptype\') {
+					s1 += \'<td>{\' + id + \'_required}</td>\';
+					s2 += \'<td>'.$lang['threadtype_template_requiredflag'].'</td>\';
+					s1 += \'<td>{\' + id + \'_tips}</td>\';
+					s2 += \'<td>'.$lang['threadtype_template_tipflag'].'</td>\';
+					s1 += \'<td>{\' + id + \'_description}</td>\';
+					s2 += \'<td>'.$lang['threadtype_template_briefdes'].'</td>\';
+				}
+				if(obj.parentNode.id == \'ptype\') {
+					s3 = \'<dt><strong class="rq">{\' + id + \'_required}</strong>{\' + id + \'}</dt><dd>{\' + id + \'_value} {\' + id + \'_unit} {\' + id + \'_tips} {\' + id + \'_description}</dd>\r\n\';
+				} else {
+					s3 = obj.parentNode.id == \'ttype\' ? \'<dt>{\' + id + \'}:</dt><dd>{\' + id + \'_value} {\' + id + \'_unit}</dd>\r\n\' : \'<p><em>{\' + id + \'}:</em>{\' + id + \'_value} {\' + id + \'_unit}</p>\r\n\';
+				}
+			} else {
+				for(i = 0;i < tips.length;i++) {
+					var i0 = tips[i].substr(0, tips[i].indexOf(\'/\'));
+					var i1 = tips[i].substr(tips[i].indexOf(\'/\') + 1);
+					if(i0) {
+						s1 += \'<td>{\' + i0 + \'}</td>\';
+					}
+					s2 += \'<td>\' + i1 + \'</td>\';
+				}
+				if($(id + \'_sample\')) {
+					s3 = $(id + \'_sample\').innerHTML;
+				}
+			}
+			$(tipid).innerHTML = \'<table class="tb tb2">\' +
+				(s1 ? \'<tr><td class="bold" width="50">'.$lang['threadtype_template_tag'].'</td>\' + s1 + \'</tr>\' : \'\') +
+				\'<tr><td class="bold" width="50">'.$lang['threadtype_template_intro'].'</td>\' + s2 + \'</tr></table>\';
+			if(s3) {
+				$(tipid).innerHTML += \'<table class="tb tb2"><tr><td class="bold" width="50">'.$lang['threadtype_template_example'].'</td><td colspan="6"><textarea style="width: 95%;" rows="2" readonly onclick="this.select()" id="\' + obj.parentNode.id + \'_sample"></textarea></td></tr></table>\';
+				$(obj.parentNode.id + \'_sample\').innerHTML = s3;
+			}
+		}
+		</script>';
+	} else {
+		C::t('forum_threadtype')->update($_GET['sortid'], array(
+			'special' => 1,
+			'template' => $_GET['typetemplate'],
+			'stemplate' => $_GET['stypetemplate'],
+			'ptemplate' => $_GET['ptypetemplate'],
+			'btemplate' => $_GET['btypetemplate'],
+			'expiration' => $_GET['typeexpiration'],
+		));
+		updatecache('threadsorts');
+		cpmsg('threadtype_infotypes_succeed', 'action=threadtypes&operation=sorttemplate&sortid='.$_GET['sortid'], 'succeed');
 	}
 
 } elseif($operation == 'content') {
@@ -806,11 +913,11 @@ EOT;
 			array(array('menu' => ($curclassname ? $curclassname : 'threadtype_infotypes_option'), 'submenu' => $classoptionmenu))
 		));
 
-		$_G['gp_sortid'] = intval($_G['gp_sortid']);
+		$_GET['sortid'] = intval($_GET['sortid']);
 		$threadtypes = '<select name="sortid" onchange="window.location.href = \'?action=threadtypes&operation=content&sortid=\'+ this.options[this.selectedIndex].value"><option value="0">'.cplang('none').'</option>';
-		$query = DB::query("SELECT * FROM ".DB::table('forum_threadtype')." ORDER BY displayorder");
-		while($type = DB::fetch($query)) {
-			$threadtypes .= '<option value="'.$type['typeid'].'" '.($_G['gp_sortid'] == $type['typeid'] ? 'selected="selected"' : '').'>'.dhtmlspecialchars($type['name']).'</option>';
+		$query = C::t('forum_threadtype')->fetch_all_for_order();
+		foreach($query as $type) {
+			$threadtypes .= '<option value="'.$type['typeid'].'" '.($_GET['sortid'] == $type['typeid'] ? 'selected="selected"' : '').'>'.dhtmlspecialchars($type['name']).'</option>';
 		}
 		$threadtypes .= '</select>';
 
@@ -818,11 +925,11 @@ EOT;
 		showtableheader('threadtype_content_choose');
 		showsetting('threadtype_content_name', '', '', $threadtypes);
 
-		if($_G['gp_sortid']) {
+		if($_GET['sortid']) {
 			showtableheader('threadtype_content_sort_by_conditions');
-			loadcache(array('threadsort_option_'.$_G['gp_sortid']));
+			loadcache(array('threadsort_option_'.$_GET['sortid']));
 
-			$sortoptionarray = $_G['cache']['threadsort_option_'.$_G['gp_sortid']];
+			$sortoptionarray = $_G['cache']['threadsort_option_'.$_GET['sortid']];
 			if(is_array($sortoptionarray)) foreach($sortoptionarray as $optionid => $option) {
 				$optionshow = '';
 				if($option['search']) {
@@ -830,38 +937,38 @@ EOT;
 						if($option['type'] == 'select') {
 							$optionshow .= '<select name="searchoption['.$optionid.'][value]"><option value="0">'.cplang('unlimited').'</option>';
 							foreach($option['choices'] as $id => $value) {
-								$optionshow .= '<option value="'.$id.'" '.($_G['gp_searchoption'][$optionid]['value'] == $id ? 'selected="selected"' : '').'>'.$value.'</option>';
+								$optionshow .= '<option value="'.$id.'" '.($_GET['searchoption'][$optionid]['value'] == $id ? 'selected="selected"' : '').'>'.$value.'</option>';
 							}
 							$optionshow .= '</select><input type="hidden" name="searchoption['.$optionid.'][type]" value="select">';
 						} elseif($option['type'] == 'radio') {
 							$optionshow .= '<input type="radio" class="radio" name="searchoption['.$optionid.'][value]" value="0" checked="checked"]>'.cplang('unlimited').'&nbsp;';
 							foreach($option['choices'] as $id => $value) {
-								$optionshow .= '<input type="radio" class="radio" name="searchoption['.$optionid.'][value]" value="'.$id.'" '.($_G['gp_searchoption'][$optionid]['value'] == $id ? 'checked="checked"' : '').'> '.$value.' &nbsp;';
+								$optionshow .= '<input type="radio" class="radio" name="searchoption['.$optionid.'][value]" value="'.$id.'" '.($_GET['searchoption'][$optionid]['value'] == $id ? 'checked="checked"' : '').'> '.$value.' &nbsp;';
 							}
 							$optionshow .= '<input type="hidden" name="searchoption['.$optionid.'][type]" value="radio">';
 						} elseif($option['type'] == 'checkbox') {
 							foreach($option['choices'] as $id => $value) {
-								$optionshow .= '<input type="checkbox" class="checkbox" name="searchoption['.$optionid.'][value]['.$id.']" value="'.$id.'" '.($_G['gp_searchoption'][$optionid]['value'] == $id ? 'checked="checked"' : '').'> '.$value.'';
+								$optionshow .= '<input type="checkbox" class="checkbox" name="searchoption['.$optionid.'][value]['.$id.']" value="'.$id.'" '.($_GET['searchoption'][$optionid]['value'] == $id ? 'checked="checked"' : '').'> '.$value.'';
 							}
 							$optionshow .= '<input type="hidden" name="searchoption['.$optionid.'][type]" value="checkbox">';
 						}
 					} elseif(in_array($option['type'], array('number', 'text', 'email', 'calendar', 'image', 'url', 'textarea', 'upload', 'range'))) {
 						if ($option['type'] == 'calendar') {
-							$optionshow .= '<script type="text/javascript" src="'.$_G['setting']['jspath'].'calendar.js?'.VERHASH.'"></script><input type="text" name="searchoption['.$optionid.'][value]" class="txt" value="'.$_G['gp_searchoption'][$optionid]['value'].'" onclick="showcalendar(event, this, false)" />';
+							$optionshow .= '<script type="text/javascript" src="'.$_G['setting']['jspath'].'calendar.js?'.VERHASH.'"></script><input type="text" name="searchoption['.$optionid.'][value]" class="txt" value="'.$_GET['searchoption'][$optionid]['value'].'" onclick="showcalendar(event, this, false)" />';
 						} elseif($option['type'] == 'number') {
 							$optionshow .= '<select name="searchoption['.$optionid.'][condition]">
-								<option value="0" '.($_G['gp_searchoption'][$optionid]['condition'] == 0 ? 'selected="selected"' : '').'>'.cplang('equal_to').'</option>
-								<option value="1" '.($_G['gp_searchoption'][$optionid]['condition'] == 1 ? 'selected="selected"' : '').'>'.cplang('more_than').'</option>
-								<option value="2" '.($_G['gp_searchoption'][$optionid]['condition'] == 2 ? 'selected="selected"' : '').'>'.cplang('lower_than').'</option>
+								<option value="0" '.($_GET['searchoption'][$optionid]['condition'] == 0 ? 'selected="selected"' : '').'>'.cplang('equal_to').'</option>
+								<option value="1" '.($_GET['searchoption'][$optionid]['condition'] == 1 ? 'selected="selected"' : '').'>'.cplang('more_than').'</option>
+								<option value="2" '.($_GET['searchoption'][$optionid]['condition'] == 2 ? 'selected="selected"' : '').'>'.cplang('lower_than').'</option>
 							</select>&nbsp;&nbsp;
-							<input type="text" class="txt" name="searchoption['.$optionid.'][value]" value="'.$_G['gp_searchoption'][$optionid]['value'].'" />
+							<input type="text" class="txt" name="searchoption['.$optionid.'][value]" value="'.$_GET['searchoption'][$optionid]['value'].'" />
 							<input type="hidden" name="searchoption['.$optionid.'][type]" value="number">';
 						} elseif($option['type'] == 'range') {
-							$optionshow .= '<input type="text" name="searchoption['.$optionid.'][value][min]" size="16" value="'.$_G['gp_searchoption'][$optionid]['value']['min'].'" /> -
-							<input type="text" name="searchoption['.$optionid.'][value][max]" size="16" value="'.$_G['gp_searchoption'][$optionid]['value']['max'].'" />
+							$optionshow .= '<input type="text" name="searchoption['.$optionid.'][value][min]" size="16" value="'.$_GET['searchoption'][$optionid]['value']['min'].'" /> -
+							<input type="text" name="searchoption['.$optionid.'][value][max]" size="16" value="'.$_GET['searchoption'][$optionid]['value']['max'].'" />
 							<input type="hidden" name="searchoption['.$optionid.'][type]" value="range">';
 						} else {
-							$optionshow .= '<input type="text" name="searchoption['.$optionid.'][value]" class="txt" value="'.$_G['gp_searchoption'][$optionid]['value'].'" />';
+							$optionshow .= '<input type="text" name="searchoption['.$optionid.'][value]" class="txt" value="'.$_GET['searchoption'][$optionid]['value'].'" />';
 						}
 					}
 					$optionshow .=  '&nbsp;'.$option['unit'];
@@ -878,15 +985,15 @@ EOT;
 
 		if(submitcheck('searchsortsubmit', 1)) {
 
-			if(empty($_G['gp_searchoption']) && !$_G['gp_sortid']) {
+			if(empty($_GET['searchoption']) && !$_GET['sortid']) {
 				cpmsg('threadtype_content_no_choice', 'action=threadtypes&operation=content', 'error');
 			}
-			$mpurl = ADMINSCRIPT.'?action=threadtypes&operation=content&sortid='.$_G['gp_sortid'].'&searchsortsubmit=true';
-			if(!is_array($_G['gp_searchoption'])) {
-				$mpurl .= '&searchoption='.$_G['gp_searchoption'];
-				$_G['gp_searchoption'] = unserialize(base64_decode($_G['gp_searchoption']));
+			$mpurl = ADMINSCRIPT.'?action=threadtypes&operation=content&sortid='.$_GET['sortid'].'&searchsortsubmit=true';
+			if(!is_array($_GET['searchoption'])) {
+				$mpurl .= '&searchoption='.$_GET['searchoption'];
+				$_GET['searchoption'] = dunserialize(base64_decode($_GET['searchoption']));
 			} else {
-				$mpurl .= '&searchoption='.base64_encode(serialize($_G['gp_searchoption']));
+				$mpurl .= '&searchoption='.base64_encode(serialize($_GET['searchoption']));
 			}
 
 			shownav('forum', 'threadtype_infotypes');
@@ -897,13 +1004,13 @@ EOT;
 			));
 
 			loadcache('forums');
-			loadcache(array('threadsort_option_'.$_G['gp_sortid']));
+			loadcache(array('threadsort_option_'.$_GET['sortid']));
 			require_once libfile('function/threadsort');
-			sortthreadsortselectoption($_G['gp_sortid']);
-			$sortoptionarray = $_G['cache']['threadsort_option_'.$_G['gp_sortid']];
+			sortthreadsortselectoption($_GET['sortid']);
+			$sortoptionarray = $_G['cache']['threadsort_option_'.$_GET['sortid']];
 			$selectsql = '';
-			if($_G['gp_searchoption']) {
-				foreach($_G['gp_searchoption'] as $optionid => $option) {
+			if($_GET['searchoption']) {
+				foreach($_GET['searchoption'] as $optionid => $option) {
 					$fieldname = $sortoptionarray[$optionid]['identifier'] ? $sortoptionarray[$optionid]['identifier'] : 1;
 					if($option['value']) {
 						if(in_array($option['type'], array('number', 'radio'))) {
@@ -944,33 +1051,30 @@ EOT;
 				}
 
 				$selectsql = trim($selectsql);
-				$searchtids = $searchthread = array();
-				$query = DB::query("SELECT tid FROM ".DB::table('forum_optionvalue')."{$_G['gp_sortid']} ".($selectsql ? 'WHERE '.$selectsql : '')."");
-				while($thread = DB::fetch($query)) {
-					$searchtids[] = $thread['tid'];
-				}
+				$searchtids = C::t('forum_optionvalue')->fetch_all_tid($_GET['sortid'], $selectsql ? 'WHERE '.$selectsql : '');
 			}
 
 			if($searchtids) {
-				$lpp = max(5, empty($_G['gp_lpp']) ? 50 : intval($_G['gp_lpp']));
+				$lpp = max(5, empty($_GET['lpp']) ? 50 : intval($_GET['lpp']));
 				$start_limit = ($page - 1) * $lpp;
 
-				$threadcount = DB::result_first("SELECT count(*) FROM ".DB::table('forum_thread')." WHERE tid IN (".dimplode($searchtids).")");
-				$query = DB::query("SELECT fid, tid, subject, authorid, author, views, replies, lastpost FROM ".DB::table('forum_thread')." WHERE tid IN (".dimplode($searchtids).") LIMIT $start_limit, $lpp");
-				while($thread = DB::fetch($query)) {
-					$threads .= showtablerow('', array('class="td25"', '', '', 'class="td28"', 'class="td28"'), array(
-					"<input class=\"checkbox\" type=\"checkbox\" name=\"tidsarray[]\" value=\"$thread[tid]\"/>".
-					"<input type=\"hidden\" name=\"fidsarray[]\" value=\"$thread[fid]\"/>",
-					"<a href=\"forum.php?mod=viewthread&tid=$thread[tid]\" target=\"_blank\">$thread[subject]</a>",
-					"<a href=\"forum.php?mod=forumdisplay&fid=$thread[fid]\" target=\"_blank\">{$_G['cache'][forums][$thread[fid]][name]}</a>",
-					"<a href=\"home.php?mod=space&uid=$thread[authorid]\" target=\"_blank\">$thread[author]</a>",
-					$thread['replies'],
-					$thread['views'],
-					dgmdate($thread['lastpost'], 'd'),
-					), TRUE);
-				}
+				$threadcount = C::t('forum_thread')->count_by_tid_fid($searchtids);
+				if($threadcount) {
+					foreach(C::t('forum_thread')->fetch_all_by_tid($searchtids, $start_limit, $lpp) as $thread) {
+						$threads .= showtablerow('', array('class="td25"', '', '', 'class="td28"', 'class="td28"'), array(
+						"<input class=\"checkbox\" type=\"checkbox\" name=\"tidsarray[]\" value=\"$thread[tid]\"/>".
+						"<input type=\"hidden\" name=\"fidsarray[]\" value=\"$thread[fid]\"/>",
+						"<a href=\"forum.php?mod=viewthread&tid=$thread[tid]\" target=\"_blank\">$thread[subject]</a>",
+						"<a href=\"forum.php?mod=forumdisplay&fid=$thread[fid]\" target=\"_blank\">{$_G['cache'][forums][$thread[fid]][name]}</a>",
+						"<a href=\"home.php?mod=space&uid=$thread[authorid]\" target=\"_blank\">$thread[author]</a>",
+						$thread['replies'],
+						$thread['views'],
+						dgmdate($thread['lastpost'], 'd'),
+						), TRUE);
+					}
 
-				$multipage = multi($threadcount, $lpp, $page, $mpurl, 0, 3);
+					$multipage = multi($threadcount, $lpp, $page, $mpurl, 0, 3);
+				}
 			}
 
 			showformheader('threadtypes&operation=content');
@@ -986,16 +1090,16 @@ EOT;
 
 			require_once libfile('function/post');
 
-			if($_G['gp_tidsarray']) {
+			if($_GET['tidsarray']) {
 				require_once libfile('function/delete');
-				deletethread($_G['gp_tidsarray']);
+				deletethread($_GET['tidsarray']);
 
 				if($_G['setting']['globalstick']) {
 					updatecache('globalstick');
 				}
 
-				if($_G['gp_fidsarray']) {
-					foreach(explode(',', $_G['gp_fidsarray']) as $fid) {
+				if($_GET['fidsarray']) {
+					foreach(explode(',', $_GET['fidsarray']) as $fid) {
 						updateforumcount(intval($fid));
 					}
 				}
@@ -1009,11 +1113,10 @@ EOT;
 
 	$classoptions = '';
 	$classidarray = array();
-	$classid = $_G['gp_classid'] ? $_G['gp_classid'] : 0;
-	$query = DB::query("SELECT optionid, title FROM ".DB::table('forum_typeoption')." WHERE classid='$classid' ORDER BY displayorder");
-	while($option = DB::fetch($query)) {
+	$classid = $_GET['classid'] ? $_GET['classid'] : 0;
+	foreach(C::t('forum_typeoption')->fetch_all_by_classid($classid) as $option) {
 		$classidarray[] = $option['optionid'];
-		$classoptions .= "<a href=\"#ol\" onclick=\"ajaxget('".ADMINSCRIPT."?action=threadtypes&operation=optionlist&typeid={$_G['gp_typeid']}&classid=$option[optionid]', 'optionlist', 'optionlist', 'Loading...', '', checkedbox)\">$option[title]</a> &nbsp; ";
+		$classoptions .= "<a href=\"#ol\" onclick=\"ajaxget('".ADMINSCRIPT."?action=threadtypes&operation=optionlist&typeid={$_GET['typeid']}&classid=$option[optionid]', 'optionlist', 'optionlist', 'Loading...', '', checkedbox)\">$option[title]</a> &nbsp; ";
 	}
 
 	include template('common/header');
@@ -1022,19 +1125,18 @@ EOT;
 	exit;
 
 } elseif($operation == 'optionlist') {
-	$classid = $_G['gp_classid'];
+	$classid = $_GET['classid'];
 	if(!$classid) {
-		$classid = DB::result_first("SELECT optionid FROM ".DB::table('forum_typeoption')." WHERE classid='0' ORDER BY displayorder LIMIT 1");
+		$classid = C::t('forum_typeoption')->fetch_all_by_classid(0, 0, 1);
+		$classid = $classid[0]['optionid'];
 	}
-	$query = DB::query("SELECT optionid FROM ".DB::table('forum_typevar')." WHERE sortid='{$_G['gp_typeid']}'");
 	$option = $options = array();
-	while($option = DB::fetch($query)) {
+	foreach(C::t('forum_typevar')->fetch_all_by_sortid($_GET['typeid']) as $option) {
 		$options[] = $option['optionid'];
 	}
 
 	$optionlist = '';
-	$query = DB::query("SELECT * FROM ".DB::table('forum_typeoption')." WHERE classid='$classid' ORDER BY displayorder");
-	while($option = DB::fetch($query)) {
+	foreach(C::t('forum_typeoption')->fetch_all_by_classid($classid) as $option) {
 		$optionlist .= "<input ".(in_array($option['optionid'], $options) ? ' checked="checked" ' : '')."class=\"checkbox\" type=\"checkbox\" name=\"typeselect[]\" id=\"typeselect_$option[optionid]\" value=\"$option[optionid]\" onclick=\"insertoption(this.value);\" /><label for=\"typeselect_$option[optionid]\">".dhtmlspecialchars($option['title'])."</label>&nbsp;&nbsp;";
 	}
 	include template('common/header');
@@ -1043,8 +1145,8 @@ EOT;
 	exit;
 
 } elseif($operation == 'sortlist') {
-	$optionid = $_G['gp_optionid'];
-	$option = DB::fetch_first("SELECT * FROM ".DB::table('forum_typeoption')." WHERE optionid='$optionid' LIMIT 1");
+	$optionid = $_GET['optionid'];
+	$option = C::t('forum_typeoption')->fetch($optionid);
 	include template('common/header');
 	$option['type'] = $lang['threadtype_edit_vars_type_'. $option['type']];
 	$option['available'] = 1;
@@ -1059,35 +1161,179 @@ EOT;
 		"<input class=\"checkbox\" type=\"checkbox\" name=\"search[$option[optionid]][form]\" value=\"1\" ".(getstatus($option['search'], 1) == 1 ? 'checked' : '').">",
 		"<input class=\"checkbox\" type=\"checkbox\" name=\"search[$option[optionid]][font]\" value=\"1\" ".(getstatus($option['search'], 2) == 1 ? 'checked' : '').">",
 		"<input class=\"checkbox\" type=\"checkbox\" name=\"subjectshow[$option[optionid]]\" value=\"1\" ".($option['subjectshow'] ? 'checked' : '').">",
-		"<a href=\"###\" onclick=\"insertvar('$option[identifier]', 'typetemplate', 'message');doane(event);return false;\" class=\"act\">".$lang['threadtype_infotypes_add_template']."</a>",
-		"<a href=\"###\" onclick=\"insertvar('$option[identifier]', 'stypetemplate', 'subject');doane(event);return false;\" class=\"act\">".$lang['threadtype_infotypes_add_stemplate']."</a>",
-		"<a href=\"###\" onclick=\"insertvar('$option[identifier]', 'ptypetemplate', 'post');doane(event);return false;\" class=\"act\">".$lang['threadtype_infotypes_add_ptemplate']."</a>",
-		"<a href=\"###\" onclick=\"insertvar('$option[identifier]', 'btypetemplate', 'subject');doane(event);return false;\" class=\"act\">".$lang['threadtype_infotypes_add_btemplate']."</a>",
 		"<a href=\"".ADMINSCRIPT."?action=threadtypes&operation=optiondetail&optionid=$option[optionid]\" class=\"act\">".$lang['edit']."</a>"
 	));
 	include template('common/footer');
 	exit;
-}
+} elseif($operation == 'import') {
 
-function syntablestruct($sql, $version, $dbcharset) {
+	$sortid = 0;
+	$newthreadtype = getimportdata('Discuz! Threadtypes');
 
-	if(strpos(trim(substr($sql, 0, 18)), 'CREATE TABLE') === FALSE) {
-		return $sql;
+	if($newthreadtype) {
+		$idcmp = $searcharr = $replacearr = $indexoption = array();
+		$create_tableoption_sql = $separator = '';
+		$i = 0;
+		foreach($newthreadtype as $key => $value) {
+			if(!$i) {
+				if($newname1 = trim(strip_tags($value['name']))) {
+					$findname = 0;
+					$tmpnewname1 = $newname1;
+					$decline = '_';
+					while(!$findname) {
+						if(C::t('forum_threadtype')->checkname($tmpnewname1)) {
+							$tmpnewname1 = $newname1.$decline;
+							$decline .= '_';
+						} else {
+							$findname = 1;
+						}
+					}
+					$newname1 = $tmpnewname1;
+					$data = array(
+						'name' => $newname1,
+						'description' => dhtmlspecialchars(trim($value['ttdescription'])),
+						'special' => 1,
+					);
+					$sortid = C::t('forum_threadtype')->insert($data, 1);
+				}
+				$i = 1;
+
+				if(empty($value['identifier'])) {
+					cpmsg('threadtype_import_succeed', 'action=threadtypes', 'succeed');
+				}
+			}
+
+			$typeoption = array(
+				'classid' => $value['classid'],
+				'expiration' => $value['tpexpiration'],
+				'protect' => $value['protect'],
+				'title' => $value['title'],
+				'description' => $value['tpdescription'],
+				'type' => $value['type'],
+				'unit' => $value['unit'],
+				'rules' => $value['rules'],
+				'permprompt' => $value['permprompt'],
+			);
+			if(strlen($value['identifier']) > 34) {
+				cpmsg('threadtype_infotypes_optionvariable_invalid', 'action=threadtypes', 'error');
+			}
+
+			$findidentifier = 0;
+			$tmpidentifier = $value['identifier'];
+			$decline = '_';
+			while(!$findidentifier) {
+				if(C::t('forum_typeoption')->fetch_all_by_identifier($tmpidentifier, 0, 1) || !ispluginkey($tmpidentifier) || in_array(strtoupper($tmpidentifier), $mysql_keywords)) {
+					$tmpidentifier = $value['identifier'].$decline.$sortid;
+					$decline .= '_';
+				} else {
+					$findidentifier = 1;
+				}
+			}
+			$typeoption['identifier'] = $tmpidentifier;
+			$idcmp[$value['identifier']] = $tmpidentifier;
+
+			$newoptionid = C::t('forum_typeoption')->insert($typeoption, true);
+
+			$typevar = array(
+				'sortid' => $sortid,
+				'optionid' => $newoptionid,
+				'available' => $value['available'],
+				'required' => $value['required'],
+				'unchangeable' => $value['unchangeable'],
+				'search' => $value['search'],
+				'displayorder' => $value['displayorder'],
+				'subjectshow' => $value['subjectshow'],
+			);
+			C::t('forum_typevar')->insert($typevar);
+
+			if($tmpidentifier) {
+				if(in_array($value['type'], array('radio'))) {
+					$create_tableoption_sql .= "$separator$tmpidentifier smallint(6) UNSIGNED NOT NULL DEFAULT '0'";
+				} elseif(in_array($value['type'], array('number', 'range'))) {
+					$create_tableoption_sql .= "$separator$tmpidentifier int(10) UNSIGNED NOT NULL DEFAULT '0'";
+				} elseif($value['type'] == 'select') {
+					$create_tableoption_sql .= "$separator$tmpidentifier varchar(50) NOT NULL";
+				} else {
+					$create_tableoption_sql .= "$separator$tmpidentifier mediumtext NOT NULL";
+				}
+				$separator = ' ,';
+				if(in_array($value['type'], array('radio', 'select', 'number'))) {
+					$indexoption[] = $tmpidentifier;
+				}
+			}
+		}
+
+		foreach($idcmp as $k => $v) {
+			if($k != $v) {
+				$searcharr[] = '{'.$k.'}';
+				$searcharr[] = '{'.$k;
+				$searcharr[] = '['.$k;
+				$searcharr[] = '['.$k.']';
+				$replacearr[] = '{'.$v.'}';
+				$replacearr[] = '{'.$v;
+				$replacearr[] = '['.$v;
+				$replacearr[] = '['.$v.']';
+			}
+		}
+
+		$threadtype = array(
+			'icon' => $value['icon'],
+			'special' => $value['special'],
+			'modelid' => $value['modelid'],
+			'expiration' => $value['ttexpiration'],
+			'template' => str_replace($searcharr, $replacearr, $value['template']),
+			'stemplate' => str_replace($searcharr, $replacearr, $value['stemplate']),
+			'ptemplate' => str_replace($searcharr, $replacearr, $value['ptemplate']),
+			'btemplate' => str_replace($searcharr, $replacearr, $value['btemplate']),
+		);
+		DB::update('forum_threadtype', $threadtype, array('typeid' => $sortid));
+
+		$fields = ($create_tableoption_sql ? $create_tableoption_sql.',' : '')."tid mediumint(8) UNSIGNED NOT NULL DEFAULT '0',fid smallint(6) UNSIGNED NOT NULL DEFAULT '0',dateline int(10) UNSIGNED NOT NULL DEFAULT '0',expiration int(10) UNSIGNED NOT NULL DEFAULT '0',";
+		$fields .= "KEY (fid), KEY(dateline)";
+		if($indexoption) {
+			foreach($indexoption as $index) {
+				$fields .= "$separator KEY $index ($index)";
+				$separator = ' ,';
+			}
+		}
+		$dbcharset = $_G['config']['db'][1]['dbcharset'];
+		$dbcharset = empty($dbcharset) ? str_replace('-','',CHARSET) : $dbcharset;
+		C::t('forum_optionvalue')->create($sortid, $fields, $dbcharset);
+
+		updatecache('threadsorts');
+	}
+	cpmsg('threadtype_import_succeed', 'action=threadtypes', 'succeed');
+
+} elseif($operation == 'export') {
+
+	$sortid = intval($_GET['sortid']);
+	$typevarlist = array();
+	$typevararr = C::t('forum_typevar')->fetch_all_by_sortid($sortid);
+	$typeoptionarr = C::t('forum_typeoption')->fetch_all(array_keys($typevararr));
+	$threadtypearr = C::t('forum_threadtype')->fetch($sortid);
+	foreach($typevararr as $typevar) {
+		$typeoption = $typeoptionarr[$typevar['optionid']];
+		$typevar = array_merge($threadtypearr, $typevar);
+		$typevar = array_merge($typeoption, $typevar);
+		$typevar['tpdescription'] = $typeoption['description'];
+		$typevar['ttdescription'] = $threadtypearr['description'];
+		$typevar['tpexpiration'] = $typeoption['expiration'];
+		$typevar['ttexpiration'] = $threadtypearr['expiration'];
+		unset($typevar['fid']);
+		$typevarlist[] = $typevar;
+	}
+	if(empty($typevarlist)) {
+		$threadtype = C::t('forum_threadtype')->fetch($sortid);
+		$threadtype['ttdescription'] = $threadtype['description'];
+		unset($threadtype['fid']);
+		$typevarlist[] = $threadtype;
 	}
 
-	$sqlversion = strpos($sql, 'ENGINE=') === FALSE ? FALSE : TRUE;
-
-	if($sqlversion === $version) {
-
-		return $sqlversion && $dbcharset ? preg_replace(array('/ character set \w+/i', '/ collate \w+/i', "/DEFAULT CHARSET=\w+/is"), array('', '', "DEFAULT CHARSET=$dbcharset"), $sql) : $sql;
+	if(empty($typevarlist)) {
+		cpmsg('threadtype_export_error');
 	}
 
-	if($version) {
-		return preg_replace(array('/TYPE=HEAP/i', '/TYPE=(\w+)/is'), array("ENGINE=MEMORY DEFAULT CHARSET=$dbcharset", "ENGINE=\\1 DEFAULT CHARSET=$dbcharset"), $sql);
-
-	} else {
-		return preg_replace(array('/character set \w+/i', '/collate \w+/i', '/ENGINE=MEMORY/i', '/\s*DEFAULT CHARSET=\w+/is', '/\s*COLLATE=\w+/is', '/ENGINE=(\w+)(.*)/is'), array('', '', 'ENGINE=HEAP', '', '', 'TYPE=\\1\\2'), $sql);
-	}
+	exportdata('Discuz! Threadtypes', $typevarlist[0]['typeid'], $typevarlist);
 }
 
 ?>

@@ -4,25 +4,24 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_smilies.php 26875 2011-12-27 03:30:35Z chenmengshu $
+ *      $Id: admincp_smilies.php 29236 2012-03-30 05:34:47Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
 }
 
-$imgextarray = array('jpg', 'gif');
-$id = $_G['gp_id'];
+$imgextarray = array('jpg', 'gif', 'png');
+$id = $_GET['id'];
 if($operation == 'export' && $id) {
-	$smileyarray = DB::fetch_first("SELECT name, directory FROM ".DB::table('forum_imagetype')." WHERE typeid='$id' AND type='smiley'");
+	$smileyarray = C::t('forum_imagetype')->fetch($id);
 	if(!$smileyarray) {
 		cpheader();
 		cpmsg('smilies_type_nonexistence', '', 'error');
 	}
 
 	$smileyarray['smilies'] = array();
-	$query = DB::query("SELECT typeid, displayorder, code, url FROM ".DB::table('common_smiley')." WHERE typeid='$id' AND type='smiley'");
-	while($smiley = DB::fetch($query)) {
+	foreach(C::t('common_smiley')->fetch_all_by_typeid_type($id, 'smiley') as $smiley) {
 		$smileyarray['smilies'][] = $smiley;
 	}
 
@@ -48,10 +47,8 @@ if(!$operation) {
 
 		$smtypes = 0;
 		$dirfilter = array();
-		$query = DB::query("SELECT * FROM ".DB::table('forum_imagetype')." WHERE type='smiley' ORDER BY displayorder");
-		while($type = DB::fetch($query)) {
-			$squery = DB::query("SELECT COUNT(*) FROM ".DB::table('common_smiley')." WHERE type='smiley' AND typeid='$type[typeid]'");
-			$smiliesnum = DB::result($squery, 0);
+		foreach(C::t('forum_imagetype')->fetch_all_by_type('smiley') as $type) {
+			$smiliesnum = C::t('common_smiley')->count_by_type_typeid('smiley', $type['typeid']);
 			showtablerow('', array('class="td25"', 'class="td28"'), array(
 				"<input class=\"checkbox\" type=\"checkbox\" name=\"delete[]\" value=\"$type[typeid]\" ".($smiliesnum ? 'disabled' : '').">",
 				"<input type=\"text\" class=\"txt\" name=\"displayordernew[$type[typeid]]\" value=\"$type[displayorder]\" size=\"2\">",
@@ -82,7 +79,7 @@ if(!$operation) {
 					}
 				}
 				showtablerow('', array('class="td25"', 'class="td28"'), array(
-					($dirnum ? '&nbsp;' : $lang['add_new']),
+					($lang['add_new']),
 					'<input type="text" class="txt" name="newdisplayorder['.$dirnum.']" value="'.($smtypes + $dirnum + 1).'" size="2" />',
 					'<input class="checkbox" type="checkbox" name="newavailable['.$dirnum.']" value="1"'.($smnums ? ' checked="checked"' : ' disabled="disabled"').' />',
 					'<input type="text" class="txt" name="newname['.$dirnum.']" value="" size="15" />',
@@ -110,39 +107,47 @@ if(!$operation) {
 
 	} else {
 
-		if(is_array($_G['gp_namenew'])) {
-			foreach($_G['gp_namenew'] as $id => $val) {
-				$_G['gp_availablenew'][$id] = $_G['gp_availablenew'][$id] && $_G['gp_smiliesnum'][$id] > 0 ? 1 : 0;
-				DB::query("UPDATE ".DB::table('forum_imagetype')." SET available='{$_G['gp_availablenew'][$id]}', name='".htmlspecialchars(trim($val))."', displayorder='{$_G['gp_displayordernew'][$id]}' WHERE typeid='$id'");
+		if(is_array($_GET['namenew'])) {
+			foreach($_GET['namenew'] as $id => $val) {
+				$_GET['availablenew'][$id] = $_GET['availablenew'][$id] && $_GET['smiliesnum'][$id] > 0 ? 1 : 0;
+				C::t('forum_imagetype')->update($id, array(
+				    'available' => $_GET['availablenew'][$id],
+				    'name' => dhtmlspecialchars(trim($val)),
+				    'displayorder' => $_GET['displayordernew'][$id]
+				));
 			}
 		}
 
-		if($ids = dimplode($_G['gp_delete'])) {
-			if(DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_smiley')." WHERE type='smiley' AND typeid IN ($ids)")) {
+		if($_GET['delete']) {
+			if(C::t('common_smiley')->count_by_type_typeid('smiley', $_GET['delete'])) {
 				cpmsg('smilies_delete_invalid', '', 'error');
 			}
-			DB::query("DELETE FROM ".DB::table('forum_imagetype')." WHERE typeid IN ($ids)");
+			C::t('forum_imagetype')->delete($_GET['delete']);
 		}
 
-		if(is_array($_G['gp_newname'])) {
-			foreach($_G['gp_newname'] as $key => $val) {
+		if(is_array($_GET['newname'])) {
+			foreach($_GET['newname'] as $key => $val) {
 				$val = trim($val);
 				if($val) {
-					$smurl = './static/image/smiley/'.$newdiredctory[$key];
-					if(!is_dir(DISCUZ_ROOT.$smurl)) {
+					$smurl = './static/image/smiley/'.$_GET['newdirectory'][$key];
+					$smdir = DISCUZ_ROOT.$smurl;
+					if(!is_dir($smdir)) {
 						cpmsg('smilies_directory_invalid', '', 'error', array('smurl' => $smurl));
 					}
-					$newavailable[$key] = $newavailable[$key] && $smnums[$key] > 0 ? 1 : 0;
+					$newavailable[$key] = $_GET['newavailable'][$key] && $smnums[$key] > 0 ? 1 : 0;
 					$data = array(
-						'available' => $newavailable[$key],
-						'name' => htmlspecialchars($val),
+						'available' => $_GET['newavailable'][$key],
+						'name' => dhtmlspecialchars($val),
 						'type' => 'smiley',
-						'displayorder' => $newdisplayorder[$key],
-						'directory' => $_G['gp_newdirectory'][$key],
+						'displayorder' => $_GET['newdisplayorder'][$key],
+						'directory' => $_GET['newdirectory'][$key],
 					);
-					DB::insert('forum_imagetype', $data);
-					if($smilies[$key]) {
-						addsmilies(DB::insert_id(), $smilies[$key]);
+					$newSmileId = C::t('forum_imagetype')->insert($data, true);
+
+					$smilies = update_smiles($smdir, $newSmileId, $imgextarray);
+					if($smilies['smilies']) {
+						addsmilies($newSmileId, $smilies['smilies']);
+						updatecache(array('smilies', 'smileycodes', 'smilies_js'));
 					}
 				}
 			}
@@ -155,13 +160,13 @@ if(!$operation) {
 
 } elseif($operation == 'edit' && $id) {
 
-	$type = DB::fetch_first("SELECT typeid, name, directory FROM ".DB::table('forum_imagetype')." WHERE typeid='$id' AND type='smiley'");
+	$type = C::t('forum_imagetype')->fetch($id);
 	$smurl = './static/image/smiley/'.$type['directory'];
 	$smdir = DISCUZ_ROOT.$smurl;
 	if(!is_dir($smdir)) {
 		cpmsg('smilies_directory_invalid', '', 'error', array('smurl' => $smurl));
 	}
-	$fastsmiley = unserialize(DB::result_first("SELECT svalue FROM ".DB::table('common_setting')." WHERE skey='fastsmiley'"));
+	$fastsmiley = C::t('common_setting')->fetch('fastsmiley', true);
 
 	if(!$do) {
 
@@ -170,13 +175,12 @@ if(!$operation) {
 			$smiliesperpage = 100;
 			$start_limit = ($page - 1) * $smiliesperpage;
 
-			$num = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_smiley')." WHERE typeid='$id' AND type='smiley'");
+			$num = C::t('common_smiley')->count_by_type_typeid('smiley', $id);
 			$multipage = multi($num, $smiliesperpage, $page, ADMINSCRIPT.'?action=smilies&operation=edit&id='.$id);
 
 			$smileynum = 1;
 			$smilies = '';
-			$query = DB::query("SELECT * FROM ".DB::table('common_smiley')." WHERE typeid='$id' AND type='smiley' ORDER BY displayorder LIMIT $start_limit, $smiliesperpage");
-			while($smiley =	DB::fetch($query)) {
+			foreach(C::t('common_smiley')->fetch_all_by_typeid_type($id, 'smiley', $start_limit, $smiliesperpage) as $smiley) {
 				$smilies .= showtablerow('', array('class="td25"', 'class="td28 td24"', 'class="td25"', 'class="td23"', 'class="td23"', 'class="td24"'), array(
 					"<input class=\"checkbox\" type=\"checkbox\" name=\"delete[]\" value=\"$smiley[id]\">",
 					"<input type=\"text\" class=\"txt\" size=\"2\" name=\"displayorder[$smiley[id]]\" value=\"$smiley[displayorder]\">",
@@ -233,7 +237,7 @@ EOT;
 				array('add', "smilies&operation=edit&do=add&id=$id", $do == 'add')
 			));
 			showformheader("smilies&operation=edit&id=$id");
-			showhiddenfields(array('page' => $_G['gp_page']));
+			showhiddenfields(array('page' => $_GET['page']));
 			showtableheader('', 'nobottom');
 			showsubtitle(array('', 'display_order', 'smilies_fast', 'smilies_edit_image', 'smilies_id', 'smilies_edit_code', 'smilies_edit_filename'));
 			echo $smilies;
@@ -247,28 +251,30 @@ EOT;
 
 		} else {
 
-			if($ids = dimplode($_G['gp_delete'])) {
-				DB::query("DELETE FROM	".DB::table('common_smiley')." WHERE id IN ($ids)");
+			if($_GET['delete']) {
+				C::t('common_smiley')->delete($_GET['delete']);
 			}
 
 			$unsfast = array();
-			if(is_array($_G['gp_displayorder'])) {
-				foreach($_G['gp_displayorder'] as $key => $val) {
-					if(!in_array($key, $_G['gp_fast'])) {
+			if(is_array($_GET['displayorder'])) {
+				foreach($_GET['displayorder'] as $key => $val) {
+					if(!in_array($key, $_GET['fast'])) {
 						$unsfast[] = $key;
 					}
-					$_G['gp_displayorder'][$key] = intval($_G['gp_displayorder'][$key]);
-					$_G['gp_code'][$key] = trim($_G['gp_code'][$key]);
-					$codeadd = !empty($_G['gp_code'][$key]) ? ", code='{$_G['gp_code'][$key]}'" : '';
-					DB::query("UPDATE ".DB::table('common_smiley')." SET displayorder='{$_G['gp_displayorder'][$key]}' $codeadd WHERE id='$key'");
+					$_GET['displayorder'][$key] = intval($_GET['displayorder'][$key]);
+					$_GET['code'][$key] = trim($_GET['code'][$key]);
+					$data = array('displayorder' => $_GET['displayorder'][$key]);
+					if(!empty($_GET['code'][$key])) {
+						$data['code'] = $_GET['code'][$key];
+					}
+					C::t('common_smiley')->update($key, $data);
 				}
 			}
 
-			$fastsmiley[$id] = array_diff(array_unique(array_merge((array)$fastsmiley[$id], (array)$_G['gp_fast'])), $unsfast);
-			DB::insert('common_setting', array('skey' => 'fastsmiley', 'svalue' => addslashes(serialize($fastsmiley))), false, true);
-
+			$fastsmiley[$id] = array_diff(array_unique(array_merge((array)$fastsmiley[$id], (array)$_GET['fast'])), $unsfast);
+			C::t('common_setting')->update('fastsmiley', $fastsmiley);
 			updatecache(array('smilies', 'smileycodes', 'smilies_js'));
-			cpmsg('smilies_edit_succeed', "action=smilies&operation=edit&id=$id&page=$_G[gp_page]", 'succeed');
+			cpmsg('smilies_edit_succeed', "action=smilies&operation=edit&id=$id&page=$_GET[page]", 'succeed');
 
 		}
 
@@ -290,13 +296,12 @@ EOT;
 			showtablerow('', '', '<input type="button" class="btn" value="'.$lang['search'].'" onclick="ajaxget(\''.ADMINSCRIPT.'?action=smilies&operation=edit&do=add&id='.$id.'&search=yes\', \'addsmilies\', \'addsmilies\', \'auto\');doane(event);">');
 			showtablefooter();
 			showtagfooter('div');
-			if($_G['gp_search']) {
+			if($_GET['search']) {
 
 				$newid = 1;
 				$newimages = '';
 				$imgfilter =  array();
-				$query = DB::query("SELECT url FROM ".DB::table('common_smiley')." WHERE typeid='$id' AND type='smiley'");
-				while($img = DB::fetch($query)) {
+				foreach(C::t('common_smiley')->fetch_all_by_typeid_type($id, 'smiley') as $smiley) {
 					$imgfilter[] = $img[url];
 				}
 				$smiliesdir = dir($smdir);
@@ -342,8 +347,8 @@ EOT;
 
 		} else {
 
-			if(is_array($_G['gp_smilies'])) {
-				addsmilies($id, $_G['gp_smilies']);
+			if(is_array($_GET['smilies'])) {
+				addsmilies($id, $_GET['smilies']);
 			}
 
 			updatecache(array('smilies', 'smileycodes', 'smilies_js'));
@@ -353,7 +358,7 @@ EOT;
 
 } elseif($operation == 'update' && $id) {
 
-	if(!$smtype = DB::fetch_first("SELECT name, directory FROM ".DB::table('forum_imagetype')." WHERE typeid='$id' AND type='smiley'")) {
+	if(!($smtype = C::t('forum_imagetype')->fetch($id))) {
 		cpmsg('smilies_type_nonexistence', '', 'error');
 	} else {
 		$smurl = './static/image/smiley/'.$smtype['directory'];
@@ -363,25 +368,12 @@ EOT;
 		}
 	}
 
-	$num = 0;
-	$smilies = $imgfilter =  array();
-	$query = DB::query("SELECT url FROM ".DB::table('common_smiley')." WHERE typeid='$id' AND type='smiley'");
-	while($img = DB::fetch($query)) {
-		$imgfilter[] = $img[url];
-	}
-	$smiliesdir = dir($smdir);
-	while($entry = $smiliesdir->read()) {
-		if(in_array(strtolower(fileext($entry)), $imgextarray) && !in_array($entry, $imgfilter) && preg_match("/^[\w\-\.\[\]\(\)\<\> &]+$/", substr($entry, 0, strrpos($entry, '.'))) && strlen($entry) < 30 && is_file($smdir.'/'.$entry)) {
-			$smilies[] = array('available' => 1, 'displayorder' => 0, 'url' => $entry);
-			$num++;
-		}
-	}
-	$smiliesdir->close();
+	$smilies = update_smiles($smdir, $id, $imgextarray);
 
-	if($smilies) {
-		addsmilies($id, $smilies);
+	if($smilies['smilies']) {
+		addsmilies($id, $smilies['smilies']);
 		updatecache(array('smilies', 'smileycodes', 'smilies_js'));
-		cpmsg('smilies_update_succeed', "action=smilies", 'succeed', array('smurl' => $smurl, 'num' => $num, 'typename' => $smtype['name']));
+		cpmsg('smilies_update_succeed', "action=smilies", 'succeed', array('smurl' => $smurl, 'num' => $smilies['num'], 'typename' => $smtype['name']));
 	} else {
 		cpmsg('smilies_update_error', '', 'error', array('smurl' => $smurl));
 	}
@@ -395,7 +387,7 @@ EOT;
 			array('smilies_type', 'smilies', 0),
 			array('smilies_import', 'smilies&operation=import', 1),
 		));
-		showtips('smilies_tips_import');
+		showtips('smilies_tips');
 		showformheader('smilies&operation=import', 'enctype');
 		showtableheader('smilies_import');
 		showimportdata();
@@ -429,13 +421,29 @@ function addsmilies($typeid, $smilies = array()) {
 					'code' => '',
 					'url' => $smiley['url'],
 				);
-				$ids[] = DB::insert('common_smiley', $data);
+				$ids[] = C::t('common_smiley')->insert($data, true);
 			}
 		}
-		if($ids = dimplode($ids)) {
-			DB::query("UPDATE ".DB::table('common_smiley')." SET code=CONCAT('{:', typeid, '_', id, ':}') WHERE id IN ($ids)");
+		if($ids) {
+			C::t('common_smiley')->update_code_by_id($ids);
 		}
 	}
 }
+function update_smiles($smdir, $id, &$imgextarray) {
+	$num = 0;
+	$smilies = $imgfilter =  array();
+	foreach(C::t('common_smiley')->fetch_all_by_typeid_type($id, 'smiley') as $img) {
+		$imgfilter[] = $img[url];
+	}
+	$smiliesdir = dir($smdir);
+	while($entry = $smiliesdir->read()) {
+		if(in_array(strtolower(fileext($entry)), $imgextarray) && !in_array($entry, $imgfilter) && preg_match("/^[\w\-\.\[\]\(\)\<\> &]+$/", substr($entry, 0, strrpos($entry, '.'))) && strlen($entry) < 30 && is_file($smdir.'/'.$entry)) {
+			$smilies[] = array('available' => 1, 'displayorder' => 0, 'url' => $entry);
+			$num++;
+		}
+	}
+	$smiliesdir->close();
 
+	return array('smilies'=>$smilies, 'num'=>$num);
+}
 ?>

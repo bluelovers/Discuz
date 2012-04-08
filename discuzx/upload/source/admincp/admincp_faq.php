@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_faq.php 20212 2011-02-17 14:27:13Z lifangming $
+ *      $Id: admincp_faq.php 25246 2011-11-02 03:34:53Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -26,8 +26,7 @@ if($operation == 'list') {
 
 		$faqparent = $faqsub = array();
 		$faqlists = $faqselect = '';
-		$query = DB::query("SELECT * FROM ".DB::table('forum_faq')." ORDER BY displayorder");
-		while($faq = DB::fetch($query)) {
+		foreach(C::t('forum_faq')->fetch_all_by_fpid() as $faq) {
 			if(empty($faq['fpid'])) {
 				$faqparent[$faq['id']] = $faq;
 				$faqselect .= "<option value=\"$faq[id]\">$faq[title]</option>";
@@ -73,24 +72,28 @@ EOT;
 
 	} else {
 
-		if($ids = dimplode($_G['gp_delete'])) {
-			DB::query("DELETE FROM	".DB::table('forum_faq')." WHERE id IN ($ids)");
+		if($_GET['delete']) {
+			C::t('forum_faq')->delete($_GET['delete']);
 		}
 
-		if(is_array($_G['gp_title'])) {
-			foreach($_G['gp_title'] as $id => $val) {
-				DB::update('forum_faq', array(
-					'displayorder' => $_G['gp_displayorder'][$id],
-					'title' => $_G['gp_title'][$id],
-				), "id='$id'");
+		if(is_array($_GET['title'])) {
+			foreach($_GET['title'] as $id => $val) {
+				C::t('forum_faq')->update($id, array(
+					'displayorder' => $_GET['displayorder'][$id],
+					'title' => $_GET['title'][$id]
+				));
 			}
 		}
 
-		if(is_array($_G['gp_newtitle'])) {
-			foreach($_G['gp_newtitle'] as $k => $v) {
+		if(is_array($_GET['newtitle'])) {
+			foreach($_GET['newtitle'] as $k => $v) {
 				$v = trim($v);
 				if($v) {
-					DB::insert('forum_faq', array('fpid' => intval($_G['gp_newfpid'][$k]), 'displayorder' => intval($_G['gp_newdisplayorder'][$k]), 'title' => $v));
+					C::t('forum_faq')->insert(array(
+						'fpid' => intval($_GET['newfpid'][$k]),
+						'displayorder' => intval($_GET['newdisplayorder'][$k]),
+						'title' => $v
+					));
 				}
 			}
 		}
@@ -100,16 +103,15 @@ EOT;
 	}
 
 } elseif($operation == 'detail') {
-	$id = $_G['gp_id'];
+	$id = $_GET['id'];
 	if(!submitcheck('detailsubmit')) {
 
-		$faq = DB::fetch_first("SELECT * FROM ".DB::table('forum_faq')." WHERE id='$id'");
+		$faq = C::t('forum_faq')->fetch($id);
 		if(!$faq) {
 			cpmsg('faq_nonexistence', '', 'error');
 		}
 
-		$query = DB::query("SELECT * FROM ".DB::table('forum_faq')." WHERE fpid='0' ORDER BY displayorder, fpid ");
-		while($parent = DB::fetch($query)) {
+		foreach(C::t('forum_faq')->fetch_all_by_fpid(0) as $parent) {
 			$faqselect .= "<option value=\"$parent[id]\" ".($faq['fpid'] == $parent['id'] ? 'selected' : '').">$parent[title]</option>";
 		}
 
@@ -131,36 +133,34 @@ EOT;
 
 	} else {
 
-		if(!$_G['gp_titlenew']) {
+		if(!$_GET['titlenew']) {
 			cpmsg('faq_no_title', '', 'error');
 		}
 
-		if(!empty($_G['gp_identifiernew'])) {
-			$query = DB::query("SELECT id FROM ".DB::table('forum_faq')." WHERE identifier='{$_G['gp_identifiernew']}' AND id!='$id'");
-			if(DB::num_rows($query)) {
+		if(!empty($_GET['identifiernew'])) {
+			if(C::t('forum_faq')->check_identifier($_GET['identifiernew'], $id)) {
 				cpmsg('faq_identifier_invalid', '', 'error');
 			}
 		}
 
-		if(strlen($_G['gp_keywordnew']) > 50) {
+		if(strlen($_GET['keywordnew']) > 50) {
 			cpmsg('faq_keyword_toolong', '', 'error');
 		}
 
-		$fpidnew = $_G['gp_fpidnew'] ? intval($_G['gp_fpidnew']) : 0;
-		$titlenew = trim($_G['gp_titlenew']);
-		$messagenew = trim($_G['gp_messagenew']);
-		$identifiernew = trim($_G['gp_identifiernew']);
-		$keywordnew = trim($_G['gp_keywordnew']);
+		$fpidnew = $_GET['fpidnew'] ? intval($_GET['fpidnew']) : 0;
+		$titlenew = trim($_GET['titlenew']);
+		$messagenew = trim($_GET['messagenew']);
+		$identifiernew = trim($_GET['identifiernew']);
+		$keywordnew = trim($_GET['keywordnew']);
 
-		DB::update('forum_faq', array(
+		C::t('forum_faq')->update($id, array(
 			'fpid' => $fpidnew,
 			'identifier' => $identifiernew,
 			'keyword' => $keywordnew,
 			'title' => $titlenew,
 			'message' => $messagenew,
-		), "id='$id'");
+		));
 
-		updatecache('faqs');
 		cpmsg('faq_list_update', 'action=faq&operation=list', 'succeed');
 
 	}

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_stamps.php 16693 2010-09-13 04:31:03Z monkey $
+ *      $Id: cache_stamps.php 25773 2011-11-22 04:22:39Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -13,12 +13,11 @@ if(!defined('IN_DISCUZ')) {
 
 function build_cache_stamps() {
 	$data = array();
-	$query = DB::query("SELECT id, url, displayorder FROM ".DB::table('common_smiley')." WHERE type IN ('stamp','stamplist') ORDER BY displayorder");
 
 	$fillarray = range(0, 99);
 	$count = 0;
 	$repeats = $stampicon = array();
-	while($stamp = DB::fetch($query)) {
+	foreach(C::t('common_smiley')->fetch_all_by_type(array('stamp','stamplist')) as $stamp) {
 		if(isset($fillarray[$stamp['displayorder']])) {
 			unset($fillarray[$stamp['displayorder']]);
 		} else {
@@ -30,21 +29,22 @@ function build_cache_stamps() {
 		reset($fillarray);
 		$displayorder = current($fillarray);
 		unset($fillarray[$displayorder]);
-		DB::query("UPDATE ".DB::table('common_smiley')." SET displayorder='$displayorder' WHERE id='$id'");
+		C::t('common_smiley')->update($id, array('displayorder'=>$displayorder));
 	}
-	$query = DB::query("SELECT typeid, displayorder FROM ".DB::table('common_smiley')." WHERE type='stamplist' AND typeid>'0' ORDER BY displayorder");
-	while($stamp = DB::fetch($query)) {
-		$stamporder = DB::result_first("SELECT displayorder FROM ".DB::table('common_smiley')." WHERE id='$stamp[typeid]' AND type='stamp'");
-		$stampicon[$stamporder] = $stamp['displayorder'];
+	foreach(C::t('common_smiley')->fetch_all_by_type('stamplist') as $stamp) {
+		if($stamp['typeid'] < 1) {
+			continue;
+		}
+		$row = C::t('common_smiley')->fetch_by_id_type($stamp['typeid'], 'stamp');
+		$stampicon[$row['displayorder']] = $stamp['displayorder'];
 	}
-	$query = DB::query("SELECT * FROM ".DB::table('common_smiley')." WHERE type IN ('stamp','stamplist') ORDER BY displayorder");
-	while($stamp = DB::fetch($query)) {
+	foreach(C::t('common_smiley')->fetch_all_by_type(array('stamp','stamplist')) as $stamp) {
 		$icon = $stamp['type'] == 'stamp' ? (isset($stampicon[$stamp['displayorder']]) ? $stampicon[$stamp['displayorder']] : 0) :
 			($stamp['type'] == 'stamplist' && !in_array($stamp['displayorder'], $stampicon) ? 1 : 0);
 		$data[$stamp['displayorder']] = array('url' => $stamp['url'], 'text' => $stamp['code'], 'type' => $stamp['type'], 'icon' => $icon);
 	}
 
-	save_syscache('stamps', $data);
+	savecache('stamps', $data);
 }
 
 ?>

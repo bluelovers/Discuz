@@ -4,14 +4,14 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_index.php 19160 2010-12-20 08:57:24Z liulanbo $
+ *      $Id: space_index.php 25870 2011-11-24 07:05:44Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
-if(($_G['adminid'] == 1 && $_G['setting']['allowquickviewprofile'] && $_G['gp_view'] != 'admin' && $_G['gp_diy'] != 'yes') || defined('IN_MOBILE')) {
+if(($_G['adminid'] == 1 && $_G['setting']['allowquickviewprofile'] && $_GET['view'] != 'admin' && $_GET['diy'] != 'yes') || defined('IN_MOBILE')) {
 	dheader("Location:home.php?mod=space&uid=$space[uid]&do=profile");
 }
 
@@ -63,16 +63,14 @@ if ($_GET['op'] == 'getmusiclist') {
 
 }else{
 
-	$viewuids = $_G['cookie']['viewuids']?explode('_', $_G['cookie']['viewuids']):array();
-	if(!$_G['setting']['preventrefresh'] || ($_G['uid'] && !$space['self'] && !in_array($space['uid'], $viewuids))) {
+	if(!$_G['setting']['preventrefresh'] || $_G['uid'] && !$space['self'] && $_G['cookie']['viewid'] != 'uid_'.$space['uid']) {
 		member_count_update($space['uid'], array('views' => 1));
 		$viewuids[$space['uid']] = $space['uid'];
-		dsetcookie('viewuids', implode('_', $viewuids));
+		dsetcookie('viewid', 'uid_'.$space['uid']);
 	}
 
 	if(!$space['self'] && $_G['uid']) {
-		$query = DB::query("SELECT dateline FROM ".DB::table('home_visitor')." WHERE uid='$space[uid]' AND vuid='$_G[uid]'");
-		$visitor = DB::fetch($query);
+		$visitor = C::t('home_visitor')->fetch_by_uid_vuid($space['uid'], $_G['uid']);
 		$is_anonymous = empty($_G['cookie']['anonymous_visit_'.$_G['uid'].'_'.$space['uid']]) ? 0 : 1;
 		if(empty($visitor['dateline'])) {
 			$setarr = array(
@@ -81,11 +79,11 @@ if ($_GET['op'] == 'getmusiclist') {
 				'vusername' => $is_anonymous ? '' : $_G['username'],
 				'dateline' => $_G['timestamp']
 			);
-			DB::insert('home_visitor', $setarr, 0, true);
+			C::t('home_visitor')->insert($setarr, false, true);
 			show_credit();
 		} else {
 			if($_G['timestamp'] - $visitor['dateline'] >= 300) {
-				DB::update('home_visitor', array('dateline'=>$_G['timestamp'], 'vusername'=>$is_anonymous ? '' : $_G['username']), array('uid'=>$space['uid'], 'vuid'=>$_G['uid']));
+				C::t('home_visitor')->update_by_uid_vuid($space['uid'], $_G['uid'], array('dateline'=>$_G['timestamp'], 'vusername'=>$is_anonymous ? '' : $_G['username']));
 			}
 			if($_G['timestamp'] - $visitor['dateline'] >= 3600) {
 				show_credit();
@@ -141,14 +139,14 @@ function formatdata($data, $position, $space) {
 function show_credit() {
 	global $_G, $space;
 
-	$showinfo = DB::fetch_first("SELECT credit, unitprice FROM ".DB::table('home_show')." WHERE uid='$space[uid]'");
+	$showinfo = C::t('home_show')->fetch($space['uid']);
 	if($showinfo['credit'] > 0) {
 		$showinfo['unitprice'] = intval($showinfo['unitprice']);
 		if($showinfo['credit'] <= $showinfo['unitprice']) {
 			notification_add($space['uid'], 'show', 'show_out');
-			DB::delete('home_show', array('uid' => $space['uid']));
+			C::t('home_show')->delete($space['uid']);
 		} else {
-			DB::query("UPDATE ".DB::table('home_show')." SET credit=credit-'$showinfo[unitprice]' WHERE uid='{$space[uid]}' AND credit>0");
+			C::t('home_show')->update_credit_by_uid($space['uid'], -$showinfo['unitprice']);
 		}
 	}
 }

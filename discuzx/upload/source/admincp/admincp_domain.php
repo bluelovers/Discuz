@@ -3,7 +3,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_domain.php 21344 2011-03-23 08:43:11Z congyushuai $
+ *      $Id: admincp_domain.php 29304 2012-04-01 03:31:07Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -37,33 +37,46 @@ if($operation == 'app') {
 		showtableheader();
 		showsubtitle(array('name', 'setting_domain_app_domain'));
 		$app = array();
+		$hiddenarr = array();
 		foreach($appkeyarr as $key => $desc) {
-			showtablerow('', array('class="td25"', ''), array(
-					$desc,
-					"<input type=\"text\" class=\"txt\" style=\"width:50%;\" name=\"appnew[$key]\" value=\"".$_G['setting']['domain']['app'][$key]."\">".($key == 'mobile' ? cplang('setting_domain_app_mobile_tips') : '')
-				));
+			if(in_array($key, array('portal', 'group')) && !helper_access::check_module($key) || ($key == 'home' && !helper_access::check_module('feed'))) {
+				$hiddenarr["appnew[$key]"] = '';
+			} else {
+				showtablerow('', array('class="td25"', ''), array(
+						$desc,
+						"<input type=\"text\" class=\"txt\" style=\"width:50%;\" name=\"appnew[$key]\" value=\"".$_G['setting']['domain']['app'][$key]."\">".($key == 'mobile' ? cplang('setting_domain_app_mobile_tips') : '')
+					));
+			}
 		}
 		showsubmit('submit');
 		showtablefooter();
+		showhiddenfields($hiddenarr);
 		showformfooter();
 	} else {
 		$olddomain = $_G['setting']['domain']['app'];
 		$_G['setting']['domain']['app'] = array();
-		foreach($_G['gp_appnew'] as $appkey => $domain) {
+		$appset = false;
+		foreach($_GET['appnew'] as $appkey => $domain) {
 			if(preg_match('/^((http|https|ftp):\/\/|\.)|(\/|\.)$/i', $domain)) {
 				cpmsg('setting_domain_http_error', '', 'error');
 			}
 			if(!empty($domain) && in_array($domain, $_G['setting']['domain']['app'])) {
 				cpmsg('setting_domain_repeat_error', '', 'error');
 			}
+			if($appkey != 'default' && $domain) {
+				$appset = true;
+			}
 			$_G['setting']['domain']['app'][$appkey] = $domain;
 		}
-
-		if($_G['gp_appnew']['mobile'] != $olddomain['mobile']) {
-			DB::update('common_nav', array('url' => (!$_G['gp_appnew']['mobile'] ? 'forum.php?mobile=yes' : 'http://'.$_G['gp_appnew']['mobile'])), array('identifier' => 'mobile'));
+		if($appset && !$_G['setting']['domain']['app']['default']) {
+			cpmsg('setting_domain_need_default_error', '', 'error');
 		}
 
-		DB::insert('common_setting', array('skey' => 'domain', 'svalue' => addslashes(serialize($_G['setting']['domain']))), false, true);
+		if($_GET['appnew']['mobile'] != $olddomain['mobile']) {
+			C::t('common_nav')->update_by_identifier('mobile', array('url' => (!$_GET['appnew']['mobile'] ? 'forum.php?mobile=yes' : 'http://'.$_GET['appnew']['mobile'])));
+		}
+
+		C::t('common_setting')->update('domain',$_G['setting']['domain']);
 		updatecache('setting');
 		cpmsg('setting_update_succeed', 'action=domain&operation=app', 'succeed');
 	}
@@ -82,30 +95,37 @@ if($operation == 'app') {
 		showformheader('domain&operation=root');
 		showtableheader();
 		showsubtitle(array('name', 'setting_domain_app_domain'));
+		$hiddenarr = array();
 		foreach($roottype as $type => $desc) {
-			$domainroot = $_G['setting']['domain']['root'][$type];
-			showtablerow('', array('class="td25"', ''), array(
-					$desc,
-					"<input type=\"text\" class=\"txt\" style=\"width:50%;\" name=\"domainnew[$type]\" value=\"$domainroot\">"
-				));
+			if(in_array($type, array('topic', 'channel')) && !helper_access::check_module('portal') || ($type == 'home' && !$_G['setting']['homepagestyle']) || ($type == 'group' && !helper_access::check_module('group'))) {
+				$hiddenarr["domainnew[$type]"] = '';
+			} else {
+				$domainroot = $_G['setting']['domain']['root'][$type];
+				showtablerow('', array('class="td25"', ''), array(
+						$desc,
+						"<input type=\"text\" class=\"txt\" style=\"width:50%;\" name=\"domainnew[$type]\" value=\"$domainroot\">"
+					));
+			}
 		}
 		showsubmit('submit');
 		showtablefooter();
+		showhiddenfields($hiddenarr);
 		showformfooter();
 	} else {
 		$oldroot = $_G['setting']['domain']['root'];
 		$_G['setting']['domain']['root'] = array();
-		foreach($_G['gp_domainnew'] as $idtype => $domain) {
+		foreach($_GET['domainnew'] as $idtype => $domain) {
 			if(preg_match('/^((http|https|ftp):\/\/|\.)|(\/|\.)$/i', $domain)) {
 				cpmsg('setting_domain_http_error', '', 'error');
 			}
 			if($_G['setting']['domain']['root'][$idtype] != $domain) {
-				DB::update('common_domain', array('domainroot' => $domain), $idtype == 'forum' ? "idtype IN('forum', 'channel')" : array('idtype' => $idtype));
+				$updatetype = $idtype == 'forum' ? array('forum', 'channel') : $idtype;
+				C::t('common_domain')->update_by_idtype($updatetype, array('domainroot' => $domain));
 			}
 			$_G['setting']['domain']['root'][$idtype] = $domain;
 
 		}
-		DB::insert('common_setting', array('skey' => 'domain', 'svalue' => addslashes(serialize($_G['setting']['domain']))), false, true);
+		C::t('common_setting')->update('domain', $_G['setting']['domain']);
 		updatecache('setting');
 		cpmsg('setting_update_succeed', 'action=domain&operation=root', 'succeed');
 	}
@@ -115,25 +135,30 @@ if($operation == 'app') {
 		showtips('setting_domain_base_tips');
 		showformheader("domain");
 		showtableheader();
-		showsetting('setting_domain_allow_space', 'settingnew[allowspacedomain]', $_G['setting']['allowspacedomain'], 'radio');
-		showsetting('setting_domain_allow_group', 'settingnew[allowgroupdomain]', $_G['setting']['allowgroupdomain'], 'radio');
+		if($_G['setting']['homepagestyle']) {
+			showsetting('setting_domain_allow_space', 'settingnew[allowspacedomain]', $_G['setting']['allowspacedomain'], 'radio');
+		} else {
+			showhiddenfields(array('settingnew[allowspacedomain]' => 0));
+		}
+		if(helper_access::check_module('group')) {
+			showsetting('setting_domain_allow_group', 'settingnew[allowgroupdomain]', $_G['setting']['allowgroupdomain'], 'radio');
+		} else {
+			showhiddenfields(array('settingnew[allowgroupdomain]' => 0));
+		}
 		showsetting('setting_domain_hold_domain', 'settingnew[holddomain]', $_G['setting']['holddomain'], 'text');
 		showsubmit('domainsubmit');
 		showtablefooter();
 		showformfooter();
 	} else {
-		$settings = array();
-		$settingnew = daddslashes($_G['gp_settingnew']);
-		foreach($settingnew as $key => $val) {
-			if(in_array($key, array('allowspacedomain', 'allowgroupdomain'))) {
-				$val = (float)$val;
-			}
-			$settings[] = "('$key', '$val')";
-		}
+
+		$settings = $_GET['settingnew'];
+		$settings['allowspacedomain'] = (float)$settings['allowspacedomain'];
+		$settings['allowgroupdomain'] = (float)$settings['allowgroupdomain'];
 		if($settings) {
-			DB::query("REPLACE INTO ".DB::table('common_setting')." (`skey`, `svalue`) VALUES ".implode(',', $settings));
+			C::t('common_setting')->update_batch($settings);
+			updatecache('setting');
+
 		}
-		updatecache('setting');
 		cpmsg('setting_update_succeed', 'action=domain', 'succeed');
 	}
 }

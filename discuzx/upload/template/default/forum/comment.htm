@@ -1,20 +1,20 @@
 <!--{template common/header}-->
-<!--{if empty($_G['gp_infloat'])}-->
+<!--{if empty($_GET['infloat'])}-->
 <div id="ct" class="wp cl">
 	<div class="mn">
 		<div class="bm bw0">
 <!--{/if}-->
 
-<form method="post" autocomplete="off" id="commentform" action="forum.php?mod=post&action=reply&comment=yes&tid=$post[tid]&pid=$_G[gp_pid]&extra=$extra{if !empty($_G[gp_page])}&page=$_G[gp_page]{/if}&commentsubmit=yes&infloat=yes" onsubmit="{if !empty($_G['gp_infloat'])}ajaxpost('commentform', 'return_$_G['gp_handlekey']', 'return_$_G['gp_handlekey']', 'onerror');return false;{/if}">
+<form method="post" autocomplete="off" id="commentform" action="forum.php?mod=post&action=reply&comment=yes&tid=$post[tid]&pid=$_GET[pid]&extra=$extra{if !empty($_GET[page])}&page=$_GET[page]{/if}&commentsubmit=yes&infloat=yes" onsubmit="{if !empty($_GET['infloat'])}ajaxpost('commentform', 'return_$_GET['handlekey']', 'return_$_GET['handlekey']', 'onerror');return false;{/if}">
 	<div class="f_c">
 		<h3 class="flb">
-			<em id="return_$_G['gp_handlekey']">{lang comments}</em>
+			<em id="return_$_GET['handlekey']">{lang comments}</em>
 			<span>
-				<!--{if !empty($_G['gp_infloat'])}--><a href="javascript:;" class="flbc" onclick="hideWindow('$_G['gp_handlekey']')" title="{lang close}">{lang close}</a><!--{/if}-->
+				<!--{if !empty($_GET['infloat'])}--><a href="javascript:;" class="flbc" onclick="hideWindow('$_GET['handlekey']')" title="{lang close}">{lang close}</a><!--{/if}-->
 			</span>
 		</h3>
 		<input type="hidden" name="formhash" id="formhash" value="{FORMHASH}" />
-		<input type="hidden" name="handlekey" value="$_G['gp_handlekey']" />
+		<input type="hidden" name="handlekey" value="$_GET['handlekey']" />
 		<div class="c">
 			<div class="tedt">
 				<div class="bar cm">
@@ -60,18 +60,18 @@
 				</script>
 			</div>
 			<!--{if checkperm('seccode') && ($secqaacheck || $seccodecheck)}-->
-				<!--{block sectpl}--><sec>: <span id="sec<hash>" onclick="showMenu({'ctrlid':this.id,'win':'{$_G[gp_handlekey]}'})"><sec></span><div id="sec<hash>_menu" class="p_pop p_opt" style="display:none"><sec></div><!--{/block}-->
+				<!--{block sectpl}--><sec>: <span id="sec<hash>" onclick="showMenu({'ctrlid':this.id,'win':'{$_GET[handlekey]}'})"><sec></span><div id="sec<hash>_menu" class="p_pop p_opt" style="display:none"><sec></div><!--{/block}-->
 				<div class="mtm"><!--{subtemplate common/seccheck}--></div>
 			<!--{/if}-->
 		</div>
 	</div>
-	<div class="o pns cl{if empty($_G['gp_infloat'])} mtm{/if}">
+	<div class="o pns cl{if empty($_GET['infloat'])} mtm{/if}">
 		<button type="submit" id="commentsubmit" class="pn pnc z" value="true" name="commentsubmit" tabindex="3"><span>{lang publish}</span></button>
 		<span class="y">{lang comment_message1} <strong id="checklen">200</strong> {lang comment_message2}</span>
 	</div>
 </form>
 
-<!--{if empty($_G['gp_infloat'])}-->
+<!--{if empty($_GET['infloat'])}-->
 		</div>
 	</div>
 </div>

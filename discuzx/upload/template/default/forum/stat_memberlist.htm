@@ -1,6 +1,5 @@
 <!--{subtemplate common/header}-->
 <div id="pt" class="bm cl">
-	<!--{subtemplate common/simplesearchform}-->
 	<div class="z">
 		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a><em>&rsaquo;</em>
 		<a href="misc.php?mod=stat">{lang stats}</a><em>&rsaquo;</em>
@@ -20,13 +19,13 @@
 			</div>
 			<table summary="{lang member_list}" class="dt bm">
 				<tr>
-					<th><a href="misc.php?mod=stat&op=memberlist&order=username{if !$_G[gp_asc]}&asc=1{/if}" class="showmenu">{lang username}</a></th>
-					<th><a href="misc.php?mod=stat&op=memberlist&order=uid{if !$_G[gp_asc]}&asc=1{/if}" class="showmenu">{lang uid}</a></th>
-					<th><a href="misc.php?mod=stat&op=memberlist&order=gender{if !$_G[gp_asc]}&asc=1{/if}" class="showmenu">{lang gender}</a></th>
-					<th><a href="misc.php?mod=stat&op=memberlist&order=regdate{if !$_G[gp_asc]}&asc=1{/if}" class="showmenu">{lang regdate}</a></th>
-					<th><a href="misc.php?mod=stat&op=memberlist&order=lastvisit{if !$_G[gp_asc]}&asc=1{/if}" class="showmenu">{lang lastvisit}</a></th>
-					<th><a href="misc.php?mod=stat&op=memberlist&order=posts{if !$_G[gp_asc]}&asc=1{/if}" class="showmenu">{lang posts}</a></th>
-					<th><a href="misc.php?mod=stat&op=memberlist&order=credits{if !$_G[gp_asc]}&asc=1{/if}" class="showmenu">{lang credits}</a></th>
+					<th><a href="misc.php?mod=stat&op=memberlist&order=username{if !$_GET[asc]}&asc=1{/if}" class="showmenu">{lang username}</a></th>
+					<th><a href="misc.php?mod=stat&op=memberlist&order=uid{if !$_GET[asc]}&asc=1{/if}" class="showmenu">{lang uid}</a></th>
+					<th><a href="misc.php?mod=stat&op=memberlist&order=gender{if !$_GET[asc]}&asc=1{/if}" class="showmenu">{lang gender}</a></th>
+					<th><a href="misc.php?mod=stat&op=memberlist&order=regdate{if !$_GET[asc]}&asc=1{/if}" class="showmenu">{lang regdate}</a></th>
+					<th><a href="misc.php?mod=stat&op=memberlist&order=lastvisit{if !$_GET[asc]}&asc=1{/if}" class="showmenu">{lang lastvisit}</a></th>
+					<th><a href="misc.php?mod=stat&op=memberlist&order=posts{if !$_GET[asc]}&asc=1{/if}" class="showmenu">{lang posts}</a></th>
+					<th><a href="misc.php?mod=stat&op=memberlist&order=credits{if !$_GET[asc]}&asc=1{/if}" class="showmenu">{lang credits}</a></th>
 				</tr>
 				<!--{loop $memberlist $member}-->
 					<tr class="{echo swapclass('alt')}">

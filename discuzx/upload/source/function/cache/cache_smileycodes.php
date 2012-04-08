@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_smileycodes.php 16698 2010-09-13 05:22:15Z monkey $
+ *      $Id: cache_smileycodes.php 24968 2011-10-19 09:51:28Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -13,20 +13,15 @@ if(!defined('IN_DISCUZ')) {
 
 function build_cache_smileycodes() {
 	$data = array();
-	$query = DB::query("SELECT typeid, directory FROM ".DB::table('forum_imagetype')." WHERE type='smiley' AND available='1' ORDER BY displayorder");
-
-	while($type = DB::fetch($query)) {
-		$squery = DB::query("SELECT id, code, url FROM ".DB::table('common_smiley')." WHERE type='smiley' AND code<>'' AND typeid='$type[typeid]' ORDER BY displayorder");
-		if(DB::num_rows($squery)) {
-			while($smiley = DB::fetch($squery)) {
-				if($size = @getimagesize('./static/image/smiley/'.$type['directory'].'/'.$smiley['url'])) {
-					$data[$smiley['id']] = $smiley['code'];
-				}
+	foreach(C::t('forum_imagetype')->fetch_all_by_type('smiley', 1) as $type) {
+		foreach(C::t('common_smiley')->fetch_all_by_type_code_typeid('smiley', $type['typeid']) as $smiley) {
+			if($size = @getimagesize('./static/image/smiley/'.$type['directory'].'/'.$smiley['url'])) {
+				$data[$smiley['id']] = $smiley['code'];
 			}
 		}
 	}
 
-	save_syscache('smileycodes', $data);
+	savecache('smileycodes', $data);
 }
 
 ?>

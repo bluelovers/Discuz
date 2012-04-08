@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_forumselect.php 8331 2010-04-20 02:20:39Z monkey $
+ *      $Id: misc_forumselect.php 25889 2011-11-24 09:52:20Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -17,7 +17,7 @@ if(!isset($_G['cache']['forums'])) {
 
 
 $grouplist = $commonlist = '';
-$special = isset($_G['gp_special']) ? intval($_G['gp_special']) : null;
+$special = isset($_GET['special']) ? intval($_GET['special']) : null;
 $forumlist = $subforumlist = array();
 $i = array();
 

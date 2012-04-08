@@ -1,7 +1,6 @@
 <!--{eval $_G['home_tpl_titles'] = array('{lang pm}');}-->
 <!--{template common/header}-->
 <div id="pt" class="bm cl">
-	<!--{subtemplate common/simplesearchform}-->
 	<div class="z">
 		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
 		<span>{lang prompt}</span> <em>&rsaquo;</em>
@@ -93,7 +92,7 @@
 					<div class="pm_g cl">
 						<h2 class="mbm xs2"><span class="xi1">$membernum</span> {lang pm_members_message} : <span class="xi2">$subject</span></h2>
 						<div class="pm_sd">
-							<ul class="pm_mem_l pm_admin">
+							<ul class="pm_mem_l{if $authorid == $_G['uid']} pm_admin{/if}">
 							<!--{loop $chatpmmemberlist $key $value}-->
 								<li><a href="home.php?mod=space&uid=$value[uid]" target="_blank" {if $ols[$value[uid]]} class="xi2" title="{lang online}"{else} class="xg1"{/if}>$value[username]</a></li>
 							<!--{/loop}-->
@@ -188,7 +187,7 @@
 							<p class="d">{lang sendpm_tip}</p>
 						</div>
 						<div id="username_menu" style="display: none;">
-							<ul id="friends"></ul>
+							<ul id="friends" class="pmfrndl"></ul>
 						</div>
 						<div class="p_pof" id="showSelectBox_menu" unselectable="on" style="display:none;">
 							<div class="pbm">

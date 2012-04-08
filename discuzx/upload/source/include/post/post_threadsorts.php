@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: post_threadsorts.php 22852 2011-05-26 04:15:24Z monkey $
+ *      $Id: post_threadsorts.php 23995 2011-08-18 09:41:27Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -24,9 +24,12 @@ foreach($_G['cache']['threadsort_option_'.$sortid] AS $key => $val) {
 	}
 }
 if($sqlarr) {
-	$member_profile_sql = implode(', ', $sqlarr);
-	$member_profile = DB::fetch_first("SELECT $member_profile_sql FROM ".DB::table('common_member_profile')." WHERE uid = '$_G[uid]' LIMIT 1");
-	unset($member_profile_sql);
+	$member_profile = array();
+	$_member_profile = C::t('common_member_profile')->fetch($_G['uid']);
+	foreach($sqlarr as $val) {
+		$member_profile[$val] = $_member_profile[$val];
+	}
+	unset($_member_profile);
 }
 threadsort_optiondata($pid, $sortid, $_G['cache']['threadsort_option_'.$sortid], $_G['cache']['threadsort_template_'.$sortid]);
 

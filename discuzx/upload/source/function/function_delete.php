@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_delete.php 29030 2012-03-23 02:35:21Z chenmengshu $
+ *      $Id: function_delete.php 29029 2012-03-23 02:33:05Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -14,77 +14,92 @@ if(!defined('IN_DISCUZ')) {
 require_once libfile('function/home');
 
 function deletemember($uids, $delpost = true) {
+	global $_G;
 	if(!$uids) {
 		return;
 	}
-	require_once libfile('function/sec');
-	updateMemberOperate($uids, 2);
-
+	if($_G['setting']['plugins']['func'][HOOKTYPE]['deletemember']) {
+		$_G['deleteposuids'] = & $uids;
+		$hookparam = func_get_args();
+		hookscript('deletemember', 'global', 'funcs', array('param' => $hookparam, 'step' => 'check'), 'deletemember');
+	}
 	if($delpost) {
 		deleteattach($uids, 'uid');
 		deletepost($uids, 'authorid');
 	}
-	require_once libfile('function/forum');
-	foreach($uids as $uid) {
-		my_thread_log('deluser', array('uid' => $uid));
-	}
 
+	$arruids = $uids;
 	$uids = dimplode($uids);
-	$numdeleted = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_member')." WHERE uid IN ($uids)");
+	$numdeleted = count(C::t('common_member')->fetch_all($arruids));
 	foreach(array('common_member_field_forum', 'common_member_field_home', 'common_member_count', 'common_member_log', 'common_member_profile',
-		'common_member_verify', 'common_member_verify_info', 'common_member_status', 'common_member_validate', 'common_member_magic',
-		'forum_access', 'forum_moderator', 'common_member_action_log') as $table) {
-		DB::delete($table, "uid IN ($uids)");
+		'common_member_verify', 'common_member_status', 'common_member_validate', 'common_member_magic') as $table) {
+		C::t($table)->delete($arruids, true);
 	}
 
+	C::t('forum_access')->delete_by_uid($arruids);
+	C::t('common_member_verify_info')->delete_by_uid($arruids);
+	C::t('common_member_action_log')->delete_by_uid($arruids);
+	C::t('forum_moderator')->delete_by_uid($arruids);
+	C::t('forum_post_location')->delete_by_uid($arruids);
 	$doids = array();
-	$query = DB::query("SELECT * FROM ".DB::table('home_doing')." WHERE uid IN ($uids)");
-	while($value = DB::fetch($query)) {
+	$query = C::t('home_doing')->fetch_all_by_uid_doid($arruids);
+	foreach($query as $value) {
 		$doids[$value['doid']] = $value['doid'];
 	}
-	$delsql = !empty($doids) ? "doid IN (".dimplode($doids).") OR " : "";
 
-	DB::delete('home_docomment', "$delsql uid IN ($uids)");
-	DB::delete('common_domain', "id IN ($uids) AND idtype='home'");
-	DB::delete('home_feed', "uid IN ($uids) OR (id IN ($uids) AND idtype='uid')");
-	DB::delete('home_notification', "uid IN ($uids) OR authorid IN ($uids)");
-	DB::delete('home_poke', "uid IN ($uids) OR fromuid IN ($uids)");
-	DB::delete('home_comment', "(uid IN ($uids) OR authorid IN ($uids) OR (id IN ($uids) AND idtype='uid'))");
-	DB::delete('home_visitor', "uid IN ($uids) OR vuid IN ($uids)");
-	DB::delete('home_friend', "uid IN ($uids) OR fuid IN ($uids)");
-	DB::delete('home_friend_request', "uid IN ($uids) OR fuid IN ($uids)");
-	DB::delete('common_invite', "uid IN ($uids) OR fuid IN ($uids)");
-	DB::delete('common_myinvite', "touid IN ($uids) OR fromuid IN ($uids)");
-	DB::delete('common_moderate', "id IN (".$uids.") AND idtype='uid_cid'");
+	C::t('home_docomment')->delete_by_doid_uid($doids, $arruids);
+	C::t('common_domain')->delete_by_id_idtype($arruids, 'home');
+	C::t('home_feed')->delete_by_uid($arruids);
+	C::t('home_notification')->delete_by_uid($arruids);
+	C::t('home_poke')->delete_by_uid_or_fromuid($uids);
+	C::t('home_comment')->delete_by_uid($arruids);
+	C::t('home_visitor')->delete_by_uid_or_vuid($uids);
+	C::t('home_friend')->delete_by_uid_fuid($arruids);
+	C::t('home_friend_request')->delete_by_uid_or_fuid($arruids);
+	C::t('common_invite')->delete_by_uid_or_fuid($arruids);
+	C::t('common_myinvite')->delete_by_touid_or_fromuid($uids);
+	C::t('common_moderate')->delete($arruids, 'uid_cid');
 
-	$query = DB::query("SELECT filepath, thumb, remote FROM ".DB::table('home_pic')." WHERE uid IN ($uids)");
-	while($value = DB::fetch($query)) {
+	foreach(C::t('forum_collectionfollow')->fetch_all_by_uid($arruids) as $follow) {
+		C::t('forum_collection')->update_by_ctid($follow['ctid'], 0, -1);
+	}
+
+	foreach(C::t('forum_collectioncomment')->fetch_all_by_uid($arruids) as $comment) {
+		C::t('forum_collection')->update_by_ctid($comment['ctid'], 0, 0, -1);
+	}
+
+	$query = C::t('home_pic')->fetch_all_by_uid($uids);
+	foreach($query as $value) {
 		$pics[] = $value;
 	}
 	deletepicfiles($pics);
 
 	include_once libfile('function/home');
-	$query = DB::query("SELECT * FROM ".DB::table('home_album')." WHERE uid IN ($uids)");
-	while($value = DB::fetch($query)) {
+	$query = C::t('home_album')->fetch_all_by_uid($arruids);
+	foreach($query as $value) {
 		pic_delete($value['pic'], 'album', 0, ($value['picflag'] == 2 ? 1 : 0));
 	}
 
-	DB::query("DELETE FROM ".DB::table('common_mailcron').", ".DB::table('common_mailqueue')." USING ".DB::table('common_mailcron').", ".DB::table('common_mailqueue')." WHERE ".DB::table('common_mailcron').".touid IN ($uids) AND ".DB::table('common_mailcron').".cid=".DB::table('common_mailqueue').".cid", 'UNBUFFERED');
+	C::t('common_mailcron')->delete_by_touid($arruids);
 
 	foreach(array('home_doing', 'home_share', 'home_album', 'common_credit_rule_log', 'common_credit_rule_log_field',
 		'home_pic', 'home_blog', 'home_blogfield', 'home_class', 'home_clickuser',
-		'home_userapp', 'home_userappfield', 'home_show', 'common_member') as $table) {
-		DB::delete($table, "uid IN ($uids)");
+		'home_userapp', 'home_userappfield', 'home_show', 'forum_collectioncomment', 'forum_collectionfollow', 'forum_collectionteamworker') as $table) {
+		C::t($table)->delete_by_uid($arruids);
 	}
+	C::t('common_member')->delete($arruids);
 
 	manyoulog('user', $uids, 'delete');
+	if($_G['setting']['plugins']['func'][HOOKTYPE]['deletemember']) {
+		hookscript('deletemember', 'global', 'funcs', array('param' => $hookparam, 'step' => 'delete'), 'deletemember');
+	}
 	return $numdeleted;
 }
 
 function deletepost($ids, $idtype = 'pid', $credit = false, $posttableid = false, $recycle = false) {
 	global $_G;
 	$recycle = $recycle && $idtype == 'pid' ? true : false;
-	if($_G['setting']['plugins'][HOOKTYPE.'_deletepost']) {
+	if($_G['setting']['plugins']['func'][HOOKTYPE]['deletepost']) {
 		$_G['deletepostids'] = & $ids;
 		$hookparam = func_get_args();
 		hookscript('deletepost', 'global', 'funcs', array('param' => $hookparam, 'step' => 'check'), 'deletepost');
@@ -96,20 +111,21 @@ function deletepost($ids, $idtype = 'pid', $credit = false, $posttableid = false
 	loadcache('posttableids');
 	$posttableids = !empty($_G['cache']['posttableids']) ? ($posttableid !== false && in_array($posttableid, $_G['cache']['posttableids']) ? array($posttableid) : $_G['cache']['posttableids']): array('0');
 
-	if($idtype == 'pid') {
-		require_once libfile('function/forum');
-		foreach($ids as $pid) {
-			my_post_log('delete', array('pid' => $pid));
-		}
-	}
 	$count = count($ids);
 	$idsstr = dimplode($ids);
 
 	if($credit) {
 		$tuidarray = $ruidarray = array();
 		foreach($posttableids as $id) {
-			$query = DB::query('SELECT tid, pid, first, authorid, replycredit, invisible FROM '.DB::table(getposttable($id))." WHERE $idtype IN ($idsstr)");
-			while($post = DB::fetch($query)) {
+			$postlist = array();
+			if($idtype == 'pid') {
+				$postlist = C::t('forum_post')->fetch_all($id, $ids, false);
+			} elseif($idtype == 'tid') {
+				$postlist = C::t('forum_post')->fetch_all_by_tid($id, $ids, false);
+			} elseif($idtype == 'authorid') {
+				$postlist = C::t('forum_post')->fetch_all_by_authorid($id, $ids, false);
+			}
+			foreach($postlist as $post) {
 				if($post['invisible'] != -1 && $post['invisible'] != -5) {
 					if($post['first']) {
 						$tuidarray[$post['fid']][] = $post['authorid'];
@@ -122,6 +138,7 @@ function deletepost($ids, $idtype = 'pid', $credit = false, $posttableid = false
 					$tids[] = $post['tid'];
 				}
 			}
+			unset($postlist);
 		}
 
 		if($tuidarray || $ruidarray) {
@@ -141,27 +158,41 @@ function deletepost($ids, $idtype = 'pid', $credit = false, $posttableid = false
 
 	foreach($posttableids as $id) {
 		if($recycle) {
-			DB::query("UPDATE ".DB::table(getposttable($id))." SET invisible='-5' WHERE pid IN ($idsstr)");
+			C::t('forum_post')->update($id, $ids, array('invisible' => -5));
 		} else {
-			foreach(array(getposttable($id), 'forum_postcomment') as $table) {
-				DB::delete($table, "$idtype IN ($idsstr)");
+			if($idtype == 'pid') {
+				C::t('forum_post')->delete($id, $ids);
+				C::t('forum_postcomment')->delete_by_pid($ids);
+			} elseif($idtype == 'tid') {
+				C::t('forum_post')->delete_by_tid($id, $ids);
+				C::t('forum_postcomment')->delete_by_tid($ids);
+			} elseif($idtype == 'authorid') {
+				C::t('forum_post')->delete_by_authorid($id, $ids);
+				C::t('forum_postcomment')->delete_by_authorid($ids);
 			}
-			DB::delete('forum_trade', ($idtype == 'authorid' ? 'sellerid' : $idtype)." IN ($idsstr)");
-			DB::delete('home_feed', "id IN ($idsstr) AND idtype='".($idtype == 'authorid' ? 'uid' : $idtype)."'");
+			C::t('forum_trade')->delete_by_id_idtype($ids, ($idtype == 'authorid' ? 'sellerid' : $idtype));
+			C::t('home_feed')->delete_by_id_idtype($ids, ($idtype == 'authorid' ? 'uid' : $idtype));
 		}
 	}
 	if(!$recycle && $idtype != 'authorid') {
-		foreach(array('forum_postposition', 'forum_poststick') as $table) {
-			DB::delete($table, "$idtype IN ($idsstr)");
+		if($idtype == 'pid') {
+			C::t('forum_poststick')->delete_by_pid($ids);
+		} elseif($idtype == 'tid') {
+			C::t('forum_poststick')->delete_by_tid($ids);
 		}
+
 	}
 	if($idtype == 'pid') {
-		DB::delete('forum_postcomment', "rpid IN ($idsstr)");
-		DB::delete('common_moderate', "id IN ($idsstr) AND idtype='pid'");
+		C::t('forum_postcomment')->delete_by_rpid($ids);
+		C::t('common_moderate')->delete($ids, 'pid');
+		C::t('forum_post_location')->delete($ids);
+	} elseif($idtype == 'tid') {
+		C::t('forum_post_location')->delete_by_tid($ids);
+	} elseif($idtype == 'authorid') {
+		C::t('forum_post_location')->delete_by_uid($ids);
 	}
 	if($replycredit_list) {
-		$query = DB::query("SELECT tid, extcreditstype FROM ".DB::table('forum_replycredit')." WHERE tid IN (".dimplode($tids).")");
-		while($rule = DB::fetch($query)) {
+		foreach(C::t('forum_replycredit')->fetch_all($tids) as $rule) {
 			$rule['extcreditstype'] = $rule['extcreditstype'] ? $rule['extcreditstype'] : $_G['setting']['creditstransextra'][10] ;
 			$replycredity_rule[$rule['tid']] = $rule;
 		}
@@ -175,7 +206,7 @@ function deletepost($ids, $idtype = 'pid', $credit = false, $posttableid = false
 	if(!$recycle) {
 		deleteattach($ids, $idtype);
 	}
-	if($_G['setting']['plugins'][HOOKTYPE.'_deletepost']) {
+	if($_G['setting']['plugins']['func'][HOOKTYPE]['deletepost']) {
 		hookscript('deletepost', 'global', 'funcs', array('param' => $hookparam, 'step' => 'delete'), 'deletepost');
 	}
 	return $count;
@@ -187,13 +218,7 @@ function deletethreadcover($tids) {
 	$threadtableids = !empty($_G['cache']['threadtableids']) ? $_G['cache']['threadtableids'] : array(0);
 	$deletecover = array();
 	foreach($threadtableids as $tableid) {
-		if(!$tableid) {
-			$threadtable = "forum_thread";
-		} else {
-			$threadtable = "forum_thread_$tableid";
-		}
-		$query = DB::query("SELECT cover, tid FROM ".DB::table($threadtable)." WHERE tid IN ($tids)");
-		while($row = DB::fetch($query)) {
+		foreach(C::t('forum_thread')->fetch_all_by_tid($tids, 0, 0, $tableid) as $row) {
 			if($row['cover']) {
 				$deletecover[$row['tid']] = $row['cover'];
 			}
@@ -210,7 +235,7 @@ function deletethreadcover($tids) {
 
 function deletethread($tids, $membercount = false, $credit = false, $ponly = false) {
 	global $_G;
-	if($_G['setting']['plugins'][HOOKTYPE.'_deletethread']) {
+	if($_G['setting']['plugins']['func'][HOOKTYPE]['deletethread']) {
 		$_G['deletethreadtids'] = & $tids;
 		$hookparam = func_get_args();
 		hookscript('deletethread', 'global', 'funcs', array('param' => $hookparam, 'step' => 'check'), 'deletethread');
@@ -218,11 +243,9 @@ function deletethread($tids, $membercount = false, $credit = false, $ponly = fal
 	if(!$tids) {
 		return 0;
 	}
-	require_once libfile('function/forum');
-	foreach($tids as $tid) {
-		my_post_log('delete', array('tid' => $tid));
-	}
+
 	$count = count($tids);
+	$arrtids = $tids;
 	$tids = dimplode($tids);
 
 	loadcache(array('threadtableids', 'posttableids'));
@@ -232,22 +255,22 @@ function deletethread($tids, $membercount = false, $credit = false, $ponly = fal
 		$threadtableids = array_merge(array(0), $threadtableids);
 	}
 
-	DB::delete('common_moderate', "id IN ($tids) AND idtype='tid'");
+	C::t('common_moderate')->delete($arrtids, 'tid');
+	C::t('forum_threadclosed')->delete($arrtids);
 
-	$atids = $fids = $postids = $threadtables = array();
+	$cachefids = $atids = $fids = $postids = $threadtables = array();
 	foreach($threadtableids as $tableid) {
-		$threadtable = !$tableid ? "forum_thread" : "forum_thread_$tableid";
-		$query = DB::query("SELECT cover, tid, fid, posttableid FROM ".DB::table($threadtable)." WHERE tid IN ($tids)");
-		while($row = DB::fetch($query)) {
+		foreach(C::t('forum_thread')->fetch_all_by_tid($arrtids, 0, 0, $tableid) as $row) {
 			$atids[] = $row['tid'];
 			$row['posttableid'] = !empty($row['posttableid']) && in_array($row['posttableid'], $posttableids) ? $row['posttableid'] : '0';
 			$postids[$row['posttableid']][$row['tid']] = $row['tid'];
 			if($tableid) {
 				$fids[$row['fid']][] = $tableid;
 			}
+			$cachefids[$row['fid']] = $row['fid'];
 		}
 		if(!$tableid && !$ponly) {
-			$threadtables[] = $threadtable;
+			$threadtables[] = $tableid;
 		}
 	}
 
@@ -256,15 +279,13 @@ function deletethread($tids, $membercount = false, $credit = false, $ponly = fal
 
 		$postlist = $uidarray = $tuidarray = $ruidarray = array();
 		foreach($postids as $posttableid => $posttabletids) {
-			$query = DB::query('SELECT tid, first, authorid, dateline, replycredit, invisible FROM '.DB::table(getposttable($posttableid)).' WHERE tid IN ('.dimplode($posttabletids).')');
-			while($post = DB::fetch($query)) {
+			foreach(C::t('forum_post')->fetch_all_by_tid($posttableid, $posttabletids, false) as $post) {
 				if($post['invisible'] != -1 && $post['invisible'] != -5) {
 					$postlist[] = $post;
 				}
 			}
 		}
-		$query = DB::query("SELECT tid, extcreditstype FROM ".DB::table('forum_replycredit')." WHERE tid IN ($tids)");
-		while($rule = DB::fetch($query)) {
+		foreach(C::t('forum_replycredit')->fetch_all($arrtids) as $rule) {
 			$rule['extcreditstype'] = $rule['extcreditstype'] ? $rule['extcreditstype'] : $_G['setting']['creditstransextra'][10] ;
 			$replycredit_rule[$rule['tid']] = $rule;
 		}
@@ -312,11 +333,10 @@ function deletethread($tids, $membercount = false, $credit = false, $ponly = fal
 			}
 			$auidarray = $attachtables = array();
 			foreach($atids as $tid) {
-				$attachtables[getattachtablebytid($tid)][] = $tid;
+				$attachtables[getattachtableid($tid)][] = $tid;
 			}
 			foreach($attachtables as $attachtable => $attachtids) {
-				$query = DB::query("SELECT uid, dateline FROM ".DB::table($attachtable)." WHERE tid IN (".dimplode($attachtids).")");
-				while($attach = DB::fetch($query)) {
+				foreach(C::t('forum_attachment_n')->fetch_all_by_id($attachtable, 'tid', $attachtids) as $attach) {
 					if($attach['dateline'] > $losslessdel) {
 						$auidarray[$attach['uid']] = !empty($auidarray[$attach['uid']]) ? $auidarray[$attach['uid']] + 1 : 1;
 					}
@@ -329,23 +349,52 @@ function deletethread($tids, $membercount = false, $credit = false, $ponly = fal
 		}
 	}
 
+	$relatecollection = C::t('forum_collectionthread')->fetch_all_by_tids($arrtids);
+	if(count($relatecollection) > 0) {
+		$collectionids = array();
+		foreach($relatecollection as $collection) {
+			$collectionids[] = $collection['ctid'];
+		}
+		$collectioninfo = C::t('forum_collection')->fetch_all($collectionids);
+		foreach($relatecollection as $collection) {
+			$decthread = C::t('forum_collectionthread')->delete_by_ctid_tid($collection['ctid'], $arrtids);
+			$lastpost = null;
+			if(in_array($collectioninfo[$collection['ctid']]['lastpost'], $arrtids) && ($collectioninfo[$collection['ctid']]['threadnum'] - $decthread) > 0) {
+				$collection_thread = C::t('forum_collectionthread')->fetch_by_ctid_dateline($collection['ctid']);
+				if($collection_thread) {
+					$thread = C::t('forum_thread')->fetch($collection_thread['tid']);
+					$lastpost = array(
+						'lastpost' => $thread['tid'],
+						'lastsubject' => $thread['subject'],
+						'lastposttime' => $thread['dateline'],
+						'lastposter' => $thread['authorid']
+					);
+				}
+			}
+			C::t('forum_collection')->update_by_ctid($collection['ctid'], -$decthread, 0, 0, 0, 0, 0, $lastpost);
+		}
+		C::t('forum_collectionrelated')->delete($arrtids);
+	}
+	if($cachefids) {
+		C::t('forum_thread')->clear_cache($cachefids, 'forumdisplay_');
+	}
 	if($ponly) {
-		if($_G['setting']['plugins'][HOOKTYPE.'_deletethread']) {
+		if($_G['setting']['plugins']['func'][HOOKTYPE]['deletethread']) {
 			hookscript('deletethread', 'global', 'funcs', array('param' => $hookparam, 'step' => 'delete'), 'deletethread');
 		}
-		DB::query("UPDATE ".DB::table('forum_thread')." SET displayorder='-1', digest='0', moderated='1' WHERE tid IN ($tids)");
+		C::t('forum_thread')->update($arrtids, array('displayorder'=>-1, 'digest'=>0, 'moderated'=>1));
 		foreach($postids as $posttableid=>$oneposttids) {
-			updatepost(array('invisible' => '-1'), "tid IN ($tids)");
+			C::t('forum_post')->update_by_tid($posttableid, $oneposttids, array('invisible' => '-1'));
 		}
 		return $count;
 	}
 
-	DB::delete('forum_replycredit', "tid IN ($tids)");
-	DB::delete('common_credit_log', "operation IN ('RCT', 'RCA', 'RCB') AND relatedid IN ($tids)");
-
-	deletethreadcover($tids);
-	foreach($threadtables as $threadtable) {
-		DB::delete($threadtable, "tid IN ($tids)");
+	C::t('forum_replycredit')->delete($arrtids);
+	C::t('forum_post_location')->delete_by_tid($arrtids);
+	C::t('common_credit_log')->delete_by_operation_relatedid(array('RCT', 'RCA', 'RCB'), $arrtids);
+	deletethreadcover($arrtids);
+	foreach($threadtables as $tableid) {
+		C::t('forum_thread')->delete_by_tid($arrtids, false, $tableid);
 	}
 
 	if($atids) {
@@ -355,26 +404,33 @@ function deletethread($tids, $membercount = false, $credit = false, $ponly = fal
 		deleteattach($atids, 'tid');
 	}
 	if($fids) {
+		loadcache('forums');
 		foreach($fids as $fid => $tableids) {
-			$tableids = array_unique($tableids);
-			foreach($tableids as $tableid) {
-				$query = DB::query("SELECT COUNT(*) AS threads, SUM(replies)+COUNT(*) AS posts FROM ".DB::table("forum_thread_$tableid")." WHERE fid='$fid'");
-				while($row = DB::fetch($query)) {
-					DB::insert('forum_forum_threadtable', array('fid' => $fid, 'threadtableid' => $tableid, 'threads' => intval($row['threads']), 'posts' => intval($row['posts'])), false, true);
-				}
+			if(empty($_G['cache']['forums'][$fid]['archive'])) {
+				continue;
+			}
+			foreach(C::t('forum_thread')->count_posts_by_fid($fid) as $row) {
+				C::t('forum_forum_threadtable')->insert(array(
+						'fid' => $fid,
+						'threadtableid' => $tableid,
+						'threads' => $row['threads'],
+						'posts' => $row['posts']
+				), false, true);
 			}
 		}
 	}
 
 	foreach(array('forum_forumrecommend', 'forum_polloption', 'forum_poll', 'forum_activity', 'forum_activityapply', 'forum_debate',
-		'forum_debatepost', 'forum_threadmod', 'forum_relatedthread', 'forum_typeoptionvar',
-		'forum_postposition', 'forum_poststick', 'forum_pollvoter', 'forum_threadimage') as $table) {
-		DB::delete($table, "tid IN ($tids)");
+		'forum_debatepost', 'forum_threadmod', 'forum_relatedthread',
+		'forum_pollvoter', 'forum_threadimage', 'forum_threadpreview') as $table) {
+		C::t($table)->delete_by_tid($arrtids);
 	}
-	DB::query("DELETE FROM ".DB::table('home_feed')." WHERE id IN ($tids) AND idtype='tid'", 'UNBUFFERED');
-	DB::query("DELETE FROM ".DB::table('common_tagitem')." WHERE idtype='tid' AND itemid IN ($tids)", 'UNBUFFERED');
-	DB::query("DELETE FROM ".DB::table('forum_threadrush')." WHERE tid IN ($tids)", 'UNBUFFERED');
-	if($_G['setting']['plugins'][HOOKTYPE.'_deletethread']) {
+	C::t('forum_typeoptionvar')->delete_by_tid($arrtids);
+	C::t('forum_poststick')->delete_by_tid($arrtids);
+	C::t('home_feed')->delete_by_id_idtype($arrtids, 'tid');
+	C::t('common_tagitem')->delete(0, $tids, 'tid');
+	C::t('forum_threadrush')->delete($arrtids);
+	if($_G['setting']['plugins']['func'][HOOKTYPE]['deletethread']) {
 		hookscript('deletethread', 'global', 'funcs', array('param' => $hookparam, 'step' => 'delete'), 'deletethread');
 	}
 	return $count;
@@ -386,11 +442,10 @@ function deleteattach($ids, $idtype = 'aid') {
 		return;
 	}
 	$idtype = $idtype == 'authorid' ? 'uid' : $idtype;
-	$ids = dimplode($ids);
 
 	$pics = $attachtables = array();
-	$query = DB::query("SELECT aid, tableid FROM ".DB::table('forum_attachment')." WHERE $idtype IN ($ids) AND pid>0");
-	while($attach = DB::fetch($query)) {
+
+	foreach(C::t('forum_attachment')->fetch_all_by_id($idtype, $ids) as $attach) {
 		$attachtables[$attach['tableid']][] = $attach['aid'];
 	}
 
@@ -398,24 +453,26 @@ function deleteattach($ids, $idtype = 'aid') {
 		if($attachtable == 127) {
 			continue;
 		}
-		$attachtable = 'forum_attachment_'.$attachtable;
-		$aids = dimplode($aids);
-		$query = DB::query("SELECT attachment, thumb, remote, aid, picid FROM ".DB::table($attachtable)." WHERE aid IN ($aids) AND pid>0");
-		while($attach = DB::fetch($query)) {
+		$attachs = C::t('forum_attachment_n')->fetch_all($attachtable, $aids);
+		foreach($attachs as $attach) {
 			if($attach['picid']) {
 				$pics[] = $attach['picid'];
 			}
 			dunlink($attach);
 		}
-		DB::delete($attachtable, "aid IN ($aids) AND pid>0");
+		C::t('forum_attachment_exif')->delete($aids);
+		C::t('forum_attachment_n')->delete($attachtable, $aids);
 	}
-	DB::delete('forum_attachment', "$idtype IN ($ids) AND pid>0");
+	C::t('forum_attachment')->delete_by_id($idtype, $ids);
 	if($pics) {
 		$albumids = array();
-		$query = DB::query("SELECT albumid FROM ".DB::table('home_pic')." WHERE picid IN (".dimplode($pics).") GROUP BY albumid");
-		DB::delete('home_pic', 'picid IN ('.dimplode($pics).')', 0);
-		while($album = DB::fetch($query)) {
-			DB::update('home_album', array('picnum' => getcount('home_pic', array('albumid' => $album['albumid']))), array('albumid' => $album['albumid']));
+		C::t('home_pic')->delete($pics);
+		$query = C::t('home_pic')->fetch_all($pics);
+		foreach($query as $album) {
+			if(!in_array($album['albumid'], $albumids)) {
+				C::t('home_album')->update($album['albumid'], array('picnum' => C::t('home_pic')->check_albumpic($album['albumid'])));
+				$albumids[] = $album['albumid'];
+			}
 		}
 	}
 }
@@ -423,15 +480,16 @@ function deleteattach($ids, $idtype = 'aid') {
 function deletecomments($cids) {
 	global $_G;
 
-	$deltypes = $blognums = $newcids = $dels = $counts = array();
+	$blognums = $newcids = $dels = $counts = array();
 	$allowmanage = checkperm('managecomment');
 
-	$query = DB::query("SELECT * FROM ".DB::table('home_comment')." WHERE cid IN (".dimplode($cids).")");
-	while ($value = DB::fetch($query)) {
+	$query = C::t('home_comment')->fetch_all($cids);
+	$deltypes = array();
+	foreach($query as $value) {
 		if($allowmanage || $value['authorid'] == $_G['uid'] || $value['uid'] == $_G['uid']) {
 			$dels[] = $value;
 			$newcids[] = $value['cid'];
-			$deltypes[$value['idtype']] = $value['idtype'].'_cid';
+			$deltypes[] = $value['idtype'].'_cid';
 			if($value['authorid'] != $_G['uid'] && $value['uid'] != $_G['uid']) {
 				$counts[$value['authorid']]['coef'] -= 1;
 			}
@@ -443,8 +501,10 @@ function deletecomments($cids) {
 
 	if(empty($dels)) return array();
 
-	DB::delete('home_comment', "cid IN (".dimplode($newcids).")");
-	DB::delete('common_moderate', "id IN (".dimplode($newcids).") AND idtype IN(".dimplode($deltypes).")");
+	C::t('home_comment')->delete($newcids);
+	for($i = 0; $i < count($newcids); $i++) {
+		C::t('common_moderate')->delete($newcids[$i], $deltypes[$i]);
+	}
 
 	if($counts) {
 		foreach ($counts as $uid => $setarr) {
@@ -454,7 +514,7 @@ function deletecomments($cids) {
 	if($blognums) {
 		$nums = renum($blognums);
 		foreach ($nums[0] as $num) {
-			DB::query("UPDATE ".DB::table('home_blog')." SET replynum=replynum-$num WHERE blogid IN (".dimplode($nums[1][$num]).")");
+			C::t('home_blog')->increase($nums[1][$num], 0, array('replynum' => -$num));
 		}
 	}
 	return $dels;
@@ -466,8 +526,8 @@ function deleteblogs($blogids) {
 	$blogs = $newblogids = $counts = array();
 	$allowmanage = checkperm('manageblog');
 
-	$query = DB::query("SELECT * FROM ".DB::table('home_blog')." WHERE blogid IN (".dimplode($blogids).")");
-	while ($value = DB::fetch($query)) {
+	$query = C::t('home_blog')->fetch_all($blogids);
+	foreach($query as $value) {
 		if($allowmanage || $value['uid'] == $_G['uid']) {
 			$blogs[] = $value;
 			$newblogids[] = $value['blogid'];
@@ -480,13 +540,13 @@ function deleteblogs($blogids) {
 	}
 	if(empty($blogs)) return array();
 
-	DB::delete('home_blog', "blogid IN (".dimplode($newblogids).")");
-	DB::delete('home_blogfield', "blogid IN (".dimplode($newblogids).")");
-	DB::delete('home_comment', "id IN (".dimplode($newblogids).") AND idtype='blogid'");
-	DB::delete('home_feed', "id IN (".dimplode($newblogids).") AND idtype='blogid'");
-	DB::delete('home_clickuser', "id IN (".dimplode($newblogids).") AND idtype='blogid'");
-	DB::delete('common_moderate', "id IN (".dimplode($newblogids).") AND idtype='blogid'");
-	DB::delete('common_moderate', "id IN (".dimplode($newblogids).") AND idtype='blogid_cid'");
+	C::t('home_blog')->delete($newblogids);
+	C::t('home_blogfield')->delete($newblogids);
+	C::t('home_comment')->delete('', $newblogids, 'blogid');
+	C::t('home_feed')->delete_by_id_idtype($newblogids, 'blogid');
+	C::t('home_clickuser')->delete_by_id_idtype($newblogids, 'blogid');
+	C::t('common_moderate')->delete($newblogids, 'blogid');
+	C::t('common_moderate')->delete($newblogids, 'blogid_cid');
 
 	if($counts) {
 		foreach ($counts as $uid => $setarr) {
@@ -494,7 +554,7 @@ function deleteblogs($blogids) {
 		}
 	}
 
-	DB::query("DELETE FROM ".DB::table('common_tagitem')." WHERE idtype='blogid' AND itemid IN (".dimplode($newblogids).")");
+	C::t('common_tagitem')->delete(0, $newblogids, 'blogid');
 
 	return $blogs;
 }
@@ -505,8 +565,8 @@ function deletefeeds($feedids) {
 	$allowmanage = checkperm('managefeed');
 
 	$feeds = $newfeedids = array();
-	$query = DB::query("SELECT * FROM ".DB::table('home_feed')." WHERE feedid IN (".dimplode($feedids).")");
-	while ($value = DB::fetch($query)) {
+	$query = C::t('home_feed')->fetch_all($feedids);
+	foreach($query as $value) {
 		if($allowmanage || $value['uid'] == $_G['uid']) {
 			$newfeedids[] = $value['feedid'];
 			$feeds[] = $value;
@@ -515,7 +575,7 @@ function deletefeeds($feedids) {
 
 	if(empty($newfeedids)) return array();
 
-	DB::query("DELETE FROM ".DB::table('home_feed')." WHERE feedid IN (".dimplode($newfeedids).")");
+	C::t('home_feed')->delete($newfeedids);
 
 	return $feeds;
 }
@@ -526,8 +586,7 @@ function deleteshares($sids) {
 	$allowmanage = checkperm('manageshare');
 
 	$shares = $newsids = $counts = array();
-	$query = DB::query("SELECT * FROM ".DB::table('home_share')." WHERE sid IN (".dimplode($sids).")");
-	while ($value = DB::fetch($query)) {
+	foreach(C::t('home_share')->fetch_all($sids) as $value) {
 		if($allowmanage || $value['uid'] == $_G['uid']) {
 			$shares[] = $value;
 			$newsids[] = $value['sid'];
@@ -540,11 +599,11 @@ function deleteshares($sids) {
 	}
 	if(empty($shares)) return array();
 
-	DB::delete('home_share', "sid IN (".dimplode($newsids).")");
-	DB::delete('home_comment', "id IN (".dimplode($newsids).") AND idtype='sid'");
-	DB::delete('home_feed', "id IN (".dimplode($newsids).") AND idtype='sid'");
-	DB::delete('common_moderate', "id IN (".dimplode($newsids).") AND idtype='sid'");
-	DB::delete('common_moderate', "id IN (".dimplode($newsids).") AND idtype='sid_cid'");
+	C::t('home_share')->delete($newsids);
+	C::t('home_comment')->delete('', $newsids, 'sid');
+	C::t('home_feed')->delete_by_id_idtype($newsids, 'sid');
+	C::t('common_moderate')->delete($newsids, 'sid');
+	C::t('common_moderate')->delete($newsids, 'sid_cid');
 
 	if($counts) {
 		foreach ($counts as $uid => $setarr) {
@@ -561,8 +620,8 @@ function deletedoings($ids) {
 	$allowmanage = checkperm('managedoing');
 
 	$doings = $newdoids = $counts = array();
-	$query = DB::query("SELECT * FROM ".DB::table('home_doing')." WHERE doid IN (".dimplode($ids).")");
-	while ($value = DB::fetch($query)) {
+	$query = C::t('home_doing')->fetch_all($ids);
+	foreach($query as $value) {
 		if($allowmanage || $value['uid'] == $_G['uid']) {
 			$doings[] = $value;
 			$newdoids[] = $value['doid'];
@@ -576,10 +635,10 @@ function deletedoings($ids) {
 
 	if(empty($doings)) return array();
 
-	DB::delete('home_doing', "doid IN (".dimplode($newdoids).")");
-	DB::delete('home_docomment', "doid IN (".dimplode($newdoids).")");
-	DB::delete('home_feed', "id IN (".dimplode($newdoids).") AND idtype='doid'");
-	DB::delete('common_moderate', "id IN (".dimplode($newdoids).") AND idtype='doid'");
+	C::t('home_doing')->delete($newdoids);
+	C::t('home_docomment')->delete_by_doid_uid($newdoids);
+	C::t('home_feed')->delete_by_id_idtype($newdoids, 'doid');
+	C::t('common_moderate')->delete($newdoids, 'doid');
 
 	if($counts) {
 		foreach ($counts as $uid => $setarr) {
@@ -596,7 +655,7 @@ function deletespace($uid) {
 	$allowmanage = checkperm('managedelspace');
 
 	if($allowmanage) {
-		DB::query("UPDATE ".DB::table('common_member')." SET status='1' WHERE uid='$uid'");
+		C::t('common_member')->update($uid, array('status' => 1));
 		manyoulog('user', $uid, 'delete');
 		return true;
 	} else {
@@ -611,8 +670,8 @@ function deletepics($picids) {
 	$allowmanage = checkperm('managealbum');
 
 	$haveforumpic = false;
-	$query = DB::query("SELECT * FROM ".DB::table('home_pic')." WHERE picid IN (".dimplode($picids).")");
-	while ($value = DB::fetch($query)) {
+	$query = C::t('home_pic')->fetch_all($picids);
+	foreach($query as $value) {
 		if($allowmanage || $value['uid'] == $_G['uid']) {
 			$pics[] = $value;
 			$newids[] = $value['picid'];
@@ -625,18 +684,18 @@ function deletepics($picids) {
 	}
 	if(empty($pics)) return array();
 
-	DB::query("DELETE FROM ".DB::table('home_pic')." WHERE picid IN (".dimplode($newids).")");
+	C::t('home_pic')->delete($newids);
 	if($haveforumpic) {
 		for($i = 0;$i < 10;$i++) {
-			DB::query("UPDATE ".DB::table('forum_attachment_'.$i)." SET picid='0' WHERE picid IN (".dimplode($newids).")");
+			C::t('forum_attachment_n')->reset_picid($i, $newids);
 		}
 	}
 
-	DB::delete('home_comment', "id IN (".dimplode($newids).") AND idtype='picid'");
-	DB::delete('home_feed', "id IN (".dimplode($newids).") AND idtype='picid'");
-	DB::delete('home_clickuser', "id IN (".dimplode($newids).") AND idtype='picid'");
-	DB::delete('common_moderate', "id IN (".dimplode($newids).") AND idtype='picid'");
-	DB::delete('common_moderate', "id IN (".dimplode($newids).") AND idtype='picid_cid'");
+	C::t('home_comment')->delete('', $newids, 'picid');
+	C::t('home_feed')->delete_by_id_idtype($newids, 'picid');
+	C::t('home_clickuser')->delete_by_id_idtype($newids, 'picid');
+	C::t('common_moderate')->delete($newids, 'picid');
+	C::t('common_moderate')->delete($newids, 'picid_cid');
 
 	if($sizes) {
 		foreach ($sizes as $uid => $setarr) {
@@ -672,8 +731,8 @@ function deletealbums($albumids) {
 	$sizes = $dels = $newids = $counts = array();
 	$allowmanage = checkperm('managealbum');
 
-	$query = DB::query("SELECT * FROM ".DB::table('home_album')." WHERE albumid IN (".dimplode($albumids).")");
-	while ($value = DB::fetch($query)) {
+	$value = C::t('home_album')->fetch($albumids);
+	if($value['albumid']) {
 		if($allowmanage || $value['uid'] == $_G['uid']) {
 			$dels[] = $value;
 			$newids[] = $value['albumid'];
@@ -684,11 +743,12 @@ function deletealbums($albumids) {
 		}
 		$counts[$value['uid']]['albums'] -= 1;
 	}
+
 	if(empty($dels)) return array();
 
 	$pics = $picids = array();
-	$query = DB::query("SELECT * FROM ".DB::table('home_pic')." WHERE albumid IN (".dimplode($newids).")");
-	while ($value = DB::fetch($query)) {
+	$query = C::t('home_pic')->fetch_all_by_albumid($newids);
+	foreach($query as $value) {
 		$pics[] = $value;
 		$picids[] = $value['picid'];
 		$sizes[$value['uid']] = $sizes[$value['uid']] + $value['size'];
@@ -697,9 +757,11 @@ function deletealbums($albumids) {
 	if($picids) {
 		deletepics($picids);
 	}
-	DB::query("DELETE FROM ".DB::table('home_album')." WHERE albumid IN (".dimplode($newids).")");
-	DB::query("DELETE FROM ".DB::table('home_feed')." WHERE id IN (".dimplode($newids).") AND idtype='albumid'");
-	if($picids) DB::query("DELETE FROM ".DB::table('home_clickuser')." WHERE id IN (".dimplode($picids).") AND idtype='picid'");
+	C::t('home_album')->delete($newids);
+	C::t('home_feed')->delete_by_id_idtype($newids, 'albumid');
+	if($picids) {
+		C::t('home_clickuser')->delete_by_id_idtype($picids, 'picid');
+	}
 
 	if($sizes) {
 		foreach ($sizes as $uid => $value) {
@@ -708,58 +770,17 @@ function deletealbums($albumids) {
 			updatemembercount($uid, array('albums' => $albumnum, 'attachsize' => -$attachsize), false);
 		}
 	}
-
 	return $dels;
 }
-
-function deletepolls($pids) {
-	global $_G;
-
-
-	$counts = $polls = $newpids = array();
-	$allowmanage = checkperm('managepoll');
-
-	$query = DB::query("SELECT * FROM ".DB::table('home_poll')." WHERE pid IN (".dimplode($pids).")");
-	while ($value = DB::fetch($query)) {
-		if($allowmanage || $value['uid'] == $_G['uid']) {
-			$polls[] = $value;
-			$newpids[] = $value['pid'];
-
-			if($value['uid'] != $_G['uid']) {
-				$counts[$value['uid']]['coef'] -= 1;
-			}
-			$counts[$value['uid']]['polls'] -= 1;
-		}
-	}
-	if(empty($polls)) return array();
-
-	DB::query("DELETE FROM ".DB::table('home_poll')." WHERE pid IN (".dimplode($newpids).")");
-	DB::query("DELETE FROM ".DB::table('home_pollfield')." WHERE pid IN (".dimplode($newpids).")");
-	DB::query("DELETE FROM ".DB::table('home_polloption')." WHERE pid IN (".dimplode($newpids).")");
-	DB::query("DELETE FROM ".DB::table('home_polluser')." WHERE pid IN (".dimplode($newpids).")");
-	DB::query("DELETE FROM ".DB::table('home_comment')." WHERE id IN (".dimplode($newpids).") AND idtype='pid'");
-	DB::query("DELETE FROM ".DB::table('home_feed')." WHERE id IN (".dimplode($newpids).") AND idtype='pid'");
-
-	if($counts) {
-		foreach ($counts as $uid => $setarr) {
-			batchupdatecredit('createpoll', $uid, array('polls' => $setarr['polls']), $setarr['coef']);
-		}
-	}
-
-	return $polls;
-
-}
-
 
 function deletetrasharticle($aids) {
 	global $_G;
 
 	require_once libfile('function/home');
 	$articles = $trashid = $pushs = $dels = array();
-	$query = DB::query("SELECT * FROM ".DB::table('portal_article_trash')." WHERE aid IN (".dimplode($aids).")");
-	while ($value = DB::fetch($query)) {
+	foreach(C::t('portal_article_trash')->fetch_all($aids) as $value) {
 		$dels[$value['aid']] = $value['aid'];
-		$article = unserialize($value['content']);
+		$article = dunserialize($value['content']);
 		$articles[$article['aid']] = $article;
 		if(!empty($article['idtype'])) $pushs[$article['idtype']][] = $article['id'];
 		if($article['pic']) {
@@ -768,7 +789,7 @@ function deletetrasharticle($aids) {
 	}
 
 	if($dels) {
-		DB::query('DELETE FROM '.DB::table('portal_article_trash')." WHERE aid IN(".dimplode($dels).")", 'UNBUFFERED');
+		C::t('portal_article_trash')->delete($dels, 'UNBUFFERED');
 		deletearticlepush($pushs);
 		deletearticlerelated($dels);
 	}
@@ -781,8 +802,8 @@ function deletearticle($aids, $istrash = true) {
 
 	if(empty($aids)) return false;
 	$trasharr = $article = $bids = $dels = $attachment = $attachaid = $catids = $pushs = array();
-	$query = DB::query("SELECT * FROM ".DB::table('portal_article_title')." WHERE aid IN (".dimplode($aids).")");
-	while ($value = DB::fetch($query)) {
+	$query = C::t('portal_article_title')->fetch_all($aids);
+	foreach($query as $value) {
 		$catids[] = intval($value['catid']);
 		$dels[$value['aid']] = $value['aid'];
 		$article[] = $value;
@@ -791,30 +812,27 @@ function deletearticle($aids, $istrash = true) {
 	if($dels) {
 		foreach($article as $key => $value) {
 			if($istrash) {
-				$valstr = daddslashes(serialize($value));
-				$trasharr[] = "('$value[aid]', '$valstr')";
+				$trasharr[] = array('aid' => $value['aid'], 'content'=>serialize($value));
 			} elseif($value['pic']) {
 				pic_delete($value['pic'], 'portal', $value['thumb'], $value['remote']);
 				$attachaid[] = $value['aid'];
 			}
 		}
-		if($istrash) {
-			if($trasharr) {
-				DB::query("INSERT INTO ".DB::table('portal_article_trash')." (`aid`, `content`) VALUES ".implode(',', $trasharr));
-			}
+		if($istrash && $trasharr) {
+			C::t('portal_article_trash')->insert_batch($trasharr);
 		} else {
 			deletearticlepush($pushs);
 			deletearticlerelated($dels);
 		}
 
-		DB::delete('portal_article_title', "aid IN(".dimplode($dels).")");
-		DB::delete('common_moderate', "id IN (".dimplode($dels).") AND idtype='aid'");
+		C::t('portal_article_title')->delete($dels);
+		C::t('common_moderate')->delete($dels, 'aid');
 
 		$catids = array_unique($catids);
 		if($catids) {
 			foreach($catids as $catid) {
-				$cnt = DB::result_first('SELECT COUNT(*) FROM '.DB::table('portal_article_title')." WHERE catid = '$catid'");
-				DB::update('portal_category', array('articles'=>$cnt), array('catid'=>$catid));
+				$cnt = C::t('portal_article_title')->fetch_count_for_cat($catid);
+				C::t('portal_category')->update($catid, array('articles'=>dintval($cnt)));
 			}
 		}
 	}
@@ -826,10 +844,10 @@ function deletearticlepush($pushs) {
 		foreach($pushs as $idtype=> $fromids) {
 			switch ($idtype) {
 				case 'blogid':
-					if(!empty($fromids)) DB::update('home_blogfield',array('pushedaid'=>'0'), 'blogid IN ('.dimplode($fromids).')');
+					if(!empty($fromids)) C::t('home_blogfield')->update($fromids, array('pushedaid'=>'0'));
 					break;
 				case 'tid':
-					if(!empty($fromids)) $a = DB::update('forum_thread',array('pushedaid'=>'0'), 'tid IN ('.dimplode($fromids).')');
+					if(!empty($fromids)) C::t('forum_thread')->update($fromids, array('pushedaid'=>'0'));
 					break;
 			}
 		}
@@ -838,24 +856,21 @@ function deletearticlepush($pushs) {
 
 function deletearticlerelated($dels) {
 
-	DB::delete('portal_article_count', "aid IN(".dimplode($dels).")");
-	DB::delete('portal_article_content', "aid IN(".dimplode($dels).")");
+	C::t('portal_article_count')->delete($dels);
+	C::t('portal_article_content')->delete($dels);
 
-	$query = DB::query("SELECT * FROM ".DB::table('portal_attachment')." WHERE aid IN (".dimplode($dels).")");
-	while ($value = DB::fetch($query)) {
-		$attachment[] = $value;
-		$attachdel[] = $value['attachid'];
+	if($attachment = C::t('portal_attachment')->fetch_all_by_aid($dels)) {
+		require_once libfile('function/home');
+		foreach ($attachment as $value) {
+			pic_delete($value['attachment'], 'portal', $value['thumb'], $value['remote']);
+		}
+		C::t('portal_attachment')->delete(array_keys($attachment));
 	}
-	require_once libfile('function/home');
-	foreach ($attachment as $value) {
-		pic_delete($value['attachment'], 'portal', $value['thumb'], $value['remote']);
-	}
-	DB::delete('portal_attachment', "aid IN (".dimplode($dels).")");
 
-	DB::delete('portal_comment', "id IN(".dimplode($dels).") AND idtype='aid'");
-	DB::delete('common_moderate', "id IN (".dimplode($dels).") AND idtype='aid_cid'");
+	C::t('portal_comment')->delete_by_id_idtype($dels, 'aid');
+	C::t('common_moderate')->delete($dels, 'aid_cid');
 
-	DB::delete('portal_article_related', "aid IN(".dimplode($dels).")");
+	C::t('portal_article_related')->delete_by_aid_raid($dels);
 
 }
 
@@ -865,7 +880,7 @@ function deleteportaltopic($dels) {
 	foreach ((array)$dels as $key => $value) {
 		$targettplname[] = 'portal/portal_topic_content_'.$value;
 	}
-	DB::delete('common_diy_data', "targettplname IN (".dimplode($targettplname).")", 0, true);
+	C::t('common_diy_data')->delete($targettplname, null);
 
 	require_once libfile('class/blockpermission');
 	$tplpermission = & template_permission::instance();
@@ -873,35 +888,28 @@ function deleteportaltopic($dels) {
 	$tplpermission->delete_allperm_by_tplname($targettplname);
 
 	deletedomain($dels, 'topic');
-	DB::delete('common_template_block', 'targettplname IN ('.dimplode($targettplname).')', 0, true);
+	C::t('common_template_block')->delete_by_targettplname($targettplname, '');
 
 	require_once libfile('function/home');
 
 	$picids = array();
-	$query = DB::query('SELECT * FROM '.DB::table('portal_topic').' WHERE topicid IN ('.dimplode($dels).')');
-	while ($value = DB::fetch($query)) {
+	foreach(C::t('portal_topic')->fetch_all($dels) as $value) {
 		if($value['picflag'] != '0') pic_delete(str_replace('portal/', '', $value['cover']), 'portal', 0, $value['picflag'] == '2' ? '1' : '0');
 	}
 
 	$picids = array();
-	$query = DB::query('SELECT * FROM '.DB::table('portal_topic_pic').' WHERE topicid IN ('.dimplode($dels).')');
-	while ($value = DB::fetch($query)) {
+	foreach(C::t('portal_topic_pic')->fetch_all($dels) as $value) {
 		$picids[] = $value['picid'];
 		pic_delete($value['filepath'], 'portal', $value['thumb'], $value['remote']);
 	}
 	if (!empty($picids)) {
-		DB::delete('portal_topic_pic', 'picid IN ('.dimplode($picids).')', 0, true);
+		C::t('portal_topic_pic')->delete($picids, true);
 	}
 
-	foreach ($targettplname as $key => $value) {
-		@unlink(DISCUZ_ROOT.'./data/diy/'.$value.'.htm');
-		@unlink(DISCUZ_ROOT.'./data/diy/'.$value.'.htm.bak');
-		@unlink(DISCUZ_ROOT.'./data/diy/'.$value.'_preview.htm');
-	}
 
-	DB::delete('portal_topic', 'topicid IN ('.dimplode($dels).')');
-	DB::delete('portal_comment', "id IN(".dimplode($dels).") AND idtype='topicid'");
-	DB::delete('common_moderate', "id IN (".dimplode($dels).") AND idtype='topicid_cid'");
+	C::t('portal_topic')->delete($dels);
+	C::t('portal_comment')->delete_by_id_idtype($dels, 'topicid');
+	C::t('common_moderate')->delete($dels, 'topicid_cid');
 
 	include_once libfile('function/block');
 	block_clear();
@@ -912,9 +920,51 @@ function deleteportaltopic($dels) {
 
 function deletedomain($ids, $idtype) {
 	if($ids && $idtype) {
-		$ids = !is_array($ids) ? array($ids) : $ids;
-		DB::query('DELETE FROM '.DB::table('common_domain')." WHERE id IN(".dimplode($ids).") AND idtype='$idtype'", 'UNBUFFERED');
+		C::t('common_domain')->delete_by_id_idtype($ids, $idtype);
 	}
 }
 
+function deletecollection($ctid) {
+	$tids = array();
+	$threadlist = C::t('forum_collectionthread')->fetch_all_by_ctid($ctid);
+	$tids = array_keys($threadlist);
+
+	deleterelatedtid($tids, $ctid);
+
+	$collectionteamworker = C::t('forum_collectionteamworker')->fetch_all_by_ctid($ctid);
+	foreach ($collectionteamworker as $worker) {
+		notification_add($worker['uid'], "system", 'collection_removed', array('ctid'=>$collectiondata['ctid'], 'collectionname'=>$collectiondata['name']), 1);
+	}
+
+	C::t('forum_collectionthread')->delete_by_ctid($ctid);
+	C::t('forum_collectionfollow')->delete_by_ctid($ctid);
+	C::t('forum_collectioncomment')->delete_by_ctid($ctid);
+	C::t('forum_collectionteamworker')->delete_by_ctid($ctid);
+	C::t('forum_collectioninvite')->delete_by_ctid($ctid);
+	C::t('forum_collection')->delete($ctid, true);
+}
+
+function deleterelatedtid($tids, $ctid) {
+	$loadreleated = C::t('forum_collectionrelated')->fetch_all($tids, true);
+	foreach($loadreleated as $loadexist) {
+		if($loadexist['tid']) {
+			$collectionlist = explode("\t", $loadexist['collection']);
+			if(count($collectionlist)>0) {
+				foreach ($collectionlist as $collectionkey=>$collectionvalue) {
+					if ($collectionvalue == $ctid) {
+						unset($collectionlist[$collectionkey]);
+						break;
+					}
+				}
+			}
+			$newcollection = implode("\t", $collectionlist);
+			if (trim($newcollection) == '') {
+				C::t('forum_collectionrelated')->delete($loadexist['tid']);
+				C::t('forum_thread')->update_status_by_tid($loadexist['tid'], '1111111011111111', '&');
+			} else {
+				C::t('forum_collectionrelated')->update_collection_by_ctid_tid($newcollection, $loadexist['tid'], true);
+			}
+		}
+	}
+}
 ?>

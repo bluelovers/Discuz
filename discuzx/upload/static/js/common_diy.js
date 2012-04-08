@@ -1,5 +1,5 @@
 /*
-	[Discuz!] (C)2001-2009 Comsenz Inc.
+	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
 	$Id: common_diy.js 24718 2011-10-09 09:40:35Z zhangguosheng $
@@ -249,13 +249,14 @@ var Util = {
 	},
 	hide:function (ele){
 		if (typeof ele == 'string') {ele = $(ele);}
-		if (ele){ele.style.display = 'none';}
+		if (ele){ele.style.display = 'none';ele.style.visibility = 'hidden';}
 	},
 	show:function (ele){
 		if (typeof ele == 'string') {ele = $(ele);}
 		if (ele) {
 			this.removeClass(ele, 'hide');
 			ele.style.display = '';
+			ele.style.visibility = 'visible';
 		}
 	},
 	cancelSelect : function () {
@@ -840,12 +841,25 @@ var Util = {
 				}
 			}
 		},
+		showBlockName : function (ele) {
+			var title = $C('block-name', ele, 'div');
+			if(title.length) {
+				Util.show(title[0]);
+			}
+		},
+		hideBlockName : function (ele) {
+			var title = $C('block-name', ele, 'div');
+			if(title.length) {
+				Util.hide(title[0]);
+			}
+		},
 		showEdit : function (e) {
 			e = Util.event(e);
 			var targetObject = Util.getTarget(e,'className',this.moveableObject);
 			if (targetObject) {
 				Util.show(targetObject.id + '_edit');
 				targetObject.style.backgroundColor="#fffacd";
+				this.showBlockName(targetObject);
 			} else {
 				var targetFrame = Util.getTarget(e,'className',this.frameClass);
 				if (typeof targetFrame == 'object') {
@@ -865,6 +879,7 @@ var Util = {
 			if (typeof targetObject == 'object') {
 				Util.hide(targetObject.id + '_edit');
 				targetObject.style.backgroundColor = '';
+				this.hideBlockName(targetObject);
 			}
 		},
 		toggleMenu : function (e, obj) {

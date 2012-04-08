@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_common.php 15466 2010-08-24 06:56:09Z zhengqingpeng $
+ *      $Id: spacecp_common.php 24550 2011-09-26 02:58:48Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -47,14 +47,15 @@ if($op == 'ignore') {
 	dsetcookie('closefeedbox', 1);
 
 } elseif($op == 'modifyunitprice') {
-	$showinfo = DB::fetch_first("SELECT credit, unitprice FROM ".DB::table('home_show')." WHERE uid='$_G[uid]'");
+	$showinfo = C::t('home_show')->fetch($_G['uid']); //DB::fetch_first("SELECT credit, unitprice FROM ".DB::table('home_show')." WHERE uid='$_G[uid]'");
 	if(submitcheck('modifysubmit')) {
 		$unitprice = intval($_POST['unitprice']);
 		if($unitprice < 1) {
 			showmessage('showcredit_error', '', array(), array('return' => 1));
 		}
 		$unitprice = $unitprice > $showinfo['credit'] ? $showinfo['credit'] : $unitprice;
-		DB::query("UPDATE ".DB::table('home_show')." SET unitprice='$unitprice' WHERE uid='$_G[uid]'");
+		C::t('home_show')->update($_G['uid'], array('unitprice' => $unitprice));
+
 		showmessage('do_success', dreferer(), array('unitprice' => $unitprice), array('showdialog'=>1, 'showmsg' => true, 'closetime' => true));
 	}
 }

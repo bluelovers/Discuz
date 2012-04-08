@@ -4,45 +4,85 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cloud_qqgroup.php 23998 2011-08-18 10:21:43Z yexinhao $
+ *      $Id: cloud_qqgroup.php 29283 2012-03-31 09:35:36Z liudongdong $
  */
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
 }
 
-$op = trim($_G['gp_op']);
+$op = trim($_GET['op']);
 
-$signUrl = generateSiteSignUrl();
+$utilService = Cloud::loadClass('Service_Util');
+$signUrl = $utilService->generateSiteSignUrl(array('v' => 2));
 
-$_G['gp_anchor'] = in_array($_G['gp_anchor'], array('block', 'list', 'info')) ? $_G['gp_anchor'] : 'block';
+$_GET['anchor'] = in_array($_GET['anchor'], array('block', 'list', 'info', 'setting')) ? $_GET['anchor'] : 'block';
 
-if ($_G['gp_first']) {
-	$_G['gp_anchor'] = 'list';
+if ($_GET['first']) {
+	$_GET['anchor'] = 'list';
 }
 
-$current = array($_G['gp_anchor'] => 1);
+$current = array($_GET['anchor'] => 1);
 
 $qqgroupnav = array();
 
 $qqgroupnav[0] = array('qqgroup_menu_block', 'cloud&operation=qqgroup&anchor=block', $current['block']);
 $qqgroupnav[1] = array('qqgroup_menu_list', 'cloud&operation=qqgroup&anchor=list', $current['list']);
 $qqgroupnav[2] = array('qqgroup_menu_manager', 'cloud&operation=qqgroup&anchor=info', $current['info']);
+$qqgroupnav[3] = array('qqgroup_menu_setting', 'cloud&operation=qqgroup&anchor=setting', $current['setting']);
 
 if (!$_G['inajax']) {
 	cpheader();
 }
 
-if($_G['gp_anchor'] == 'list') {
-	headerLocation($cloudDomain.'/qun/list/?'.$signUrl);
+if($_GET['anchor'] == 'list') {
+	$utilService->redirect($cloudDomain.'/qun/list/?' . $signUrl);
 
-} elseif($_G['gp_anchor'] == 'info') {
-	headerLocation($cloudDomain.'/qun/siteInfo/?'.$signUrl);
+} elseif($_GET['anchor'] == 'info') {
+	$utilService->redirect($cloudDomain.'/qun/siteInfo/?' . $signUrl);
 
-} elseif($_G['gp_anchor'] == 'block') {
+} elseif($_GET['anchor'] == 'setting') {
+	if(submitcheck('settingsubmit')) {
+		$usergroups = $_POST['groupid'];
+
+		$updateData = array(
+							'qqgroup_usergroup_feed_list' => serialize($usergroups),
+						);
+
+		C::t('common_setting')->update_batch($updateData);
+		updatecache('setting');
+
+		cpmsg('setting_update_succeed', 'action=cloud&operation=qqgroup&anchor='.$_GET['anchor'], 'succeed');
+
+	} else {
+
+		$usergroupsfeedlist = unserialize($_G['setting']['qqgroup_usergroup_feed_list']);
+		$groupselect = array();
+
+		foreach (C::t('common_usergroup')->fetch_all_by_radminid(0) as $group) {
+			$group['type'] = $group['type'] == 'special' && $group['radminid'] ? 'specialadmin' : $group['type'];
+			$groupselect[$group['type']] .= "<option value=\"$group[groupid]\" ".(in_array($group['groupid'], $usergroupsfeedlist) ? 'selected' : '').">$group[grouptitle]</option>\n";
+		}
+
+		$groupselect = ($groupselect['special'] ? '<optgroup label="'.$lang['usergroups_special'].'">'.$groupselect['special'].'</optgroup>' : '').
+			($groupselect['specialadmin'] ? '<optgroup label="'.$lang['usergroups_specialadmin'].'">'.$groupselect['specialadmin'].'</optgroup>' : '').
+			'<optgroup label="'.$lang['usergroups_system'].'">'.$groupselect['system'].'</optgroup>';
+
+		shownav('navcloud', 'menu_cloud_qqgroup');
+		showsubmenu('menu_cloud_qqgroup', $qqgroupnav);
+		showtips('qqgroup_setting_tips');
+		showformheader('cloud&operation=qqgroup&anchor=setting');
+		showtableheader('qqgroup_feed_setting', '', '', 2);
+		showsetting('qqgroup_usergroup_feed_list', '', '', '<select name="groupid[]" multiple="multiple" size="10">'.$groupselect.'</select>');
+		showsubmit('settingsubmit');
+		showtablefooter();
+		showformfooter();
+
+	}
+} elseif($_GET['anchor'] == 'block') {
 
 	$perpage = 10;
 	$maxPage = 10;
-	$page = intval($_G['gp_page']);
+	$page = intval($_GET['page']);
 	$page = MAX($page, 1);
 	$page = MIN($page, $maxPage);
 
@@ -51,13 +91,13 @@ if($_G['gp_anchor'] == 'list') {
 
 	if(submitcheck('setMiniportalThreadsSubmit')) {
 
-		$topic = dstripslashes($_G['gp_topic']);
+		$topic = $_GET['topic'];
 		$topic = processMiniportalTopicThread($topic);
 		if(!$topic) {
 			cpmsg('qqgroup_msg_deficiency', '', 'error');
 		}
 
-		$normal = dstripslashes($_G['gp_normal']);
+		$normal = $_GET['normal'];
 		$normal = processMiniportalNormalThreads($normal);
 		if(!$normal) {
 			cpmsg('qqgroup_msg_deficiency', '', 'error');
@@ -81,7 +121,7 @@ if($_G['gp_anchor'] == 'list') {
 		getNormalThread();
 
 	} elseif($op == 'uploadImage') {
-		$tid = intval($_G['gp_tid']);
+		$tid = intval($_GET['tid']);
 		if (submitcheck('uploadImageSubmit')) {
 			ajaxshowheader();
 			if($uploadImage = QQGroupUpload($tid)) {
@@ -127,7 +167,7 @@ function showSearchForm() {
 		$orderoption .= '<option value="'.$value.'" '.($value == 'dateline' ? 'selected="selected"' : '').'>'.cplang('qqgroup_search_order_'.$value).'</option>';
 	}
 
-	$datelineoptions = array(1, 2, 3, 4, 0);
+	$datelineoptions = array(1, 2, 3, 4);
 	$datelineoption = '';
 	foreach($datelineoptions as $value) {
 		$datelineoption .= '<option value="'.$value.'" '.($value == 4 ? 'selected="selected"' : '').'>'.cplang(sprintf('qqgroup_search_dateline_%s', $value)).'</option>';
@@ -146,39 +186,32 @@ function showSearchForm() {
 }
 
 function showSearchThreads() {
-	global $_G;
-	$where = $order = array();
+	global $_G, $page, $perpage;;
+	$threads = array();
+	$starttime = 0;
+	$srchtid = intval($_GET['srchtid']);
+	$srchorder = in_array($_GET['srchorder'], array('views', 'replies', 'heats', 'dateline', 'lastpost')) ? $_GET['srchorder'] : 'dateline';
 
-	$srchtid = intval($_G['gp_srchtid']);
-	$srchorder = in_array($_G['gp_srchorder'], array('views', 'replies', 'heats', 'dateline', 'lastpost')) ? $_G['gp_srchorder'] : 'dateline';
+	$datelinearray = array(1 => 3600, 2 => 86400, 3 => 86400 * 7, 4 => 86400 * 30);
+	$srchdateline = array_key_exists($_GET['srchdateline'], $datelinearray) ? $datelinearray[$_GET['srchdateline']] : 86400 * 30;
 
-	$datelinearray = array(1 => 3600, 2 => 86400, 3 => 86400 * 7, 4 => 86400 * 30, 0 => 0);
-	$srchdateline = array_key_exists($_G['gp_srchdateline'], $datelinearray) ? $datelinearray[$_G['gp_srchdateline']] : 86400 * 30;
+	$start = ($page - 1) * $perpage;
 
 	if($srchtid) {
-		$where[] = "tid='$srchtid'";
+		$threads = C::t('forum_thread')->fetch_all_by_tid_displayorder($srchtid, 0);
 	} else {
-
-		if($srchdateline) {
-			$starttime = TIMESTAMP - $srchdateline;
-			$where[] = "dateline > '$starttime'";
-		}
-
-		$order = array("`$srchorder` DESC");
-
+		$starttime = TIMESTAMP - $srchdateline;
+		$threads = C::t('forum_thread')->fetch_all_by_dateline($starttime, $start, $perpage, $srchorder);
 	}
 
-	$where[] = "displayorder>'-1'";
-
 	$mpurl = ADMINSCRIPT.'?action=cloud&operation=qqgroup&anchor=block&op=searchForm'
-					.'&srchtid='.$srchtid.'&srchorder='.$srchorder.'&srchdateline='.intval($_G['gp_srchdateline']);
+					.'&srchtid='.$srchtid.'&srchorder='.$srchorder.'&srchdateline='.intval($_GET['srchdateline']);
 
-	return showSearchResultThreads($where, $order, $mpurl);
+	return showSearchResultThreads($threads, $mpurl);
 }
 
-function showSearchResultThreads($where, $order, $mpurl) {
+function showSearchResultThreads($threads, $mpurl) {
 	global $_G;
-	$threads = listSearchResultThreads($where, $order);
 	$threadsOutput = '';
 	loadcache('forums');
 	if(empty($threads)) {
@@ -187,6 +220,7 @@ function showSearchResultThreads($where, $order, $mpurl) {
 		';
 	} else {
 		foreach($threads as $thread) {
+			$thread['subject'] = strip_tags($thread['subject']);
 			$threadsOutput .= '
 			<tr id="thread_'.$thread['tid'].'">
 				<td class="title"><a href="forum.php?mod=viewthread&tid='.$thread['tid'].'"  title="'.$thread['subject'].'" target="_blank">'.cutstr($thread['subject'], 45).($thread['attachment'] == 2 ? '&nbsp;<img align="absmiddle" src="static/image/admincp/cloud/image_s.gif" alt="attach_img" title="'.cplang('attach_img').'" />' : '').'</a></td>
@@ -201,35 +235,6 @@ function showSearchResultThreads($where, $order, $mpurl) {
 	ajaxshowfooter();
 }
 
-function listSearchResultThreads($where, $order) {
-	global $_G, $page, $perpage;
-
-	$threads = array();
-	$start = ($page - 1) * $perpage;
-
-	$wheresql = implode(' AND ', $where);
-	$ordersql = implode(', ', $order);
-	if(empty($wheresql)) {
-		$wheresql = '';
-	} else {
-		$wheresql = 'WHERE '.$wheresql;
-	}
-	if(empty($ordersql)) {
-		$ordersql = '';
-	} else {
-		$ordersql = 'ORDER BY '.$ordersql;
-	}
-
-	$sql = 'SELECT tid, fid, subject, attachment FROM '.DB::table('forum_thread')." $wheresql $ordersql LIMIT $start, $perpage";
-
-	$query = DB::query($sql);
-	while($thread = DB::fetch($query)) {
-		$thread['subject'] = strip_tags($thread['subject']);
-		$threads[$thread['tid']] = $thread;
-	}
-
-	return $threads;
-}
 
 
 function showSearchResultPageLinks($num = 0, $mpurl) {
@@ -259,7 +264,7 @@ function QQGroupSearchSimplePage($needNext, $curpage, $mpurl) {
 
 function getTopicThread() {
 	global $_G;
-	$tid = intval($_G['gp_tid']);
+	$tid = intval($_GET['tid']);
 	if(empty($tid)) {
 		ajaxshowheader();
 		echo showTopicTemplate(0);
@@ -283,7 +288,7 @@ function getTopicThread() {
 	$imagePath = $imageUrl = '';
 
 	$subject = strip_tags($_G['thread']['subject']);
-	$post = DB::fetch_first('SELECT message, pid FROM '.DB::table($posttable)." WHERE tid='$tid' AND first='1'");
+	$post = C::t('forum_post')->fetch_threadpost_by_tid_invisible($tid);
 	$pid = intval($post['pid']);
 	$message = cutstr(strip_tags(discuzcode($post['message'], 1, 0, 1)), 200);
 	$message = preg_replace('/\[attach\](\d+)\[\/attach\]/is', '', $message);
@@ -295,9 +300,9 @@ function getTopicThread() {
 		$imagePath = $thumbTarget;
 		$imageUrl = $_G['setting']['attachurl'].$imagePath;
 	} else {
-		$attachment = DB::result_first("SELECT attachment FROM ".DB::table(getattachtablebytid($tid))." WHERE pid='$pid' AND (isimage='1' OR isimage='-1') AND remote='0'");
-		if($attachment) {
-			$imagePath = 'forum/'.$attachment;
+		$attachments = C::t('forum_attachment_n')->fetch_all_by_id('tid:' . $tid, 'pid', $pid, '', array('-1', '1'), false, 0, 1);
+		if($attachments && $attachment = reset($attachments)) {
+			$imagePath = 'forum/'.$attachment['attachment'];
 			$imageUrl = $_G['setting']['attachurl'].$imagePath;
 		}
 	}
@@ -344,7 +349,7 @@ function showTopicTemplate($tid, $subject = '', $message = '', $imagePath = '', 
 
 function getNormalThread() {
 	global $_G;
-	$tid = intval($_G['gp_tid']);
+	$tid = intval($_GET['tid']);
 	if(empty($tid)) {
 		return false;
 	}
@@ -379,8 +384,7 @@ function showNormalTemplateLi($tid, $subject = '', $hasImage = false) {
 
 function getMiniportalThreads() {
 	$threads = array();
-	$threads = DB::result_first('SELECT svalue FROM '.DB::table('common_setting')." WHERE skey='cloud_qqgroup_miniportal_threads'");
-	$threads = unserialize($threads);
+	$threads = C::t('common_setting')->fetch('cloud_qqgroup_miniportal_threads', true);
 	$normalThreads = array();
 	if($threads['normal']) {
 		$i = 1;
@@ -396,8 +400,8 @@ function getMiniportalThreads() {
 
 function getResultThreads() {
 	global $_G;
-	$info = $_G['gp_info'];
-	$info = unserialize(base64_decode(trim($info)));
+	$info = $_GET['info'];
+	$info = dunserialize(base64_decode(trim($info)));
 	if(!$info) {
 		return false;
 	}
@@ -455,7 +459,7 @@ function showSearchResultDiv() {
 
 function showMiniportalPreview() {
 	global $_G;
-	if($_G['gp_sentResult'] && $_G['gp_info']) {
+	if($_GET['sentResult'] && $_GET['info']) {
 		$mcThreads = getResultThreads();
 	} else {
 		$mcThreads = getMiniportalThreads();
@@ -584,9 +588,7 @@ function processlNormalThread($thread) {
 }
 
 function storeMiniportalThreads($threads) {
-	$threads = addslashes(serialize($threads));
-	$data = array('skey' => 'cloud_qqgroup_miniportal_threads', 'svalue' => $threads);
-	return DB::insert('common_setting', $data, false, true);
+	return C::t('common_setting')->update('cloud_qqgroup_miniportal_threads', $threads);
 }
 
 function sentMiniportalThreadsRemote($topic, $normal, $gIds = array()) {
@@ -596,19 +598,19 @@ function sentMiniportalThreadsRemote($topic, $normal, $gIds = array()) {
 		$topic['extra']['image'] = base64_encode($topic['extra']['image']);
 	}
 
-	require_once(DISCUZ_ROOT.'./api/manyou/Manyou.php');
+	$groupClient = Cloud::loadClass('Service_Client_QQGroup');
 
-	$client = new Discuz_Cloud_Client();
-
-	$res = $client->QQGroupMiniportal($topic, $normal, $gIds);
-
-	if($client->errno) {
-		if ($client->errno == 1) {
+	try {
+		$res = $groupClient->miniportal($topic, $normal, $gIds);
+	} catch (Cloud_Service_Client_RestfulException $e) {
+		if ($e->getCode() == 1) {
 			$res = array('status' => false, 'msg' => cplang('qqgroup_msg_unknown_dns'));
 		} else {
-			$res = array('status' => false, 'msg' => cplang('qqgroup_msg_remote_exception', array('errmsg' => $client->errmsg, 'errno' => $client->errno)));
+			$res = array('status' => false, 'msg' => cplang('qqgroup_msg_remote_exception', array('errmsg' => $e->getMessage(), 'errno' => $e->getCode())));
 		}
-	} elseif(!is_array($res)) {
+	}
+
+	if(!is_array($res)) {
 		$res = array('status' => false, 'msg' => cplang('qqgroup_msg_remote_error'));
 	}
 
@@ -659,7 +661,6 @@ function QQGroupUpload($tid) {
 	$imageName = 'miniportal_tid_'.$tid.'.jpg';
 	$fieldName = 'imageFile';
 
-	require_once libfile('class/upload');
 	$_FILES[$fieldName]['name'] = addslashes(urldecode($_FILES[$fieldName]['name']));
 	$_FILES[$fieldName]['type'] = addslashes(urldecode($_FILES[$fieldName]['type']));
 	$upload = new discuz_upload();
@@ -725,7 +726,7 @@ EOF;
 function QQGroupMessage($message, $url = '', $info = '') {
 
 	if($url) {
-		$url = addcslashes(substr($url, 0, 5) == 'http:' ? $url : ADMINSCRIPT.'?'.$url, '\'');
+		$url = addcslashes(substr($url, 0, 5) == 'http:' ? $url : ADMINSCRIPT . '?' . $url, '\'');
 	}
 	if($info) {
 		$info = base64_encode(serialize($info));
@@ -740,5 +741,3 @@ function QQGroupMessage($message, $url = '', $info = '') {
 	exit();
 
 }
-
-?>

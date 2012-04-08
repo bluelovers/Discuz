@@ -517,13 +517,13 @@ function trade_notifycheck($type) {
 		$resHandler->setKey(DISCUZ_TENPAY_OPENTRANS_KEY);
 	}
 	if($type == 'credit' || $type == 'invite') {
-		if(DISCUZ_TENPAY_DIRECT && $resHandler->isTenpaySign() && DISCUZ_PARTNER == $_G['gp_bargainor_id']) {
+		if(DISCUZ_TENPAY_DIRECT && $resHandler->isTenpaySign() && DISCUZ_PARTNER == $_GET['bargainor_id']) {
 			return array(
-				'validator'	=> !$_G['gp_pay_result'],
-				'order_no' 	=> $_G['gp_sp_billno'],
-				'trade_no'	=> $_G['gp_transaction_id'],
-				'price' 	=> $_G['gp_total_fee'] / 100,
-				'bargainor_id' => $_G['gp_bargainor_id'],
+				'validator'	=> !$_GET['pay_result'],
+				'order_no' 	=> $_GET['sp_billno'],
+				'trade_no'	=> $_GET['transaction_id'],
+				'price' 	=> $_GET['total_fee'] / 100,
+				'bargainor_id' => $_GET['bargainor_id'],
 				'location'	=> true,
 				);
 		}elseif(!DISCUZ_TENPAY_DIRECT && $resHandler->isTenpaySign()) {
@@ -601,7 +601,7 @@ function trade_typestatus($method, $status = -1) {
 		case 'refundtrades'	: $methodvalue = array(9, 10);break;
 		case 'unstarttrades'	: $methodvalue = array(0);break;
 	}
-	return $status != -1 ? in_array($status, $methodvalue) : implode('\',\'', $methodvalue);
+	return $status != -1 ? in_array($status, $methodvalue) : $methodvalue;
 }
 
 function trade_getstatus($key, $method = 2) {

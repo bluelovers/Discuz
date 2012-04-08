@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_ec_credit.php 16321 2010-09-03 06:29:51Z zhengqingpeng $
+ *      $Id: function_ec_credit.php 26205 2011-12-05 10:09:32Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -25,7 +25,12 @@ function updatecreditcache($uid, $type, $return = 0) {
 
 	$data = array('all' => $all, 'before' => $before, 'halfyear' => $halfyear, 'thismonth' => $thismonth, 'thisweek' => $thisweek);
 
-	DB::query("REPLACE INTO ".DB::table('forum_spacecache')." (uid, variable, value, expiration) VALUES ('$uid', '$type', '".addslashes(serialize($data))."', '".getexpiration()."')");
+	C::t('forum_spacecache')->insert(array(
+		'uid' => $uid,
+		'variable' => $type,
+		'value' => serialize($data),
+		'expiration' => getexpiration(),
+	), false, true);
 	if($return) {
 		return $data;
 	}
@@ -33,10 +38,8 @@ function updatecreditcache($uid, $type, $return = 0) {
 
 function countcredit($uid, $type, $days = 0) {
 	$type = $type == 'buyercredit' ? 1 : 0;
-	$timeadd = $days ? ("AND dateline>='".(TIMESTAMP - $days * 86400)."'") : '';
-	$query = DB::query("SELECT score FROM ".DB::table('forum_tradecomment')." WHERE rateeid='$uid' AND type='$type' $timeadd");
 	$good = $soso = $bad = 0;
-	while($credit = DB::fetch($query)) {
+	foreach(C::t('forum_tradecomment')->fetch_all_by_rateeid($uid, $type, $days ? TIMESTAMP - $days * 86400 : 0) as $credit) {
 		if($credit['score'] == 1) {
 			$good++;
 		} elseif($credit['score'] == 0) {
@@ -54,9 +57,9 @@ function updateusercredit($uid, $type, $level) {
 		return;
 	}
 
-	if($cache = DB::fetch_first("SELECT value, expiration FROM ".DB::table('forum_spacecache')." WHERE uid='$uid' AND variable='$type'")) {
+	if($cache = C::t('forum_spacecache')->fetch($uid, $type)) {
 		$expiration = $cache['expiration'];
-		$cache = unserialize($cache['value']);
+		$cache = dunserialize($cache['value']);
 	} else {
 		$init = array('good' => 0, 'soso' => 0, 'bad' => 0, 'total' => 0);
 		$cache = array('all' => $init, 'before' => $init, 'halfyear' => $init, 'thismonth' => $init, 'thisweek' => $init);
@@ -68,10 +71,15 @@ function updateusercredit($uid, $type, $level) {
 		$cache[$key]['total']++;
 	}
 
-	DB::query("REPLACE INTO ".DB::table('forum_spacecache')." (uid, variable, value, expiration) VALUES ('$uid', '$type', '".addslashes(serialize($cache))."', '$expiration')");
+	C::t('forum_spacecache')->insert(array(
+		'uid' => $uid,
+		'variable' => $type,
+		'value' => serialize($cache),
+		'expiration' => $expiration,
+	), false, true);
 
 	$score = $level == 'good' ? 1 : ($level == 'soso' ? 0 : -1);
-	DB::query("UPDATE ".DB::table('common_member_status')." SET $type=$type+($score) WHERE uid='$uid'");
+	C::t('common_member_status')->increase($uid, array($type=>$score));
 }
 
 ?>

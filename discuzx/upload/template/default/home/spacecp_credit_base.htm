@@ -3,28 +3,28 @@
 		<!--{hook/spacecp_credit_top}-->
 		<!--{subtemplate home/spacecp_credit_header}-->
 
-		<!--{if in_array($_G['gp_op'], array('base', 'buy', 'transfer', 'exchange'))}-->
+		<!--{if in_array($_GET['op'], array('base', 'buy', 'transfer', 'exchange'))}-->
 			<ul class="creditl mtm bbda cl">
 			<!--{eval $creditid=0;}-->
-			<!--{if $_G['gp_op'] == 'base' && $_G['setting']['creditstrans']}-->
+			<!--{if $_GET['op'] == 'base' && $_G['setting']['creditstrans']}-->
 				<!--{eval $creditid=$_G['setting']['creditstrans'];}-->
 				<!--{if $_G['setting']['extcredits'][$creditid]}-->
 				<!--{eval $credit=$_G['setting']['extcredits'][$creditid]; }-->
-				<li class="xi1 cl"><em><!--{if $credit[img]}--> {$credit[img]}<!--{/if}--> {$credit[title]}:</em><!--{echo getuserprofile('extcredits'.$creditid);}--> {$credit[unit]} &nbsp; <!--{if ($_G['setting']['ec_ratio'] && ($_G['setting']['ec_tenpay_opentrans_chnid'] || $_G['setting'][ec_tenpay_bargainor] || $_G['setting']['ec_account'])) || $_G['setting']['card']['open']}--><a href="home.php?mod=spacecp&ac=credit&op=buy" class="xi2">{lang card_use}&raquo;</a><!--{/if}--></li>
+				<li class="xi1 cl"><em><!--{if $credit[img]}--> {$credit[img]}<!--{/if}--> {$credit[title]}: </em><!--{echo getuserprofile('extcredits'.$creditid);}--> {$credit[unit]} &nbsp; <!--{if ($_G['setting']['ec_ratio'] && ($_G['setting']['ec_tenpay_opentrans_chnid'] || $_G['setting'][ec_tenpay_bargainor] || $_G['setting']['ec_account'])) || $_G['setting']['card']['open']}--><a href="home.php?mod=spacecp&ac=credit&op=buy" class="xi2">{lang card_use}&raquo;</a><!--{/if}--></li>
 				<!--{/if}-->
 			<!--{/if}-->
 			<!--{loop $_G['setting']['extcredits'] $id $credit}-->
 				<!--{if $id!=$creditid}-->
-				<li><em><!--{if $credit[img]}--> {$credit[img]}<!--{/if}--> {$credit[title]}:</em><!--{echo getuserprofile('extcredits'.$id);}--> {$credit[unit]}</li>
+				<li><em><!--{if $credit[img]}--> {$credit[img]}<!--{/if}--> {$credit[title]}: </em><!--{echo getuserprofile('extcredits'.$id);}--> {$credit[unit]}</li>
 				<!--{/if}-->
 			<!--{/loop}-->
-			<!--{if  $_G['gp_op'] == 'base'}-->
-				<li class="cl"><em>{lang credits}:</em>$_G['member']['credits'] <span class="xg1">( $creditsformulaexp )</span></li>
+			<!--{if  $_GET['op'] == 'base'}-->
+				<li class="cl"><em>{lang credits}: </em>$_G['member']['credits'] <span class="xg1">( $creditsformulaexp )</span></li>
 			<!--{/if}-->
 			<!--{hook/spacecp_credit_extra}-->
 			</ul>
 		<!--{/if}-->
-		<!--{if $_G['gp_op'] == 'base'}-->
+		<!--{if $_GET['op'] == 'base'}-->
 			<table summary="{lang memcp_credits_log_transaction}" cellspacing="0" cellpadding="0" class="dt mtm">
 				<caption>
 					<h2 class="mbm xs2">
@@ -52,7 +52,7 @@
 			<!--{/if}-->
 			</table>
 
-		<!--{elseif $_G['gp_op'] == 'buy'}-->
+		<!--{elseif $_GET['op'] == 'buy'}-->
 
 			<!--{if ($_G[setting][ec_ratio] && ($_G[setting][ec_account] || $_G[setting][ec_tenpay_opentrans_chnid] || $_G[setting][ec_tenpay_bargainor])) || $_G[setting][card][open]}-->
 			<form id="addfundsform" name="addfundsform" method="post" autocomplete="off" action="home.php?mod=spacecp&ac=credit&op=buy" onsubmit="ajaxpost(this.id, 'return_addfundsform');">
@@ -63,18 +63,21 @@
 					<tr>
 						<th>{lang mode_of_payment}</th>
 						<td colspan="2">
+							<!--{eval $ecchecked = 'checked="checked"';}-->
 							<!--{if $_G[setting][ec_ratio] && ($_G[setting][ec_tenpay_bargainor] || $_G[setting][ec_tenpay_opentrans_chnid])}-->
-								<label onclick="$('apitype_tenpay').checked=true;{if $_G[setting][card][open]}$('cardbox').style.display='none';if($('card_box_sec')){$('card_box_sec').style.display='none';}$('paybox').style.display='';{/if}"><input name="apitype" type="radio" value="tenpay" id="apitype_tenpay" checked="checked" /><img title="{lang apitype_tenpay}" alt="{lang apitype_tenpay}" onclick="$('apitype_tenpay').checked=true" src="{STATICURL}image/common/tenpay_logo.gif" /></label>
+								<label onclick="$('apitype_tenpay').checked=true;{if $_G[setting][card][open]}$('cardbox').style.display='none';if($('card_box_sec')){$('card_box_sec').style.display='none';}$('paybox').style.display='';{/if}"><input name="apitype" type="radio" value="tenpay" id="apitype_tenpay" $ecchecked /><img title="{lang apitype_tenpay}" alt="{lang apitype_tenpay}" onclick="$('apitype_tenpay').checked=true" src="{STATICURL}image/common/tenpay_logo.gif" /></label>
+								<!--{eval $ecchecked = '';}-->
 							<!--{/if}-->
 							<!--{if $_G[setting][ec_ratio] && $_G[setting][ec_account]}-->
-								<label onclick="$('apitype_alipay').checked=true;{if $_G[setting][card][open]}$('cardbox').style.display='none';if($('card_box_sec')){$('card_box_sec').style.display='none';}$('paybox').style.display='';{/if}"><input name="apitype" type="radio" value="alipay" id="apitype_alipay" checked="checked" /><img title="{lang apitype_alipay}" alt="{lang apitype_alipay}" onclick="$('apitype_alipay').checked=true" src="{STATICURL}image/common/alipay_logo.gif" /></label>
+								<label onclick="$('apitype_alipay').checked=true;{if $_G[setting][card][open]}$('cardbox').style.display='none';if($('card_box_sec')){$('card_box_sec').style.display='none';}$('paybox').style.display='';{/if}"><input name="apitype" type="radio" value="alipay" id="apitype_alipay" $ecchecked /><img title="{lang apitype_alipay}" alt="{lang apitype_alipay}" onclick="$('apitype_alipay').checked=true" src="{STATICURL}image/common/alipay_logo.gif" /></label>
+								<!--{eval $ecchecked = '';}-->
 							<!--{/if}-->
 							<!--{if $_G[setting][card][open]}-->
-								<label onclick="$('apitype_card').checked=true;$('cardbox').style.display='';if($('card_box_sec')){$('card_box_sec').style.display='';}$('paybox').style.display='none';"><input name="apitype" type="radio" value="card" id="apitype_card" checked="checked" /><span class="xs2">{lang card_credit}</span></label>
+								<label onclick="$('apitype_card').checked=true;$('cardbox').style.display='';if($('card_box_sec')){$('card_box_sec').style.display='';}$('paybox').style.display='none';"><input name="apitype" type="radio" value="card" id="apitype_card" $ecchecked /><span class="xs2">{lang card_credit}</span></label>
 							<!--{/if}-->
 						</td>
 					</tr>
-					<tr id="paybox" style="{if ($_G[setting][ec_tenpay_bargainor] || $_G[setting][ec_tenpay_opentrans_chnid] || $_G[setting][ec_account]) && !$_G[setting][card][open] }display:;{else}display:none;{/if}">
+					<tr id="paybox" style="{if ($_G[setting][ec_tenpay_bargainor] || $_G[setting][ec_tenpay_opentrans_chnid] || $_G[setting][ec_account]) && empty($ecchecked) }display:;{else}display:none;{/if}">
 						<th>{lang memcp_credits_addfunds}</th>
 						<td class="pns">
 							<input type="text" size="5" class="px" style="width: auto;" id="addfundamount" name="addfundamount" value="0" onkeyup="addcalcredit()" />
@@ -89,15 +92,15 @@
 						</td>
 					</tr>
 					<!--{if $_G[setting][card][open]}-->
-						<tr id="cardbox" style="{if $_G[setting][card][open]}display:;{else}display:none;{/if}">
+						<tr id="cardbox" style="{if $_G[setting][card][open] && $ecchecked}display:;{else}display:none;{/if}">
 							<th>{lang card}</th>
 							<td colspan="2">
 								<input type="text" class="px" id="cardid" name="cardid" />
 							</td>
 						</tr>
 						<!--{if $_G['setting']['seccodestatus'] & 16}-->
-							<!--{block sectpl}--><tr><th><sec></th><td colspan="2"><span id="sec<hash>" onclick="showMenu({'ctrlid':this.id,'win':'{$_G[gp_handlekey]}'})"><sec></span><div id="sec<hash>_menu" class="p_pop p_opt" style="display:none"><sec></div></td></tr><!--{/block}-->
-							<tbody id="card_box_sec" style="{if $_G[setting][card][open]}display:;{else}display:none;{/if}"><!--{subtemplate common/seccheck}--></tbody>
+							<!--{block sectpl}--><tr><th><sec></th><td colspan="2"><span id="sec<hash>" onclick="showMenu({'ctrlid':this.id,'win':'{$_GET[handlekey]}'})"><sec></span><div id="sec<hash>_menu" class="p_pop p_opt" style="display:none"><sec></div></td></tr><!--{/block}-->
+							<tbody id="card_box_sec" style="{if $_G[setting][card][open] && $ecchecked}display:;{else}display:none;{/if}"><!--{subtemplate common/seccheck}--></tbody>
 						<!--{/if}-->
 					<!--{/if}-->
 					<tr>
@@ -118,7 +121,7 @@
 				}
 			</script>
 			<!--{/if}-->
-		<!--{elseif $_G['gp_op'] == 'transfer'}-->
+		<!--{elseif $_GET['op'] == 'transfer'}-->
 
 			<!--{if $_G[setting][transferstatus] && $_G['group']['allowtransfer']}-->
 			<form id="transferform" name="transferform" method="post" autocomplete="off" action="home.php?mod=spacecp&ac=credit&op=transfer" onsubmit="ajaxpost(this.id, 'return_transfercredit');">
@@ -158,7 +161,7 @@
 			</form>
 			<!--{/if}-->
 
-		<!--{elseif $_G['gp_op'] == 'exchange'}-->
+		<!--{elseif $_GET['op'] == 'exchange'}-->
 
 			<!--{if $_G[setting][exchangestatus] && ($_G[setting][extcredits] || $_CACHE['creditsettings'])}-->
 			<form id="exchangeform" name="exchangeform" method="post" autocomplete="off" action="home.php?mod=spacecp&ac=credit&op=exchange&handlekey=credit" onsubmit="showWindow('credit', 'exchangeform', 'post');">

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_album.php 22995 2011-06-13 03:15:57Z zhangguosheng $
+ *      $Id: admincp_album.php 27892 2012-02-16 07:24:19Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -14,20 +14,20 @@ include_once libfile('function/portalcp');
 
 cpheader();
 
-$detail = !empty($_GET['uid']) ? true : $_G['gp_detail'];
-$albumname = $_G['gp_albumname'];
-$albumid = $_G['gp_albumid'];
-$uid = $_G['gp_uid'];
-$users = $_G['gp_users'];
-$starttime = $_G['gp_starttime'];
-$endtime = $_G['gp_endtime'];
-$searchsubmit = $_G['gp_searchsubmit'];
-$albumids = $_G['gp_albumids'];
-$friend = $_G['gp_friend'];
-$orderby = $_G['gp_orderby'];
-$ordersc = $_G['gp_ordersc'];
+$detail = $_GET['detail'];
+$albumname = $_GET['albumname'];
+$albumid = $_GET['albumid'];
+$uid = $_GET['uid'];
+$users = $_GET['users'];
+$starttime = $_GET['starttime'];
+$endtime = $_GET['endtime'];
+$searchsubmit = $_GET['searchsubmit'];
+$albumids = $_GET['albumids'];
+$friend = $_GET['friend'];
+$orderby = $_GET['orderby'];
+$ordersc = $_GET['ordersc'];
 
-$fromumanage = $_G['gp_fromumanage'] ? 1 : 0;
+$fromumanage = $_GET['fromumanage'] ? 1 : 0;
 
 $muticondition = '';
 $muticondition .= $albumname ? '&albumname='.$albumname : '';
@@ -41,11 +41,11 @@ $muticondition .= $orderby ? '&orderby='.$orderby : '';
 $muticondition .= $ordersc ? '&ordersc='.$ordersc : '';
 $muticondition .= $fromumanage ? '&fromumanage='.$fromumanage : '';
 $muticondition .= $searchsubmit ? '&searchsubmit='.$searchsubmit : '';
-$muticondition .= $_G['gp_search'] ? '&search='.$_G['gp_search'] : '';
+$muticondition .= $_GET['search'] ? '&search='.$_GET['search'] : '';
 $muticondition .= $detail ? '&detail='.$detail : '';
 
 if(!submitcheck('albumsubmit')) {
-	if(empty($_G['gp_search'])) {
+	if(empty($_GET['search'])) {
 		$newlist = 1;
 		$detail = 1;
 	}
@@ -80,13 +80,13 @@ function page(number) {
 </script>
 EOT;
 	showtagheader('div', 'searchposts', !$searchsubmit && empty($newlist));
-	showformheader("album".(!empty($_G['gp_search']) ? '&search=true' : ''), '', 'albumforum');
-	showhiddenfields(array('page' => $page, 'pp' => $_G['gp_pp'] ? $_G['gp_pp'] : $_G['gp_perpage']));
+	showformheader("album".(!empty($_GET['search']) ? '&search=true' : ''), '', 'albumforum');
+	showhiddenfields(array('page' => $page, 'pp' => $_GET['pp'] ? $_GET['pp'] : $_GET['perpage']));
 	showtableheader();
 	showsetting('album_search_detail', 'detail', $detail, 'radio');
-	showsetting('album_search_perpage', '', $_G['gp_perpage'], "<select name='perpage'><option value='20'>$lang[perpage_20]</option><option value='50'>$lang[perpage_50]</option><option value='100'>$lang[perpage_100]</option></select>");
+	showsetting('album_search_perpage', '', $_GET['perpage'], "<select name='perpage'><option value='20'>$lang[perpage_20]</option><option value='50'>$lang[perpage_50]</option><option value='100'>$lang[perpage_100]</option></select>");
 	showsetting('resultsort', '', $orderby, "<select name='orderby'><option value=''>$lang[defaultsort]</option><option value='dateline'>$lang[topic_dateline]</option><option value='updatetime'>$lang[updatetime]</option><option value='picnum'>$lang[pic_num]</option></select> ");
-	showsetting('', '', $ordersc, "<select name='ordersc'><option value='desc'>$lang[orderdesc]</option><option value='asc'>$lang[orderasc]</option></select>");
+	showsetting('', '', $ordersc, "<select name='ordersc'><option value='desc'>$lang[orderdesc]</option><option value='asc'>$lang[orderasc]</option></select>", '', 0, '', '', '', true);
 	showsetting('album_search_albumname', 'albumname', $albumname, 'text');
 	showsetting('album_search_albumid', 'albumid', $albumid, 'text');
 	showsetting('album_search_uid', 'uid', $uid, 'text');
@@ -100,18 +100,18 @@ EOT;
 	showtagfooter('div');
 
 } else {
-	if($_G['gp_albumids']) {
-		$albumids = authcode($_G['gp_albumids'], 'DECODE');
-		$albumidsadd = $albumids ? explode(',', $albumids) : $_G['gp_delete'];
+	if($_GET['albumids']) {
+		$albumids = authcode($_GET['albumids'], 'DECODE');
+		$albumidsadd = $albumids ? explode(',', $albumids) : $_GET['delete'];
 		include_once libfile('function/delete');
 		$deletecount = count(deletealbums($albumidsadd));
 		$cpmsg = cplang('album_succeed', array('deletecount' => $deletecount));
 	} else {
 		$albums = $catids = array();
-		$selectalbumids = !empty($_G['gp_ids']) && is_array($_G['gp_ids']) ? $_G['gp_ids'] : array();
+		$selectalbumids = !empty($_GET['ids']) && is_array($_GET['ids']) ? $_GET['ids'] : array();
 		if($selectalbumids) {
-			$query = DB::query('SELECT albumid, catid FROM '.DB::table('home_album')." WHERE albumid IN (".dimplode($selectalbumids).')');
-			while($value=DB::fetch($query)) {
+			$query = C::t('home_album')->fetch_all($selectalbumids);
+			foreach($query as $value) {
 				$albums[$value['albumid']] = $value;
 				$catids[] = intval($value['catid']);
 			}
@@ -126,11 +126,11 @@ EOT;
 				$tocatid = intval($_POST['tocatid']);
 				$catids[] = $tocatid;
 				$catids = array_merge($catids);
-				DB::update('home_album', array('catid'=>$tocatid), 'albumid IN ('.dimplode($selectalbumids).')');
+				C::t('home_album')->update($selectalbumids, array('catid'=>$tocatid));
 				foreach($catids as $catid) {
 					$catid = intval($catid);
-					$cnt = DB::result_first('SELECT COUNT(*) FROM '.DB::table('home_album')." WHERE catid = '$catid'");
-					DB::update('home_album_category', array('num'=>intval($cnt)), array('catid'=>$catid));
+					$cnt = C::t('home_album')->count_by_catid($catid);
+					C::t('home_album_category')->update($catid, array('num'=>intval($cnt)));
 				}
 				$cpmsg = cplang('album_move_succeed');
 			} else {
@@ -154,56 +154,42 @@ if(submitcheck('searchsubmit', 1) || $newlist) {
 	$users = trim($users);
 
 	if($users != '') {
-		$uids = '-1';
-		$query = DB::query("SELECT uid FROM ".DB::table('home_album')." WHERE username IN ('".str_replace(',', '\',\'', str_replace(' ', '', $users))."')");
-		while($member = DB::fetch($query)) {
-			$uids .= ",$member[uid]";
-		}
-		$sql .= " AND a.uid IN ($uids)";
+		$uids = array(-1);
+		$query = C::t('home_album')->fetch_uid_by_username(explode(',', $users));
+		$uids = array_keys($query) + $uids;
 	}
 
-	if($albumname !='') {
-		$query =DB::query("SELECT albumname FROM ".DB::table('home_album')." WHERE albumname='$albumname'");
-		$arr = DB::fetch($query);
-		$albumname = $arr['albumname'];
-		$sql .= " AND a.albumname='$albumname'";
-	}
 
 	if($starttime != '') {
 		$starttime = strtotime($starttime);
-		$sql .= " AND a.dateline>'$starttime'";
 	}
 
 	if($_G['adminid'] == 1 && $endtime != dgmdate(TIMESTAMP, 'Y-n-j')) {
 		if($endtime != '') {
 			$endtime = strtotime($endtime);
-			$sql .= " AND a.dateline<'$endtime'";
 		}
 	} else {
 		$endtime = TIMESTAMP;
 	}
 
 	if($albumid != '') {
-		$albumids = '-1';
-		$query = DB::query("SELECT albumid FROM ".DB::table('home_album')." WHERE albumid IN ('".str_replace(',', '\',\'', str_replace(' ', '', $albumid))."')");
-		while($arr = DB::fetch($query)) {
-			$albumids .= ",$arr[albumid]";
-		}
-		$sql .= " AND a.albumid IN ($albumids)";
+		$albumids = explode(',', $albumid);
 	}
 
 	if($uid != '') {
-		$uids = '-1';
-		$query = DB::query("SELECT uid FROM ".DB::table('home_album')." WHERE uid IN ('".str_replace(',', '\',\'', str_replace(' ', '', $uid))."')");
-		while($uidarr = DB::fetch($query)) {
-			$uids .= ",$uidarr[uid]";
+		$query = C::t('home_album')->fetch_uid_by_uid($uid);
+		if(!$uids) {
+			$uids = array_keys($query);
+		} else {
+			$uids = array_intersect(array_keys($query), $uids);
 		}
-		$sql .= " AND a.uid IN ($uids)";
+		if(!$uids) {
+			$uids = array(-1);
+		}
 	}
 
-	$sql .= $friend ? " AND a.friend = '$friend'" : '';
-	$orderby = $orderby ? "a.$orderby" : 'a.updatetime';
-	$ordersc = $ordersc ? "$ordersc" : 'DESC';
+	$orderby = $orderby ? $orderby : 'updatetime';
+	$ordersc = $ordersc ? $ordersc : 'DESC';
 
 	if(($_G['adminid'] == 2 && $endtime - $starttime > 86400 * 16) || ($_G['adminid'] == 3 && $endtime - $starttime > 86400 * 8)) {
 		$error = 'album_mod_range_illegal';
@@ -211,13 +197,13 @@ if(submitcheck('searchsubmit', 1) || $newlist) {
 
 	if(!$error) {
 		if($detail) {
-			$_G['gp_perpage'] = intval($_G['gp_perpage']) < 1 ? 20 : intval($_G['gp_perpage']);
-			$perpage = $_G['gp_pp'] ? $_G['gp_pp'] : $_G['gp_perpage'];
-			$query = DB::query("SELECT * FROM ".DB::table('home_album')." a WHERE 1 $sql ORDER BY $orderby $ordersc LIMIT ".(($page - 1) * $perpage).",{$perpage}");
+			$_GET['perpage'] = intval($_GET['perpage']) < 1 ? 20 : intval($_GET['perpage']);
+			$perpage = $_GET['pp'] ? $_GET['pp'] : $_GET['perpage'];
+			$query = C::t('home_album')->fetch_all_by_search(1, $uids, $albumname, false, '', $starttime, $endtime, $albumids, $friend, $orderby, $ordersc, (($page - 1) * $perpage), $perpage);
 			$albums = '';
 
 			include_once libfile('function/home');
-			while($album = DB::fetch($query)) {
+			foreach($query as $album) {
 				if($album['friend'] != 4 && ckfriend($album['uid'], $album['friend'], $album['target_ids'])) {
 					$album['pic'] = pic_cover_get($album['pic'], $album['picflag']);
 				} else {
@@ -253,12 +239,12 @@ if(submitcheck('searchsubmit', 1) || $newlist) {
 					$album['friend']
 				), TRUE);
 			}
-			$albumcount = DB::result_first("SELECT count(*) FROM ".DB::table('home_album')." a WHERE 1 $sql");
+			$albumcount = C::t('home_album')->fetch_all_by_search(3, $uids, $albumname, false, '', $starttime, $endtime, $albumids, $friend);
 			$multi = multi($albumcount, $perpage, $page, ADMINSCRIPT."?action=album$muticondition");
 		} else {
 			$albumcount = 0;
-			$query = DB::query("SELECT a.albumid FROM ".DB::table('home_album')." a WHERE 1 $sql");
-			while($album = DB::fetch($query)) {
+			$query = C::t('home_album')->fetch_all_by_search(2, $uids, $albumname, false, '', $starttime, $endtime, $albumids, $friend);
+			foreach($query as $album) {
 				$albumids .= ','.$album['albumid'];
 				$albumcount++;
 			}

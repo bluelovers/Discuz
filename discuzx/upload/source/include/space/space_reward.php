@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_reward.php 25327 2011-11-07 07:27:20Z zhengqingpeng $
+ *      $Id: space_reward.php 28220 2012-02-24 07:52:50Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -15,7 +15,7 @@ $minhot = $_G['setting']['feedhotmin']<1?3:$_G['setting']['feedhotmin'];
 $page = empty($_GET['page'])?1:intval($_GET['page']);
 if($page<1) $page=1;
 $id = empty($_GET['id'])?0:intval($_GET['id']);
-$_G['gp_flag'] = empty($_G['gp_flag']) ? 0 : intval($_G['gp_flag']);
+$_GET['flag'] = empty($_GET['flag']) ? 0 : intval($_GET['flag']);
 $_GET['fuid'] = empty($_GET['fuid']) ? 0 : intval($_GET['fuid']);
 $opactives['reward'] = 'class="a"';
 
@@ -43,24 +43,15 @@ $gets = array(
 $theurl = 'home.php?'.url_implode($gets);
 $multi = '';
 
-$wheresql = "t.special='3'";
+$conditions['special'] = 3;
+$conditions['specialthread'] = 1;
 
 $f_index = '';
 $ordersql = 't.dateline DESC';
 $need_count = true;
 require_once libfile('function/misc');
-if($_GET['view'] == 'all') {
-	$start = 0;
-	$perpage = 100;
-
-	$alltype = $ordertype = in_array($_G['gp_order'], array('new', 'hot')) ? $_G['gp_order'] : 'new';
-	if($_GET['order'] == 'hot') {
-		$wheresql .= " AND t.replies>='$minhot'";
-	}
-	$orderactives = array($ordertype => ' class="a"');
-	loadcache('space_reward');
-} elseif($_GET['view'] == 'me') {
-	$wheresql = "t.authorid = '$space[uid]' AND t.special='3'";
+if($_GET['view'] == 'me') {
+	$conditions = array('authorid' => $space['uid'], 'special' => 3, 'specialthread' => 1);
 } else {
 
 	space_merge($space, 'field_home');
@@ -69,14 +60,14 @@ if($_GET['view'] == 'all') {
 		require_once libfile('function/friend');
 		$fuid = intval($_GET['fuid']);
 		if($fuid && friend_check($fuid, $space['uid'])) {
-			$wheresql = "t.authorid='$fuid' AND t.special='3'";
+			$conditions = array('authorid' => $fuid, 'special' => 3, 'specialthread' => 1);
 			$fuid_actives = array($fuid=>' selected');
 		} else {
-			$wheresql .= " AND t.authorid IN ($space[feedfriend])";
+			$conditions['authorid'] = explode(',', $space['feedfriend']);
 		}
 
-		$query = DB::query("SELECT * FROM ".DB::table('home_friend')." WHERE uid='$space[uid]' ORDER BY num DESC LIMIT 0,100");
-		while ($value = DB::fetch($query)) {
+		$query = C::t('home_friend')->fetch_all_by_uid($space['uid'], 0, 100, true);
+		foreach($query as $value) {
 			$userlist[] = $value;
 		}
 	} else {
@@ -88,65 +79,39 @@ $actives = array($_GET['view'] =>' class="a"');
 
 if($need_count) {
 
-	$wheresql .= $_G['gp_view'] != 'me' ? " AND t.displayorder>='0'" : '';
+	if($_GET['view'] != 'me') {
+		$conditions['sticky'] = 0;
+	}
 	if($searchkey = stripsearchkey($_GET['searchkey'])) {
-		$wheresql .= " AND t.subject LIKE '%$searchkey%'";
+		$conditions['keywords'] = $searchkey;
 		$searchkey = dhtmlspecialchars($searchkey);
 	}
 
-	if($_G['gp_flag'] < 0) {
+	if($_GET['flag'] < 0) {
 		$wheresql .= " AND t.price < '0'";
+		$conditions['pricesless'] = 0;
 		$alltype .= '1';
-	} elseif($_G['gp_flag'] > 0) {
+	} elseif($_GET['flag'] > 0) {
 		$wheresql .= " AND t.price > '0'";
+		$conditions['pricemore'] = 0;
 		$alltype .= '0';
 	}
 
-	$havecache = false;
-	if($_G['gp_view'] == 'all') {
 
-		$cachetime = $_G['gp_order'] == 'hot' ? 43200 : 3000;
-		if(!empty($_G['cache']['space_reward'][$alltype]) && is_array($_G['cache']['space_reward'][$alltype])) {
-			$cachearr = $_G['cache']['space_reward'][$alltype];
-			if(!empty($cachearr['dateline']) && $cachearr['dateline'] > $_G['timestamp'] - $cachetime) {
-				$list = $cachearr['data'];
-				$hiddennum = $cachearr['hiddennum'];
-				$havecache = true;
+	$count = C::t('forum_thread')->count_search($conditions);
+	if($count) {
+
+		foreach(C::t('forum_thread')->fetch_all_search($conditions, 0, $start, $perpage, 'dateline') as $value) {
+			if(empty($value['author']) && $value['authorid'] != $_G['uid']) {
+				$hiddennum++;
+				continue;
 			}
+			$list[] = procthread($value);
 		}
+		$multi = multi($count, $perpage, $page, $theurl);
+
 	}
-	if(!$havecache) {
-		$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('forum_thread')." t WHERE $wheresql"),0);
-		if($count) {
-			$query = DB::query("SELECT t.* FROM ".DB::table('forum_thread')." t
-				WHERE $wheresql
-				ORDER BY $ordersql LIMIT $start,$perpage");
 
-			while($value = DB::fetch($query)) {
-				if(empty($value['author']) && $value['authorid'] != $_G['uid']) {
-					$hiddennum++;
-					continue;
-				}
-				$list[] = procthread($value);
-			}
-
-			if($_G['gp_view'] == 'all') {
-				$_G['cache']['space_reward'][$alltype] = array(
-					'dateline' => $_G['timestamp'],
-					'hiddennum' => $hiddennum,
-					'data' => $list
-				);
-				save_syscache('space_reward', $_G['cache']['space_reward']);
-			}
-
-			if($_G['gp_view'] != 'all') {
-				$multi = multi($count, $perpage, $page, $theurl);
-			}
-
-		}
-	} else {
-		$count = count($list);
-	}
 }
 
 $creditid = 0;
@@ -157,11 +122,11 @@ if($_G['setting']['creditstransextra'][2]) {
 }
 
 if($_G['uid']) {
-	$_G['gp_view'] = !$_G['gp_view'] ? 'we' : $_G['gp_view'];
-	$navtitle = lang('core', 'title_'.$_G['gp_view'].'_reward');
+	$_GET['view'] = !$_GET['view'] ? 'we' : $_GET['view'];
+	$navtitle = lang('core', 'title_'.$_GET['view'].'_reward');
 } else {
-	$_G['gp_order'] = !$_G['gp_order'] ? 'dateline' : $_G['gp_order'];
-	$navtitle = lang('core', 'title_'.$_G['gp_order'].'_reward');
+	$_GET['order'] = !$_GET['order'] ? 'dateline' : $_GET['order'];
+	$navtitle = lang('core', 'title_'.$_GET['order'].'_reward');
 }
 
 include_once template("diy:home/space_reward");

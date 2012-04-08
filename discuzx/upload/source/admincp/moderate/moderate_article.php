@@ -4,23 +4,23 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: moderate_article.php 24018 2011-08-22 02:28:39Z svn_project_zhangjie $
+ *      $Id: moderate_article.php 25764 2011-11-22 03:39:57Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
 }
 
-if(!submitcheck('modsubmit') && !$_G['gp_fast']) {
+if(!submitcheck('modsubmit') && !$_GET['fast']) {
 
 	shownav('topic', $lang['moderate_articles']);
 	showsubmenu('nav_moderate_posts', $submenu);
 
-	$select[$_G['gp_tpp']] = $_G['gp_tpp'] ? "selected='selected'" : '';
+	$select[$_GET['tpp']] = $_GET['tpp'] ? "selected='selected'" : '';
 	$tpp_options = "<option value='20' $select[20]>20</option><option value='50' $select[50]>50</option><option value='100' $select[100]>100</option>";
-	$tpp = !empty($_G['gp_tpp']) ? $_G['gp_tpp'] : '20';
+	$tpp = !empty($_GET['tpp']) ? $_GET['tpp'] : '20';
 	$start_limit = ($page - 1) * $ppp;
-	$dateline = $_G['gp_dateline'] ? $_G['gp_dateline'] : '604800';
+	$dateline = $_GET['dateline'] ? $_GET['dateline'] : '604800';
 	$dateline_options = '';
 	foreach(array('all', '604800', '2592000', '7776000') as $v) {
 		$selected = '';
@@ -30,16 +30,16 @@ if(!submitcheck('modsubmit') && !$_G['gp_fast']) {
 		$dateline_options .= "<option value=\"$v\" $selected>".cplang("dateline_$v");
 	}
 	$cat_select = '<option value="">'.$lang['all'].'</option>';
-	$query = DB::query("SELECT catid, catname FROM ".DB::table('portal_category'));
-	while($cat = DB::fetch($query)) {
+	loadcache('portalcategory');
+	foreach($_G['cache']['portalcategory'] as $cat) {
 		$selected = '';
-		if($cat['catid'] == $_G['gp_catid']) {
+		if($cat['catid'] == $_GET['catid']) {
 			$selected = 'selected="selected"';
 		}
 		$cat_select .= "<option value=\"$cat[catid]\" $selected>$cat[catname]</option>";
 	}
 	$article_status = 1;
-	if($_G['gp_filter'] == 'ignore') {
+	if($_GET['filter'] == 'ignore') {
 		$article_status = 2;
 	}
 	showformheader("moderate&operation=articles");
@@ -47,7 +47,7 @@ if(!submitcheck('modsubmit') && !$_G['gp_fast']) {
 
 	showtablerow('', array('width="60"', 'width="160"', 'width="60"'),
 		array(
-			cplang('username'), "<input size=\"15\" name=\"username\" type=\"text\" value=\"$_G[gp_username]\" />",
+			cplang('username'), "<input size=\"15\" name=\"username\" type=\"text\" value=\"$_GET[username]\" />",
 			cplang('moderate_article_category'), "<select name=\"catid\">$cat_select</select>",
 		)
 	);
@@ -66,42 +66,22 @@ if(!submitcheck('modsubmit') && !$_G['gp_fast']) {
 
 	$pagetmp = $page;
 	$sqlwhere = "";
-	if(!empty($_G['gp_catid'])) {
-		$sqlwhere .= " AND a.catid='{$_G['gp_catid']}'";
-	}
-	if(!empty($_G['gp_username'])) {
-		$sqlwhere .= " AND a.username='{$_G['gp_username']}'";
-	}
-	if($dateline != 'all') {
-		$sqlwhere .= " AND a.dateline>'".(TIMESTAMP - $dateline)."'";
-	}
-
-	$modcount = DB::result_first("SELECT COUNT(*)
-		FROM ".DB::table('common_moderate')." m
-		LEFT JOIN ".DB::table('portal_article_title')." a ON a.aid=m.id
-		WHERE m.idtype='aid' AND m.status='$moderatestatus' $sqlwhere");
+	$modcount = C::t('common_moderate')->fetch_all_for_article($moderatestatus, $_GET['catid'], $_GET['username'], $dateline, 1);
 	do {
 		$start_limit = ($pagetmp - 1) * $tpp;
-		$query = DB::query("SELECT a.aid, a.catid, a.uid, a.username, a.title, a.summary, a.dateline, cat.catname
-			FROM ".DB::table('common_moderate')." m
-			LEFT JOIN ".DB::table('portal_article_title')." a ON a.aid=m.id
-			LEFT JOIN ".DB::table('portal_category')." cat ON cat.catid=a.catid
-			WHERE m.idtype='aid' AND m.status='$moderatestatus' $sqlwhere
-			ORDER BY m.dateline DESC
-			LIMIT $start_limit, $tpp");
-			$pagetmp = $pagetmp - 1;
-	} while($pagetmp > 0 && DB::num_rows($query) == 0);
+		$query = C::t('common_moderate')->fetch_all_for_article($moderatestatus, $_GET['catid'], $_GET['username'], $dateline, 0, $start_limit, $tpp);
+		$pagetmp = $pagetmp - 1;
+	} while($pagetmp > 0 && count($query) == 0);
 	$page = $pagetmp + 1;
-	$multipage = multi($modcount, $tpp, $page, ADMINSCRIPT."?action=moderate&operation=articles&filter=$filter&catid={$_G['gp_catid']}&dateline={$_G['gp_dateline']}&username={$_G['gp_username']}&keyword={$_G['gp_keyword']}&tpp=$tpp&showcensor=$showcensor");
+	$multipage = multi($modcount, $tpp, $page, ADMINSCRIPT."?action=moderate&operation=articles&filter=$filter&catid={$_GET['catid']}&dateline={$_GET['dateline']}&username={$_GET['username']}&keyword={$_GET['keyword']}&tpp=$tpp&showcensor=$showcensor");
 
 	echo '<p class="margintop marginbot"><a href="javascript:;" onclick="expandall();">'.cplang('moderate_all_expand').'</a> <a href="javascript:;" onclick="foldall();">'.cplang('moderate_all_fold').'</a></p>';
 
 	showtableheader();
-	require_once libfile('class/censor');
 	$censor = & discuz_censor::instance();
 	$censor->highlight = '#FF0000';
 	require_once libfile('function/misc');
-	while($article = DB::fetch($query)) {
+	foreach($query as $article) {
 		$article['dateline'] = dgmdate($article['dateline']);
 		if($showcensor) {
 			$censor->check($article['title']);
@@ -148,8 +128,7 @@ if(!submitcheck('modsubmit') && !$_G['gp_fast']) {
 	}
 
 	if($validate_aids = dimplode($moderation['validate'])) {
-		DB::update('portal_article_title', array('status' => '0'), "aid IN ($validate_aids)");
-		$validates = DB::affected_rows();
+		$validates = C::t('portal_article_title')->update($moderation['validate'], array('status' => '0'));
 		updatemoderate('aid', $moderation['validate'], 2);
 	}
 	if(!empty($moderation['delete'])) {
@@ -159,15 +138,14 @@ if(!submitcheck('modsubmit') && !$_G['gp_fast']) {
 		updatemoderate('aid', $moderation['delete'], 2);
 	}
 	if($ignore_aids = dimplode($moderation['ignore'])) {
-		DB::update('portal_article_title', array('status' => '2'), "aid IN ($ignore_aids)");
-		$ignores = DB::affected_rows();
+		$ignores = C::t('portal_article_title')->update($moderation['ignore'], array('status' => '2'));
 		updatemoderate('aid', $moderation['ignore'], 1);
 	}
-	if($_G['gp_fast']) {
-		echo callback_js($_G['gp_aid']);
+	if($_GET['fast']) {
+		echo callback_js($_GET['aid']);
 		exit;
 	} else {
-		cpmsg('moderate_articles_succeed', "action=moderate&operation=articles&page=$page&filter=$filter&catid={$_G['gp_catid']}&dateline={$_G['gp_dateline']}&username={$_G['gp_username']}&keyword={$_G['gp_keyword']}&idtype={$_G['gp_idtype']}&tpp={$_G['gp_tpp']}&showcensor=$showcensor", 'succeed', array('validates' => $validates, 'ignores' => $ignores, 'deletes' => $deletes));
+		cpmsg('moderate_articles_succeed', "action=moderate&operation=articles&page=$page&filter=$filter&catid={$_GET['catid']}&dateline={$_GET['dateline']}&username={$_GET['username']}&keyword={$_GET['keyword']}&idtype={$_GET['idtype']}&tpp={$_GET['tpp']}&showcensor=$showcensor", 'succeed', array('validates' => $validates, 'ignores' => $ignores, 'deletes' => $deletes));
 	}
 
 }

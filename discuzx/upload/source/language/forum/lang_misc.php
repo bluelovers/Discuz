@@ -4,8 +4,12 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_misc.php 20740 2011-03-02 09:55:01Z liulanbo $
+ *      $Id: lang_misc.php 29327 2012-04-01 09:37:17Z liudongdong $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 $lang = array
 (
@@ -25,7 +29,7 @@ $lang = array
 	'post_single_banned' => '**** 该帖被屏蔽 ****',
 	'message_ishidden_hiddenreplies' => '此帖仅作者可见',
 	'post_reply_quote' => '{author} 发表于 {time}',
-	'post_edit' => '[i=s] 本帖最后由 {editor} 于 {edittime} 编辑 [/i]\n\n',
+	'post_edit' => "[i=s] 本帖最后由 {editor} 于 {edittime} 编辑 [/i]\n\n",
 	'post_edit_regexp' => '/^\[i=s\] 本帖最后由 .*? 于 .*? 编辑 \[\/i\]\n\n/s',
 	'post_edithtml' => '[i=s] 本帖最后由 {editor} 于 {edittime} 编辑 [/i]<br /><br />',
 	'post_edithtml_regexp' => '/^\[i=s\] 本帖最后由 .*? 于 .*? 编辑 \[\/i\]&lt;br \/&gt;&lt;br \/&gt;/s',
@@ -57,7 +61,6 @@ $lang = array
 	'post_trade_pm_buynum' => '购买数量',
 	'post_trade_pm_wishprice' => '我期望的价格是',
 	'post_trade_pm_reason' => '我议价的理由是',
-	'post_deleted' => '无效楼层，该帖已经被删除',
 	'postappend_content' => '补充内容',
 	'payment_unit' => '元',
 
@@ -113,6 +116,8 @@ $lang = array
 	'credit_payment' => '积分充值',
 	'credit_forum_payment' => '论坛积分充值',
 	'credit_forum_royalty' => '交易手续费',
+
+	'credit_total' => '总积分',
 
 	'invite_payment' => '购买邀请码',
 	'invite_forum_payment' => '购买邀请码',
@@ -264,6 +269,11 @@ $lang = array
 	'perms_allowstat' => '允许查看趋势统计',
 	'perms_allowpostarticle' => '发表文章',
 	'perms_raterange' => '允许参与评分',
+	'perms_allowcommentpost' => '允许参与点评',
+	'perms_allowat' => '允许 @ 的人数',
+	'perms_allowreplycredit' => '允许设置回帖奖励',
+	'perms_allowposttag' => '允许使用标签',
+	'perms_allowcreatecollection' => '允许创建淘专辑的数量',
 	'perms_allowsendpm' => '允许发短消息',
 	'perms_maximagesize' => '单张图片最大尺寸',
 	'perms_allowmediacode' => '允许使用多媒体代码',
@@ -274,11 +284,41 @@ $lang = array
 	'join_reward' => '参与悬赏',
 	'join_activity' => '参与活动',
 	'join_debate' => '参与辩论',
+	'at_invite' => '@我的好友',
 
 	'lower' => '低于',
 	'higher' => '高于',
 	'report_msg_your' => '您的 ',
 	'report_noreward' => '不奖惩',
+	'activity_viewimg' => '点击查看',
+
+	'crime_postreason' => '{reason} &nbsp; <a href="forum.php?mod=redirect&goto=findpost&pid={pid}&ptid={tid}" target="_blank" class="xi2">查看详情</a>',
+	'crime_reason' => '{reason}',
+
+	'connectguest_message_search' => array('尚未登录', '先登录'),
+	'connectguest_message_replace' => array('尚未 <a href="member.php?mod=connect" class="xi2">完善帐号信息</a> 或 <a href="member.php?mod=connect&ac=bind" class="xi2">绑定已有帐号</a> ', '先 <a href="member.php?mod=connect" class="xi2">完善帐号信息</a> 或 <a href="member.php?mod=connect&ac=bind" class="xi2">绑定已有帐号</a> '),
+	'connectguest_message_mobile_search' => array('尚未登录', '先登录'),
+	'connectguest_message_mobile_replace' => '在电脑版完善资料或绑定已有帐号，',
+
+	'avatar' => '头像',
+	'signature' => '签名',
+	'custom_title' => '自定义头衔',
+
+	'forum_guide' => '导读',
+
+	'patch_site_have' => '您的网站有',
+	'patch_is_fixed' => '个安全漏洞，已修复',
+	'patch_need_fix' => '个安全漏洞，请尽快修复',
+	'patch_fixed_status' => '已修复',
+	'patch_unfix_status' => '未修复',
+	'patch_fix_failed_status' => '修复失败',
+	'patch_fix_right_now' => '立即修复',
+	'patch_view_fix_detail' => '查看详情',
+	'patch_name' => '漏洞名称',
+	'patch_dateline' => '发布日期',
+	'patch_status' => '当前状态',
+	'patch_close' => '关闭',
+
 );
 
 ?>

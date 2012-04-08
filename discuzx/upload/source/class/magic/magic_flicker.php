@@ -3,7 +3,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: magic_flicker.php 13898 2010-08-03 02:22:52Z monkey $
+ *      $Id: magic_flicker.php 26901 2011-12-27 07:16:24Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -29,10 +29,10 @@ class magic_flicker {
 	function usesubmit() {
 		global $_G;
 
-		DB::update('home_comment', array('magicflicker' => 1), array('cid'=>intval($_G['gp_id']), 'authorid'=>$_G['uid']));
+		C::t('home_comment')->update($_GET['id'], array('magicflicker' => 1), $_G['uid']);
 		usemagic($this->magic['magicid'], $this->magic['num']);
 		updatemagiclog($this->magic['magicid'], '2', '1', '0');
-		showmessage(lang('magic/flicker', 'flicker_succeed'), '', array(), array('showdialog' => 1, 'closetime' => true));
+		showmessage(lang('magic/flicker', 'flicker_succeed'), dreferer(), array(), array('alert' => 'right', 'showdialog' => 1, 'closetime' => true, 'locationtime' => true));
 	}
 
 	function show() {

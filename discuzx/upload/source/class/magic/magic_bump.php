@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: magic_bump.php 13898 2010-08-03 02:22:52Z monkey $
+ *      $Id: magic_bump.php 29236 2012-03-30 05:34:47Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -49,31 +49,30 @@ class magic_bump {
 
 	function usesubmit() {
 		global $_G;
-		if(empty($_G['gp_tid'])) {
+		if(empty($_GET['tid'])) {
 			showmessage(lang('magic/bump', 'bump_info_nonexistence'));
 		}
 
-		$thread = getpostinfo($_G['gp_tid'], 'tid', array('fid', 'authorid', 'subject'));
+		$thread = getpostinfo($_GET['tid'], 'tid', array('fid', 'authorid', 'subject'));
 		$this->_check($thread['fid']);
 
-		DB::query("UPDATE ".DB::table('forum_thread')." SET lastpost='".TIMESTAMP."', moderated='1' WHERE tid='$_G[gp_tid]'");
-
+		C::t('forum_thread')->update($_GET['tid'], array('moderated' => 1, 'lastpost' => TIMESTAMP));
 		usemagic($this->magic['magicid'], $this->magic['num']);
-		updatemagiclog($this->magic['magicid'], '2', '1', '0', 0, 'tid', $_G['gp_tid']);
-		updatemagicthreadlog($_G['gp_tid'], $this->magic['magicid'], 'BMP');
+		updatemagiclog($this->magic['magicid'], '2', '1', '0', 0, 'tid', $_GET['tid']);
+		updatemagicthreadlog($_GET['tid'], $this->magic['magicid'], 'BMP');
 
 		if($thread['authorid'] != $_G['uid']) {
-			notification_add($thread['authorid'], 'magic', lang('magic/bump', 'bump_notification'), array('tid' => $_G['gp_tid'], 'subject' => $thread['subject'], 'magicname' => $this->magic['name']));
+			notification_add($thread['authorid'], 'magic', lang('magic/bump', 'bump_notification'), array('tid' => $_GET['tid'], 'subject' => $thread['subject'], 'magicname' => $this->magic['name']));
 		}
 
-		showmessage(lang('magic/bump', 'bump_succeed'), dreferer(), array(), array('showdialog' => 1, 'locationtime' => true));
+		showmessage(lang('magic/bump', 'bump_succeed'), dreferer(), array(), array('alert' => 'right', 'showdialog' => 1, 'locationtime' => true));
 	}
 
 	function show() {
 		global $_G;
-		$tid = !empty($_G['gp_id']) ? htmlspecialchars($_G['gp_id']) : '';
+		$tid = !empty($_GET['id']) ? uhtmlspecialchars($_GET['id']) : '';
 		if($tid) {
-			$thread = getpostinfo($_G['gp_id'], 'tid', array('fid'));
+			$thread = getpostinfo($_GET['id'], 'tid', array('fid'));
 			$this->_check($thread['fid']);
 		}
 		magicshowtype('top');
@@ -83,8 +82,8 @@ class magic_bump {
 
 	function buy() {
 		global $_G;
-		if(!empty($_G['gp_id'])) {
-			$thread = getpostinfo($_G['gp_id'], 'tid', array('fid'));
+		if(!empty($_GET['id'])) {
+			$thread = getpostinfo($_GET['id'], 'tid', array('fid'));
 			$this->_check($thread['fid']);
 		}
 	}

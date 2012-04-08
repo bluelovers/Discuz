@@ -4,29 +4,29 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_comment.php 29125 2012-03-27 06:21:23Z zhangguosheng $
+ *      $Id: admincp_comment.php 28774 2012-03-12 10:09:50Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
 }
 
-$detail = !empty($_GET['authorid']) ? true : $_G['gp_detail'];
-$idtype = $_G['gp_idtype'];
-$id = $_G['gp_id'];
-$author = $_G['gp_author'];
-$authorid = $_G['gp_authorid'];
-$uid = $_G['gp_uid'];
-$message = $_G['gp_message'];
-$ip = $_G['gp_ip'];
-$users = $_G['gp_users'];
-$starttime = $_G['gp_starttime'];
-$endtime = $_G['gp_endtime'];
-$searchsubmit = $_G['gp_searchsubmit'];
-$cids = $_G['gp_cids'];
-$page = max(1, $_G['gp_page']);
+$detail = $_GET['detail'];
+$idtype = $_GET['idtype'];
+$id = $_GET['id'];
+$author = $_GET['author'];
+$authorid = $_GET['authorid'];
+$uid = $_GET['uid'];
+$message = $_GET['message'];
+$ip = $_GET['ip'];
+$users = $_GET['users'];
+$starttime = $_GET['starttime'];
+$endtime = $_GET['endtime'];
+$searchsubmit = $_GET['searchsubmit'];
+$cids = $_GET['cids'];
+$page = max(1, $_GET['page']);
 
-$fromumanage = $_G['gp_fromumanage'] ? 1 : 0;
+$fromumanage = $_GET['fromumanage'] ? 1 : 0;
 
 cpheader();
 if(empty($operation)) {
@@ -58,10 +58,10 @@ if(empty($operation)) {
 EOT;
 		showtagheader('div', 'searchposts', !$searchsubmit);
 		showformheader("comment", '', 'commentforum');
-		showhiddenfields(array('page' => $page, 'pp' => $_G['gp_pp'] ? $_G['gp_pp'] : $_G['gp_perpage']));
+		showhiddenfields(array('page' => $page, 'pp' => $_GET['pp'] ? $_GET['pp'] : $_GET['perpage']));
 		showtableheader();
 		showsetting('comment_search_detail', 'detail', $detail, 'radio');
-		showsetting('comment_search_perpage', '', $_G['gp_perpage'], "<select name='perpage'><option value='20'>$lang[perpage_20]</option><option value='50'>$lang[perpage_50]</option><option value='100'>$lang[perpage_100]</option></select>");
+		showsetting('comment_search_perpage', '', $_GET['perpage'], "<select name='perpage'><option value='20'>$lang[perpage_20]</option><option value='50'>$lang[perpage_50]</option><option value='100'>$lang[perpage_100]</option></select>");
 		showsetting('comment_idtype', array('idtype', array(
 			array('', $lang['all']),
 			array('uid', $lang['comment_uid']),
@@ -84,7 +84,7 @@ EOT;
 
 	} else {
 		$cids = authcode($cids, 'DECODE');
-		$cidsadd = $cids ? explode(',', $cids) : $_G['gp_delete'];
+		$cidsadd = $cids ? explode(',', $cids) : $_GET['delete'];
 		include_once libfile('function/delete');
 		$deletecount = count(deletecomments($cidsadd));
 		$cpmsg = cplang('comment_succeed', array('deletecount' => $deletecount));
@@ -99,39 +99,35 @@ EOT;
 
 		$comments = $commentcount = '0';
 		$sql = $error = '';
+		$authorids = array();
 		$author = trim($author);
 
 		if($id !='') {
-			$sql .=" AND c.id IN ('".str_replace(',', '\',\'', str_replace(' ', '', $id))."')";
+			$id = explode(',', $id);
 		}
 
 		if($author != '') {
-			$authorids = array();
-			$query = DB::query("SELECT uid FROM ".DB::table('common_member')." WHERE username IN ('".str_replace(',', '\',\'', str_replace(' ', '', $author))."')");
-			while($arr = DB::fetch($query)) {
-				$authorids[] = intval($arr['uid']);
+			$authorids = C::t('common_member')->fetch_all_uid_by_username(array_map('trim', explode(',', $author)));
+			if (!$authorids) {
+				$authorids = array(-1);
 			}
-			$authorid = ($authorid ? $authorid.',' : '').implode(',',$authorids);
 		}
 
 		$authorid = trim($authorid, ', ');
 		if($authorid != '') {
-			$sql .= " AND c.authorid IN ('".str_replace(',', '\',\'', str_replace(' ', '', $authorid))."')";
-		}
-
-		if($idtype != '') {
-			$sql .= " AND c.idtype='$idtype'";
-		}
-
-		if($starttime != '') {
-			$starttime = strtotime($starttime);
-			$sql .= " AND c.dateline>'$starttime'";
+			if (!$authorids) {
+				$authorids = explode(',', $authorid);
+			} else {
+				$authorids = array_intersect($authorids, explode(',', $authorid));
+			}
+			if (!$authorids) {
+				$authorids = array(-1);
+			}
 		}
 
 		if($_G['adminid'] == 1 && $endtime != dgmdate(TIMESTAMP, 'Y-n-j')) {
 			if($endtime != '') {
 				$endtime = strtotime($endtime);
-				$sql .= " AND c.dateline<'$endtime'";
 			}
 		} else {
 			$endtime = TIMESTAMP;
@@ -143,47 +139,25 @@ EOT;
 
 		$uid = trim($uid, ', ');
 		if($uid !='') {
-			$sql .=" AND c.uid IN ('".str_replace(',', '\',\'', str_replace(' ', '', $uid))."')";
-		}
-
-		if($message != '') {
-			$sqlmessage = '';
-			$or = '';
-			$message = explode(',', str_replace(' ', '', $message));
-
-			for($i = 0; $i < count($message); $i++) {
-				if(preg_match("/\{(\d+)\}/", $message[$i])) {
-					$message[$i] = preg_replace("/\\\{(\d+)\\\}/", ".{0,\\1}", preg_quote($message[$i], '/'));
-					$message .= " $or c.message REGEXP '".$message[$i]."'";
-				} else {
-					$sqlmessage .= " $or c.message LIKE '%".$message[$i]."%'";
-				}
-				$or = 'OR';
-			}
-			$sql .= " AND ($sqlmessage)";
-		}
-
-		if($ip != '') {
-			$sql .= " AND c.ip LIKE '".str_replace('*', '%', $ip)."'";
+			$uid = explode(',', $uid);
 		}
 
 		if(!$error) {
-			if(($commentcount = DB::result_first("SELECT count(*) FROM ".DB::table('home_comment')." c WHERE 1 $sql"))) {
+			if($commentcount = C::t('home_comment')->fetch_all_search(3, $id, $authorids, $uid, $ip, $message, $idtype, $starttime, $endtime)) {
 				if($detail) {
-					$_G['gp_perpage'] = intval($_G['gp_perpage']) < 1 ? 20 : intval($_G['gp_perpage']);
-					$perpage = $_G['gp_pp'] ? $_G['gp_pp'] : $_G['gp_perpage'];
-					$query = DB::query("SELECT c.cid, c.uid, c.message, c.author, c.idtype, c.id, c.ip, c.dateline FROM ".DB::table('home_comment')." c  WHERE 1 $sql ORDER BY c.dateline DESC LIMIT ".(($page - 1) * $perpage).",{$perpage}");
-
+					$_GET['perpage'] = intval($_GET['perpage']) < 1 ? 20 : intval($_GET['perpage']);
+					$perpage = $_GET['pp'] ? $_GET['pp'] : $_GET['perpage'];
+					$query = C::t('home_comment')->fetch_all_search(1, $id, $authorids, $uid, $ip, $message, $idtype, $starttime, $endtime, (($page - 1) * $perpage), $perpage);
 					$comments = '';
 
-					while($comment = DB::fetch($query)) {
+					foreach ($query as $comment) {
 						$comment['dateline'] = dgmdate($comment['dateline']);
 						switch($comment['idtype']) {
 							case 'picid':
 								$address = "<a href=\"home.php?mod=space&uid=$comment[uid]&do=album&picid=$comment[id]\" target=\"_blank\">$comment[message]</a>";
 								break;
 							case 'uid':
-								$address = "<a href=\"home.php?mod=space&uid=$comment[uid]&do=uid\" target=\"_blank\">$comment[message]</a>";
+								$address = "<a href=\"home.php?mod=space&uid=$comment[uid]&do=wall\" target=\"_blank\">$comment[message]</a>";
 								break;
 							case 'sid':
 								$address = "<a href=\"home.php?mod=space&uid=1&do=share&id=$comment[id]\" target=\"_blank\">$comment[message]</a>";
@@ -205,8 +179,8 @@ EOT;
 					$multi = preg_replace("/href=\"".ADMINSCRIPT."\?action=comment&amp;page=(\d+)\"/", "href=\"javascript:page(\\1)\"", $multi);
 					$multi = str_replace("window.location='".ADMINSCRIPT."?action=comment&amp;page='+this.value", "page(this.value)", $multi);
 			} else {
-				$query = DB::query("SELECT c.cid FROM ".DB::table('home_comment')." c WHERE 1 $sql");
-				while($comment = DB::fetch($query)) {
+				$query = C::t('home_comment')->fetch_all_search(2, $id, $authorids, $uid, $ip, $message, $idtype, $starttime, $endtime);
+				foreach ($query as $comment) {
 					$cids .= ','.$comment['cid'];
 				}
 			}
@@ -239,8 +213,8 @@ EOT;
 
 if($operation == 'article' || $operation == 'topic') {
 
-	$aid = $_G['gp_aid'];
-	$subject = $_G['gp_subject'];
+	$aid = $_GET['aid'];
+	$subject = $_GET['subject'];
 	$idtype = $operation == 'article' ? 'aid' : 'topicid';
 	$tablename = $idtype == 'aid' ? 'portal_article_title' : 'portal_topic';
 
@@ -267,9 +241,9 @@ if($operation == 'article' || $operation == 'topic') {
 EOT;
 		showtagheader('div', 'searchposts', !$searchsubmit);
 		showformheader("comment&operation=$operation", '', 'articleforum');
-		showhiddenfields(array('page' => $page, 'pp' => $_G['gp_pp'] ? $_G['gp_pp'] : $_G['gp_perpage']));
+		showhiddenfields(array('page' => $page, 'pp' => $_GET['pp'] ? $_GET['pp'] : $_GET['perpage']));
 		showtableheader();
-		showsetting('comment_search_perpage', '', $_G['gp_perpage'], "<select name='perpage'><option value='20'>$lang[perpage_20]</option><option value='50'>$lang[perpage_50]</option><option value='100'>$lang[perpage_100]</option></select>");
+		showsetting('comment_search_perpage', '', $_GET['perpage'], "<select name='perpage'><option value='20'>$lang[perpage_20]</option><option value='50'>$lang[perpage_50]</option><option value='100'>$lang[perpage_100]</option></select>");
 		showsetting("comment_{$operation}_subject", 'subject', $subject, 'text');
 		showsetting("comment_{$operation}_id", 'aid', $aid, 'text');
 		showsetting('comment_search_message', 'message', $message, 'text');
@@ -283,14 +257,17 @@ EOT;
 
 	} else {
 
-		$cidsadd = dimplode($_G['gp_delete']);
 
-		$query = DB::query("SELECT id, idtype FROM ".DB::table('portal_comment')." WHERE cid IN (".$cidsadd.")");
-		while($value = DB::fetch($query)) {
-			$updatetablename = $value['idtype'] == 'aid' ? 'portal_article_count' : 'portal_topic';
-			DB::query("UPDATE ".DB::table($updatetablename)." SET commentnum=commentnum-1 WHERE $value[idtype]='$value[id]'");
+		$commentnum = array();
+		foreach(C::t('portal_comment')->fetch_all($_GET['delete']) as $value) {
+			$commentnum[$value['idtype']][$value['id']] = $value['id'];
 		}
-		DB::query("DELETE FROM ".DB::table('portal_comment')." WHERE cid IN (".$cidsadd.")");
+		if($commentnum['aid']) {
+			C::t('portal_article_count')->increase($commentnum['aid'], array('commentnum' => -1));
+		} elseif($commentnum['topicid']) {
+			C::t('portal_topic')->increase($commentnum['topicid'], array('commentnum' => -1));
+		}
+		C::t('portal_comment')->delete($_GET['delete']);
 		$cpmsg = cplang('comment_article_delete');
 
 	?>
@@ -304,61 +281,37 @@ EOT;
 		$sql = $error = '';
 		$author = trim($author);
 
-		if($subject != '') {
-			$sqlsubject = '';
-			$or = '';
-			$subject = explode(',', str_replace(' ', '', $subject));
+		$queryAId = $aid ? array($aid) : array();
 
-			for($i = 0, $l = count($subject); $i < $l; $i++) {
-				if(preg_match("/\{(\d+)\}/", $subject[$i])) {
-					$subject[$i] = preg_replace("/\\\{(\d+)\\\}/", ".{0,\\1}", preg_quote($subject[$i], '/'));
-					$sqlsubject .= " $or title REGEXP '".$subject[$i]."'";
-				} else {
-					$sqlsubject .= " $or title LIKE '%".$subject[$i]."%'";
-				}
-				$or = 'OR';
-			}
-			if($sqlsubject) {
+		if($subject != '') {
+
 				$ids = array();
-				$query = DB::query("SELECT $idtype FROM ".DB::table($tablename)." WHERE $sqlsubject");
-				while(($value=DB::fetch($query))) {
+				$query = C::t($tablename)->fetch_all_by_title($idtype, $subject);
+				foreach($query as $value) {
 					$ids[] = intval($value[$idtype]);
 				}
-				$aid = ($aid ? $aid.',':'').implode(',',$ids);
-			}
+				$queryAId = array_merge($queryAId, $ids);
 		}
 
-		if($aid !='') {
-			$sql .=" AND c.id IN ('".str_replace(',', '\',\'', str_replace(' ', '', $aid))."')";
-		}
 
-		if($idtype != '') {
-			$sql .= " AND c.idtype='$idtype'";
-		}
+
+		$queryAuthorIDs = $authorid ? array($authorid) : array();
 
 		if($author != '') {
-			$authorids = array();
-			$query = DB::query("SELECT uid FROM ".DB::table('common_member')." WHERE username IN ('".str_replace(',', '\',\'', str_replace(' ', '', $author))."')");
-			while($arr = DB::fetch($query)) {
-				$authorids[] = intval($arr['uid']);
-			}
-			$authorid = ($authorid ? $authorid.',' : '').implode(',',$authorids);
+			$authorids = C::t('common_member')->fetch_all_uid_by_username(array_map('trim', explode(',', $author)));
+			$queryAuthorIDs = array_merge($queryAuthorIDs, $authorids);
 		}
 
-		$authorid = trim($authorid,', ');
-		if($authorid != '') {
-			$sql .= " AND c.uid IN ('".str_replace(',', '\',\'', str_replace(' ', '', $authorid))."')";
-		}
 
 		if($starttime != '0') {
 			$starttime = strtotime($starttime);
-			$sql .= " AND c.dateline>'$starttime'";
 		}
+
+		$sqlendtime = '';
 
 		if($_G['adminid'] == 1 && $endtime != dgmdate(TIMESTAMP, 'Y-n-j')) {
 			if($endtime != '0') {
-				$endtime = strtotime($endtime);
-				$sql .= " AND c.dateline<'$endtime'";
+				$sqlendtime = $endtime = strtotime($endtime);
 			}
 		} else {
 			$endtime = TIMESTAMP;
@@ -368,37 +321,20 @@ EOT;
 			$error = 'comment_mod_range_illegal';
 		}
 
-		if($message != '') {
-			$sqlmessage = '';
-			$or = '';
-			$message = explode(',', str_replace(' ', '', $message));
 
-			for($i = 0, $l = count($message); $i < $l; $i++) {
-				if(preg_match("/\{(\d+)\}/", $message[$i])) {
-					$message[$i] = preg_replace("/\\\{(\d+)\\\}/", ".{0,\\1}", preg_quote($message[$i], '/'));
-					$sqlmessage .= " $or c.message REGEXP '".$message[$i]."'";
-				} else {
-					$sqlmessage .= " $or c.message LIKE '%".$message[$i]."%'";
-				}
-				$or = 'OR';
-			}
-			$sql .= " AND ($sqlmessage)";
-		}
 
 		if(!$error) {
 
-			$commentcount = DB::result_first("SELECT count(*) FROM ".DB::table('portal_comment')." c WHERE 1 $sql");
+			$commentcount = C::t('portal_comment')->count_all_by_search($queryAId, $queryAuthorIDs, $starttime, $sqlendtime, $idtype, $message);
 			if($commentcount) {
-
-				$_G['gp_perpage'] = intval($_G['gp_perpage']) < 1 ? 20 : intval($_G['gp_perpage']);
-				$perpage = $_G['gp_pp'] ? $_G['gp_pp'] : $_G['gp_perpage'];
-				$query = DB::query("SELECT c.*, a.title FROM ".DB::table('portal_comment')." c LEFT JOIN ".DB::table($tablename).
-						" a ON a.$idtype=c.id WHERE 1 $sql ORDER BY c.dateline DESC LIMIT ".(($page - 1) * $perpage).",{$perpage}");
+				$_GET['perpage'] = intval($_GET['perpage']) < 1 ? 20 : intval($_GET['perpage']);
+				$perpage = $_GET['pp'] ? $_GET['pp'] : $_GET['perpage'];
+				$query = C::t('portal_comment')->fetch_all_by_search($queryAId, $queryAuthorIDs, $starttime, $sqlendtime, $idtype, $message, (($page - 1) * $perpage), $perpage);
 
 				$comments = '';
 
 				$mod = $idtype == 'aid' ? 'view' : 'topic';
-				while($comment = DB::fetch($query)) {
+				foreach($query as $comment) {
 					$comment['dateline'] = dgmdate($comment['dateline']);
 					$comments .= showtablerow('', '', array(
 						"<input class=\"checkbox\" type=\"checkbox\" name=\"delete[]\" value=\"$comment[cid]\" />",

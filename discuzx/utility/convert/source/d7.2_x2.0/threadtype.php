@@ -50,7 +50,9 @@ while($row = $db_source->fetch_array($query)) {
 
 if($typetids) {
 	foreach($typetids as $newtypeid => $row) {
-		$db_target->query("UPDATE $table_target_thread SET typeid='$newtypeid' WHERE tid IN (".implode(',', $row).")");
+		for($i = 0; $i < count($row); $i += 200) {
+			$db_target->query("UPDATE $table_target_thread SET typeid='$newtypeid' WHERE tid IN (".implode(',', array_slice($row, $i, 200)).")");
+		}
 	}
 }
 

@@ -13,7 +13,7 @@ body { background: #FFF url(bgimg.jpg) no-repeat 50% 0; }
 .fl .bm_h { border-color: #DFCDDE; background: #F8EFF8 url(titlebg.png) repeat-x 0 0; }
 
 /* 重定义 {SPECIALBG} */
-.bmn, .bm_h, td.pls, .ad td.plc, div.exfm, .tb a, .tb_h, .ttp li.a a, div.uo a, input#addsubmit_btn, #gh .bm .bm_h, .appnew, .apphot { background-color: #F8EFF8; }
+.bmn, .bm_h, td.pls, .ad td.plc, div.exfm, .tb a, .tb_h, .ttp li.a a, div.uo a, input#addsubmit_btn, #gh .bm .bm_h { background-color: #F8EFF8; }
 
 .ct2_a, .ct3_a { background-image: url(vlineb.png); }
 .tbn li.a { background: #FFF; }
@@ -28,7 +28,7 @@ body { background: #FFF url(bgimg.jpg) no-repeat 50% 0; }
 .ad td.pls { background-color: #DFCDDE; }
 
 /* 重定义字体 */
-#qmenu, .fl .bm_h h2 a, .xi1, #um .new, .topnav .new, .sch .new, .el .ec .hot em, .pll .s a.joins { color: #6F099E; }
+#qmenu, .fl .bm_h h2 a, .xi1, #um .new, .topnav .new, .sch .new, .el .ec .hot em, .pll .s a.joins, #diy_backup_tip .xi2 { color: #6F099E; }
 .pll .s a.go { color: #FFF; }
 .xi2, .xi2 a { color: #000; }
 
@@ -39,10 +39,11 @@ body { background: #FFF url(bgimg.jpg) no-repeat 50% 0; }
 .moodfm_btn { background-image: url(mood_input_btn.png) !important; }
 #create_group_btn { display: block; background: url(create_group.png) no-repeat 0 0; }
 	#create_group_btn img { opacity: 0; filter: alpha(opacity=0); }
-.el .ec .hot { background-image: url(hotspot.gif); }
+.el .ec .hot, .clct_list .xld .m { background-image: url(hotspot.gif); }
 .pll .s { background-image:url(polljoins.gif); }
 
-/* 重定义侧边导航 */
+/* 重定义版块快速跳转和侧边导航 */
+#fjump_menu li.a a { background-color: #FCF8FC; }
 .bdl, .bdl dt, .bdl dd.bdl_a a { border-color: #DFCDDE; background-color: #FCF8FC; }
 	.bdl dt { background-image: url(titlebg_sd.png); }
 .bdl dd.bdl_a a { color: #6F099E; }

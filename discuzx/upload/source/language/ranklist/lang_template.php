@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_template.php 21925 2011-04-18 02:58:25Z monkey $
+ *      $Id: lang_template.php 28113 2012-02-22 09:25:55Z svn_project_zhangjie $
  *
  *      This file is automatically generate
  */
@@ -17,6 +17,7 @@ $lang = array (
   'join' => '人参加',
   'message' => '条留言',
   'none_data' => '没有相关数据',
+  'ranklist' => '排行',
   'ranklist_activity' => '活动排行',
   'ranklist_activity_end' => '报名截止',
   'ranklist_activity_start' => '活动时间:',
@@ -33,7 +34,6 @@ $lang = array (
   'comment' => '评论',
   'comment_ranklist' => '评论排行',
   'hot_ranklist' => '人气排行',
-  'ranklist' => '排行',
   'ranklist_thread_view' => '查看',
   'views' => '人气:',
   'visit_ranklist' => '查看排行',
@@ -44,7 +44,6 @@ $lang = array (
   'ranklist_forum_post' => '发帖',
   'ranklist_post' => '发帖排行',
   'ranklist_post_day' => '最近 24 小时发帖排行',
-  'ranklist_post_month' => '最近 30 天发帖排行',
   'ranklist_reply' => '回复排行',
   'reply' => '回复',
   'credit_num' => '积分数',
@@ -56,9 +55,9 @@ $lang = array (
   'ranklist_member_num' => '成员数排行',
   'auction_ranking' => '竞价排行',
   'close_ranking_note' => '管理员已关闭竞价,暂时无法继续上榜',
-  'credit_is_not_number' => '你所填写的{$extcredits[$creditid][title]}不是一个合法数值',
-  'credit_title_error' => '你所填写的{$extcredits[$creditid][title]}不能小于1',
-  'credit_title_message' => '你的当前{$extcredits[$creditid][title]}为 {$space[credit]}，请填写一个小于该值的数字',
+  'credit_is_not_number' => '您所填写的{$extcredits[$creditid][title]}不是一个合法数值',
+  'credit_title_error' => '您所填写的{$extcredits[$creditid][title]}不能小于1',
+  'credit_title_message' => '您的当前{$extcredits[$creditid][title]}为 {$space[credit]}，请填写一个小于该值的数字',
   'current_ranking' => '当前排名',
   'edit_price' => '修改单价',
   'friend_need_help' => '要帮助的好友',
@@ -75,8 +74,8 @@ $lang = array (
   'not_exceed' => '不要超过自己的',
   'please_input_friend_name' => '请输入好友的用户名',
   'price_can_not_be_higher_than_the_total' => '您所填写的单价不能高于竞价总额',
-  'ranking_message_0' => '你现在还没有上榜。让自己上榜吧，这会大大提升你的主页曝光率。',
-  'ranking_message_1' => '竞价单价越多，竞价排名越靠前，你的主页曝光率也会越高；',
+  'ranking_message_0' => '您现在还没有上榜。让自己上榜吧，这会大大提升您的主页曝光率。',
+  'ranking_message_1' => '竞价单价越多，竞价排名越靠前，您的主页曝光率也会越高；',
   'ranking_message_2' => '上榜用户的主页被别人有效浏览一次，将从竞价{$extcredits[$creditid][title]}中扣除您设定的竞价值(恶意刷新访问不扣减)。',
   'ranklist_beauty' => '美女排行',
   'ranklist_blog' => '日志数排行',
@@ -86,8 +85,8 @@ $lang = array (
   'ranklist_onlinetime' => '在线时间排行',
   'ranklist_post_num' => '发帖数排行',
   'reminder' => '提示信息',
-  'self_current_credit' => '你当前的',
-  'self_current_friend_num' => '你当前的好友数',
+  'self_current_credit' => '您当前的',
+  'self_current_friend_num' => '您当前的好友数',
   'show_unitprice' => '竞价单价',
   'top_100_update' => '下面列出的为排行前100名，数据每 $cache_time 分钟更新一次。',
   'unitprice_is_not_number' => '您所填写的单价不是一个合法数值',

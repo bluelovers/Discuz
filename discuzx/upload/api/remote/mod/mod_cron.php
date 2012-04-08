@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: mod_cron.php 21878 2011-04-14 09:23:58Z cnteacher $
+ *      $Id: mod_cron.php 23508 2011-07-21 06:34:40Z cnteacher $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -19,7 +19,7 @@ class mod_cron extends remote_service
 			$this->error(100, 'cron service is off. Please check "config.global.php" on your webserver folder.');
 		}
 
-		$discuz = & discuz_core::instance();
+		$discuz = C::app();
 		$discuz->init_cron = true;
 		$discuz->_init_cron();
 		$this->success('Cron work is done');

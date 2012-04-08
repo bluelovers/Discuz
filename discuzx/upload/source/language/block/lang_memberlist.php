@@ -4,8 +4,12 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_memberlist.php 20017 2011-01-28 04:30:42Z zhangguosheng $
+ *      $Id: lang_memberlist.php 28353 2012-02-28 06:57:02Z chenmengshu $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 $lang = array
 (
@@ -13,7 +17,7 @@ $lang = array
 	'memberlist_uids_comment' => '指定用户UID，多个UID之间用 ,分割',
 	'memberlist_special' => '特殊会员',
 	'memberlist_special_nolimit' => '不限',
-	'memberlist_special_hot' => '明星会员',
+	'memberlist_special_hot' => '推荐关注',
 	'memberlist_gender' => '性别',
 	'memberlist_gender_nolimit' => '不限',
 	'memberlist_gender_male' => '男',

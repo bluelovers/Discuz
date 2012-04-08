@@ -4,13 +4,13 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: block_group.php 10773 2010-05-14 10:53:42Z xupeng $
+ *      $Id: block_group.php 25525 2011-11-14 04:39:11Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
-class block_group {
+class block_group extends discuz_block {
 	var $setting = array();
 	function block_group(){
 		$this->setting = array(
@@ -82,6 +82,7 @@ class block_group {
 
 	function fields() {
 		return array(
+				'id' => array('name' => lang('blockclass', 'blockclass_field_id'), 'formtype' => 'text', 'datatype' => 'int'),
 				'url' => array('name' => lang('blockclass', 'blockclass_group_field_url'), 'formtype' => 'text', 'datatype' => 'string'),
 				'title' => array('name' => lang('blockclass', 'blockclass_group_field_title'), 'formtype' => 'title', 'datatype' => 'title'),
 				'pic' => array('name' => lang('blockclass', 'blockclass_group_field_pic'), 'formtype' => 'pic', 'datatype' => 'pic'),
@@ -117,10 +118,6 @@ class block_group {
 			);
 	}
 
-	function cookparameter($parameter) {
-		return $parameter;
-	}
-
 	function getdata($style, $parameter) {
 		global $_G;
 
@@ -149,6 +146,8 @@ class block_group {
 		} else {
 			$wheresql = !empty($typeids) ? "f.fup IN (".dimplode($typeids).") AND f.status='3' AND f.type='sub' $sqlban" : "0";
 		}
+		$wheresql .= " AND f.level > '0'";
+
 		if(in_array($orderby, array('posts', 'todayposts', 'threads', 'level', 'commoncredits'))) {
 			$orderbysql = "f.$orderby DESC";
 		} elseif(in_array($orderby, array('dateline', 'activity', 'membernum'))) {

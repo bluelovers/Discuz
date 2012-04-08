@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: post_newtrade.php 20885 2011-03-07 07:36:57Z monkey $
+ *      $Id: post_newtrade.php 28586 2012-03-05 07:41:37Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -43,14 +43,14 @@ if($post_invalid = checkpost($subject, $message, 1)) {
 
 if($time_left = checkflood()) {
 	showmessage('post_flood_ctrl', '', array('floodctrl' => $_G['setting']['floodctrl'], 'time_left' => $time_left));
-} elseif(checkmaxpostsperhour()) {
-		showmessage('post_flood_ctrl_posts_per_hour', '', array('posts_per_hour' => $_G['group']['maxpostsperhour']));
+} elseif(checkmaxperhour('tid')) {
+		showmessage('thread_flood_ctrl_threads_per_hour', '', array('threads_per_hour' => $_G['group']['maxthreadsperhour']));
 	}
 
-$item_price = floatval($_G['gp_item_price']);
-$item_credit = intval($_G['gp_item_credit']);
-$_G['gp_item_name'] = censor($_G['gp_item_name']);
-if(!trim($_G['gp_item_name'])) {
+$item_price = floatval($_GET['item_price']);
+$item_credit = intval($_GET['item_credit']);
+$_GET['item_name'] = censor($_GET['item_name']);
+if(!trim($_GET['item_name'])) {
 	showmessage('trade_please_name');
 } elseif($_G['group']['maxtradeprice'] && $item_price > 0 && ($_G['group']['mintradeprice'] > $item_price || $_G['group']['maxtradeprice'] < $item_price)) {
 	showmessage('trade_price_between', '', array('mintradeprice' => $_G['group']['mintradeprice'], 'maxtradeprice' => $_G['group']['maxtradeprice']));
@@ -62,7 +62,7 @@ if(!trim($_G['gp_item_name'])) {
 	showmessage('trade_credit_more_than', '', array('mintradeprice' => $_G['group']['mintradeprice']));
 } elseif($item_price <= 0 && $item_credit <= 0) {
 	showmessage('trade_pricecredit_need');
-} elseif($_G['gp_item_number'] < 1) {
+} elseif($_GET['item_number'] < 1) {
 	showmessage('tread_please_number');
 }
 
@@ -79,25 +79,45 @@ if(($_G['group']['allowpostattach'] || $_G['group']['allowpostimage']) && is_arr
 	}
 }
 
-$_G['gp_save'] = $_G['uid'] ? $_G['gp_save'] : 0;
+$_GET['save'] = $_G['uid'] ? $_GET['save'] : 0;
 $typeid = isset($typeid) ? $typeid : 0;
-$displayorder = $modnewthreads ? -2 : (($_G['forum']['ismoderator'] && !empty($_G['gp_sticktopic'])) ? 1 : (empty($_G['gp_save']) ? 0 : -4));
+$displayorder = $modnewthreads ? -2 : (($_G['forum']['ismoderator'] && !empty($_GET['sticktopic'])) ? 1 : (empty($_GET['save']) ? 0 : -4));
 if($displayorder == -2) {
-	DB::update('forum_forum', array('modworks' => '1'), "fid='{$_G['fid']}'");
+	C::t('forum_forum')->update($_G['fid'], array('modworks' => '1'));
 } elseif($displayorder == -4) {
-	$_G['gp_addfeed'] = 0;
+	$_GET['addfeed'] = 0;
 }
 $digest = ($_G['forum']['ismoderator'] && !empty($addtodigest)) ? 1 : 0;
 $readperm = $_G['group']['allowsetreadperm'] ? $readperm : 0;
-$isanonymous = $_G['gp_isanonymous'] && $_G['group']['allowanonymous'] ? 1 : 0;
+$isanonymous = $_GET['isanonymous'] && $_G['group']['allowanonymous'] ? 1 : 0;
 
 $author = !$isanonymous ? $_G['username'] : '';
 
 $moderated = $digest || $displayorder > 0 ? 1 : 0;
 $isgroup = $_G['forum']['status'] == 3 ? 1 : 0;
-DB::query("INSERT INTO ".DB::table('forum_thread')." (fid, posttableid, readperm, price, typeid, author, authorid, subject, dateline, lastpost, lastposter, displayorder, digest, special, attachment, moderated, replies, status, isgroup)
-	VALUES ('$_G[fid]', '0', '$readperm', '$price', '$typeid', '$author', '$_G[uid]', '$subject', '$_G[timestamp]', '$_G[timestamp]', '$author', '$displayorder', '$digest', '$special', '$attachment', '$moderated', '1', '$thread[status]', '$isgroup')");
-$tid = DB::insert_id();
+
+$newthread = array(
+	'fid' => $_G['fid'],
+	'posttableid' => 0,
+	'readperm' => $readperm,
+	'price' => $price,
+	'typeid' => $typeid,
+	'author' => $author,
+	'authorid' => $_G['uid'],
+	'subject' => $subject,
+	'dateline' => $_G['timestamp'],
+	'lastpost' => $_G['timestamp'],
+	'lastposter' => $author,
+	'displayorder' => $displayorder,
+	'digest' => $digest,
+	'special' => $special,
+	'attachment' => $attachment,
+	'moderated' => $moderated,
+	'replies' => 1,
+	'status' => $thread['status'],
+	'isgroup' => $isgroup
+);
+$tid = C::t('forum_thread')->insert($newthread, true);
 useractionlog($_G['uid'], 'tid');
 
 if($moderated) {
@@ -105,15 +125,16 @@ if($moderated) {
 	updatemodworks(($displayorder > 0 ? 'STK' : 'DIG'), 1);
 }
 
-$bbcodeoff = checkbbcodes($message, !empty($_G['gp_bbcodeoff']));
-$smileyoff = checksmilies($message, !empty($_G['gp_smileyoff']));
-$parseurloff = !empty($_G['gp_parseurloff']);
-$htmlon = $_G['group']['allowhtml'] && !empty($_G['gp_htmlon']) ? 1 : 0;
-$attentionon = empty($_G['gp_attention_add']) ? 0 : 1;
+$bbcodeoff = checkbbcodes($message, !empty($_GET['bbcodeoff']));
+$smileyoff = checksmilies($message, !empty($_GET['smileyoff']));
+$parseurloff = !empty($_GET['parseurloff']);
+$htmlon = $_G['group']['allowhtml'] && !empty($_GET['htmlon']) ? 1 : 0;
+$attentionon = empty($_GET['attention_add']) ? 0 : 1;
 
-$pinvisible = $modnewthreads ? -2 : (empty($_G['gp_save']) ? 0 : -3);
+$pinvisible = $modnewthreads ? -2 : (empty($_GET['save']) ? 0 : -3);
 
-$tagstr = addthreadtag($_G['gp_tags'], $tid);
+$class_tag = new tag();
+$tagstr = $class_tag->add_tag($_GET['tags'], $tid, 'tid');
 insertpost(array(
 	'fid' => $_G['fid'],
 	'tid' => $tid,
@@ -126,7 +147,7 @@ insertpost(array(
 	'useip' => $_G['clientip'],
 	'invisible' => $pinvisible,
 	'anonymous' => $isanonymous,
-	'usesig' => $_G['gp_usesig'],
+	'usesig' => $_GET['usesig'],
 	'htmlon' => $htmlon,
 	'bbcodeoff' => $bbcodeoff,
 	'smileyoff' => $smileyoff,
@@ -146,9 +167,9 @@ $pid = insertpost(array(
 	'dateline' => $_G['timestamp'],
 	'message' => $message,
 	'useip' => $_G['clientip'],
-	'invisible' => $pinvisible,
+	'invisible' => 0,
 	'anonymous' => $isanonymous,
-	'usesig' => $_G['gp_usesig'],
+	'usesig' => $_GET['usesig'],
 	'htmlon' => $htmlon,
 	'bbcodeoff' => $bbcodeoff,
 	'smileyoff' => $smileyoff,
@@ -158,39 +179,41 @@ $pid = insertpost(array(
 	'status' => (defined('IN_MOBILE') ? 8 : 0)
 ));
 
-($_G['group']['allowpostattach'] || $_G['group']['allowpostimage']) && ($_G['gp_attachnew'] || $_G['gp_tradeaid']) && updateattach($displayorder == -4 || $modnewthreads, $tid, $pid, $_G['gp_attachnew']);
-
+($_G['group']['allowpostattach'] || $_G['group']['allowpostimage']) && ($_GET['attachnew'] || $_GET['tradeaid']) && updateattach($displayorder == -4 || $modnewthreads, $tid, $pid, $_GET['attachnew']);
 require_once libfile('function/trade');
 trade_create(array(
 	'tid' => $tid,
 	'pid' => $pid,
-	'aid' => $_G['gp_tradeaid'],
-	'item_expiration' => $_G['gp_item_expiration'],
+	'aid' => $_GET['tradeaid'],
+	'item_expiration' => $_GET['item_expiration'],
 	'thread' => $thread,
 	'discuz_uid' => $_G['uid'],
 	'author' => $author,
-	'seller' => empty($_G['gp_paymethod']) && $_G['gp_seller'] ? dhtmlspecialchars(trim($_G['gp_seller'])) : '',
-	'tenpayaccount' => $_G['gp_tenpay_account'],
-	'item_name' => $_G['gp_item_name'],
-	'item_price' => $_G['gp_item_price'],
-	'item_number' => $_G['gp_item_number'],
-	'item_quality' => $_G['gp_item_quality'],
-	'item_locus' => $_G['gp_item_locus'],
-	'transport' => $_G['gp_transport'],
-	'postage_mail' => $_G['gp_postage_mail'],
-	'postage_express' => $_G['gp_postage_express'],
-	'postage_ems' => $_G['gp_postage_ems'],
-	'item_type' => $_G['gp_item_type'],
-	'item_costprice' => $_G['gp_item_costprice'],
-	'item_credit' => $_G['gp_item_credit'],
-	'item_costcredit' => $_G['gp_item_costcredit']
+	'seller' => empty($_GET['paymethod']) && $_GET['seller'] ? dhtmlspecialchars(trim($_GET['seller'])) : '',
+	'tenpayaccount' => $_GET['tenpay_account'],
+	'item_name' => $_GET['item_name'],
+	'item_price' => $_GET['item_price'],
+	'item_number' => $_GET['item_number'],
+	'item_quality' => $_GET['item_quality'],
+	'item_locus' => $_GET['item_locus'],
+	'transport' => $_GET['transport'],
+	'postage_mail' => $_GET['postage_mail'],
+	'postage_express' => $_GET['postage_express'],
+	'postage_ems' => $_GET['postage_ems'],
+	'item_type' => $_GET['item_type'],
+	'item_costprice' => $_GET['item_costprice'],
+	'item_credit' => $_GET['item_credit'],
+	'item_costcredit' => $_GET['item_costcredit']
 ));
 
-if(!empty($_G['gp_tradeaid'])) {
-	convertunusedattach($_G['gp_tradeaid'], $tid, $pid);
+if(!empty($_GET['tradeaid'])) {
+	convertunusedattach($_GET['tradeaid'], $tid, $pid);
 }
 
-$param = array('fid' => $_G['fid'], 'tid' => $tid, 'pid' => $pid);
+if($_G['forum']['picstyle']) {
+	setthreadcover($pid);
+}
+$param = array('fid' => $_G['fid'], 'tid' => $tid, 'pid' => $pid, 'coverimg' => '');
 
 include_once libfile('function/stat');
 updatestat($isgroup ? 'groupthread' : 'trade');
@@ -200,17 +223,17 @@ dsetcookie('clearUserdata', 'forum');
 if($modnewthreads) {
 
 	updatemoderate('tid', $tid);
-	DB::query("UPDATE ".DB::table('forum_forum')." SET todayposts=todayposts+1 WHERE fid='$_G[fid]'", 'UNBUFFERED');
+	C::t('forum_forum')->update_forum_counter($_G['fid'], 0, 0, 1);
 	manage_addnotify('verifythread');
 	showmessage('post_newthread_mod_succeed', "forum.php?mod=viewthread&tid=$tid&extra=$extra", $param);
 
 } else {
 	$feed = array();
-	if(!empty($_G['gp_addfeed']) && $_G['forum']['allowfeed'] && !$isanonymous) {
+	if(!empty($_GET['addfeed']) && $_G['forum']['allowfeed'] && !$isanonymous) {
 		$feed['icon'] = 'goods';
 		$feed['title_template'] = 'feed_thread_goods_title';
-		if($_G['gp_item_price'] > 0) {
-			if($_G['setting']['creditstransextra'][5] != -1 && $_G['gp_item_credit']) {
+		if($_GET['item_price'] > 0) {
+			if($_G['setting']['creditstransextra'][5] != -1 && $_GET['item_credit']) {
 				$feed['body_template'] = 'feed_thread_goods_message_1';
 			} else {
 				$feed['body_template'] = 'feed_thread_goods_message_2';
@@ -219,17 +242,17 @@ if($modnewthreads) {
 			$feed['body_template'] = 'feed_thread_goods_message_3';
 		}
 		$feed['body_data'] = array(
-			'itemname'=> "<a href=\"forum.php?mod=viewthread&do=tradeinfo&tid=$tid&pid=$pid\">$_G[gp_item_name]</a>",
-			'itemprice'=> $_G['gp_item_price'],
-			'itemcredit'=> $_G['gp_item_credit'],
+			'itemname'=> "<a href=\"forum.php?mod=viewthread&do=tradeinfo&tid=$tid&pid=$pid\">$_GET[item_name]</a>",
+			'itemprice'=> $_GET['item_price'],
+			'itemcredit'=> $_GET['item_credit'],
 			'creditunit'=> $_G['setting']['extcredits'][$_G['setting']['creditstransextra'][5]]['unit'].$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][5]]['title']
 		);
-		if($_G['gp_tradeaid']) {
-			$feed['images'] = array(getforumimg($_G['gp_tradeaid']));
+		if($_GET['tradeaid']) {
+			$feed['images'] = array(getforumimg($_GET['tradeaid']));
 			$feed['image_links'] = array("forum.php?mod=viewthread&do=tradeinfo&tid=$tid&pid=$pid");
 		}
-		if($_G['gp_tradeaid']) {
-			$attachment = DB::fetch_first("SELECT * FROM ".DB::table(getattachtablebytid($tid))." WHERE aid='$_G[gp_tradeaid]'");
+		if($_GET['tradeaid']) {
+			$attachment = C::t('forum_attachment_n')->fetch('tid:'.$tid, $_GET['tradeaid']);
 			if(in_array($attachment['filetype'], array('image/gif', 'image/jpeg', 'image/png'))) {
 				$imgurl = $_G['setting']['attachurl'].'forum/'.($attachment['thumb'] && $attachment['filetype'] != 'image/gif' ? getimgthumbname($attachment['attachment']) : $attachment['attachment']);
 				$feed['images'][] = $attachment['attachment'] ? $imgurl : '';
@@ -249,24 +272,24 @@ if($modnewthreads) {
 		}
 		updatepostcredits('+',  $_G['uid'], 'post', $_G['fid']);
 		if($isgroup) {
-			DB::query("UPDATE ".DB::table('forum_groupuser')." SET threads=threads+1, lastupdate='".TIMESTAMP."' WHERE uid='$_G[uid]' AND fid='$_G[fid]'");
+			C::t('forum_groupuser')->update_counter_for_user($_G['uid'], $_G['fid'], 1);
 		}
 
-		$lastpost = "$tid\t$subject\t$_G[timestamp]\t$author";
-		DB::query("UPDATE ".DB::table('forum_forum')." SET lastpost='$lastpost', threads=threads+1, posts=posts+2, todayposts=todayposts+1 WHERE fid='$_G[fid]'", 'UNBUFFERED');
+		$lastpost = "$tid\t".$subject."\t$_G[timestamp]\t$author";
+		C::t('forum_forum')->update($_G['fid'], array('lastpost' => $lastpost));
+		C::t('forum_forum')->update_forum_counter($_G['fid'], 1, 2, 1);
 		if($_G['forum']['type'] == 'sub') {
-			DB::query("UPDATE ".DB::table('forum_forum')." SET lastpost='$lastpost' WHERE fid='".$_G['forum']['fup']."'", 'UNBUFFERED');
+			C::t('forum_forum')->update($_G['forum']['fup'], array('lastpost' => $lastpost));
 		}
 	}
 
 	if($_G['forum']['status'] == 3) {
-		require_once libfile('function/group');
-		updateactivity($_G['fid'], 0);
+		C::t('forum_forumfield')->update($_G['fid'], array('lastupdate' => TIMESTAMP));
 		require_once libfile('function/grouplog');
 		updategroupcreditlog($_G['fid'], $_G['uid']);
 	}
 
-	if(!empty($_G['gp_continueadd'])) {
+	if(!empty($_GET['continueadd'])) {
 		dheader("location: forum.php?mod=post&action=reply&fid=$_G[fid]&tid=$tid&addtrade=yes");
 	} else {
 		showmessage('post_newthread_succeed', "forum.php?mod=viewthread&tid=$tid&extra=$extra", $param);

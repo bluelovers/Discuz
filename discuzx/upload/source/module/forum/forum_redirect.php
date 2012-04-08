@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_redirect.php 23301 2011-07-04 06:26:23Z liulanbo $
+ *      $Id: forum_redirect.php 28464 2012-03-01 06:35:27Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -15,11 +15,11 @@ foreach(array('pid', 'ptid', 'authorid', 'ordertype', 'postno') as $k) {
 	$$k = !empty($_GET[$k]) ? intval($_GET[$k]) : 0;
 }
 
-if(empty($_G['gp_goto']) && $ptid) {
-	$_G['gp_goto'] = 'findpost';
+if(empty($_GET['goto']) && $ptid) {
+	$_GET['goto'] = 'findpost';
 }
 
-if($_G['gp_goto'] == 'findpost') {
+if($_GET['goto'] == 'findpost') {
 
 	$post = $thread = array();
 
@@ -30,7 +30,7 @@ if($_G['gp_goto'] == 'findpost') {
 	if($pid) {
 
 		if($thread) {
-			$post = get_post_by_pid($pid, '*', '', $thread['posttable']);
+			$post = C::t('forum_post')->fetch($thread['posttableid'], $pid);
 		} else {
 			$post = get_post_by_pid($pid);
 		}
@@ -50,14 +50,18 @@ if($_G['gp_goto'] == 'findpost') {
 
 		if($postno) {
 			if(getstatus($thread['status'], 3)) {
-				$pid = DB::result_first("SELECT pid FROM ".DB::table('forum_postposition')." WHERE tid='$ptid' AND position='$postno'");
+				$rowarr = C::t('forum_post')->fetch_all_by_tid_position($thread['posttableid'], $ptid, $postno);
+				$pid = $rowarr[0]['pid'];
 			}
 
 			if($pid) {
-				$post = DB::fetch_first("SELECT * FROM ".DB::table($thread['posttable'])." WHERE pid='$pid' AND invisible='0'");
+				$post = C::t('forum_post')->fetch($thread['posttableid'], $pid);
+				if($post['invisible'] != 0) {
+					$post = array();
+				}
 			} else {
 				$postno = $postno > 1 ? $postno - 1 : 0;
-				$post = DB::fetch_first("SELECT * FROM ".DB::table($thread['posttable'])." WHERE tid='$ptid' AND invisible='0' ORDER BY dateline LIMIT $postno, 1");
+				$post = C::t('forum_post')->fetch_visiblepost_by_tid($thread['posttableid'], $ptid, $postno);
 			}
 		}
 
@@ -75,8 +79,17 @@ if($_G['gp_goto'] == 'findpost') {
 	}
 
 	$ordertype = !isset($_GET['ordertype']) && getstatus($thread['status'], 4) ? 1 : $ordertype;
-	$curpostnum = DB::result_first("SELECT COUNT(*) FROM ".DB::table($thread['posttable'])." WHERE tid='$tid' AND invisible='0' AND dateline<='$post[dateline]'");
-
+	if($thread['special'] == 2 || C::t('forum_threaddisablepos')->fetch($tid)) {
+		$curpostnum = C::t('forum_post')->count_by_tid_dateline($thread['posttableid'], $tid, $post['dateline']);
+	} else {
+		if($thread['maxposition']) {
+			$maxposition = $thread['maxposition'];
+		} else {
+			$maxposition = C::t('forum_post')->fetch_maxposition_by_tid($thread['posttableid'], $tid);
+		}
+		$thread['replies'] = $maxposition;
+		$curpostnum = $post['position'];
+	}
 	if($ordertype != 1) {
 		$page = ceil($curpostnum / $_G['ppp']);
 	} elseif($curpostnum > 1) {
@@ -85,7 +98,7 @@ if($_G['gp_goto'] == 'findpost') {
 		$page = 1;
 	}
 
-	if($thread['special'] == 2 && DB::result_first("SELECT count(*) FROM ".DB::table('forum_trade')." WHERE pid='$pid'")) {
+	if($thread['special'] == 2 && C::t('forum_trade')->check_goods($pid)) {
 		header("HTTP/1.1 301 Moved Permanently");
 		dheader("Location: forum.php?mod=viewthread&do=tradeinfo&tid=$tid&pid=$pid");
 	}
@@ -93,7 +106,7 @@ if($_G['gp_goto'] == 'findpost') {
 	$authoridurl = $authorid ? '&authorid='.$authorid : '';
 	$ordertypeurl = $ordertype ? '&ordertype='.$ordertype : '';
 	header("HTTP/1.1 301 Moved Permanently");
-	dheader("Location: forum.php?mod=viewthread&tid=$tid&page=$page$authoridurl$ordertypeurl".(isset($_G['gp_modthreadkey']) && ($modthreadkey = modauthkey($tid)) ? "&modthreadkey=$modthreadkey": '')."#pid$pid");
+	dheader("Location: forum.php?mod=viewthread&tid=$tid&page=$page$authoridurl$ordertypeurl".(isset($_GET['modthreadkey']) && ($modthreadkey = modauthkey($tid)) ? "&modthreadkey=$modthreadkey": '')."#pid$pid");
 }
 
 
@@ -101,7 +114,7 @@ if(empty($_G['thread'])) {
 	showmessage('thread_nonexistence');
 }
 
-if($_G['gp_goto'] == 'lastpost') {
+if($_GET['goto'] == 'lastpost') {
 
 	$pageadd = '';
 	if(!getstatus($_G['thread'], 4)) {
@@ -111,20 +124,21 @@ if($_G['gp_goto'] == 'lastpost') {
 
 	dheader('Location: forum.php?mod=viewthread&tid='.$_G['tid'].$pageadd.'#lastpost');
 
-} elseif($_G['gp_goto'] == 'nextnewset' || $_G['gp_goto'] == 'nextoldset') {
+} elseif($_GET['goto'] == 'nextnewset' || $_GET['goto'] == 'nextoldset') {
 
 	$lastpost = $_G['thread']['lastpost'];
 
-	$query = "SELECT tid FROM ".DB::table($_G['thread']['threadtable'])." WHERE fid='$_G[fid]' AND displayorder>='0' AND closed='0' AND lastpost";
-	if($_G['gp_goto'] == 'nextnewset') {
-		$query .= ">'$lastpost' ORDER BY lastpost ASC LIMIT 1";
-	} else {
-		$query .= "<'$lastpost' ORDER BY lastpost DESC LIMIT 1";
+
+	$glue = '<';
+	$sort = 'DESC';
+	if($_GET['goto'] == 'nextnewset') {
+		$glue = '>';
+		$sort = 'ASC';
 	}
-	$next = DB::result_first($query);
+	$next = C::t('forum_thread')->fetch_next_tid_by_fid_lastpost($_G['fid'], $lastpost, $glue, $sort, $_G['thread']['threadtableid']);
 	if($next) {
 		dheader("Location: forum.php?mod=viewthread&tid=$next");
-	} elseif($_G['gp_goto'] == 'nextnewset') {
+	} elseif($_GET['goto'] == 'nextnewset') {
 		showmessage('redirect_nextnewset_nonexistence');
 	} else {
 		showmessage('redirect_nextoldset_nonexistence');

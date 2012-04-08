@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_district.php 19363 2010-12-29 02:35:55Z zhengqingpeng $
+ *      $Id: admincp_district.php 26298 2011-12-08 03:58:22Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -35,8 +35,7 @@ for($i=0;$i<3;$i++) {
 if(submitcheck('editsubmit')) {
 
 	$delids = array();
-	$query = DB::query('SELECT * FROM '.DB::table('common_district')." WHERE upid ='$theid'");
-	while($value = DB::fetch($query)) {
+	foreach(C::t('common_district')->fetch_all_by_upid($theid) as $value) {
 		$usetype = 0;
 		if($_POST['birthcity'][$value['id']] && $_POST['residecity'][$value['id']]) {
 			$usetype = 3;
@@ -48,15 +47,14 @@ if(submitcheck('editsubmit')) {
 		if(!isset($_POST['district'][$value['id']])) {
 			$delids[] = $value['id'];
 		} elseif($_POST['district'][$value['id']] != $value['name'] || $_POST['displayorder'][$value['id']] != $value['displayorder'] || $usetype != $value['usetype']) {
-			DB::update('common_district', array('name'=>$_POST['district'][$value['id']], 'displayorder'=>$_POST['displayorder'][$value['id']], 'usetype'=>$usetype), array('id'=>$value['id']));
+			C::t('common_district')->update($value['id'], array('name'=>$_POST['district'][$value['id']], 'displayorder'=>$_POST['displayorder'][$value['id']], 'usetype'=>$usetype));
 		}
 	}
 	if($delids) {
 		$ids = $delids;
 		for($i=$level; $i<4; $i++) {
-			$query = DB::query('SELECT id FROM '.DB::table('common_district')." WHERE upid IN (".dimplode($ids).')');
 			$ids = array();
-			while($value=DB::fetch($query)) {
+			foreach(C::t('common_district')->fetch_all_by_upid($delids) as $value) {
 				$value['id'] = intval($value['id']);
 				$delids[] = $value['id'];
 				$ids[] = $value['id'];
@@ -65,7 +63,7 @@ if(submitcheck('editsubmit')) {
 				break;
 			}
 		}
-		DB::query('DELETE FROM '.DB::table('common_district')." WHERE id IN (".dimplode($delids).')');
+		C::t('common_district')->delete($delids);
 	}
 	if(!empty($_POST['districtnew'])) {
 		$inserts = array();
@@ -74,11 +72,8 @@ if(submitcheck('editsubmit')) {
 			$displayorder = trim($_POST['districtnew_order'][$key]);
 			$value = trim($value);
 			if(!empty($value)) {
-				$inserts[] = "('$value', '$level',  '$theid', '$displayorder')";
+				C::t('common_district')->insert(array('name' => $value, 'level' => $level, 'upid' => $theid, 'displayorder' => $displayorder));
 			}
-		}
-		if($inserts) {
-			DB::query('INSERT INTO '.DB::table('common_district')."(`name`, level, upid, displayorder) VALUES ".implode(',',$inserts));
 		}
 	}
 	cpmsg('setting_district_edit_success', 'action=district&pid='.$values[0].'&cid='.$values[1].'&did='.$values[2], 'succeed');
@@ -92,8 +87,7 @@ if(submitcheck('editsubmit')) {
 
 	$options = array(1=>array(), 2=>array(), 3=>array());
 	$thevalues = array();
-	$query = DB::query('SELECT * FROM '.DB::table('common_district')." WHERE upid IN (".dimplode($upids).') ORDER BY displayorder');
-	while($value = DB::fetch($query)) {
+	foreach(C::t('common_district')->fetch_all_by_upid($upids) as $value) {
 		$options[$value['level']][] = array($value['id'], $value['name']);
 		if($value['upid'] == $theid) {
 			$thevalues[] = array($value['id'], $value['name'], $value['displayorder'], $value['usetype']);

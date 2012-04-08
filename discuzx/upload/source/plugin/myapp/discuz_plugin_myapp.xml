@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <root>
 	<item id="Title"><![CDATA[Discuz! Plugin]]></item>
-	<item id="Version"><![CDATA[X2]]></item>
+	<item id="Version"><![CDATA[X2.5]]></item>
 	<item id="Data">
 		<item id="plugin">
 			<item id="available"><![CDATA[1]]></item>
@@ -48,6 +48,15 @@
 				<item id="variable"><![CDATA[showtitle]]></item>
 				<item id="type"><![CDATA[text]]></item>
 				<item id="value"><![CDATA[<font style="font-weight:700">ÎÒÍæµÄÓ¦ÓÃ:</font><br/>]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="2">
+				<item id="displayorder"><![CDATA[2]]></item>
+				<item id="title"><![CDATA[ÏÔÊ¾ÓÃ»§ÂþÓÎ¶¯Ì¬]]></item>
+				<item id="description"><![CDATA[¿ªÆôºóÌû×ÓÏÂ·½ÏÔÊ¾±¾ÓÃ»§µÄÂþÓÎ¶¯Ì¬]]></item>
+				<item id="variable"><![CDATA[showmyapp]]></item>
+				<item id="type"><![CDATA[radio]]></item>
+				<item id="value"><![CDATA[1]]></item>
 				<item id="extra"><![CDATA[]]></item>
 			</item>
 		</item>

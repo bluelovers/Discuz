@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: magic_money.php 8055 2010-04-16 01:39:07Z monkey $
+ *      $Id: magic_money.php 26715 2011-12-21 01:35:43Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -36,7 +36,7 @@ class magic_money {
 
 		usemagic($this->magic['magicid'], $this->magic['num']);
 		updatemagiclog($this->magic['magicid'], '2', '1', '0', 0, 'uid', $_G['uid']);
-		showmessage('magics_credit_message', '', array('credit' => $_G['setting']['extcredits'][$_G['setting']['creditstransextra'][3]]['title'].' '.$getmoney.' '.$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][3]]['unit']), array('showdialog' => 1));
+		showmessage('magics_credit_message', '', array('credit' => $_G['setting']['extcredits'][$_G['setting']['creditstransextra'][3]]['title'].' '.$getmoney.' '.$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][3]]['unit']), array('alert' => 'right', 'showdialog' => 1));
 	}
 
 	function show() {

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: uninstall.php 6752 2010-03-25 08:47:54Z cnteacher $
+ *      $Id: uninstall.php 24473 2011-09-21 03:53:05Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -17,6 +17,5 @@ DROP TABLE cdb_myrepeats;
 
 EOF;
 
-runquery($sql);
 
 $finish = TRUE;

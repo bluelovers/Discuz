@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_groupreadaccess.php 16693 2010-09-13 04:31:03Z monkey $
+ *      $Id: cache_groupreadaccess.php 27076 2012-01-04 08:01:37Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -13,14 +13,18 @@ if(!defined('IN_DISCUZ')) {
 
 function build_cache_groupreadaccess() {
 	$data = array();
-	$query = DB::query("SELECT g.groupid, g.grouptitle, gf.readaccess FROM ".DB::table('common_usergroup')." g
-		LEFT JOIN ".DB::table('common_usergroup_field')." gf ON gf.groupid=g.groupid WHERE gf.readaccess>'0' ORDER BY gf.readaccess");
+	$gf_data = C::t('common_usergroup_field')->fetch_readaccess_by_readaccess(0);
+	$ug_data = C::t('common_usergroup')->fetch_all(array_keys($gf_data));
 
-	while($datarow = DB::fetch($query)) {
+	foreach($gf_data as $key => $datarow) {
+		if(!$ug_data[$key]['groupid']) {
+			continue;
+		}
+		$datarow['grouptitle'] = $ug_data[$key]['grouptitle'];
 		$data[] = $datarow;
 	}
 
-	save_syscache('groupreadaccess', $data);
+	savecache('groupreadaccess', $data);
 }
 
 ?>

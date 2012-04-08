@@ -4,14 +4,14 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: block_activity.php 6799 2010-03-25 12:56:43Z monkey $
+ *      $Id: block_myapp.php 28626 2012-03-06 09:10:25Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
-class block_myapp {
+class block_myapp extends discuz_block{
 
 	var $setting = array();
 
@@ -44,6 +44,7 @@ class block_myapp {
 				'title' => array('name' => lang('blockclass', 'blockclass_myapp_field_title'), 'formtype' => 'title', 'datatype' => 'title'),
 				'icon' => array('name' => lang('blockclass', 'blockclass_myapp_field_icon'), 'formtype' => 'text', 'datatype' => 'string'),
 				'icon_small' => array('name' => lang('blockclass', 'blockclass_myapp_field_icon_small'), 'formtype' => 'text', 'datatype' => 'string'),
+				'icon_abouts' => array('name' => lang('blockclass', 'blockclass_myapp_field_icon_abouts'), 'formtype' => 'text', 'datatype' => 'string'),
 			);
 	}
 
@@ -52,10 +53,6 @@ class block_myapp {
 		$settings = $this->setting;
 
 		return $settings;
-	}
-
-	function cookparameter($parameter) {
-		return $parameter;
 	}
 
 	function getdata($style, $parameter) {
@@ -84,6 +81,7 @@ class block_myapp {
 				'fields' => array(
 					'icon' => 'http://appicon.manyou.com/logos/'.$data['appid'],
 					'icon_small' => 'http://appicon.manyou.com/icons/'.$data['appid'],
+					'icon_abouts' => 'http://appicon.manyou.com/abouts/'.$data['appid'],
 				)
 			);
 		}

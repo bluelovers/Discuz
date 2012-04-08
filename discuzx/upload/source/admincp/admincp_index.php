@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_index.php 23425 2011-07-14 06:38:11Z liulanbo $
+ *      $Id: admincp_index.php 29203 2012-03-28 10:16:25Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -22,42 +22,40 @@ if(@file_exists(DISCUZ_ROOT.'./install/index.php') && !DISCUZ_DEBUG) {
 require_once libfile('function/attachment');
 $isfounder = isfounder();
 
-$siteuniqueid = DB::result_first("SELECT svalue FROM ".DB::table('common_setting')." WHERE skey='siteuniqueid'");
+$siteuniqueid = C::t('common_setting')->fetch('siteuniqueid');
 if(empty($siteuniqueid) || strlen($siteuniqueid) < 16) {
 	$chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz';
 	$siteuniqueid = 'DX'.$chars[date('y')%60].$chars[date('n')].$chars[date('j')].$chars[date('G')].$chars[date('i')].$chars[date('s')].substr(md5($_G['clientip'].$_G['username'].TIMESTAMP), 0, 4).random(4);
-	$temp = array(
-		'skey' => 'siteuniqueid',
-		'svalue' => $siteuniqueid
-	);
-	DB::insert('common_setting', $temp, false, true);
+	C::t('common_setting')->update('siteuniqueid', $siteuniqueid);
+	require_once libfile('function/cache');
+	updatecache('setting');
 }
 
 
 if(submitcheck('notesubmit', 1)) {
-	if(!empty($_G['gp_noteid']) && is_numeric($_G['gp_noteid'])) {
-		DB::query("DELETE FROM ".DB::table('common_adminnote')." WHERE id='$_G[gp_noteid]'".($isfounder ? '' : " AND admin='$_G[username]'"));
+	if(!empty($_GET['noteid']) && is_numeric($_GET['noteid'])) {
+		C::t('common_adminnote')->delete($_GET['noteid'], ($isfounder ? '' : $_G['username']));
 	}
-	if(!empty($_G['gp_newmessage'])) {
+	if(!empty($_GET['newmessage'])) {
 		$newaccess = 0;
-		$_G['gp_newexpiration'] = TIMESTAMP + (intval($_G['gp_newexpiration']) > 0 ? intval($_G['gp_newexpiration']) : 30) * 86400;
-		$_G['gp_newmessage'] = nl2br(dhtmlspecialchars($_G['gp_newmessage']));
+		$_GET['newexpiration'] = TIMESTAMP + (intval($_GET['newexpiration']) > 0 ? intval($_GET['newexpiration']) : 30) * 86400;
+		$_GET['newmessage'] = nl2br(dhtmlspecialchars($_GET['newmessage']));
 		$data = array(
 			'admin' => $_G['username'],
 			'access' => 0,
 			'adminid' => $_G['adminid'],
 			'dateline' => $_G['timestamp'],
-			'expiration' => $_G['gp_newexpiration'],
-			'message' => $_G['gp_newmessage'],
+			'expiration' => $_GET['newexpiration'],
+			'message' => $_GET['newmessage'],
 		);
-		DB::insert('common_adminnote', $data);
+		C::t('common_adminnote')->insert($data);
 	}
 }
 
 $serverinfo = PHP_OS.' / PHP v'.PHP_VERSION;
 $serverinfo .= @ini_get('safe_mode') ? ' Safe Mode' : NULL;
 $serversoft = $_SERVER['SERVER_SOFTWARE'];
-$dbversion = DB::result_first("SELECT VERSION()");
+$dbversion = helper_dbtool::dbversion();
 
 if(@ini_get('file_uploads')) {
 	$fileupload = ini_get('upload_max_filesize');
@@ -66,33 +64,26 @@ if(@ini_get('file_uploads')) {
 }
 
 
-$dbsize = 0;
-$query = DB::query("SHOW TABLE STATUS LIKE '{$_G['config']['db'][1]['tablepre']}%'", 'SILENT');
-while($table = DB::fetch($query)) {
-	$dbsize += $table['Data_length'] + $table['Index_length'];
-}
+$dbsize = helper_dbtool::dbsize();
 $dbsize = $dbsize ? sizecount($dbsize) : $lang['unknown'];
 
-if(isset($_G['gp_attachsize'])) {
-	$attachsize = 0;
-	for($i = 0;$i < 10;$i++) {
-		$attachsize += intval(DB::result_first("SELECT SUM(filesize) FROM ".DB::table('forum_attachment_'.$i)));
-	}
+if(isset($_GET['attachsize'])) {
+	$attachsize = C::t('forum_attachment_n')->get_total_filesize();
 	$attachsize = is_numeric($attachsize) ? sizecount($attachsize) : $lang['unknown'];
 } else {
 	$attachsize = '<a href="'.ADMINSCRIPT.'?action=index&attachsize">[ '.$lang['detail'].' ]</a>';
 }
 
-$membersmod = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_member_validate')." WHERE status='0'");
-$threadsdel= DB::result_first("SELECT COUNT(*) FROM ".DB::table('forum_thread')." WHERE displayorder='-1'");
+$membersmod = C::t('common_member_validate')->count_by_status(0);
+$threadsdel = C::t('forum_thread')->count_by_displayorder(-1);
+$groupmod = C::t('forum_forum')->validate_level_num();
 
-$query = DB::query("SELECT idtype, COUNT(*) AS count FROM ".DB::table('common_moderate')." WHERE status='0' GROUP BY idtype");
 $modcount = array();
-while($value = DB::fetch($query)) {
+foreach(C::t('common_moderate')->count_group_idtype_by_status(0) as $value) {
 	$modcount[$value['idtype']] = $value['count'];
 }
 
-$medalsmod = DB::result_first("SELECT COUNT(*) FROM ".DB::table('forum_medallog')." WHERE type='2'");
+$medalsmod = C::t('forum_medallog')->count_by_type(2);
 $threadsmod = $modcount['tid'];
 $postsmod = $modcount['pid'];
 $blogsmod = $modcount['blogid'];
@@ -104,8 +95,7 @@ $articlesmod = $modcount['aid'];
 $articlecommentsmod = $modcount['aid_cid'];
 $topiccommentsmod = $modcount['topicid_cid'];
 $verify = '';
-$query = DB::query("SELECT verifytype, COUNT(*) AS num FROM ".DB::table('common_member_verify_info')." WHERE flag='0' GROUP BY verifytype");
-while($value = DB::fetch($query)) {
+foreach(C::t('common_member_verify_info')->group_by_verifytype_count() as $value) {
 	if($value['num']) {
 		if($value['verifytype']) {
 			$verifyinfo = !empty($_G['setting']['verify'][$value['verifytype']]) ? $_G['setting']['verify'][$value['verifytype']] : array();
@@ -123,29 +113,45 @@ shownav();
 
 showsubmenu('home_welcome', array(), '', array('bbname' => $_G['setting']['bbname']));
 
-$save_mastermobile = DB::result_first("SELECT svalue FROM ".DB::table('common_setting')." WHERE skey='mastermobile'");
+$save_master = C::t('common_setting')->fetch_all(array('mastermobile', 'masterqq', 'masteremail'));
+$save_mastermobile = $save_master['mastermobile'];
 $save_mastermobile = !empty($save_mastermobile) ? authcode($save_mastermobile, 'DECODE', $_G['config']['security']['authkey']) : '';
+$save_masterqq = $save_master['masterqq'] ? $save_master['masterqq'] : '';
+$save_masteremail = $save_master['masteremail'] ? $save_master['masteremail'] : '';
 
 $securityadvise = '';
 if($isfounder) {
+	$securityadvise = $_G['setting']['cloud_status'] ? cplang('home_security_service_open_info') : cplang('home_security_service_close_info');
 	$securityadvise .= !$_G['config']['admincp']['founder'] ? $lang['home_security_nofounder'] : '';
 	$securityadvise .= !$_G['config']['admincp']['checkip'] ? $lang['home_security_checkip'] : '';
 	$securityadvise .= $_G['config']['admincp']['runquery'] ? $lang['home_security_runquery'] : '';
-	if(!empty($_G['gp_securyservice'])) {
-		$_G['gp_new_mastermobile'] = trim($_G['gp_new_mastermobile']);
-		if(empty($_G['gp_new_mastermobile'])) {
-			$save_mastermobile = $_G['gp_new_mastermobile'];
-			DB::query("REPLACE INTO ".DB::table('common_setting')." (skey, svalue) VALUES ('mastermobile', '{$_G['gp_new_mastermobile']}')");
-		} elseif($save_mastermobile != $_G['gp_new_mastermobile'] && strlen($_G['gp_new_mastermobile']) == 11 && is_numeric($_G['gp_new_mastermobile']) && in_array(substr($_G['gp_new_mastermobile'], 0, 2), array('13', '15', '18'))) {
-			$save_mastermobile = $_G['gp_new_mastermobile'];
-			$_G['gp_new_mastermobile'] = authcode($_G['gp_new_mastermobile'], 'ENCODE', $_G['config']['security']['authkey']);
-			DB::query("REPLACE INTO ".DB::table('common_setting')." (skey, svalue) VALUES ('mastermobile', '{$_G['gp_new_mastermobile']}')");
+	if(!empty($_GET['securyservice'])) {
+		$_GET['new_mastermobile'] = trim($_GET['new_mastermobile']);
+		$_GET['new_masterqq'] = trim($_GET['new_masterqq']);
+		$_GET['new_masteremail'] = trim($_GET['new_masteremail']);
+		if(empty($_GET['new_mastermobile'])) {
+			$save_mastermobile = $_GET['new_mastermobile'];
+		} elseif(strlen($_GET['new_mastermobile']) == 11 && is_numeric($_GET['new_mastermobile']) && in_array(substr($_GET['new_mastermobile'], 0, 2), array('13', '15', '18'))) {
+			$save_mastermobile = $_GET['new_mastermobile'];
+			$_GET['new_mastermobile'] = authcode($_GET['new_mastermobile'], 'ENCODE', $_G['config']['security']['authkey']);
+		} else {
+			$_GET['new_mastermobile'] = $save_master['mastermobile'];
 		}
+		if(empty($_GET['new_masterqq']) || is_numeric($_GET['new_masterqq'])) {
+			$save_masterqq = $_GET['new_masterqq'];
+		} else {
+			$_GET['new_masterqq'] = $save_masterqq;
+		}
+		if(empty($_GET['new_masteremail']) || (strlen($_GET['new_masteremail']) > 6 && preg_match("/^[\w\-\.]+@[\w\-\.]+(\.\w+)+$/", $_GET['new_masteremail']))) {
+			$save_masteremail = $_GET['new_masteremail'];
+		} else {
+			$_GET['new_masteremail'] = $save_masteremail;
+		}
+
+		C::t('common_setting')->update_batch(array('mastermobile' => $_GET['new_mastermobile'], 'masterqq' => $_GET['new_masterqq'], 'masteremail' => $_GET['new_masteremail']));
 	}
 
 	$view_mastermobile = !empty($save_mastermobile) ? substr($save_mastermobile, 0 , 3).'*****'.substr($save_mastermobile, -3) : '';
-
-	$securityadvise = '<li><p>'.cplang('home_security_service_info').'</p><form method="post" autocomplete="off" action="'.ADMINSCRIPT.'?action=index&securyservice=yes">'.cplang('home_security_service_mobile').': <input type="text" class="txt" name="new_mastermobile" value="'.$view_mastermobile.'" size="30" /> <input type="submit" class="btn" name="securyservice" value="'.cplang($view_mastermobile ? 'submit' : 'home_security_service_open').'"  /> <span class="lightfont">'.cplang($view_mastermobile ? 'home_security_service_mobile_save' : 'home_security_service_mobile_none').'</span></form></li>'.$securityadvise;
 }
 
 if($securityadvise) {
@@ -155,11 +161,10 @@ if($securityadvise) {
 }
 
 $onlines = '';
-$query = DB::query("SELECT cps.uid,cps.dateline,m.username FROM ".DB::table('common_admincp_session')." cps
-	LEFT JOIN ".DB::table('common_member')." m ON m.uid=cps.uid WHERE panel='1'
-	ORDER BY cps.dateline DESC");
-while($online = DB::fetch($query)) {
-	$onlines .= '<a href="home.php?mod=space&uid='.$online['uid'].'" title="'.dgmdate($online['dateline']).'">'.$online['username'].'</a>&nbsp;&nbsp;&nbsp;';
+$admincp_session = C::t('common_admincp_session')->fetch_all_by_panel(1);
+$members = C::t('common_member')->fetch_all(array_keys($admincp_session), false, 0);
+foreach($admincp_session as $uid => $online) {
+	$onlines .= '<a href="home.php?mod=space&uid='.$online['uid'].'" title="'.dgmdate($online['dateline']).'" target="_blank">'.$members[$uid]['username'].'</a>&nbsp;&nbsp;&nbsp;';
 }
 
 
@@ -174,6 +179,7 @@ if($membersmod || $threadsmod || $postsmod || $medalsmod || $blogsmod || $pictur
 		($threadsmod ? '<a href="'.ADMINSCRIPT.'?action=moderate&operation=threads&dateline=all">'.cplang('home_mod_threads').'</a>(<em class="lightnum">'.$threadsmod.'</em>)' : '').
 		($postsmod ? '<a href="'.ADMINSCRIPT.'?action=moderate&operation=replies&dateline=all">'.cplang('home_mod_posts').'</a>(<em class="lightnum">'.$postsmod.'</em>)' : '').
 		($medalsmod ? '<a href="'.ADMINSCRIPT.'?action=medals&operation=mod">'.cplang('home_mod_medals').'</a>(<em class="lightnum">'.$medalsmod.'</em>)' : '').
+		($groupmod ? '<a href="'.ADMINSCRIPT.'?action=group&operation=mod">'.cplang('group_mod_wait').'</a>(<em class="lightnum">'.$groupmod.'</em>)' : '').
 		($blogsmod ? '<a href="'.ADMINSCRIPT.'?action=moderate&operation=blogs&dateline=all">'.cplang('home_mod_blogs').'</a>(<em class="lightnum">'.$blogsmod.'</em>)' : '').
 		($picturesmod ? '<a href="'.ADMINSCRIPT.'?action=moderate&operation=pictures&dateline=all">'.cplang('home_mod_pictures').'</a>(<em class="lightnum">'.$picturesmod.'</em>)' : '').
 		($doingsmod ? '<a href="'.ADMINSCRIPT.'?action=moderate&operation=doings&dateline=all">'.cplang('home_mod_doings').'</a>(<em class="lightnum">'.$doingsmod.'</em>)' : '').
@@ -196,10 +202,9 @@ showtablefooter();
 showformheader('index');
 showtableheader('home_notes', 'fixpadding"', '', '3');
 
-$query = DB::query("SELECT * FROM ".DB::table('common_adminnote')." WHERE access='0' ORDER BY dateline DESC");
-while($note = DB::fetch($query)) {
+foreach(C::t('common_adminnote')->fetch_all_by_access(0) as $note) {
 	if($note['expiration'] < TIMESTAMP) {
-		DB::query("DELETE FROM ".DB::table('common_adminnote')." WHERE id='$note[id]'");
+		C::t('common_adminnote')->delete($note['id']);
 	} else {
 		$note['adminenc'] = rawurlencode($note['admin']);
 		$note['expiration'] = ceil(($note['expiration'] - $note['dateline']) / 86400);
@@ -275,7 +280,7 @@ showtablerow('', array('class="vtop td24 lineheight"', 'class="lineheight smallf
 	 <a href="http://www.discuz.net/home.php?mod=space&uid=246213" class="lightlink2 smallfont" target="_blank">Lanbo Liu</a>
 	 <a href="http://www.discuz.net/home.php?mod=space&uid=322293" class="lightlink2 smallfont" target="_blank">Qingpeng \'andy888\' Zheng</a>
 	 <a href="http://www.discuz.net/home.php?mod=space&uid=401635" class="lightlink2 smallfont" target="_blank">Guosheng \'bilicen\' Zhang</a>
-	 <a href="http://www.discuz.net/home.php?mod=space&uid=1125041" class="lightlink2 smallfont" target="_blank">Zongjun \'Fresh\' Shan</a>
+	 <a href="http://www.discuz.net/home.php?mod=space&uid=2829" class="lightlink2 smallfont" target="_blank">Mengshu \'msxcms\' Chen</a>
 	 <a href="http://www.discuz.net/home.php?mod=space&uid=492114" class="lightlink2 smallfont" target="_blank">Liang \'Metthew\' Xu</a>
 	 <a href="http://www.discuz.net/home.php?mod=space&uid=1087718" class="lightlink2 smallfont" target="_blank">Yushuai \'Max\' Cong</a>
 	 <a href="http://www.discuz.net/home.php?mod=space&uid=875919" class="lightlink2 smallfont" target="_blank">Jie \'tom115701\' Zhang</a>
@@ -313,7 +318,7 @@ showtablerow('', array('class="vtop td24 lineheight"', 'class="lineheight"'), ar
 	cplang('home_dev_links'),
 	'<a href="http://www.comsenz.com" class="lightlink2" target="_blank">&#x516C;&#x53F8;&#x7F51;&#x7AD9;</a>,
 		<a href="http://idc.comsenz.com" class="lightlink2" target="_blank">&#x865A;&#x62DF;&#x4E3B;&#x673A;</a>,
-		<a href="http://www.comsenz.com/category-51" class="lightlink2" target="_blank">&#x8D2D;&#x4E70;&#x6388;&#x6743;</a>,
+		<a href="http://www.comsenz.com/purchase/discuzx" class="lightlink2" target="_blank">&#x8D2D;&#x4E70;&#x6388;&#x6743;</a>,
 		<a href="http://www.discuz.com/" class="lightlink2" target="_blank">&#x44;&#x69;&#x73;&#x63;&#x75;&#x7A;&#x21;&#x20;&#x4EA7;&#x54C1;</a>,
 		<a href="http://www.comsenz.com/downloads/styles/discuz" class="lightlink2" target="_blank">&#x6A21;&#x677F;</a>,
 		<a href="http://www.comsenz.com/downloads/plugins/discuz" class="lightlink2" target="_blank">&#x63D2;&#x4EF6;</a>,

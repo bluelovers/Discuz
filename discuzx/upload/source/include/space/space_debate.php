@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_debate.php 20818 2011-03-04 08:21:11Z monkey $
+ *      $Id: space_debate.php 28220 2012-02-24 07:52:50Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -40,35 +40,23 @@ $gets = array(
 $theurl = 'home.php?'.url_implode($gets);
 $multi = '';
 
-$wheresql = '1';
-$apply_sql = '';
 
 $f_index = '';
 $ordersql = 't.dateline DESC';
 $need_count = true;
+$join = $authorid = $replies = 0;
+$displayorder = null;
+$subject = '';
 
-if($_GET['view'] == 'all') {
-
-	$start = 0;
-	$perpage = 100;
-	$alltype = 'dateline';
-	if($_GET['order'] == 'hot') {
-		$wheresql = "t.replies>='$minhot'";
-		$alltype = 'hot';
-	}
-	$orderactives = array($_GET['order'] => ' class="a"');
-	loadcache('space_debate');
-
-} elseif($_GET['view'] == 'me') {
+if($_GET['view'] == 'me') {
 
 	if($_GET['type'] == 'reply') {
-		$wheresql = "p.authorid = '$space[uid]' AND p.first='0' AND p.tid = t.tid";
-		$posttable = getposttable();
-		$apply_sql = ', '.DB::table($posttable).' p ';
+		$authorid = $space['uid'];
+		$join = true;
 	} else {
-		$wheresql = "t.authorid = '$space[uid]'";
+		$authorid = $space['uid'];
 	}
-	$viewtype = in_array($_G['gp_type'], array('orig', 'reply')) ? $_G['gp_type'] : 'orig';
+	$viewtype = in_array($_GET['type'], array('orig', 'reply')) ? $_GET['type'] : 'orig';
 	$typeactives = array($viewtype => ' class="a"');
 
 } else {
@@ -82,15 +70,15 @@ if($_GET['view'] == 'all') {
 		require_once libfile('function/friend');
 		$fuid = intval($_GET['fuid']);
 		if($fuid && friend_check($fuid, $space['uid'])) {
-			$wheresql = "t.authorid='$fuid'";
+			$authorid = $fuid;
 			$fuid_actives = array($fuid=>' selected');
 		} else {
-			$wheresql = "t.authorid IN ($space[feedfriend])";
+			$authorid = explode(',', $space['feedfriend']);
 			$theurl = "home.php?mod=space&uid=$space[uid]&do=$do&view=we";
 		}
 
-		$query = DB::query("SELECT * FROM ".DB::table('home_friend')." WHERE uid='$space[uid]' ORDER BY num DESC LIMIT 0,100");
-		while ($value = DB::fetch($query)) {
+		$query = C::t('home_friend')->fetch_all_by_uid($space['uid'], 0, 100, true);
+		foreach($query as $value) {
 			$userlist[] = $value;
 		}
 	} else {
@@ -102,106 +90,74 @@ $actives = array($_GET['view'] =>' class="a"');
 
 if($need_count) {
 
-	$wheresql .= " AND t.special='5'";
-	$wheresql .= $_G['gp_view'] != 'me' ? " AND t.displayorder>='0'" : '';
+	if($_GET['view'] != 'me') {
+		$displayorder = 0;
+	}
 	if($searchkey = stripsearchkey($_GET['searchkey'])) {
-		$wheresql .= " AND t.subject LIKE '%$searchkey%'";
+		$subject = $searchkey;
 		$searchkey = dhtmlspecialchars($searchkey);
 	}
 
-	$havecache = false;
-	if($_G['gp_view'] == 'all') {
+	$count = C::t('forum_thread')->count_by_special(5, $authorid, $replies, $displayorder, $subject, $join);
+	if($count) {
 
-		$cachetime = $_G['gp_order'] == 'hot' ? 43200 : 3000;
-		if(!empty($_G['cache']['space_debate'][$alltype]) && is_array($_G['cache']['space_debate'][$alltype])) {
-			$cachearr = $_G['cache']['space_debate'][$alltype];
-			if(!empty($cachearr['dateline']) && $cachearr['dateline'] > $_G['timestamp'] - $cachetime) {
-				$list = $cachearr['data'];
-				$havecache = true;
-			}
-		}
-	}
-
-	if(!$havecache) {
-		$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('forum_thread')." t $apply_sql WHERE $wheresql"),0);
-		if($count) {
-			$field = $apply_sql ? ', p.message' : '';
-			$query = DB::query("SELECT t.* $field FROM ".DB::table('forum_thread')." t $apply_sql
-				WHERE $wheresql
-				ORDER BY $ordersql LIMIT $start,$perpage");
-
-			$dids = $special = $multitable = $tids = array();
-			require_once libfile('function/post');
-			while($value = DB::fetch($query)) {
-				$value['dateline'] = dgmdate($value['dateline']);
-				if($_GET['view'] == 'me' && $_GET['type'] == 'reply' && $page == 1 && count($special) < 2) {
-					$value['message'] = messagecutstr($value['message'], 200);
+		$dids = $special = $multitable = $tids = array();
+		require_once libfile('function/post');
+		foreach(C::t('forum_thread')->fetch_all_by_special(5, $authorid, $replies, $displayorder, $subject, $join, $start, $perpage) as $value) {
+			$value['dateline'] = dgmdate($value['dateline']);
+			if($_GET['view'] == 'me' && $_GET['type'] == 'reply' && $page == 1 && count($special) < 2) {
+				$value['message'] = messagecutstr($value['message'], 200);
+				$special[$value['tid']] = $value;
+			} else {
+				if($page == 1 && count($special) < 2) {
+					$tids[$value['posttableid']][$value['tid']] = $value['tid'];
 					$special[$value['tid']] = $value;
 				} else {
-					if($page == 1 && count($special) < 2) {
-						$tids[$value['posttableid']][$value['tid']] = $value['tid'];
-						$special[$value['tid']] = $value;
-					} else {
-						$list[$value['tid']] = $value;
-					}
-				}
-				$dids[$value['tid']] = $value['tid'];
-			}
-			if($tids) {
-				foreach($tids as $postid => $tid) {
-					$posttable = getposttable();
-					$query = DB::query("SELECT tid, message FROM ".DB::table($posttable)." WHERE tid IN(".dimplode($tid).")");
-					while($value = DB::fetch($query)) {
-						$special[$value['tid']]['message'] = messagecutstr($value['message'], 200);
-					}
+					$list[$value['tid']] = $value;
 				}
 			}
-			if($dids) {
-				$query = DB::query("SELECT * FROM ".DB::table('forum_debate')." WHERE tid IN(".dimplode($dids).")");
-				while($value = DB::fetch($query)) {
-					$value['negavotesheight'] = $value['affirmvotesheight'] = '8px';
-					if($value['affirmvotes'] || $value['negavotes']) {
-						$allvotes = $value['affirmvotes'] + $value['negavotes'];
-						$value['negavotesheight'] = round($value['negavotes']/$allvotes * 100, 2).'%';
-						$value['affirmvotesheight'] = round($value['affirmvotes']/$allvotes * 100, 2).'%';
-					}
-					if($list[$value['tid']]) {
-						$list[$value['tid']] = array_merge($value, $list[$value['tid']]);
-					} elseif($special[$value['tid']]) {
-						$special[$value['tid']] = array_merge($value, $special[$value['tid']]);
-					}
-				}
-			}
-
-			if($_G['gp_view'] == 'all') {
-				$_G['cache']['space_debate'][$alltype] = array(
-					'dateline' => $_G['timestamp'],
-					'data' => $list
-				);
-				save_syscache('space_debate', $_G['cache']['space_debate']);
-			}
-
-			if($_G['gp_view'] != 'all') {
-				$multi = multi($count, $perpage, $page, $theurl);
-			}
-
+			$dids[$value['tid']] = $value['tid'];
 		}
-	} else {
-		$count = count($list);
+		if($tids) {
+			foreach($tids as $postid => $tid) {
+				foreach(C::t('forum_post')->fetch_all_by_tid(0, $tid) as $value) {
+					$special[$value['tid']]['message'] = messagecutstr($value['message'], 200);
+				}
+			}
+		}
+		if($dids) {
+			foreach(C::t('forum_debate')->fetch_all($dids) as $value) {
+				$value['negavotesheight'] = $value['affirmvotesheight'] = '8px';
+				if($value['affirmvotes'] || $value['negavotes']) {
+					$allvotes = $value['affirmvotes'] + $value['negavotes'];
+					$value['negavotesheight'] = round($value['negavotes']/$allvotes * 100, 2).'%';
+					$value['affirmvotesheight'] = round($value['affirmvotes']/$allvotes * 100, 2).'%';
+				}
+				if($list[$value['tid']]) {
+					$list[$value['tid']] = array_merge($value, $list[$value['tid']]);
+				} elseif($special[$value['tid']]) {
+					$special[$value['tid']] = array_merge($value, $special[$value['tid']]);
+				}
+			}
+		}
+
+		$multi = multi($count, $perpage, $page, $theurl);
+
 	}
+
 }
 
 
 if($_G['uid']) {
-	if($_G['gp_view'] == 'all') {
+	if($_GET['view'] == 'all') {
 		$navtitle = lang('core', 'title_view_all').lang('core', 'title_debate');
-	} elseif($_G['gp_view'] == 'me') {
+	} elseif($_GET['view'] == 'me') {
 		$navtitle = lang('core', 'title_my_debate');
 	} else {
 		$navtitle = lang('core', 'title_friend_debate');
 	}
 } else {
-	if($_G['gp_order'] == 'hot') {
+	if($_GET['order'] == 'hot') {
 		$navtitle = lang('core', 'title_top_debate');
 	} else {
 		$navtitle = lang('core', 'title_newest_debate');

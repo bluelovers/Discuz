@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_privacy.php 18515 2010-11-25 07:35:31Z zhengqingpeng $
+ *      $Id: spacecp_privacy.php 24946 2011-10-18 02:54:40Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -91,14 +91,12 @@ if($operation == 'filter') {
 		}
 	}
 	if($uids) {
-		$query = DB::query("SELECT uid, username FROM ".DB::table('common_member')." WHERE uid IN (".dimplode($uids).")");
-		while ($value = DB::fetch($query)) {
-			$users[$value['uid']] = $value['username'];
+		foreach(C::t('common_member')->fetch_all($uids) as $uid => $value) {
+			$users[$uid] = $value['username'];
 		}
 	}
 	if($appids) {
-		$query = DB::query("SELECT appid, appname FROM ".DB::table('common_myapp')." WHERE appid IN (".dimplode($appids).")");
-		while ($value = DB::fetch($query)) {
+		foreach(C::t('common_myapp')->fetch_all($appids) as $value) {
 			$iconnames[$value['appid']] = $value['appname'];
 		}
 	}
@@ -107,8 +105,8 @@ if($operation == 'filter') {
 
 	$gid = empty($_GET['gid'])?0:intval($_GET['gid']);
 	$users = array();
-	$query = DB::query("SELECT fusername FROM ".DB::table('home_friend')." WHERE uid='$_G[uid]' AND gid='$gid'");
-	while ($value = DB::fetch($query)) {
+	$query = C::t('home_friend')->fetch_all_by_uid_gid($_G['uid'], $gid, 0, 0, false);
+	foreach($query as $value) {
 		$users[] = $value['fusername'];
 	}
 	$ustr = empty($users)?'': dhtmlspecialchars(implode(' ', $users));

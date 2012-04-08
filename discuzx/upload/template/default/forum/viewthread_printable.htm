@@ -9,18 +9,17 @@ h1 { font-size: 24px; margin-bottom: 20px; color: #999; }
 </style>
 <script type="text/javascript" src="{$_G['setting']['jspath']}common.js?{VERHASH}"></script>
 <script type="text/javascript" src="{$_G['setting']['jspath']}forum_viewthread.js?{VERHASH}"></script>
-<script type="text/javascript">zoomstatus = 0;</script>
+<script type="text/javascript">var STYLEID = '{STYLEID}', STATICURL = '{STATICURL}', IMGDIR = '{IMGDIR}', VERHASH = '{VERHASH}', charset = '{CHARSET}', discuz_uid = '$_G[uid]', cookiepre = '{$_G[config][cookie][cookiepre]}', cookiedomain = '{$_G[config][cookie][cookiedomain]}', cookiepath = '{$_G[config][cookie][cookiepath]}', showusercard = '{$_G[setting][showusercard]}', attackevasive = '{$_G[config][security][attackevasive]}', disallowfloat = '{$_G[setting][disallowfloat]}', creditnotice = '<!--{if $_G['setting']['creditnotice']}-->$_G['setting']['creditnames']<!--{/if}-->', defaultstyle = '$_G[style][defaultextstyle]', REPORTURL = '$_G[currenturl_encode]', SITEURL = '$_G[siteurl]', JSPATH = '$_G[setting][jspath]';</script>
 </head>
 
 <body>
 <h1>$_G['setting']['bbname']</h1>
 <b>{lang subject}: </b>$_G[forum_thread][subject] <b><a href="###" onclick="this.style.visibility='hidden';window.print();this.style.visibility='visible'">[{lang thread_print}]</a></b></span><br />
-
+<script type="text/javascript">var zoomstatus = 0;var aimgcount = new Array();</script>
 <!--{loop $postlist $post}-->
 	<hr noshade size="2" width="100%" color="#808080">
 	<b>{lang author}: </b><!--{if $post['author'] && !$post['anonymous']}-->$post[author]<!--{else}-->{lang anonymous}<!--{/if}-->&nbsp; &nbsp; <b>{lang time}: </b>$post[dateline]
-	<!--{if $post['subject']}--> &nbsp; &nbsp; <b>{lang subject}: </b>$post[subject]<!--{/if}-->
-	<br /><br />
+	<br />
 	<!--{if $_G['adminid'] != 1 && $_G['setting']['bannedmessages'] && (($post['authorid'] && !$userinfo[$post[authorid]]['username']) || ($userinfo[$post[authorid]]['groupid'] == 4 || $userinfo[$post[authorid]]['groupid'] == 5))}-->
 		{lang message_banned}
 	<!--{elseif $_G['adminid'] != 1 && $post['status'] & 1}-->
@@ -28,16 +27,33 @@ h1 { font-size: 24px; margin-bottom: 20px; color: #999; }
 	<!--{elseif $post['first'] && $_G['forum_threadpay']}-->
 		{lang pay_comment}
 	<!--{else}-->
+		<!--{if $post['subject']}--><b>{lang subject}: </b>$post[subject]<br /><!--{/if}-->
 		$post[message]
-		<!--{loop $post['attachments'] $attach}-->
-			<br /><br />$attach[attachicon]
-			<!--{if !$attach['attachimg'] || !$_G['group']['allowgetattach']}-->
-				{lang attachment}: <!--{if $attach['description']}-->[{$attach[description]}]<!--{/if}--> <b>$attach[filename]</b> ($attach[dateline], $attach[attachsize]) / {lang attach_download_count} $attach[downloads]<br />{$_G[siteurl]}forum.php?mod=attachment&aid=<!--{echo aidencode($attach[aid])}-->
+		<!--{if $post['imagelist']}-->
+			<!--{echo showattach($post, 1)}-->
+		<!--{/if}-->
+		<!--{if $post['attachlist']}-->
+			<!--{echo showattach($post)}-->
+		<!--{/if}-->
+	<!--{/if}-->
+	<!--{if !empty($aimgs[$post[pid]])}-->
+	<script type="text/javascript" reload="1">
+		aimgcount[{$post[pid]}] = [<!--{echo dimplode($aimgs[$post[pid]]);}-->];
+		attachimggroup($post['pid']);
+		<!--{if empty($_G['setting']['lazyload'])}-->
+			<!--{if !$post['imagelistthumb']}-->
+				attachimgshow($post[pid]);
 			<!--{else}-->
-				{lang attach_img}: <!--{if $attach['description']}-->[{$attach[description]}]<!--{/if}--> <b>$attach[filename]</b> ($attach[dateline], $attach[attachsize]) / {lang attach_download_count} $attach[downloads]<br />{$_G[siteurl]}forum.php?mod=attachment&aid=<!--{echo aidencode($attach[aid])}-->
-				<!--{if !$attach['price'] || $attach['payed']}--><br /><br /><img src="$attach[url]/$attach[attachment]" border="0" onload="if(this.width >screen.width*0.8) this.width=screen.width*0.8" alt="" /><!--{/if}-->
+				attachimgshow($post[pid], 1);
 			<!--{/if}-->
-		<!--{/loop}-->
+		<!--{/if}-->
+		<!--{if $post['imagelistthumb']}-->
+			attachimglstshow($post['pid'], <!--{echo intval($_G['setting']['lazyload']), 0, 0}-->);
+		<!--{/if}-->
+		<!--{if !IS_ROBOT && !empty($_G[setting][lazyload])}-->
+			new lazyload();
+		<!--{/if}-->
+	</script>
 	<!--{/if}-->
 <!--{/loop}-->
 

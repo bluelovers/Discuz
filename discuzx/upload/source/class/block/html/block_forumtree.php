@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: block_forumtree.php 9038 2010-04-26 07:56:28Z xupeng $
+ *      $Id: block_forumtree.php 25525 2011-11-14 04:39:11Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -46,6 +46,7 @@ class block_forumtree extends commonblock_html {
 		}
 		$forumlist = array();
 		$parameter['fids'] = (array)$parameter['fids'];
+		$parameter['fids'] = array_map('intval', $parameter['fids']);
 		foreach($_G['cache']['forums'] as $forum) {
 			if(!$forum['status']) {
 				continue;

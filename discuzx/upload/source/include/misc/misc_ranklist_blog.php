@@ -7,9 +7,9 @@ loadcache('click');
 $clicks = empty($_G['cache']['click']['blogid'])?array():$_G['cache']['click']['blogid'];
 
 $bloglist = '';
-$orderby = in_array($_G['gp_orderby'], array('thisweek', 'thismonth', 'today', 'all')) ? $_G['gp_orderby'] : '';
+$orderby = in_array($_GET['orderby'], array('thisweek', 'thismonth', 'today', 'all')) ? $_GET['orderby'] : '';
 $navname = $_G['setting']['navs'][8]['navname'] . ' - ' . $_G['setting']['bbname'];
-switch($_G['gp_view']) {
+switch($_GET['view']) {
 	case 'heats':
 		$view = 'hot';
 		$navtitle = lang('ranklist/navtitle', 'ranklist_title_blog_heat').' - '.$navname;
@@ -41,14 +41,14 @@ switch($_G['gp_view']) {
 		$metadescription = lang('rankilist/template', 'ranklist_title_blog_favorite');
 		break;
 	default:
-		if($clicks[$_G['gp_view']]) {
-			$view = 'click'.$_G['gp_view'];
-			$navtitle = lang('ranklist/navtitle', 'ranklist_title_blog_'.$_G['gp_view']).' - '.$navname;
-			$metakeywords = lang('ranklist/navtitle', 'ranklist_title_blog_'.$_G['gp_view']);
-			$metadescription = lang('ranklist/navtitle', 'ranklist_title_blog_'.$_G['gp_view']);
+		if($clicks[$_GET['view']]) {
+			$view = 'click'.$_GET['view'];
+			$navtitle = lang('ranklist/navtitle', 'ranklist_title_blog_'.$_GET['view']).' - '.$navname;
+			$metakeywords = lang('ranklist/navtitle', 'ranklist_title_blog_'.$_GET['view']);
+			$metadescription = lang('ranklist/navtitle', 'ranklist_title_blog_'.$_GET['view']);
 		} else {
 			$view = 'hot';
-			$_G['gp_view'] = 'heats';
+			$_GET['view'] = 'heats';
 		}
 }
 

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_fields_connect_register.php 18330 2010-11-19 04:17:30Z monkey $
+ *      $Id: cache_fields_connect_register.php 24935 2011-10-17 07:41:48Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -24,9 +24,8 @@ function build_cache_fields_connect_register() {
 		$fields[] = 'birthday';
 	}
 	if($fields) {
-		$query = DB::query("SELECT * FROM ".DB::table('common_member_profile_setting')." WHERE fieldid IN (".dimplode($fields).")");
 
-		while($field = DB::fetch($query)) {
+		foreach(C::t('common_member_profile_setting')->fetch_all($fields) as $field) {
 			$choices = array();
 			if($field['selective']) {
 				foreach(explode("\n", $field['choices']) as $item) {
@@ -43,7 +42,7 @@ function build_cache_fields_connect_register() {
 		}
 	}
 
-	save_syscache('fields_connect_register', $data);
+	savecache('fields_connect_register', $data);
 }
 
 ?>

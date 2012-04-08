@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portalcp_topic.php 20732 2011-03-02 08:33:43Z zhangguosheng $
+ *      $Id: portalcp_topic.php 27484 2012-02-02 05:08:02Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -21,7 +21,7 @@ $op = in_array($_GET['op'], array('edit')) ? $_GET['op'] : 'add';
 $topicid = $_GET['topicid'] ? intval($_GET['topicid']) : 0;
 $topic = '';
 if($topicid) {
-	$topic = DB::fetch_first('SELECT * FROM '.DB::table('portal_topic')." WHERE topicid = '$topicid'");
+	$topic = C::t('portal_topic')->fetch($topicid);
 	if(empty($topic)) {
 		showmessage('topic_not_exist');
 	}
@@ -45,14 +45,15 @@ if(($topicid && !$allowmanage) || (!$topicid && !$allowadd)) {
 
 $tpls = array();
 
-if (($dh = opendir(DISCUZ_ROOT.'./template/default/portal'))) {
-	while(($file = readdir($dh)) !== false) {
-		$file = strtolower($file);
-		if (fileext($file) == 'htm' && substr($file, 0, 13) == 'portal_topic_') {
-			$tpls[str_replace('.htm','',$file)] = $file;
+foreach($alltemplate = C::t('common_template')->range() as $template) {
+	if(($dir = dir(DISCUZ_ROOT.$template['directory'].'/portal/'))) {
+		while(false !== ($file = $dir->read())) {
+			$file = strtolower($file);
+			if (fileext($file) == 'htm' && substr($file, 0, 13) == 'portal_topic_') {
+				$tpls[$template['directory'].':portal/'.str_replace('.htm','',$file)] = getprimaltplname($template['directory'].':portal/'.$file);
+			}
 		}
 	}
-	closedir($dh);
 }
 
 if (empty($tpls)) showmessage('topic_has_on_template', dreferer());

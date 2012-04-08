@@ -4,8 +4,12 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_blockclass.php 22735 2011-05-18 10:09:30Z zhangguosheng $
+ *      $Id: lang_blockclass.php 28619 2012-03-06 08:40:56Z chenmengshu $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 $lang = array(
 	'blockclass_html' => '展示类',
@@ -37,6 +41,7 @@ $lang = array(
 	'blockclass_myapp_field_title' => '应用名称',
 	'blockclass_myapp_field_icon' => '应用图标',
 	'blockclass_myapp_field_icon_small' => '应用图标(小)',
+	'blockclass_myapp_field_icon_abouts' => '应用图标(大图)',
 	'blockclass_myapp_script_myapp' => '漫游应用',
 
 	'blockclass_forum' => '论坛类',
@@ -184,7 +189,7 @@ $lang = array(
 	'blockclass_member_field_reason' => '推荐原因',
 	'blockclass_member_field_unitprice' => '竟价单次访问单价',
 	'blockclass_member_field_showcredit' => '竟价总积分',
-	'blockclass_member_field_shwonote' => '竟价上榜宣言',
+	'blockclass_member_field_shownote' => '竟价上榜宣言',
 	'blockclass_member_field_extcredits1' => '扩展积分1',
 	'blockclass_member_field_extcredits2' => '扩展积分2',
 	'blockclass_member_field_extcredits3' => '扩展积分3',
@@ -451,6 +456,8 @@ $lang = array(
 	'blockclass_other_stat_albums_title' => '相册显示名',
 	'blockclass_other_stat_pics_title' => '图片显示名',
 	'blockclass_other_stat_shares_title' => '分享显示名',
+
+	'blockclass_field_id' => '数据ID',
 );
 
 

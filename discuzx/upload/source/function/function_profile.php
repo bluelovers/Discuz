@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_profile.php 27243 2012-01-12 03:27:26Z zhengqingpeng $
+ *      $Id: function_profile.php 28582 2012-03-05 07:15:39Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -26,9 +26,8 @@ function profile_setting($fieldid, $space=array(), $showstatus=false, $ignoreunc
 		$uid = intval($space['uid']);
 		if($uid && !isset($_G['profile_verifys'][$uid])) {
 			$_G['profile_verifys'][$uid] = array();
-			$query = DB::query('SELECT field FROM '.DB::table('common_member_verify_info')." WHERE uid = '$uid' AND verifytype='0'");
-			while($value = DB::fetch($query)) {
-				$fields = unserialize($value['field']);
+			if($value = C::t('common_member_verify_info')->fetch_by_uid_verifytype($uid, 0)) {
+				$fields = dunserialize($value['field']);
 				foreach($fields as $key => $fvalue) {
 					if($_G['cache']['profilesetting'][$key]['needverify']) {
 						$_G['profile_verifys'][$uid][$key] = $fvalue;
@@ -230,10 +229,10 @@ function profile_check($fieldid, &$value, $space=array()) {
 		if($field['required']) {
 			if(in_array($fieldid, array('birthprovince', 'birthcity', 'birthdist', 'birthcommunity', 'resideprovince', 'residecity', 'residedist', 'residecommunity'))) {
 				if(substr($fieldid, 0, 5) == 'birth') {
-					if(!empty($_G['gp_birthprovince']) || !empty($_G['gp_birthcity']) || !empty($_G['gp_birthdist']) || !empty($_G['gp_birthcommunity'])) {
+					if(!empty($_GET['birthprovince']) || !empty($_GET['birthcity']) || !empty($_GET['birthdist']) || !empty($_GET['birthcommunity'])) {
 						return true;
 					}
-				} elseif(!empty($_G['gp_resideprovince']) || !empty($_G['gp_residecity']) || !empty($_G['gp_residedist']) || !empty($_G['gp_residecommunity'])) {
+				} elseif(!empty($_GET['resideprovince']) || !empty($_GET['residecity']) || !empty($_GET['residedist']) || !empty($_GET['residecommunity'])) {
 					return true;
 				}
 			}
@@ -251,7 +250,7 @@ function profile_check($fieldid, &$value, $space=array()) {
 		$value = intval($value);
 		return true;
 	} elseif(in_array($fieldid, array('birthprovince', 'birthcity', 'birthdist', 'birthcommunity', 'resideprovince', 'residecity', 'residedist', 'residecommunity'))) {
-		$value = getstr($value, '', 1, 1);
+		$value = getstr($value);
 		return true;
 	}
 
@@ -259,7 +258,7 @@ function profile_check($fieldid, &$value, $space=array()) {
 		$field['choices'] = explode("\n", $field['choices']);
 	}
 	if($field['formtype'] == 'text' || $field['formtype'] == 'textarea') {
-		$value = getstr($value, '', 1, 1);
+		$value = getstr($value);
 		if($field['size'] && strlen($value) > $field['size']) {
 			return false;
 		} else {
@@ -271,7 +270,7 @@ function profile_check($fieldid, &$value, $space=array()) {
 	} elseif($field['formtype'] == 'checkbox' || $field['formtype'] == 'list') {
 		$arr = array();
 		foreach ($value as $op) {
-			if(in_array(stripslashes($op), $field['choices'])) {
+			if(in_array($op, $field['choices'])) {
 				$arr[] = $op;
 			}
 		}
@@ -280,7 +279,7 @@ function profile_check($fieldid, &$value, $space=array()) {
 			return false;
 		}
 	} elseif($field['formtype'] == 'radio' || $field['formtype'] == 'select') {
-		if(!in_array(stripslashes($value), $field['choices'])){
+		if(!in_array($value, $field['choices'])){
 			return false;
 		}
 	}
@@ -319,6 +318,8 @@ function profile_show($fieldid, $space=array()) {
 	} elseif($fieldid == 'site') {
 		$url = str_replace('"', '\\"', $space[$fieldid]);
 		return "<a href=\"$url\" target=\"_blank\">$url</a>";
+	} elseif($fieldid == 'position') {
+		return nl2br($space['office'] ? $space['office'] : $space['position']);
 	} else {
 		return nl2br($space[$fieldid]);
 	}
@@ -345,8 +346,7 @@ function showdistrict($values, $elems=array(), $container='districtbox', $showle
 	}
 	$options = array(1=>array(), 2=>array(), 3=>array(), 4=>array());
 	if($upids && is_array($upids)) {
-		$query = DB::query('SELECT * FROM '.DB::table('common_district')." WHERE upid IN (".dimplode($upids).') ORDER BY displayorder');
-		while($value = DB::fetch($query)) {
+		foreach(C::t('common_district')->fetch_all_by_upid($upids, 'displayorder', 'ASC') as $value) {
 			if($value['level'] == 1 && ($value['id'] != $values[0] && ($value['usetype'] == 0 || !(($containertype == 'birth' && in_array($value['usetype'], array(1, 3))) || ($containertype != 'birth' && in_array($value['usetype'], array(2, 3))))))) {
 				continue;
 			}
@@ -383,9 +383,7 @@ function countprofileprogress($uid = 0) {
 	global $_G;
 
 	$uid = intval(!$uid ? $_G['uid'] : $uid);
-	$result = DB::fetch_first("SELECT * FROM ".DB::table('common_setting')." WHERE skey='profilegroup'");
-	if(!empty($result['svalue'])) {
-		$profilegroup = unserialize($result['svalue']);
+	if(($profilegroup = C::t('common_setting')->fetch('profilegroup', true))) {
 		$fields = array();
 		foreach($profilegroup as $type => $value) {
 			foreach($value['field'] as $key => $field) {
@@ -401,7 +399,7 @@ function countprofileprogress($uid = 0) {
 		loadcache('profilesetting');
 		$allowcstatus = !empty($_G['group']['allowcstatus']) ? true : false;
 		$complete = 0;
-		$profile = DB::fetch_first("SELECT p.*, f.sightml, f.customstatus FROM ".DB::table('common_member_profile')." p LEFT JOIN ".DB::table('common_member_field_forum')." f USING(uid)  WHERE p.uid='$uid'");
+		$profile = array_merge(C::t('common_member_profile')->fetch($uid), C::t('common_member_field_forum')->fetch($uid));
 		foreach($fields as $key) {
 			if((!isset($_G['cache']['profilesetting'][$key]) || !$_G['cache']['profilesetting'][$key]['available']) && !in_array($key, array('sightml', 'customstatus'))) {
 				unset($fields[$key]);
@@ -433,7 +431,7 @@ function countprofileprogress($uid = 0) {
 			}
 		}
 		$progress = floor($complete / count($fields) * 100);
-		DB::update('common_member_status', array('profileprogress' => $progress > 100 ? 100 : $progress), array('uid' => $uid));
+		C::t('common_member_status')->update($uid, array('profileprogress' => $progress > 100 ? 100 : $progress), 'UNBUFFERED');
 		return $progress;
 	}
 }

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_article.php 20616 2011-03-01 01:05:56Z monkey $
+ *      $Id: admincp_article.php 29236 2012-03-30 05:34:47Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_DISCUZ')) {
@@ -26,7 +26,7 @@ if($operation == 'list') {
 			.'<a href="javascript:;" onclick="$(\'tb_search\').style.display=\'none\';$(\'a_search_show\').style.display=\'\';$(\'a_search_hide\').style.display=\'none\';" id="a_search_hide">'.cplang('hide_search').'</a>'
 			.'</span>';
 }
-$catid = intval($_GET['catid']);
+$catid = $_GET['catid'] = intval($_GET['catid']);
 showsubmenu('article',  array(
 	array('list', 'article&catid='.$catid, $operation == 'list'),
 	array('article_trash', 'article&operation=trash&catid='.$catid, $operation == 'trash'),
@@ -39,7 +39,7 @@ if($operation == 'tag') {
 	showtips('article_tag_tip');
 
 	if(submitcheck('articletagsubmit')) {
-		DB::insert('common_setting', array('skey'=>'article_tags', 'svalue'=>addslashes(serialize($_POST['tag']))), false, true);
+		C::t('common_setting')->update('article_tags', $_POST['tag']);
 		updatecache('setting');
 		cpmsg('update_articletag_succeed', 'action=article&operation=tag', 'succeed');
 	}
@@ -53,6 +53,7 @@ if($operation == 'tag') {
 			array(lang('portalcp', 'article_tag').$i, "<input type=\"text\" class=\"txt\" name=\"tag[$i]\" value=\"$tag_names[$i]\" />"));
 	}
 	showsubmit('articletagsubmit', 'submit');
+	showtablefooter();
 	showformfooter();
 
 } elseif($operation == 'trash') {
@@ -66,25 +67,26 @@ if($operation == 'tag') {
 		if($_POST['optype'] == 'recover') {
 
 			$inserts = $ids = $catids = array();
-			$query = DB::query('SELECT * FROM '.DB::table('portal_article_trash')." WHERE aid IN (".dimplode($_POST['ids']).")");
-			while($value=DB::fetch($query)) {
+			foreach(C::t('portal_article_trash')->fetch_all($_POST['ids']) as $value) {
 				$ids[] = intval($value['aid']);
-				$article = unserialize($value['content']);
+				$article = dunserialize($value['content']);
 				$catids[] = intval($article['catid']);
 				$article = daddslashes($article);
-				$inserts[] = "('$article[aid]', '$article[uid]', '$article[username]', '$article[title]', '$article[url]', '$article[pic]', '$article[id]', '$article[idtype]', '$article[contents]', '$article[dateline]', '$article[catid]')";
+				$inserts[] = array('aid' => $article['aid'], 'uid' => $article['uid'], 'username' => $article['username'], 'title' => $article['title'], 'url' => $article['url'], 'pic' => $article['pic'], 'id' => $article['id'], 'idtype' => $article['idtype'], 'contents' => $article['contents'], 'dateline' => $article['dateline'], 'catid' => $article['catid']);
 			}
 
 			if($inserts) {
-				DB::query('REPLACE INTO '.DB::table('portal_article_title')."(aid, uid, username, title, url, pic, id, idtype, contents, dateline, catid) VALUES ".implode(',',$inserts));
-				DB::query('DELETE FROM '.DB::table('portal_article_trash')." WHERE aid IN (".dimplode($ids).")");
+				foreach($inserts as $data) {
+					C::t('portal_article_title')->insert($data, 0, 1);
+				}
+				C::t('portal_article_trash')->delete($ids);
 			}
 
 			$catids = array_unique($catids);
 			if($catids) {
 				foreach($catids as $catid) {
-					$cnt = DB::result_first('SELECT COUNT(*) FROM '.DB::table('portal_article_title')." WHERE catid = '$catid'");
-					DB::update('portal_category', array('articles'=>$cnt), array('catid'=>$catid));
+					$cnt = C::t('portal_article_title')->fetch_count_for_cat($catid);
+					C::t('portal_category')->update($catid, array('articles'=>dintval($cnt)));
 				}
 			}
 			cpmsg('article_trash_recover_succeed', 'action=article&operation=trash', 'succeed');
@@ -96,9 +98,8 @@ if($operation == 'tag') {
 			cpmsg('article_trash_delete_succeed', 'action=article&operation=trash', 'succeed');
 
 		} elseif($_POST['optype'] == 'clear') {
-			$query = DB::query('SELECT aid FROM '.DB::table('portal_article_trash')." LIMIT 50");
 			$aids = array();
-			while($value = DB::fetch($query)) {
+			foreach(C::t('portal_article_trash')->range(50) as $value) {
 				$aids[$value['aid']] = $value['aid'];
 			}
 			if(!empty($aids)) {
@@ -128,11 +129,10 @@ if($operation == 'tag') {
 		showsubtitle(array('', 'article_title', 'article_category', 'article_username', 'article_dateline'));
 
 		$multipage = '';
-		$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('portal_article_trash').""), 0);
+		$count = C::t('portal_article_trash')->count();
 		if($count) {
-			$query = DB::query("SELECT * FROM ".DB::table('portal_article_trash')." LIMIT $start,$perpage");
-			while ($value = DB::fetch($query)) {
-				$value = unserialize($value['content']);
+			foreach(C::t('portal_article_trash')->range($start, $perpage) as $value) {
+				$value = dunserialize($value['content']);
 				showtablerow('', array('class="td25"', 'class=""', 'class="td28"'), array(
 						"<input type=\"checkbox\" class=\"checkbox\" name=\"ids[]\" value=\"$value[aid]\">",
 						$value[title],
@@ -157,16 +157,16 @@ if($operation == 'tag') {
 
 	if(submitcheck('articlesubmit')) {
 
-		$perpage = intval($_G['gp_hiddenperpage']);
-		$page = intval($_G['gp_hiddenpage']);
-		$catid = intval($_G['gp_hiddencatid']);
+		$perpage = intval($_GET['hiddenperpage']);
+		$page = intval($_GET['hiddenpage']);
+		$catid = intval($_GET['hiddencatid']);
 
 		$articles = $catids = array();
-		$aids = !empty($_G['gp_ids']) && is_array($_G['gp_ids']) ? $_G['gp_ids'] : array();
+		$aids = !empty($_GET['ids']) && is_array($_GET['ids']) ? $_GET['ids'] : array();
 		if($aids) {
-			$query = DB::query('SELECT aid, catid FROM '.DB::table('portal_article_title')." WHERE aid IN (".dimplode($aids).')');
-			while($value=DB::fetch($query)) {
-				$articles[$value['aid']] = $value;
+			$query = C::t('portal_article_title')->fetch_all($aids);
+			foreach($query as $value) {
+				$articles[$value['aid']] = array('aid' => $value['aid'], 'catid' => $value['catid']);
 				$catids[] = intval($value['catid']);
 			}
 		}
@@ -186,11 +186,11 @@ if($operation == 'tag') {
 			$tocatid = intval($_POST['tocatid']);
 			$catids[] = $tocatid;
 			$catids = array_merge($catids);
-			DB::update('portal_article_title', array('catid'=>$tocatid), 'aid IN ('.dimplode($aids).')');
+			C::t('portal_article_title')->update($aids, array('catid'=>$tocatid));
 			foreach($catids as $catid) {
 				$catid = intval($catid);
-				$cnt = DB::result_first('SELECT COUNT(*) FROM '.DB::table('portal_article_title')." WHERE catid = '$catid'");
-				DB::update('portal_category', array('articles'=>intval($cnt)), array('catid'=>$catid));
+				$cnt = C::t('portal_article_title')->fetch_count_for_cat($catid);
+				C::t('portal_category')->update($catid, array('articles'=>dintval($cnt)));
 			}
 			cpmsg('article_move_succeed', 'action=article&catid='.$catid.'&perpage='.$perpage.'&page='.$page, 'succeed');
 
@@ -210,7 +210,7 @@ if($operation == 'tag') {
 		$likekeys = array('title', 'username');
 		$results = getwheres($intkeys, $strkeys, $randkeys, $likekeys);
 		foreach($likekeys as $k) {
-			$_GET[$k] = htmlspecialchars(stripslashes($_GET[$k]));
+			$_GET[$k] = dhtmlspecialchars($_GET[$k]);
 		}
 		$wherearr = $results['wherearr'];
 		$mpurl .= '&'.implode('&', $results['urls']);
@@ -253,6 +253,11 @@ if($operation == 'tag') {
 			$articletagcheckbox .= "<input type=\"checkbox\" class=\"checkbox\" id=\"tag_$k\" name=\"tag[$k]\" value=\"1\"$checked />";
 			$articletagcheckbox .= "<label for=\"tag_$k\">$v</label>";
 		}
+
+		$start = ($page-1)*$perpage;
+
+		$mpurl .= '&perpage='.$perpage;
+		$perpages = array($perpage => ' selected');
 
 		$adminscript = ADMINSCRIPT;
 		echo <<<SEARCH
@@ -300,20 +305,15 @@ if($operation == 'tag') {
 		</form>
 SEARCH;
 
-		$start = ($page-1)*$perpage;
-
-		$mpurl .= '&perpage='.$perpage;
-		$perpages = array($perpage => ' selected');
-
 		showformheader('article&operation=list');
 		showtableheader('article_list');
 		showsubtitle(array('', 'article_title', 'article_category', 'article_username', 'article_dateline', 'operation'));
 
 		$multipage = '';
-		$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('portal_article_title')." WHERE $wheresql"), 0);
+		$count = C::t('portal_article_title')->fetch_all_by_sql($wheresql, '', 0, 0, 1);
 		if($count) {
-			$query = DB::query("SELECT * FROM ".DB::table('portal_article_title')." WHERE $wheresql $ordersql LIMIT $start,$perpage");
-			while ($value = DB::fetch($query)) {
+			$query = C::t('portal_article_title')->fetch_all_by_sql($wheresql, $ordersql, $start, $perpage);
+			foreach($query as $value) {
 				$tags = article_parse_tags($value['tag']);
 				$taghtml = '';
 				foreach($tags as $k=>$v) {
@@ -369,7 +369,7 @@ function showcategoryrow($key, $type = '', $last = '') {
 			$boardattr .= '</div>';
 		}
 
-		$return .= '<input type="text" class="txt" name="name['.$forum['fid'].']" value="'.htmlspecialchars($forum['name']).'" class="txt" />'.
+		$return .= '<input type="text" class="txt" name="name['.$forum['fid'].']" value="'.dhtmlspecialchars($forum['name']).'" class="txt" />'.
 			($type == '' ? '<a href="###" onclick="addrowdirect = 1;addrow(this, 2, '.$forum['fid'].')" class="addchildboard">'.$lang['forums_admin_add_sub'].'</a>' : '').
 			'</div>'.$boardattr.
 			'</td><td>'.showforum_moderators($forum).'</td>

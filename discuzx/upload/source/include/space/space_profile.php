@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_profile.php 26640 2011-12-19 02:31:59Z liulanbo $
+ *      $Id: space_profile.php 29279 2012-03-31 09:06:19Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -31,12 +31,13 @@ $space['admingroup']['icon'] = g_icon($space['adminid'], 1);
 
 $space['group'] = $_G['cache']['usergroups'][$space['groupid']];
 $space['group']['icon'] = g_icon($space['groupid'], 1);
+$encodeusername = rawurlencode($space['username']);
 
 if($space['extgroupids']) {
 	$newgroup = array();
 	$e_ids = explode(',', $space['extgroupids']);
 	foreach ($e_ids as $e_id) {
-		$newgroup[] = $_G['usergroups'][$e_id]['grouptitle'];
+		$newgroup[] = $_G['cache']['usergroups'][$e_id]['grouptitle'];
 	}
 	$space['extgroupids'] = implode(',', $newgroup);
 }
@@ -99,15 +100,9 @@ foreach($_G['cache']['profilesetting'] as $fieldid => $field) {
 			continue;
 	}
 	if(
-		$field['available'] && strlen($space[$fieldid]) > 0 &&
-		(
-			$field['showinthread'] ||
-			$field['showincard'] ||
-			(
-				$space['self'] || empty($privacy[$fieldid]) || ($isfriend && $privacy[$fieldid] == 1)
-			)
-		) &&
-		(!$_G['inajax'] && $field['invisible'] != '1' || $_G['inajax'] && $field['showincard'])
+		$field['available'] && (strlen($space[$fieldid]) > 0 || ($fieldid == 'birthcity' && strlen($space['birthprovince']) || $fieldid == 'residecity' && strlen($space['resideprovince']))) &&
+		($space['self'] || empty($privacy[$fieldid]) || ($isfriend && $privacy[$fieldid] == 1)) &&
+		(!$_G['inajax'] && !$field['invisible'] || $_G['inajax'] && $field['showincard'])
 	) {
 		$val = profile_show($fieldid, $space);
 		if($val !== false) {
@@ -124,22 +119,22 @@ foreach($_G['cache']['profilesetting'] as $fieldid => $field) {
 	}
 }
 
-$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('forum_moderator')." WHERE uid = '$space[uid]'"), 0);
+$count = C::t('forum_moderator')->count_by_uid($space['uid']);
 if($count) {
-	$query = DB::query("SELECT f.name,f.fid AS fid FROM ".DB::table('forum_moderator').
-		" m LEFT JOIN ".DB::table('forum_forum')." f USING(fid) WHERE  uid = '$space[uid]'");
-	while($result = DB::fetch($query)) {
+	foreach(C::t('forum_moderator')->fetch_all_by_uid($space['uid']) as $result) {
+		$moderatefids[] = $result['fid'];
+	}
+	$query = C::t('forum_forum')->fetch_all_info_by_fids($moderatefids);
+	foreach($query as $result) {
 		$manage_forum[$result['fid']] = $result['name'];
 	}
 }
 
 if(!$_G['inajax'] && $_G['setting']['groupstatus']) {
-	$groupcount = DB::result_first("SELECT COUNT(*) FROM ".DB::table('forum_groupuser')." WHERE uid = '{$space['uid']}'");
+	$gorupcount = C::t('forum_groupuser')->fetch_all_group_for_user($space['uid'], 1);
 	if($groupcount > 0) {
-		$query = DB::query("SELECT fg.fid, ff.name FROM ".DB::table('forum_groupuser')." fg LEFT JOIN ".DB::table('forum_forum')." ff USING(fid) WHERE fg.uid = '{$space['uid']}' LIMIT $groupcount");
-		while ($result = DB::fetch($query)) {
-			$usergrouplist[] = $result;
-		}
+		$fids = C::t('forum_groupuser')->fetch_all_fid_by_uids($space['uid']);
+		$usergrouplist = C::t('forum_forum')->fetch_all_info_by_fids($fids);
 	}
 }
 
@@ -169,11 +164,17 @@ if($space['videophotostatus'] > 0 && $_G['uid'] != $space['uid'] && !ckvideophot
 	$showvideophoto = false;
 }
 
+$clist = array();
+if(in_array($_G['adminid'], array(1, 2, 3))) {
+	include_once libfile('function/member');
+	$clist = crime('getactionlist', $space['uid']);
+}
+
 if(!$_G['privacy']) {
 	if(!$_G['inajax']) {
 		include_once template("home/space_profile");
 	} else {
-		$_G['gp_do'] = 'card';
+		$_GET['do'] = 'card';
 		include_once template("home/space_card");
 	}
 }

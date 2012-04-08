@@ -4,13 +4,13 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: block_blog.php 10773 2010-05-14 10:53:42Z xupeng $
+ *      $Id: block_blog.php 27932 2012-02-17 02:26:59Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
-class block_blog {
+class block_blog extends discuz_block {
 	var $setting = array();
 	function block_blog() {
 		$this->setting = array(
@@ -83,6 +83,7 @@ class block_blog {
 
 	function fields() {
 		return array(
+				'id' => array('name' => lang('blockclass', 'blockclass_field_id'), 'formtype' => 'text', 'datatype' => 'int'),
 				'url' => array('name' => lang('blockclass', 'blockclass_blog_field_url'), 'formtype' => 'text', 'datatype' => 'string'),
 				'title' => array('name' => lang('blockclass', 'blockclass_blog_field_title'), 'formtype' => 'title', 'datatype' => 'title'),
 				'summary' => array('name' => lang('blockclass', 'blockclass_blog_field_summary'), 'formtype' => 'summary', 'datatype' => 'summary'),
@@ -157,10 +158,6 @@ class block_blog {
 		return $settings;
 	}
 
-	function cookparameter($parameter) {
-		return $parameter;
-	}
-
 	function getdata($style, $parameter) {
 		global $_G;
 
@@ -180,6 +177,12 @@ class block_blog {
 
 		$datalist = $list = array();
 		$wheres = array();
+		if(!$blogids) {
+			$maxitemnum = $_G['setting']['blockmaxaggregationitem'] ? $_G['setting']['blockmaxaggregationitem'] : 65535;
+			if(($maxid = $this->getmaxid() - $maxitemnum) > 0) {
+				$wheres[] = 'b.blogid > '.$maxid;
+			}
+		}
 		if($blogids) {
 			$wheres[] = 'b.blogid IN ('.dimplode($blogids).')';
 		}
@@ -249,6 +252,19 @@ class block_blog {
 		}
 		return array('html' => '', 'data' => $list);
 	}
+
+	function getmaxid() {
+		loadcache('databasemaxid');
+		$data = getglobal('cache/databasemaxid');
+		if(!isset($data['blog']) || TIMESTAMP - $data['blog']['dateline'] >= 86400) {
+			$data['blog']['dateline'] = TIMESTAMP;
+			$data['blog']['id'] = DB::result_first('SELECT MAX(blogid) FROM '.DB::table('home_blog'));
+			savecache('databasemaxid', $data);
+		}
+		return $data['blog']['id'];
+	}
+
+
 }
 
 ?>

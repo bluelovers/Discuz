@@ -1,3 +1,10 @@
+/*
+	[Discuz!] (C)2001-2099 Comsenz Inc.
+	This is NOT a freeware, use is subject to license terms
+
+	$Id: threadsort.js 28987 2012-03-21 10:34:02Z monkey $
+*/
+
 function xmlobj() {
 	var obj = new Object();
 	obj.createXMLDoc = function(xmlstring) {
@@ -109,7 +116,7 @@ function changeselectthreadsort(selectchoiceoptionid, optionid, type) {
 	if((choicesarr[sselectchoiceoptionid]['slevel'] == 1 || type == 'search') && choicesarr[sselectchoiceoptionid]['scount'] == 1) {
 		nameid = name + ' ' + id;
 	}
-	var selectoption = '<select' + nameid + ' class="ps vm" onchange="changeselectthreadsort(this.value, \'' + optionid + '\'' + issearch + ');checkoption(\'' + forum_optionlist[soptionid]['sidentifier'] + '\', \'' + forum_optionlist[soptionid]['srequired'] + '\', \'' + forum_optionlist[soptionid]['stype'] + '\')"><option value="0">请选择</option>';
+	var selectoption = '<select' + nameid + ' class="ps vm" onchange="changeselectthreadsort(this.value, \'' + optionid + '\'' + issearch + ');checkoption(\'' + forum_optionlist[soptionid]['sidentifier'] + '\', \'' + forum_optionlist[soptionid]['srequired'] + '\', \'' + forum_optionlist[soptionid]['stype'] + '\')" ' + ((forum_optionlist[soptionid]['sunchangeable'] == 1 && type == 'update') ? 'disabled' : '') + '><option value="0">请选择</option>';
 	for(var i in choicesarr) {
 		nameid = '';
 		if((choicesarr[sselectchoiceoptionid]['slevel'] == 1 || type == 'search') && choicesarr[i]['scount'] == choicesarr[sselectchoiceoptionid]['scount']) {
@@ -126,7 +133,7 @@ function changeselectthreadsort(selectchoiceoptionid, optionid, type) {
 			if(parseInt(choicesarr[i]['scount']) >= (parseInt(choicesarr[sselectchoiceoptionid]['scount']) + parseInt(choicesarr[sselectchoiceoptionid]['slevel']))) {
 				break;
 			}
-			selectoption += '</select>' + "\r\n" + '<select' + nameid + ' class="ps vm" onchange="changeselectthreadsort(this.value, \'' + optionid + '\'' + issearch + ');checkoption(\'' + forum_optionlist[soptionid]['sidentifier'] + '\', \'' + forum_optionlist[soptionid]['srequired'] + '\', \'' + forum_optionlist[soptionid]['stype'] + '\')"><option value="0">请选择</option>';
+			selectoption += '</select>' + "\r\n" + '<select' + nameid + ' class="ps vm" onchange="changeselectthreadsort(this.value, \'' + optionid + '\'' + issearch + ');checkoption(\'' + forum_optionlist[soptionid]['sidentifier'] + '\', \'' + forum_optionlist[soptionid]['srequired'] + '\', \'' + forum_optionlist[soptionid]['stype'] + '\')" ' + ((forum_optionlist[soptionid]['sunchangeable'] == 1 && type == 'update') ? 'disabled' : '') + '><option value="0">请选择</option>';
 
 			lastcount = parseInt(choicesarr[i]['scount']);
 		}
@@ -168,6 +175,22 @@ function checkoption(identifier, required, checktype, checkmaxnum, checkminnum, 
 		}
 	}
 
+	if(checktype == 'radio' || checktype == 'checkbox') {
+		var nodes = $('typeoption_' + identifier).parentNode.parentNode.parentNode.getElementsByTagName('INPUT');
+		var nodechecked = false;
+		for(var i=0; i<nodes.length; i++) {
+			if(nodes[i].id == 'typeoption_' + identifier) {
+				if(nodes[i].checked) {
+					nodechecked = true;
+				}
+			}
+		}
+		if(!nodechecked && required != '0') {
+			warning(ce, '必填项目没有填写');
+			return false;
+		}
+	}
+
 	if(checktype == 'image') {
 		var checkvalue = $('sortaid_' + identifier).value;
 	} else {
@@ -175,7 +198,7 @@ function checkoption(identifier, required, checktype, checkmaxnum, checkminnum, 
 	}
 
 	if(required != '0') {
-		if(checkvalue == '' || checkvalue == '0') {
+		if(checkvalue == '') {
 			warning(ce, '必填项目没有填写');
 			return false;
 		} else {
@@ -184,26 +207,28 @@ function checkoption(identifier, required, checktype, checkmaxnum, checkminnum, 
 	}
 
 	if(checkvalue) {
-		if((checktype == 'number' || checktype == 'range') && isNaN(checkvalue)) {
-			warning(ce, '数字填写不正确');
-			return false;
-		} else if(checktype == 'email' && !(/^[\-\.\w]+@[\.\-\w]+(\.\w+)+$/.test(checkvalue))) {
+		if(checktype == 'email' && !(/^[\-\.\w]+@[\.\-\w]+(\.\w+)+$/.test(checkvalue))) {
 			warning(ce, '邮件地址不正确');
 			return false;
 		} else if((checktype == 'text' || checktype == 'textarea') && checkmaxlength != '0' && mb_strlen(checkvalue) > checkmaxlength) {
 			warning(ce, '填写项目长度过长');
 			return false;
 		} else if((checktype == 'number' || checktype == 'range')) {
-			if(checkmaxnum != '0' && parseInt(checkvalue) > parseInt(checkmaxnum)) {
+			if(isNaN(checkvalue)) {
+				warning(ce, '数字填写不正确');
+				return false;
+			} else if(checkmaxnum != '0' && parseInt(checkvalue) > parseInt(checkmaxnum)) {
 				warning(ce, '大于设置最大值');
 				return false;
 			} else if(checkminnum != '0' && parseInt(checkvalue) < parseInt(checkminnum)) {
 				warning(ce, '小于设置最小值');
 				return false;
 			}
-		} else {
-			ce.innerHTML = '<img src="' + IMGDIR + '/check_right.gif" width="16" height="16" class="vm" />';
+		} else if(checktype == 'url' && !(/(http[s]?|ftp):\/\/[^\/\.]+?\..+\w[\/]?$/i.test(checkvalue))) {
+			warning(ce, '请正确填写以http://开头的URL地址');
+			return false;
 		}
+		ce.innerHTML = '<img src="' + IMGDIR + '/check_right.gif" width="16" height="16" class="vm" />';
 	}
 	return true;
 }

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_relatethread.php 6757 2010-03-25 09:01:29Z cnteacher $
+ *      $Id: forum_relatethread.php 25791 2011-11-22 07:10:59Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -106,17 +106,12 @@ if($data) {
 	$relatedthreads = $relatedthreadlist ? addslashes(serialize($relatedthreadlist)) : '';
 	$expiration = $nextuptime ? $nextuptime : $timestamp + 86400;
 
-	require_once './include/db_'.$database.'.class.php';
-	$db = DB::object();
-	$db->connect($dbhost, $dbuser, $dbpw, $dbname, $pconnect, true, $dbcharset);
-	$db->select_db($dbname);
-	unset($dbhost, $dbuser, $dbpw, $dbname, $pconnect);
-
-	DB::query("REPLACE INTO ".DB::table('forum_relatedthread')." (tid, type, expiration, keywords, relatedthreads)
-		VALUES ('$tid', 'general', '$expiration', '$keywords[general]', '$relatedthreads')", 'UNBUFFERED');
+	$data = array('tid' => $tid, 'type' => 'general', 'expiration' => $expiration, 'keywords' => $keywords[general], 'relatedthreads' => $relatedthreads);
+	C::t('forum_relatedthread')->insert($data, 0, 1);
 	if($keywords['trade']) {
-		DB::query("REPLACE INTO ".DB::table('forum_relatedthread')." (tid, type, expiration, keywords, relatedthreads)
-			VALUES ('$tid', 'trade', '$expiration', '$keywords[trade]', '$relatedthreads')", 'UNBUFFERED');
+		$data['type'] = 'trade';
+		$data['keywords'] = $keywords['trade'];
+		C::t('forum_relatedthread')->insert($data, 0, 1);
 	}
 }
 

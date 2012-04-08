@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_credit_log.php 21696 2011-04-09 02:07:19Z monkey $
+ *      $Id: spacecp_credit_log.php 26805 2011-12-23 07:21:04Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -18,40 +18,42 @@ $start = ($page-1)*$perpage;
 
 $gets = array(
 	'mod' => 'spacecp',
-	'op' => $_G['gp_op'],
+	'op' => $_GET['op'],
 	'ac' => 'credit',
-	'suboperation' => $_G['gp_suboperation'],
-	'exttype' => $_G['gp_exttype'],
-	'income' => $_G['gp_income'],
-	'starttime' => $_G['gp_starttime'],
-	'endtime' => $_G['gp_endtime'],
-	'optype' => $_G['gp_optype']
+	'suboperation' => $_GET['suboperation'],
+	'exttype' => $_GET['exttype'],
+	'income' => $_GET['income'],
+	'starttime' => $_GET['starttime'],
+	'endtime' => $_GET['endtime'],
+	'optype' => $_GET['optype']
 );
 $theurl = 'home.php?'.url_implode($gets);
 $multi = '';
 
-$_G['gp_income'] = intval($_G['gp_income']);
-$incomeactives = array($_G['gp_income'] => ' selected="selected"');
-$optypes = array('TRC','RTC','RAC','MRC','BGC','RGC','AGC','TFR','RCV','CEC','ECU','SAC','BAC','PRC','RSC','STC','BTC','AFD','UGP','RPC','ACC','RCT','RCA','RCB','BMC','CDC','RKC');
+$_GET['income'] = intval($_GET['income']);
+$incomeactives = array($_GET['income'] => ' selected="selected"');
+$optypes = array('TRC','RTC','RAC','MRC','BGC','RGC','AGC','TFR','RCV','CEC','ECU','SAC','BAC','PRC','RSC','STC','BTC','AFD','UGP','RPC','ACC','RCT','RCA','RCB','BMC','BME','CDC','RKC');
 $endunixstr = $beginunixstr = 0;
-if($_G['gp_starttime']) {
-	$beginunixstr = strtotime($_G['gp_starttime']);
-	$_G['gp_starttime'] = dgmdate($beginunixstr, 'Y-m-d');
+if($_GET['starttime']) {
+	$beginunixstr = strtotime($_GET['starttime']);
+	$_GET['starttime'] = dgmdate($beginunixstr, 'Y-m-d');
 }
-if($_G['gp_endtime']) {
-	$endunixstr = strtotime($_G['gp_endtime'].' 23:59:59');
-	$_G['gp_endtime'] = dgmdate($endunixstr, 'Y-m-d');
+if($_GET['endtime']) {
+	$endunixstr = strtotime($_GET['endtime'].' 23:59:59');
+	$_GET['endtime'] = dgmdate($endunixstr, 'Y-m-d');
 }
 if($beginunixstr && $endunixstr && $endunixstr < $beginunixstr) {
 	showmessage('start_time_is_greater_than_end_time');
 }
 
-if($_G['gp_suboperation'] == 'creditrulelog') {
+if($_GET['suboperation'] == 'creditrulelog') {
 
-	$count = DB::result(DB::query("SELECT count(*) FROM ".DB::table('common_credit_rule_log')." WHERE uid='$_G[uid]'"), 0);
+	$count = C::t('common_credit_rule_log')->count_by_uid($_G['uid']);
 	if($count) {
-		$query = DB::query("SELECT r.rulename, l.* FROM ".DB::table('common_credit_rule_log')." l LEFT JOIN ".DB::table('common_credit_rule')." r USING(rid) WHERE l.uid='$_G[uid]' ORDER BY l.dateline DESC LIMIT $start,$perpage");
-		while($value = DB::fetch($query)) {
+		$rulelogs = C::t('common_credit_rule_log')->fetch_all_by_uid($_G['uid'], $start, $perpage);
+		$rules = C::t('common_credit_rule')->fetch_all_by_rid(C::t('common_credit_rule_log')->get_rids());
+		foreach($rulelogs as $value) {
+			$value['rulename'] = $rules[$value['rid']]['rulename'];
 			$list[] = $value;
 		}
 	}
@@ -60,44 +62,29 @@ if($_G['gp_suboperation'] == 'creditrulelog') {
 
 	loadcache('usergroups');
 	$suboperation = 'creditslog';
-	$where[] = "uid='$_G[uid]'";
-	if($_G['gp_optype'] && in_array($_G['gp_optype'], $optypes)) {
-		$where[] = "operation='$_G[gp_optype]'";
+	$optype = '';
+	if($_GET['optype'] && in_array($_GET['optype'], $optypes)) {
+		$optype = $_GET['optype'];
 	}
-	if($beginunixstr) {
-		$where[] = "dateline>='$beginunixstr'";
-	}
-	if($endunixstr) {
-		$where[] = "dateline<='$endunixstr'";
-	}
-	$exttype = intval($_G['gp_exttype']);
+	$exttype = intval($_GET['exttype']);
 
-	if($exttype && $_G['setting']['extcredits'][$exttype]) {
-		$where[] = "extcredits{$exttype}!='0'";
-	}
-	$income = intval($_G['gp_income']);
-	if($income) {
-		$incomestr = $income < 0 ? '<' : '>';
-		$incomearr = array();
-		foreach($_G['setting']['extcredits'] as $id => $arr) {
-			$incomearr[] = 'extcredits'.$id.$incomestr."'0'";
-		}
-		$where[] = '('.implode(' OR ', $incomearr).')';
-	}
-	$sql = $where ? ' WHERE '.implode(' AND ', $where) : '';
-	$count = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_credit_log').$sql);
+	$income = intval($_GET['income']);
+	$count = C::t('common_credit_log')->count_by_search($_G['uid'], $optype, $beginunixstr, $endunixstr, $exttype, $income, $_G['setting']['extcredits']);
 	if($count) {
 		$aids = $pids = $tids = $taskids = $uids = $loglist = array();
 		loadcache(array('magics'));
-		$query = DB::query("SELECT * FROM ".DB::table('common_credit_log')." $sql ORDER BY dateline DESC LIMIT $start,$perpage");
-		while($log = DB::fetch($query)) {
+		foreach(C::t('common_credit_log')->fetch_all_by_search($_G['uid'], $optype, $beginunixstr, $endunixstr, $exttype, $income, $_G['setting']['extcredits'], $start,$perpage) as $log) {
 			$credits = array();
 			$havecredit = false;
 			$maxid = $minid = 0;
 			foreach($_G['setting']['extcredits'] as $id => $credit) {
 				if($log['extcredits'.$id]) {
 					$havecredit = true;
-					$credits[] = $credit['title'].' <span class="'.($log['extcredits'.$id] > 0 ? 'xi1' : 'xg1').'">'.($log['extcredits'.$id] > 0 ? '+' : '').$log['extcredits'.$id].'</span>';
+					if($log['operation'] == 'RPZ') {
+						$credits[] = $credit['title'].lang('spacecp', 'credit_update_reward_clean');
+					} else {
+						$credits[] = $credit['title'].' <span class="'.($log['extcredits'.$id] > 0 ? 'xi1' : 'xg1').'">'.($log['extcredits'.$id] > 0 ? '+' : '').$log['extcredits'.$id].'</span>';
+					}
 					if($log['operation'] == 'CEC' && !empty($log['extcredits'.$id])) {
 						if($log['extcredits'.$id] > 0) {
 							$log['maxid'] = $id;
@@ -138,7 +125,7 @@ if($count) {
 $optypehtml = '<select id="optype" name="optype" class="ps" width="168">';
 $optypehtml .= '<option value="">'.lang('spacecp', 'logs_select_operation').'</option>';
 foreach($optypes as $type) {
-	$optypehtml .= '<option value="'.$type.'"'.($type == $_G['gp_optype'] ? ' selected="selected"' : '').'>'.lang('spacecp', 'logs_credit_update_'.$type).'</option>';
+	$optypehtml .= '<option value="'.$type.'"'.($type == $_GET['optype'] ? ' selected="selected"' : '').'>'.lang('spacecp', 'logs_credit_update_'.$type).'</option>';
 }
 $optypehtml .= '</select>';
 include template('home/spacecp_credit_log');

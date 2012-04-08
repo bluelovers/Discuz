@@ -3,7 +3,6 @@
 }-->
 <!--{template common/header}-->
 <div id="pt" class="bm cl">
-	<!--{subtemplate common/simplesearchform}-->
 	<div class="z">
 		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
 		<a href="home.php?mod=space&do=thread">{lang post}</a> <em>&rsaquo;</em>
@@ -28,7 +27,6 @@
 			<ul class="tb cl">
 				<li$actives[we]><a href="home.php?mod=space&do=activity&view=we">{lang friend_activity}</a></li>
 				<li$actives[me]><a href="home.php?mod=space&do=activity&view=me">{lang my_activity}</a></li>
-				<!--{if $_G['setting']['homestatus']}--><li$actives[all]><a href="home.php?mod=space&do=activity&view=all">{lang view_all}</a></li><!--{/if}-->
 				<!--{if $_G[group][allowpostactivity]}-->
 					<li class="o">
 						<!--{if $_G[setting][activityforumid]}-->
@@ -47,11 +45,6 @@
 			<div class="tbmu">
 				<a href="home.php?mod=space&do=activity&view=me" $orderactives[orig]>{lang my_create_activity}</a><span class="pipe">|</span>
 				<a href="home.php?mod=space&do=activity&view=me&type=apply" $orderactives[apply]>{lang my_join_activity}</a>
-			</div>
-		<!--{elseif $_GET[view] == 'all'}-->
-			<div class="tbmu">
-				<a href="home.php?mod=space&do=activity&view=all" $orderactives[dateline]>{lang newest_activity}</a><span class="pipe">|</span>
-				<a href="home.php?mod=space&do=activity&view=all&order=hot" $orderactives[hot]>{lang top_activity}</a>
 			</div>
 		<!--{/if}-->
 

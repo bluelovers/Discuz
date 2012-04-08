@@ -4,8 +4,12 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_google.php 14918 2010-08-17 05:35:02Z chenchunshao $
+ *      $Id: lang_google.php 27449 2012-02-01 05:32:35Z zhangguosheng $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 $lang = array
 (
@@ -22,7 +26,7 @@ $lang = array
 	'google_default_0' => '网页搜索',
 	'google_default_1' => '站内搜索',
 	'google_client' => '搜索联盟 ID',
-	'google_client_comment' => '如果你加入了 Google 搜索联盟，可以在这里填写 ID',
+	'google_client_comment' => '如果您加入了 Google 搜索联盟，可以在这里填写 ID',
 );
 
 ?>

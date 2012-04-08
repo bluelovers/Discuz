@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cron_magic_daily.php 19669 2011-01-13 06:48:56Z monkey $
+ *      $Id: cron_magic_daily.php 24589 2011-09-27 07:45:55Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -13,8 +13,7 @@ if(!defined('IN_DISCUZ')) {
 
 if(!empty($_G['setting']['magicstatus'])) {
 	$magicarray = array();
-	$query = DB::query("SELECT magicid, supplytype, supplynum, num FROM ".DB::table('common_magic')." WHERE available='1'");
-	while($magic = DB::fetch($query)) {
+	foreach(C::t('common_magic')->fetch_all_data(1) as $magic) {
 		if($magic['supplytype'] && $magic['supplynum']) {
 			$magicarray[$magic['magicid']]['supplytype'] = $magic['supplytype'];
 			$magicarray[$magic['magicid']]['supplynum'] = $magic['supplynum'];
@@ -34,7 +33,7 @@ if(!empty($_G['setting']['magicstatus'])) {
 		}
 
 		if(!empty($autosupply)) {
-			DB::query("UPDATE ".DB::table('common_magic')." SET num='$magic[supplynum]' WHERE magicid='$id'");
+			C::t('common_magic')->update($id, array('num' => $magic['supplynum']));
 		}
 	}
 }

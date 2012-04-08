@@ -68,20 +68,23 @@ function apiCallback(apiIps) {
 		return false;
 	}
 
-	if (!apiIps.result || !apiIps.result.cloud_api_ip || !apiIps.result.manyou_api_ip) {
+	if (!apiIps.result || !apiIps.result.cloud_api_ip || !apiIps.result.manyou_api_ip || !apiIps.result.qzone_api_ip) {
 		return false;
 	}
 
-	if (!$('cloud_tbody_api_test') || !$('cloud_tbody_manyou_test')) {
+	if (!$('cloud_tbody_api_test') || !$('cloud_tbody_manyou_test') || !$('cloud_tbody_qzone_test')) {
 		return false;
 	}
 
 	var cloudAPIIPs = apiIps.result.cloud_api_ip;
 	var manyouAPIIPs = apiIps.result.manyou_api_ip;
+	var QzoneAPIIPs = apiIps.result.qzone_api_ip;
 
 	ajaxShowAPIStatus(1, cloudAPIIPs);
 
 	ajaxShowAPIStatus(2, manyouAPIIPs);
+
+	ajaxShowAPIStatus(3, QzoneAPIIPs);
 
 }
 
@@ -125,4 +128,35 @@ function ajaxShowAPIStatus(apiType, ips) {
 		ajaxget('admin.php?action=cloud&operation=doctor&op=apitest&api_type=' + apiType + '&api_ip=' + encodeURI(apiIp) + '&api_description=' + encodeURI(apiDescription), '_doctor_apitest_' + apiType + '_' + apiIp);
 	}
 
+}
+
+function siteTestApiCallback(returnInfo, siteTestPosition) {
+
+	if (typeof siteTestPosition == 'undefined') {
+		var siteTestPosition = 'doctor';
+	}
+
+	if (!$('cloud_doctor_site_test_result_div')) {
+		return false;
+	}
+
+	if (typeof returnInfo == 'undefined' || !returnInfo) {
+		$('cloud_doctor_site_test_result_div').innerHTML = '<img align="absmiddle" src="static/image/admincp/cloud/wrong.gif" /> 服务器繁忙，请稍后再试';
+		return false;
+	}
+
+	if (returnInfo.errorCode) {
+		var errorCode = parseInt(returnInfo.errorCode);
+		var errorMessage = returnInfo.errorMessage;
+		$('cloud_doctor_site_test_result_div').innerHTML = '<img align="absmiddle" src="static/image/admincp/cloud/wrong.gif" /> ' + errorMessage;
+		return false;
+	}
+
+	$('cloud_doctor_site_test_result_div').innerHTML = '<img align="absmiddle" src="static/image/admincp/cloud/right.gif" /> 测试成功，耗时 ' + returnInfo.result.timeUsed + ' 秒';
+	if (siteTestPosition == 'open') {
+		$('submit_submit').style.color = '#000';
+		$('submit_submit').disabled = false;
+	}
+
+	return true;
 }

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: block_albumnew.php 8963 2010-04-26 02:10:28Z xupeng $
+ *      $Id: block_albumnew.php 25525 2011-11-14 04:39:11Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -39,7 +39,7 @@ class block_albumnew extends block_album {
 
 	function cookparameter($parameter) {
 		$parameter['orderby'] = 'updatetime';
-		return $parameter;
+		return parent::cookparameter($parameter);
 	}
 }
 

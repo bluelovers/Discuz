@@ -2,7 +2,7 @@
 <!--{eval
 	$_G['home_tpl_spacemenus'][] = "<a href=\"home.php?mod=space&do=trade\">{lang trade}</a>";
 }-->
-<!--{if $_G[gp_view] == 'eccredit'}-->
+<!--{if $_GET[view] == 'eccredit'}-->
 	<!--{eval
 			$_G['home_tpl_spacemenus'][] = "<a href=\"home.php?mod=space&uid=$space[uid]&do=$do&view=eccredit\">{lang they_credit_rating}</a>";
 	}-->
@@ -13,9 +13,8 @@
 <!--{/if}-->
 
 <div id="pt" class="bm cl">
-	<!--{subtemplate common/simplesearchform}-->
 	<div class="z">
-		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em> 
+		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
 		<a href="home.php?mod=space&do=thread">{lang post}</a> <em>&rsaquo;</em>
 		<a href="home.php?mod=space&uid=$space[uid]&do=trade&view=me">{lang trade}</a>
 	</div>
@@ -39,7 +38,6 @@
 				<li$actives[me]><a href="home.php?mod=space&do=trade&view=me">{lang my_trade}</a></li>
 				<li$actives[tradelog]><a href="home.php?mod=space&do=trade&view=tradelog">{lang trade_log}</a></li>
 				<li><a href="home.php?mod=space&do=trade&view=eccredit" target="_blank">{lang credit_rating}</a></li>
-				<!--{if $_G['setting']['homestatus']}--><li$actives[all]><a href="home.php?mod=space&do=trade&view=all">{lang view_all}</a></li><!--{/if}-->
 				<!--{if $_G[group][allowposttrade]}-->
 					<li class="o">
 						<!--{if $_G[setting][tradeforumid]}-->
@@ -55,7 +53,7 @@
 			<!--{template home/space_menu}-->
 			<p class="tbmu cl">
 				<span class="y">
-					<!--{if $_G[gp_view]=='me'}-->
+					<!--{if $_GET[view]=='me'}-->
 					<!--{eval $actives[onlyuser]=' class="a"';}-->
 					<!--{/if}-->
 					<!--{if $space[uid] > 0}-->
@@ -66,15 +64,10 @@
 			</p>
 		<!--{/if}-->
 
-		<!--{if $_G[gp_view] == 'tradelog' && $space[uid] > 0}-->
+		<!--{if $_GET[view] == 'tradelog' && $space[uid] > 0}-->
 			<p class="tbmu bw0">
 				<a href="home.php?mod=space&do=trade&view=tradelog" $orderactives[sell]>{lang sell_trade}</a><span class="pipe">|</span>
 				<a href="home.php?mod=space&do=trade&view=tradelog&type=buy" $orderactives[buy]>{lang buy_trade}</a>
-			</p>
-		<!--{elseif $_G[gp_view] == 'all'}-->
-			<p class="tbmu">
-				<a href="home.php?mod=space&do=trade&view=all"$orderactives[new]>{lang newest_trade}</a><span class="pipe">|</span>
-				<a href="home.php?mod=space&do=trade&view=all&order=hot"$orderactives[hot]>{lang hot_trade}</a>
 			</p>
 		<!--{/if}-->
 
@@ -90,7 +83,7 @@
 			</p>
 		<!--{/if}-->
 
-		<!--{if $_G[gp_view] == 'tradelog'}-->
+		<!--{if $_GET[view] == 'tradelog'}-->
 			<!--{eval
 				$selltrades = array('all' => '{lang trade_all}', 'trading' => '{lang trade_trading}', 'attention' => '{lang trade_attention}', 'eccredit' => '{lang trade_eccredit}', 'success' => '{lang trade_success}', 'refund' => '{lang trade_refund}', 'closed' => '{lang trade_closed}', 'unstart' => '{lang trade_unstart}');
 			}-->
@@ -218,11 +211,11 @@
 	</div>
 	<div class="appl">
 		<!--{subtemplate home/space_thread_nav}-->
-		
+
 		<div class="drag">
 			<!--[diy=diy2]--><div id="diy2" class="area"></div><!--[/diy]-->
 		</div>
-		
+
 	</div>
 </div>
 

@@ -4,8 +4,12 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_spacecp.php 22088 2011-04-21 07:50:14Z zhengqingpeng $
+ *      $Id: lang_spacecp.php 28195 2012-02-24 02:59:57Z svn_project_zhangjie $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 $lang = array(
 
@@ -16,10 +20,10 @@ $lang = array(
 	'share_action' => '分享了',
 
 	'pm_comment' => '答复点评',
-	'pm_thread_about' => '关于你在“{subject}”的帖子',
+	'pm_thread_about' => '关于您在“{subject}”的帖子',
 
-	'wall_pm_subject' => '你好，我给你留言了',
-	'wall_pm_message' => '我在你的留言板给你留言了，[url=\\1]点击这里去留言板看看吧[/url]',
+	'wall_pm_subject' => '您好，我给您留言了',
+	'wall_pm_message' => '我在您的留言板给您留言了，[url=\\1]点击这里去留言板看看吧[/url]',
 	'reward' => '悬赏',
 	'reward_info' => '参与投票可获得  \\1 积分',
 	'poll_separator' => '"、"',
@@ -40,63 +44,64 @@ $lang = array(
 	'message_can_not_send_13' => '这不是群聊消息',
 	'message_can_not_send_14' => '这不是私人消息',
 	'message_can_not_send_15' => '数据有误',
+	'message_can_not_send_16' => '您超出了24小时内发短消息数量的上限',
 	'message_can_not_send_onlyfriend' => '该用户只接收好友发送的短消息',
 
 
-	'friend_subject' => '<a href="{url}" target="_blank">{username} 请求加你为好友</a>',
+	'friend_subject' => '<a href="{url}" target="_blank">{username} 请求加您为好友</a>',
 	'friend_request_note' => '，附言：{note}',
-	'comment_friend' =>'<a href="\\2" target="_blank">\\1 给你留言了</a>',
-	'photo_comment' => '<a href="\\2" target="_blank">\\1 评论了你的照片</a>',
-	'blog_comment' => '<a href="\\2" target="_blank">\\1 评论了你的日志</a>',
-	'poll_comment' => '<a href="\\2" target="_blank">\\1 评论了你的投票</a>',
-	'share_comment' => '<a href="\\2" target="_blank">\\1 评论了你的分享</a>',
-	'friend_pm' => '<a href="\\2" target="_blank">\\1 给你发私信了</a>',
-	'poke_subject' => '<a href="\\2" target="_blank">\\1 向你打招呼</a>',
-	'mtag_reply' => '<a href="\\2" target="_blank">\\1 回复了你的话题</a>',
-	'event_comment' => '<a href="\\2" target="_blank">\\1 评论了你的活动</a>',
+	'comment_friend' =>'<a href="\\2" target="_blank">\\1 给您留言了</a>',
+	'photo_comment' => '<a href="\\2" target="_blank">\\1 评论了您的照片</a>',
+	'blog_comment' => '<a href="\\2" target="_blank">\\1 评论了您的日志</a>',
+	'poll_comment' => '<a href="\\2" target="_blank">\\1 评论了您的投票</a>',
+	'share_comment' => '<a href="\\2" target="_blank">\\1 评论了您的分享</a>',
+	'friend_pm' => '<a href="\\2" target="_blank">\\1 给您发私信了</a>',
+	'poke_subject' => '<a href="\\2" target="_blank">\\1 向您打招呼</a>',
+	'mtag_reply' => '<a href="\\2" target="_blank">\\1 回复了您的话题</a>',
+	'event_comment' => '<a href="\\2" target="_blank">\\1 评论了您的活动</a>',
 
-	'friend_pm_reply' => '\\1 回复了你的私信',
-	'comment_friend_reply' => '\\1 回复了你的留言',
-	'blog_comment_reply' => '\\1 回复了你的日志评论',
-	'photo_comment_reply' => '\\1 回复了你的照片评论',
-	'poll_comment_reply' => '\\1 回复了你的投票评论',
-	'share_comment_reply' => '\\1 回复了你的分享评论',
-	'event_comment_reply' => '\\1 回复了你的活动评论',
+	'friend_pm_reply' => '\\1 回复了您的私信',
+	'comment_friend_reply' => '\\1 回复了您的留言',
+	'blog_comment_reply' => '\\1 回复了您的日志评论',
+	'photo_comment_reply' => '\\1 回复了您的照片评论',
+	'poll_comment_reply' => '\\1 回复了您的投票评论',
+	'share_comment_reply' => '\\1 回复了您的分享评论',
+	'event_comment_reply' => '\\1 回复了您的活动评论',
 
 	'mail_my' => '好友与我的互动提醒',
   	'mail_system' => '系统提醒',
 
-	'invite_subject' => '{username}邀请你加入{sitename}，并成为好友',
+	'invite_subject' => '{username}邀请您加入{sitename}，并成为好友',
 	'invite_massage' => '<table border="0">
 		<tr>
 		<td valign="top">{avatar}</td>
 		<td valign="top">
-		<h3>Hi，我是{username}，邀请你也加入{sitename}并成为我的好友</h3><br>
-		请加入到我的好友中，你就可以了解我的近况，与我一起交流，随时与我保持联系。<br>
+		<h3>Hi，我是{username}，邀请您也加入{sitename}并成为我的好友</h3><br>
+		请加入到我的好友中，您就可以了解我的近况，与我一起交流，随时与我保持联系。<br>
 		<br>
 		邀请附言：<br>{saymsg}
 		<br><br>
-		<strong>请你点击以下链接，接受好友邀请：</strong><br>
+		<strong>请您点击以下链接，接受好友邀请：</strong><br>
 		<a href="{inviteurl}">{inviteurl}</a><br>
 		<br>
-		<strong>如果你拥有{sitename}上面的账号，请点击以下链接查看我的个人主页：</strong><br>
+		<strong>如果您拥有{sitename}上面的账号，请点击以下链接查看我的个人主页：</strong><br>
 		<a href="{siteurl}home.php?mod=space&uid={uid}">{siteurl}home.php?mod=space&uid={uid}</a><br>
 		</td></tr></table>',
 
-	'app_invite_subject' => '{username}邀请你加入{sitename}，一起来玩{appname}',
+	'app_invite_subject' => '{username}邀请您加入{sitename}，一起来玩{appname}',
 	'app_invite_massage' => '<table border="0">
 		<tr>
 		<td valign="top">{avatar}</td>
 		<td valign="top">
-		<h3>Hi，我是{username}，在{sitename}上玩 {appname}，邀请你也加入一起玩</h3><br>
+		<h3>Hi，我是{username}，在{sitename}上玩 {appname}，邀请您也加入一起玩</h3><br>
 		<br>
 		邀请附言：<br>
 		{saymsg}
 		<br><br>
-		<strong>请你点击以下链接，接受好友邀请一起玩{appname}：</strong><br>
+		<strong>请您点击以下链接，接受好友邀请一起玩{appname}：</strong><br>
 		<a href="{inviteurl}">{inviteurl}</a><br>
 		<br>
-		<strong>如果你拥有{sitename}上面的账号，请点击以下链接查看我的个人主页：</strong><br>
+		<strong>如果您拥有{sitename}上面的账号，请点击以下链接查看我的个人主页：</strong><br>
 		<a href="{siteurl}home.php?mod=space&uid={uid}">{siteurl}home.php?mod=space&uid={uid}</a><br>
 		</td></tr></table>',
 
@@ -105,8 +110,8 @@ $lang = array(
 
 	'space_update' => '{actor} 被SHOW了一下',
 
-	'active_email_subject' => '你的邮箱激活邮件',
-	'active_email_msg' => '请复制下面的激活链接到浏览器进行访问，以便激活你的邮箱。<br>邮箱激活链接:<br><a href="{url}" target="_blank">{url}</a>',
+	'active_email_subject' => '您的邮箱激活邮件',
+	'active_email_msg' => '请复制下面的激活链接到浏览器进行访问，以便激活您的邮箱。<br>邮箱激活链接:<br><a href="{url}" target="_blank">{url}</a>',
 	'share_space' => '分享了一个用户',
 	'share_blog' => '分享了一篇日志',
 	'share_album' => '分享了一个相册',
@@ -134,11 +139,11 @@ $lang = array(
 
 	'thread_edit_trail' => '<ins class="modify">[本话题由 \\1 于 \\2 编辑]</ins>',
 	'create_a_new_album' => '创建了新相册',
-	'not_allow_upload' => '你现在没有权限上传图片',
+	'not_allow_upload' => '您现在没有权限上传图片',
 	'not_allow_upload_extend' => '不允许上传{extend}类型的图片',
 	'files_can_not_exceed_size' => '{extend}类文件不能超过{size}',
 	'get_passwd_subject' => '取回密码邮件',
-	'get_passwd_message' => '你只需在提交请求后的三天之内，通过点击下面的链接重置你的密码：<br />\\1<br />(如果上面不是链接形式，请将地址手工粘帖到浏览器地址栏再访问)<br />上面的页面打开后，输入新的密码后提交，之后你即可使用新的密码登录了。',
+	'get_passwd_message' => '您只需在提交请求后的三天之内，通过点击下面的链接重置您的密码：<br />\\1<br />(如果上面不是链接形式，请将地址手工粘帖到浏览器地址栏再访问)<br />上面的页面打开后，输入新的密码后提交，之后您即可使用新的密码登录了。',
 	'file_is_too_big' => '文件过大',
 
 	'take_part_in_the_voting' => '{actor} 参与了 {touser} 的{reward}投票 <a href="{url}" target="_blank">{subject}</a>',
@@ -153,8 +158,8 @@ $lang = array(
 	'upload_album' => '更新了相册',
 	'the_total_picture' => '共 \\1 张图片',
 
-	'space_open_subject' => '快来打理一下你的个人主页吧',
-	'space_open_message' => 'hi，我今天去拜访了一下你的个人主页，发现你自己还没有打理过呢。赶快来看看吧。地址是：\\1space.php',
+	'space_open_subject' => '快来打理一下您的个人主页吧',
+	'space_open_message' => 'hi，我今天去拜访了一下您的个人主页，发现您自己还没有打理过呢。赶快来看看吧。地址是：\\1space.php',
 
 
 
@@ -162,12 +167,12 @@ $lang = array(
 
 
 	'magicunit' => '个',
-	'magic_note_wall' => '{actor}在留言板上给你<a href="{url}" target="_blank">留言</a>',
-	'magic_call' => '在日志中点了你的名，<a href="{url}" target="_blank">快去看看吧</a>',
+	'magic_note_wall' => '{actor}在留言板上给您<a href="{url}" target="_blank">留言</a>',
+	'magic_call' => '在日志中点了您的名，<a href="{url}" target="_blank">快去看看吧</a>',
 
 
-	'present_user_magics' => '你收到了管理员赠送的道具：\\1',
-	'has_not_more_doodle' => '你没有涂鸦板了',
+	'present_user_magics' => '您收到了管理员赠送的道具：\\1',
+	'has_not_more_doodle' => '您没有涂鸦板了',
 
 	'do_stat_login' => '来访用户',
 	'do_stat_mobilelogin' => '手机访问',
@@ -236,11 +241,14 @@ $lang = array(
 	'logs_credit_update_RCA' => '回帖中奖',
 	'logs_credit_update_RCB' => '返还回帖奖励积分',
 	'logs_credit_update_CDC' => '卡密充值',
-
 	'logs_credit_update_RGC' => '回收红包',
 	'logs_credit_update_BGC' => '埋下红包',
 	'logs_credit_update_AGC' => '获得红包',
 	'logs_credit_update_RKC' => '竞价排名',
+	'logs_credit_update_BME' => '购买勋章',
+	'logs_credit_update_RPR' => '后台积分奖惩',
+	'logs_credit_update_RPZ' => '后台积分奖惩清零',
+	'logs_credit_update_reward_clean' => '清零',
 	'logs_select_operation' => '请选择操作类型',
 	'task_credit' => '任务奖励积分',
 	'special_3_credit' => '悬赏主题扣除积分',
@@ -264,6 +272,7 @@ $lang = array(
 	'thread_credit2' => '主题支出积分',
 	'buy_credit' => '对积分充值',
 	'buy_usergroup' => '购买扩展用户组支出积分',
+	'buy_medal' => '购买勋章',
 	'report_credit' => '举报功能中的奖惩',
 	'join' => '参与',
 	'activity_credit' => '活动扣除积分',
@@ -275,6 +284,8 @@ $lang = array(
 	'replycredit_thread' => '散发的帖子',
 	'card_credit' => '卡密充值获得的积分',
 	'ranklist_top' => '参加竞价排名消费积分',
+	'admincp_op_credit' => '后台积分奖惩操作',
+	'credit_update_reward_clean' => '清零',
 
 	'profile_unchangeable' => '此项资料提交后不可修改',
 	'profile_is_verifying' => '此项资料正在审核中',
@@ -291,11 +302,32 @@ $lang = array(
 	'district_level_4' => '-乡镇-',
 	'invite_you_to_visit' => '{user}邀请您访问{bbname}',
 
+	'portal' => '门户',
+	'group' => '群组',
+	'follow' => '广播',
+	'collection' => '淘帖',
+	'guide' => '导读',
+	'feed' => '动态',
+	'blog' => '日志',
+	'doing' => '记录',
+	'wall' => '留言板',
+	'homepage' => '个人主页',
+	'ranklist' => '排行榜',
+	'select_the_navigation_position' => '选择{type}导航位置',
+	'close_module' => '关闭{type}功能',
+
+	'follow_add_remark' => '添加备注',
+	'follow_modify_remark' => '修改备注',
+	'follow_specified_group' => '广播专区',
+	'follow_specified_forum' => '广播专版',
+
+	'filesize_lessthan' => '文件大小应该小于',
+
 	'spacecp_message_prompt' => '(支持 {msg} 代码,最大 1000 字)',
 	'card_update_doing' => ' <a class="xi2" href="###">[更新记录]</a>',
 	'email_acitve_message' => '<img src="{imgdir}/mail_inactive.png" alt="未验证" class="vm" /> <span class="xi1">新邮箱({newemail})等待验证中...</span><br />
 								系统已经向该邮箱发送了一封验证激活邮件，请查收邮件，进行验证激活。<br>
-								如果没有收到验证邮件，你可以更换一个邮箱，或者<a href="home.php?mod=spacecp&ac=profile&op=password&resend=1" class="xi2">重新接收验证邮件</a>',
+								如果没有收到验证邮件，您可以更换一个邮箱，或者<a href="home.php?mod=spacecp&ac=profile&op=password&resend=1" class="xi2">重新接收验证邮件</a>',
 
 );
 

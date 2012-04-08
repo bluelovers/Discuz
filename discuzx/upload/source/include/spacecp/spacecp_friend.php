@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_friend.php 22841 2011-05-25 08:40:43Z zhangguosheng $
+ *      $Id: spacecp_friend.php 26329 2011-12-09 03:03:16Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -34,7 +34,7 @@ if($op == 'add') {
 		showmessage('you_have_friends');
 	}
 
-	$tospace = getspace($uid);
+	$tospace = getuserbyuid($uid);
 	if(empty($tospace)) {
 		showmessage('space_does_not_exist');
 	}
@@ -70,7 +70,7 @@ if($op == 'add') {
 			}
 
 			notification_add($uid, 'friend', 'friend_add');
-			showmessage('friends_add', dreferer(), array('username' => $tospace['username'], 'uid'=>$uid, 'from' => $_G['gp_from']), array('showdialog'=>1, 'showmsg' => true, 'closetime' => true));
+			showmessage('friends_add', dreferer(), array('username' => $tospace['username'], 'uid'=>$uid, 'from' => $_GET['from']), array('showdialog'=>1, 'showmsg' => true, 'closetime' => true));
 		}
 
 		$op = 'add2';
@@ -81,8 +81,8 @@ if($op == 'add') {
 
 	} else {
 
-		if(getcount('home_friend_request', array('uid'=>$uid, 'fuid'=>$_G['uid']))) {
-			showmessage('waiting_for_the_other_test');
+		if(C::t('home_friend_request')->count_by_uid_fuid($uid, $_G['uid'])) {
+			showmessage('waiting_for_the_other_test', '', array(), array('alert' => 'info'));
 		}
 
 		if(submitcheck('addsubmit')) {
@@ -125,12 +125,12 @@ if($op == 'add') {
 			} else {
 				friend_request_delete($uid);
 			}
-			showmessage('do_success', 'home.php?mod=spacecp&ac=friend&op=request', array('uid'=>$uid, 'from' => $_G['gp_from']), array('showdialog' => 1, 'showmsg' => true, 'closetime' => 0));
+			showmessage('do_success', 'home.php?mod=spacecp&ac=friend&op=request', array('uid'=>$uid, 'from' => $_GET['from']), array('showdialog' => 1, 'showmsg' => true, 'closetime' => 0));
 		}
 	} elseif($_GET['key'] == $space['key']) {
-		$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('home_friend_request')." WHERE uid='$_G[uid]'"), 0);
+		$count = C::t('home_friend_request')->count_by_uid($_G['uid']);
 		if($count) {
-			DB::delete('home_friend_request', array('uid'=>$_G['uid']));
+			C::t('home_friend_request')->delete_by_uid($_G['uid']);
 
 			dsetcookie('promptstate_'.$_G['uid'], $space['newprompt'], 31536000);
 		}
@@ -156,8 +156,7 @@ if($op == 'add') {
 			}
 		}
 
-		$query = DB::query("SELECT fuid, fusername FROM ".DB::table('home_friend_request')." WHERE uid='$space[uid]' LIMIT 0,1");
-		if($value = DB::fetch($query)) {
+		if($value = C::t('home_friend_request')->fetch_by_uid($space['uid'])) {
 			friend_add($value['fuid']);
 			showmessage('friend_addconfirm_next', 'home.php?mod=spacecp&ac=friend&op=addconfirm&key='.$space['key'], array('username' => $value['fusername']), array('showdialog'=>1, 'showmsg' => true, 'closetime' => true));
 		}
@@ -172,8 +171,8 @@ if($op == 'add') {
 	$recommenduser = $myfuids = $fuids =array();
 
 	$i = 0;
-	$query = DB::query("SELECT fuid, fusername FROM ".DB::table('home_friend')." WHERE uid='$_G[uid]' ORDER BY num DESC");
-	while ($value = DB::fetch($query)) {
+	$query = C::t('home_friend')->fetch_all_by_uid($_G['uid'], 0, 0, true);
+	foreach($query as $value) {
 		if($i < 100) {
 			$fuids[$value['fuid']] = $value['fuid'];
 		}
@@ -182,16 +181,13 @@ if($op == 'add') {
 	}
 	$myfuids[$space['uid']] = $space['uid'];
 
-	$query = DB::query("SELECT * FROM ".DB::table('home_specialuser'));
-	while ($value = DB::fetch($query)) {
+	foreach(C::t('home_specialuser')->range() as $value) {
 		$recommenduser[$value['uid']] = $value;
 	}
 
 	$i = 0;
 	$nearlist = array();
-	$myip = explode('.', $_G['clientip']);
-	$query = DB::query("SELECT * FROM ".DB::table('common_session')." WHERE ip1='$myip[0]' AND ip2='$myip[1]' AND ip3='$myip[2]' LIMIT 0,200");
-	while($value = DB::fetch($query)) {
+	foreach(C::app()->session->fetch_all_by_ip($_G['clientip'], 200) as $value) {
 		if($value['uid'] && empty($myfuids[$value['uid']])) {
 			$nearlist[$value['uid']] = $value;
 			$i++;
@@ -202,10 +198,11 @@ if($op == 'add') {
 	$i = 0;
 	$friendlist = array();
 	if($fuids) {
-		$query = DB::query("SELECT fuid AS uid, fusername AS username FROM ".DB::table('home_friend')."
-			WHERE uid IN (".dimplode($fuids).") LIMIT 0,200");
+		$query = C::t('home_friend')->fetch_all_by_uid($fuids, 0, 200);
 		$fuids[$space['uid']] = $space['uid'];
-		while ($value = DB::fetch($query)) {
+		foreach($query as $value) {
+			$value['fuid'] = $value['uid'];
+			$value['fusername'] = $value['username'];
 			if(empty($myfuids[$value['uid']])) {
 				$friendlist[$value['uid']] = $value;
 				$i++;
@@ -216,9 +213,8 @@ if($op == 'add') {
 
 	$i = 0;
 	$onlinelist = array();
-	$query = DB::query("SELECT * FROM ".DB::table('common_session'));
-	while ($value = DB::fetch($query)) {
-		if($value['uid'] && empty($myfuids[$value['uid']]) && !isset($onlinelist[$value['uid']])) {
+	foreach(C::app()->session->fetch_member(1, 2, 200) as $value) {
+		if(empty($myfuids[$value['uid']]) && !isset($onlinelist[$value['uid']])) {
 			$onlinelist[$value['uid']] = $value;
 			$i++;
 			if($i>=$maxnum) break;
@@ -229,13 +225,13 @@ if($op == 'add') {
 } elseif($op == 'changegroup') {
 
 	if(submitcheck('changegroupsubmit')) {
-		DB::update('home_friend', array('gid'=>intval($_POST['group'])), array('uid'=>$_G['uid'], 'fuid'=>$uid));
+		C::t('home_friend')->update_by_uid_fuid($_G['uid'], $uid, array('gid'=>intval($_POST['group'])));
 		friend_cache($_G['uid']);
 		showmessage('do_success', dreferer(), array('gid'=>intval($_POST['group'])), array('showdialog'=>1, 'showmsg' => true, 'closetime' => true));
 	}
 
-	$query = DB::query("SELECT * FROM ".DB::table('home_friend')." WHERE uid='$_G[uid]' AND fuid='$uid'");
-	if(!$friend = DB::fetch($query)) {
+	$query = C::t('home_friend')->fetch_all_by_uid_fuid($_G['uid'], $uid);
+	if(!$friend = $query[0]) {
 		showmessage('specified_user_is_not_your_friend');
 	}
 	$groupselect = array($friend['gid'] => ' checked');
@@ -246,13 +242,13 @@ if($op == 'add') {
 } elseif($op == 'editnote') {
 
 	if(submitcheck('editnotesubmit')) {
-		$note = getstr($_POST['note'], 20, 1, 1);
-		DB::update('home_friend', array('note'=>$note), array('uid'=>$_G['uid'], 'fuid'=>$uid));
+		$note = getstr($_POST['note'], 20);
+		C::t('home_friend')->update_by_uid_fuid($_G['uid'], $uid, array('note'=>$note));
 		showmessage('do_success', dreferer(), array('uid'=>$uid, 'note'=>$note), array('showdialog'=>1, 'msgtype' => 2, 'closetime' => true));
 	}
 
-	$query = DB::query("SELECT * FROM ".DB::table('home_friend')." WHERE uid='$_G[uid]' AND fuid='$uid'");
-	if(!$friend = DB::fetch($query)) {
+	$query = C::t('home_friend')->fetch_all_by_uid_fuid($_G['uid'], $uid);
+	if(!$friend = $query[0]) {
 		showmessage('specified_user_is_not_your_friend');
 	}
 
@@ -262,13 +258,13 @@ if($op == 'add') {
 	if(submitcheck('changenumsubmit')) {
 		$num = abs(intval($_POST['num']));
 		if($num > 9999) $num = 9999;
-		DB::update('home_friend', array('num'=>$num), array('uid'=>$_G['uid'], 'fuid'=>$uid));
+		C::t('home_friend')->update_by_uid_fuid($_G['uid'], $uid, array('num'=>$num));
 		friend_cache($_G['uid']);
 		showmessage('do_success', dreferer(), array('fuid'=>$uid, 'num'=>$num), array('showmsg' => true, 'timeout' => 3, 'return'=>1));
 	}
 
-	$query = DB::query("SELECT * FROM ".DB::table('home_friend')." WHERE uid='$_G[uid]' AND fuid='$uid'");
-	if(!$friend = DB::fetch($query)) {
+	$query = C::t('home_friend')->fetch_all_by_uid_fuid($_G['uid'], $uid);
+	if(!$friend = $query[0]) {
 		showmessage('specified_user_is_not_your_friend');
 	}
 
@@ -278,9 +274,9 @@ if($op == 'add') {
 		if(empty($_POST['fuids'])) {
 			showmessage('please_correct_choice_groups_friend', dreferer());
 		}
-		$ids = dimplode($_POST['fuids']);
+		$ids = $_POST['fuids'];
 		$groupid = intval($_POST['group']);
-		DB::update('home_friend', array('gid'=>$groupid), "uid='$_G[uid]' AND fuid IN ($ids)");
+		C::t('home_friend')->update_by_uid_fuid($_G['uid'], $ids, array('gid'=>$groupid));
 		friend_cache($_G['uid']);
 		showmessage('do_success', dreferer());
 	}
@@ -308,14 +304,12 @@ if($op == 'add') {
 			$theurl .= "&group=$group";
 		}
 
-		$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('home_friend')." main
-			WHERE main.uid='$space[uid]' $wheresql"), 0);
+		$count = C::t('home_friend')->fetch_all_search($space['uid'], $group, '', true);
 		if($count) {
-			$query = DB::query("SELECT main.fuid AS uid,main.fusername AS username, main.gid, main.num FROM ".DB::table('home_friend')." main
-				WHERE main.uid='$space[uid]' $wheresql
-				ORDER BY main.dateline DESC
-				LIMIT $start,$perpage");
-			while ($value = DB::fetch($query)) {
+			$query = C::t('home_friend')->fetch_all_search($space['uid'], $group, '', false, $start, $perpage, true);
+			foreach($query as $value) {
+				$value['uid'] = $value['fuid'];
+				$value['username'] = $value['fusername'];
 				$value['group'] = $groups[$value['gid']];
 				$list[] = $value;
 			}
@@ -347,11 +341,10 @@ if($op == 'add') {
 
 	$list = array();
 
-	$count = getcount('home_friend_request', array('uid'=>$space['uid']));
+	$count = C::t('home_friend_request')->count_by_uid($space['uid']);
 	if($count) {
 		$fuids = array();
-		$query = DB::query("SELECT * FROM ".DB::table('home_friend_request')." WHERE uid='$space[uid]' ORDER BY dateline DESC LIMIT $start, $perpage");
-		while ($value = DB::fetch($query)) {
+		foreach(C::t('home_friend_request')->fetch_all_by_uid($space['uid'], $start, $perpage) as $value) {
 			$fuids[$value['fuid']] = $value['fuid'];
 			$list[$value['fuid']] = $value;
 		}
@@ -374,7 +367,7 @@ if($op == 'add') {
 	}
 	space_merge($space, 'field_home');
 	if(submitcheck('groupnamesubmit')) {
-		$space['privacy']['groupname'][$group] = getstr($_POST['groupname'], 20, 1, 1);
+		$space['privacy']['groupname'][$group] = getstr($_POST['groupname'], 20);
 		privacy_update();
 		showmessage('do_success', dreferer(), array('gid'=>$group), array('showdialog'=>1, 'showmsg' => true, 'closetime' => true));
 	}
@@ -404,14 +397,13 @@ if($op == 'add') {
 
 	if($_GET['subop'] == 'delete') {
 		$_GET['uid'] = intval($_GET['uid']);
-		DB::query("DELETE FROM ".DB::table('home_blacklist')." WHERE uid='$space[uid]' AND buid='$_GET[uid]'");
+		C::t('home_blacklist')->delete_by_uid_buid($space['uid'], $_GET['uid']);
 		showmessage('do_success', "home.php?mod=space&uid=$_G[uid]&do=friend&view=blacklist&quickforward=1&start=$_GET[start]");
 	}
 
 	if(submitcheck('blacklistsubmit')) {
 		$_POST['username'] = trim($_POST['username']);
-		$query = DB::query("SELECT * FROM ".DB::table('common_member')." WHERE username='$_POST[username]'");
-		if(!$tospace = DB::fetch($query)) {
+		if(!($tospace = C::t('common_member')->fetch_by_username($_POST['username']))) {
 			showmessage('space_does_not_exist');
 		}
 		if($tospace['uid'] == $space['uid']) {
@@ -420,8 +412,7 @@ if($op == 'add') {
 
 		friend_delete($tospace['uid']);
 
-		DB::insert('home_blacklist', array('uid'=>$space['uid'], 'buid'=>$tospace['uid'], 'dateline'=>$_G['timestamp']), 0, true);
-
+		C::t('home_blacklist')->insert(array('uid'=>$space['uid'], 'buid'=>$tospace['uid'], 'dateline'=>$_G['timestamp']), false, false, true);
 		showmessage('do_success', "home.php?mod=space&uid=$_G[uid]&do=friend&view=blacklist&quickforward=1&start=$_GET[start]");
 	}
 
@@ -430,15 +421,15 @@ if($op == 'add') {
 	$userlist = $randuids = array();
 	space_merge($space, 'count');
 	if($space['friends']<5) {
-		$query = DB::query("SELECT uid FROM ".DB::table('common_session')." LIMIT 0,100");
+		$userlist = C::app()->session->fetch_member(1, 2, 100);
 	} else {
-		$query = DB::query("SELECT fuid as uid FROM ".DB::table('home_friend')." WHERE uid='$_G[uid]'");
-	}
-	while($value = DB::fetch($query)) {
-		if($value['uid'] != $space['uid']) {
-			$userlist[] = $value['uid'];
+		$query = C::t('home_friend')->fetch($_G['uid']);
+		foreach($query as $value) {
+			$userlist[$value['uid']] = $value['fuid'];
 		}
 	}
+	unset($userlist[$space['uid']]);
+
 	$randuids = sarray_rand($userlist, 1);
 	showmessage('do_success', "home.php?mod=space&quickforward=1&uid=".array_pop($randuids));
 
@@ -449,8 +440,8 @@ if($op == 'add') {
 	$list = array();
 	if($fuid) {
 		$friend = $friendlist = array();
-		$query = DB::query("SELECT * FROM ".DB::table('home_friend')." WHERE uid='$space[uid]' OR uid='$fuid'");
-		while($value = DB::fetch($query)) {
+		$query = C::t('home_friend')->fetch_all_by_uid_common($space['uid'], $fuid);
+		foreach($query as $value) {
 			$friendlist[$value['uid']][] = $value['fuid'];
 			$friend[$value['fuid']] = $value;
 		}
@@ -468,12 +459,11 @@ if($op == 'add') {
 
 	}
 } elseif($op == 'getinviteuser') {
-
 	require_once libfile('function/search');
 	$perpage = 20;
-	$username = empty($_G['gp_username'])?'':searchkey($_G['gp_username'], "f.fusername LIKE '{text}%'");
-	$page = empty($_G['gp_page'])?0:intval($_G['gp_page']);
-	$gid = isset($_G['gp_gid']) ? intval($_G['gp_gid']) : -1;
+	$username = empty($_GET['username'])?'':searchkey($_GET['username'], "f.fusername LIKE '{text}%'");
+	$page = empty($_GET['page'])?0:intval($_GET['page']);
+	$gid = isset($_GET['gid']) ? intval($_GET['gid']) : -1;
 	if($page<1) $page = 1;
 	$start = ($page-1) * $perpage;
 	$json = array();
@@ -484,31 +474,51 @@ if($op == 'add') {
 	if(!empty($username)) {
 		$wheresql .= $username;
 	}
-	$singlenum = 0;
-	$count = DB::result_first("SELECT COUNT(*) FROM ".DB::table('home_friend')." f WHERE f.uid='$_G[uid]' $wheresql");
-	if($count) {
-		$query = DB::query("SELECT f.*, m.username FROM ".DB::table('home_friend')." f LEFT JOIN ".DB::table('common_member')." m ON f.fuid=m.uid WHERE f.uid='$_G[uid]' $wheresql ORDER BY f.num DESC, f.dateline DESC LIMIT $start,$perpage");
-		while($value = DB::fetch($query)) {
-			$value['fusername'] = daddslashes($value['username']);
-			$value['avatar'] = avatar($value['fuid'], 'small', true);
-			$singlenum++;
-			$json[$value['fuid']] = "$value[fuid]:{'uid':$value[fuid], 'username':'$value[fusername]', 'avatar':'$value[avatar]'}";
+
+	$count = $count_at = $singlenum = 0;
+	if($_GET['at'] == 1 && $gid < 0) {
+		$count_at = C::t('home_follow')->count_by_uid_username($_G['uid'], $_GET['username']);
+		if($count_at) {
+			foreach(C::t('home_follow')->fetch_all_by_uid_username($_G['uid'], $_GET['username'], $start, $perpage) as $value) {
+				$value['fusername'] = daddslashes($value['fusername']);
+				$value['avatar'] = avatar($value['followuid'], 'small', true);
+				$singlenum++;
+				$json[$value['followuid']] = "$value[followuid]:{'uid':$value[followuid], 'username':'$value[fusername]', 'avatar':'$value[avatar]'}";
+			}
+			$perpage = $perpage - $singlenum;
+			$start = max($start - $count_at, 0);
+		}
+
+	}
+	if($perpage && $gid != -2) {
+		$count = C::t('home_friend')->fetch_all_search($_G['uid'], $gid, $_GET['username'], true);
+		if($count) {
+			$homefriend = C::t('home_friend')->fetch_all_search($_G['uid'], $gid, $_GET['username'], false, $start, $perpage, true);
+
+			$usrids = array();
+			foreach($homefriend as $key=>$usrs) {
+				$usrids[$key] = $usrs['fuid'];
+			}
+
+			$usernames = C::t('common_member')->fetch_all_username_by_uid($usrids);
+			foreach($homefriend as $value) {
+				$value['fusername'] = daddslashes($usernames[$value['fuid']]);
+				$value['avatar'] = avatar($value['fuid'], 'small', true);
+				$singlenum++;
+				$json[$value['fuid']] = "$value[fuid]:{'uid':$value[fuid], 'username':'$value[fusername]', 'avatar':'$value[avatar]'}";
+			}
 		}
 	}
-	$jsstr = "{'userdata':{".implode(',', $json)."}, 'maxfriendnum':'$count', 'singlenum':'$singlenum'}";
+	$jsstr = "{'userdata':{".implode(',', $json)."}, 'maxfriendnum':'".($count+$count_at)."', 'singlenum':'$singlenum'}";
 
 } elseif($op == 'search') {
 
-	$searchkey = stripsearchkey($_GET['searchkey']);
 	if(strlen($searchkey) < 2) {
 		showmessage('username_less_two_chars');
 	}
 
 	$list = array();
-	$query = DB::query("SELECT * FROM ".DB::table('common_member')." WHERE username LIKE '%$searchkey%' LIMIT 0,100");
-	while ($value = DB::fetch($query)) {
-		$list[$value['uid']] = $value;
-	}
+	$list = C::t('common_member')->fetch_all_by_like_username($searchkey, 0, 100);
 	$navtitle = lang('core', 'title_search_friend');
 }
 

@@ -4,29 +4,29 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_pic.php 22995 2011-06-13 03:15:57Z zhangguosheng $
+ *      $Id: admincp_pic.php 28299 2012-02-27 08:48:36Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
 }
 
-$detail = !empty($_GET['uid']) ? true : $_G['gp_detail'];
-$albumid = $_G['gp_albumid'];
-$users = $_G['gp_users'];
-$picid = $_G['gp_picid'];
-$postip = $_G['gp_postip'];
-$hot1 = $_G['gp_hot1'];
-$hot2 = $_G['gp_hot2'];
-$starttime = $_G['gp_starttime'];
-$endtime = $_G['gp_endtime'];
-$searchsubmit = $_G['gp_searchsubmit'];
-$picids = $_G['gp_picids'];
-$title = $_G['gp_title'];
-$orderby = $_G['gp_orderby'];
-$ordersc = $_G['gp_ordersc'];
+$detail = $_GET['detail'];
+$albumid = $_GET['albumid'];
+$users = $_GET['users'];
+$picid = $_GET['picid'];
+$postip = $_GET['postip'];
+$hot1 = $_GET['hot1'];
+$hot2 = $_GET['hot2'];
+$starttime = $_GET['starttime'];
+$endtime = $_GET['endtime'];
+$searchsubmit = $_GET['searchsubmit'];
+$picids = $_GET['picids'];
+$title = $_GET['title'];
+$orderby = $_GET['orderby'];
+$ordersc = $_GET['ordersc'];
 
-$fromumanage = $_G['gp_fromumanage'] ? 1 : 0;
+$fromumanage = $_GET['fromumanage'] ? 1 : 0;
 
 $muticondition = '';
 $muticondition .= $albumid ? '&albumid='.$albumid : '';
@@ -42,13 +42,13 @@ $muticondition .= $orderby ? '&orderby='.$orderby : '';
 $muticondition .= $ordersc ? '&ordersc='.$ordersc : '';
 $muticondition .= $fromumanage ? '&fromumanage='.$fromumanage : '';
 $muticondition .= $searchsubmit ? '&searchsubmit='.$searchsubmit : '';
-$muticondition .= $_G['gp_search'] ? '&search='.$_G['gp_search'] : '';
+$muticondition .= $_GET['search'] ? '&search='.$_GET['search'] : '';
 $muticondition .= $detail ? '&detail='.$detail : '';
 
 cpheader();
 
 if(!submitcheck('picsubmit')) {
-	if(empty($_G['gp_search'])) {
+	if(empty($_GET['search'])) {
 		$newlist = 1;
 		$detail = 1;
 	}
@@ -83,13 +83,13 @@ function page(number) {
 </script>
 EOT;
 	showtagheader('div', 'searchposts', !$searchsubmit && empty($newlist));
-	showformheader("pic".(!empty($_G['gp_search']) ? '&search=true' : ''), '', 'picforum');
-	showhiddenfields(array('page' => $page, 'pp' => $_G['gp_pp'] ? $_G['gp_pp'] : $_G['gp_perpage']));
+	showformheader("pic".(!empty($_GET['search']) ? '&search=true' : ''), '', 'picforum');
+	showhiddenfields(array('page' => $page, 'pp' => $_GET['pp'] ? $_GET['pp'] : $_GET['perpage']));
 	showtableheader();
 	showsetting('pic_search_detail', 'detail', $detail, 'radio');
-	showsetting('pic_search_perpage', '', $_G['gp_perpage'], "<select name='perpage'><option value='20'>$lang[perpage_20]</option><option value='50'>$lang[perpage_50]</option><option value='100'>$lang[perpage_100]</option></select>");
+	showsetting('pic_search_perpage', '', $_GET['perpage'], "<select name='perpage'><option value='20'>$lang[perpage_20]</option><option value='50'>$lang[perpage_50]</option><option value='100'>$lang[perpage_100]</option></select>");
 	showsetting('resultsort', '', $orderby, "<select name='orderby'><option value=''>$lang[defaultsort]</option><option value='dateline'>$lang[pic_search_createtime]</option><option value='size'>$lang[pic_size]</option><option value='hot'>$lang[pic_search_hot]</option></select> ");
-	showsetting('', '', $ordersc, "<select name='ordersc'><option value='desc'>$lang[orderdesc]</option><option value='asc'>$lang[orderasc]</option></select>");
+	showsetting('', '', $ordersc, "<select name='ordersc'><option value='desc'>$lang[orderdesc]</option><option value='asc'>$lang[orderasc]</option></select>", '', 0, '', '', '', true);
 	showsetting('pic_search_albumid', 'albumid', $albumid, 'text');
 	showsetting('pic_search_user', 'users', $users, 'text');
 	showsetting('pic_search_picid', 'picid', $picid, 'text');
@@ -105,7 +105,7 @@ EOT;
 
 } else {
 	$picids = authcode($picids, 'DECODE');
-	$picidsadd = $picids ? explode(',', $picids) : $_G['gp_delete'];
+	$picidsadd = $picids ? explode(',', $picids) : $_GET['delete'];
 	include_once libfile('function/delete');
 	$deletecount = count(deletepics($picidsadd));
 	$cpmsg = cplang('pic_succeed', array('deletecount' => $deletecount));
@@ -124,13 +124,13 @@ if(submitcheck('searchsubmit', 1) || $newlist) {
 
 	if($starttime != '') {
 		$starttime = strtotime($starttime);
-		$sql .= " AND p.dateline>'$starttime'";
+		$sql .= ' AND p.'.DB::field('dateline', $starttime, '>');
 	}
 
 	if($_G['adminid'] == 1 && $endtime != dgmdate(TIMESTAMP, 'Y-n-j')) {
 		if($endtime != '') {
 			$endtime = strtotime($endtime);
-			$sql .= " AND p.dateline<'$endtime'";
+			$sql .= ' AND p.'.DB::field('dateline', $endtime, '<');
 		}
 	} else {
 		$endtime = TIMESTAMP;
@@ -138,39 +138,45 @@ if(submitcheck('searchsubmit', 1) || $newlist) {
 
 	if($picid !='') {
 		$picids = '-1';
-		$query = DB::query("SELECT picid FROM ".DB::table('home_pic')." WHERE picid IN ('".str_replace(',', '\',\'', str_replace(' ', '', $picid))."')");
-		while($arr = DB::fetch($query)) {
+		$picidsarr = array('-1');
+		$query = C::t('home_pic')->fetch_all(explode(',', str_replace(' ', '', $picid)));
+		foreach($query as $arr) {
 			$picids .=",$arr[picid]";
+			$picidsarr[] = $arr['picid'];
 		}
-		$sql .=" AND p.picid IN ($picids)";
+		$sql .= ' AND p.'.DB::field('picid', $picidsarr);
 	}
 
 	if($albumid !='') {
 		$albumids = '-1';
-		$query = DB::query("SELECT albumid FROM ".DB::table('home_album')." WHERE albumid IN ('".str_replace(',', '\',\'', str_replace(' ', '', $albumid))."')");
-		while($arr = DB::fetch($query)) {
+		$albumidsarr = array('-1');
+		$query = C::t('home_album')->fetch_all(explode(',', $albumid));
+		foreach($query as $arr) {
 			$albumids .=",$arr[albumid]";
+			$albumidsarr[] = $arr['albumid'];
 		}
-		$sql .=" AND p.albumid IN ($albumids)";
+		$sql .= ' AND p.'.DB::field('albumid', $albumidsarr);
 	}
 
 	if($users != '') {
 		$uids = '-1';
-		$query = DB::query("SELECT uid FROM ".DB::table('home_album')." WHERE username IN ('".str_replace(',', '\',\'', str_replace(' ', '', $users))."')");
-		while($arr = DB::fetch($query)) {
+		$uidsarr = array('-1');
+		$query = C::t('home_album')->fetch_uid_by_username(explode(',', $users));
+		foreach($query as $arr) {
 			$uids .= ",$arr[uid]";
+			$uidsarr[] = $arr['uid'];
 		}
-		$sql .= " AND p.uid IN ($uids)";
+		$sql .= ' AND p.'.DB::field('uid', $uidsarr);
 	}
 
 	if($postip != '') {
-		$sql .= " AND p.postip LIKE '".str_replace('*', '%', $postip)."'";
+		$sql .= ' AND p.'.DB::field('postip', str_replace('*', '%', $postip), 'like');
 	}
 
-	$sql .= $hot1 ? " AND p.hot >= '$hot1'" : '';
-	$sql .= $hot2 ? " AND p.hot <= '$hot2'" : '';
-	$sql .= $title ? " AND p.title LIKE '%$title%'" : '';
-	$orderby = $orderby ? "p.$orderby" : 'p.dateline';
+	$sql .= $hot1 ? ' AND p.'.DB::field('hot', $hot1, '>=') : '';
+	$sql .= $hot2 ? ' AND p.'.DB::field('hot', $hot2, '<=') : '';
+	$sql .= $title ? ' AND p.'.DB::field('title', '%'.$title.'%', 'like') : '';
+	$orderby = $orderby ? $orderby : 'dateline';
 	$ordersc = $ordersc ? "$ordersc" : 'DESC';
 
 	if(($_G['adminid'] == 2 && $endtime - $starttime > 86400 * 16) || ($_G['adminid'] == 3 && $endtime - $starttime > 86400 * 8)) {
@@ -179,13 +185,13 @@ if(submitcheck('searchsubmit', 1) || $newlist) {
 
 	if(!$error) {
 		if($detail) {
-			$_G['gp_perpage'] = intval($_G['gp_perpage']) < 1 ? 20 : intval($_G['gp_perpage']);
-			$perpage = $_G['gp_pp'] ? $_G['gp_pp'] : $_G['gp_perpage'];
-			$query = DB::query("SELECT a.*, p.* FROM ".DB::table('home_pic')." p LEFT JOIN ".DB::table('home_album')." a USING(albumid) WHERE 1 $sql ORDER BY $orderby $ordersc LIMIT ".(($page - 1) * $perpage).",{$perpage}");
+			$_GET['perpage'] = intval($_GET['perpage']) < 1 ? 20 : intval($_GET['perpage']);
+			$perpage = $_GET['pp'] ? $_GET['pp'] : $_GET['perpage'];
+			$query = C::t('home_pic')->fetch_all_by_sql('1 '.$sql, 'p.'.DB::order($orderby, $ordersc), (($page - 1) * $perpage), $perpage);
 			$pics = '';
 
 			include_once libfile('function/home');
-			while($pic = DB::fetch($query)) {
+			foreach($query as $pic) {
 				$pic['dateline'] = dgmdate($pic['dateline']);
 				$pic['pic'] = pic_get($pic['filepath'], 'album', $pic['thumb'], $pic['remote']);
 				$pic['albumname'] = empty($pic['albumname']) && empty($pic['albumid']) ? $lang['album_default'] : $pic['albumname'];
@@ -199,12 +205,12 @@ if(submitcheck('searchsubmit', 1) || $newlist) {
 					$pic['dateline'], "<a href=\"".ADMINSCRIPT."?action=comment&detail=1&searchsubmit=1&idtype=picid&id=$pic[picid]\">".$lang['pic_comment']."</a>"
 				), TRUE);
 			}
-			$piccount = DB::result_first("SELECT count(*) FROM ".DB::table('home_pic')." p WHERE 1 $sql");
+			$piccount = C::t('home_pic')->fetch_all_by_sql('1 '.$sql, '', 0, 0, 1);
 			$multi = multi($piccount, $perpage, $page, ADMINSCRIPT."?action=pic$muticondition");
 		} else {
 			$piccount = 0;
-			$query = DB::query("SELECT p.picid FROM ".DB::table('home_pic')." p WHERE 1 $sql");
-			while($pic = DB::fetch($query)) {
+			$query = C::t('home_pic')->fetch_all_by_sql('1 '.$sql, '', 0, 0, 0, 0);
+			foreach($query as $pic) {
 				$picids .= ','.$pic['picid'];
 				$piccount++;
 			}

@@ -4,11 +4,17 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_forumlist.php 19504 2011-01-05 04:51:17Z monkey $
+ *      $Id: lang_forumlist.php 27449 2012-02-01 05:32:35Z zhangguosheng $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 $lang = array
 (
+	'forumlist_fids' => '指定版块',
+	'forumlist_fids_comment' => '填入指定版块的ID(fid)，多个版块之间用逗号(,)分隔',
 	'forumlist_fups' => '上级版块',
 	'forumlist_fups_comment' => '设置显示某些分类或版块下属的版块',
 	'forumlist_titlelength' => '名称长度',

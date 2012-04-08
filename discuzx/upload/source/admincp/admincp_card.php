@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_card.php 22176 2011-04-25 07:01:10Z congyushuai $
+ *      $Id: admincp_card.php 29335 2012-04-05 02:08:34Z cnteacher $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -35,7 +35,7 @@ if($operation == 'set') {
 	$nav = '';
 }
 if($nav != '') {
-	if(!submitcheck('cardsubmit', 1) || $operation == 'type') {
+	if(!submitcheck('cardsubmit', 1) || $operation == 'manage' || $operation == 'type') {
 		shownav('extended', 'nav_card', $nav);
 		showsubmenu('nav_card', array(
 			array('config', 'card', $submenu['set']),
@@ -59,18 +59,24 @@ if($operation == 'set') {
 		showtablefooter();
 		showformfooter();
 	} else {
-		$card_setting = serialize(array('open' => $_POST['card_config_open']));
-		DB::query("REPLACE INTO ".DB::table('common_setting')." (`skey`, `svalue`) VALUES ('card', '$card_setting')");
+		C::t('common_setting')->update('card', array('open' => $_POST['card_config_open']));
 		updatecache('setting');
 		cpmsg('card_config_succeed', 'action=card&operation=set', 'succeed');
 	}
 } elseif($operation == 'manage'){
 	if(submitcheck('cardsubmit')) {
 		if(is_array($_POST['delete'])) {
-			DB::query("DELETE FROM ".DB::table('common_card')." WHERE id IN(".dimplode($_POST['delete']).")");
-			$delnum = intval(DB::affected_rows());
+			$delnum = C::t('common_card')->delete($_POST['delete']);
 			$card_info = serialize(array('num' => ($delnum ? $delnum : 0)));
-			DB::query("INSERT INTO ".DB::table('common_card_log')." (uid, cardrule, info, dateline, operation, username)VALUES('{$_G['uid']}', '', '{$card_info}', '{$_G['timestamp']}', '3', '{$_G['member']['username']}')");
+			$cardlog = array(
+				'uid' => $_G['uid'],
+				'cardrule' => '',
+				'info' => $card_info,
+				'dateline' => $_G['timestamp'],
+				'operation' => 3,
+				'username' => $_G['member']['username']
+			);
+			C::t('common_card_log')->insert($cardlog);
 		}
 	}
 	$sqladd = cardsql();
@@ -87,9 +93,8 @@ if($operation == 'set') {
 	echo '<script type="text/javascript" src="static/js/calendar.js"></script>';
 
 	showtips('card_manage_tips');
-	$query = DB::query("SELECT * FROM ".DB::table('common_card_type')." ORDER BY id ASC");
 	$card_type_option = '';
-	while($result = DB::fetch($query)) {
+	foreach(C::t('common_card_type')->range(0, 0, 'ASC') as $result) {
 		$card_type[$result['id']] = $result;
 		$card_type_option .= "<option value=\"{$result['id']}\" ".($_GET['srch_card_type'] == $result['id'] ? 'selected' : '').">{$result['typename']}</option>";
 	}
@@ -151,21 +156,17 @@ if($operation == 'set') {
 			$url_add .= '&'.$key.'='.$val;
 		}
 	}
-	$url = ADMINSCRIPT."?action=card&operation=manage&page=".$page.$url_add;
-	$count = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_card')." WHERE 1 $sqladd");
+	$url = ADMINSCRIPT.'?action=card&operation=manage&page='.$page.'&perpage='.$perpage.$url_add;
+	$count = $sqladd ? C::t('common_card')->count_by_where($sqladd) : C::t('common_card')->count();
 	if($count) {
 		$multipage = multi($count, $perpage, $page, $url, 0, 3);
-		$query = DB::query("SELECT * FROM ".DB::table('common_card')." WHERE 1 $sqladd ORDER BY dateline DESC LIMIT $start_limit, $perpage");
-		while($result = DB::fetch($query)) {
+		foreach(C::t('common_card')->fetch_all_by_where($sqladd, $start_limit, $perpage) as $result) {
 			$userlist[$result['makeruid']] = $result['makeruid'];
 			$userlist[$result['uid']] = $result['uid'];
 			$cardlist[] = $result;
 		}
 		if($userlist) {
-			$query = DB::query("SELECT uid, username FROM ".DB::table('common_member')." WHERE uid IN (".dimplode($userlist).")");
-			while($member = DB::fetch($query)) {
-				$members[$member['uid']] = $member;
-			}
+			$members = C::t('common_member')->fetch_all($userlist);
 			unset($userlist);
 		}
 
@@ -184,9 +185,8 @@ if($operation == 'set') {
 				"<a href='home.php?mod=space&uid={$val['makeruid']}' target='_blank'>".$members[$val['makeruid']]['username']."</a>"
 			));
 		}
+		echo '<input type="hidden" name="perpage" value="'.$perpage.'">';
 		showsubmit('cardsubmit', 'submit', 'del', '<a href="'.ADMINSCRIPT.'?action=card&operation=export&'.implode('&', $export_url).'" title="'.$lang['card_export_title'].'">'.$lang['card_export'].'</a>', $multipage, false);
-	} else {
-
 	}
 
 	showtablefooter();
@@ -195,19 +195,15 @@ if($operation == 'set') {
 } elseif($operation == 'type') {
 	if(submitcheck('cardsubmit')) {
 		if(is_array($_POST['delete'])) {
-			DB::query("DELETE FROM ".DB::table('common_card_type')." WHERE id IN (".dimplode($_POST['delete']).")");
-			DB::query("UPDATE ".DB::table('common_card')." SET typeid = 1 WHERE typeid IN (".dimplode($_POST['delete']).")");
+			C::t('common_card_type')->delete($_POST['delete']);
+			C::t('common_card')->update_by_typeid($_POST['delete'], array('typeid'=>1));
 		}
 		if(is_array($_POST['newtype'])) {
-			$insert_str = '';
 			$_POST['newtype'] = dhtmlspecialchars(daddslashes($_POST['newtype']));
 			foreach($_POST['newtype'] AS $key => $val) {
 				if(trim($val)) {
-					$insert_str .= ($insert_str ? ',' : '')."('".trim($val)."')";
+					C::t('common_card_type')->insert(array('typename' => trim($val)));
 				}
-			}
-			if($insert_str) {
-				DB::query("INSERT INTO ".DB::table('common_card_type')." (typename)VALUES $insert_str");
 			}
 		}
 	}
@@ -223,8 +219,7 @@ if($operation == 'set') {
 		'<input class="checkbox" type="checkbox" value ="" disabled="disabled" >',
 		cplang('card_type_default'),
 	));
-	$query = DB::query("SELECT * FROM ".DB::table('common_card_type')." ORDER BY id ASC");
-	while($result = DB::fetch($query)) {
+	foreach(C::t('common_card_type')->range(0, 0, 'ASC') as $result) {
 		showtablerow('', '', array(
 		'<input class="checkbox" type="checkbox" name ="delete[]" value ="'.$result['id'].'" >',
 		$result['typename'],
@@ -243,12 +238,11 @@ EOT;
 	showformfooter();
 } elseif($operation == 'make') {
 	if(!submitcheck('cardsubmit', 1)) {
-		if($card_log = DB::fetch_first("SELECT * FROM ".DB::table('common_card_log')." WHERE  operation = 1 ORDER BY dateline DESC LIMIT 1")) {
-			$card_log['rule'] = unserialize($card_log['cardrule']);
+		if($card_log = C::t('common_card_log')->fetch_by_operation(1)) {
+			$card_log['rule'] = dunserialize($card_log['cardrule']);
 		}
-		$query = DB::query("SELECT * FROM ".DB::table('common_card_type')." ORDER BY id ASC");
 		$card_type[] = array(0, cplang('card_type_default'));
-		while($result = DB::fetch($query)) {
+		foreach(C::t('common_card_type')->range(0, 0, 'ASC') as $result) {
 			$card_type[] = array($result['id'], $result['typename']);
 		}
 
@@ -307,9 +301,17 @@ EOT;
 		}
 
 		if($_GET['step'] == 1) {
-			$card_rule = serialize(daddslashes(array('rule' => $_GET['rule'], 'price' => $_GET['price'], 'extcreditskey' => $_GET['extcreditskey'], 'extcreditsval' => $_GET['extcreditsval'], 'num' => $_GET['num'], 'cleardateline' => $cleardateline, 'typeid' => $_GET['typeid'])));
-			DB::query("INSERT INTO ".DB::table('common_card_log')." (uid, username, cardrule, dateline, description, operation)VALUES('{$_G[uid]}', '{$_G['member']['username']}', '$card_rule', '{$_G['timestamp']}', '{$_GET['description']}', 1)");
-			$logid = DB::insert_id();
+			$card_rule = serialize(array('rule' => $_GET['rule'], 'price' => $_GET['price'], 'extcreditskey' => $_GET['extcreditskey'], 'extcreditsval' => $_GET['extcreditsval'], 'num' => $_GET['num'], 'cleardateline' => $cleardateline, 'typeid' => $_GET['typeid']));
+			$cardlog = array(
+				'uid' => $_G['uid'],
+				'username' => $_G['member']['username'],
+				'cardrule' => $card_rule,
+				'dateline' => $_G['timestamp'],
+				'description' => $_GET['description'],
+				'operation' => 1,
+
+			);
+			$logid = C::t('common_card_log')->insert($cardlog, true);
 		}
 		$onepage_make = 500;
 		$_GET['logid'] = $logid ? $logid : $_GET['logid'];
@@ -346,8 +348,8 @@ EOT;
 			$nextlink = "action=card&operation=make&rule={$_GET['rule']}&num={$_GET['num']}&price={$_GET['price']}&extcreditskey={$_GET['extcreditskey']}&extcreditsval={$_GET['extcreditsval']}&cleardateline={$_GET['cleardateline']}&step={$nextstep}&succeed_num={$_GET['succeed_num']}&fail_num={$_GET['fail_num']}&typeid={$_GET['typeid']}&logid={$_GET['logid']}&cardsubmit=yes";
 			cpmsg('card_make_step', $nextlink, 'loading', array('step' => $nextstep - 1, 'step_num' => $step_num, 'succeed_num' => $card->succeed, 'fail_num' => $card->fail));
 		} else {
-			$card_info = serialize(daddslashes(array('num' => $_GET['num'], 'succeed_num' => $_GET['succeed_num'], 'fail_num' => $_GET['fail_num'])));
-			DB::query("UPDATE ".DB::table('common_card_log')." SET info = '$card_info' WHERE id = '{$_GET[logid]}'");
+			$card_info = serialize(array('num' => $_GET['num'], 'succeed_num' => $_GET['succeed_num'], 'fail_num' => $_GET['fail_num']));
+			C::t('common_card_log')->update($_GET['logid'], array('info'=>$card_info));
 			if(ceil($_GET['num']*0.6) > $_GET['succeed_num']) {
 				cpmsg('card_make_rate_succeed', 'action=card&operation=make', 'succeed', array('succeed_num' => $_GET['succeed_num'], 'fail_num' => $_GET['fail_num']));
 			}
@@ -359,22 +361,23 @@ EOT;
 	showformheader('card&operation=log&');
 	showtableheader();
 
-	$perpage = max(20, empty($_G['gp_perpage']) ? 20 : intval($_G['gp_perpage']));
+	$perpage = max(20, empty($_GET['perpage']) ? 20 : intval($_GET['perpage']));
 	$start_limit = ($page - 1) * $perpage;
 
 	$do = in_array($_GET['do'], array('add', 'task', 'del', 'cron')) ? $_GET['do'] : 'add';
+	$operation = 0;
 	switch($do) {
 		case 'add':
-			$sqlstr = ' AND operation = 1';
+			$operation = 1;
 			break;
 		case 'task':
-			$sqlstr = ' AND operation = 2';
+			$operation = 2;
 			break;
 		case 'del':
-			$sqlstr = ' AND operation = 3';
+			$operation = 3;
 			break;
 		case 'cron':
-			$sqlstr = ' AND operation = 9';
+			$operation = 9;
 			break;
 	}
 
@@ -405,16 +408,15 @@ EOT;
 
 	showtablerow('class="header"', array('class="td21"','class="td23"','class="td23"','class="td21"','class="td23"'), $showtabletitle);
 
-	$count = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_card_log')." WHERE 1 $sqlstr");
+	$count = C::t('common_card_log')->count_by_operation($operation);
 	if($count) {
-		$url = ADMINSCRIPT."?action=card&operation=log&do=".$do."&page=".$page;
+		$url = ADMINSCRIPT."?action=card&operation=log&do=".$do."&page=".$page.'&perpage='.$perpage;
 		$multipage = multi($count, $perpage, $page, $url, 0, 3);
 
-		$query = DB::query("SELECT * FROM ".DB::table('common_card_log')." WHERE 1 $sqlstr ORDER BY dateline DESC LIMIT $start_limit, $perpage");
-		while($result = DB::fetch($query)) {
-			$result['info_arr'] = unserialize($result['info']);
+		foreach(C::t('common_card_log')->fetch_all_by_operation($operation, $start_limit, $perpage) as $result) {
+			$result['info_arr'] = dunserialize($result['info']);
 			if($result['operation'] == 1 || $result['operation'] == 2) {
-				$result['cardrule_arr'] = unserialize($result['cardrule']);
+				$result['cardrule_arr'] = dunserialize($result['cardrule']);
 				$showrule = array(
 					$result['cardrule_arr']['rule'],
 					cplang('card_log_price').' : '.$result['cardrule_arr']['price'].cplang('card_make_price_unit'),
@@ -462,26 +464,20 @@ EOT;
 
 	$sqladd = cardsql();
 	$_GET['start'] = intval($_GET['start']);
-	$count = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_card')." WHERE 1 $sqladd");
+	$count = $sqladd ? C::t('common_card')->count_by_where($sqladd) : C::t('common_card')->count();
 	if($count) {
-		$query = DB::query("SELECT * FROM ".DB::table('common_card_type'));
-		while($result = DB::fetch($query)) {
-			$cardtype[$result['id']] = $result;
-		}
+		$cardtype = C::t('common_card_type')->range();
 		$count = min(10000, $count);
-		$query = DB::query("SELECT id, typeid, price, extcreditskey, extcreditsval, status, uid, useddateline, cleardateline, dateline, makeruid FROM ".DB::table('common_card')." WHERE 1 $sqladd ORDER BY dateline DESC LIMIT ".($_GET['start'] ? "{$_GET['start']}, " : '')." $count");
-		while($result = DB::fetch($query)) {
+		foreach(C::t('common_card')->fetch_all_by_where($sqladd, $_GET['start'], $count) as $result) {
 			$userlist[$result['uid']] = $result['uid'];
 			$userlist[$result['makeruid']] = $result['makeruid'];
 			$result['extcreditsval'] = $result['extcreditsval'].$_G['setting']['extcredits'][$result['extcreditskey']]['title'];
 			unset($result['extcreditskey']);
+			unset($result['maketype']);
 			$cardlist[] = $result;
 		}
 		if($userlist) {
-			$query = DB::query("SELECT uid, username, email FROM ".DB::table('common_member')." WHERE uid IN (".dimplode($userlist).")");
-			while($member = DB::fetch($query)) {
-				$members[$member['uid']] = $member;
-			}
+			$members = C::t('common_member')->fetch_all($userlist);
 			unset($userlist);
 		}
 
@@ -561,6 +557,10 @@ EOT;
 
 
 function cardsql() {
+
+
+	$_GET = daddslashes($_GET);
+
 	$_GET['srch_id'] = trim($_GET['srch_id']);
 
 	$_GET['srch_price_max'] = intval($_GET['srch_price_max']);
@@ -575,18 +575,17 @@ function cardsql() {
 	$_GET['srch_useddateline_start'] = trim($_GET['srch_useddateline_start']);
 	$_GET['srch_useddateline_end'] = trim($_GET['srch_useddateline_end']);
 
+	$sqladd = '';
 	if($_GET['srch_id']) {
 		$sqladd .= " AND id LIKE '%{$_GET['srch_id']}%' ";
 	}
 	if($_GET['srch_card_type'] != '') {
 		$sqladd .= " AND typeid = '{$_GET['srch_card_type']}'";
 	}
-	if($_GET['srch_price_min'] == 0 || $_GET['srch_price_max'] == 0) {
-		if($_GET['srch_price_max'] == 0 && $_GET['srch_price_min']) {
-			$sqladd .= " AND price = '{$_GET['srch_price_min']}'";
-		} elseif($srch_price_min == 0 && $srch_price_max) {
-			$sqladd .= " AND price = '{$_GET['srch_price_max']}'";
-		}
+	if($_GET['srch_price_min'] && !$_GET['srch_price_max']) {
+		$sqladd .= " AND price = '{$_GET['srch_price_min']}'";
+	} elseif($_GET['srch_price_max'] && !$_GET['srch_price_min']) {
+		$sqladd .= " AND price = '{$_GET['srch_price_max']}'";
 	} elseif($_GET['srch_price_min'] && $_GET['srch_price_max']) {
 		$sqladd .= " AND price between '{$_GET['srch_price_min']}' AND '{$_GET['srch_price_max']}'";
 	}
@@ -599,7 +598,7 @@ function cardsql() {
 	}
 
 	if($_GET['srch_username']) {
-		$uid = DB::result_first("SELECT uid FROM ".DB::table('common_member')." WHERE username = '{$_GET['srch_username']}'");
+		$uid = ($uid = C::t('common_member')->fetch_uid_by_username($_GET['srch_username'])) ? $uid : C::t('common_member_archive')->fetch_uid_by_username($_GET['srch_username']);
 		$sqladd .= " AND uid = '{$uid}'";
 	}
 	if($_GET['srch_card_status']) {
@@ -615,6 +614,6 @@ function cardsql() {
 			$sqladd .= " AND useddateline <= '".mktime('23', '59', '59', $m, $d, $y)."' AND useddateline <> 0 ";
 		}
 	}
-	return $sqladd ? $sqladd : '' ;
+	return $sqladd ? ' 1 '.$sqladd : '';
 }
 ?>

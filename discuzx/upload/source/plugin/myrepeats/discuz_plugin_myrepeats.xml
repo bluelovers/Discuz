@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <root>
 	<item id="Title"><![CDATA[Discuz! Plugin]]></item>
-	<item id="Version"><![CDATA[X2]]></item>
+	<item id="Version"><![CDATA[X2.5]]></item>
 	<item id="Data">
 		<item id="plugin">
 			<item id="available"><![CDATA[1]]></item>
@@ -12,7 +12,7 @@
 			<item id="datatables"><![CDATA[]]></item>
 			<item id="directory"><![CDATA[myrepeats/]]></item>
 			<item id="copyright"><![CDATA[Comsenz Inc.]]></item>
-			<item id="version"><![CDATA[2.3]]></item>
+			<item id="version"><![CDATA[2.4]]></item>
 			<item id="__modules">
 				<item id="0">
 					<item id="name"><![CDATA[memcp]]></item>
@@ -61,6 +61,7 @@
 				<item id="login_succeed_rsnonexistence"><![CDATA[ÄúÒÑÇÐ»»µ½ {user} {comment}ÕÊºÅ£¬µ«ÊÇ´ËÕËºÅÉÐÎ´ÉèÖÃ {olduser} ÎªÂí¼×¡£<br /><a href="home.php?mod=spacecp&ac=plugin&id=myrepeats:memcp&username={olduserenc}" target="_blank">[ ÉèÖÃ {olduser} Îª±¾ÕËºÅµÄÂí¼× ]</a><br /><a href="{referer}">[ ×ªÈëÇÐ»»Ç°Ò³Ãæ ]</a>]]></item>
 				<item id="login_activation"><![CDATA[{user} ÕËºÅÎ´ÔÚ±¾ÂÛÌ³¼¤»î£¬ÏÖÔÚ½«×ªÈëÕÊºÅ¼¤»îÒ³Ãæ¡£]]></item>
 				<item id="login_invalid"><![CDATA[ÕËºÅÇÐ»»Ê§°Ü£¬ÇëÖØÐÂÉèÖÃÕÊºÅÐÅÏ¢£¬Äú»¹¿ÉÒÔ³¢ÊÔ {loginperm} ´Î¡£]]></item>
+				<item id="login_password_invalid"><![CDATA[ÕËºÅÇÐ»»Ê§°Ü£¬ÇëÖØÐÂÉèÖÃÕÊºÅÐÅÏ¢¡£]]></item>
 				<item id="login_question_empty"><![CDATA[ÇëÖØÐÂÉèÖÃÕËºÅµÄ°²È«ÌáÎÊÒÔ¼°ÕýÈ·µÄ´ð°¸¡£]]></item>
 				<item id="login_question_invalid"><![CDATA[°²È«ÌáÎÊÑ¡Ôñ´íÎó£¬ÇëÖØÐÂÉèÖÃ¡£]]></item>
 				<item id="user_nonexistence"><![CDATA[ÎÞÐ§µÄÂí¼×ÕËºÅÐÅÏ¢£¬ÇëÖØÐÂÉèÖÃ¡£]]></item>

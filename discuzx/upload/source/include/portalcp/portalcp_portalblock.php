@@ -3,7 +3,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portalcp_article.php 7701 2010-04-12 06:01:33Z zhengqingpeng $
+ *      $Id: portalcp_portalblock.php 29236 2012-03-30 05:34:47Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -11,28 +11,98 @@ if(!defined('IN_DISCUZ')) {
 }
 
 require_once libfile('function/block');
-$op = in_array($_GET['op'], array('recommend', 'getblocklist', 'updateblock')) ? $_GET['op'] : 'getblocklist';
-$_GET['idtype'] = htmlspecialchars($_GET['idtype']);
+$op = in_array($_GET['op'], array('recommend', 'getblocklist', 'verifydata', 'verifieddata')) ? $_GET['op'] : 'getblocklist';
+$initemdata = $op === 'verifydata' || $op === 'verifieddata' ? true : false;
+$_GET['idtype'] = dhtmlspecialchars($_GET['idtype']);
 $_GET['id'] = intval($_GET['id']);
 
-if(!checkperm('allowdiy') && !$admincp4 && !$admincp5 && !$admincp6) {
+$allowdiy = checkperm('allowdiy');
+if(!$allowdiy && !$admincp4 && !$admincp5 && !$admincp6) {
 	showmessage('portal_nopermission', dreferer());
 }
-$bids = array();
+loadcache('diytemplatename');
+$pagebids = $tpls = $blocks = $tplpermissions = $wherearr = $blockfavorite = $topblocks = $blockdata = array();
 
-if($op == 'updateblock') {
-	if(submitcheck('portalcpblocksubmit')) {
-		$bids = $_G['gp_bids'];
-		$bids = array_map('intval', $bids);
-		$bids = array_filter($bids);
-		if($bids) {
-			DB::query('UPDATE '.DB::table('common_block').' SET `dateline`='.TIMESTAMP.'-cachetime WHERE bid IN ('.dimplode($bids).')');
+if(submitcheck('getblocklistsubmit') || submitcheck('verifieddatasubmit') || submitcheck('verifydatasubmit')) {
+
+	if($allowdiy) {
+		$tpls = array_keys($_G['cache']['diytemplatename']);
+	} else {
+		$permissions = getallowdiytemplate($_G['uid']);
+		foreach($permissions as $value) {
+			if($value['allowmanage'] || ($value['allowrecommend'] && empty($value['needverify']))) {
+				$tpls[] = $value['targettplname'];
+			}
+		}
+	}
+	if(!$allowdiy) {
+		foreach(C::t('common_block_permission')->fetch_all_by_uid($_G['uid']) as $bid => $value) {
+			if($value['allowmanage'] == 1 || ($value['allowrecommend'] == 1 && $value['needverify'] == 0)) {
+				$bids[$value['bid']] = intval($value['bid']);
+			}
+		}
+	}
+
+	if(!$allowdiy && empty($bids)) {
+		showmessage('portal_nopermission', dreferer());
+	}
+
+	if(submitcheck('getblocklistsubmit')) {
+
+		$updatebids = $_GET['bids'];
+		$updatebids = array_map('intval', $updatebids);
+		$updatebids = array_filter($updatebids);
+		$updatebids = !$allowdiy ? array_intersect($bids, $updatebids) : $updatebids;
+		if($updatebids) {
+			C::t('common_block')->update_dateline_to_expired($updatebids, TIMESTAMP);
 		}
 		showmessage('portalcp_block_push_the_update_line', dreferer());
-	} else {
-		showmessage('portalcp_block_has_no_block','portal.php?mod=portalcp&ac=portalblock');
+
+	} else if (submitcheck('verifydatasubmit')) {
+
+		if(!in_array($_POST['optype'], array('pass', 'delete'))) {
+			showmessage('select_a_option', dreferer());
+		}
+		$ids = $updatebids = array();
+		if($_POST['ids']) {
+			foreach(C::t('common_block_item_data')->fetch_all($_POST['ids']) as $value) {
+				if($allowdiy || in_array($value['bid'], $bids)) {
+					$ids[$value['dataid']] = intval($value['dataid']);
+					$updatebids[$value['bid']] = $value['bid'];
+				}
+			}
+		}
+		if(empty($ids)) {
+			showmessage('select_a_moderate_data', dreferer());
+		}
+
+		if($_POST['optype']=='pass') {
+			C::t('common_block_item_data')->update($ids, array('isverified' => '1', 'verifiedtime' => $_G['timestamp']));
+			if($updatebids) {
+				C::t('common_block')->update_dateline_to_expired($updatebids, TIMESTAMP);
+			}
+		} elseif($_POST['optype']=='delete') {
+			C::t('common_block_item_data')->delete($ids);
+		}
+		showmessage('operation_done', dreferer());
+
+	} else if (submitcheck('verifieddatasubmit')) {
+
+		$ids = array();
+		if(!empty($_POST['ids'])) {
+			foreach(C::t('common_block_item_data')->fetch_all($_POST['ids']) as $value) {
+				if($allowdiy || in_array($value['bid'], $bids)) {
+					$ids[$value['dataid']] = intval($value['dataid']);
+				}
+			}
+		}
+		if($ids) {
+			C::t('common_block_item_data')->delete($ids);
+		}
+		showmessage('do_success', dreferer());
 	}
 } else {
+
 	$perpage = $op == 'recommend' ? 16 : 30;
 	$page = max(1,intval($_GET['page']));
 	$start = ($page-1)*$perpage;
@@ -40,14 +110,9 @@ if($op == 'updateblock') {
 	$theurl = 'portal.php?mod=portalcp&ac=portalblock&op='.$op.'&idtype='.$_GET['idtype'].'&id='.$_GET['id'];
 	$showfavorite = $page == 1 ? true : false;
 
-	loadcache(array('diytemplatename'));
-	loadcache('diytemplatename');
-
-	$pagebids = $tpls = $blocks = $tplpermissions = $wherearr = $blockfavorite = $topblocks = array();
 	$multi = $fields = $leftjoin = '';
-	$blockfields = 'b.bid,b.blockclass,b.name,b.script,b.dateline,b.cachetime';
 	$blockfavorite = block_get_favorite($_G['uid']);
-	if(checkperm('allowdiy')) {
+	if($allowdiy) {
 		$tpls = $_G['cache']['diytemplatename'];
 	} else {
 		$tplpermissions = getallowdiytemplate($_G['uid']);
@@ -61,6 +126,12 @@ if($op == 'updateblock') {
 		$wherearr[] = "bp.uid='$_G[uid]'";
 		$wherearr[] = "(bp.allowmanage='1' OR (bp.allowrecommend='1'".($op == 'recommend' ? '' : "AND bp.needverify='0'")."))";
 	}
+
+	$hasinblocks = array();
+	if($op == 'recommend' && in_array($_GET['idtype'], array('tid', 'gtid', 'blogid', 'picid', 'aid'), true) && ($_GET['id'] = dintval($_GET['id']))) {
+		$hasinblocks = C::t('common_block')->fetch_all_recommended_block($_GET['id'], $_GET['idtype'], $wherearr, $leftjoin, $fields);
+	}
+
 	if($_GET['searchkey']) {
 		$_GET['searchkey'] = trim($_GET['searchkey']);
 		$showfavorite = false;
@@ -69,24 +140,24 @@ if($op == 'updateblock') {
 			$wherearr[] = " (b.bid='$bid' OR b.name='$bid')";
 		} else {
 			$_GET['searchkey'] = stripsearchkey($_GET['searchkey']);
-			$wherearr[] = " b.name LIKE '%$_GET[searchkey]%'";
+			$wherearr[] = " b.name LIKE '%".addslashes($_GET['searchkey'])."%'";
 			$perpage = 10000;
 		}
 		$_GET['searchkey'] = dhtmlspecialchars($_GET['searchkey']);
+		$theurl .= '&searchkey='.$_GET['searchkey'];
 	}
 	if($_GET['targettplname']) {
 		$showfavorite = false;
-		$targettplname = addslashes(trim($_GET['targettplname']));
-		$query = DB::query("SELECT * FROM ".DB::table('common_template_block')." WHERE targettplname='$targettplname'");
-		while(($value = DB::fetch($query))){
-			$pagebids[] = $value['bid'];
-		}
+		$targettplname = trim($_GET['targettplname']);
+		$pagebids = array_keys(C::t('common_template_block')->fetch_all_by_targettplname($targettplname));
 		if(!empty($pagebids)) {
 			$wherearr[] = "b.bid IN (".dimplode($pagebids).")";
 			$perpage = 10000;
 		} else {
 			$wherearr[] = "b.bid='0'";
 		}
+		$_GET['targettplname'] = dhtmlspecialchars($_GET['targettplname']);
+		$theurl .= '&targettplname='.$_GET['targettplname'];
 	}
 
 	if($op == 'recommend') {
@@ -112,10 +183,8 @@ if($op == 'updateblock') {
 		$wherearr = array_merge($rewhere, $wherearr);
 		$where = $wherearr ? ' WHERE '.implode(' AND ', $wherearr) : '';
 
-		$count = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_block').' b'."$leftjoin$where");
-		if($count) {
-			$query = DB::query("SELECT b.bid,b.blockclass,b.name,b.script$fields FROM ".DB::table('common_block').' b'."$leftjoin$where ORDER BY b.bid DESC LIMIT $start, $perpage");
-			while(($value = DB::fetch($query))) {
+		if(($count = C::t('common_block')->count_by_where($where, $leftjoin))) {
+			foreach(C::t('common_block')->fetch_all_by_where($where, $start, $perpage, $leftjoin, $fields) as $value) {
 				$value = formatblockvalue($value);
 				if(!$value['favorite'] || !$showfavorite) {
 					$blocks[$value['bid']] = $value;
@@ -125,15 +194,13 @@ if($op == 'updateblock') {
 				$blocks = $blockfavorite + $blocks;
 			}
 			$theurl = $_G['inajax'] ? $theurl.'&getdata=yes' : $theurl;
-			if($_G['inajax']) $_G['gp_ajaxtarget'] = 'itemeditarea';
+			if($_G['inajax']) $_GET['ajaxtarget'] = 'itemeditarea';
 			$multi = multi($count, $perpage, $page, $theurl);
 		}
 	} else {
 		$where = empty($wherearr) ? '' : ' WHERE '.implode(' AND ', $wherearr);
-		$count = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_block').' b'."$leftjoin$where ORDER BY b.bid DESC");
-		if($count) {
-			$query = DB::query("SELECT b.bid,b.blockclass,b.name,b.script,b.dateline,b.cachetime$fields FROM ".DB::table('common_block').' b'."$leftjoin$where ORDER BY b.bid DESC LIMIT $start, $perpage");
-			while(($value = DB::fetch($query))) {
+		if(($count = C::t('common_block')->count_by_where($where, $leftjoin))) {
+			foreach(C::t('common_block')->fetch_all_by_where($where, $initemdata ? 0 : $start, $initemdata ? 0 : $perpage, $leftjoin, $fields) as $value) {
 				$value = formatblockvalue($value);
 				if(!$value['favorite'] || !$showfavorite) {
 					$blocks[$value['bid']] = $value;
@@ -142,14 +209,31 @@ if($op == 'updateblock') {
 			if(!empty($blockfavorite) && $showfavorite) {
 				$blocks = $blockfavorite + $blocks;
 			}
-			$multi = multi($count, $perpage, $page, $theurl);
+			$multi = $initemdata ? '' : multi($count, $perpage, $page, $theurl);
 		}
 	}
+
 	if($blocks) {
+		$losttpls = $alldata = array();
 		$bids = array_keys($blocks);
 		if($bids) {
-			$query = DB::query("SELECT targettplname, bid FROM ".DB::table('common_template_block')." WHERE bid IN (".dimplode($bids).")");
-			while(($value = DB::fetch($query))) {
+			foreach(C::t('common_template_block')->fetch_all_by_bid($bids) as $value) {
+				$alldata[] = $value;
+				if(!isset($_G['cache']['diytemplatename'][$value['targettplname']])) {
+					$losttpls[$value['targettplname']] = $value['targettplname'];
+				}
+			}
+
+			if($losttpls) {
+				$lostnames = getdiytplnames($losttpls);
+				foreach($lostnames as $pre => $datas) {
+					foreach($datas as $id => $name) {
+						$_G['cache']['diytemplatename'][$pre.$id] = $tpls[$pre.$id] = $name;
+					}
+				}
+			}
+
+			foreach($alldata as $value) {
 				$diyurl = block_getdiyurl($value['targettplname']);
 				$diyurl = $diyurl['url'];
 				$tplname = isset($_G['cache']['diytemplatename'][$value['targettplname']]) ? $_G['cache']['diytemplatename'][$value['targettplname']] : $value['targettplname'];
@@ -159,9 +243,14 @@ if($op == 'updateblock') {
 				$blocks[$value['bid']]['page'][$value['targettplname']] = $diyurl ? '<a href="'.$diyurl.'" target="_blank">'.$tplname.'</a>' : $tplname;
 			}
 		}
+		if($initemdata) {
+			$isverified = $op === 'verifieddata' ? 1 : 0;
+			$count = C::t('common_block_item_data')->count_by_bid($bids, $isverified);
+			$blockdata = $count ? C::t('common_block_item_data')->fetch_all_by_bid($bids, $isverified, $start, $perpage) : array();
+			$multi = multi($count, $perpage, $page, $theurl);
+		}
 	}
 }
-
 include_once template("portal/portalcp_portalblock");
 
 function formatblockvalue($value) {
@@ -176,10 +265,12 @@ function formatblockvalue($value) {
 	return $value;
 }
 function formatblockpermissoin($block) {
+	static $allowdiy = null;
+	$allowdiy = isset($allowdiy) ? $allowdiy : checkperm('allowdiy');;
 	$perm = array('allowproperty' => 0, 'allowdata'=> 0);
 	$bid = !empty($block) ? $block['bid'] : 0;
 	if(!empty($bid)) {
-		if(checkperm('allowdiy')) {
+		if($allowdiy) {
 			$perm = array('allowproperty' => 1, 'allowdata'=> 1);
 		} else {
 			if($block['allowmanage']) {
@@ -194,22 +285,24 @@ function formatblockpermissoin($block) {
 }
 
 function block_get_favorite($uid){
-	$blockfavorite = array();
+	static $allowdiy = null;
+	$allowdiy = isset($allowdiy) ? $allowdiy : checkperm('allowdiy');
+	$blockfavorite = $permission = array();
 	$uid = intval($uid);
 	if($uid) {
-		$query = DB::query('SELECT bid FROM '.DB::table('common_block_favorite')." WHERE uid='$uid' ORDER BY dateline DESC");
-		while($value = DB::fetch($query)) {
+		foreach(C::t('common_block_favorite')->fetch_all_by_uid($uid) as $value) {
 			$blockfavorite[$value['bid']] = $value['bid'];
 		}
 	}
-	$blockfields = 'b.bid,b.blockclass,b.name,b.script,b.dateline,b.cachetime';
 	if(!empty($blockfavorite)) {
-		if(checkperm('allowdiy')) {
-			$query = DB::query("SELECT $blockfields FROM ".DB::table('common_block').' b'." WHERE b.bid IN (".dimplode($blockfavorite).")");
-		} else {
-			$query = DB::query("SELECT $blockfields,bp.allowmanage,bp.allowrecommend,bp.needverify FROM ".DB::table('common_block').' b'.' LEFT JOIN '.DB::table('common_block_permission').' bp ON b.bid=bp.bid'." WHERE bp.uid='$uid' AND b.bid IN (".dimplode($blockfavorite).")");
+		$blocks = C::t('common_block')->fetch_all($blockfavorite);
+		if(!$allowdiy) {
+			$permission = C::t('common_block_permission')->fetch_all_by_uid($uid);
 		}
-		while(($value = DB::fetch($query))) {
+		foreach($blocks as $bid => $value) {
+			if(!$allowdiy && $permission[$bid]) {
+				$value = array_merge($value, $permission[$bid]);
+			}
 			$value = formatblockvalue($value);
 			$value['favorite'] = true;
 			$blockfavorite[$value['bid']] = $value;

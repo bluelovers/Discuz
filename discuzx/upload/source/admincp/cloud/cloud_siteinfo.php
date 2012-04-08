@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cloud_siteinfo.php 24570 2011-09-26 09:18:58Z yexinhao $
+ *      $Id: cloud_siteinfo.php 29273 2012-03-31 07:58:50Z yexinhao $
  */
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
@@ -16,58 +16,62 @@ if(submitcheck('syncsubmit')) {
 		cpmsg('cloud_open_first', '', 'succeed', array(), '<p class="marginbot"><a href="###" onclick="top.location = \''.ADMINSCRIPT.'?frames=yes&action=cloud&operation=open\'" class="lightlink">'.cplang('message_redirect').'</a></p><script type="text/JavaScript">setTimeout("top.location = \''.ADMINSCRIPT.'?frames=yes&action=cloud&operation=open\'", 3000);</script>');
 	}
 
-	require_once DISCUZ_ROOT.'/api/manyou/Manyou.php';
-	$cloudClient = new Discuz_Cloud_Client();
-	if ($_G['setting']['my_app_status']) {
-		manyouSync();
+	try {
+		$cloudClient = & Cloud::loadClass('Service_Client_Cloud', array(true));
+
+		if ($_G['setting']['my_app_status']) {
+			$manyouClient = Cloud::loadClass('Service_Client_Manyou');
+			$manyouClient->sync();
+		}
+
+		$res = $cloudClient->sync();
+	} catch (Cloud_Service_Client_RestfulException $e) {
+		cpmsg('cloud_sync_failure', '', 'error', array('errorCode' => $e->getCode(), 'errorMessage' => $e->getMessage()));
 	}
 
-	$res = $cloudClient->sync();
+	cpmsg('cloud_sync_success', '', 'succeed', array(), '<p class="marginbot"><a href="###" onclick="top.location = \''.ADMINSCRIPT.'?frames=yes&action=cloud&operation=siteinfo\'" class="lightlink">'.cplang('message_redirect').'</a></p><script type="text/JavaScript">setTimeout("top.location = \''.ADMINSCRIPT.'?frames=yes&action=cloud&operation=siteinfo\'", 3000);</script>');
 
-	if(!$res) {
-		cpmsg('cloud_sync_failure', '', 'error', array('errCode' => $cloudClient->errno, 'errMessage' => $cloudClient->errmsg));
-	} else {
-		cpmsg('cloud_sync_success', '', 'succeed', array(), '<p class="marginbot"><a href="###" onclick="top.location = \''.ADMINSCRIPT.'?frames=yes&action=cloud&operation=siteinfo\'" class="lightlink">'.cplang('message_redirect').'</a></p><script type="text/JavaScript">setTimeout("top.location = \''.ADMINSCRIPT.'?frames=yes&action=cloud&operation=siteinfo\'", 3000);</script>');
-	}
 } elseif(submitcheck('resetsubmit')) {
+
+	if (!isfounder()) {
+		cpmsg('action_noaccess', '', 'error');
+	}
 
 	if($cloudstatus != 'cloud') {
 		cpmsg('cloud_open_first', '', 'succeed', array(), '<p class="marginbot"><a href="###" onclick="top.location = \''.ADMINSCRIPT.'?frames=yes&action=cloud&operation=open\'" class="lightlink">'.cplang('message_redirect').'</a></p><script type="text/JavaScript">setTimeout("top.location = \''.ADMINSCRIPT.'?frames=yes&action=cloud&operation=open\'", 3000);</script>');
 	}
 
-	require_once DISCUZ_ROOT.'/api/manyou/Manyou.php';
-	$cloudClient = new Discuz_Cloud_Client();
-
-	$res = $cloudClient->resetKey();
-
-	if(!$res) {
-		cpmsg($cloudClient->errmsg, '', 'error');
-	} else {
-		$sId = $res['sId'];
-		$sKey = $res['sKey'];
-
-		DB::query("REPLACE INTO ".DB::table('common_setting')." (`skey`, `svalue`)
-					VALUES ('my_siteid', '$sId'), ('my_sitekey', '$sKey'), ('cloud_status', '1')");
-		updatecache('setting');
-
-		cpmsg('cloud_reset_success', '', 'succeed', array(), '<p class="marginbot"><a href="###" onclick="top.location = \''.ADMINSCRIPT.'?frames=yes&action=cloud&operation=siteinfo\'" class="lightlink">'.cplang('message_redirect').'</a></p><script type="text/JavaScript">setTimeout("top.location = \''.ADMINSCRIPT.'?frames=yes&action=cloud&operation=siteinfo\'", 3000);</script>');
+	try {
+		$cloudClient = Cloud::loadClass('Service_Client_Cloud');
+		$res = $cloudClient->resetKey();
+	} catch (Cloud_Service_Client_RestfulException $e) {
+		cpmsg($e->getMessage(), '', 'error');
 	}
+
+	$sId = intval($res['sId']);
+	$sKey = trim($res['sKey']);
+
+	C::t('common_setting')->update_batch(array('my_siteid' => $sId, 'my_sitekey' => $sKey));
+	updatecache('setting');
+
+	cpmsg('cloud_reset_success', '', 'succeed', array(), '<p class="marginbot"><a href="###" onclick="top.location = \''.ADMINSCRIPT.'?frames=yes&action=cloud&operation=siteinfo\'" class="lightlink">'.cplang('message_redirect').'</a></p><script type="text/JavaScript">setTimeout("top.location = \''.ADMINSCRIPT.'?frames=yes&action=cloud&operation=siteinfo\'", 3000);</script>');
+
 } elseif(submitcheck('ipsubmit')) {
 
-	$_G['gp_cloud_api_ip'] = trim($_G['gp_cloud_api_ip']);
-	$_G['gp_my_ip'] = trim($_G['gp_my_ip']);
+	$_POST['cloud_api_ip'] = trim($_POST['cloud_api_ip']);
+	$_POST['my_ip'] = trim($_POST['my_ip']);
+	$_POST['connect_api_ip'] = trim($_POST['connect_api_ip']);
 
-	if($_G['setting']['cloud_api_ip'] != $_G['gp_cloud_api_ip'] || $_G['setting']['my_ip'] != $_G['gp_my_ip']) {
-		DB::query("REPLACE INTO ".DB::table('common_setting')." (`skey`, `svalue`)
-					VALUES ('cloud_api_ip', '{$_G['gp_cloud_api_ip']}'), ('my_ip', '{$_G['gp_my_ip']}')");
+	if($_G['setting']['cloud_api_ip'] != $_POST['cloud_api_ip'] || $_G['setting']['my_ip'] != $_POST['my_ip'] || $_G['setting']['connect_api_ip'] != $_POST['connect_api_ip']) {
+		C::t('common_setting')->update_batch(array('cloud_api_ip' => $_POST['cloud_api_ip'], 'my_ip' => $_POST['my_ip'], 'connect_api_ip' => $_POST['connect_api_ip']));
 		updatecache('setting');
 	}
 
-	$locationUrl = $_G['gp_callback'] == 'doctor' ? ADMINSCRIPT.'?frames=yes&action=cloud&operation=doctor' : ADMINSCRIPT.'?frames=yes&action=cloud&operation=siteinfo';
+	$locationUrl = $_GET['callback'] == 'doctor' ? ADMINSCRIPT.'?frames=yes&action=cloud&operation=doctor' : ADMINSCRIPT.'?frames=yes&action=cloud&operation=siteinfo';
 
 	cpmsg('cloud_ipsetting_success', '', 'succeed', array(), '<p class="marginbot"><a href="###" onclick="top.location = \''.$locationUrl.'\'" class="lightlink">'.cplang('message_redirect').'</a></p><script type="text/JavaScript">setTimeout("top.location = \''.$locationUrl.'\'", 3000);</script>');
 
-} elseif ($_G['gp_anchor'] == 'cloud_ip') {
+} elseif ($_GET['anchor'] == 'cloud_ip') {
 	ajaxshowheader();
 	echo '
 		<h3 class="flb" id="fctrl_showblock" style="cursor: move;">
@@ -78,12 +82,13 @@ if(submitcheck('syncsubmit')) {
 	echo '<div style="margin: 0 10px; width: 700px;">';
 	showformheader('cloud');
 	showhiddenfields(array('operation' => $operation));
-	if($_G['gp_callback']) {
-		showhiddenfields(array('callback' => $_G['gp_callback']));
+	if($_GET['callback']) {
+		showhiddenfields(array('callback' => $_GET['callback']));
 	}
 	showtableheader();
 	showsetting('cloud_api_ip', 'cloud_api_ip', $_G['setting']['cloud_api_ip'], 'text');
 	showsetting('cloud_manyou_ip', 'my_ip', $_G['setting']['my_ip'], 'text');
+	showsetting('cloud_connect_api_ip', 'connect_api_ip', $_G['setting']['connect_api_ip'], 'text');
 	showsubmit('ipsubmit');
 	showtablefooter();
 	showformfooter();
@@ -110,9 +115,9 @@ if(submitcheck('syncsubmit')) {
 		'<strong>'.cplang('cloud_site_id').'</strong>',
 		$_G['setting']['my_siteid']
 	));
-	showsubmit('syncsubmit', 'cloud_sync', '', '<input type="submit" class="btn" id="submit_resetsubmit" name="resetsubmit" value="'.$lang['cloud_resetkey'].'" />&nbsp; <input type="button" class="btn" onClick="showWindow(\'cloudApiIpWin\', \''.ADMINSCRIPT.'?action=cloud&operation=siteinfo&anchor=cloud_ip\'); return false;" value="'.$lang['cloud_api_ip_btn'].'" />');
+
+	$resetSubmitButton = isfounder() ? '<input type="submit" class="btn" id="submit_resetsubmit" name="resetsubmit" value="'.$lang['cloud_resetkey'].'" />&nbsp; ' : '';
+	showsubmit('syncsubmit', 'cloud_sync', '',$resetSubmitButton.'<input type="button" class="btn" onClick="showWindow(\'cloudApiIpWin\', \''.ADMINSCRIPT.'?action=cloud&operation=siteinfo&anchor=cloud_ip\'); return false;" value="'.$lang['cloud_api_ip_btn'].'" />');
 	showtablefooter();
 	showformfooter();
 }
-
-?>

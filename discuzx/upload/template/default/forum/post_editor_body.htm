@@ -19,10 +19,7 @@
 			<div class="y"><!--{hook/post_editorctrl_right}--></div>
 		<!--{/if}-->
 		<div id="{$editorid}_button" class="btn cl">
-			<div class="b1r" id="{$editorid}_adv_s0">
-				<a id="{$editorid}_paste" title="{lang e_paste}">{lang e_paste}</a>
-			</div>
-			<div class="b2r nbr" id="{$editorid}_adv_s2">
+			<div class="b2r nbr nbl" id="{$editorid}_adv_s2">
 				<a id="{$editorid}_fontname" class="dp" title="{lang e_fontname}" menupos="43!"><span id="{$editorid}_font">{lang e_font}</span></a>
 				<a id="{$editorid}_fontsize" class="dp" title="{lang e_fontsize}" menupos="43!" menuwidth="25"><span id="{$editorid}_size">{lang e_size}</span></a>
 				<span id="{$editorid}_adv_1">
@@ -74,39 +71,35 @@
 					<a id="{$editorid}_vid" title="{lang e_video_title}">{lang e_video}</a>
 					<a id="{$editorid}_fls" title="{lang e_flash_title}">{lang e_flash}</a>
 				<!--{/if}-->
+				<!--{if ($_GET[action] == 'newthread' || $_GET[action] == 'reply' || $_GET[action] == 'edit') && $_G['group']['allowat']}-->
+					<a id="{$editorid}_at" title="{lang e_at_title}" menupos="43" menuwidth="600">{lang e_at}</a>
+				<!--{/if}-->
 				<!--{hook/post_editorctrl_left}-->
 			</div>
-			<div class="b2r{if $_G['cache']['bbcodes_display'][$_G['groupid']]} nbr{/if}" id="{$editorid}_adv_6">
+			<div class="b2r" id="{$editorid}_adv_6">
 				<p>
 					<a id="{$editorid}_code" title="{lang e_code_title}">{lang e_code}</a>
 					<!--{if $isfirstpost}--><a id="{$editorid}_free" title="{lang e_free}">Free</a><!--{/if}-->
+					<a id="{$editorid}_pasteword" title="{lang e_pasteword_title}">{lang e_pasteword}</a>
+					<!--{if $_G['group']['allowdownremoteimg']}--><!--{if !($_G['setting']['magicstatus'] && !empty($_G['setting']['magics']['doodle']))}--><!--{/if}--><a id="{$editorid}_downremoteimg" title="{lang e_downremoteimg_title}">{lang e_downremoteimg}</a><!--{/if}-->
 				</p>
 				<p>
 					<a id="{$editorid}_quote" title="{lang e_quote_title}">{lang e_quote}</a>
 					<!--{if $isfirstpost}--><a id="{$editorid}_hide" title="{lang e_hide}"{if !$_G['group']['allowhidecode']} style="visibility:hidden;"{/if}>Hide</a><!--{/if}-->
+					<!--{if $_G['setting']['magicstatus'] && !empty($_G['setting']['magics']['doodle'])}-->
+						<a id="a_magic_doodle" href="home.php?mod=magic&mid=doodle&showid=comment_doodle&target={$editorid}_textarea&from=forumeditor" class="cst" onclick="showWindow(this.id, this.href, 'get', 0)"><img src="{STATICURL}image/magic/doodle.small.gif" alt="doodle" title="$_G['setting']['magics']['doodle']" style="margin-top:2px" /></a>
+					<!--{/if}-->
 				</p>
 			</div>
 			<!--{if $_G['cache']['bbcodes_display'][$_G['groupid']]}-->
-			<div class="b2r nbl">
-				<!--{loop $_G['cache']['bbcodes_display'][$_G['groupid']] $tag $bbcode}-->
-					<!--{if $bbcode['i'] % 2 != 0}--><a id="{$editorid}_cst{$bbcode[params]}_$tag" class="cst" title="$bbcode[explanation]"><img src="{STATICURL}image/common/$bbcode[icon]" title="$bbcode[explanation]" alt="$tag" /></a><!--{/if}-->
-				<!--{/loop}-->
+			<div class="b2r cst nbb" id="{$editorid}_cst" style="display:none">
 				<!--{hook/post_editorctrl_top}-->
-				<br id="{$editorid}_adv_7" />
 				<!--{loop $_G['cache']['bbcodes_display'][$_G['groupid']] $tag $bbcode}-->
-					<!--{if $bbcode['i'] % 2 == 0}--><a id="{$editorid}_cst{$bbcode[params]}_$tag" class="cst" title="$bbcode[explanation]"><img src="{STATICURL}image/common/$bbcode[icon]" title="$bbcode[explanation]" alt="$tag" /></a><!--{/if}-->
+					<a id="{$editorid}_cst{$bbcode[params]}_$tag" class="cst" title="$bbcode[explanation]"><img src="{STATICURL}image/common/$bbcode[icon]" title="$bbcode[explanation]" alt="$tag" /></a>
 				<!--{/loop}-->
 				<!--{hook/post_editorctrl_bottom}-->
 			</div>
 			<!--{/if}-->
-			<div class="b2r" id="{$editorid}_adv_9">
-				<a id="{$editorid}_pasteword" title="{lang e_pasteword_title}">{lang e_pasteword}</a>
-				<!--{if $_G['group']['allowdownremoteimg']}--><!--{if !($_G['setting']['magicstatus'] && !empty($_G['setting']['magics']['doodle']))}--><br><!--{/if}--><a id="{$editorid}_downremoteimg" title="{lang e_downremoteimg_title}">{lang e_downremoteimg}</a><!--{/if}-->
-				<!--{if $_G['setting']['magicstatus'] && !empty($_G['setting']['magics']['doodle'])}-->
-					<br /><a id="a_magic_doodle" href="home.php?mod=magic&mid=doodle&showid=comment_doodle&target={$editorid}_textarea&from=forumeditor" class="cst" onclick="showWindow(this.id, this.href, 'get', 0)"><img src="{STATICURL}image/magic/doodle.small.gif" alt="doodle" title="$_G['setting']['magics']['doodle']" style="margin-top:2px" /></a>
-				<!--{/if}-->
-
-			</div>
 		</div>
 	</div>
 

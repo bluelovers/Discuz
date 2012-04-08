@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: like.php 22384 2011-05-05 03:55:37Z monkey $
+ *      $Id: like.php 25510 2011-11-14 02:22:26Z yexinhao $
  */
 
 define('IN_API', true);
@@ -13,7 +13,7 @@ define('CURSCRIPT', 'api');
 require_once '../../source/class/class_core.php';
 
 $cachelist = array();
-$discuz = & discuz_core::instance();
+$discuz = C::app();
 $discuz->init_setting = true;
 $discuz->init();
 

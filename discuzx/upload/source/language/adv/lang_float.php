@@ -4,8 +4,12 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_float.php 19237 2010-12-23 04:27:46Z monkey $
+ *      $Id: lang_float.php 27449 2012-02-01 05:32:35Z zhangguosheng $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 $lang = array
 (
@@ -22,6 +26,10 @@ $lang = array
 	'float_position_right' => '右侧',
 	'float_category' => '投放门户频道',
 	'float_category_comment' => '设置广告投放的频道分类，当广告投放范围中包含“门户”时有效',
+	'float_disableclose' => '关闭广告的链接',
+	'float_disableclose_comment' => '如果广告代码中已内置关闭操作，可以关闭系统预置的关闭链接',
+	'float_show' => '显示',
+	'float_hidden' => '隐藏',
 );
 
 ?>

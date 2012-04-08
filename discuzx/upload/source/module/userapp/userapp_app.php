@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: userapp_app.php 22039 2011-04-20 08:37:29Z zhengqingpeng $
+ *      $Id: userapp_app.php 25889 2011-11-24 09:52:20Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -19,8 +19,7 @@ if($appid == '1036584') {
 }
 
 $app = array();
-$query = DB::query("SELECT * FROM ".DB::table('common_myapp')." WHERE appid='$appid' LIMIT 1");
-if($app = DB::fetch($query)) {
+if($app = C::t('common_myapp')->fetch($appid)) {
 	if($app['flag']<0) {
 		showmessage('no_privilege_myapp');
 	}

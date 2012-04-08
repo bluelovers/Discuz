@@ -8,7 +8,7 @@
 	</ul>
 	<script type="text/javascript" src="{$_G[setting][jspath]}calendar.js?{VERHASH}"></script>
 	<div class="datalist">
-		<form method="post" autocomplete="off" action="{$cpscript}?mod=modcp&action=$_G[gp_action]&op=search">
+		<form method="post" autocomplete="off" action="{$cpscript}?mod=modcp&action=$_GET[action]&op=search">
 			<input type="hidden" name="formhash" value="{FORMHASH}">
 			<div class="exfm">
 				<table cellspacing="0" cellpadding="0">
@@ -60,7 +60,7 @@
 		<h2 class="mtm mbm">{lang modcp_forum}: <a href="forum.php?mod=forumdisplay&fid=$_G[fid]" target="_blank" class="xi2">$_G['forum'][name]</a></h2>
 		<!--{if $postlist}-->
 		<div id="threadlist" class="tl">
-			<form method="post" autocomplete="off" name="moderate" id="moderate" action="$cpscript?mod=modcp&fid=$_G[fid]&action=$_G[gp_action]">
+			<form method="post" autocomplete="off" name="moderate" id="moderate" action="$cpscript?mod=modcp&fid=$_G[fid]&action=$_GET[action]">
 				<input type="hidden" name="formhash" value="{FORMHASH}" />
 				<input type="hidden" name="op" value="" />
 				<input type="hidden" name="oldop" value="$op" />

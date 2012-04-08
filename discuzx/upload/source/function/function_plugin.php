@@ -4,23 +4,25 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_plugin.php 22837 2011-05-25 06:58:35Z monkey $
+ *      $Id: function_plugin.php 29270 2012-03-31 07:03:43Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
-function plugininstall($pluginarray, $installtype = '') {
+require_once libfile('function/cloudaddons');
+
+function plugininstall($pluginarray, $installtype = '', $available = 0) {
 	if(!$pluginarray || !$pluginarray['plugin']['identifier']) {
 		return false;
 	}
-	$plugin = DB::fetch_first("SELECT name, pluginid FROM ".DB::table('common_plugin')." WHERE identifier='{$pluginarray[plugin][identifier]}' LIMIT 1");
+	$plugin = C::t('common_plugin')->fetch_by_identifier($pluginarray['plugin']['identifier']);
 	if($plugin) {
 		return false;
 	}
 
-	$pluginarray['plugin']['modules'] = unserialize(dstripslashes($pluginarray['plugin']['modules']));
+	$pluginarray['plugin']['modules'] = dunserialize($pluginarray['plugin']['modules']);
 	$pluginarray['plugin']['modules']['extra']['installtype'] = $installtype;
 	if(updatepluginlanguage($pluginarray)) {
 		$pluginarray['plugin']['modules']['extra']['langexists'] = 1;
@@ -28,22 +30,22 @@ function plugininstall($pluginarray, $installtype = '') {
 	if(!empty($pluginarray['intro'])) {
 		if(!empty($pluginarray['intro'])) {
 			require_once libfile('function/discuzcode');
-			$pluginarray['plugin']['modules']['extra']['intro'] = discuzcode(dstripslashes(strip_tags($pluginarray['intro'])), 1, 0);
+			$pluginarray['plugin']['modules']['extra']['intro'] = discuzcode(strip_tags($pluginarray['intro']), 1, 0);
 		}
 	}
-	$pluginarray['plugin']['modules'] = addslashes(serialize($pluginarray['plugin']['modules']));
+	$pluginarray['plugin']['modules'] = serialize($pluginarray['plugin']['modules']);
 
 	$data = array();
 	foreach($pluginarray['plugin'] as $key => $val) {
 		if($key == 'directory') {
 			$val .= (!empty($val) && substr($val, -1) != '/') ? '/' : '';
 		} elseif($key == 'available') {
-			$val = 0;
+			$val = $available;
 		}
 		$data[$key] = $val;
 	}
 
-	$pluginid = DB::insert('common_plugin', $data, 1);
+	$pluginid = C::t('common_plugin')->insert($data, true);
 
 	if(is_array($pluginarray['var'])) {
 		foreach($pluginarray['var'] as $config) {
@@ -51,12 +53,12 @@ function plugininstall($pluginarray, $installtype = '') {
 			foreach($config as $key => $val) {
 				$data[$key] = $val;
 			}
-			DB::insert('common_pluginvar', $data);
+			C::t('common_pluginvar')->insert($data);
 		}
 	}
 
 	if(!empty($dir) && !empty($pluginarray['importfile'])) {
-		require_once adminfile('function/importdata');
+		require_once libfile('function/importdata');
 		foreach($pluginarray['importfile'] as $importtype => $file) {
 			if(in_array($importtype, array('smilies', 'styles'))) {
 				$files = explode(',', $file);
@@ -71,22 +73,25 @@ function plugininstall($pluginarray, $installtype = '') {
 		}
 	}
 
+	cloudaddons_installlog($pluginarray['plugin']['identifier'].'.plugin');
+
 	updatecache(array('plugin', 'setting', 'styles'));
-	return true;
+	cleartemplatecache();
+	dsetcookie('addoncheck_plugin', '', -1);
+	return $pluginid;
 }
 
 function pluginupgrade($pluginarray, $installtype) {
 	if(!$pluginarray || !$pluginarray['plugin']['identifier']) {
 		return false;
 	}
-	$plugin = DB::fetch_first("SELECT name, pluginid, modules FROM ".DB::table('common_plugin')." WHERE identifier='{$pluginarray[plugin][identifier]}' LIMIT 1");
+	$plugin = C::t('common_plugin')->fetch_by_identifier($pluginarray['plugin']['identifier']);
 	if(!$plugin) {
 		return false;
 	}
 	if(is_array($pluginarray['var'])) {
-		$query = DB::query("SELECT variable FROM ".DB::table('common_pluginvar')." WHERE pluginid='$plugin[pluginid]'");
 		$pluginvars = $pluginvarsnew = array();
-		while($pluginvar = DB::fetch($query)) {
+		foreach(C::t('common_pluginvar')->fetch_all_by_pluginid($plugin['pluginid']) as $pluginvar) {
 			$pluginvars[] = $pluginvar['variable'];
 		}
 		foreach($pluginarray['var'] as $config) {
@@ -95,31 +100,30 @@ function pluginupgrade($pluginarray, $installtype) {
 				foreach($config as $key => $val) {
 					$data[$key] = $val;
 				}
-				DB::insert('common_pluginvar', $data);
+				C::t('common_pluginvar')->insert($data);
 			} else {
-				$sql = $comma = '';
+				$data = array();
 				foreach($config as $key => $val) {
 					if($key != 'value') {
-						$sql .= $comma.$key.'=\''.$val.'\'';
-						$comma = ',';
+						$data[$key] = $val;
 					}
 				}
-				if($sql) {
-					DB::query("UPDATE ".DB::table('common_pluginvar')." SET $sql WHERE pluginid='$plugin[pluginid]' AND variable='$config[variable]'");
+				if($data) {
+					C::t('common_pluginvar')->update_by_variable($plugin['pluginid'], $config['variable'], $data);
 				}
 			}
 			$pluginvarsnew[] = $config['variable'];
 		}
 		$pluginvardiff = array_diff($pluginvars, $pluginvarsnew);
 		if($pluginvardiff) {
-			DB::query("DELETE FROM ".DB::table('common_pluginvar')." WHERE pluginid='$plugin[pluginid]' AND variable IN (".dimplode($pluginvardiff).")");
+			C::t('common_pluginvar')->delete_by_variable($plugin['pluginid'], $pluginvardiff);
 		}
 	}
 
 	$langexists = updatepluginlanguage($pluginarray);
 
-	$pluginarray['plugin']['modules'] = unserialize(dstripslashes($pluginarray['plugin']['modules']));
-	$plugin['modules'] = unserialize($plugin['modules']);
+	$pluginarray['plugin']['modules'] = dunserialize($pluginarray['plugin']['modules']);
+	$plugin['modules'] = dunserialize($plugin['modules']);
 	if(!empty($plugin['modules']['system'])) {
 		$pluginarray['plugin']['modules']['system'] = $plugin['modules']['system'];
 	}
@@ -128,15 +132,19 @@ function pluginupgrade($pluginarray, $installtype) {
 	if(!empty($pluginarray['intro']) || $langexists) {
 		if(!empty($pluginarray['intro'])) {
 			require_once libfile('function/discuzcode');
-			$pluginarray['plugin']['modules']['extra']['intro'] = discuzcode(dstripslashes(strip_tags($pluginarray['intro'])), 1, 0);
+			$pluginarray['plugin']['modules']['extra']['intro'] = discuzcode(strip_tags($pluginarray['intro']), 1, 0);
 		}
 		$langexists && $pluginarray['plugin']['modules']['extra']['langexists'] = 1;
 	}
-	$pluginarray['plugin']['modules'] = addslashes(serialize($pluginarray['plugin']['modules']));
+	$pluginarray['plugin']['modules'] = serialize($pluginarray['plugin']['modules']);
 
-	DB::query("UPDATE ".DB::table('common_plugin')." SET version='{$pluginarray[plugin][version]}', modules='{$pluginarray[plugin][modules]}' WHERE pluginid='$plugin[pluginid]'");
+	C::t('common_plugin')->update($plugin['pluginid'], array('version' => $pluginarray['plugin']['version'], 'modules' => $pluginarray['plugin']['modules']));
+
+	cloudaddons_installlog($pluginarray['plugin']['identifier'].'.plugin');
 
 	updatecache(array('plugin', 'setting', 'styles'));
+	cleartemplatecache();
+	dsetcookie('addoncheck_plugin', '', -1);
 	return true;
 }
 
@@ -149,13 +157,12 @@ function updatepluginlanguage($pluginarray) {
 	if(!$pluginarray['language']) {
 		return false;
 	}
-	$pluginarray['language'] = dstripslashes($pluginarray['language']);
 	foreach(array('script', 'template', 'install') as $type) {
 		loadcache('pluginlanguage_'.$type, 1);
 		if(!empty($pluginarray['language'][$type.'lang'])) {
 			$_G['cache']['pluginlanguage_'.$type][$pluginarray['plugin']['identifier']] = $pluginarray['language'][$type.'lang'];
 		}
-		save_syscache('pluginlanguage_'.$type, $_G['cache']['pluginlanguage_'.$type]);
+		savecache('pluginlanguage_'.$type, $_G['cache']['pluginlanguage_'.$type]);
 	}
 	return true;
 }
@@ -200,51 +207,6 @@ function createtable($sql, $dbcharset) {
 	$type = in_array($type, array('MYISAM', 'HEAP')) ? $type : 'MYISAM';
 	return preg_replace("/^\s*(CREATE TABLE\s+.+\s+\(.+?\)).*$/isU", "\\1", $sql).
 	(mysql_get_server_info() > '4.1' ? " ENGINE=$type DEFAULT CHARSET=$dbcharset" : " TYPE=$type");
-}
-
-function pluginstat($type, $data) {
-	global $_G;
-	$url = 'http://stat.discuz.com/plugins.php?action='.$type.'&id='.rawurlencode($data['identifier'].'@'.$_G['setting']['version']).'&version='.rawurlencode($data['version']).'&url='.rawurlencode($_G['siteurl']).'&ip='.$_G['clientip'];
-	echo '<iframe src="'.$url.'" style="display:none"></iframe>';
-}
-
-function pluginvalidator($identifier) {
-	global $importtxt;
-	$validatorkey = '';
-	if(file_exists(DISCUZ_ROOT.'./source/plugin/'.$identifier.'/validator.xml')) {
-		$importtxt = file_get_contents(DISCUZ_ROOT.'./source/plugin/'.$identifier.'/validator.xml');
-		$validatorarray = getimportdata('Discuz! Plugin Validator');
-		if(!empty($validatorarray) && is_array($validatorarray)) {
-			$md5 = '';
-			foreach($validatorarray as $file) {
-				$md5 .= file_exists(DISCUZ_ROOT.$file) ? @md5_file($file) : '';
-			}
-			$validatorkey = md5(md5($md5).$identifier);
-		}
-	}
-	return $validatorkey;
-}
-
-function pluginupgradecheck($checkdata) {
-	$result = array();
-	if(!$checkdata) {
-		return $result;
-	}
-	$data = dfsockopen('http://addons.discuz.com/register.php', 0, http_build_query($checkdata), '', false, '', 5);
-	$data = explode("\n", $data);
-	foreach($data as $row) {
-		if(!$row) {
-			continue;
-		}
-		list($id, $value) = explode("\t", $row);
-		if(!ispluginkey($id)) {
-			continue;
-		}
-		$valuee = explode(':', $value);
-		$result[$id]['result'] = $valuee[0];
-		$result[$id]['newver'] = $valuee[1];
-	}
-	return $result;
 }
 
 ?>

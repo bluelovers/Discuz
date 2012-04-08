@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_magics.php 16696 2010-09-13 05:02:24Z monkey $
+ *      $Id: cache_magics.php 24589 2011-09-27 07:45:55Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -13,13 +13,11 @@ if(!defined('IN_DISCUZ')) {
 
 function build_cache_magics() {
 	$data = array();
-	$query = DB::query("SELECT * FROM ".DB::table('common_magic')." WHERE available='1'");
-
-	while($magic = DB::fetch($query)) {
+	foreach(C::t('common_magic')->fetch_all_data(1) as $magic) {
 		$data[$magic['magicid']] = $magic;
 	}
 
-	save_syscache('magics', $data);
+	savecache('magics', $data);
 }
 
 ?>

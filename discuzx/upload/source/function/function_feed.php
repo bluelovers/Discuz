@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_feed.php 13398 2010-07-27 01:48:11Z wangjinbo $
+ *      $Id: function_feed.php 28299 2012-02-27 08:48:36Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -14,6 +14,9 @@ if(!defined('IN_DISCUZ')) {
 function feed_add($icon, $title_template='', $title_data=array(), $body_template='', $body_data=array(), $body_general='', $images=array(), $image_links=array(), $target_ids='', $friend='', $appid='', $returnid=0, $id=0, $idtype='', $uid=0, $username='') {
 	global $_G;
 
+	if(!helper_access::check_module('feed')) {
+		return false;
+	}
 	$title_template = $title_template?lang('feed', $title_template):'';
 	$body_template = $body_template?lang('feed', $body_template):'';
 	$body_general = $body_general?lang('feed', $body_general):'';
@@ -44,41 +47,33 @@ function feed_add($icon, $title_template='', $title_data=array(), $body_template
 		'idtype' => $idtype
 	);
 
-	$feedarr = dstripslashes($feedarr);
-	$feedarr['title_data'] = serialize(dstripslashes($title_data));
-	$feedarr['body_data'] = serialize(dstripslashes($body_data));
+	$feedarr['title_data'] = serialize($title_data);
+	$feedarr['body_data'] = serialize($body_data);
 	$feedarr['hash_data'] = empty($title_data['hash_data'])?'':$title_data['hash_data'];
-	$feedarr = daddslashes($feedarr);
 
 	if(is_numeric($icon)) {
 		$feed_table = 'home_feed_app';
 		unset($feedarr['id'], $feedarr['idtype']);
 	} else {
 		if($feedarr['hash_data']) {
-			$query = DB::query("SELECT feedid FROM ".DB::table('home_feed')." WHERE uid='$feedarr[uid]' AND hash_data='$feedarr[hash_data]' LIMIT 0,1");
-			if($oldfeed = DB::fetch($query)) {
+			$oldfeed = C::t('home_feed')->fetch_feedid_by_hashdata($feedarr['uid'], $feedarr['hash_data']);
+			if($oldfeed) {
 				return 0;
 			}
 		}
 		$feed_table = 'home_feed';
 	}
 
-	if($returnid) {
-		return DB::insert($feed_table, $feedarr, $returnid);
-	} else {
-		DB::insert($feed_table, $feedarr);
-		return 1;
-	}
+	return C::t($feed_table)->insert($feedarr, $returnid);
 }
 
 function mkfeed($feed, $actors=array()) {
 	global $_G;
-
-	$feed['title_data'] = empty($feed['title_data'])?array():(is_array($feed['title_data'])?$feed['title_data']:@unserialize($feed['title_data']));
+	$feed['title_data'] = empty($feed['title_data'])?array():(is_array($feed['title_data'])?$feed['title_data']:@dunserialize($feed['title_data']));
 	if(!is_array($feed['title_data'])) $feed['title_data'] = array();
-	$feed['body_data'] = empty($feed['body_data'])?array():(is_array($feed['body_data'])?$feed['body_data']:@unserialize($feed['body_data']));
-	if(!is_array($feed['body_data'])) $feed['body_data'] = array();
 
+	$feed['body_data'] = empty($feed['body_data'])?array():(is_array($feed['body_data'])?$feed['body_data']:@dunserialize($feed['body_data']));
+	if(!is_array($feed['body_data'])) $feed['body_data'] = array();
 	$searchs = $replaces = array();
 	if($feed['title_data']) {
 		foreach (array_keys($feed['title_data']) as $key) {
@@ -139,14 +134,21 @@ function feed_mktarget($html) {
 
 function feed_publish($id, $idtype, $add=0) {
 	global $_G;
-
+	$id = intval($id);
+	if(empty($id)) {
+		return;
+	}
+	if(!helper_access::check_module('feed')) {
+		return false;
+	}
 	$setarr = array();
 	switch ($idtype) {
 		case 'blogid':
-			$query = DB::query("SELECT b.*, bf.* FROM ".DB::table('home_blog')." b
-				LEFT JOIN ".DB::table('home_blogfield')." bf ON bf.blogid=b.blogid
-				WHERE b.blogid='$id'");
-			if($value = DB::fetch($query)) {
+			$value = array_merge(
+				C::t('home_blog')->fetch($id),
+				C::t('home_blogfield')->fetch($id)
+			);
+			if($value) {
 				if($value['friend'] != 3) {
 					$setarr['icon'] = 'blog';
 					$setarr['id'] = $value['blogid'];
@@ -173,7 +175,7 @@ function feed_publish($id, $idtype, $add=0) {
 						$value['message'] = preg_replace("/&[a-z]+\;/i", '', $value['message']);
 						$setarr['body_data'] = array(
 							'subject' => "<a href=\"$url\">$value[subject]</a>",
-							'summary' => getstr($value['message'], 150, 1, 1, 0, -1)
+							'summary' => getstr($value['message'], 150, 0, 0, 0, -1)
 						);
 					}
 				}
@@ -182,10 +184,8 @@ function feed_publish($id, $idtype, $add=0) {
 		case 'albumid':
 			$key = 1;
 			if($id > 0) {
-				$query = DB::query("SELECT a.username, a.albumname, a.picnum, a.friend, a.target_ids, p.* FROM ".DB::table('home_pic')." p
-					LEFT JOIN ".DB::table('home_album')." a ON a.albumid=p.albumid
-					WHERE p.albumid='$id' ORDER BY dateline DESC LIMIT 0,4");
-				while ($value = DB::fetch($query)) {
+				$query = C::t('home_pic')->fetch_all_by_sql('p.'.DB::field('albumid', $id), 'a.dateline DESC', 0, 4);
+				foreach($query as $value) {
 					if($value['friend'] <= 2) {
 						if(empty($setarr['icon'])) {
 							$setarr['icon'] = 'album';
@@ -214,10 +214,9 @@ function feed_publish($id, $idtype, $add=0) {
 			}
 			break;
 		case 'picid':
-			$plussql = $id>0?"p.picid='$id'":"p.uid='$_G[uid]' ORDER BY dateline DESC LIMIT 1";
-			$query = DB::query("SELECT p.*, a.friend, a.target_ids FROM ".DB::table('home_pic')." p
-				LEFT JOIN ".DB::table('home_album')." a ON a.albumid=p.albumid WHERE $plussql");
-			if($value = DB::fetch($query)) {
+			$plussql = $id>0 ? 'p.'.DB::field('picid', $id) : 'p.'.DB::field('uid', $_G[uid]).' ORDER BY dateline DESC LIMIT 1';
+			$query = C::t('home_pic')->fetch_all_by_sql($plussql);
+			if($value = $query[0]) {
 				if(empty($value['friend'])) {
 					$setarr['icon'] = 'album';
 					$setarr['id'] = $value['picid'];
@@ -248,18 +247,17 @@ function feed_publish($id, $idtype, $add=0) {
 		$setarr['title_data']['hash_data'] = "{$idtype}{$id}";
 		$setarr['title_data'] = serialize($setarr['title_data']);
 		$setarr['body_data'] = serialize($setarr['body_data']);
-		$setarr = daddslashes($setarr);
 
 		$feedid = 0;
 		if(!$add && $setarr['id']) {
-			$query = DB::query("SELECT feedid FROM ".DB::table('home_feed')." WHERE id='$id' AND idtype='$idtype'");
-			$feedid = DB::result($query, 0);
+			$feedid = C::t('home_feed')->fetch($id, $idtype);
+			$feedid = $feedid['feedid'];
 		}
 		if($status == 0) {
 			if($feedid) {
-				DB::update('home_feed', $setarr, array('feedid'=>$feedid));
+				C::t('home_feed')->update('', $setarr, '', '', $feedid);
 			} else {
-				DB::insert('home_feed', $setarr);
+				C::t('home_feed')->insert($setarr);
 			}
 		}
 	}

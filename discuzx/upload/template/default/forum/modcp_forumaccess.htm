@@ -42,7 +42,7 @@
 		}
 
 		</script>
-		<form method="post" autocomplete="off" action="{$cpscript}?mod=modcp&action=$_G[gp_action]">
+		<form method="post" autocomplete="off" action="{$cpscript}?mod=modcp&action=$_GET[action]">
 			<input type="hidden" name="formhash" value="{FORMHASH}" />
 			<input type="hidden" name="op" value="$op" id="operation" />
 			<div class="exfm">
@@ -119,7 +119,7 @@
 	<!--{/if}-->
 	<div class="ptm pbm cl">
 		<div class="y pns">
-			<form method="post" autocomplete="off" action="{$cpscript}?mod=modcp&action=$_G[gp_action]&op=$op">
+			<form method="post" autocomplete="off" action="{$cpscript}?mod=modcp&action=$_GET[action]&op=$op">
 				<input type="hidden" name="formhash" value="{FORMHASH}">
 				{lang username}: <input type="text" name="suser" class="px vm" value="$suser" onclick="this.value='';" />&nbsp;
 				<select name="fid" class="ps vm">

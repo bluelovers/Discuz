@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_stamptypeid.php 16693 2010-09-13 04:31:03Z monkey $
+ *      $Id: cache_stamptypeid.php 24968 2011-10-19 09:51:28Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -13,13 +13,15 @@ if(!defined('IN_DISCUZ')) {
 
 function build_cache_stamptypeid() {
 	$data = array();
-	$query = DB::query("SELECT displayorder, typeid FROM ".DB::table('common_smiley')." WHERE type='stamp' AND typeid>'0'");
 
-	while($stamp = DB::fetch($query)) {
+	foreach(C::t('common_smiley')->fetch_all_by_type('stamp') as $stamp) {
+		if($stamp['typeid'] < 0) {
+			continue;
+		}
 		$data[$stamp['typeid']] = $stamp['displayorder'];
 	}
 
-	save_syscache('stamptypeid', $data);
+	savecache('stamptypeid', $data);
 }
 
 ?>

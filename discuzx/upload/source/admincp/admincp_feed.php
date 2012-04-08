@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_feed.php 20811 2011-03-04 07:35:59Z congyushuai $
+ *      $Id: admincp_feed.php 27696 2012-02-10 03:39:50Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -26,10 +26,10 @@ showsubmenu('nav_feed', array(
 if($operation == 'global') {
 
 	if(!submitcheck('globalsubmit')) {
-		$feedid = intval($_G['gp_feedid']);
+		$feedid = intval($_GET['feedid']);
 		$feed = array();
 		if($feedid) {
-			$feed = DB::fetch_first("SELECT * FROM ".DB::table('home_feed')." WHERE feedid='$feedid'");
+			$feed = C::t('home_feed')->fetch('', '', '', $feedid);
 
 			if($feed['uid']) {
 				require_once libfile('function/feed');
@@ -143,26 +143,26 @@ EOF;
 			$setarr['dateline'] = $newtimestamp;
 			$setarr['hot'] = intval($feednew['hot']);
 
-			DB::update('home_feed', $setarr, array('feedid'=>$feedid));
+			C::t('home_feed')->update('', $setarr, '', '', $feedid);
 		}
 		cpmsg('feed_global_add_success', '', 'succeed');
 	}
 
 } else {
 
-	$detail = !empty($_GET['uid']) ? true : $_G['gp_detail'];
-	$uid = $_G['gp_uid'];
-	$users = $_G['gp_users'];
-	$feedid = $_G['gp_feedid'];
-	$icon = $_G['gp_icon'];
-	$hot1 = $_G['gp_hot1'];
-	$hot2 = $_G['gp_hot2'];
-	$starttime = $_G['gp_starttime'];
-	$endtime = $_G['gp_endtime'];
-	$searchsubmit = $_G['gp_searchsubmit'];
-	$feedids = $_G['gp_feedids'];
+	$detail = $_GET['detail'];
+	$uid = $_GET['uid'];
+	$users = $_GET['users'];
+	$feedid = $_GET['feedid'];
+	$icon = $_GET['icon'];
+	$hot1 = $_GET['hot1'];
+	$hot2 = $_GET['hot2'];
+	$starttime = $_GET['starttime'];
+	$endtime = $_GET['endtime'];
+	$searchsubmit = $_GET['searchsubmit'];
+	$feedids = $_GET['feedids'];
 
-	$fromumanage = $_G['gp_fromumanage'] ? 1 : 0;
+	$fromumanage = $_GET['fromumanage'] ? 1 : 0;
 
 	showtips('feed_tips');
 	if(!submitcheck('feedsubmit')) {
@@ -186,10 +186,10 @@ EOF;
 EOT;
 		showtagheader('div', 'searchposts', !$searchsubmit);
 		showformheader("feed", '', 'feedforum');
-		showhiddenfields(array('page' => $page, 'pp' => $_G['gp_pp'] ? $_G['gp_pp'] : $_G['gp_perpage']));
+		showhiddenfields(array('page' => $page, 'pp' => $_GET['pp'] ? $_GET['pp'] : $_GET['perpage']));
 		showtableheader();
 		showsetting('feed_search_detail', 'detail', $detail, 'radio');
-		showsetting('feed_search_perpage', '', $_G['gp_perpage'], "<select name='perpage'><option value='20'>$lang[perpage_20]</option><option value='50'>$lang[perpage_50]</option><option value='100'>$lang[perpage_100]</option></select>");
+		showsetting('feed_search_perpage', '', $_GET['perpage'], "<select name='perpage'><option value='20'>$lang[perpage_20]</option><option value='50'>$lang[perpage_50]</option><option value='100'>$lang[perpage_100]</option></select>");
 		$selected[$icon] = $icon ? 'selected="selected"' : '';
 		showsetting('feed_search_icon', '', $icon, "<select name='icon'><option value=''>$lang[all]</option><option value='blog' $selected[blog]>$lang[feed_blog]</option>
 			<option value='thread' $selected[thread]>$lang[feed_thread]</option><option value='album' $selected[album]>$lang[feed_album]</option><option value='doing' $selected[doing]>$lang[doing]</option>
@@ -209,7 +209,7 @@ EOT;
 
 	} else {
 		$feedids = authcode($feedids, 'DECODE');
-		$feedidsadd = $feedids ? explode(',', $feedids) : $_G['gp_delete'];
+		$feedidsadd = $feedids ? explode(',', $feedids) : $_GET['delete'];
 		include_once libfile('function/delete');
 		$deletecount = count(deletefeeds($feedidsadd));
 		$cpmsg = cplang('feed_succeed', array('deletecount' => $deletecount));
@@ -227,55 +227,49 @@ EOT;
 		$users = trim($users);
 
 		if($users != '') {
-			$uids = '-1';
-			$query = DB::query("SELECT uid FROM ".DB::table('home_feed')." WHERE username IN ('".str_replace(',', '\',\'', str_replace(' ', '', $users))."')");
-			while($feedarr = DB::fetch($query)) {
-				$uids .= ",$feedarr[uid]";
-			}
-			$sql .= " AND f.uid IN ($uids)";
+			$uids = array(-1);
+			$query = C::t('home_feed')->fetch_uid_by_username(explode(',', $users));
+			$uids = array_keys($query) + $uids;
 		}
 
 		if($icon != '') {
-			$query = DB::query("SELECT icon FROM ".DB::table('home_feed')." WHERE icon ='$icon'");
-			$feedarr = DB::fetch($query);
-			$icon = $feedarr[icon];
-			$sql .= " AND f.icon='$icon'";
+			$feedarr = C::t('home_feed')->fetch_icon_by_icon($icon);
+			$icon = $feedarr['icon'];
+			if($icon == '') {
+				$icon = '-1';
+			}
 		}
 
 		if($starttime != '') {
 			$starttime = strtotime($starttime);
-			$sql .= " AND f.dateline>'$starttime'";
 		}
 
 		if($_G['adminid'] == 1 && $endtime != dgmdate(TIMESTAMP, 'Y-n-j')) {
 			if($endtime != '') {
 				$endtime = strtotime($endtime);
-				$sql .= " AND f.dateline<'$endtime'";
 			}
 		} else {
 			$endtime = TIMESTAMP;
 		}
 
 		if($feedid != '') {
-			$feedids = '-1';
-			$query = DB::query("SELECT feedid FROM ".DB::table('home_feed')." WHERE feedid IN ('".str_replace(',', '\',\'', str_replace(' ', '', $feedid))."')");
-			while($fidarr = DB::fetch($query)) {
-				$feedids .= ",$fidarr[feedid]";
-			}
-			$sql .= " AND  f.feedid IN ($feedids)";
+			$feedids = array(-1);
+			$query = C::t('home_feed')->fetch_feedid_by_feedid(explode(',', $feedid));
+			$feedids = array_keys($query) + $feedids;
 		}
 
 		if($uid != '') {
-			$uids = '-1';
-			$query = DB::query("SELECT uid FROM ".DB::table('home_feed')." WHERE uid IN ('".str_replace(',', '\',\'', str_replace(' ', '', $uid))."')");
-			while($uidarr = DB::fetch($query)) {
-				$uids .= ",$uidarr[uid]";
+			$query = C::t('home_feed')->fetch_uid_by_uid(explode(',', $uid));
+			if(!$uids) {
+				$uids = array_keys($query);
+			} else {
+				$uids = array_intersect(array_keys($query), $uids);
 			}
-			$sql .= " AND f.uid IN ($uids)";
+			if(!$uids) {
+				$uids = array(-1);
+			}
 		}
 
-		$sql .= $hot1 ? " AND f.hot >= '$hot1'" : '';
-		$sql .= $hot2 ? " AND f.hot <= '$hot2'" : '';
 
 		if(($_G['adminid'] == 2 && $endtime - $starttime > 86400 * 16) || ($_G['adminid'] == 3 && $endtime - $starttime > 86400 * 8)) {
 			$error = 'feed_mod_range_illegal';
@@ -283,12 +277,12 @@ EOT;
 
 		if(!$error) {
 			if($detail) {
-				$_G['gp_perpage'] = intval($_G['gp_perpage']) < 1 ? 20 : intval($_G['gp_perpage']);
-				$perpage = $_G['gp_pp'] ? $_G['gp_pp'] : $_G['gp_perpage'];
-				$query = DB::query("SELECT * FROM ".DB::table('home_feed')." f WHERE 1 $sql ORDER BY f.dateline DESC LIMIT ".(($page - 1) * $perpage).",{$perpage}");
+				$_GET['perpage'] = intval($_GET['perpage']) < 1 ? 20 : intval($_GET['perpage']);
+				$perpage = $_GET['pp'] ? $_GET['pp'] : $_GET['perpage'];
+				$query = C::t('home_feed')->fetch_all_by_search(1, $uids, $icon, $starttime, $endtime, $feedids, $hot1, $hot2, (($page - 1) * $perpage), $perpage);
 				$feeds = '';
 				include_once libfile('function/feed');
-				while($feed = DB::fetch($query)) {
+				foreach ($query as $feed) {
 					$feed['dateline'] = dgmdate($feed['dateline']);
 
 					$feed = mkfeed($feed);
@@ -301,14 +295,14 @@ EOT;
 						'<a href="'.ADMINSCRIPT.'?action=feed&operation=global&feedid='.$feed['feedid'].'">'.$lang['edit'].'</a>'
 					), TRUE);
 				}
-				$feedcount = DB::result_first("SELECT count(*) FROM ".DB::table('home_feed')." f WHERE 1 $sql");
+				$feedcount = C::t('home_feed')->fetch_all_by_search(3, $uids, $icon, $starttime, $endtime, $feedids, $hot1, $hot2);
 				$multi = multi($feedcount, $perpage, $page, ADMINSCRIPT."?action=feed");
 				$multi = preg_replace("/href=\"".ADMINSCRIPT."\?action=feed&amp;page=(\d+)\"/", "href=\"javascript:page(\\1)\"", $multi);
 				$multi = str_replace("window.location='".ADMINSCRIPT."?action=feed&amp;page='+this.value", "page(this.value)", $multi);
 			} else {
 				$feedcount = 0;
-				$query = DB::query("SELECT f.feedid FROM ".DB::table('home_feed')." f WHERE 1 $sql");
-				while($feed = DB::fetch($query)) {
+				$query = C::t('home_feed')->fetch_all_by_search(2, $uids, $icon, $starttime, $endtime, $feedids, $hot1, $hot2);
+				foreach ($query as $feed) {
 					$feedids .= ','.$feed['feedid'];
 					$feedcount++;
 				}

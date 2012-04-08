@@ -3,16 +3,19 @@
 <!--{/if}-->
 <div id="pgt" class="bm bw0 pgs cl">
 	$multipage
+	<!--{if helper_access::check_module('group')}-->
 	<span {if $_G[setting][visitedforums]}id="visitedforums" onmouseover="$('visitedforums').id = 'visitedforumstmp';this.id = 'visitedforums';showMenu({'ctrlid':this.id})"{/if} class="pgb y"><a href="forum.php?mod=group&fid=$_G[fid]">{lang return_index}</a></span>
+	
 	<a href="javascript:;" id="newspecial" onmouseover="$('newspecial').id = 'newspecialtmp';this.id = 'newspecial';showMenu({'ctrlid':this.id})" onclick="showWindow('newthread', 'forum.php?mod=post&action=newthread&fid=$_G[fid]')" title="{lang send_posts}"><img src="{IMGDIR}/pn_post.png" alt="{lang send_posts}" /></a>
+	<!--{/if}-->
 	<!--{hook/forumdisplay_postbutton_top}-->
 </div>
 <!--{if $_G['forum']['threadtypes']}-->
 	<ul class="ttp bm cl">
-		<li id="ttp_all"{if !$_G['gp_typeid']} class="xw1 a"{/if}><a href="forum.php?mod=forumdisplay&action=list&fid=$_G[fid]">{lang forum_viewall}</a></li>
+		<li id="ttp_all"{if !$_GET['typeid']} class="xw1 a"{/if}><a href="forum.php?mod=forumdisplay&action=list&fid=$_G[fid]">{lang forum_viewall}</a></li>
 		<!--{if $_G['forum']['threadtypes']}-->
 			<!--{loop $_G['forum']['threadtypes']['types'] $id $name}-->
-				<li{if $_G['gp_typeid'] == $id} class="xw1 a"{/if}><a href="forum.php?mod=forumdisplay&action=list&fid=$_G[fid]{if $_G['gp_typeid'] != $id}&filter=typeid&typeid=$id$forumdisplayadd[typeid]{/if}">$name</a>
+				<li{if $_GET['typeid'] == $id} class="xw1 a"{/if}><a href="forum.php?mod=forumdisplay&action=list&fid=$_G[fid]{if $_GET['typeid'] != $id}&filter=typeid&typeid=$id$forumdisplayadd[typeid]{/if}">$name</a>
 			<!--{/loop}-->
 		<!--{/if}-->
 		<!--{hook/forumdisplay_filter_extra}-->
@@ -152,6 +155,7 @@
 		</form>
 	</div>
 </div>
+<!--{if helper_access::check_module('group')}-->
 <div class="bm bw0 pgs cl">
 	$multipage
 	<span {if $_G[setting][visitedforums]}id="visitedforums" onmouseover="$('visitedforums').id = 'visitedforumstmp';this.id = 'visitedforums';showMenu({'ctrlid':this.id})"{/if} class="pgb y"><a href="forum.php?mod=group&fid=$_G[fid]">{lang return_index}</a></span>
@@ -179,4 +183,5 @@
 			<!--{/loop}-->
 		<!--{/if}-->
 	</ul>
+<!--{/if}-->
 <!--{/if}-->

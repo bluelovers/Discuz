@@ -4,30 +4,28 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: block_xml.php 19516 2011-01-05 07:11:32Z zhangguosheng $
+ *      $Id: block_xml.php 28663 2012-03-07 05:50:37Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
-class block_xml {
+class block_xml extends discuz_block {
 
 	var $blockdata = array();
 
 	function block_xml($xmlid = null) {
 		if(!empty($xmlid)) {
-			$blockxml = DB::fetch_first("SELECT * FROM ".DB::table('common_block_xml')." WHERE id='$xmlid'");
-			if(!$blockxml) {
+			if(!($blockxml = C::t('common_block_xml')->fetch($xmlid))) {
 				return;
 			}
 			$this->blockdata = $blockxml;
-			$this->blockdata['data'] = (array)unserialize($blockxml['data']);
+			$this->blockdata['data'] = (array)dunserialize($blockxml['data']);
 		} else {
-			$query = DB::query('SELECT * FROM '.DB::table('common_block_xml'));
-			while($value = DB::fetch($query)) {
+			foreach(C::t('common_block_xml')->range() as $value) {
 				$one = $value;
-				$one['data'] = (array)unserialize($value['data']);
+				$one['data'] = (array)dunserialize($value['data']);
 				$this->blockdata[] = $one;
 			}
 		}
@@ -50,6 +48,7 @@ class block_xml {
 	}
 
 	function getdata($style, $parameter) {
+		$parameter = $this->cookparameter($parameter);
 		$array = array();
 		foreach($parameter as $key => $value) {
 			if(is_array($value)) {
@@ -67,7 +66,8 @@ class block_xml {
 			require_once libfile('function/importdata');
 			$importtxt = @dfsockopen($xmlurl, 0, create_sign_url($parameter, $this->blockdata['key'], $this->blockdata['signtype']));
 		} else {
-			$importtxt = @file_get_contents($xmlurl);
+			$ctx = stream_context_create(array('http' => array('timeout' => 20)));
+			$importtxt = @file_get_contents($xmlurl, false, $ctx);
 		}
 		if($importtxt) {
 			require libfile('class/xml');

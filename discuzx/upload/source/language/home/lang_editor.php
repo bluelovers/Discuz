@@ -4,8 +4,12 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_editor.php 20565 2011-02-28 02:24:52Z congyushuai $
+ *      $Id: lang_editor.php 28113 2012-02-22 09:25:55Z svn_project_zhangjie $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 $lang = array(
 	'editor_switch_media' => '切换到多媒体',
@@ -23,8 +27,9 @@ $lang = array(
 	'editor_indent' => '缩进',
 	'editor_hyperlink' => '超链接',
 	'editor_remove_link' => '移除链接',
-	'editor_link_image' => '引用图片',
-	'editor_link_flash' => '引用视频FLASH或MP3音乐',
+	'editor_link_image' => '添加图片',
+	'editor_link_attach' => '添加附件',
+	'editor_link_flash' => '添加视频FLASH或MP3音乐',
 	'editor_insert_smiley' => '插入表情',
 	'editor_doodle' => '涂鸦',
 	'editor_pagebreak' => '插入分页标志',
@@ -33,7 +38,7 @@ $lang = array(
 	'editor_switch_text' => '切换到纯文本',
 	'editor_font_song' => '宋体',
 	'editor_font_hei' => '黑体',
-	'editor_font_kai' => '楷体_GB2312',
+	'editor_font_kai' => '楷体',
 	'editor_font_li' => '隶书',
 	'editor_font_you' => '幼圆',
 	'editor_fontsize_xxsmall' => '极小',
@@ -74,6 +79,7 @@ $lang = array(
 	'editor_prompt_video_media' => 'Media 视频',
 	'editor_prompt_video_real' => 'Real 视频',
 	'editor_prompt_mp3' => 'mp3 音乐',
+	'editor_full_screen' => '全屏',
 );
 
 ?>

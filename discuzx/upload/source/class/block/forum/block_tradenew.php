@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: block_tradenew.php 7979 2010-04-15 06:52:32Z zhengqingpeng $
+ *      $Id: block_tradenew.php 25525 2011-11-14 04:39:11Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -49,7 +49,7 @@ class block_tradenew extends block_trade {
 
 	function cookparameter($parameter) {
 		$parameter['orderby'] = 'dateline';
-		return $parameter;
+		return parent::cookparameter($parameter);
 	}
 }
 

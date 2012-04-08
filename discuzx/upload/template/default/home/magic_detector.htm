@@ -1,7 +1,7 @@
 <!--{if $op == 'show'}-->
 	<!--{template common/header}-->
 	<script type="text/javascript">
-		var html = ''	
+		var html = ''
 	<!--{if $list}-->
 			+ '<ul class="mtm ml mls cl" style="width:370px;">'
 		<!--{loop $list $value}-->
@@ -14,9 +14,9 @@
 	<!--{else}-->
 			+ '<p style="padding:8px;">{lang no_redbag_space}</p>';
 	<!--{/if}-->
-		$('hkey_$_G[gp_handlekey]').innerHTML = html;
-		$('hbtn_$_G[gp_handlekey]').style.display = 'none';
-		setMenuPosition('fwin_$_G[gp_handlekey]', 'fwin_$_G[gp_handlekey]', '00');
+		$('hkey_$_GET[handlekey]').innerHTML = html;
+		$('hbtn_$_GET[handlekey]').style.display = 'none';
+		setMenuPosition('fwin_$_GET[handlekey]', 'fwin_$_GET[handlekey]', '00');
 	</script>
 	<!--{template common/footer}-->
 <!--{/if}-->

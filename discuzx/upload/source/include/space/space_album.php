@@ -4,14 +4,14 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_album.php 20784 2011-03-03 10:27:32Z svn_project_zhangjie $
+ *      $Id: space_album.php 28299 2012-02-27 08:48:36Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
-$minhot = $_G['setting']['feedhotmin']<1?3:$_G['setting']['feedhotmin'];
+$minhot = $_G['setting']['feedhotmin']<1?3:intval($_G['setting']['feedhotmin']);
 $id = empty($_GET['id'])?0:intval($_GET['id']);
 $picid = empty($_GET['picid'])?0:intval($_GET['picid']);
 
@@ -28,31 +28,28 @@ if($id) {
 	ckstart($start, $perpage);
 
 	if($id > 0) {
-		$query = DB::query("SELECT * FROM ".DB::table('home_album')." WHERE albumid='$id' AND uid='$space[uid]' LIMIT 1");
-		$album = DB::fetch($query);
+		$album = C::t('home_album')->fetch($id, $space['uid']);
 		if(empty($album)) {
 			showmessage('to_view_the_photo_does_not_exist');
 		}
 
 		ckfriend_album($album);
 
-		$wheresql = "albumid='$id'";
 
-		$album['picnum'] = $count = DB::result_first("SELECT COUNT(*) FROM ".DB::table('home_pic')." WHERE albumid='$id'");
+		$album['picnum'] = $count = C::t('home_pic')->check_albumpic($id);
 
 		if(empty($count) && !$space['self']) {
-			DB::query("DELETE FROM ".DB::table('home_album')." WHERE albumid='$id'");
+			C::t('home_album')->delete($id);
 			showmessage('to_view_the_photo_does_not_exist', "home.php?mod=space&uid=$album[uid]&do=album&view=me");
 		}
 
 		if($album['catid']) {
-			$album['catname'] = DB::result(DB::query("SELECT catname FROM ".DB::table('home_album_category')." WHERE catid='$album[catid]'"), 0);
+			$album['catname'] = C::t('home_album_category')->fetch_catname_by_catid($album['catid']);
 			$album['catname'] = dhtmlspecialchars($album['catname']);
 		}
 
 	} else {
-		$wheresql = "albumid='0' AND uid='$space[uid]'";
-		$count = getcount('home_pic', array('albumid'=>0, 'uid'=>$space['uid']));
+		$count = C::t('home_pic')->check_albumpic(0, NULL, $space['uid']);
 
 		$album = array(
 			'uid' => $space['uid'],
@@ -64,8 +61,8 @@ if($id) {
 
 	$albumlist = array();
 	$maxalbum = $nowalbum = $key = 0;
-	$query = DB::query("SELECT * FROM ".DB::table('home_album')." WHERE uid='$space[uid]' ORDER BY updatetime DESC LIMIT 0, 100");
-	while ($value = DB::fetch($query)) {
+	$query = C::t('home_album')->fetch_all_by_uid($space['uid'], 'updatetime', 0, 100);
+	foreach($query as $value) {
 		if($value['friend'] != 4 && ckfriend($value['uid'], $value['friend'], $value['target_ids'])) {
 			$value['pic'] = pic_cover_get($value['pic'], $value['picflag']);
 		} elseif ($value['picnum']) {
@@ -81,8 +78,8 @@ if($id) {
 	$list = array();
 	$pricount = 0;
 	if($count) {
-		$query = DB::query("SELECT * FROM ".DB::table('home_pic')." WHERE $wheresql ORDER BY dateline DESC LIMIT $start,$perpage");
-		while ($value = DB::fetch($query)) {
+		$query = C::t('home_pic')->fetch_all_by_albumid($id, $start, $perpage, 0, 0, 1, $space['uid']);
+		foreach($query as $value) {
 			if($value['status'] == 0 || $value['uid'] == $_G['uid'] || $_G['adminid'] == 1) {
 				$value['pic'] = pic_get($value['filepath'], 'album', $value['thumb'], $value['remote']);
 				$list[] = $value;
@@ -117,10 +114,9 @@ if($id) {
 	include_once template("diy:home/space_album_view");
 
 } elseif ($picid) {
-
-	$query = DB::query("SELECT * FROM ".DB::table('home_pic')." WHERE picid='$picid' AND uid='$space[uid]' LIMIT 1");
-	$pic = DB::fetch($query);
-	if(!$pic || ($pic['status'] == 1 && $pic['uid'] != $_G['uid'] && $_G['adminid'] != 1 && $_G['gp_modpickey'] != modauthkey($pic['picid']))) {
+	$query = C::t('home_pic')->fetch_all_by_uid($space['uid'], 0, 1, $picid);
+	$pic = $query[0];
+	if(!$pic || ($pic['status'] == 1 && $pic['uid'] != $_G['uid'] && $_G['adminid'] != 1 && $_GET['modpickey'] != modauthkey($pic['picid']))) {
 		showmessage('view_images_do_not_exist');
 	}
 
@@ -129,25 +125,23 @@ if($id) {
 
 	$album = array();
 	if($pic['albumid']) {
-		$query = DB::query("SELECT * FROM ".DB::table('home_album')." WHERE albumid='$pic[albumid]'");
-		if(!$album = DB::fetch($query)) {
-			DB::update('home_pic', array('albumid'=>0), array('albumid'=>$pic['albumid']));
+		$album = C::t('home_album')->fetch($pic['albumid']);
+		if(!$album) {
+			C::t('home_pic')->update_for_albumid($pic['albumid'], array('albumid' => 0));
 		}
 	}
 
 	if($album) {
 		ckfriend_album($album);
-		$wheresql = "albumid='$pic[albumid]'";
 	} else {
-		$album['picnum'] = getcount('home_pic', array('uid'=>$pic['uid'], 'albumid'=>0));
+		$album['picnum'] = C::t('home_pic')->check_albumpic(0, NULL, $pic['uid']);
 		$album['albumid'] = $pic['albumid'] = '-1';
-		$wheresql = "uid='$space[uid]' AND albumid='0'";
 	}
 
 	$piclist = $list = $keys = array();
 	$keycount = 0;
-	$query = DB::query("SELECT * FROM ".DB::table('home_pic')." WHERE $wheresql ORDER BY dateline DESC");
-	while ($value = DB::fetch($query)) {
+	$query = C::t('home_pic')->fetch_all_by_albumid($pic['albumid'], 0, 0, 0, 0, 1, $space['uid']);
+	foreach($query as $value) {
 		if($value['status'] == 0 || $value['uid'] == $_G['uid'] || $_G['adminid'] == 1) {
 			$keys[$value['picid']] = $keycount;
 			$list[$keycount] = $value;
@@ -214,14 +208,13 @@ if($id) {
 	ckstart($start, $perpage);
 
 	$cid = empty($_GET['cid'])?0:intval($_GET['cid']);
-	$csql = $cid?"cid='$cid' AND":'';
 
 	$siteurl = getsiteurl();
 	$list = array();
-	$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('home_comment')." WHERE $csql id='$pic[picid]' AND idtype='picid'"),0);
+	$count = C::t('home_comment')->count_by_id_idtype($pic['picid'], 'picid', $cid);
 	if($count) {
-		$query = DB::query("SELECT * FROM ".DB::table('home_comment')." WHERE $csql id='$pic[picid]' AND idtype='picid' ORDER BY dateline LIMIT $start,$perpage");
-		while ($value = DB::fetch($query)) {
+		$query = C::t('home_comment')->fetch_all_by_id_idtype($pic['picid'], 'picid', $start, $perpage, $cid);
+		foreach($query as $value) {
 			$list[] = $value;
 		}
 	}
@@ -251,11 +244,7 @@ if($id) {
 	}
 
 	$clickuserlist = array();
-	$query = DB::query("SELECT * FROM ".DB::table('home_clickuser')."
-		WHERE id='$id' AND idtype='$idtype'
-		ORDER BY dateline DESC
-		LIMIT 0,20");
-	while ($value = DB::fetch($query)) {
+	foreach(C::t('home_clickuser')->fetch_all_by_id_idtype($id, $idtype, 0, 20) as $value) {
 		$value['clickname'] = $clicks[$value['clickid']]['name'];
 		$clickuserlist[] = $value;
 	}
@@ -327,16 +316,11 @@ if($id) {
 			$need_count = false;
 
 			$ordersql = 'p.dateline';
-			$wheresql = "p.hot>='$minhot'";
 
-			$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('home_pic')." p WHERE $wheresql"),0);
+			$count = C::t('home_pic')->fetch_all_by_sql('p.'.DB::field('hot', $minhot, '>='), '', 0, 0, 1);
 			if($count) {
-				$query = DB::query("SELECT p.*, a.albumname, a.friend, a.target_ids FROM ".DB::table('home_pic')." p
-					LEFT JOIN ".DB::table('home_album')." a ON a.albumid=p.albumid
-					WHERE $wheresql
-					ORDER BY $ordersql DESC
-					LIMIT $start,$perpage");
-				while ($value = DB::fetch($query)) {
+				$query = C::t('home_pic')->fetch_all_by_sql('p.'.DB::field('hot', $minhot, '>='), 'p.dateline DESC', $start, $perpage);
+				foreach($query as $value) {
 					if($value['friend'] != 4 && ckfriend($value['uid'], $value['friend'], $value['target_ids']) && ($value['status'] == 0 || $value['uid'] == $_G['uid'] || $_G['adminid'] == 1)) {
 						$value['pic'] = pic_get($value['filepath'], 'album', $value['thumb'], $value['remote']);
 						$list[] = $value;
@@ -354,23 +338,25 @@ if($id) {
 
 		space_merge($space, 'field_home');
 
+		$uids = array();
+
 		if($space['feedfriend']) {
 
-			$wheresql = "uid IN ($space[feedfriend])";
-			$f_index = 'USE INDEX(updatetime)';
+			$uids = explode(',', $space['feedfriend']);
+			$f_index = 'updatetime';
 
 			$fuid_actives = array();
 
 			require_once libfile('function/friend');
 			$fuid = intval($_GET['fuid']);
 			if($fuid && friend_check($fuid)) {
-				$wheresql = "uid='$fuid'";
+				$uids = array($fuid);
 				$f_index = '';
 				$fuid_actives = array($fuid=>' selected');
 			}
 
-			$query = DB::query("SELECT * FROM ".DB::table('home_friend')." WHERE uid='$space[uid]' ORDER BY num DESC, dateline DESC LIMIT 0,500");
-			while ($value = DB::fetch($query)) {
+			$query = C::t('home_friend')->fetch_all_by_uid($space['uid'], 0, 500, true);
+			foreach($query as $value) {
 				$userlist[] = $value;
 			}
 		} else {
@@ -381,26 +367,23 @@ if($id) {
 
 		if($_GET['from'] == 'space') $diymode = 1;
 
-		$wheresql = "uid='$space[uid]'";
+		$uids = array($space['uid']);
 	}
 
 	if($need_count) {
 
 		if($searchkey = stripsearchkey($_GET['searchkey'])) {
-			$wheresql .= " AND albumname LIKE '%$searchkey%'";
+			$sqlSearchKey = $searchkey;
 			$searchkey = dhtmlspecialchars($searchkey);
 		}
 
 		$catid = empty($_GET['catid'])?0:intval($_GET['catid']);
-		if($catid) {
-			$wheresql .= " AND catid='$catid'";
-		}
 
-		$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('home_album')." WHERE $wheresql"),0);
+		$count = C::t('home_album')->fetch_all_by_search(3, $uids, $sqlSearchKey, true, $catid, 0, 0, '');
 
 		if($count) {
-			$query = DB::query("SELECT * FROM ".DB::table('home_album')." $f_index WHERE $wheresql ORDER BY updatetime DESC LIMIT $start,$perpage");
-			while ($value = DB::fetch($query)) {
+			$query = C::t('home_album')->fetch_all_by_search(1, $uids, $sqlSearchKey, true, $catid, 0, 0, '', '', 'updatetime', 'DESC', $start, $perpage, $f_index);
+			foreach($query as $value) {
 				if($value['friend'] != 4 && ckfriend($value['uid'], $value['friend'], $value['target_ids'])) {
 					$value['pic'] = pic_cover_get($value['pic'], $value['picflag']);
 				} elseif ($value['picnum']) {
@@ -418,15 +401,15 @@ if($id) {
 	dsetcookie('home_diymode', $diymode);
 
 	if($_G['uid']) {
-		if($_G['gp_view'] == 'all') {
+		if($_GET['view'] == 'all') {
 			$navtitle = lang('core', 'title_view_all').lang('core', 'title_album');
-		} elseif($_G['gp_view'] == 'me') {
+		} elseif($_GET['view'] == 'me') {
 			$navtitle = lang('core', 'title_my_album');
 		} else {
 			$navtitle = lang('core', 'title_friend_album');
 		}
 	} else {
-		if($_G['gp_order'] == 'hot') {
+		if($_GET['order'] == 'hot') {
 			$navtitle = lang('core', 'title_hot_pic_recommend');
 		} else {
 			$navtitle = lang('core', 'title_newest_update_album');

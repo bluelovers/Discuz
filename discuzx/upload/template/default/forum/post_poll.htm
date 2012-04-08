@@ -2,7 +2,7 @@
 <div class="exfm cl">
 	<div class="sinf sppoll z">
 		<input type="hidden" name="fid" value="$_G[fid]" />
-		<!--{if $_G[gp_action] == 'newthread'}-->
+		<!--{if $_GET[action] == 'newthread'}-->
 			<input type="hidden" name="tpolloption" value="1" />
 			<div class="cl">
 				<span class="y mtn"><input id="pollchecked" type="checkbox" class="pc" onclick="switchpollm(1)" /><label for="pollchecked">{lang post_single_frame_mode}</label></span>
@@ -39,18 +39,18 @@
 	<div class="sadd z">
 		<p class="mbn">
 			<label for="maxchoices">{lang post_poll_allowmultiple}</label>
-			<input type="text" name="maxchoices" id="maxchoices" class="px pxs" value="{if $_G[gp_action] == 'edit' && $poll[maxchoices]}$poll[maxchoices]{else}1{/if}" tabindex="1" /> {lang post_option}
+			<input type="text" name="maxchoices" id="maxchoices" class="px pxs" value="{if $_GET[action] == 'edit' && $poll[maxchoices]}$poll[maxchoices]{else}1{/if}" tabindex="1" /> {lang post_option}
 		</p>
 		<p class="mbn">
 			<label for="polldatas">{lang post_poll_expiration}</label>
-			<input type="text" name="expiration" id="polldatas" class="px pxs" value="{if $_G[gp_action] == 'edit'}{if !$poll[expiration]}0{elseif $poll[expiration] < 0}{lang poll_close}{elseif $poll[expiration] < TIMESTAMP}{lang poll_finish}{else}{echo (round(($poll[expiration] - TIMESTAMP) / 86400))}{/if}{/if}" tabindex="1" /> {lang days}
+			<input type="text" name="expiration" id="polldatas" class="px pxs" value="{if $_GET[action] == 'edit'}{if !$poll[expiration]}0{elseif $poll[expiration] < 0}{lang poll_close}{elseif $poll[expiration] < TIMESTAMP}{lang poll_finish}{else}{echo (round(($poll[expiration] - TIMESTAMP) / 86400))}{/if}{/if}" tabindex="1" /> {lang days}
 		</p>
 		<p class="mbn">
-			<input type="checkbox" name="visibilitypoll" id="visibilitypoll" class="pc" value="1"{if $_G[gp_action] == 'edit' && !$poll[visible]} checked{/if} tabindex="1" />
+			<input type="checkbox" name="visibilitypoll" id="visibilitypoll" class="pc" value="1"{if $_GET[action] == 'edit' && !$poll[visible]} checked{/if} tabindex="1" />
 			<label for="visibilitypoll">{lang poll_after_result}</label>
 		</p>
 		<p class="mbn">
-			<input type="checkbox" name="overt" id="overt" class="pc" value="1"{if $_G[gp_action] == 'edit' && $poll[overt]} checked{/if} tabindex="1" />
+			<input type="checkbox" name="overt" id="overt" class="pc" value="1"{if $_GET[action] == 'edit' && $poll[overt]} checked{/if} tabindex="1" />
 			<label for="overt">{lang post_poll_overt}</label>
 		</p>
 		<!--{hook/post_poll_extra}-->
@@ -59,7 +59,7 @@
 
 <script type="text/javascript" reload="1">
 var maxoptions = parseInt('$_G[setting][maxpolloptions]');
-<!--{if $_G[gp_action] == 'newthread'}-->
+<!--{if $_GET[action] == 'newthread'}-->
 	var curoptions = 0;
 	addpolloption();
 	addpolloption();

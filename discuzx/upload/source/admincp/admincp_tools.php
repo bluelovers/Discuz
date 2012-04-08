@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_tools.php 23086 2011-06-17 02:52:18Z zhangguosheng $
+ *      $Id: admincp_tools.php 27301 2012-01-13 07:23:05Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -15,7 +15,7 @@ cpheader();
 
 if($operation == 'updatecache') {
 
-	$step = max(1, intval($_G['gp_step']));
+	$step = max(1, intval($_GET['step']));
 	shownav('tools', 'nav_updatecache');
 	showsubmenusteps('nav_updatecache', array(
 		array('nav_updatecache_confirm', $step == 1),
@@ -28,30 +28,25 @@ if($operation == 'updatecache') {
 	if($step == 1) {
 		cpmsg("<input type=\"checkbox\" name=\"type[]\" value=\"data\" id=\"datacache\" class=\"checkbox\" checked /><label for=\"datacache\">".$lang[tools_updatecache_data]."</label><input type=\"checkbox\" name=\"type[]\" value=\"tpl\" id=\"tplcache\" class=\"checkbox\" checked /><label for=\"tplcache\">".$lang[tools_updatecache_tpl]."</label><input type=\"checkbox\" name=\"type[]\" value=\"blockclass\" id=\"blockclasscache\" class=\"checkbox\" /><label for=\"blockclasscache\">".$lang[tools_updatecache_blockclass].'</label>', 'action=tools&operation=updatecache&step=2', 'form', '', FALSE);
 	} elseif($step == 2) {
-		$type = implode('_', (array)$_G['gp_type']);
+		$type = implode('_', (array)$_GET['type']);
 		cpmsg(cplang('tools_updatecache_waiting'), "action=tools&operation=updatecache&step=3&type=$type", 'loading', '', FALSE);
 	} elseif($step == 3) {
-		$type = explode('_', $_G['gp_type']);
+		$type = explode('_', $_GET['type']);
 		if(in_array('data', $type)) {
 			updatecache();
 			require_once libfile('function/group');
 			$groupindex['randgroupdata'] = $randgroupdata = grouplist('lastupdate', array('ff.membernum', 'ff.icon'), 80);
 			$groupindex['topgrouplist'] = $topgrouplist = grouplist('activity', array('f.commoncredits', 'ff.membernum', 'ff.icon'), 10);
 			$groupindex['updateline'] = TIMESTAMP;
-			$groupdata = DB::fetch_first("SELECT SUM(todayposts) AS todayposts, COUNT(fid) AS groupnum FROM ".DB::table('forum_forum')." WHERE status='3' AND type='sub'");
+			$groupdata = C::t('forum_forum')->fetch_group_counter();
 			$groupindex['todayposts'] = $groupdata['todayposts'];
 			$groupindex['groupnum'] = $groupdata['groupnum'];
-			save_syscache('groupindex', $groupindex);
-			DB::query("TRUNCATE ".DB::table('forum_groupfield'));
+			savecache('groupindex', $groupindex);
+			C::t('forum_groupfield')->truncate();
+			savecache('forum_guide', '');
 		}
 		if(in_array('tpl', $type) && $_G['config']['output']['tplrefresh']) {
-			$tpl = dir(DISCUZ_ROOT.'./data/template');
-			while($entry = $tpl->read()) {
-				if(preg_match("/\.tpl\.php$/", $entry)) {
-					@unlink(DISCUZ_ROOT.'./data/template/'.$entry);
-				}
-			}
-			$tpl->close();
+			cleartemplatecache();
 		}
 		if(in_array('blockclass', $type)) {
 			include_once libfile('function/block');
@@ -62,7 +57,7 @@ if($operation == 'updatecache') {
 
 } elseif($operation == 'fileperms') {
 
-	$step = max(1, intval($_G['gp_step']));
+	$step = max(1, intval($_GET['step']));
 
 	shownav('tools', 'nav_fileperms');
 	showsubmenusteps('nav_fileperms', array(
@@ -104,7 +99,7 @@ if($operation == 'updatecache') {
 			if(!is_dir($fullentry) && !file_exists($fullentry)) {
 				continue;
 			} else {
-				if(!is_writeable($fullentry)) {
+				if(!dir_writeable($fullentry)) {
 					$result .= '<li class="error">'.(is_dir($fullentry) ? $lang['dir'] : $lang['file'])." ./$entry $lang[fileperms_unwritable]</li>";
 				}
 			}

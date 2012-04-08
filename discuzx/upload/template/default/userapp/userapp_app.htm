@@ -37,7 +37,7 @@ function  htmlspecialchars_decode(string) {
 
 }
 function setTitle(x) {
-	<!--{eval $my_site_name=htmlspecialchars($_G['setting']['sitename'], ENT_QUOTES);}-->
+	<!--{eval $my_site_name=uhtmlspecialchars($_G['setting']['sitename'], ENT_QUOTES);}-->
 	var my_site_name = htmlspecialchars_decode('{$my_site_name}');
 
 	x = htmlspecialchars_decode(x);

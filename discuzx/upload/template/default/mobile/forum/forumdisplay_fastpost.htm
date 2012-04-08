@@ -1,5 +1,5 @@
 <div class="mtn editor_box">
-  <form method="post" autocomplete="off" id="fastpostform" action="forum.php?mod=post&action=reply&fid=$_G[fid]&tid=$_G[tid]&extra=$_G[gp_extra]&replysubmit=yes&mobile=yes">
+  <form method="post" autocomplete="off" id="fastpostform" action="forum.php?mod=post&action=reply&fid=$_G[fid]&tid=$_G[tid]&extra=$_GET[extra]&replysubmit=yes&mobile=yes">
    	  <input type="hidden" name="formhash" value="{FORMHASH}" />
       <!--{if $_G[forum_thread][special] == 5 && empty($firststand)}-->
         <div class="inbox">

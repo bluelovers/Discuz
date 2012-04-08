@@ -7,6 +7,10 @@
  *      $Id: lang_admincp_menu.php 29171 2012-03-28 02:59:31Z monkey $
  */
 
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
+
 $lang = array
 (
 
@@ -22,7 +26,7 @@ $lang = array
 	'header_adv' => '广告',
 	'header_tools' => '工具',
 	'header_uc' => 'UCenter',
-	'header_welcome' => '你好',
+	'header_welcome' => '您好',
 	'header_logout' => '退出',
 	'header_bbs' => '站点首页',
 	'header_portal' => '门户',
@@ -35,7 +39,7 @@ $lang = array
 	'menu_home_clearhistorymenus' => '清空历史操作',
 
 	'menu_setting_basic' => '站点信息',
-	'menu_setting_access' => '注册与访问',
+	'menu_setting_access' => '注册与访问控制',
 	'menu_setting_customnav' => '导航设置',
 	'menu_setting_styles' => '界面设置',
 	'menu_setting_optimize' => '性能优化',
@@ -51,6 +55,7 @@ $lang = array
 	'menu_setting_imgwater' => '水印设置',
 	'menu_setting_uc' => 'UCenter 设置',
 	'menu_setting_uchome' => 'UCHome 设置',
+	'menu_setting_follow' => '广播设置',
 	'menu_setting_home' => '空间设置',
 	'menu_setting_search' => '搜索设置',
 	'menu_setting_district' => '地区设置',
@@ -67,6 +72,7 @@ $lang = array
 	'menu_members_add' => '添加用户',
 	'menu_members_edit' => '用户管理',
 	'menu_members_newsletter' => '发送通知',
+	'menu_usertag' => '用户标签',
 	'menu_members_edit_ban_user' => '禁止用户',
 	'menu_members_ipban' => '禁止 IP',
 	'menu_members_credits' => '积分奖惩',
@@ -78,7 +84,7 @@ $lang = array
 	'menu_profilefields' => '用户栏目定制',
 	'menu_admingroups' => '管理组',
 	'menu_usergroups' => '用户组',
-	'menu_hotuser' => '明星会员',
+	'menu_follow' => '推荐关注',
 	'menu_defaultuser' => '推荐好友',
 
 	'menu_moderate_posts' => '内容审核',
@@ -95,6 +101,7 @@ $lang = array
 	'menu_maint_threads_group' => '群组主题管理',
 	'menu_maint_prune_group' => '群组批量删帖',
 	'menu_maint_attaches_group' => '群组附件管理',
+	'menu_setting_collection' => '淘帖管理',
 	'menu_posting_tags' => '标签管理',
 	'menu_posting_censors' => '词语过滤',
 	'menu_maint_report' => '用户举报',
@@ -118,6 +125,9 @@ $lang = array
 	'menu_founder_groupperm' => '编辑团队职务权限 - {group}',
 	'menu_founder_permgrouplist' => '编辑权限 - {perm}',
 	'menu_founder_memberperm' => '编辑团队成员 - {username}',
+
+	'menu_patch' => '安全中心',
+	'menu_upgrade' => '在线升级',
 
 	'menu_addons' => '应用中心',
 	'menu_plugins' => '插件',
@@ -151,11 +161,13 @@ $lang = array
 	'menu_tools_relatedtag' => ' 标签聚合',
 	'menu_tools_creditwizard' => '积分策略向导',
 	'menu_tools_fileperms' => '文件权限检查',
+	'menu_tools_hookcheck' => '嵌入点校验',
 	'menu_tools_filecheck' => '文件校验',
 	'menu_forum_scheme' => '站点方案管理',
 	'menu_db' => '数据库',
 	'menu_postsplit' => '帖子分表',
 	'menu_threadsplit' => '主题分表',
+	'menu_membersplit' => '用户表优化',
 	'menu_logs' => '运行记录',
 	'menu_custommenu_manage' => '常用操作管理',
 	'menu_misc_cron' => '计划任务',
@@ -166,6 +178,7 @@ $lang = array
 	'menu_albumcategory' => '相册分类',
 	'menu_block' => '模块管理',
 	'menu_blockstyle' => '模块模板',
+	'menu_portalpermission' => '权限列表',
 	'menu_blockxml' => '第三方模块',
 	'menu_topic' => '专题管理',
 	'menu_diytemplate' => '页面管理',
@@ -175,6 +188,7 @@ $lang = array
 	'menu_group_manage' => '群组管理',
 	'menu_group_userperm' => '群主权限',
 	'menu_group_level' => '群组等级',
+	'menu_group_mod' => '审核群组',
 
 	'menu_setting_manyou' => 'Manyou 设置',
 	'menu_setting_qqconnect' => 'QQ 绑定设置',

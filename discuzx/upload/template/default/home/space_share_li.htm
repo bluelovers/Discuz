@@ -1,7 +1,7 @@
 <!--{if empty($ajax_edit)}--><li id="share_$value[sid]_li"><!--{/if}-->
 	<div class="h">
 		<div class="y">
-		<!--{if $value[uid] != $_G[uid] && $value[itemid]}-->
+		<!--{if $value[uid] != $_G[uid] && $value[itemid] && helper_access::check_module('share')}-->
 			<a href="home.php?mod=spacecp&ac=share&type=$value[type]&id=$value[itemid]" id="k_share" onclick="showWindow(this.id, this.href, 'get', 0);">{lang sharemetoo}</a>
 			<span class="pipe">|</span>
 		<!--{/if}-->

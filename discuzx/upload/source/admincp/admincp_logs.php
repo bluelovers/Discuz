@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_logs.php 27854 2012-02-15 11:12:37Z svn_project_zhangjie $
+ *      $Id: admincp_logs.php 29236 2012-03-30 05:34:47Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -13,38 +13,46 @@ if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 
 cpheader();
 
-$lpp = empty($_G['gp_lpp']) ? 20 : $_G['gp_lpp'];
+$lpp = empty($_GET['lpp']) ? 20 : $_GET['lpp'];
 $checklpp = array();
 $checklpp[$lpp] = 'selected="selected"';
 $extrainput = '';
 
-$operation = in_array($operation, array('illegal', 'rate', 'credit', 'mods', 'medal', 'ban', 'cp', 'magic', 'error', 'invite', 'payment', 'warn')) ? $operation : 'illegal';
-
+$operation = in_array($operation, array('illegal', 'rate', 'credit', 'mods', 'medal', 'ban', 'cp', 'magic', 'error', 'invite', 'payment', 'warn', 'crime', 'sendmail')) ? $operation : 'illegal';
 $logdir = DISCUZ_ROOT.'./data/log/';
-$logfiles = get_log_files($logdir, $operation.'log');
+$logfiles = get_log_files($logdir, $operation.($operation == 'sendmail' ? '' : 'log'));
 $logs = array();
 $lastkey = count($logfiles) - 1;
 $lastlog = $logfiles[$lastkey];
 krsort($logfiles);
 if($logfiles) {
-	if(!isset($_G['gp_day']) || strexists($_G['gp_day'], '_')) {
-		list($_G['gp_day'], $_G['gp_num']) = explode('_', $_G['gp_day']);
-		$logs = file(($_G['gp_day'] ? $logdir.$_G['gp_day'].'_'.$operation.'log'.($_G['gp_num'] ? '_'.$_G['gp_num'] : '').'.php' : $logdir.$lastlog));
+	if(!isset($_GET['day']) || strexists($_GET['day'], '_')) {
+		list($_GET['day'], $_GET['num']) = explode('_', $_GET['day']);
+		$logs = file(($_GET['day'] ? $logdir.$_GET['day'].'_'.$operation.($operation == 'sendmail' ? '' : 'log').($_GET['num'] ? '_'.$_GET['num'] : '').'.php' : $logdir.$lastlog));
 	} else {
-		$logs = file($logdir.$_G['gp_day'].'_'.$operation.'log'.'.php');
+		$logs = file($logdir.$_GET['day'].'_'.$operation.($operation == 'sendmail' ? '' : 'log').'.php');
 	}
 }
 
 $start = ($page - 1) * $lpp;
 $logs = array_reverse($logs);
 
-if(empty($_G['gp_keyword'])) {
+if(empty($_GET['keyword']) && empty($_GET['filteract'])) {
 	$num = count($logs);
-	$multipage = multi($num, $lpp, $page, ADMINSCRIPT."?action=logs&operation=$operation&lpp=$lpp".(!empty($_G['gp_day']) ? '&day='.$_GET['day'] : ''), 0, 3);
+	$multipage = multi($num, $lpp, $page, ADMINSCRIPT."?action=logs&operation=$operation&lpp=$lpp".(!empty($_GET['day']) ? '&day='.$_GET['day'] : ''), 0, 3);
 	$logs = array_slice($logs, $start, $lpp);
 } else {
 	foreach($logs as $key => $value) {
-		if(strpos($value, $_G['gp_keyword']) === FALSE) {
+		if(!empty($_GET['filteract'])) {
+			$log = explode("\t", $value);
+			preg_match("/operation=(.[^;]*)/i", $log[6], $operationInfo);
+			$logExplain = $operationInfo[1] ? rtrim($log[5]).'_'.$operationInfo[1] : rtrim($log[5]) ;
+			$logPostion = strpos($logExplain, $_GET['filteract']);
+			if($logPostion === false || $logPostion != 0) {
+				unset($logs[$key]);
+			}
+		}
+		if(!empty($_GET['keyword']) && strpos($value, $_GET['keyword']) === FALSE) {
 			unset($logs[$key]);
 		}
 	}
@@ -54,23 +62,22 @@ if(empty($_G['gp_keyword'])) {
 $usergroup = array();
 
 if(in_array($operation, array('rate', 'mods', 'ban', 'cp'))) {
-	$query = DB::query("SELECT groupid, grouptitle FROM ".DB::table('common_usergroup'));
-	while($group = DB::fetch($query)) {
+	foreach(C::t('common_usergroup')->range() as $group) {
 		$usergroup[$group['groupid']] = $group['grouptitle'];
 	}
 }
 
 shownav('tools', 'nav_logs', 'nav_logs_'.$operation);
 if($logfiles) {
-	$sel = '<select class="right" style="margin-right:20px;" onchange="location.href=\''.ADMINSCRIPT.'?action=logs&operation='.$operation.'&keyword='.$_G['gp_keyword'].'&day=\'+this.value">';
+	$sel = '<select class="right" style="margin-right:20px;" onchange="location.href=\''.ADMINSCRIPT.'?action=logs&operation='.$operation.'&keyword='.$_GET['keyword'].'&day=\'+this.value">';
 	foreach($logfiles as $logfile) {
 		list($date, $logtype, $num) = explode('_', $logfile);
 		if(is_numeric($date)) {
 			$num = intval($num);
-			$sel .= '<option value="'.$date.'_'.$num.'"'.($date.'_'.$num == $_G['gp_day'].'_'.intval($_G['gp_num']) ? ' selected="selected"' : '').'>'.($num ? '&nbsp;&nbsp;'.$date.' '.cplang('logs_archive').' '.$num : $date).'</option>';
+			$sel .= '<option value="'.$date.'_'.$num.'"'.($date.'_'.$num == $_GET['day'].'_'.intval($_GET['num']) ? ' selected="selected"' : '').'>'.($num ? '&nbsp;&nbsp;'.$date.' '.cplang('logs_archive').' '.$num : $date).'</option>';
 		} else {
 			list($logtype) = explode('.', $logtype);
-			$sel .= '<option value="'.$logtype.'"'.($logtype == $_G['gp_day'] ? ' selected="selected"' : '').'>'.$logtype.'</option>';
+			$sel .= '<option value="'.$logtype.'"'.($logtype == $_GET['day'] ? ' selected="selected"' : '').'>'.$logtype.'</option>';
 		}
 	}
 	$sel .= '</select>';
@@ -86,6 +93,7 @@ showsubmenu('nav_logs', array(
 	array(array('menu' => 'nav_logs_system', 'submenu' => array(
 		array('nav_logs_cp', 'logs&operation=cp'),
 		array('nav_logs_error', 'logs&operation=error'),
+		array('nav_logs_sendmail', 'logs&operation=sendmail'),
 	)), '', in_array($operation, array('cp', 'error'))),
 	array(array('menu' => 'nav_logs_extended', 'submenu' => array(
 		array('nav_logs_rate', 'logs&operation=rate'),
@@ -95,14 +103,29 @@ showsubmenu('nav_logs', array(
 		array('nav_logs_medal', 'logs&operation=medal'),
 		array('nav_logs_invite', 'logs&operation=invite'),
 		array('nav_logs_payment', 'logs&operation=payment'),
-	)), '', in_array($operation, array('rate', 'credit', 'magic', 'medal', 'invite', 'payment')))
+	)), '', in_array($operation, array('rate', 'credit', 'magic', 'medal', 'invite', 'payment'))),
+	array(array('menu' => 'nav_logs_crime', 'submenu' => array(
+		array('nav_logs_crime_delpost', 'logs&operation=crime&crimeactions=crime_delpost'),
+		array('nav_logs_crime_warnpost', 'logs&operation=crime&crimeactions=crime_warnpost'),
+		array('nav_logs_crime_banpost', 'logs&operation=crime&crimeactions=crime_banpost'),
+		array('nav_logs_crime_banspeak', 'logs&operation=crime&crimeactions=crime_banspeak'),
+		array('nav_logs_crime_banvisit', 'logs&operation=crime&crimeactions=crime_banvisit'),
+		array('nav_logs_crime_banstatus', 'logs&operation=crime&crimeactions=crime_banstatus'),
+		array('nav_logs_crime_avatar', 'logs&operation=crime&crimeactions=crime_avatar'),
+		array('nav_logs_crime_sightml', 'logs&operation=crime&crimeactions=crime_sightml'),
+		array('nav_logs_crime_customstatus', 'logs&operation=crime&crimeactions=crime_customstatus'),
+	)), '', in_array($operation, array('crime'))),
 ), $sel);
 if($operation == 'illegal') {
 	showtips('logs_tips_illegal');
 } elseif($operation == 'ban') {
 	showtips('logs_tips_ban');
 }
-showformheader("logs&operation=$operation");
+if($operation == 'crime') {
+	showformheader("logs", null, null, 'get');
+} else {
+	showformheader("logs&operation=$operation");
+}
 showtableheader('', 'fixpadding" style="table-layout: fixed');
 $filters = '';
 if($operation == 'illegal') {
@@ -132,6 +155,42 @@ if($operation == 'illegal') {
 			$log[2],
 			$log[3],
 			$log[4]
+		));
+	}
+
+} elseif($operation == 'sendmail') {
+
+	showtablerow('class="header"', array('class="td23"','class="td23"','class="td23"'), array(
+		cplang('time'),
+		cplang('username'),
+		cplang('email'),
+	));
+
+	$logarr = $logemail = array();
+	foreach($logs as $logrow) {
+		$log = explode("\t", $logrow);
+		if(empty($log[1])) {
+			continue;
+		}
+		$log[5] = trim(str_replace('sendmail failed.', '', $log[5]));
+		if(!$log[5]) {
+			continue;
+		}
+		$logemail[] = $log[5];
+		$logarr[] = $log;
+	}
+
+	$members = C::t('common_member')->fetch_all_by_email($logemail);
+
+	foreach($logarr as $log) {
+		$log[6] = $members[$log[5]]['username'];
+		if(strtolower($log[6]) == strtolower($_G['member']['username'])) {
+			$log[6] = "<b>$log[6]</b>";
+		}
+		showtablerow('', array('class="smallefont"', 'class="bold"', 'class="smallefont"'), array(
+			$log[1],
+			'<a href="home.php?mod=space&username='.$log[6].'" target="_blank">'.$log[6].'</a>',
+			$log[5]
 		));
 	}
 
@@ -182,16 +241,10 @@ if($operation == 'illegal') {
 		cplang('members_access_dateline'),
 	));
 
-	$sql = '';
-	$warncount = 0;
-	if($_G['gp_keyword']) {
-		$searchuserarr = explode(',', $_G['gp_keyword']);
-		$sql = " WHERE fw.author IN (".dimplode($searchuserarr).")";
-	}
 
-	$warncount = DB::result_first("SELECT count(*) FROM ".DB::table('forum_warning').' fw '.$sql);
-	$query = DB::query("SELECT fw.* FROM ".DB::table('forum_warning')." fw $sql ORDER BY fw.wid DESC LIMIT $start, $lpp");
-	while($row = DB::fetch($query)) {
+	$warncount = C::t('forum_warning')->count_by_author($_GET['keyword'] ? explode(',', $_GET['keyword']) : null);
+	C::t('forum_warning')->fetch_all_by_author(($_GET['keyword'] ? explode(',', $_GET['keyword']) : null), $start, $lpp);
+	foreach(C::t('forum_warning')->fetch_all_by_author(($_GET['keyword'] ? explode(',', $_GET['keyword']) : null), $start, $lpp) as $row) {
 		showtablerow('', array('class="td28"', 'class=""', '', 'class="td26"', ''), array(
 			'<b>'.cplang('warn_url').'</b><a href="forum.php?mod=redirect&goto=findpost&pid='.$row['pid'].'" target="_blank">'.$_G['siteurl'].'forum.php?mod=redirect&goto=findpost&pid='.$row['pid'].'</a><br><b>'.cplang('warn_reason').'</b>'.$row['reason'],
 			'<a href="home.php?mod=space&uid='.$row['authorid'].'">'.$row['author'].'</a>',
@@ -199,37 +252,96 @@ if($operation == 'illegal') {
 			dgmdate($row['dateline'], 'y-m-d H:i'),
 		));
 	}
-	$multipage = multi($warncount, $lpp, $page, ADMINSCRIPT."?action=logs&operation=$operation&keyword=".rawurlencode($_G['gp_keyword'])."&lpp=$lpp", 0, 3);
+	$multipage = multi($warncount, $lpp, $page, ADMINSCRIPT."?action=logs&operation=$operation&keyword=".rawurlencode($_GET['keyword'])."&lpp=$lpp", 0, 3);
+
+} elseif($operation == 'crime') {
+
+	include_once libfile('function/member');
+
+	if($_GET['crimeactions']) {
+		$_GET['crimeaction'] = array_search($_GET['crimeactions'], crime('actions'));
+	}
+	$operator = trim($_GET['operator']);
+	$crimeaction = intval($_GET['crimeaction']);
+	$username = trim($_GET['username']);
+	$starttime = trim($_GET['starttime']);
+	$endtime = trim($_GET['endtime']);
+	$keyword = trim($_GET['keyword']);
+
+	$_GET['crimesearch'] = 1;
+
+	foreach(crime('actions') as $key => $value) {
+		$crimeactionselect .= '<option value="'.$key.'"'.($key == $crimeaction ? ' selected' : '').'>'.$lang[$value].'</option>';
+	}
+	print <<<SEARCH
+		<script src="static/js/calendar.js"></script>
+		<input type="hidden" name="operation" value="$operation">
+		<input type="hidden" name="action" value="$action">
+		<table cellspacing="3" cellpadding="3">
+			<tr>
+				<th>$lang[crime_operator]: </th><td width="160"><input type="text" class="txt" name="operator" value="$operator" /></td>
+				<th>$lang[crime_action]: </th><td><select name="crimeaction">$crimeactionselect</select></td>
+			</tr>
+			<tr>
+				<th>$lang[crime_user]: </th><td><input type="text" class="txt" name="username" value="$username" /></td>
+				<th>$lang[startendtime]: </th><td><input type="text" onclick="showcalendar(event, this)" style="width: 80px; margin-right: 5px;" value="$starttime" name="starttime" class="txt" /> -- <input type="text" onclick="showcalendar(event, this)" style="width: 80px; margin-left: 5px;" value="$endtime" name="endtime" class="txt" /></td>
+			</tr>
+			<tr>
+				<th>$lang[keywords]: </th><td><input type="text" class="txt" name="keyword" value="$keyword" /></td>
+				<th><input type="submit" name="crimesearch" value="$lang[search]" class="btn" /></th><td></td>
+			</tr>
+		</table>
+SEARCH;
+
+	if(submitcheck('crimesearch', 1)) {
+		include_once libfile('function/member');
+		list($count, $clist) = crime('search', $crimeaction, $username, $operator, $startime, $endtime, $keyword, $start, $lpp);
+
+		showtablefooter();
+		showtableheader($lang[members_ban_crime_record], 'fixpadding', '', 5);
+
+		if($clist) {
+			showtablerow('class="header"', array('class="td24"','class="td24"','class="td31"','','class="td24"'), array($lang['crime_user'], $lang['crime_action'], $lang['crime_dateline'], $lang['crime_reason'], $lang['crime_operator']));
+			foreach($clist as $crime) {
+				showtablerow('', '', array('<a href="home.php?mod=space&uid='.$crime['uid'].'" target="_blank">'.$crime['username'].'</a>', $lang[$crime['action']], date('Y-m-d H:i:s', $crime['dateline']), $crime['reason'], '<a href="home.php?mod=space&uid='.$crime['operatorid'].'" target="_blank">'.$crime['operator'].'</a>'));
+			}
+			$multipage = multi($count, $lpp, $page, ADMINSCRIPT."?action=logs&operation=$operation&keyword=".rawurlencode($_GET['keyword'])."&starttime=$starttime&endtime=$endtime&username=".rawurlencode($username)."&operator=".rawurlencode($operator)."&crimeaction=$crimeaction&lpp=$lpp&crimesearch=yes");
+		} else {
+			showtablerow('', 'colspan=5', array($lang['none']));
+		}
+	}
 
 } elseif($operation == 'credit') {
 
-	$operationlist = array('TRC', 'RTC', 'RAC', 'MRC', 'TFR', 'RCV', 'CEC', 'ECU', 'SAC', 'BAC', 'PRC', 'RSC', 'STC', 'BTC', 'AFD', 'UGP', 'RPC', 'ACC', 'RCT', 'RCA', 'RCB', 'CDC', 'RKC');
+	$operationlist = array('TRC', 'RTC', 'RAC', 'MRC', 'TFR', 'RCV', 'CEC', 'ECU', 'SAC', 'BAC', 'PRC', 'RSC', 'STC', 'BTC', 'AFD', 'UGP', 'RPC', 'ACC', 'RCT', 'RCA', 'RCB', 'CDC', 'RKC', 'BME', 'RPR', 'RPZ');
 
 	$rdata = array(
 		'task' => array('TRC'),
 		'thread' => array('RTC', 'RAC', 'STC', 'BTC', 'ACC', 'RCT', 'RCA', 'RCB'),
-		'member' => array('TFR', 'RCV', 'CEC', 'ECU', 'AFD', 'CDC', 'RKC'),
+		'member' => array('TFR', 'RCV', 'CEC', 'ECU', 'AFD', 'CDC', 'RKC', 'RPR', 'RPZ'),
 		'attach' => array('BAC', 'SAC'),
 		'magic' => array('MRC', 'BGC', 'RGC', 'AGC', 'BMC'),
+		'medal' => array('BME'),
 		'post' => array('PRC', 'RSC'),
 		'usergroup' => array('UGP'),
 		'report' => array('RPC'),
 	);
 
-	$perpage = max(50, empty($_G['gp_perpage']) ? 50 : intval($_G['gp_perpage']));
+	$perpage = max(50, empty($_GET['perpage']) ? 50 : intval($_GET['perpage']));
 	$start_limit = ($page - 1) * $perpage;
 
 	$where = '1';
 	$pageadd = '';
-	if($srch_uid = trim($_G['gp_srch_uid'])) {
+	$begintime = $endtime = $uid = 0;
+	if($srch_uid = trim($_GET['srch_uid'])) {
 		if($uid = max(0, intval($srch_uid))) {
 			$where .= " AND l.`uid`='$uid'";
 			$pageadd .= '&srch_uid='.$uid;
 		} else {
 			$srch_uid = '';
 		}
-	} elseif($srch_username = trim($_G['gp_srch_username'])) {
-		$uid = DB::result_first("SELECT uid FROM ".DB::table('common_member')." WHERE username='$srch_username'");
+	} elseif($srch_username = trim($_GET['srch_username'])) {
+		$uid = ($uid = C::t('common_member')->fetch_uid_by_username($srch_username)) ? $uid : C::t('common_member_archive')->fetch_uid_by_username($srch_username);
 		if($uid) {
 			$where .= " AND l.`uid`='$uid'";
 			$pageadd .= '&srch_username='.rawurlencode($srch_username);
@@ -237,25 +349,28 @@ if($operation == 'illegal') {
 			$srch_username = '';
 		}
 	}
-	if(($srch_rtype = trim($_G['gp_srch_rtype'])) && array_key_exists($srch_rtype, $rdata) && isset($_G['gp_srch_rid']) && ($srch_rid = max(0, intval($_G['gp_srch_rid'])))) {
+	if(($srch_rtype = trim($_GET['srch_rtype'])) && array_key_exists($srch_rtype, $rdata) && isset($_GET['srch_rid']) && ($srch_rid = max(0, intval($_GET['srch_rid'])))) {
 		$where .= " AND l.`relatedid`='$srch_rid'";
 		$pageadd .= '&srch_rtype='.$srch_rtype.'&srch_rid='.$srch_rid;
 	}
-	if($srch_operation = trim($_G['gp_srch_operation'])) {
+	$optype = '';
+	if($srch_operation = trim($_GET['srch_operation'])) {
 		if(in_array($srch_operation, $operationlist)) {
 			$where .= " AND l.`operation`='$srch_operation'";
+			$optype = $srch_operation;
 			$pageadd .= '&srch_operation='.$srch_operation;
 		}
 	}
-	if($srch_starttime = trim($_G['gp_srch_starttime'])) {
+	if($srch_starttime = trim($_GET['srch_starttime'])) {
 		if($starttime = strtotime($srch_starttime)) {
 			$where .= " AND l.`dateline`>'$starttime'";
+			$begintime = $starttime;
 			$pageadd .= '&srch_starttime='.$srch_starttime;
 		} else {
 			$srch_starttime = '';
 		}
 	}
-	if($srch_endtime = trim($_G['gp_srch_endtime'])) {
+	if($srch_endtime = trim($_GET['srch_endtime'])) {
 		if($endtime = strtotime($srch_endtime)) {
 			$where .= " AND l.`dateline`<'$endtime'";
 			$pageadd .= '&srch_endtime='.$srch_endtime;
@@ -308,24 +423,28 @@ if($operation == 'illegal') {
 		cplang('logs_credit_relatedid'),
 	));
 
-	$num = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_credit_log')." l WHERE $where");
+	$num = C::t('common_credit_log')->count_by_search($uid, $optype, $begintime, $endtime, 0, 0, array(), $srch_rid);
 
 	$mpurl = ADMINSCRIPT."?action=logs&operation=$operation".$pageadd;
 	$multipage = multi($num, $perpage, $page, $mpurl, 0, 3);
 
-	$query = DB::query("SELECT l.*, u.username
-		FROM ".DB::table('common_credit_log')." l
-		LEFT JOIN ".DB::table('common_member')." u
-		ON l.uid=u.uid
-		WHERE $where
-		ORDER BY l.dateline DESC LIMIT $start_limit, $perpage");
-
-	while($log = DB::fetch($query)) {
+	$logs = C::t('common_credit_log')->fetch_all_by_search($uid, $optype, $begintime, $endtime, 0, 0, array(), $start_limit, $perpage, $srch_rid);
+	$luid = array();
+	foreach($logs as $log) {
+		$luid[$log['uid']] = $log['uid'];
+	}
+	$members = C::t('common_member')->fetch_all($luid);
+	foreach($logs as $log) {
+		$log['username'] = $members[$log['uid']]['username'];
 		$log['dateline'] = dgmdate($log['dateline'], 'y-n-j H:i');
 		$log['update'] = '';
 		foreach($_G['setting']['extcredits'] as $id => $credit) {
 			if($log['extcredits'.$id]) {
-				$log['update'] .= $credit['title'].($log['extcredits'.$id] > 0 ? '+' : '').$log['extcredits'.$id].$credit['unit'].'&nbsp;';
+				if($log['operation'] == 'RPZ') {
+					$log['update'] .= $credit['title'].$lang['logs_credit_update_reward_clean'].'&nbsp;';
+				} else {
+					$log['update'] .= $credit['title'].($log['extcredits'.$id] > 0 ? '+' : '').$log['extcredits'.$id].$credit['unit'].'&nbsp;';
+				}
 			}
 		}
 		$related = '';
@@ -338,6 +457,9 @@ if($operation == 'illegal') {
 		} elseif(in_array($log['operation'], $rdata['magic'])) {
 			$rtype = 'magic';
 			$related = cplang('logs_magic_id').':'.$log['relatedid'];
+		} elseif(in_array($log['operation'], $rdata['medal'])) {
+			$rtype = 'medal';
+			$related = cplang('logs_medal_id').':'.$log['relatedid'];
 		} elseif(in_array($log['operation'], $rdata['member'])) {
 			$rtype = 'member';
 			$related = '<a href="home.php?mod=space&uid='.$log['relatedid'].'&do=profile" target="_blank">'.cplang('uid').':'.$log['relatedid'].'</a>';
@@ -388,10 +510,13 @@ if($operation == 'illegal') {
 			continue;
 		}
 		$log[1] = dgmdate($log[1], 'y-n-j H:i');
-		$log[2] = dstripslashes($log[2]);
+		$log[2] = $log[2];
 		$log[3] = $usergroup[$log[3]];
 		$log[4] = $_G['group']['allowviewip'] ? $log[4] : '-';
 		$log[6] = "<a href=\"./forum.php?mod=forumdisplay&fid=$log[5]\" target=\"_blank\">$log[6]</a>";
+		if(!empty($log[11])) {
+			$log[6] .= " -> <a href=\"./forum.php?mod=forumdisplay&fid=$log[11]\" target=\"_blank\">$log[12]</a>";
+		}
 		$log[8] = "<a href=\"./forum.php?mod=viewthread&tid=$log[7]\" target=\"_blank\" title=\"$log[8]\">".cutstr($log[8], 15)."</a>";
 		$log[9] = $modactioncode[trim($log[9])];
 		showtablerow('', array('class="bold"'), array(
@@ -421,7 +546,7 @@ if($operation == 'illegal') {
 	$operations = array(1 => '<b>'.$lang['logs_lock'].'</b>', 2 => '<b>'.$lang['logs_unlock'].'</b>', 3 => '<i>'.$lang['logs_banned_unban'].'</i>', 4 => '<b>'.$lang['logs_banned_ban'].'</b>');
 	$extrainput = '&nbsp;'.cplang('operation').': <select name="filter"><option></option>';
 	foreach($operations as $k => $v) {
-		$extrainput .= '<option value="'.$k.'"'.($_G['gp_filter'] == $k ? ' selected="selected"' : '').'>'.strip_tags($v).'</option>';
+		$extrainput .= '<option value="'.$k.'"'.($_GET['filter'] == $k ? ' selected="selected"' : '').'>'.strip_tags($v).'</option>';
 	}
 	$extrainput .= '</select>';
 
@@ -444,7 +569,7 @@ if($operation == 'illegal') {
 				$operation = (in_array($log[6], array(4, 5)) && !in_array($log[7], array(4, 5))) ? 3 : 4;
 			}
 		}
-		if(!empty($_G['gp_filter']) && $_G['gp_filter'] != $operation) {
+		if(!empty($_GET['filter']) && $_GET['filter'] != $operation) {
 			continue;
 		}
 		$operation = $operations[$operation];
@@ -484,6 +609,26 @@ function togglecplog(k) {
 }
 </script>
 EOD;
+	$data = getactionarray();
+	$selectOperationOptions = "<option value=''>".cplang('all')."</option>";
+	foreach($data['cats'] as $topkey) {
+		if(!$data['actions'][$topkey]) {
+			continue;
+		}
+		$selectOperationOptions .= "<optgroup label='".cplang('header_'.$topkey)."'>";
+		foreach($data['actions'][$topkey] as $k => $item) {
+			if(!$item) {
+				continue;
+			}
+			$explainAction[$item[1]] = cplang($item[0]);
+			if ($item[1]) {
+				$checkedhere = $_GET['filteract'] == $item[1] ? " selected='true'" : '';
+				$selectOperationOptions .= "<option value='$item[1]'{$checkedhere}>{$explainAction[$item[1]]}</option>";
+			}
+		}
+		$selectOperationOptions .= "</optgroup>";
+	}
+	unset($explainAction['']);
 
 	foreach($logs as $k => $logrow) {
 		$log = explode("\t", $logrow);
@@ -491,11 +636,13 @@ EOD;
 			continue;
 		}
 		$log[1] = dgmdate($log[1], 'y-n-j H:i');
-		$log[2] = dstripslashes($log[2]);
+		$log[2] = $log[2];
 		$log[2] = "<a href=\"home.php?mod=space&username=".rawurlencode($log[2])."\" target=\"_blank\">".($log[2] != $_G['member']['username'] ? "<b>$log[2]</b>" : $log[2])."</a>";
 		$log[3] = $usergroup[$log[3]];
 		$log[4] = $_G['group']['allowviewip'] ? $log[4] : '-';
-		$log[5] = rtrim($log[5]);
+		preg_match("/operation=(.[^;]*)/i", $log[6], $operationInfo);
+		$logExplain = $explainAction[rtrim($log[5]).'_'.$operationInfo[1]] ? $explainAction[rtrim($log[5]).'_'.$operationInfo[1]] : $explainAction[rtrim($log[5])] ;
+		$log[5] = $logExplain ? $logExplain : rtrim($log[5]);
  		showtablerow('', array('class="bold"'), array($log[2], $log[3], $log[4], $log[1], $log[5], '<a href="javascript:;" onclick="togglecplog('.$k.')">'.cutstr($log[6], 200).'</a>'));
  		echo '<tbody id="cplog_'.$k.'" style="display:none;">';
  		echo '<tr><td colspan="6">'.$log[6].'</td></tr>';
@@ -527,15 +674,16 @@ EOD;
 
 		$where = '1';
 		$pageadd = '';
-		if($srch_uid = trim($_G['gp_srch_uid'])) {
+		$uid = $fuid = 0;
+		if($srch_uid = trim($_GET['srch_uid'])) {
 			if($uid = max(0, intval($srch_uid))) {
 				$where .= " AND i.`uid`='$uid'";
 				$pageadd .= '&srch_uid='.$uid;
 			} else {
 				$srch_uid = '';
 			}
-		} elseif($srch_username = trim($_G['gp_srch_username'])) {
-			$uid = DB::result_first("SELECT uid FROM ".DB::table('common_member')." WHERE username='$srch_username'");
+		} elseif($srch_username = trim($_GET['srch_username'])) {
+			$uid = ($uid = C::t('common_member')->fetch_uid_by_username($srch_username)) ? $uid : C::t('common_member_archive')->fetch_uid_by_username($srch_username);
 			if($uid) {
 				$where .= " AND i.`uid`='$uid'";
 				$pageadd .= '&srch_username='.rawurlencode($srch_username);
@@ -543,19 +691,19 @@ EOD;
 				$srch_username = '';
 			}
 		}
-		if($srch_fuid = trim($_G['gp_srch_fuid'])) {
-			if($uid = max(0, intval($srch_fuid))) {
-				$where .= " AND i.`fuid`='$uid'";
-				$pageadd .= '&srch_fuid='.$uid;
+		if($srch_fuid = trim($_GET['srch_fuid'])) {
+			if($fuid = max(0, intval($srch_fuid))) {
+				$where .= " AND i.`fuid`='$fuid'";
+				$pageadd .= '&srch_fuid='.$fuid;
 			} else {
 				$srch_fuid = '';
 			}
 		}
-		if($srch_fusername = trim($_G['gp_srch_fusername'])) {
+		if($srch_fusername = trim($_GET['srch_fusername'])) {
 			$where .= " AND i.`fusername`='$srch_fusername'";
 			$pageadd .= '&srch_fusername='.rawurlencode($srch_fusername);
 		}
-		if($srch_buydate_start = trim($_G['gp_srch_buydate_start'])) {
+		if($srch_buydate_start = trim($_GET['srch_buydate_start'])) {
 			if($buydate_start = strtotime($srch_buydate_start)) {
 				$where .= " AND i.`dateline`>'$buydate_start'";
 				$pageadd .= '&srch_buydate_start='.$srch_buydate_start;
@@ -563,7 +711,7 @@ EOD;
 				$srch_buydate_start = '';
 			}
 		}
-		if($srch_buydate_end = trim($_G['gp_srch_buydate_end'])) {
+		if($srch_buydate_end = trim($_GET['srch_buydate_end'])) {
 			if($buydate_end = strtotime($srch_buydate_end)) {
 				$where .= " AND i.`dateline`<'$buydate_end'";
 				$pageadd .= '&srch_buydate_end='.$srch_buydate_end;
@@ -571,17 +719,18 @@ EOD;
 				$srch_buydate_end = '';
 			}
 		}
-		if($srch_ip = trim($_G['gp_srch_ip'])) {
+		if($srch_ip = trim($_GET['srch_ip'])) {
 			$pageadd .= '&srch_ip='.rawurlencode($srch_ip);
 			$inviteip = str_replace('*', '%', addcslashes($srch_ip, '%_'));
-			$srch_ip = htmlspecialchars($srch_ip);
+			$srch_ip = dhtmlspecialchars($srch_ip);
 			$where .= " AND i.`inviteip` LIKE '$inviteip%'";
 		}
-		if($srch_code = trim($_G['gp_srch_code'])) {
+		if($srch_code = trim($_GET['srch_code'])) {
 			$pageadd .= '&srch_ip='.rawurlencode($srch_code);
 			$where .= " AND i.`code`='$srch_code'";
-			$srch_code = htmlspecialchars($srch_code);
+			$srch_code = dhtmlspecialchars($srch_code);
 		}
+
 		showtableheader('search', 'fixpadding');
 		showtablerow('', array('class="td23"', 'width="150"', 'class="td23"'),
 			array(
@@ -621,17 +770,18 @@ EOD;
 			cplang('logs_invite_status'),
 		));
 
-		$tpp = $_G['gp_lpp'] ? intval($_G['gp_lpp']) : $_G['tpp'];
+		$tpp = $_GET['lpp'] ? intval($_GET['lpp']) : $_G['tpp'];
 		$start_limit = ($page - 1) * $tpp;
 
 		$dels = array();
-		$invitecount = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_invite')." i WHERE $where");
-
+		$invitecount = C::t('common_invite')->count_by_search($uid, $fuid, $srch_fusername, $buydate_start, $buydate_end, $inviteip, $srch_code);
 		if($invitecount) {
 			$multipage = multi($invitecount, $tpp, $page, ADMINSCRIPT."?action=logs&operation=invite&lpp=$lpp$pageadd", 0, 3);
 
-			$query = DB::query("SELECT i.*, m.username FROM ".DB::table('common_invite')." i LEFT JOIN ".DB::table('common_member')." m USING(uid) WHERE $where ORDER BY i.id DESC LIMIT $start_limit,$tpp");
-			while($invite = DB::fetch($query)) {
+			$invitearr = C::t('common_invite')->fetch_all_by_search($uid, $fuid, $srch_fusername, $buydate_start, $buydate_end, $inviteip, $srch_code, $start_limit, $tpp);
+			$members = C::t('common_member')->fetch_all(C::t('common_invite')->get_uids());
+			foreach($invitearr as $invite) {
+				$invite['username'] = $members[$invite['uid']]['username'];
 				if(!$invite['fuid'] && $_G['timestamp'] > $invite['endtime']) {
 					$dels[] = $invite['id'];
 					continue;
@@ -656,53 +806,56 @@ EOD;
 			showhiddenfields(array('pageadd' => $pageadd));
 
 			if($dels) {
-				DB::query("DELETE FROM ".DB::table('common_invite')." WHERE id IN (".dimplode($dels).")");
+				C::t('common_invite')->delete($dels);
 			}
 		}
 
 	} else {
 
-		if($deletelist = dimplode($_G['gp_delete'])) {
-			DB::query("DELETE FROM ".DB::table('common_invite')." WHERE id IN ($deletelist)");
+		if($_GET['delete']) {
+			C::t('common_invite')->delete($_GET['delete']);
 		}
 
-		header("Location: $_G[siteurl]".ADMINSCRIPT."?action=logs&operation=invite&lpp=$_G[gp_lpp]$_G[gp_pageadd]");
+		header("Location: $_G[siteurl]".ADMINSCRIPT."?action=logs&operation=invite&lpp=$_GET[lpp]$_GET[pageadd]");
 	}
 
 } elseif($operation == 'magic') {
 
 	loadcache('magics');
 
-	$lpp = empty($_G['gp_lpp']) ? 20 : $_G['gp_lpp'];
+	$lpp = empty($_GET['lpp']) ? 20 : $_GET['lpp'];
 	$start_limit = ($page - 1) * $lpp;
 
 	$mpurl = ADMINSCRIPT."?action=logs&operation=magic&lpp=$lpp";
 
 	$wheresql = '';
 	$wherearr = array();
-	if(in_array($_G['gp_opt'], array('1', '2', '3', '4', '5'))) {
-		$wherearr[] = "ma.action='{$_G['gp_opt']}'";
-		$mpurl .= '&opt='.$_G['gp_opt'];
+	$magicid = $action = 0;
+	if(in_array($_GET['opt'], array('1', '2', '3', '4', '5'))) {
+		$wherearr[] = "ma.action='{$_GET['opt']}'";
+		$action = $_GET['opt'];
+		$mpurl .= '&opt='.$_GET['opt'];
 	}
 
-	if(!empty($_G['gp_magicid'])) {
-		$wherearr[] = "ma.magicid='".intval($_G['gp_magicid'])."'";
-		$mpurl .= '&magicid='.$_G['gp_magicid'];
+	if(!empty($_GET['magicid'])) {
+		$wherearr[] = "ma.magicid='".intval($_GET['magicid'])."'";
+		$magicid = intval($_GET['magicid']);
+		$mpurl .= '&magicid='.$_GET['magicid'];
 	}
 
 	$wheresql = !empty($wherearr) && is_array($wherearr) ? ' WHERE '.implode(' AND ', $wherearr) : '';
 
 	$check1 = $check2 = array();
-	$check1[$_G['gp_magicid']] = 'selected="selected"';
-	$check2[$_G['gp_opt']] = 'selected="selected"';
+	$check1[$_GET['magicid']] = 'selected="selected"';
+	$check2[$_GET['opt']] = 'selected="selected"';
 
-	$filters .= '<select onchange="window.location=\''.ADMINSCRIPT.'?action=logs&operation=magic&opt='.$_G['gp_opt'].'&lpp='.$lpp.'&opt='.$_G['gp_opt'].'&magicid=\'+this.options[this.selectedIndex].value"><option value="">'.$lang['magics_type'].'</option>';
+	$filters .= '<select onchange="window.location=\''.ADMINSCRIPT.'?action=logs&operation=magic&opt='.$_GET['opt'].'&lpp='.$lpp.'&opt='.$_GET['opt'].'&magicid=\'+this.options[this.selectedIndex].value"><option value="">'.$lang['magics_type'].'</option>';
 	foreach($_G['cache']['magics'] as $id => $magic) {
 		$filters .= '<option value="'.$id.'" '.$check1[$id].'>'.$magic['name'].'</option>';
 	}
 	$filters .= '</select>';
 
-	$filters .= '<select onchange="window.location=\''.ADMINSCRIPT.'?action=logs&operation=magic&magicid='.$magicid.'&lpp='.$lpp.'&magicid='.$_G['gp_magicid'].'&opt=\'+this.options[this.selectedIndex].value"><option value="">'.$lang['action'].'</option><option value="">'.$lang['all'].'</option>';
+	$filters .= '<select onchange="window.location=\''.ADMINSCRIPT.'?action=logs&operation=magic&magicid='.$magicid.'&lpp='.$lpp.'&magicid='.$_GET['magicid'].'&opt=\'+this.options[this.selectedIndex].value"><option value="">'.$lang['all'].'</option>';
 	foreach(array('1', '2', '3', '4', '5') as $o) {
 		$filters .= '<option value="'.$o.'" '.$check2[$o].'>'.$lang['logs_magic_operation_'.$o].'</option>';
 	}
@@ -717,15 +870,18 @@ EOD;
 		cplang('action')
 	));
 
-	$num = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_magiclog')." ma $wheresql");
+	$num = C::t('common_magiclog')->count_by_magicid_action($magicid, $action);
 	if($num) {
 		$multipage = multi($num, $lpp, $page, $mpurl, 0, 3);
-		$query = DB::query("SELECT ma.*, m.username FROM ".DB::table('common_magiclog')." ma
-			LEFT JOIN ".DB::table('common_member')." m USING (uid)
-			$wheresql ORDER BY dateline DESC LIMIT $start_limit, $lpp");
 
-		$targetuids = $logs = array();
-		while($log = DB::fetch($query)) {
+		$luids = $targetuids = $logs = array();
+		$mlogs = C::t('common_magiclog')->fetch_all_by_magicid_action($magicid, $action, $start_limit, $lpp);
+		foreach($mlogs as $log) {
+			$luids[$log['uid']] = $log['uid'];
+		}
+		$members = C::t('common_member')->fetch_all($luids);
+		foreach($mlogs as $log) {
+			$log['username'] = $members[$log['uid']]['username'];
 			$log['name'] = $_G['cache']['magics'][$log['magicid']]['name'];
 			$log['dateline'] = dgmdate($log['dateline'], 'Y-n-j H:i');
 			if($log['action'] == 3) {
@@ -735,11 +891,7 @@ EOD;
 		}
 
 		if($targetuids) {
-			$query = DB::query("SELECT username,uid FROM ".DB::table('common_member')." WHERE uid IN (".dimplode($targetuids).")");
-			$targetuids = array();
-			while($row = DB::fetch($query)) {
-				$targetuids[$row['uid']] = $row['username'];
-			}
+			$targetuids = C::t('common_member')->fetch_all_username_by_uid($targetuids);
 		}
 
 		foreach($logs as $log) {
@@ -758,35 +910,34 @@ EOD;
 
 	loadcache('medals');
 
-	$lpp = empty($_G['gp_lpp']) ? 50 : $_G['gp_lpp'];
+	$lpp = empty($_GET['lpp']) ? 50 : $_GET['lpp'];
 	$start_limit = ($page - 1) * $lpp;
 
 	$mpurl = ADMINSCRIPT."?action=logs&operation=medal&lpp=$lpp";
 
-	$wheresql = '';
-	$wherearr = array();
-	if(in_array($_G['gp_opt'], array('0', '1', '2', '3'))) {
-		$wherearr[] = "me.type='{$_G['gp_opt']}'";
-		$mpurl .= '&opt='.$_G['gp_opt'];
+	$type = $medalid = '';
+	if(in_array($_GET['opt'], array('0', '1', '2', '3'))) {
+		$type = $_GET['opt'];
+		$mpurl .= '&opt='.$_GET['opt'];
 	}
-	if(!empty($_G['gp_medalid'])) {
-		$wherearr[] = "me.medalid='".intval($_G['gp_medalid'])."'";
-		$mpurl .= '&medalid='.$_G['gp_medalid'];
+	if(!empty($_GET['medalid'])) {
+		$medalid = $_GET['medalid'];
+		$mpurl .= '&medalid='.$_GET['medalid'];
 	}
 
 	$wheresql = !empty($wherearr) && is_array($wherearr) ? ' WHERE '.implode(' AND ', $wherearr) : '';
 
 	$check1 = $check2 = array();
-	$check1[$_G['gp_medalid']] = 'selected="selected"';
-	$check2[$_G['gp_opt']] = 'selected="selected"';
+	$check1[$_GET['medalid']] = 'selected="selected"';
+	$check2[$_GET['opt']] = 'selected="selected"';
 
-	$filters .= '<select onchange="window.location=\''.ADMINSCRIPT.'?action=logs&operation=medal&opt='.$_G['gp_opt'].'&lpp='.$lpp.'&medalid=\'+this.options[this.selectedIndex].value"><option value="">'.$lang['medals'].'</option><option value="">'.$lang['all'].'</option>';
+	$filters .= '<select onchange="window.location=\''.ADMINSCRIPT.'?action=logs&operation=medal&opt='.$_GET['opt'].'&lpp='.$lpp.'&medalid=\'+this.options[this.selectedIndex].value"><option value="">'.$lang['medals'].'</option><option value="">'.$lang['all'].'</option>';
 	foreach($_G['cache']['medals'] as $id => $medal) {
 		$filters .= '<option value="'.$id.'" '.$check1[$id].'>'.$medal['name'].'</option>';
 	}
 	$filters .= '</select>';
 
-	$filters .= '<select onchange="window.location=\''.ADMINSCRIPT.'?action=logs&operation=medal&medalid='.$_G['gp_medalid'].'&lpp='.$lpp.'&opt=\'+this.options[this.selectedIndex].value"><option value="">'.$lang['action'].'</option><option value="">'.$lang['all'].'</option>';
+	$filters .= '<select onchange="window.location=\''.ADMINSCRIPT.'?action=logs&operation=medal&medalid='.$_GET['medalid'].'&lpp='.$lpp.'&opt=\'+this.options[this.selectedIndex].value"><option value="">'.$lang['all'].'</option>';
 	foreach(array('0', '1', '2', '3') as $o) {
 		$filters .= '<option value="'.$o.'" '.$check2[$o].'>'.$lang['logs_medal_operation_'.$o].'</option>';
 	}
@@ -800,19 +951,22 @@ EOD;
 		cplang('logs_medal_expiration')
 	));
 
-	$num = DB::result_first("SELECT COUNT(*) FROM ".DB::table('forum_medallog')." me $wheresql");
+	$num = C::t('forum_medallog')->count_by_type_medalid($type, $medalid);
 	if($num) {
 		$multipage = multi($num, $lpp, $page, $mpurl, 0, 3);
-		$query = DB::query("SELECT me.*, m.username FROM ".DB::table('forum_medallog')." me
-			LEFT JOIN ".DB::table('common_member')." m USING (uid)
-			$wheresql ORDER BY dateline DESC LIMIT $start_limit, $lpp");
 
-		while($log = DB::fetch($query)) {
+		$uids = array();
+		$logs = C::t('forum_medallog')->fetch_all_by_type_medalid($type, $medalid, $start_limit, $lpp);
+		foreach($logs as $log) {
+			$uids[] = $log['uid'];
+		}
+		$users = C::t('common_member')->fetch_all_username_by_uid($uids);
+		foreach($logs as $log) {
 			$log['name'] = $_G['cache']['medals'][$log['medalid']]['name'];
 			$log['dateline'] = dgmdate($log['dateline'], 'Y-n-j H:i');
 			$log['expiration'] = empty($log['expiration']) ? cplang('logs_noexpire') : dgmdate($log['expiration'], 'Y-n-j H:i');
 			showtablerow('', array('class="td23"', 'class="td24"', 'class="td23"', 'class="td24"'), array(
-				"<a href=\"home.php?mod=space&username=".rawurlencode($log['username'])."\" target=\"_blank\">$log[username]",
+				"<a href=\"home.php?mod=space&uid=".$log['uid']."\" target=\"_blank\">".$users[$log['uid']],
 				$log['name'],
 				$lang['logs_medal_operation_'.$log['type']],
 				$log['dateline'],
@@ -832,19 +986,29 @@ EOD;
 		cplang('logs_payment_buydateline'),
 	));
 
-	$tpp = $_G['gp_lpp'] ? intval($_G['gp_lpp']) : $_G['tpp'];
+	$tpp = $_GET['lpp'] ? intval($_GET['lpp']) : $_G['tpp'];
 	$start_limit = ($page - 1) * $tpp;
 
-	$threadcount = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_credit_log')." WHERE operation='BTC'");
+	$threadcount = C::t('common_credit_log')->count_by_operation('BTC');
 	if($threadcount) {
 		$multipage = multi($threadcount, $tpp, $page, ADMINSCRIPT."?action=logs&operation=payment&lpp=$lpp", 0, 3);
-		$query = DB::query("SELECT l.*, m.username, t.tid, t.subject, t.dateline AS postdateline, t.author, t.authorid AS tauthorid
-				FROM ".DB::table('common_credit_log')." l
-				LEFT JOIN ".DB::table('common_member')." m ON m.uid=l.uid
-				LEFT JOIN ".DB::table('forum_thread')." t ON t.tid=l.relatedid
-				WHERE l.operation='BTC'
-				ORDER BY l.dateline DESC LIMIT $start_limit,$tpp");
-		while($paythread = DB::fetch($query)) {
+		$logs = C::t('common_credit_log')->fetch_all_by_operation('BTC', $start_limit, $tpp);
+		$ltids = $luid = array();
+		foreach($logs as $log) {
+			$luid[$log['uid']] = $log['uid'];
+			$ltids[$log['relatedid']] = $log['relatedid'];
+		}
+		$members = C::t('common_member')->fetch_all($luid);
+		$threads = C::t('forum_thread')->fetch_all($ltids);
+		foreach($logs as $paythread) {
+			$thread = $threads[$paythread['relatedid']];
+			$paythread['username'] = $members[$paythread['uid']]['username'];
+			$paythread['tid'] = $thread['tid'];
+			$paythread['subject'] = $thread['subject'];
+			$paythread['postdateline'] = $thread['dateline'];
+			$paythread['author'] = $thread['author'];
+			$paythread['tauthorid'] = $thread['authorid'];
+
 			$paythread['seller'] = $paythread['tauthorid'] ? "<a href=\"home.php?mod=space&uid=$paythread[tauthorid]\">$paythread[author]</a>" : cplang('logs_payment_del')."(<a href=\"home.php?mod=space&uid=$paythread[authorid]\">".cplang('logs_payment_view')."</a>)";
 			$paythread['buyer'] = "<a href=\"home.php?mod=space&uid=$paythread[uid]\">$paythread[username]</a>";
 			$paythread['subject'] = $paythread['subject'] ? "<a href=\"forum.php?mod=viewthread&tid=$paythread[tid]\">$paythread[subject]</a>" : cplang('logs_payment_del');
@@ -867,7 +1031,21 @@ EOD;
 		}
 	}
 }
-
+function getactionarray() {
+	$isfounder = true;
+	require './source/admincp/admincp_menu.php';
+	require './source/admincp/admincp_perm.php';
+	unset($topmenu['index'], $menu['index']);
+	$actioncat = $actionarray = array();
+	$actioncat[] = 'setting';
+	$actioncat = array_merge($actioncat, array_keys($topmenu));
+	foreach($menu as $tkey => $items) {
+		foreach($items as $item) {
+			$actionarray[$tkey][] = $item;
+		}
+	}
+	return array('actions' => $actionarray, 'cats' => $actioncat);
+}
 function get_log_files($logdir = '', $action = 'action') {
 	$dir = opendir($logdir);
 	$files = array();
@@ -907,13 +1085,20 @@ function get_log_files($logdir = '', $action = 'action') {
 showtablefooter();
 showtableheader('', 'fixpadding');
 if($operation != 'credit') {
-	if(empty($_G['gp_keyword'])) {
+	if(empty($_GET['keyword']) && empty($_GET['filteract'])) {
 		showhiddenfields(array('lpp' => $lpp));
 	}
 	if(!empty($_GET['day'])) {
 		showhiddenfields(array('day' => $_GET['day']));
 	}
-	showsubmit($operation == 'invite' ? 'invitesubmit' : '', 'submit', 'del', $filters, $multipage.(empty($_G['gp_keyword']) ? cplang('logs_lpp').':<select onchange="if(this.options[this.selectedIndex].value != \'\') {this.form.lpp.value = this.options[this.selectedIndex].value;this.form.submit(); }"><option value="20" '.$checklpp[20].'> 20 </option><option value="40" '.$checklpp[40].'> 40 </option><option value="80" '.$checklpp[80].'> 80 </option></select>' : '').$extrainput.'&nbsp;'.($operation == 'warn' ? cplang('warn_user').': ' : '').($logfiles || $operation == 'warn' ? '<input type="text" class="txt" name="keyword" value="'.$_G['gp_keyword'].'" />'.($_G['gp_day'] ? '<input type="hidden" class="btn" value="'.$_G['gp_day'].'" />' : '').'<input type="submit" class="btn" value="'.$lang['search'].'" />' : ''));
+	if($operation == 'cp') {
+		$selectOperation = '<select onchange="this.form.filteract.value = this.options[this.selectedIndex].value;this.form.submit();">';
+		$selectOperation .= $selectOperationOptions;
+		$selectOperation .= '</select> ';
+	} else {
+		$selectOperation = '';
+	}
+	showsubmit($operation == 'invite' ? 'invitesubmit' : '', 'submit', 'del', $filters, $multipage.(empty($_GET['keyword']) && empty($_GET['filteract']) ? cplang('logs_lpp').':<select onchange="if(this.options[this.selectedIndex].value != \'\') {this.form.lpp.value = this.options[this.selectedIndex].value;this.form.submit(); }"><option value="20" '.$checklpp[20].'> 20 </option><option value="40" '.$checklpp[40].'> 40 </option><option value="80" '.$checklpp[80].'> 80 </option></select>' : '').$extrainput.'&nbsp;'.($operation == 'warn' ? cplang('warn_user').': ' : '').$selectOperation.($logfiles || $operation == 'warn' ? '<input type="text" class="txt" name="keyword" value="'.$_GET['keyword'].'" />'.($_GET['day'] ? '<input type="hidden" class="btn" value="'.$_GET['day'].'" />' : '').'<input type="hidden" name="filteract" value="'.$_GET['filteract'].'" /><input type="submit" class="btn" value="'.$lang['search'].'" />' : ''));
 }
 showtablefooter();
 showformfooter();

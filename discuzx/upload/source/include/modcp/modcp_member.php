@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: modcp_member.php 22321 2011-04-29 09:42:42Z zhengqingpeng $
+ *      $Id: modcp_member.php 26578 2011-12-15 10:10:18Z yangli $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_MODCP')) {
@@ -13,44 +13,42 @@ if(!defined('IN_DISCUZ') || !defined('IN_MODCP')) {
 
 if($op == 'edit') {
 
-	$_G['gp_uid'] = isset($_G['gp_uid']) ? intval($_G['gp_uid']) : '';
-	$_G['gp_username'] = isset($_G['gp_username']) ? trim($_G['gp_username']) : '';
+	$_GET['uid'] = isset($_GET['uid']) ? intval($_GET['uid']) : '';
+	$_GET['username'] = isset($_GET['username']) ? trim($_GET['username']) : '';
 
-	$member = loadmember($_G['gp_uid'], $_G['gp_username'], $error);
+	$member = loadmember($_GET['uid'], $_GET['username'], $error);
 	$usernameenc = $member ? rawurlencode($member['username']) : '';
 
 	if($member && submitcheck('editsubmit') && !$error) {
 
-		$sql = 'uid=uid';
 		if($_G['group']['allowedituser']) {
 
-			if(!empty($_G['gp_clearavatar'])) {
+			if(!empty($_GET['clearavatar'])) {
 				loaducenter();
 				uc_user_deleteavatar($member['uid']);
 			}
 
 			require_once libfile('function/discuzcode');
 
-			if($_G['gp_bionew']) {
-				$biohtmlnew = nl2br(dhtmlspecialchars($_G['gp_bionew']));
+			if($_GET['bionew']) {
+				$biohtmlnew = nl2br(dhtmlspecialchars($_GET['bionew']));
 			} else {
 				$biohtmlnew = '';
 			}
 
-			if($_G['gp_signaturenew']) {
-				$signaturenew = censor($_G['gp_signaturenew']);
-				$sightmlnew = addslashes(discuzcode(dstripslashes($signaturenew), 1, 0, 0, 0, $member['allowsigbbcode'], $member['allowsigimgcode'], 0, 0, 1));
+			if($_GET['signaturenew']) {
+				$signaturenew = censor($_GET['signaturenew']);
+				$sightmlnew = discuzcode($signaturenew, 1, 0, 0, 0, $member['allowsigbbcode'], $member['allowsigimgcode'], 0, 0, 1);
 			} else {
 				$sightmlnew = $signaturenew = '';
 			}
 
-			!empty($_G['gp_locationnew']) && $locationnew = dhtmlspecialchars($_G['gp_locationnew']);
+			!empty($_GET['locationnew']) && $locationnew = dhtmlspecialchars($_GET['locationnew']);
 
-			$sql .= ', sigstatus=\''.($signaturenew ? 1 : 0).'\'';
-			DB::query("UPDATE ".DB::table('common_member_profile')." SET bio='$biohtmlnew' WHERE uid='$member[uid]'");
-			DB::query("UPDATE ".DB::table('common_member_field_forum')." SET sightml='$sightmlnew' WHERE uid='$member[uid]'");
+			C::t('common_member_profile')->update($member['uid'], array('bio' => $biohtmlnew));
+			C::t('common_member_field_forum')->update($member['uid'], array('sightml' => $sightmlnew));
 		}
-		acpmsg('members_edit_succeed', "$cpscript?mod=modcp&action=$_G[gp_action]&op=$op");
+		acpmsg('members_edit_succeed', "$cpscript?mod=modcp&action=$_GET[action]&op=$op");
 
 	} elseif($member) {
 
@@ -59,51 +57,54 @@ if($op == 'edit') {
 		$member['bio'] = html2bbcode($bio[0]);
 		$member['biotrade'] = !empty($bio[1]) ? html2bbcode($bio[1]) : '';
 		$member['signature'] = html2bbcode($member['sightml']);
-		$username = !empty($_G['gp_username']) ? $member['username'] : '';
+		$username = !empty($_GET['username']) ? $member['username'] : '';
 
 	}
 
 } elseif($op == 'ban' && ($_G['group']['allowbanuser'] || $_G['group']['allowbanvisituser'])) {
 
-	$_G['gp_uid'] = isset($_G['gp_uid']) ? intval($_G['gp_uid']) : '';
-	$_G['gp_username'] = isset($_G['gp_username']) ? trim($_G['gp_username']) : '';
-	$member = loadmember($_G['gp_uid'], $_G['gp_username'], $error);
+	$_GET['uid'] = isset($_GET['uid']) ? intval($_GET['uid']) : '';
+	$_GET['username'] = isset($_GET['username']) ? trim($_GET['username']) : '';
+	$member = loadmember($_GET['uid'], $_GET['username'], $error);
 	$usernameenc = $member ? rawurlencode($member['username']) : '';
 
+	include_once libfile('function/member');
+	$clist = crime('getactionlist', $member['uid']);
+
 	if($member && submitcheck('bansubmit') && !$error) {
-		$sql = 'uid=uid';
-		$reason = trim($_G['gp_reason']);
+		$setarr = array();
+		$reason = trim($_GET['reason']);
 		if(!$reason && ($_G['group']['reasonpm'] == 1 || $_G['group']['reasonpm'] == 3)) {
 			acpmsg('admin_reason_invalid');
 		}
 
-		if($_G['gp_bannew'] == 4 || $_G['gp_bannew'] == 5) {
-			if($_G['gp_bannew'] == 4 && !$_G['group']['allowbanuser'] || $_G['gp_bannew'] == 5 && !$_G['group']['allowbanvisituser']) {
+		if($_GET['bannew'] == 4 || $_GET['bannew'] == 5) {
+			if($_GET['bannew'] == 4 && !$_G['group']['allowbanuser'] || $_GET['bannew'] == 5 && !$_G['group']['allowbanvisituser']) {
 				acpmsg('admin_nopermission');
 			}
-			$groupidnew = $_G['gp_bannew'];
-			$banexpirynew = !empty($_G['gp_banexpirynew']) ? TIMESTAMP + $_G['gp_banexpirynew'] * 86400 : 0;
+			$groupidnew = $_GET['bannew'];
+			$banexpirynew = !empty($_GET['banexpirynew']) ? TIMESTAMP + $_GET['banexpirynew'] * 86400 : 0;
 			$banexpirynew = $banexpirynew > TIMESTAMP ? $banexpirynew : 0;
 			if($banexpirynew) {
 				$member['groupterms'] = $member['groupterms'] && is_array($member['groupterms']) ? $member['groupterms'] : array();
 				$member['groupterms']['main'] = array('time' => $banexpirynew, 'adminid' => $member['adminid'], 'groupid' => $member['groupid']);
 				$member['groupterms']['ext'][$groupidnew] = $banexpirynew;
-				$sql .= ', groupexpiry=\''.groupexpiry($member['groupterms']).'\'';
+				$setarr['groupexpiry'] = groupexpiry($member['groupterms']);
 			} else {
-				$sql .= ', groupexpiry=0';
+				$setarr['groupexpiry'] = 0;
 			}
 			$adminidnew = -1;
-			DB::delete('forum_postcomment', "authorid='$member[uid]' AND rpid>'0'");
+			C::t('forum_postcomment')->delete_by_authorid($member['uid'], false, true);
 		} elseif($member['groupid'] == 4 || $member['groupid'] == 5) {
 			if(!empty($member['groupterms']['main']['groupid'])) {
 				$groupidnew = $member['groupterms']['main']['groupid'];
 				$adminidnew = $member['groupterms']['main']['adminid'];
 				unset($member['groupterms']['main']);
 				unset($member['groupterms']['ext'][$member['groupid']]);
-				$sql .= ', groupexpiry=\''.groupexpiry($member['groupterms']).'\'';
+				$setarr['groupexpiry'] = groupexpiry($member['groupterms']);
 			} else {
-				$query = DB::query("SELECT groupid FROM ".DB::table('common_usergroup')." WHERE type='member' AND creditshigher<='$member[credits]' AND creditslower>'$member[credits]'");
-				$groupidnew = DB::result($query, 0);
+				$usergroup = C::t('common_usergroup')->fetch_by_credits($member['credits']);
+				$groupidnew = $usergroup['groupid'];
 				$adminidnew = 0;
 			}
 		} else {
@@ -111,25 +112,37 @@ if($op == 'edit') {
 			$adminidnew = $member['adminid'];
 		}
 
-		$sql .= ", adminid='$adminidnew', groupid='$groupidnew'";
-		DB::query("UPDATE ".DB::table('common_member')." SET $sql WHERE uid='$member[uid]'");
-		$my_opt = in_array($groupidnew, array(4, 5)) ? 'banuser' : 'unbanuser';
-		my_thread_log($my_opt, array('uid' => $member['uid']));
+		$setarr['adminid'] = $adminidnew;
+		$setarr['groupid'] = $groupidnew;
+		C::t('common_member')->update($member['uid'], $setarr);
 
 		if(DB::affected_rows()) {
 			savebanlog($member['username'], $member['groupid'], $groupidnew, $banexpirynew, $reason);
 		}
 
-		DB::query("UPDATE ".DB::table('common_member_field_forum')." SET groupterms='".($member['groupterms'] ? addslashes(serialize($member['groupterms'])) : '')."' WHERE uid='$member[uid]'");
-		if($_G['gp_bannew'] == 4) {
+		C::t('common_member_field_forum')->update($member['uid'], array('groupterms' => serialize($member['groupterms'])));
+		if($_GET['bannew'] == 4) {
 			$notearr = array(
 				'user' => "<a href=\"home.php?mod=space&uid=$_G[uid]\">$_G[username]</a>",
-				'day' => $_G['gp_banexpirynew'],
+				'day' => $_GET['banexpirynew'],
 				'reason' => $reason
 			);
 			notification_add($member['uid'], 'system', 'member_ban_speak', $notearr, 1);
 		}
-		acpmsg('modcp_member_ban_succeed', "$cpscript?mod=modcp&action=$_G[gp_action]&op=$op");
+		if($_GET['bannew'] == 5) {
+			$notearr = array(
+				'user' => "<a href=\"home.php?mod=space&uid=$_G[uid]\">$_G[username]</a>",
+				'day' => $_GET['banexpirynew'],
+				'reason' => $reason
+			);
+			notification_add($member['uid'], 'system', 'member_ban_visit', $notearr, 1);
+		}
+
+		if($_GET['bannew'] == 4 || $_GET['bannew'] == 5) {
+			crime('recordaction', $member['uid'], ($_GET['bannew'] == 4 ? 'crime_banspeak' : 'crime_banvisit'), $reason);
+		}
+
+		acpmsg('modcp_member_ban_succeed', "$cpscript?mod=modcp&action=$_GET[action]&op=$op");
 
 	}
 
@@ -140,24 +153,22 @@ if($op == 'edit') {
 	$updatecheck = $addcheck = $deletecheck = $adderror = 0;
 
 	if(submitcheck('ipbansubmit')) {
-		$_G['gp_delete'] = isset($_G['gp_delete']) ? $_G['gp_delete'] : '';
-		if($ids = dimplode($_G['gp_delete'])) {
-			DB::query("DELETE FROM ".DB::table('common_banned')." WHERE id IN ($ids) AND ('$_G[adminid]'='1' OR admin='$_G[username]')");
-			$deletecheck = DB::affected_rows();
+		$_GET['delete'] = isset($_GET['delete']) ? $_GET['delete'] : '';
+		if($_GET['delete']) {
+			$deletecheck = C::t('common_banned')->delete_by_id($_GET['delete'], $_G['adminid'], $_G['username']);
 		}
-		if($_G['gp_ip1new'] != '' && $_G['gp_ip2new'] != '' && $_G['gp_ip3new'] != '' && $_G['gp_ip4new'] != '') {
-			$addcheck = ipbanadd($_G['gp_ip1new'], $_G['gp_ip2new'], $_G['gp_ip3new'], $_G['gp_ip4new'], $_G['gp_validitynew'], $adderror);
+		if($_GET['ip1new'] != '' && $_GET['ip2new'] != '' && $_GET['ip3new'] != '' && $_GET['ip4new'] != '') {
+			$addcheck = ipbanadd($_GET['ip1new'], $_GET['ip2new'], $_GET['ip3new'], $_GET['ip4new'], $_GET['validitynew'], $adderror);
 			if(!$addcheck) {
-				$iptoban = array($_G['gp_ip1new'], $_G['gp_ip2new'], $_G['gp_ip3new'], $_G['gp_ip4new']);
+				$iptoban = array($_GET['ip1new'], $_GET['ip2new'], $_GET['ip3new'], $_GET['ip4new']);
 			}
 		}
 
-		if(!empty($_G['gp_expirationnew']) && is_array($_G['gp_expirationnew'])) {
-			foreach($_G['gp_expirationnew'] as $id => $expiration) {
+		if(!empty($_GET['expirationnew']) && is_array($_GET['expirationnew'])) {
+			foreach($_GET['expirationnew'] as $id => $expiration) {
 				if($expiration == intval($expiration)) {
 					$expiration = $expiration > 1 ? (TIMESTAMP + $expiration * 86400) : TIMESTAMP + 86400;
-					DB::query("UPDATE ".DB::table('common_banned')." SET expiration='$expiration' WHERE id='$id' AND ('$_G[adminid]'='1' OR admin='$_G[username]')");
-					empty($updatecheck) && $updatecheck = DB::affected_rows();
+					$updatecheck = C::t('common_banned')->update_expiration_by_id($id, $expiration, $_G['adminid'], $_G['username']);
 				}
 			}
 		}
@@ -170,8 +181,7 @@ if($op == 'edit') {
 	}
 
 	$iplist = array();
-	$query = DB::query("SELECT * FROM ".DB::table('common_banned')." ORDER BY dateline");
-	while($banned = DB::fetch($query)) {
+	foreach(C::t('common_banned')->fetch_all_order_dateline() as $banned) {
 		for($i = 1; $i <= 4; $i++) {
 			if($banned["ip$i"] == -1) {
 				$banned["ip$i"] = '*';
@@ -192,26 +202,25 @@ if($op == 'edit') {
 function loadmember(&$uid, &$username, &$error) {
 	global $_G;
 
-	$uid = !empty($_G['gp_uid']) && is_numeric($_G['gp_uid']) && $_G['gp_uid'] > 0 ? $_G['gp_uid'] : '';
-	$username = isset($_G['gp_username']) && $_G['gp_username'] != '' ? dhtmlspecialchars(trim($_G['gp_username'])) : '';
+	$uid = !empty($_GET['uid']) && is_numeric($_GET['uid']) && $_GET['uid'] > 0 ? $_GET['uid'] : '';
+	$username = isset($_GET['username']) && $_GET['username'] != '' ? dhtmlspecialchars(trim($_GET['username'])) : '';
 
 	$member = array();
 
 	if($uid || $username != '') {
 
-		$query = DB::query("SELECT m.uid, m.username, m.groupid, m.adminid, mf.groupterms, mp.bio, mf.sightml, u.type AS grouptype, uf.allowsigbbcode, uf.allowsigimgcode, m.credits FROM ".DB::table('common_member')." m
-			LEFT JOIN ".DB::table('common_member_field_forum')." mf ON mf.uid=m.uid
-			LEFT JOIN ".DB::table('common_usergroup')." u ON u.groupid=m.groupid
-			LEFT JOIN ".DB::table('common_member_profile')." mp ON mp.uid=m.uid
-			LEFT JOIN ".DB::table('common_usergroup_field')." uf ON uf.groupid=m.groupid
-			WHERE ".($uid ? "m.uid='$uid'" : "m.username='$username'"));
-
-		if(!$member = DB::fetch($query)) {
+		$member = $uid ? getuserbyuid($uid) : C::t('common_member')->fetch_by_username($username);
+		if($member) {
+			$uid = $member['uid'];
+			$member = array_merge($member, C::t('common_member_field_forum')->fetch($uid), C::t('common_member_profile')->fetch($uid),
+					C::t('common_usergroup')->fetch($member['groupid']), C::t('common_usergroup_field')->fetch($member['groupid']));
+		}
+		if(!$member) {
 			$error = 2;
 		} elseif(($member['grouptype'] == 'system' && in_array($member['groupid'], array(1, 2, 3, 6, 7, 8))) || in_array($member['adminid'], array(1,2,3))) {
 			$error = 3;
 		} else {
-			$member['groupterms'] = unserialize($member['groupterms']);
+			$member['groupterms'] = dunserialize($member['groupterms']);
 			$member['banexpiry'] = !empty($member['groupterms']['main']['time']) && ($member['groupid'] == 4 || $member['groupid'] == 5) ? dgmdate($member['groupterms']['main']['time'], 'Y-n-j') : '';
 			$error = 0;
 		}
@@ -219,7 +228,6 @@ function loadmember(&$uid, &$username, &$error) {
 	} else {
 		$error = 1;
 	}
-
 	return $member;
 }
 
@@ -250,16 +258,24 @@ function ipbanadd($ip1new, $ip2new, $ip3new, $ip4new, $validitynew, &$error) {
 		}
 
 		$query = DB::query("SELECT * FROM ".DB::table('common_banned')." WHERE (ip1='$ip1new' OR ip1='-1') AND (ip2='$ip2new' OR ip2='-1') AND (ip3='$ip3new' OR ip3='-1') AND (ip4='$ip4new' OR ip4='-1')");
-		if($banned = DB::fetch($query)) {
+		if($banned = C::t('common_banned')->fetch_by_ip($ip1new, $ip2new, $ip3new, $ip4new)) {
 			$error = 3;
 			return FALSE;
 		}
 
 		$expiration = $validitynew > 1 ? (TIMESTAMP + $validitynew * 86400) : TIMESTAMP + 86400;
 
-		DB::query("UPDATE ".DB::table('common_session')." SET groupid='6' WHERE ('$ip1new'='-1' OR ip1='$ip1new') AND ('$ip2new'='-1' OR ip2='$ip2new') AND ('$ip3new'='-1' OR ip3='$ip3new') AND ('$ip4new'='-1' OR ip4='$ip4new')");
-		DB::query("INSERT INTO ".DB::table('common_banned')." (ip1, ip2, ip3, ip4, admin, dateline, expiration)
-				VALUES ('$ip1new', '$ip2new', '$ip3new', '$ip4new', '$_G[username]', '$_G[timestamp]', '$expiration')");
+		C::app()->session->update_by_ipban($ip1new, $ip2new, $ip3new, $ip4new);
+		$data = array(
+			'ip1' => $ip1new,
+			'ip2' => $ip2new,
+			'ip3' => $ip3new,
+			'ip4' => $ip4new,
+			'admin' => $_G['username'],
+			'dateline' => $_G['timestamp'],
+			'expiration' => $expiration
+		);
+		C::t('common_banned')->insert($data);
 
 		return TRUE;
 

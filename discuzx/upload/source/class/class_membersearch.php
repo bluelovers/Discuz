@@ -4,8 +4,12 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_membersearch.php 24683 2011-10-08 04:15:03Z svn_project_zhangjie $
+ *      $Id: class_membersearch.php 27449 2012-02-01 05:32:35Z zhangguosheng $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 class membersearch {
 
@@ -13,13 +17,13 @@ class membersearch {
 
 	function getfield($fieldid='') {
 		static $fields = array(
-			'uid'=>'member', 'username'=>'member', 'groupid'=>'member',
+			'uid'=>'member', 'username'=>'member', 'groupid'=>'member', 'medalid'=>'medal','tagid'=>'tag','idtype'=>'tag',
 			'email'=>'member', 'credits'=>'member', 'regdate'=>'member',
 			'status'=>'member', 'emailstatus'=>'member', 'avatarstatus'=>'member','videophotostatus'=>'member',
 			'conisbind'=>'member','uin' => 'black','sid'=>'session',
 			'extcredits1'=>'count', 'extcredits2'=>'count', 'extcredits3'=>'count', 'extcredits4'=>'count',
 			'extcredits5'=>'count',	'extcredits6'=>'count', 'extcredits7'=>'count', 'extcredits8'=>'count',
-			'posts'=>'count','friends'=>'count',
+			'posts'=>'count','friends'=>'count','oltime'=>'count',
 			'fid' => 'groupuser', 'level' => 'groupuser',
 			'verify1' => 'verify', 'verify2' => 'verify', 'verify3' => 'verify', 'verify4' => 'verify', 'verify5' => 'verify', 'verify6' => 'verify', 'verify7' => 'verify',
 			'regip'=>'status', 'lastip'=>'status', 'lastvisit'=>'status', 'lastpost' => 'status', 'realname'=>'profile',
@@ -41,7 +45,7 @@ class membersearch {
 
 	function gettype($fieldid) {
 		static $types = array(
-			'uid'=>'int', 'groupid'=>'int', 'credits'=>'int',
+			'uid'=>'int', 'groupid'=>'int', 'medalid'=>'int', 'tagid'=>'int', 'credits'=>'int',
 			'status'=>'int', 'emailstatus'=>'int', 'avatarstatus'=>'int','videophotostatus'=>'int',
 			'extcredits1'=>'int', 'extcredits2'=>'int', 'extcredits3'=>'int', 'extcredits4'=>'int',
 			'extcredits5'=>'int', 'extcredits6'=>'int', 'extcredits7'=>'int', 'extcredits8'=>'int',
@@ -69,100 +73,24 @@ class membersearch {
 		return intval($count);
 	}
 
-	function cachesearch($condition, $start=0, $limit=20, $renew=false) {
-		global $_G;
-		$hash = membersearch::makehash($condition);
-		$option = membersearch::getoption($hash);
-		if(empty($option)) {
-			$option = array(
-				'condition' => serialize($condition),
-				'hash' => $hash,
-				'users' => 0,
-				'updatetime' => 0
-			);
-			$optionid = DB::insert('common_member_stat_search', daddslashes($option), true);
-			$option['optionid'] = intval($optionid);
-		}
-
-		$list = array();
-		if($renew) {
-			DB::query('DELETE FROM '.DB::table('common_member_stat_searchcache')." WHERE optionid='$option[optionid]'");
-			$sql = membersearch::makesql($condition);
-			$query = DB::query($sql.' LIMIT 5000');
-			$inserts = array();
-			$total = 0;
-			$n = 1000;
-			while($value = DB::fetch($query)) {
-				if($limit > 0) {
-					$list[] = intval($value['uid']);
-					$limit--;
-				}
-				$inserts[] = "('$option[optionid]', '$value[uid]')";
-				$total++;
-				if($n > 0) {
-					$n--;
-				} else {
-					DB::query('REPLACE INTO '.DB::table('common_member_stat_searchcache').'(optionid, uid) VALUES '.implode(', ', $inserts));
-					$inserts = array();
-					$n = 100;
-				}
-			}
-			if($inserts) {
-				DB::query('REPLACE INTO '.DB::table('common_member_stat_searchcache').'(optionid, uid) VALUES '.implode(', ', $inserts));
-			}
-			DB::update('common_member_stat_search', array('users'=>$total, 'updatetime'=>$_G['timestamp']), array('optionid'=>$option['optionid']));
-			$option['users'] = $total;
-			$option['updatetime'] = $_G['timestamp'];
-			$_G['statsearch'][$hash] = $option;
-		} else {
-			$sql = 'SELECT uid FROM '.DB::table('common_member_stat_searchcache')." WHERE optionid='$option[optionid]' LIMIT $start, $limit";
-			$query = DB::query($sql);
-			while($value = DB::fetch($query)) {
-				$list[] = intval($value['uid']);
-			}
-		}
-		return $list;
-	}
-
-	function cachecheck($condition, $expire=0) {
-		global $_G;
-		$hash = membersearch::makehash($condition);
-		$option = membersearch::getoption($hash);
-		if(!empty($option) && (empty($expire) || $option['updatetime'] + $expire > $_G['timestamp'])) {
-			return $option;
-		} else {
-			return false;
-		}
-	}
-
-	function getoption($hash) {
-		global $_G;
-		$_G['statsearch'] = isset($_G['statsearch']) ? $_G['statsearch'] : array();
-		if(!isset($_G['statsearch'][$hash])) {
-			$_G['statsearch'][$hash] = DB::fetch_first('SELECT * FROM '.DB::table('common_member_stat_search')." WHERE hash = '$hash'");
-		}
-		return $_G['statsearch'][$hash];
-	}
-
-	function makehash($condition) {
-		return md5(serialize($condition));
-	}
-
 	function filtercondition($condition) {
+		$tablename = isset($condition['tablename']) ? $condition['tablename'] : '';
+		unset($condition['tablename']);
 		$fields = membersearch::getfield();
 		foreach($condition as $key => $value) {
 			$rkey = str_replace(array('_low', '_high', '_noempty', '_after', '_before'), '', $key);
-			if(!(isset($fields[$rkey]) || in_array($key, array('verify', 'fid')))) {
+			if(!(isset($fields[$rkey]) || in_array($key, array('verify', 'fid', 'tagid')))) {
 				unset($condition[$key]);
 			}
 		}
+		$condition['tablename'] = $tablename;
 		return $condition;
 	}
 
 	function makesql($condition, $onlyCount=false) {
 
 		$tables = $wheres = array();
-
+		$isarchive = $condition['tablename'] === 'archive' ? true : false;
 		if($condition['verify']) {
 			foreach($condition['verify'] as $key => $value) {
 				$condition[$value] = 1;
@@ -171,6 +99,9 @@ class membersearch {
 		}
 		if($condition['fid']) {
 			$condition['level'] = '1,2,3,4';
+		}
+		if($condition['tagid']) {
+			$condition['idtype'] = 'uid';
 		}
 
 		$fields = membersearch::getfield();
@@ -194,22 +125,32 @@ class membersearch {
 		}
 		if($tables && $wheres) {
 			$parts = array();
-			$table1 = '';
+			$table1 = $asuid = '';
+			$uidfield = 'uid';
 			foreach ($tables as $key => $value) {
-				$value = membersearch::gettable($key);
+				$value = membersearch::gettable($key, $isarchive);
 				$parts[] = "$value as $key";
 				if(! $table1) {
 					$table1 = $key;
+					if($table1 == 'tag') {
+						$uidfield = 'itemid';
+						$asuid = ' as uid';
+					}
 				} else {
-					$wheres[] = $table1.'.uid = '.$key.'.uid';
+					if($key == 'tag') {
+						$keyuid = 'itemid';
+					} else {
+						$keyuid = 'uid';
+					}
+					$wheres[] = $table1.'.'.$uidfield.' = '.$key.'.'.$keyuid;
 				}
 			}
 
-			$selectsql = $onlyCount ? 'SELECT COUNT(DISTINCT '.$table1.'.uid) as cnt ' : 'SELECT DISTINCT '.$table1.'.uid';
+			$selectsql = $onlyCount ? 'SELECT COUNT(DISTINCT '.$table1.'.'.$uidfield.') as cnt ' : 'SELECT DISTINCT '.$table1.'.'.$uidfield.$asuid;
 			return $selectsql.' FROM '.implode(', ', $parts).' WHERE '.implode(' AND ', $wheres);
 		} else {
 			$selectsql = $onlyCount ? 'SELECT COUNT(uid) as cnt ' : 'SELECT uid';
-			return $selectsql.' FROM '.DB::table('common_member')." WHERE 1";
+			return $selectsql.' FROM '.DB::table('common_member'.($isarchive ? '_archive' : ''))." WHERE 1";
 		}
 	}
 
@@ -235,7 +176,7 @@ class membersearch {
 			} elseif(!$islikesearch && strexists($value, '*')) {
 				$islikesearch = true;
 			}
-			if($type != 'int') $value = addslashes(stripslashes($value));
+			if($type != 'int') $value = addslashes($value);
 			if($value !== null) {
 				$values[] = $value;
 			}
@@ -279,8 +220,8 @@ class membersearch {
 			$range_low = intval($range_low);
 			$range_high = intval($range_high);
 		}  else {
-			$range_low = addslashes(stripslashes(trim($range_low)));
-			$range_high = addslashes(stripslashes(trim($range_high)));
+			$range_low = addslashes(trim($range_low));
+			$range_high = addslashes(trim($range_high));
 		}
 
 		$wheres = array();
@@ -299,9 +240,9 @@ class membersearch {
 	}
 
 
-	function gettable($alias) {
-		static $mapping = array('member'=>'common_member', 'status'=>'common_member_status', 'profile'=>'common_member_profile', 'count'=>'common_member_count', 'session'=>'common_session', 'groupuser' => 'forum_groupuser', 'verify' => 'common_member_verify', 'black'=>'common_uin_black');
-		return DB::table($mapping[$alias]);
+	function gettable($alias, $isarchive = false) {
+		static $mapping = array('member'=>'common_member', 'status'=>'common_member_status', 'profile'=>'common_member_profile', 'count'=>'common_member_count', 'session'=>'common_session', 'groupuser' => 'forum_groupuser', 'verify' => 'common_member_verify', 'black'=>'common_uin_black', 'medal'=>'common_member_medal', 'tag'=>'common_tagitem');
+		return DB::table($isarchive && in_array($alias, array('member', 'status', 'profile', 'count')) ? $mapping[$alias].'_archive' : $mapping[$alias]);
 	}
 
 }

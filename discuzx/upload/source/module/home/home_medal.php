@@ -4,57 +4,76 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: home_medal.php 22728 2011-05-18 09:05:00Z monkey $
+ *      $Id: home_medal.php 28887 2012-03-16 10:17:38Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
+
 loadcache('medals');
 
-if(!$_G['uid'] && $_G['gp_action']) {
+if(!$_G['uid'] && $_GET['action']) {
 	showmessage('not_loggedin', NULL, array(), array('login' => 1));
 }
 
 $_G['mnid'] = 'mn_common';
 $medallist = $medallogs = array();
 $tpp = 10;
-$page = max(1, intval($_G['gp_page']));
+$page = max(1, intval($_GET['page']));
 $start_limit = ($page - 1) * $tpp;
 
-if(empty($_G['gp_action'])) {
+if(empty($_GET['action'])) {
 	include libfile('function/forum');
-	$query = DB::query("SELECT * FROM ".DB::table('forum_medal')." WHERE available='1' ORDER BY displayorder LIMIT 0,100");
-	while($medal = DB::fetch($query)) {
-		$medal['permission'] = medalformulaperm(serialize(array('medal' => unserialize($medal['permission']))), 1);
+	$medalcredits = array();
+	foreach(C::t('forum_medal')->fetch_all_data(1) as $medal) {
+		$medal['permission'] = medalformulaperm(serialize(array('medal' => dunserialize($medal['permission']))), 1);
+		if($medal['price']) {
+			$medal['credit'] = $medal['credit'] ? $medal['credit'] : $_G['setting']['creditstransextra'][3];
+			$medalcredits[$medal['credit']] = $medal['credit'];
+		}
 		$medallist[$medal['medalid']] = $medal;
 	}
 
-	$query = DB::query("SELECT m.uid, m.username, ml.medalid, ml.dateline FROM ".DB::table('forum_medallog')." ml
-		USE INDEX(dateline) LEFT JOIN ".DB::table('common_member')." m USING(uid)
-		WHERE ml.type<'2' ORDER BY ml.dateline DESC LIMIT 10");
-	$lastmedals = array();
-	while($lastmedal = DB::fetch($query)) {
+	$memberfieldforum = C::t('common_member_field_forum')->fetch($_G['uid']);
+	$membermedal = $memberfieldforum['medals'] ? explode("\t", $memberfieldforum['medals']) : array();
+	$membermedal = array_map('intval', $membermedal);
+
+	$lastmedals = $uids = array();
+	foreach(C::t('forum_medallog')->fetch_all_lastmedal(10) as $id => $lastmedal) {
 		$lastmedal['dateline'] = dgmdate($lastmedal['dateline'], 'u');
-		$lastmedals[] = $lastmedal;
+		$lastmedals[$id] = $lastmedal;
+		$uids[] = $lastmedal['uid'];
 	}
+	$lastmedalusers = C::t('common_member')->fetch_all($uids);
+	$mymedals = C::t('common_member_medal')->fetch_all_by_uid($_G['uid']);
 
-} elseif($_G['gp_action'] == 'apply' && submitcheck('medalsubmit')) {
+} elseif($_GET['action'] == 'confirm') {
 
-	$medalid = intval($_G['gp_medalid']);
+	include libfile('function/forum');
+	$medal = C::t('forum_medal')->fetch($_GET['medalid']);
+	$medal['permission'] = medalformulaperm(serialize(array('medal' => dunserialize($medal['permission']))), 1);
+	if($medal['price']) {
+		$medal['credit'] = $medal['credit'] ? $medal['credit'] : $_G['setting']['creditstransextra'][3];
+		$medalcredits[$medal['credit']] = $medal['credit'];
+	}
+	include template('home/space_medal_float');
+
+} elseif($_GET['action'] == 'apply' && submitcheck('medalsubmit')) {
+
+	$medalid = intval($_GET['medalid']);
 	$_G['forum_formulamessage'] = $_G['forum_usermsg'] = $medalnew = '';
-	$medal = DB::fetch_first("SELECT * FROM ".DB::table('forum_medal')." WHERE medalid='$medalid'");
+	$medal = C::t('forum_medal')->fetch($medalid);
 	if(!$medal['type']) {
 		showmessage('medal_apply_invalid');
 	}
 
-	$medaldetail = DB::fetch_first("SELECT medalid FROM ".DB::table('forum_medallog')." WHERE uid='$_G[uid]' AND medalid='$medalid' AND type<'3'");
-	if($medaldetail['medalid']) {
+	if(C::t('common_member_medal')->count_by_uid_medalid($_G['uid'], $medalid)) {
 		showmessage('medal_apply_existence', 'home.php?mod=medal');
 	}
 
 	$applysucceed = FALSE;
-	$medalpermission = $medal['permission'] ? unserialize($medal['permission']) : '';
+	$medalpermission = $medal['permission'] ? dunserialize($medal['permission']) : '';
 	if($medalpermission[0] || $medalpermission['usergroupallow']) {
 		include libfile('function/forum');
 		medalformulaperm(serialize(array('medal' => $medalpermission)), 1);
@@ -71,30 +90,50 @@ if(empty($_G['gp_action'])) {
 	if($applysucceed) {
 		$expiration = empty($medal['expiration'])? 0 : TIMESTAMP + $medal['expiration'] * 86400;
 		if($medal['type'] == 1) {
-			$usermedal = DB::fetch_first("SELECT medals FROM ".DB::table('common_member_field_forum')." WHERE uid='$_G[uid]'");
+			if($medal['price']) {
+				$medal['credit'] = $medal['credit'] ? $medal['credit'] : $_G['setting']['creditstransextra'][3];
+				if($medal['price'] > getuserprofile('extcredits'.$medal['credit'])) {
+					showmessage('medal_not_get_credit', '', array('credit' => $_G['setting']['extcredits'][$medal[credit]][title]));
+				}
+				updatemembercount($_G['uid'], array($medal['credit'] => -$medal['price']), true, 'BME', $medal['medalid']);
+			}
+
+			$memberfieldforum = C::t('common_member_field_forum')->fetch($_G['uid']);
+			$usermedal = $memberfieldforum;
+			unset($memberfieldforum);
 			$medal['medalid'] = $medal['medalid'].(empty($expiration) ? '' : '|'.$expiration);
 			$medalnew = $usermedal['medals'] ? $usermedal['medals']."\t".$medal['medalid'] : $medal['medalid'];
-			DB::query("UPDATE ".DB::table('common_member_field_forum')." SET medals='$medalnew' WHERE uid='$_G[uid]'");
+			C::t('common_member_field_forum')->update($_G['uid'], array('medals' => $medalnew));
+			C::t('common_member_medal')->insert(array('uid' => $_G['uid'], 'medalid' => $medal['medalid']), 0, 1);
 			$medalmessage = 'medal_get_succeed';
 		} else {
+			if(C::t('forum_medallog')->count_by_verify_medalid($_G['uid'], $medal['medalid'])) {
+				showmessage('medal_apply_existence', 'home.php?mod=medal');
+			}
 			$medalmessage = 'medal_apply_succeed';
 			manage_addnotify('verifymedal');
 		}
 
-		DB::query("INSERT INTO ".DB::table('forum_medallog')." (uid, medalid, type, dateline, expiration, status) VALUES ('$_G[uid]', '$medalid', '$medal[type]', '$_G[timestamp]', '$expiration', '0')");
+		C::t('forum_medallog')->insert(array(
+		    'uid' => $_G['uid'],
+		    'medalid' => $medalid,
+		    'type' => $medal['type'],
+		    'dateline' => TIMESTAMP,
+		    'expiration' => $expiration,
+		    'status' => ($expiration ? 1 : 0),
+		));
 		showmessage($medalmessage, 'home.php?mod=medal', array('medalname' => $medal['name']));
 	}
 
-} elseif($_G['gp_action'] == 'log') {
+} elseif($_GET['action'] == 'log') {
 
 	include libfile('function/forum');
-	$query = DB::query("SELECT * FROM ".DB::table('forum_medal')." WHERE available='1' ORDER BY displayorder LIMIT 0,100");
-	while($medal = DB::fetch($query)) {
+	foreach(C::t('forum_medal')->fetch_all_data(1) as $medal) {
 		$medallist[$medal['medalid']] = $medal;
 	}
 
-	$medaldata = DB::result_first("SELECT medals FROM ".DB::table('common_member_field_forum')." WHERE uid='$_G[uid]'");
-	$membermedal = $medaldata ? explode("\t", $medaldata) : array();
+	$memberfieldforum = C::t('common_member_field_forum')->fetch($_G['uid']);
+	$membermedal = $memberfieldforum['medals'] ? explode("\t", $memberfieldforum['medals']) : array();
 	foreach($membermedal as $k => $medal) {
 		if(!in_array($medal, array_keys($medallist))) {
 			unset($membermedal[$k]);
@@ -114,13 +153,10 @@ if(empty($_G['gp_action'])) {
 		}
 	}
 
-	$medallognum = DB::result_first("SELECT COUNT(*) FROM ".DB::table('forum_medallog')." WHERE uid='$_G[uid]' AND type<'2'");
+	$medallognum = C::t('forum_medallog')->count_by_uid($_G['uid']);
 	$multipage = multi($medallognum, $tpp, $page, "home.php?mod=medal&action=log");
 
-	$query = DB::query("SELECT me.*, m.image FROM ".DB::table('forum_medallog')." me
-			LEFT JOIN ".DB::table('forum_medal')." m USING (medalid)
-			WHERE me.uid='$_G[uid]' ORDER BY me.dateline DESC LIMIT $start_limit,$tpp");
-	while($medallog = DB::fetch($query)) {
+	foreach(C::t('forum_medallog')->fetch_all_by_uid($_G['uid'], $start_limit, $tpp) as $medallog) {
 		$medallog['name'] = $_G['cache']['medals'][$medallog['medalid']]['name'];
 		$medallog['dateline'] = dgmdate($medallog['dateline']);
 		$medallog['expiration'] = !empty($medallog['expiration']) ? dgmdate($medallog['expiration']) : '';

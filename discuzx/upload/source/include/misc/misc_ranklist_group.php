@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_top.php 11682 2010-06-11 02:38:30Z chenchunshao $
+ *      $Id: misc_ranklist_group.php 25889 2011-11-24 09:52:20Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -18,12 +18,9 @@ if(!$_G['setting']['groupstatus']) {
 $groupsrank = '';
 $view = 'threads';
 $navname = $_G['setting']['navs'][8]['navname'];
-switch($_G['gp_view']) {
+switch($_GET['view']) {
 	case 'posts':
 		$gettype = 'post';
-		break;
-	case 'thismonth':
-		$gettype = 'post_30';
 		break;
 	case 'today':
 		$gettype = 'post_24';
@@ -37,9 +34,9 @@ switch($_G['gp_view']) {
 	case 'member':
 		$gettype = 'member';
 		break;
-	default: $_G['gp_view'] = 'credit';
+	default: $_GET['view'] = 'credit';
 }
-$view = $_G['gp_view'];
+$view = $_GET['view'];
 $groupsrank = getranklistdata($type, $view);
 $lastupdate = $_G['lastupdate'];
 $nextupdate = $_G['nextupdate'];

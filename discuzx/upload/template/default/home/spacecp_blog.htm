@@ -3,7 +3,7 @@
 <!--{if $_GET[op] == 'delete'}-->
 <h3 class="flb">
 	<em>{lang delete_blog}</em>
-	<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="hideWindow('$_G[gp_handlekey]');return false;" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
+	<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="hideWindow('$_GET[handlekey]');return false;" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
 </h3>
 <form method="post" autocomplete="off" action="home.php?mod=spacecp&ac=blog&op=delete&blogid=$blogid">
 	<input type="hidden" name="referer" value="{echo dreferer()}" />
@@ -17,7 +17,7 @@
 <!--{elseif $_GET[op] == 'stick'}-->
 <h3 class="flb">
 	<em><!--{if $stickflag}-->{lang stick_blog}<!--{else}-->{lang cancel_stick_blog}<!--{/if}--></em>
-	<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="hideWindow('$_G[gp_handlekey]');return false;" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
+	<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="hideWindow('$_GET[handlekey]');return false;" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
 </h3>
 <form method="post" autocomplete="off" action="home.php?mod=spacecp&ac=blog&op=stick&blogid=$blogid">
 	<input type="hidden" name="referer" value="{echo dreferer()}" />
@@ -33,13 +33,13 @@
 <!--{elseif $_GET[op] == 'addoption'}-->
 	<h3 class="flb">
 		<em>{lang create_category}</em>
-		<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="blogCancelAddOption('$_G[gp_oid]');hideWindow('$_G[gp_handlekey]');return false;" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
+		<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="blogCancelAddOption('$_GET[oid]');hideWindow('$_GET[handlekey]');return false;" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
 	</h3>
 	<div class="c">
-		{lang name}:<input type="text" name="newsort" size="10" id="newsort" class="px" />
+		<p class="mtm mbm"><label for="newsort">{lang name}: <input type="text" name="newsort" id="newsort" class="px" size="30" /></label></p>
 	</div>
 	<p class="o pns">
-		<button type="button" name="btnsubmit" value="true" class="pn pnc" onclick="if(blogAddOption('newsort', '$_G[gp_oid]'))hideWindow('$_G[gp_handlekey]');"><strong>{lang create}</strong></button>
+		<button type="button" name="btnsubmit" value="true" class="pn pnc" onclick="if(blogAddOption('newsort', '$_GET[oid]'))hideWindow('$_GET[handlekey]');"><strong>{lang create}</strong></button>
 	</p>
 	<script type="text/javascript">
 		$('newsort').focus();
@@ -48,7 +48,7 @@
 <!--{elseif $_GET[op] == 'edithot'}-->
 <h3 class="flb">
 	<em>{lang adjust_hot}</em>
-	<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="hideWindow('$_G[gp_handlekey]');return false;" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
+	<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="hideWindow('$_GET[handlekey]');return false;" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
 </h3>
 <form method="post" autocomplete="off" action="home.php?mod=spacecp&ac=blog&op=edithot&blogid=$blogid">
 	<input type="hidden" name="referer" value="{echo dreferer()}" />
@@ -63,10 +63,8 @@
 </form>
 <!--{else}-->
 <div id="pt" class="bm cl">
-	<!--{subtemplate common/simplesearchform}-->
 	<div class="z">
 		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
-		<a href="home.php">$_G[setting][navs][4][navname]</a> <em>&rsaquo;</em>
 		<!--{if $space[self]}-->
 			<a href="home.php?mod=space&do=blog">{lang blog}</a>
 		<!--{else}-->
@@ -82,16 +80,20 @@
 	</div>
 </div>
 
-<div id="ct" class="ct2_a wp cl">
+<div id="ct" class="wp cl">
 	<div class="mn">
-		<div class="bm bw0 cl">
+		<div class="bm cl">
+			<div class="bm_h">
+				<h1>
+					<span class="y xs1 xw0"><a href="javascript:history.go(-1);">{lang previous_page}</a></span>
+					<!--{if $blog[blogid]}-->{lang edit_blog}<!--{else}-->{lang memcp_blog}<!--{/if}-->
+				</h1>
+			</div>
+			<div class="bm_c">
 			<script type="text/javascript" src="{STATICURL}image/editor/editor_function.js?{VERHASH}"></script>
 			<script type="text/javascript" src="{$_G[setting][jspath]}home_blog.js?{VERHASH}"></script>
-			<form id="ttHtmlEditor" method="post" autocomplete="off" action="home.php?mod=spacecp&ac=blog&blogid=$blog[blogid]{if $_G[gp_modblogkey]}&modblogkey=$_G[gp_modblogkey]{/if}" enctype="multipart/form-data">
-				<h1 class="mt cl">
-					<span class="y xs1 xw0 mtn"><a href="javascript:history.go(-1);">{lang previous_page}</a></span>
-					<img class="vm" src="{STATICURL}image/feed/blog.gif" alt="blog" /> <!--{if $blog[blogid]}-->{lang edit_blog}<!--{else}-->{lang memcp_blog}<!--{/if}-->
-				</h1>
+			<form id="ttHtmlEditor" method="post" autocomplete="off" action="home.php?mod=spacecp&ac=blog&blogid=$blog[blogid]{if $_GET[modblogkey]}&modblogkey=$_GET[modblogkey]{/if}" onsubmit="validate(this);" enctype="multipart/form-data">
+				
 				<!--{hook/spacecp_blog_top}-->
 				<table cellspacing="0" cellpadding="0" class="tfm">
 					<tr>
@@ -99,14 +101,15 @@
 					</tr>
 					<tr>
 						<td>
+						<!--{subtemplate home/editor_image_menu}-->
 						<textarea class="pt" name="message" id="uchome-ttHtmlEditor" style="height:100%;width:100%;display:none;border:0">$blog[message]</textarea>
-						<iframe src='home.php?mod=editor&charset={CHARSET}&allowhtml=$allowhtml&doodle={if $_G['setting']['magicstatus'] && !empty($_G['setting']['magics']['doodle'])}1{/if}' name="uchome-ifrHtmlEditor" id="uchome-ifrHtmlEditor" scrolling="no" border="0" frameborder="0" style="width:797px;height:400px;border:1px solid #C5C5C5;position:relative;"></iframe>
+						<div style="border:1px solid #C5C5C5;height:400px;"><iframe src='home.php?mod=editor&charset={CHARSET}&allowhtml=$allowhtml&doodle={if $_G['setting']['magicstatus'] && !empty($_G['setting']['magics']['doodle'])}1{/if}' name="uchome-ifrHtmlEditor" id="uchome-ifrHtmlEditor" scrolling="no" border="0" frameborder="0" style="width:100%;height:100%;position:relative;"></iframe></div>
 						</td>
 					</tr>
 				</table>
 				<!--{hook/spacecp_blog_middle}-->
 				<table cellspacing="0" cellpadding="0" width="100%" class="tfm">
-				
+
 					<!--{if $_G['setting']['blogcategorystat'] && $categoryselect}-->
 					<tr>
 						<th>{lang site_categories}</th>
@@ -116,7 +119,7 @@
 						</td>
 					</tr>
 					<!--{/if}-->
-					
+
 					<tr>
 						<th>{lang personal_category}</th>
 						<td>
@@ -199,21 +202,27 @@
 						</td>
 					</tr>
 					<!--{/if}-->
-
+					<!--{if helper_access::check_module('feed')}-->
 					<tr>
 						<th>{lang feed_option}</th>
 						<td>
 							<label for="makefeed"><input type="checkbox" name="makefeed" id="makefeed" value="1" class="pc"{if ckprivacy('blog', 'feed')} checked="checked"{/if}>{lang make_feed} (<a href="home.php?mod=spacecp&ac=privacy&op=feed" target="_blank">{lang change_default_settings}</a>)</label>
 						</td>
 					</tr>
-
+					<!--{/if}-->
 					<!--{if checkperm('seccode') && ($secqaacheck || $seccodecheck)}-->
 					<!--{eval $sectpl = '<tr><th><sec></th><td class="pns"><sec><div class="d"><sec></div></td></tr>';}-->
 					<!--{subtemplate common/seccheck}-->
 					<!--{/if}-->
+					<tr>
+						<th>&nbsp;</th>
+						<td>
+							<button type="submit" id="issuance" class="pn pnc"><strong>{lang save_publish}</strong></button>
+						</td>
+					</tr>
 				</table>
 				<input type="hidden" name="blogsubmit" value="true" />
-				<input type="button" id="blogbutton" name="blogbutton" value="{lang submit_release}" onclick="validate(this);" style="display: none;" />
+
 				<input type="hidden" name="formhash" value="{FORMHASH}" />
 			</form>
 			<script type="text/javascript">
@@ -236,7 +245,7 @@
 							}
 						}
 					}
-					
+
 					if($('seccode')) {
 						var code = $('seccode').value;
 						var x = new Ajax();
@@ -247,96 +256,21 @@
 								$('seccode').focus();
 						   		return false;
 							} else {
-								uploadEdit(obj);
+								edit_save();
 								return true;
 							}
 						});
 					} else {
-						uploadEdit(obj);
+						edit_save();
 						return true;
 					}
 				}
 			</script>
-			<!--{if !$_G[inajax] && (!$blog['uid'] || $blog['uid']==$_G['uid'])}-->
-			<table cellspacing="0" cellpadding="0" width="100%" class="tfm">
-				<tr>
-					<th>{lang pic}</th>
-					<td class="pns">
-						<button type="button" name="clickbutton[]" onclick="edit_album_show('pic')" class="pn"><em>{lang upload_pic}</em></button>
-						<button type="button" name="clickbutton[]" onclick="edit_album_show('album')" class="pn"><em>{lang insert_pic}</em></button>
-					</td>
-				</tr>
-			</table>
-			<!--{/if}-->
 
-			<table cellspacing="0" cellpadding="0" id="uchome-edit-pic" class="tfm" style="display:none;">
-				<tr>
-					<th>&nbsp;</th>
-					<td>
-						<strong>{lang select_pic}</strong>
-						<table summary="Upload" cellspacing="0" cellpadding="0">
-							<tbody id="attachbodyhidden" style="display:none">
-								<tr>
-									<td>
-										<form method="post" autocomplete="off" id="upload" action="home.php?mod=spacecp&ac=upload" enctype="multipart/form-data" target="uploadframe">
-											<input type="file" name="attach" />
-											<span id="localfile"></span>
-											<input type="hidden" name="uploadsubmit" id="uploadsubmit" value="true" />
-											<input type="hidden" name="albumid" id="albumid" value="0" />
-											<input type="hidden" name="formhash" value="{FORMHASH}" />
-										</form>
-									</td>
-								</tr>
-							</tbody>
-							<tbody id="attachbody"></tbody>
-						</table>
-						<strong>{lang storage_album}</strong>
-						<table cellspacing="0" cellpadding="0">
-							<tr>
-								<td>
-									<select name="albumid" id="uploadalbum" onchange="addSort(this)" class="ps">
-										<option value="-1">{lang select_album}</option>
-										<option value="-1">{lang default_album}</option>
-										<!--{loop $albums $value}-->
-										<option value="$value[albumid]">$value[albumname]</option>
-										<!--{/loop}-->
-										<option value="addoption" style="color:red;">+{lang create_new_album}</option>
-									</select>
-									<script type="text/javascript" src="{$_G[setting][jspath]}home_uploadpic.js?{VERHASH}"></script>
-									<iframe id="uploadframe" name="uploadframe" width="0" height="0" marginwidth="0" frameborder="0" src="about:blank"></iframe>
-								</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-			</table>
-			<table cellspacing="0" cellpadding="0" class="tfm" id="uchome-edit-album" style="display:none;">
-				<tr>
-					<th>&nbsp;</th>
-					<td>
-						{lang select_album}: <select name="view_albumid" onchange="picView(this.value)" class="ps">
-							<option value="none">{lang select_album}</option>
-							<option value="0">{lang default_album}</option>
-							<!--{loop $albums $value}-->
-							<option value="$value[albumid]">$value[albumname]</option>
-							<!--{/loop}-->
-						</select>
-						<p class="d">{lang click_pic_insert_content}</p>
-						<div id="albumpic_body"></div>
-					</td>
-				</tr>
-			</table>
+
 			<!--{hook/spacecp_blog_bottom}-->
-			<table cellspacing="0" cellpadding="0" class="tfm">
-				<tr>
-					<th>&nbsp;</th>
-					<td><button type="button" id="issuance" onclick="document.getElementById('blogbutton').click();" class="pn pnc"><strong>{lang save_publish}</strong></button></td>
-				</tr>
-			</table>
+			</div>
 		</div>
-	</div>
-	<div class="appl">
-		<!--{subtemplate common/userabout}-->
 	</div>
 </div>
 <script type="text/javascript">

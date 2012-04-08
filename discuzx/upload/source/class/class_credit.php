@@ -4,8 +4,12 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_credit.php 21612 2011-04-02 06:09:15Z congyushuai $
+ *      $Id: class_credit.php 28415 2012-02-29 07:03:42Z zhengqingpeng $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 class credit {
 
@@ -68,7 +72,7 @@ class credit {
 				}
 				$logarr = $this->addlogarr($logarr, $rule, false);
 				if($update) {
-					$clid = DB::insert('common_credit_rule_log', $logarr, 1);
+					$clid = C::t('common_credit_rule_log')->insert($logarr, 1);
 					if($rule['norepeat']) {
 						$rulelog['isnew'] = 1;
 						$rulelog['clid'] = $clid;
@@ -141,9 +145,8 @@ class credit {
 									$coef = $remain;
 								}
 							}
-							$cyclenunm = 'cyclenum+'.$coef;
 							$logarr = array(
-								'cyclenum' => "cyclenum=cyclenum+'$cyclenunm'",
+								'cyclenum' => "cyclenum=cyclenum+'$coef'",
 								'total' => "total=total+'$coef'",
 								'dateline' => "dateline='$_G[timestamp]'"
 							);
@@ -166,7 +169,7 @@ class credit {
 					}
 					if($logarr) {
 						$logarr = $this->addlogarr($logarr, $rule, true);
-						DB::query("UPDATE ".DB::table('common_credit_rule_log')." SET ".implode(',', $logarr)." WHERE clid='$rulelog[clid]'");
+						C::t('common_credit_rule_log')->increase($rulelog['clid'], $logarr);
 					}
 				}
 
@@ -193,7 +196,7 @@ class credit {
 
 		$uid = $uid ? $uid : intval($_G['uid']);
 		if($this->checklowerlimit && $uid && $_G['setting']['creditspolicy']['lowerlimit']) {
-			$member = DB::fetch_first("SELECT * FROM ".DB::table('common_member_count')." WHERE uid='$uid'");
+			$member = C::t('common_member_count')->fetch($uid);
 			$fid = $fid ? $fid : (isset($_G['fid']) && $_G['fid'] ? $_G['fid'] : 0);
 			$rule = is_array($rule) ? $rule : $this->getrule($rule, $fid);
 			for($i = 1; $i <= 8; $i++) {
@@ -251,9 +254,8 @@ class credit {
 				}
 			}
 			foreach($creditarr as $key => $value) {
-				if(!empty($key) && in_array($key, $allowkey)) {
-					$value = intval($value);
-					$sql[] = "$key=$key+'$value'";
+				if(!empty($key) && $value && in_array($key, $allowkey)) {
+					$sql[$key] = $value;
 					if($creditnotice && substr($key, 0, 10) == 'extcredits') {
 						$i = substr($key, 10);
 						$_G['cookiecredits'][$i] += $value;
@@ -268,7 +270,7 @@ class credit {
 				}
 			}
 			if($sql) {
-				DB::query("UPDATE ".DB::table('common_member_count')." SET ".implode(',', $sql)." WHERE uid IN (".dimplode($uids).")", 'UNBUFFERED');
+				C::t('common_member_count')->increase($uids, $sql);
 			}
 			if($checkgroup && count($uids) == 1) $this->checkusergroup($uids[0]);
 			$this->extrasql = array();
@@ -280,15 +282,15 @@ class credit {
 
 		$credits = 0;
 		if($uid && !empty($_G['setting']['creditsformula'])) {
-			$member = DB::fetch_first("SELECT * FROM ".DB::table('common_member_count')." WHERE uid='$uid'");
+			$member = C::t('common_member_count')->fetch($uid);
 			eval("\$credits = round(".$_G['setting']['creditsformula'].");");
 			if($uid == $_G['uid']) {
 				if($update && $_G['member']['credits'] != $credits) {
-					DB::update('common_member', array('credits'=>intval($credits)), array('uid' => $uid));
+					C::t('common_member')->update_credits($uid, $credits);
 					$_G['member']['credits'] = $credits;
 				}
 			} elseif($update) {
-				DB::update('common_member', array('credits'=>intval($credits)), array('uid' => $uid));
+				C::t('common_member')->update_credits($uid, $credits);
 			}
 		}
 		return $credits;
@@ -297,12 +299,11 @@ class credit {
 	function checkusergroup($uid) {
 		global $_G;
 
-		loadcache('usergroups');
 		$uid = intval($uid ? $uid : $_G['uid']);
 		$groupid = 0;
 		if(!$uid) return $groupid;
 		if($uid != $_G['uid']) {
-			$member = DB::fetch_first("SELECT * FROM ".DB::table('common_member')." WHERE uid='$uid'");
+			$member = getuserbyuid($uid);
 		} else {
 			$member = $_G['member'];
 		}
@@ -311,7 +312,7 @@ class credit {
 		$credits = $this->countcredit($uid, false);
 		$updatearray = array();
 		$groupid = $member['groupid'];
-		$group = $_G['cache']['usergroups'][$member['groupid']];
+		$group = C::t('common_usergroup')->fetch($member['groupid']);
 		if($member['credits'] != $credits) {
 			$updatearray['credits'] = $credits;
 			$member['credits'] = $credits;
@@ -319,7 +320,7 @@ class credit {
 		$member['credits'] = $member['credits'] == '' ? 0 : $member['credits'] ;
 		$sendnotify = false;
 		if(empty($group) || $group['type'] == 'member' && !($member['credits'] >= $group['creditshigher'] && $member['credits'] < $group['creditslower'])) {
-			$newgroup = DB::fetch_first("SELECT grouptitle, groupid FROM ".DB::table('common_usergroup')." WHERE type='member' AND $member[credits]>=creditshigher AND $member[credits]<creditslower LIMIT 1");
+			$newgroup = C::t('common_usergroup')->fetch_by_credits($member['credits']);
 			if(!empty($newgroup)) {
 				if($member['groupid'] != $newgroup['groupid']) {
 					$updatearray['groupid'] = $groupid = $newgroup['groupid'];
@@ -328,7 +329,7 @@ class credit {
 			}
 		}
 		if($updatearray) {
-			DB::update('common_member', $updatearray, array('uid' => $uid));
+			C::t('common_member')->update($uid, $updatearray);
 		}
 		if($sendnotify) {
 			notification_add($uid, 'system', 'user_usergroup', array('usergroup' => '<a href="home.php?mod=spacecp&ac=credit&op=usergroup">'.$newgroup['grouptitle'].'</a>'), 1);
@@ -342,14 +343,10 @@ class credit {
 
 		$fid = intval($fid);
 		if($rid && $fid) {
-			$lids = array();
-			$query = DB::query("SELECT * FROM ".DB::table('common_credit_rule_log')." WHERE rid='$rid' AND fid='$fid'");
-			while($value = DB::fetch($query)) {
-				$lids[$value['clid']] = $value['clid'];
-			}
+			$lids = C::t('common_credit_rule_log')->fetch_ids_by_rid_fid($rid, $fid);
 			if($lids) {
-				DB::query("DELETE FROM ".DB::table('common_credit_rule_log')." WHERE clid IN (".dimplode($lids).")");
-				DB::query("DELETE FROM ".DB::table('common_credit_rule_log_field')." WHERE clid IN (".dimplode($lids).")");
+				C::t('common_credit_rule_log')->delete($lids);
+				C::t('common_credit_rule_log_field')->delete_clid($lids);
 			}
 		}
 	}
@@ -376,9 +373,9 @@ class credit {
 			if($rulelog['isnew']) {
 				$logarr['clid'] = $rulelog['clid'];
 				$logarr['uid'] = $rulelog['uid'];
-				DB::insert('common_credit_rule_log_field', $logarr);
+				C::t('common_credit_rule_log_field')->insert($logarr);
 			} elseif($logarr) {
-				DB::update('common_credit_rule_log_field', $logarr, array('uid'=>$rulelog['uid'], 'clid'=>$rulelog['clid']));
+				C::t('common_credit_rule_log_field')->update($rulelog['uid'], $rulelog['clid'],$logarr);
 			}
 		}
 	}
@@ -423,7 +420,8 @@ class credit {
 				$fid = intval($fid);
 				$fids = explode(',', $rule['fids']);
 				if(in_array($fid, $fids)) {
-					$policy = unserialize(DB::result_first("SELECT creditspolicy FROM ".DB::table('forum_forumfield')." WHERE fid='$fid'"));
+					$forumfield = C::t('forum_forumfield')->fetch($fid);
+					$policy = dunserialize($forumfield['creditspolicy']);
 					if(isset($policy[$action])) {
 						$rule = $policy[$action];
 						$rule['rulenameuni'] = $rulenameuni;
@@ -448,9 +446,7 @@ class credit {
 		$log = array();
 		$uid = $uid ? $uid : $_G['uid'];
 		if($rid && $uid) {
-			$sql = " AND fid='$fid'";
-			$query = DB::query("SELECT * FROM ".DB::table('common_credit_rule_log')." WHERE uid='$uid' AND rid='$rid' $sql");
-			$log = DB::fetch($query);
+			$log = C::t('common_credit_rule_log')->fetch_rule_log($rid, $uid, $fid);
 		}
 		return $log;
 	}
@@ -486,15 +482,8 @@ class credit {
 	function getchecklogbyclid($clid, $uid = 0) {
 		global $_G;
 
-		$logarr = array();
 		$uid = $uid ? $uid : $_G['uid'];
-		if($clid && $uid) {
-			$query = DB::query("SELECT info, user, app FROM ".DB::table('common_credit_rule_log_field')." WHERE uid='$uid' AND clid='$clid'");
-			if(DB::num_rows($query)) {
-				$logarr = DB::fetch($query);
-			}
-		}
-		return $logarr;
+		return C::t('common_credit_rule_log_field')->fetch($uid, $clid);
 	}
 }
 

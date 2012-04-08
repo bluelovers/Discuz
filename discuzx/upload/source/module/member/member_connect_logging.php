@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: member_connect_logging.php 24736 2011-10-10 02:46:07Z yexinhao $
+ *      $Id: member_connect_logging.php 28644 2012-03-06 13:44:19Z houdelei $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -19,37 +19,30 @@ if(!empty($_POST)) {
 		showmessage('qqconnect:connect_register_bind_need_inactive');
 	}
 
-	$auth_code = authcode($_G['gp_auth_hash']);
-	$auth_code = explode('|', authcode($_G['gp_auth_hash']));
-	$conuin = authcode($auth_code[0]);
-	$conuinsecret = authcode($auth_code[1]);
-	$conopenid = authcode($auth_code[2]);
-	$user_auth_fields = authcode($auth_code[3]);
+	$conuin = $this->connect_guest['conuin'];
+	$conuinsecret = $this->connect_guest['conuinsecret'];
+	$conopenid = $this->connect_guest['conopenid'];
 
-	$conispublishfeed = $conispublisht = 0;
-	if ($_G['gp_is_feed']) {
-		$conispublishfeed = $conispublisht = 1;
-	}
+	$user_auth_fields = 1;
+	$conispublishfeed = $conispublisht = 1;
 
-	if ($conuin && $conuinsecret && $conopenid) {
-		$connect_member = DB::fetch_first("SELECT uid FROM ".DB::table('common_member_connect')." WHERE uid='$uid'");
-		if ($connect_member) {
-			DB::query("UPDATE ".DB::table('common_member_connect')." SET conuin='$conuin', conuinsecret='$conuinsecret', conopenid='$conopenid', conispublishfeed='$conispublishfeed', conispublisht='$conispublisht', conisregister='0', conisqzoneavatar='0', conisfeed='$user_auth_fields' WHERE uid='$uid'");
-		} else {
-			DB::query("INSERT INTO ".DB::table('common_member_connect')." (uid, conuin, conuinsecret, conopenid, conispublishfeed, conispublisht, conisregister, conisqzoneavatar, conisfeed) VALUES ('$uid', '$conuin', '$conuinsecret', '$conopenid', '$conispublishfeed', '$conispublisht', '0', '0', '$user_auth_fields')");
-		}
-		DB::query("UPDATE ".DB::table('common_member')." SET conisbind='1' WHERE uid='$uid'");
-		DB::query("INSERT INTO ".DB::table('connect_memberbindlog')." (uid, uin, type, dateline) VALUES ('$uid', '$conopenid', '1', '$_G[timestamp]')");
+	$is_use_qqshow = !empty($_GET['use_qqshow']) ? 1 : 0;
 
-		if ($_G['gp_is_notify']) {
-			dsetcookie('connect_js_name', 'user_bind', 86400);
-			dsetcookie('connect_js_params', base64_encode(serialize(array('type' => 'registerbind'))), 86400);
-		}
+	if ($conuin && $conopenid) {
+		C::t('#qqconnect#common_member_connect')->insert(array('uid' => $uid, 'conuin' => $conuin, 'conuinsecret' => $conuinsecret, 'conopenid' => $conopenid, 'conispublishfeed' => $conispublishfeed, 'conispublisht' => $conispublisht, 'conisregister' => '0', 'conisqzoneavatar' => '0', 'conisfeed' => $user_auth_fields, 'conisqqshow' => $is_use_qqshow), false, true);
+		C::t('common_member')->update($uid, array('conisbind' => '1'));
+		C::t('#qqconnect#connect_memberbindlog')->insert(array('uid' => $uid, 'uin' => $conopenid, 'type' => '1', 'dateline' => $_G['timestamp']));
+
+		C::t('#qqconnect#common_connect_guest')->delete($conopenid);
+
+		dsetcookie('connect_js_name', 'user_bind', 86400);
+		dsetcookie('connect_js_params', base64_encode(serialize(array('type' => 'registerbind'))), 86400);
+
 		dsetcookie('connect_login', 1, 31536000);
 		dsetcookie('connect_is_bind', '1', 31536000);
 		dsetcookie('connect_uin', $conopenid, 31536000);
 		dsetcookie('stats_qc_reg', 2, 86400);
-		if ($_G['gp_is_feed']) {
+		if ($_GET['is_feed']) {
 			dsetcookie('connect_synpost_tip', 1, 31536000);
 		}
 

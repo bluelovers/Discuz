@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_stat.php 20792 2011-03-04 02:20:22Z monkey $
+ *      $Id: misc_stat.php 28361 2012-02-28 07:12:03Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -15,10 +15,9 @@ if(empty($_G['setting']['updatestat'])) {
 	showmessage('not_open_updatestat');
 }
 
-$siteuniqueid = DB::result_first("SELECT svalue FROM ".DB::table('common_setting')." WHERE skey='siteuniqueid'");
-$stat_hash = md5($siteuniqueid."\t".substr($_G['timestamp'], 0, 6));
+$stat_hash = md5($_G['setting']['siteuniqueid']."\t".substr($_G['timestamp'], 0, 6));
 
-if(!checkperm('allowstatdata') && $_G['gp_hash'] != $stat_hash) {
+if(!checkperm('allowstatdata') && $_GET['hash'] != $stat_hash) {
 	showmessage('no_privilege_statdata');
 }
 
@@ -34,8 +33,8 @@ $cols['space'] = array('wall', 'poke', 'click', 'sendpm', 'addfriend', 'friend')
 
 $type = !empty($_GET['types']) ? array() : (empty($_GET['type'])?'all':$_GET['type']);
 
-$primarybegin = !empty($_G['gp_primarybegin']) ? $_G['gp_primarybegin'] : dgmdate($_G['timestamp']-2592000, 'Y-m-d');
-$primaryend = !empty($_G['gp_primaryend']) ? $_G['gp_primaryend'] : dgmdate($_G['timestamp'], 'Y-m-d');
+$primarybegin = !empty($_GET['primarybegin']) ? $_GET['primarybegin'] : dgmdate($_G['timestamp']-2592000, 'Y-m-d');
+$primaryend = !empty($_GET['primaryend']) ? $_GET['primaryend'] : dgmdate($_G['timestamp'], 'Y-m-d');
 
 $beginunixstr = strtotime($primarybegin);
 $endunixstr = strtotime($primaryend);
@@ -58,8 +57,7 @@ if(!empty($_GET['xml'])) {
 		$field = 'daytime,`'.implode('`+`', $_GET['types']).'` AS statistic';
 		$type = 'statistic';
 	}
-	$query = DB::query("SELECT $field FROM ".DB::table('common_stat')." WHERE daytime>='$begin' AND daytime<='$end' ORDER BY daytime");
-	while ($value = DB::fetch($query)) {
+	foreach(C::t('common_stat')->fetch_all($begin, $end, $field) as $value) {
 		$xaxis .= "<value xid='$count'>".substr($value['daytime'], 4, 4)."</value>";
 		if($type == 'all') {
 			foreach ($cols as $ck => $cvs) {

@@ -4,8 +4,12 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_couplebanner.php 19237 2010-12-23 04:27:46Z monkey $
+ *      $Id: lang_couplebanner.php 27449 2012-02-01 05:32:35Z zhangguosheng $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 $lang = array
 (
@@ -24,6 +28,10 @@ $lang = array
 	'couplebanner_coupleadid_comment' => '设置和当前广告配对的上/下联广告',
 	'couplebanner_category' => '投放门户频道',
 	'couplebanner_category_comment' => '设置广告投放的频道分类，当广告投放范围中包含“门户”时有效',
+	'couplebanner_disableclose' => '关闭广告的链接',
+	'couplebanner_disableclose_comment' => '如果广告代码中已内置关闭操作，可以关闭系统预置的关闭链接',
+	'couplebanner_show' => '显示',
+	'couplebanner_hidden' => '隐藏',
 );
 
 ?>

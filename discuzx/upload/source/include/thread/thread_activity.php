@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: thread_activity.php 20005 2011-01-27 10:10:01Z zhangguosheng $
+ *      $Id: thread_activity.php 28709 2012-03-08 08:53:48Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -14,32 +14,34 @@ if(!defined('IN_DISCUZ')) {
 $isverified = $applied = 0;
 $ufielddata = $applyinfo = '';
 if($_G['uid']) {
-	$query = DB::query("SELECT message, verified, ufielddata FROM ".DB::table('forum_activityapply')." WHERE tid='$_G[tid]' AND uid='$_G[uid]'");
-	if(DB::num_rows($query)) {
-		$applyinfo = DB::fetch($query);
+	$applyinfo = C::t('forum_activityapply')->fetch_info_for_user($_G['uid'], $_G['tid']);
+	if($applyinfo) {
 		$isverified = $applyinfo['verified'];
 		if($applyinfo['ufielddata']) {
-			$ufielddata = unserialize($applyinfo['ufielddata']);
+			$ufielddata = dunserialize($applyinfo['ufielddata']);
 		}
 		$applied = 1;
 	}
 }
 $applylist = array();
-$activity = DB::fetch_first("SELECT * FROM ".DB::table('forum_activity')." WHERE tid='$_G[tid]'");
+$activity = C::t('forum_activity')->fetch($_G['tid']);
 $activityclose = $activity['expiration'] ? ($activity['expiration'] > TIMESTAMP ? 0 : 1) : 0;
 $activity['starttimefrom'] = dgmdate($activity['starttimefrom'], 'u');
 $activity['starttimeto'] = $activity['starttimeto'] ? dgmdate($activity['starttimeto']) : 0;
 $activity['expiration'] = $activity['expiration'] ? dgmdate($activity['expiration']) : 0;
 $activity['attachurl'] = $activity['thumb'] = '';
 if($activity['ufield']) {
-	$activity['ufield'] = unserialize($activity['ufield']);
+	$activity['ufield'] = dunserialize($activity['ufield']);
 	if($activity['ufield']['userfield']) {
 		$htmls = $settings = array();
 		require_once libfile('function/profile');
 		foreach($activity['ufield']['userfield'] as $fieldid) {
 			if(empty($ufielddata['userfield'])) {
-				$query = DB::query("SELECT ".implode(',', $activity['ufield']['userfield'])." FROM ".DB::table('common_member_profile')." WHERE uid='$_G[uid]'");
-				$ufielddata['userfield'] = DB::fetch($query);
+				$memberprofile = C::t('common_member_profile')->fetch($_G['uid']);
+				foreach($activity['ufield']['userfield'] as $val) {
+					$ufielddata['userfield'][$val] = $memberprofile[$val];
+				}
+				unset($memberprofile);
 			}
 			$html = profile_setting($fieldid, $ufielddata['userfield'], false, true);
 			if($html) {
@@ -53,7 +55,7 @@ if($activity['ufield']) {
 }
 
 if($activity['aid']) {
-	$attach = DB::fetch_first("SELECT * FROM ".DB::table(getattachtablebytid($_G['tid']))." WHERE aid='$activity[aid]'");
+	$attach = C::t('forum_attachment_n')->fetch('tid:'.$_G['tid'], $activity['aid']);
 	if($attach['isimage']) {
 		$activity['attachurl'] = ($attach['remote'] ? $_G['setting']['ftp']['attachurl'] : $_G['setting']['attachurl']).'forum/'.$attach['attachment'];
 		$activity['thumb'] = $attach['thumb'] ? getimgthumbname($activity['attachurl']) : $activity['attachurl'];
@@ -65,14 +67,11 @@ if($activity['aid']) {
 
 $applylistverified = array();
 $noverifiednum = 0;
-$query = DB::query("SELECT aa.username, aa.uid, aa.verified, aa.dateline, aa.message, aa.payment, aa.ufielddata, m.groupid FROM ".DB::table('forum_activityapply')." aa
-	LEFT JOIN ".DB::table('common_member')." m USING(uid)
-	LEFT JOIN ".DB::table('common_member_field_forum')." mf USING(uid)
-	WHERE aa.tid='$_G[tid]' ORDER BY aa.dateline DESC");
-while($activityapplies = DB::fetch($query)) {
+$query = C::t('forum_activityapply')->fetch_all_for_thread($_G['tid'], 0, 0, 0, 1);
+foreach($query as $activityapplies) {
 	$activityapplies['dateline'] = dgmdate($activityapplies['dateline'], 'u');
 	if($activityapplies['verified'] == 1) {
-		$activityapplies['ufielddata'] = unserialize($activityapplies['ufielddata']);
+		$activityapplies['ufielddata'] = dunserialize($activityapplies['ufielddata']);
 		if(count($applylist) < $_G['setting']['activitypp']) {
 			$activityapplies['message'] = preg_replace("/(".lang('forum/misc', 'contact').".*)/", '', $activityapplies['message']);
 			$applylist[] = $activityapplies;

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: modcp_log.php 6752 2010-03-25 08:47:54Z cnteacher $
+ *      $Id: modcp_log.php 25246 2011-11-02 03:34:53Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_MODCP')) {
@@ -16,7 +16,7 @@ if(!isset($_G['cache']['forums'])) {
 }
 
 $language = lang('forum/misc');
-$lpp = empty($_G['gp_lpp']) ? 20 : intval($_G['gp_lpp']);
+$lpp = empty($_GET['lpp']) ? 20 : intval($_GET['lpp']);
 $lpp = min(200, max(5, $lpp));
 $logdir = DISCUZ_ROOT.'./data/log/';
 $logfiles = get_log_files($logdir, 'modcp');
@@ -30,20 +30,20 @@ $page = max(1, intval($_G['page']));
 $start = ($page - 1) * $lpp;
 $logs = array_reverse($logs);
 
-if(!empty($_G['gp_keyword'])) {
+if(!empty($_GET['keyword'])) {
 	foreach($logs as $key => $value) {
-		if(strpos($value, $_G['gp_keyword']) === FALSE) {
+		if(strpos($value, $_GET['keyword']) === FALSE) {
 			unset($logs[$key]);
 		}
 	}
 } else {
-	$_G['gp_keyword'] = '';
+	$_GET['keyword'] = '';
 }
 
 $num = count($logs);
-$multipage = multi($num, $lpp, $page, "$cpscript?mod=modcp&action=log&lpp=$lpp&keyword=".rawurlencode($_G['gp_keyword']));
+$multipage = multi($num, $lpp, $page, "$cpscript?mod=modcp&action=log&lpp=$lpp&keyword=".rawurlencode($_GET['keyword']));
 $logs = array_slice($logs, $start, $lpp);
-$keyword = isset($_G['gp_keyword']) ? dhtmlspecialchars($_G['gp_keyword']) : '';
+$keyword = isset($_GET['keyword']) ? dhtmlspecialchars($_GET['keyword']) : '';
 
 $usergroup = array();
 

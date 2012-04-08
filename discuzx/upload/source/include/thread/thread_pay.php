@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: thread_pay.php 19710 2011-01-17 02:03:39Z monkey $
+ *      $Id: thread_pay.php 25889 2011-11-24 09:52:20Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -15,17 +15,17 @@ if(!isset($_G['setting']['extcredits'][$_G['setting']['creditstransextra'][1]]))
 	showmessage('credits_transaction_disabled');
 }
 $extcredit = 'extcredits'.$_G['setting']['creditstransextra'][1];
-$payment = DB::fetch_first("SELECT COUNT(*) AS payers, SUM($extcredit) AS income
-	FROM ".DB::table('common_credit_log')."
-	WHERE relatedid='$_G[tid]' AND operation='STC'");
-
+$payment = C::t('common_credit_log')->count_stc_by_relatedid($_G['tid'], $_G['setting']['creditstransextra'][1]);
 $thread['payers'] = $payment['payers'];
 $thread['netprice'] = !$_G['setting']['maxincperthread'] || ($_G['setting']['maxincperthread'] && $payment['income'] < $_G['setting']['maxincperthread']) ? floor($thread['price'] * (1 - $_G['setting']['creditstax'])) : 0;
 $thread['creditstax'] = sprintf('%1.2f', $_G['setting']['creditstax'] * 100).'%';
 $thread['endtime'] = $_G['setting']['maxchargespan'] ? dgmdate($_G['forum_thread']['dateline'] + $_G['setting']['maxchargespan'] * 3600, 'u') : 0;
 $thread['price'] = $_G['forum_thread']['price'];
-$posttable = getposttablebytid($_G['tid']);
-$firstpost = DB::fetch_first("SELECT p.*,m.groupid FROM ".DB::table($posttable)." p LEFT JOIN ".DB::table('common_member')." m ON m.uid=p.authorid WHERE tid='$_G[tid]' AND first='1' LIMIT 1");
+$firstpost = C::t('forum_post')->fetch_threadpost_by_tid_invisible($_G['tid']);
+if($firstpost) {
+	$member = getuserbyuid($firstpost['authorid']);
+	$firstpost['groupid'] = $member['groupid'];
+}
 $pid = $firstpost['pid'];
 $freemessage = array();
 $freemessage[$pid]['message'] = '';

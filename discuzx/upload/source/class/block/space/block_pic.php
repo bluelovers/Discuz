@@ -4,13 +4,13 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: block_pic.php 10104 2010-05-06 11:59:12Z xupeng $
+ *      $Id: block_pic.php 28299 2012-02-27 08:48:36Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
-class block_pic {
+class block_pic extends discuz_block {
 	var $setting = array();
 	function block_pic() {
 		$this->setting = array(
@@ -74,6 +74,7 @@ class block_pic {
 
 	function fields() {
 		return array(
+				'id' => array('name' => lang('blockclass', 'blockclass_field_id'), 'formtype' => 'text', 'datatype' => 'int'),
 				'url' => array('name' => lang('blockclass', 'blockclass_pic_field_url'), 'formtype' => 'text', 'datatype' => 'string'),
 				'title' => array('name' => lang('blockclass', 'blockclass_pic_field_title'), 'formtype' => 'title', 'datatype' => 'title'),
 				'pic' => array('name' => lang('blockclass', 'blockclass_pic_field_pic'), 'formtype' => 'pic', 'datatype' => 'pic'),
@@ -100,10 +101,6 @@ class block_pic {
 		return $settings;
 	}
 
-	function cookparameter($parameter) {
-		return $parameter;
-	}
-
 	function getdata($style, $parameter) {
 		global $_G;
 
@@ -122,25 +119,24 @@ class block_pic {
 		$list = array();
 		$wheres = array();
 		if($picids) {
-			$wheres[] = 'pic.picid IN ('.dimplode($picids).')';
+			$wheres[] = 'p.'.DB::field('picid', $picids);
 		}
 		if($uids) {
-			$wheres[] = 'pic.uid IN ('.dimplode($uids).')';
+			$wheres[] = 'p.'.DB::field('uid', $uids);
 		}
 		if($aids) {
-			$wheres[] = 'pic.albumid IN ('.dimplode($aids).')';
+			$wheres[] = 'p.'.DB::field('albumid', $aids);
 		}
 		if($hours) {
 			$timestamp = TIMESTAMP - 3600 * $hours;
-			$wheres[] = "pic.dateline >= '$timestamp'";
+			$wheres[] = 'p.'.DB::field('dateline', $timestamp, '>=');
 		}
 		if($bannedids) {
-			$wheres[] = 'pic.picid NOT IN ('.dimplode($bannedids).')';
+			$wheres[] = 'p.'.DB::field('picid', $bannedids, 'notin');
 		}
 		$wheresql = $wheres ? implode(' AND ', $wheres) : '1';
-		$sql = "SELECT pic.* FROM ".DB::table('home_pic')." pic LEFT JOIN ".DB::table('home_album')." album ON pic.albumid=album.albumid WHERE $wheresql AND album.friend='0' ORDER BY pic.$orderby DESC";
-		$query = DB::query($sql." LIMIT $startrow,$items;");
-		while($data = DB::fetch($query)) {
+		$query = C::t('home_pic')->fetch_all_by_sql($wheresql." AND a.friend='0'", 'p.'.$orderby.' DESC');
+		foreach($query as $data) {
 			$list[] = array(
 				'id' => $data['picid'],
 				'idtype' => 'picid',

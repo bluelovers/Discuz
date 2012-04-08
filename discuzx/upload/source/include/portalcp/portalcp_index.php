@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portalcp_article.php 7701 2010-04-12 06:01:33Z zhengqingpeng $
+ *      $Id: portalcp_index.php 25889 2011-11-24 09:52:20Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -14,7 +14,7 @@ if(!defined('IN_DISCUZ')) {
 if(!$_G['setting']['portalstatus']) {
 	dheader('location:portal.php?mod=portalcp&ac=portalblock');
 }
-$op = $_GET['op'] == 'push' ? 'push' : 'list';
+$op = $_GET['op'] = 'list';
 $allowpostarticle = checkperm('allowmanagearticle') || checkperm('allowpostarticle') || $admincp2 || $admincp3;
 if($op == 'list') {
 	if(checkperm('allowdiy')) {
@@ -23,8 +23,6 @@ if($op == 'list') {
 	} elseif($_G['member']['allowadmincp'] == 8 || $_G['member']['allowadmincp'] == 32) {
 		dheader('location:portal.php?mod=portalcp&ac=portalblock');
 	}
-} elseif($op == 'push' && !$allowpostarticle) {
-	showmessage('portal_nopermission');
 }
 
 require_once libfile('function/portalcp');
@@ -41,35 +39,7 @@ if (checkperm('allowmanagearticle')) {
 	}
 }
 
-if($op == 'push') {
-
-	$_GET['id'] = intval($_GET['id']);
-	$_GET['idtype'] = in_array($_GET['idtype'], array('tid', 'blogid')) ? $_GET['idtype'] : '';
-	if(empty($_GET['idtype'])) {
-		showmessage('article_push_invalid_object');
-	}
-	$havepush = $tablename = '';
-	switch ($_GET['idtype']) {
-		case 'blogid':
-			$tablename = 'home_blogfield';
-			break;
-		case 'tid':
-			$tablename = 'forum_thread';
-			break;
-	}
-	if($tablename) $havepush = DB::result_first("SELECT pushedaid FROM ".DB::table($tablename)." WHERE {$_GET['idtype']}='$_GET[id]'");
-	if($havepush && $havepush['pushedaid']) {
-		showmessage('article_push_invalid_repeat');
-	}
-
-	$categorytree = '';
-	foreach($permissioncategory as $key => $value) {
-		if ($category[$key]['level'] == 0) {
-			$categorytree .= showcategoryrowpush($key, 0);
-		}
-	}
-
-} else {
+if($op == 'list') {
 
 	$categorytree = '';
 	foreach($permissioncategory as $key => $value) {
@@ -135,7 +105,7 @@ function showcategoryrowpush($key, $level = 0, $last = '') {
 	$op = '';
 	if (checkperm('allowmanagearticle') || checkperm('allowpostarticle') || $permission[$key]['allowpublish'] || $permission[$key]['allowmanage']) {
 		if(empty($value['disallowpublish'])){
-			$value['pushurl'] = '<a href="portal.php?mod=portalcp&ac=article&catid='.$key.'&from_idtype='.$_GET['idtype'].'&from_id='.$_GET['id'].'" target="_blank" onclick="hideWindow(\''.$_G[gp_handlekey].'\')">'.$value['catname'].'</a>';
+			$value['pushurl'] = '<a href="portal.php?mod=portalcp&ac=article&catid='.$key.'&from_idtype='.$_GET['idtype'].'&from_id='.$_GET['id'].'" target="_blank" onclick="hideWindow(\''.$_GET[handlekey].'\')">'.$value['catname'].'</a>';
 		} else {
 			$value['pushurl'] = $value['catname'];
 		}

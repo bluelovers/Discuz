@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: thread_printable.php 19920 2011-01-24 06:49:29Z monkey $
+ *      $Id: thread_printable.php 28348 2012-02-28 06:16:29Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -12,11 +12,14 @@ if(!defined('IN_DISCUZ')) {
 }
 
 $thisbg = '#FFFFFF';
-$posttable = getposttablebytid($_G['tid']);
-$addsql = getstatus($_G['forum_thread']['status'], 2) ? 'AND first=\'1\'' : 'ORDER BY dateline LIMIT 100';
-$query = DB::query("SELECT * FROM ".DB::table($posttable)." WHERE tid='$_G[tid]' AND invisible='0' $addsql");
+if(!getstatus($_G['forum_thread']['status'], 2)) {
+	$posts = C::t('forum_post')->fetch_all_by_tid('tid:'.$_G['tid'], $_G['tid'], true, 'ASC', 0, 100, null, 0);
+} else {
+	$posts = C::t('forum_post')->fetch_threadpost_by_tid_invisible($_G['tid'], 0);
+	$posts = array($posts);
+}
 $userinfo = $uids = $skipaids = array();
-while($post = DB::fetch($query)) {
+foreach($posts as $post) {
 
 	$post['dateline'] = dgmdate($post['dateline'], 'u');
 	if(preg_match("/\[hide\]\s*(.+?)\s*\[\/hide\]/is", $post['message'], $hide)) {
@@ -32,7 +35,7 @@ while($post = DB::fetch($query)) {
 	}
 	$post['attachments'] = array();
 	if($post['attachment'] && ($_G['group']['allowgetattach'] || $_G['group']['allowgetimage'])) {
-		$_G['forum_attachpids'] .= ",$post[pid]";
+		$_G['forum_attachpids'][] = $post['pid'];
 		$post['attachment'] = 0;
 		if(preg_match_all("/\[attach\](\d+)\[\/attach\]/i", $post['message'], $matchaids)) {
 			$_G['forum_attachtags'][$post['pid']] = $matchaids[1];
@@ -41,16 +44,17 @@ while($post = DB::fetch($query)) {
 	$uids[] = $post['authorid'];
 	$postlist[$post['pid']] = $post;
 }
+unset($posts);
 if($uids) {
 	$uids = array_unique($uids);
-	$query = DB::query("SELECT uid, username, groupid FROM ".DB::table('common_member')." WHERE uid IN (".dimplode($uids).")");
-	while($user = DB::fetch($query)) {
-		$userinfo[$user[uid]] = $user;
-	}
+	$userinfo = C::t('common_member')->fetch_all($uids);
 }
 
-if($_G['forum_attachpids']) {
+if($_G['forum_attachpids'] && !defined('IN_ARCHIVER')) {
 	require_once libfile('function/attachment');
+	if(is_array($threadsortshow) && !empty($threadsortshow['sortaids'])) {
+		$skipaids = array_merge($skipaids, $threadsortshow['sortaids']);
+	}
 	parseattach($_G['forum_attachpids'], $_G['forum_attachtags'], $postlist, $skipaids);
 }
 

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_forums.php 20290 2011-02-21 05:19:46Z monkey $
+ *      $Id: cache_forums.php 28876 2012-03-16 04:43:25Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -13,21 +13,13 @@ if(!defined('IN_DISCUZ')) {
 
 function build_cache_forums() {
 	$data = array();
-	$query = DB::query("SELECT f.fid, f.type, f.name, f.fup, f.simple, f.status, f.allowpostspecial, ff.viewperm, ff.formulaperm, ff.viewperm, ff.postperm, ff.replyperm, ff.getattachperm, ff.postattachperm, ff.extra, ff.commentitem, a.uid FROM ".DB::table('forum_forum')." f
-		LEFT JOIN ".DB::table('forum_forumfield')." ff ON ff.fid=f.fid LEFT JOIN ".DB::table('forum_access')." a ON a.fid=f.fid AND a.allowview>'0' WHERE f.status<>'3' ORDER BY f.type, f.displayorder");
-
+	$forums = C::t('forum_forum')->fetch_all_forum();
 	$pluginvalue = $forumlist = array();
-	$nopermdefault = array(
-		'viewperm' => array(),
-		'getattachperm' => array(),
-		'postperm' => array(7),
-		'replyperm' => array(7),
-		'postattachperm' => array(7),
-	);
 	$pluginvalue = pluginsettingvalue('forums');
 
 	$forumnoperms = array();
-	while($forum = DB::fetch($query)) {
+	foreach($forums as $val) {
+		$forum = array('fid' => $val['fid'], 'type' => $val['type'], 'name' => $val['name'], 'fup' => $val['fup'], 'simple' => $val['simple'], 'status' => $val['status'], 'allowpostspecial' => $val['allowpostspecial'], 'viewperm' => $val['viewperm'], 'formulaperm' => $val['formulaperm'], 'viewperm' => $val['viewperm'], 'postperm' => $val['postperm'], 'replyperm' => $val['replyperm'], 'getattachperm' => $val['getattachperm'], 'postattachperm' => $val['postattachperm'], 'extra' => $val['extra'], 'commentitem' => $val['commentitem'], 'uid' => $val['uid'], 'archive' => $val['archive']);
 		$forum['orderby'] = bindec((($forum['simple'] & 128) ? 1 : 0).(($forum['simple'] & 64) ? 1 : 0));
 		$forum['ascdesc'] = ($forum['simple'] & 32) ? 'ASC' : 'DESC';
 		$forum['extra'] = unserialize($forum['extra']);
@@ -36,7 +28,6 @@ function build_cache_forums() {
 		}
 
 		if(!isset($forumlist[$forum['fid']])) {
-			$forum['name'] = strip_tags($forum['name']);
 			if($forum['uid']) {
 				$forum['users'] = "\t$forum[uid]\t";
 			}
@@ -72,12 +63,12 @@ function build_cache_forums() {
 			}
 		}
 	}
-	save_syscache('forums', $data);
+	savecache('forums', $data);
 }
 
 function formatforumdata($forum, &$pluginvalue) {
 	static $keys = array('fid', 'type', 'name', 'fup', 'viewperm', 'postperm', 'orderby', 'ascdesc', 'users', 'status',
-		'extra', 'plugin', 'allowpostspecial', 'commentitem');
+		'extra', 'plugin', 'allowpostspecial', 'commentitem', 'archive');
 	static $orders = array('lastpost', 'dateline', 'replies', 'views');
 
 	$data = array();
