@@ -1,7 +1,6 @@
 <!--{if empty($diymode)}-->
 <!--{template common/header}-->
 <div id="pt" class="bm cl">
-	<!--{subtemplate common/simplesearchform}-->
 	<div class="z">
 		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
 		<a href="home.php?mod=space&do=favorite">{lang favorite}</a>
@@ -19,15 +18,15 @@
 		<div class="bm bw0">
 			<h1 class="mt bbs">
 				<img alt="favorite" src="{STATICURL}image/feed/favorite.gif" class="vm" />
-				<!--{if $_G[gp_type] == "thread"}-->{lang favorite_thread}
-				<!--{elseif $_G[gp_type] == "forum"}-->{lang favorite_forum}
-				<!--{elseif $_G[gp_type] == "group"}-->{lang favorite_group}
-				<!--{elseif $_G[gp_type] == "blog"}-->{lang favorite_blog}
-				<!--{elseif $_G[gp_type] == "album"}-->{lang favorite_album}
-				<!--{elseif $_G[gp_type] == "article"}-->{lang favorite_article}
+				<!--{if $_GET[type] == "thread"}-->{lang favorite_thread}
+				<!--{elseif $_GET[type] == "forum"}-->{lang favorite_forum}
+				<!--{elseif $_GET[type] == "group"}-->{lang favorite_group}
+				<!--{elseif $_GET[type] == "blog"}-->{lang favorite_blog}
+				<!--{elseif $_GET[type] == "album"}-->{lang favorite_album}
+				<!--{elseif $_GET[type] == "article"}-->{lang favorite_article}
 				<!--{else}-->{lang favorite_all}</a><!--{/if}-->
 			</h1>
-			
+
 <!--{else}-->
 <!--{template home/space_header}-->
 	<div id="ct" class="wp n cl">
@@ -36,7 +35,7 @@
 				<h1 class="mt">{lang favorite}</h1>
 <!--{/if}-->
 			<!--{if $list}-->
-			<form method="post" autocomplete="off" name="delform" id="delform" action="home.php?mod=spacecp&ac=favorite&op=delete&type=$_G[gp_type]&checkall=1" onsubmit="showDialog('{lang del_select_favorite_confirm}', 'confirm', '', '$(\'delform\').submit();'); return false;">
+			<form method="post" autocomplete="off" name="delform" id="delform" action="home.php?mod=spacecp&ac=favorite&op=delete&type=$_GET[type]&checkall=1" onsubmit="showDialog('{lang del_select_favorite_confirm}', 'confirm', '', '$(\'delform\').submit();'); return false;">
 			<input type="hidden" name="formhash" value="{FORMHASH}" />
 			<input type="hidden" name="delfavorite" value="true" />
 			<ul id="favorite_ul" class="">
@@ -64,7 +63,7 @@
 			<p class="emp">{lang no_favorite_yet}</p>
 			<!--{/if}-->
 <!--{if empty($diymode)}-->
-		</div>	
+		</div>
 		<!--[diy=diycontentbottom]--><div id="diycontentbottom" class="area"></div><!--[/diy]-->
 	</div>
 	<div class="appl">
@@ -74,10 +73,11 @@
 				<li$actives[all]><a href="home.php?mod=space&do=favorite&type=all">{lang favorite_all}</a></li>
 				<li$actives[thread]><a href="home.php?mod=space&do=favorite&type=thread">{lang favorite_thread}</a></li>
 				<li$actives[forum]><a href="home.php?mod=space&do=favorite&type=forum">{lang favorite_forum}</a></li>
-				<!--{if $_G['setting']['groupstatus']}--><li$actives[group]><a href="home.php?mod=space&do=favorite&type=group">{lang favorite_group}</a></li><!--{/if}-->
-				<!--{if $_G['setting']['homestatus']}--><li$actives[blog]><a href="home.php?mod=space&do=favorite&type=blog">{lang favorite_blog}</a></li><!--{/if}-->
-				<!--{if $_G['setting']['homestatus']}--><li$actives[album]><a href="home.php?mod=space&do=favorite&type=album">{lang favorite_album}</a></li><!--{/if}-->
-				<!--{if $_G['setting']['portalstatus']}--><li$actives[article]><a href="home.php?mod=space&do=favorite&type=article">{lang favorite_article}</a></li><!--{/if}-->
+				<!--{if helper_access::check_module('group')}--><li$actives[group]><a href="home.php?mod=space&do=favorite&type=group">{lang favorite_group}</a></li><!--{/if}-->
+				<!--{if helper_access::check_module('blog')}--><li$actives[blog]><a href="home.php?mod=space&do=favorite&type=blog">{lang favorite_blog}</a></li><!--{/if}-->
+				<!--{if helper_access::check_module('album')}--><li$actives[album]><a href="home.php?mod=space&do=favorite&type=album">{lang favorite_album}</a></li><!--{/if}-->
+				<!--{if helper_access::check_module('portal')}--><li$actives[article]><a href="home.php?mod=space&do=favorite&type=article">{lang favorite_article}</a></li><!--{/if}-->
+				<!--{hook/space_favorite_nav_extra}-->
 			</ul>
 		</div>
 	</div>

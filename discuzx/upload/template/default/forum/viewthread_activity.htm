@@ -50,8 +50,8 @@
 				<em>$allapplynum</em> {lang activity_member_unit}
 				<!--{if $post['invisible'] == 0 && ($_G['forum_thread']['authorid'] == $_G['uid'] || (in_array($_G['group']['radminid'], array(1, 2)) && $_G['group']['alloweditactivity']) || ( $_G['group']['radminid'] == 3 && $_G['forum']['ismoderator'] && $_G['group']['alloweditactivity']))}-->
 					<span class="pipe">|</span>
-					<span class="xi2"><a href="misc.php?mod=invite&action=thread&id=$_G[tid]" onclick="showWindow('invite', this.href, 'get', 0);">{lang invite}</a></span> &nbsp; 
-					<span class="xi2"><a href="forum.php?mod=misc&action=activityapplylist&tid=$_G[tid]&pid=$post[pid]{if $_G['gp_from']}&from=$_G['gp_from']{/if}" onclick="showWindow('activity', this.href, 'get', 0)" title="{lang manage}">{lang manage}</a> &nbsp; <a href="forum.php?mod=misc&action=activityexport&tid=$_G[tid]" title="{lang pm_archive}">{lang pm_archive}</a></span>
+					<span class="xi2"><a href="misc.php?mod=invite&action=thread&id=$_G[tid]&activity=1" onclick="showWindow('invite', this.href, 'get', 0);">{lang invite}</a></span> &nbsp;
+					<span class="xi2"><a href="forum.php?mod=misc&action=activityapplylist&tid=$_G[tid]&pid=$post[pid]{if $_GET['from']}&from=$_GET['from']{/if}" onclick="showWindow('activity', this.href, 'get', 0)" title="{lang manage}">{lang manage}</a> &nbsp; <a href="forum.php?mod=misc&action=activityexport&tid=$_G[tid]" title="{lang pm_archive}">{lang pm_archive}</a></span>
 				<!--{/if}-->
 			</dd>
 		</dl>
@@ -94,13 +94,13 @@
 
 <!--{if $_G['uid'] && !$activityclose && (!$applied || $isverified == 2)}-->
 	<div id="activityjoin" style="display:none">
-	<!--{if $_G['forum']['status'] == 3 && $isgroupuser != 'isgroupuser'}-->
+	<!--{if $_G['forum']['status'] == 3 && helper_access::check_module('group') && $isgroupuser != 'isgroupuser'}-->
 		<div class="c">
 			<p>{lang activity_no_member}</p>
 			<p><a href="forum.php?mod=group&action=join&fid=$_G[fid]" class="xi2">{lang activity_join_group}</a></p>
 		</div>
 	<!--{else}-->
-		<form name="activity" id="activity" method="post" autocomplete="off" action="forum.php?mod=misc&action=activityapplies&fid=$_G[fid]&tid=$_G[tid]&pid=$post[pid]{if $_G['gp_from']}&from=$_G['gp_from']{/if}" onsubmit="ajaxpost('activity', 'return_activityapplies', 'return_activityapplies', 'onerror');return false;">
+		<form name="activity" id="activity" method="post" autocomplete="off" action="forum.php?mod=misc&action=activityapplies&fid=$_G[fid]&tid=$_G[tid]&pid=$post[pid]{if $_GET['from']}&from=$_GET['from']{/if}" onsubmit="ajaxpost('activity', 'return_activityapplies', 'return_activityapplies', 'onerror');return false;">
 			<input type="hidden" name="formhash" value="{FORMHASH}" />
 			<input type="hidden" name="handlekey" value="activityapplies" />
 			<div class="c">
@@ -119,16 +119,16 @@
 					<!--{if !empty($activity['ufield']['userfield'])}-->
 						<!--{loop $activity['ufield']['userfield'] $fieldid}-->
 						<!--{if $settings[$fieldid][available]}-->
-							<!--{if $settings[$fieldid][formtype] != 'file'}-->
 							<tr>
 								<th id="th_$fieldid"><strong class="rq y">*</strong>$settings[$fieldid][title]</th>
 								<td id="td_$fieldid">
+							<!--{if $settings[$fieldid][formtype] != 'file'}-->
 									$htmls[$fieldid]
+							<!--{else}-->
+								 <input id="activitypic_$fieldid" type="text" tabindex="1" value="" class="px" name="$fieldid" onblur="if(!this.value.match(/^https?:\/\/.+\/.+\.(jpg|png|gif|jpeg|bmp)$/i)){$('showerror_$fieldid').innerHTML='{lang activity_imgurl_error}';}else{$('showerror_$fieldid').innerHTML='&nbsp;';}"><div id="showerror_$fieldid" class="rq mtn">{lang activity_enter_imgurl}</div>
+							<!--{/if}-->
 								</td>
 							</tr>
-							<!--{else}-->
-							 <input type="hidden" name="$fieldid" value="1">
-							<!--{/if}-->
 						<!--{/if}-->
 						<!--{/loop}-->
 					<!--{/if}-->
@@ -157,17 +157,17 @@
 				<!--{/if}-->
 			</div>
 		</form>
-		
+
 		<script type="text/javascript">
 			function succeedhandle_activityapplies(locationhref, message) {
-				showDialog(message, 'notice', '', 'location.href="' + locationhref + '"');
+				showDialog(message, 'right', '', 'location.href="' + locationhref + '"');
 			}
 		</script>
 	<!--{/if}-->
 	</div>
 <!--{elseif $_G['uid'] && !$activityclose && $applied}-->
 	<div id="activityjoincancel" style="display:none">
-		<form name="activity" method="post" autocomplete="off" action="forum.php?mod=misc&action=activityapplies&fid=$_G[fid]&tid=$_G[tid]&pid=$post[pid]{if $_G['gp_from']}&from=$_G['gp_from']{/if}">
+		<form name="activity" method="post" autocomplete="off" action="forum.php?mod=misc&action=activityapplies&fid=$_G[fid]&tid=$_G[tid]&pid=$post[pid]{if $_GET['from']}&from=$_GET['from']{/if}">
 			<input type="hidden" name="formhash" value="{FORMHASH}" />
 			<div class="c">
 				<table summary="{lang activity_join}" cellpadding="0" cellspacing="0" class="actl">
@@ -197,7 +197,7 @@
 			<!--{loop $applylist $apply}-->
 				<tr>
 					<td>
-						<a target="_blank" href="home.php?mod=space&uid=$apply[uid]" class="ratl vm"><!--{echo avatar($apply[uid], 'small')}--></a> 
+						<a target="_blank" href="home.php?mod=space&uid=$apply[uid]" class="ratl vm"><!--{echo avatar($apply[uid], 'small')}--></a>
 						<a target="_blank" href="home.php?mod=space&uid=$apply[uid]">$apply[username]</a>
 					</td>
 					<td><!--{if $apply[message]}--><p>$apply[message]</p><!--{/if}--></td>
@@ -234,7 +234,7 @@
 			<!--{loop $applylistverified $apply}-->
 				<tr>
 					<td>
-						<a target="_blank" href="home.php?mod=space&uid=$apply[uid]" class="ratl vm"><!--{echo avatar($apply[uid], 'small')}--></a> 
+						<a target="_blank" href="home.php?mod=space&uid=$apply[uid]" class="ratl vm"><!--{echo avatar($apply[uid], 'small')}--></a>
 						<a target="_blank" href="home.php?mod=space&uid=$apply[uid]">$apply[username]</a>
 					</td>
 					<td><!--{if $_G['forum_thread']['authorid'] == $_G['uid'] && $apply[message]}-->$apply[message]<!--{/if}--></td>

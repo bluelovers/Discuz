@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_relatekw.php 20885 2011-03-07 07:36:57Z monkey $
+ *      $Id: forum_relatekw.php 29236 2012-03-30 05:34:47Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -12,9 +12,7 @@ if(!defined('IN_DISCUZ')) {
 }
 
 if($tid = @intval($_GET['tid'])) {
-	$posttable = getposttablebytid($tid);
-	$query = DB::query("SELECT pid, subject, message FROM ".DB::table($posttable)." WHERE tid='$tid' AND first='1'");
-	$data = DB::fetch($query);
+	$data = C::t('forum_post')->fetch_threadpost_by_tid_invisible($tid);
 	$subject = $data['subject'];
 	$message = cutstr($data['message'], 500, '');
 	$pid = $data['pid'];
@@ -51,19 +49,21 @@ if($data) {
 	$return = '';
 	if($kws) {
 		foreach($kws as $kw) {
-			$kw = htmlspecialchars($kw);
-			$return .= $kw.' ';
+			$kw = dhtmlspecialchars($kw);
+			$return .= $kw.',';
 		}
-		$return = htmlspecialchars($return);
+		$return = dhtmlspecialchars($return);
 	}
+	$return = substr($return, 0, strlen($return)-1);
 
 	if(!$tid) {
 		$_G['inajax'] = 1;
 		include template('forum/relatekw');
 	} elseif($kws) {
 		loadcache('censor');
-		$posttable = getposttablebytid($_G['tid']);
-		DB::query("UPDATE ".DB::table($posttable)." SET tags='".implode(',', $kws)."' WHERE pid='$pid'");
+		C::t('forum_post')->update('tid:'.$_G['tid'], $pid, array(
+			'tags' => implode(',', $kws),
+		));
 	}
 }
 

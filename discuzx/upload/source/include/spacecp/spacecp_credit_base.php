@@ -4,17 +4,17 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_credit_base.php 22426 2011-05-06 10:47:43Z zhengqingpeng $
+ *      $Id: spacecp_credit_base.php 28214 2012-02-24 06:38:56Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
-if(empty($_G['gp_op']))	$_G['gp_op'] = 'base';
-if(in_array($_G['gp_op'], array('transfer', 'exchange'))) {
+if(empty($_GET['op']))	$_GET['op'] = 'base';
+if(in_array($_GET['op'], array('transfer', 'exchange'))) {
 	$taxpercent = sprintf('%1.2f', $_G['setting']['creditstax'] * 100).'%';
 }
-if($_G['gp_op'] == 'base') {
+if($_GET['op'] == 'base') {
 	$loglist = $extcredits_exchange = array();
 	if(!empty($_G['setting']['extcredits'])) {
 		foreach($_G['setting']['extcredits'] as $key => $value) {
@@ -24,18 +24,21 @@ if($_G['gp_op'] == 'base') {
 		}
 	}
 
-	$count = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_credit_log')." WHERE uid='$_G[uid]'");
+	$count = C::t('common_credit_log')->count_by_uid($_G['uid']);
 	if($count) {
 		loadcache(array('magics'));
-		$query = DB::query("SELECT * FROM ".DB::table('common_credit_log')." WHERE uid='$_G[uid]' ORDER BY dateline DESC LIMIT 0,10");
-		while($log = DB::fetch($query)) {
+		foreach(C::t('common_credit_log')->fetch_all_by_uid($_G['uid'], 0, 10) as $log) {
 			$credits = array();
 			$havecredit = false;
 			$maxid = $minid = 0;
 			foreach($_G['setting']['extcredits'] as $id => $credit) {
 				if($log['extcredits'.$id]) {
 					$havecredit = true;
-					$credits[] = $credit['title'].' <span class="'.($log['extcredits'.$id] > 0 ? 'xi1' : 'xg1').'">'.($log['extcredits'.$id] > 0 ? '+' : '').$log['extcredits'.$id].'</span>';
+					if($log['operation'] == 'RPZ') {
+						$credits[] = $credit['title'].lang('spacecp', 'credit_update_reward_clean');
+					} else {
+						$credits[] = $credit['title'].' <span class="'.($log['extcredits'.$id] > 0 ? 'xi1' : 'xg1').'">'.($log['extcredits'.$id] > 0 ? '+' : '').$log['extcredits'.$id].'</span>';
+					}
 					if($log['operation'] == 'CEC' && !empty($log['extcredits'.$id])) {
 						if($log['extcredits'.$id] > 0) {
 							$log['maxid'] = $id;
@@ -43,7 +46,6 @@ if($_G['gp_op'] == 'base') {
 							$log['minid'] = $id;
 						}
 					}
-
 				}
 			}
 			if(!$havecredit) {
@@ -71,17 +73,17 @@ if($_G['gp_op'] == 'base') {
 	$navtitle = lang('core', 'title_credit');
 	$creditsformulaexp = str_replace('*', 'X', $_G['setting']['creditsformulaexp']);
 
-} elseif ($_G['gp_op'] == 'buy') {
+} elseif ($_GET['op'] == 'buy') {
 
 	if((!$_G['setting']['ec_ratio'] || (!$_G['setting']['ec_tenpay_opentrans_chnid'] && !$_G['setting']['ec_tenpay_bargainor']  && !$_G['setting']['ec_account'])) && !$_G['setting']['card']['open'] ) {
 		showmessage('action_closed', NULL);
 	}
 
 	if(submitcheck('addfundssubmit')) {
-		$apitype = $_G['gp_apitype'];
+		$apitype = $_GET['apitype'];
 		if($apitype == 'card') {
 			if($_G['setting']['seccodestatus'] & 16) {
-				if(!check_seccode($_G['gp_seccodeverify'], $_G['gp_sechash'])) {
+				if(!check_seccode($_GET['seccodeverify'], $_GET['sechash'])) {
 					showmessage('submit_seccode_invalid', '', array(), array('showdialog' => 1, 'showmsg' => true, 'closetime' => true));
 				}
 			}
@@ -89,8 +91,8 @@ if($_G['gp_op'] == 'base') {
 			if(!$_POST['cardid']) {
 				showmessage('memcp_credits_card_msg_cardid_incorrect', '', array(), array('showdialog' => 1, 'showmsg' => true, 'closetime' => true));
 			}
-			if(!$card = DB::fetch_first("SELECT * FROM ".DB::table('common_card')." WHERE id = '{$_POST['cardid']}'")) {
-				showmessage('memcp_credits_card_msg_card_unfined', '', array(), array('showdialog' => 1, 'showmsg' => true, 'closetime' => true, 'extrajs' => '<script type="text/javascript">updateseccode("'.$_G['gp_sechash'].'");</script>'));
+			if(!($card = C::t('common_card')->fetch($_POST['cardid']))) {
+				showmessage('memcp_credits_card_msg_card_unfined', '', array(), array('showdialog' => 1, 'showmsg' => true, 'closetime' => true, 'extrajs' => '<script type="text/javascript">updateseccode("'.$_GET['sechash'].'");</script>'));
 			} else {
 				if($card['status'] == 2) {
 					showmessage('memcp_credits_card_msg_used', '', array(), array('showdialog' => 1, 'showmsg' => true, 'closetime' => true));
@@ -98,12 +100,12 @@ if($_G['gp_op'] == 'base') {
 				if($card['cleardateline'] < TIMESTAMP) {
 					showmessage('memcp_credits_card_msg_cleardateline_early', '', array(), array('showdialog' => 1, 'showmsg' => true, 'closetime' => true));
 				}
-				DB::query("UPDATE ".DB::table('common_card')." SET status = 2, uid = '{$_G['uid']}', useddateline = '{$_G['timestamp']}' WHERE id = '{$card['id']}'");
+				C::t('common_card')->update($card['id'], array('status' => 2, 'uid' => $_G['uid'], 'useddateline' => $_G['timestamp']));
 				updatemembercount($_G[uid], array($card['extcreditskey'] => $card['extcreditsval']), true, 'CDC', 1);
 				showmessage('memcp_credits_card_msg_succeed', 'home.php?mod=spacecp&ac=credit&op=base', array('extcreditstitle' => $_G['setting']['extcredits'][$card['extcreditskey']]['title'], 'extcreditsval' => $card['extcreditsval']), array('showdialog' => 1, 'alert' => 'right', 'showmsg' => true, 'locationtime' => true));
 			}
 		} else {
-			$amount = intval($_G['gp_addfundamount']);
+			$amount = intval($_GET['addfundamount']);
 			if(!$amount) {
 				showmessage('memcp_credits_addfunds_msg_incorrect', '', array(), array('showdialog' => 1, 'showmsg' => true, 'closetime' => true));
 			}
@@ -112,13 +114,12 @@ if($_G['gp_op'] == 'base') {
 				showmessage('credits_addfunds_amount_invalid', '', array('ec_maxcredits' => $_G['setting']['ec_maxcredits'], 'ec_mincredits' => $_G['setting']['ec_mincredits']), array('showdialog' => 1, 'showmsg' => true, 'closetime' => true));
 			}
 
-			if($apitype == 'card' && DB::result_first("SELECT COUNT(*) FROM ".DB::table('forum_order')." WHERE uid='$_G[uid]' AND submitdate>='$_G[timestamp]'-180 LIMIT 1")) {
+			if($apitype == 'card' && C::t('forum_order')->count_by_search($_G['uid'], null, null, null, null, null, null, $_G['timestamp'] - 180)) {
 				showmessage('credits_addfunds_ctrl', '', array(), array('showdialog' => 1, 'showmsg' => true, 'closetime' => true));
 			}
 
 			if($_G['setting']['ec_maxcreditspermonth']) {
-				$query = DB::query("SELECT SUM(amount) FROM ".DB::table('forum_order')." WHERE uid='$_G[uid]' AND submitdate>='$_G[timestamp]'-2592000 AND status IN (2, 3)");
-				if((DB::result($query, 0)) + $amount > $_G['setting']['ec_maxcreditspermonth']) {
+				if(C::t('forum_order')->sum_amount_by_uid_submitdate_status($_G['uid'], $_G['timestamp'] - 2592000, array(2, 3)) + $amount > $_G['setting']['ec_maxcreditspermonth']) {
 					showmessage('credits_addfunds_toomuch', '', array('ec_maxcreditspermonth' => $_G['setting']['ec_maxcreditspermonth']), array('showdialog' => 1, 'showmsg' => true, 'closetime' => true));
 				}
 			}
@@ -129,13 +130,18 @@ if($_G['gp_op'] == 'base') {
 			require_once libfile('function/trade');
 			$requesturl = credit_payurl($price, $orderid);
 
-			$query = DB::query("SELECT orderid FROM ".DB::table('forum_order')." WHERE orderid='$orderid'");
-			if(DB::num_rows($query)) {
+			if(C::t('forum_order')->fetch($orderid)) {
 				showmessage('credits_addfunds_order_invalid', '', array(), array('showdialog' => 1, 'showmsg' => true, 'closetime' => true));
 			}
 
-			DB::query("INSERT INTO ".DB::table('forum_order')." (orderid, status, uid, amount, price, submitdate)
-				VALUES ('$orderid', '1', '$_G[uid]', '$amount', '$price', '$_G[timestamp]')");
+			C::t('forum_order')->insert(array(
+				'orderid' => $orderid,
+				'status' => '1',
+				'uid' => $_G['uid'],
+				'amount' => $amount,
+				'price' => $price,
+				'submitdate' => $_G['timestamp'],
+			));
 
 			include template('common/header_ajax');
 			echo '<form id="payform" action="'.$requesturl.'" method="post"></form><script type="text/javascript" reload="1">$(\'payform\').submit();</script>';
@@ -149,17 +155,17 @@ if($_G['gp_op'] == 'base') {
 		}
 	}
 
-} elseif ($_G['gp_op'] == 'transfer') {
+} elseif ($_GET['op'] == 'transfer') {
 
 	if(!($_G['setting']['transferstatus'] && $_G['group']['allowtransfer'])) {
 		showmessage('action_closed', NULL);
 	}
 
 	if(submitcheck('transfersubmit')) {
-		if($_G['gp_to'] == $_G['username']) {
+		if($_GET['to'] == $_G['username']) {
 			showmessage('memcp_credits_transfer_msg_self_incorrect', '', array(), array('showdialog' => 1, 'showmsg' => true, 'closetime' => true));
 		}
-		$amount = intval($_G['gp_transferamount']);
+		$amount = intval($_GET['transferamount']);
 		if($amount <= 0) {
 			showmessage('credits_transaction_amount_invalid', '', array(), array('showdialog' => 1, 'showmsg' => true, 'closetime' => true));
 		} elseif(getuserprofile('extcredits'.$_G['setting']['creditstransextra'][9]) - $amount < ($minbalance = $_G['setting']['transfermincredits'])) {
@@ -167,14 +173,14 @@ if($_G['gp_op'] == 'base') {
 		} elseif(!($netamount = floor($amount * (1 - $_G['setting']['creditstax'])))) {
 			showmessage('credits_net_amount_iszero', '', array(), array('showdialog' => 1, 'showmsg' => true, 'closetime' => true));
 		}
-		$to = DB::fetch_first("SELECT username,uid FROM ".DB::table('common_member')." WHERE username='$_G[gp_to]'");
+		$to = C::t('common_member')->fetch_by_username($_GET['to']);
 		if(!$to) {
 			showmessage('memcp_credits_transfer_msg_user_incorrect', '', array(), array('showdialog' => 1, 'showmsg' => true, 'closetime' => true));
 		}
 
 		loaducenter();
-		$ucresult = uc_user_login($_G['username'], $_G['gp_password']);
-		list($tmp['uid']) = daddslashes($ucresult);
+		$ucresult = uc_user_login(addslashes($_G['username']), $_GET['password']);
+		list($tmp['uid']) = $ucresult;
 
 		if($tmp['uid'] <= 0) {
 			showmessage('credits_password_invalid');
@@ -183,14 +189,14 @@ if($_G['gp_op'] == 'base') {
 		updatemembercount($_G['uid'], array($_G['setting']['creditstransextra'][9] => -$amount), 1, 'TFR', $to['uid']);
 		updatemembercount($to['uid'], array($_G['setting']['creditstransextra'][9] => $netamount), 1, 'RCV', $_G['uid']);
 
-		if(!empty($_G['gp_transfermessage'])) {
-			$transfermessage = dstripslashes($_G['gp_transfermessage']);
+		if(!empty($_GET['transfermessage'])) {
+			$transfermessage = $_GET['transfermessage'];
 			notification_add($to['uid'], 'credit', 'transfer', array('credit' => $_G['setting']['extcredits'][$_G['setting']['creditstransextra'][9]]['title'].' '.$netamount.' '.$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][9]]['unit'], 'transfermessage' => $transfermessage));
 		}
 		showmessage('credits_transfer_succeed', 'home.php?mod=spacecp&ac=credit&op=transfer', array(), array('showdialog' => 1, 'showmsg' => true, 'locationtime' => true));
 	}
 
-} elseif ($_G['gp_op'] == 'exchange') {
+} elseif ($_GET['op'] == 'exchange') {
 
 	if(!$_G['setting']['exchangestatus']) {
 		showmessage('action_closed', NULL);
@@ -202,12 +208,12 @@ if($_G['gp_op'] == 'base') {
 
 	if(submitcheck('exchangesubmit')) {
 
-		$tocredits = $_G['gp_tocredits'];
-		$fromcredits = $_G['gp_fromcredits'];
-		$exchangeamount = $_G['gp_exchangeamount'];
+		$tocredits = $_GET['tocredits'];
+		$fromcredits = $_GET['fromcredits'];
+		$exchangeamount = $_GET['exchangeamount'];
 		$outexange = strexists($tocredits, '|');
-		if($outexange && !empty($_G['gp_outi'])) {
-			$fromcredits = $_G['gp_fromcredits_'.$_G['gp_outi']];
+		if($outexange && !empty($_GET['outi'])) {
+			$fromcredits = $_GET['fromcredits_'.$_GET['outi']];
 		}
 
 		if($fromcredits == $tocredits) {
@@ -240,8 +246,8 @@ if($_G['gp_op'] == 'base') {
 		}
 
 		loaducenter();
-		$ucresult = uc_user_login($_G['username'], $_G['gp_password']);
-		list($tmp['uid']) = daddslashes($ucresult);
+		$ucresult = uc_user_login(addslashes($_G['username']), $_GET['password']);
+		list($tmp['uid']) = $ucresult;
 
 		if($tmp['uid'] <= 0) {
 			showmessage('credits_password_invalid', '', array(), array('showdialog' => 1, 'showmsg' => true, 'closetime' => true));
@@ -269,29 +275,31 @@ if($_G['gp_op'] == 'base') {
 } else  {
 	$wheresql = '';
 	$list = array();
-	if($_G['gp_rid']) {
-		$rid = intval($_G['gp_rid']);
+	$rid = intval($_GET['rid']);
+	if($_GET['rid']) {
 		$wheresql = " AND rid='$rid'";
 	}
 	require_once libfile('function/forumlist');
-	$select = forumselect(false, 0, $_G['gp_fid']);
+	$select = forumselect(false, 0, $_GET['fid']);
 	$keys = array_keys($_G['setting']['extcredits']);
-	if(!$_G['setting']['homestatus']) {
-		foreach (array('doing', 'publishblog', 'guestbook', 'getguestbook', 'poke', 'visit') AS $val) {
-			$wheresql .= " AND action <> '{$val}'";
+	foreach(C::t('common_credit_rule')->fetch_all_by_rid($rid) as $value) {
+		if(!helper_access::check_module('doing') && $value['action'] == 'doing') {
+			continue;
+		} elseif(!helper_access::check_module('blog') && $value['action'] == 'publishblog') {
+			continue;
+		} elseif(!helper_access::check_module('wall') && in_array($value['action'], array('guestbook', 'getguestbook'))) {
+			continue;
 		}
-	}
-	$query = DB::query("SELECT * FROM ".DB::table('common_credit_rule')." WHERE 1 $wheresql ORDER BY rid DESC");
-	while($value = DB::fetch($query)) {
-		if(empty($_G['gp_fid']) || in_array($value['action'], array('digest', 'post', 'reply', 'getattach', 'postattach'))) {
+		if(empty($_GET['fid']) || in_array($value['action'], array('digest', 'post', 'reply', 'getattach', 'postattach'))) {
 			if(checkvalue($value, $keys)) {
 				$list[$value['action']] = $value;
 			}
 		}
 	}
-	if(!empty($_G['gp_fid'])) {
-		$_G['gp_fid'] = intval($_G['gp_fid']);
-		$flist = unserialize(DB::result_first("SELECT creditspolicy FROM ".DB::table('forum_forumfield')." WHERE fid='$_G[gp_fid]'"));
+	if(!empty($_GET['fid'])) {
+		$_GET['fid'] = intval($_GET['fid']);
+		$foruminfo = C::t('forum_forumfield')->fetch($_GET['fid']);
+		$flist = dunserialize($foruminfo['creditspolicy']);
 		foreach($flist as $action => $value) {
 			$list[$value['action']] = $value;
 		}

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_split.php 19949 2011-01-25 06:39:51Z monkey $
+ *      $Id: cache_split.php 24152 2011-08-26 10:04:08Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -17,7 +17,7 @@ function build_cache_split() {
 	foreach($splitcaches as $splitcache) {
 		loadcache($splitcache);
 		if(empty($_G['cache'][$splitcache])) {
-			save_syscache($splitcache, '');
+			savecache($splitcache, '');
 		}
 	}
 }

@@ -2,7 +2,7 @@
 <div id="pt" class="bm cl">
 	<div class="z">
 		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
-		<a href="$_G[setting][navs][8][filename]">$_G[setting][navs][8][navname]</a> <em>&rsaquo;</em>
+		<a href="misc.php?mod=ranklist">{lang ranklist}</a> <em>&rsaquo;</em>
 		{lang all}
 	</div>
 </div>
@@ -46,7 +46,7 @@
 		<!--{/if}-->
 
 		<!--[diy=diypictop]--><div id="diypictop" class="area"></div><!--[/diy]-->
-		<!--{if $_G['setting']['homestatus'] && $ranklist_setting['picture']['available']}-->
+		<!--{if helper_access::check_module('album') && $ranklist_setting['picture']['available']}-->
 		<div class="rnk1">
 			<div class="bm">
 				<div class="bm_h cl">
@@ -102,7 +102,7 @@
 		</div>
 		<!--{/if}-->
 
-		<!--{if $_G['setting']['homestatus'] && $ranklist_setting['blog']['available']}-->
+		<!--{if helper_access::check_module('blog') && $ranklist_setting['blog']['available']}-->
 		<div class="bm">
 			<div class="bm_h cl">
 				<span class="y xi2"><a href="misc.php?mod=ranklist&type=blog&view=heats&orderby=$before">{lang more}&rsaquo;</a></span>

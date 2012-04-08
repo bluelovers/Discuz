@@ -26,7 +26,7 @@
 					<h2>{lang recommend_group}</h2>
 				</div>
 				<div class="bm_c cl">
-					<!--{loop unserialize($_G['setting']['group_recommend']) $val}-->
+					<!--{loop dunserialize($_G['setting']['group_recommend']) $val}-->
 					<dl class="xld">
 						<dd class="m"><a href="forum.php?mod=group&fid=$val[fid]"><img src="$val[icon]" alt="$val[name]" width="48" height="48" /></a></dd>
 						<dt><a href="forum.php?mod=group&fid=$val[fid]">$val[name]</a></dt>
@@ -44,7 +44,6 @@
 				</div>
 				<div class="bm_c">
 					<!--{loop $first $groupid $group}-->
-						<!--{if $group['secondlist']}-->
 							<dl class="mbm pbm bbda">
 								<dt class="pbn">
 									<span class="y xi2"><!--{loop $group['secondlist'] $fid}--><a href="group.php?sgid=$fid">$second[$fid][name]</a> <!--{/loop}--><a href="group.php?gid=$groupid">{lang more} &rsaquo;</a></span>
@@ -56,7 +55,6 @@
 									<!--{/loop}-->
 								</dd>
 							</dl>
-						<!--{/if}-->
 					<!--{/loop}-->
 				</div>
 			</div>
@@ -69,27 +67,31 @@
 				<!--[diy=diysidetop]--><div id="diysidetop" class="area"></div><!--[/diy]-->
 			</div>
 			<!--{hook/index_side_top}-->
-			<!--{if empty($gid) && empty($sgid)}-->
-				<div class="bm">
-					<div class="bm_h cl">
-						<h2>{lang create_group_step}</h2>
+			<!--{if helper_access::check_module('group')}-->
+				<!--{if empty($gid) && empty($sgid)}-->
+					<div class="bm">
+						<div class="bm_h cl">
+							<h2>{lang create_group_step}</h2>
+						</div>
+						<div class="bm_c">
+							<ul id="g_guide" class="mbm">
+								<li><label><strong class="xi1">{lang group_create}</strong><span class="xg1">{lang create_group_message1}</span></label></li>
+								<li><label><strong class="xi1">{lang personality_setting}</strong><span class="xg1">{lang create_group_message2}</span></label></li>
+								<li><label><strong class="xi1">{lang invite_friend}</strong><span class="xg1">{lang create_group_message3}</span></label></li>
+								<li><label><strong class="xi1">{lang group_upgrade}</strong><span class="xg1">{lang create_group_message4}</span></label></li>
+							</ul>
+							<!--{if helper_access::check_module('group')}-->
+							<a href="forum.php?mod=group&action=create" id="create_group_btn"><img src="{IMGDIR}/create_group.png" alt="{lang group_create}" /></a>
+							<!--{/if}-->
+						</div>
 					</div>
-					<div class="bm_c">
-						<ul id="g_guide" class="mbm">
-							<li><label><strong class="xi1">{lang group_create}</strong><span class="xg1">{lang create_group_message1}</span></label></li>
-							<li><label><strong class="xi1">{lang personality_setting}</strong><span class="xg1">{lang create_group_message2}</span></label></li>
-							<li><label><strong class="xi1">{lang invite_friend}</strong><span class="xg1">{lang create_group_message3}</span></label></li>
-							<li><label><strong class="xi1">{lang group_upgrade}</strong><span class="xg1">{lang create_group_message4}</span></label></li>
-						</ul>
-						<a href="forum.php?mod=group&action=create" id="create_group_btn"><img src="{IMGDIR}/create_group.png" alt="{lang group_create}" /></a>
+				<!--{else}-->
+					<div class="bm bw0">
+						<div class="bm_c">
+							<a href="forum.php?mod=group&action=create&fupid=$fup&groupid=$sgid" id="create_group_btn"><img src="{IMGDIR}/create_group.png" alt="{lang group_create}" /></a>
+						</div>
 					</div>
-				</div>
-			<!--{else}-->
-				<div class="bm bw0">
-					<div class="bm_c">
-						<a href="forum.php?mod=group&action=create&fupid=$fup&groupid=$sgid" id="create_group_btn"><img src="{IMGDIR}/create_group.png" alt="{lang group_create}" /></a>
-					</div>
-				</div>
+				<!--{/if}-->
 			<!--{/if}-->
 			<div class="drag">
 				<!--[diy=diysidemiddle]--><div id="diysidemiddle" class="area"></div><!--[/diy]-->

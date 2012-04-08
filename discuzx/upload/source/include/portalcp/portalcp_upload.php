@@ -4,22 +4,21 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portalcp_upload.php 27927 2012-02-17 01:51:13Z svn_project_zhangjie $
+ *      $Id: portalcp_upload.php 27879 2012-02-16 05:24:55Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
-$operation = $_G['gp_op'] ? $_G['gp_op'] : '';
+$operation = $_GET['op'] ? $_GET['op'] : '';
 
-require_once libfile('class/upload');
 $upload = new discuz_upload();
 $downremotefile = false;
 $aid = intval(getgpc('aid'));
 $catid = intval(getgpc('catid'));
 if($aid) {
-	$query = DB::query("SELECT * FROM ".DB::table('portal_article_title')." WHERE aid='$aid'");
-	if(!$article = DB::fetch($query)) {
+	$article = C::t('portal_article_title')->fetch($aid);
+	if(!$article) {
 		portal_upload_error(lang('portalcp', 'article_noexist'));
 	}
 	if(check_articleperm($catid, $aid, $article, false, true) !== true) {
@@ -33,7 +32,7 @@ if($aid) {
 
 if($operation == 'downremotefile') {
 	$arrayimageurl = $temp = $imagereplace = array();
-	$string = stripslashes($_G['gp_content']);
+	$string = $_GET['content'];
 	$downremotefile = true;
 	preg_match_all("/\<img.+src=('|\"|)?(.*)(\\1)([\s].*)?\>/ismUe", $string, $temp, PREG_SET_ORDER);
 	if(is_array($temp) && !empty($temp)) {
@@ -142,7 +141,7 @@ if($attachs) {
 			'dateline' => $_G['timestamp'],
 			'aid' => $aid
 		);
-		$setarr['attachid'] = DB::insert("portal_attachment", $setarr, true);
+		$setarr['attachid'] = C::t('portal_attachment')->insert($setarr, true);
 		if($downremotefile) {
 			$attach['url'] = ($attach['remote'] ? $_G['setting']['ftp']['attachurl'] : $_G['setting']['attachurl']).'portal/';
 			$imagereplace['newimageurl'][] = $attach['url'].$attach['attachment'];
@@ -172,6 +171,7 @@ function portal_upload_error($msg) {
 }
 
 function portal_upload_show($attach) {
+	global $_G;
 
 	$imagehtml = $filehtml = $coverstr ='';
 
@@ -182,8 +182,9 @@ function portal_upload_show($attach) {
 		$filehtml = get_uploadcontent($attach, 'portal', 'upload');
 	}
 
+	echo '<script type="text/javascript" src="'.$_G[setting][jspath].'handlers.js?'.$_G['style']['verhash'].'"></script>';
 	echo '<script>';
-	if($imagehtml) echo 'parent.$(\'attach_image_body\').innerHTML = \''.addslashes($imagehtml).'\'+parent.$(\'attach_image_body\').innerHTML;';
+	if($imagehtml) echo 'var tdObj = getInsertTdId(parent.$(\'imgattachlist\'), \'attach_list_'.$attach['attachid'].'\');tdObj.innerHTML = \''.addslashes($imagehtml).'\';';
 	if($filehtml) echo 'parent.$(\'attach_file_body\').innerHTML = \''.addslashes($filehtml).'\'+parent.$(\'attach_file_body\').innerHTML;';
 	echo 'if(parent.$(\'localfile_'.$_GET['attach_target_id'].'\') != null)parent.$(\'localfile_'.$_GET['attach_target_id'].'\').style.display = \'none\';';
 	echo 'parent.$(\'attach_ids\').value += \','.$attach['attachid'].'\';';

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_medals.php 19745 2011-01-18 05:39:21Z monkey $
+ *      $Id: admincp_medals.php 27746 2012-02-14 01:57:42Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -43,15 +43,14 @@ if(!$operation) {
 	];
 </script>
 <?php
-		$query = DB::query("SELECT * FROM ".DB::table('forum_medal')." ORDER BY displayorder");
-		while($medal = DB::fetch($query)) {
+		foreach(C::t('forum_medal')->fetch_all_data() as $medal) {
 			$checkavailable = $medal['available'] ? 'checked' : '';
 			switch($medal['type']) {
 				case 0:
 					$medal['type'] = cplang('medals_adminadd');
 					break;
 				case 1:
-					$medal['type'] = cplang('medals_register');
+					$medal['type'] = $medal['price'] ? cplang('medals_buy') : cplang('medals_register');
 					break;
 				case 2:
 					$medal['type'] = cplang('modals_moderate');
@@ -76,31 +75,44 @@ if(!$operation) {
 
 	} else {
 
-		if(is_array($_G['gp_delete'])) {
-			$ids = $comma = '';
-			foreach($_G['gp_delete'] as $id) {
-				$ids .= "$comma'$id'";
-				$comma = ',';
+		if(is_array($_GET['delete']) && $_GET['delete']) {
+			$ids = array();
+			foreach($_GET['delete'] as $id) {
+				$ids[] = $id;
 			}
-			DB::query("DELETE FROM ".DB::table('forum_medal')." WHERE medalid IN ($ids)");
+			C::t('forum_medal')->delete($_GET['delete']);
 		}
 
-		if(is_array($_G['gp_name'])) {
-			foreach($_G['gp_name'] as $id => $val) {
-				DB::query("UPDATE ".DB::table('forum_medal')." SET name=".($_G['gp_name'][$id] ? '\''.dhtmlspecialchars($_G['gp_name'][$id]).'\'' : 'name').", available='{$_G['gp_available'][$id]}', description=".($_G['gp_description'][$id] ? '\''.dhtmlspecialchars($_G['gp_description'][$id]).'\'' : 'name').", displayorder='".intval($_G['gp_displayorder'][$id])."', image=".($_G['gp_image'][$id] ? '\''.$_G['gp_image'][$id].'\'' : 'image')." WHERE medalid='$id'");
+		if(is_array($_GET['name'])) {
+			foreach($_GET['name'] as $id => $val) {
+				$update = array(
+					'available' => $_GET['available'][$id],
+					'displayorder' => intval($_GET['displayorder'][$id])
+				);
+				if($_GET['name'][$id]) {
+					$update['name'] = dhtmlspecialchars($_GET['name'][$id]);
+				}
+				if($_GET['description'][$id]) {
+					$update['description'] = dhtmlspecialchars($_GET['description'][$id]);
+				}
+				if($_GET['image'][$id]) {
+					$update['image'] = dhtmlspecialchars($_GET['image'][$id]);
+				}
+				C::t('forum_medal')->update($id, $update);
+
 			}
 		}
 
-		if(is_array($_G['gp_newname'])) {
-			foreach($_G['gp_newname'] as $key => $value) {
-				if($value != '' && $_G['gp_newimage'][$key] != '') {
+		if(is_array($_GET['newname'])) {
+			foreach($_GET['newname'] as $key => $value) {
+				if($value != '' && $_GET['newimage'][$key] != '') {
 					$data = array('name' => dhtmlspecialchars($value),
-						'available' => $_G['gp_newavailable'][$key],
-						'image' => $_G['gp_newimage'][$key],
-						'displayorder' => intval($_G['gp_newdisplayorder'][$key]),
-						'description' => dhtmlspecialchars($_G['gp_newdescription'][$key]),
+						'available' => $_GET['newavailable'][$key],
+						'image' => $_GET['newimage'][$key],
+						'displayorder' => intval($_GET['newdisplayorder'][$key]),
+						'description' => dhtmlspecialchars($_GET['newdescription'][$key]),
 					);
-					DB::insert('forum_medal', $data);
+					C::t('forum_medal')->insert($data);
 				}
 			}
 		}
@@ -114,22 +126,21 @@ if(!$operation) {
 } elseif($operation == 'mod') {
 
 	if(submitcheck('delmedalsubmit')) {
-		if (is_array($_G['gp_delete']) && !empty($_G['gp_delete'])) {
-			$ids = $comma = '';
-			foreach($_G['gp_delete'] as $id) {
-				$ids .= "$comma'$id'";
-				$comma = ',';
+		if (is_array($_GET['delete']) && !empty($_GET['delete'])) {
+			$ids = array();
+			foreach($_GET['delete'] as $id) {
+				$ids[] = $id;
 			}
-			$query = DB::query("UPDATE ".DB::table('forum_medallog')." SET type='3' WHERE id IN ($ids)");
+			C::t('forum_medallog')->update($ids, array('type' => 3));
 			cpmsg('medals_invalidate_succeed', 'action=medals&operation=mod', 'succeed');
 		} else {
 			cpmsg('medals_please_input', 'action=medals&operation=mod', 'error');
 		}
 	} elseif(submitcheck('modmedalsubmit')) {
 
-		if(is_array($_G['gp_delete']) && !empty($_G['gp_delete'])) {
+		if(is_array($_GET['delete']) && !empty($_GET['delete'])) {
 			$ids = $comma = '';
-			foreach($_G['gp_delete'] as $id) {
+			foreach($_GET['delete'] as $id) {
 				$ids .= "$comma'$id'";
 				$comma = ',';
 			}
@@ -152,13 +163,14 @@ if(!$operation) {
 				$medalstatus = empty($modmedal['expiration']) ? 0 : 1;
 				$modmedal['expiration'] = $modmedal['expiration'] ? (TIMESTAMP + $modmedal['expiration'] - $modmedal['dateline']) : '';
 				$medalsnew[$modmedal['uid']][] = $modmedal['medalid'].(empty($modmedal['expiration']) ? '' : '|'.$modmedal['expiration']);
-				DB::query("UPDATE ".DB::table('forum_medallog')." SET type=1, status='$medalstatus', expiration='$modmedal[expiration]' WHERE id='$modmedal[id]'");
+				C::t('forum_medallog')->update($modmedal['id'], array('type' => 1, 'status' => $medalstatus, 'expiration' => $modmedal['expiration']));
+				C::t('common_member_medal')->insert(array('uid' => $modmedal['uid'], 'medalid' => $modmedal['medalid']), 0, 1);
 			}
 
 			foreach ($medalsnew as $key => $medalnew) {
 				$medalnew = array_unique($medalnew);
 				$medalnew = implode("\t", $medalnew);
-				DB::query("UPDATE ".DB::table('common_member_field_forum')." SET medals='$medalnew' WHERE uid='$key'");
+				C::t('common_member_field_forum')->update($key, array('medals' => $medalnew));
 			}
 			cpmsg('medals_validate_succeed', 'action=medals&operation=mod', 'succeed');
 		} else {
@@ -167,17 +179,21 @@ if(!$operation) {
 	} else {
 
 		$medals = '';
-		$query = DB::query("SELECT mel.*, m.username, me.name FROM ".DB::table('forum_medallog')." mel
-				LEFT JOIN ".DB::table('forum_medal')." me ON me.medalid = mel.medalid
-				LEFT JOIN ".DB::table('common_member')." m ON m.uid = mel.uid
-				WHERE mel.type='2' ORDER BY dateline");
-		while($medal = DB::fetch($query)) {
+		$medallogs = $medalids = $uids = array();
+		foreach(C::t('forum_medallog')->fetch_all_by_type(2) as $id => $medal) {
 			$medal['dateline'] =  dgmdate($medal['dateline'], 'Y-m-d H:i');
 			$medal['expiration'] =  empty($medal['expiration']) ? $lang['medals_forever'] : dgmdate($medal['expiration'], 'Y-m-d H:i');
+			$medalids[$medal['medalid']] = $medal['medalid'];
+			$uids[$medal['uid']] = $medal['uid'];
+			$medallogs[$id] = $medal;
+		}
+		$medalnames = C::t('forum_medal')->fetch_all($medalids);
+		$medalusers = C::t('common_member')->fetch_all($uids);
+		foreach($medallogs as $id => $medal) {
 			$medals .= showtablerow('', '', array(
-				"<input class=\"checkbox\" type=\"checkbox\" name=\"delete[]\" value=\"$medal[id]\">",
-				"<a href=\"home.php?mod=space&username=".rawurlencode($medal['username'])."\" target=\"_blank\">$medal[username]</a>",
-				$medal['name'],
+				"<input class=\"checkbox\" type=\"checkbox\" name=\"delete[]\" value=\"$id\">",
+				"<a href=\"home.php?mod=space&username=".rawurlencode($medalusers[$medal['uid']]['username'])."\" target=\"_blank\">{$medalusers[$medal[uid]][username]}</a>",
+				$medalnames[$medal['medalid']]['name'],
 				$medal['dateline'],
 				$medal['expiration']
 			), TRUE);
@@ -206,22 +222,25 @@ if(!$operation) {
 
 } elseif($operation == 'edit') {
 
-	$medalid = intval($_G['gp_medalid']);
+	$medalid = intval($_GET['medalid']);
 
 	if(!submitcheck('medaleditsubmit')) {
 
-		$medal = DB::fetch_first("SELECT * FROM ".DB::table('forum_medal')." WHERE medalid='$medalid'");
+		$medal = C::t('forum_medal')->fetch($medalid);
 
-		$medal['permission'] = unserialize($medal['permission']);
+		$medal['permission'] = dunserialize($medal['permission']);
 		$medal['usergroupallow'] = $medal['permission']['usergroupallow'];
 		$medal['usergroups'] = (array)$medal['permission']['usergroups'];
 		$medal['permission'] = $medal['permission'][0];
 
-		$checkmedaltype = array($medal['type'] => 'checked');
+		$credits = array();
+		$credits[] = array(0, $lang['default']);
+		foreach($_G['setting']['extcredits'] as $i => $extcredit) {
+			$credits[] = array($i, $extcredit['title']);
+		}
 
-		$query = DB::query("SELECT type, groupid, grouptitle, radminid FROM ".DB::table('common_usergroup')." ORDER BY (creditshigher<>'0' || creditslower<>'0'), creditslower, groupid");
 		$groupselect = array();
-		while($group = DB::fetch($query)) {
+		foreach(C::t('common_usergroup')->range_orderby_credit() as $group) {
 			$groupselect[$group['type']] .= '<option value="'.$group['groupid'].'"'.(@in_array($group['groupid'], $medal['usergroups']) ? ' selected' : '').'>'.$group['grouptitle'].'</option>';
 		}
 		$usergroups = '<select name="usergroupsnew[]" size="10" multiple="multiple">'.
@@ -240,11 +259,15 @@ if(!$operation) {
 		showtableheader(cplang('medals_edit').' - '.$medal['name'], 'nobottom');
 		showsetting('medals_name1', 'namenew', $medal['name'], 'text');
 		showsetting('medals_img', '', '', '<input type="text" class="txt" size="30" name="imagenew" value="'.$medal['image'].'" ><img src="static/image/common/'.$medal['image'].'">');
-		showsetting('medals_type1', '', '', '<ul class="nofloat" onmouseover="altStyle(this);">
-			<li'.($checkmedaltype[0] ? ' class="checked"' : '').'><input name="typenew" type="radio" class="radio" value="0" '.$checkmedaltype[0].'>&nbsp;'.$lang['medals_adminadd'].'</li>
-			<li'.($checkmedaltype[1] ? ' class="checked"' : '').'><input name="typenew" type="radio" class="radio" value="1" '.$checkmedaltype[1].'>&nbsp;'.$lang['medals_apply_auto'].'</li>
-			<li'.($checkmedaltype[2] ? ' class="checked"' : '').'><input name="typenew" type="radio" class="radio" value="2" '.$checkmedaltype[2].'>&nbsp;'.$lang['medals_apply_noauto'].'</li></ul>'
-		);
+		showsetting('medals_type1', array('typenew', array(
+			array(0, $lang['medals_adminadd'], array('creditdiv' => 'none')),
+			array(1, $lang['medals_apply_auto'], array('creditdiv' => '')),
+			array(2, $lang['medals_apply_noauto'], array('creditdiv' => 'none'))
+		)), $medal['type'], 'mradio');
+		showtagheader('tbody', 'creditdiv', $medal['type'] == 1, 'sub');
+		showsetting('medals_credit', array('creditnew', $credits), $medal['credit'], 'select');
+		showsetting('medals_price', 'pricenew', $medal['price'], 'text');
+		showtagfooter('tbody');
 		showsetting('medals_usergroups_allow', 'usergroupallow', $medal['usergroupallow'], 'radio', 0, 1);
 		showsetting('medals_usergroups', '', '', $usergroups);
 		showtagfooter('tbody');
@@ -353,27 +376,32 @@ if(!$operation) {
 			showformfooter();
 
 	} else {
-		if(!checkformulaperm($_G['gp_formulapermnew'])) {
+		if(!checkformulaperm($_GET['formulapermnew'])) {
 			cpmsg('forums_formulaperm_error', '', 'error');
 		}
 
-		$formulapermary[0] = $_G['gp_formulapermnew'];
+		$formulapermary[0] = $_GET['formulapermnew'];
 		$formulapermary[1] = preg_replace(
 				array("/(digestposts|posts|threads|oltime|extcredits[1-8])/", "/(regdate|regday|regip|lastip|buyercredit|sellercredit|field\d+)/"),
 				array("getuserprofile('\\1')", "\$memberformula['\\1']"),
-				$_G['gp_formulapermnew']);
-		$formulapermary['usergroupallow'] = $_G['gp_usergroupallow'];
-		$formulapermary['usergroups'] = (array)$_G['gp_usergroupsnew'];
-		$formulapermnew = addslashes(serialize($formulapermary));
+				$_GET['formulapermnew']);
+		$formulapermary['usergroupallow'] = $_GET['usergroupallow'];
+		$formulapermary['usergroups'] = (array)$_GET['usergroupsnew'];
+		$formulapermnew = serialize($formulapermary);
 
-		DB::update('forum_medal', array(
-			'name' => $_G['gp_namenew'] ? dhtmlspecialchars($_G['gp_namenew']) : 'name',
-			'type' => $_G['gp_typenew'],
-			'description' => dhtmlspecialchars($_G['gp_descriptionnew']),
-			'expiration' => intval($_G['gp_expirationnew']),
+		$update = array(
+			'type' => $_GET['typenew'],
+			'description' => dhtmlspecialchars($_GET['descriptionnew']),
+			'expiration' => intval($_GET['expirationnew']),
 			'permission' => $formulapermnew,
-			'image' => $_G['gp_imagenew'],
-		), "medalid='$medalid'");
+			'image' => $_GET['imagenew'],
+			'credit' => $_GET['creditnew'],
+			'price' => $_GET['pricenew'],
+		);
+		if($_GET['namenew']) {
+			$update['name'] = dhtmlspecialchars($_GET['namenew']);
+		}
+		C::t('forum_medal')->update($medalid, $update);
 
 		updatecache('medals');
 		cpmsg('medals_succeed', 'action=medals&do=editmedals', 'succeed');

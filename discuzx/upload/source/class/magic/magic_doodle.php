@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: magic_money.php 7830 2010-04-14 02:22:32Z monkey $
+ *      $Id: magic_doodle.php 23608 2011-07-27 08:10:07Z cnteacher $
  */
 
 if(!defined('IN_DISCUZ')) {

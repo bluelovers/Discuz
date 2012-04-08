@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_modcp.php 22329 2011-05-03 01:43:03Z monkey $
+ *      $Id: forum_modcp.php 28867 2012-03-16 02:27:08Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -18,47 +18,42 @@ if(!empty($_G['forum']) && $_G['forum']['status'] == 3) {
 	showmessage('group_admin_enter_panel', 'forum.php?mod=group&action=manage&fid='.$_G['fid']);
 }
 
-require_once libfile('class/panel');
 $modsession = new discuz_panel(MODCP_PANEL);
 if(getgpc('login_panel') && getgpc('cppwd') && submitcheck('submit')) {
 	$modsession->dologin($_G[uid], getgpc('cppwd'), true);
 }
 
 if(!$modsession->islogin) {
-	$_G['gp_action'] = 'login';
+	$_GET['action'] = 'login';
 }
 
-if($_G['gp_action'] == 'logout') {
+if($_GET['action'] == 'logout') {
 	$modsession->dologout();
 	showmessage('modcp_logout_succeed', 'forum.php');
 }
 
 $modforums = $modsession->get('modforums');
-$_G['gp_action'] = empty($_G['gp_action']) && $_G['fid'] ? 'thread' : $_G['gp_action'];
+$_GET['action'] = empty($_GET['action']) && $_G['fid'] ? 'thread' : $_GET['action'];
 $op = getgpc('op');
 if($modforums === null) {
 	$modforums = array('fids' => '', 'list' => array(), 'recyclebins' => array());
 	$comma = '';
 	if($_G['adminid'] == 3) {
-		$query = DB::query("SELECT m.fid, f.name, f.recyclebin
-			FROM ".DB::table('forum_moderator')." m, ".DB::table('forum_forum')." f
-			WHERE m.uid='$_G[uid]' AND f.fid=m.fid AND f.status='1' AND f.type<>'group'");
-		while($tforum = DB::fetch($query)) {
+		foreach(C::t('forum_moderator')->fetch_all_by_uid_forum($_G['uid']) as $tforum) {
 			$modforums['fids'] .= $comma.$tforum['fid']; $comma = ',';
 			$modforums['recyclebins'][$tforum['fid']] = $tforum['recyclebin'];
 			$modforums['list'][$tforum['fid']] = strip_tags($tforum['name']);
 		}
 	} else {
-		$sql = $_G['member']['accessmasks'] ?
-			"SELECT f.fid, f.name, f.threads, f.recyclebin, ff.viewperm, a.allowview FROM ".DB::table('forum_forum')." f
-				LEFT JOIN ".DB::table('forum_forumfield')." ff ON ff.fid=f.fid
-				LEFT JOIN ".DB::table('forum_access')." a ON a.uid='$_G[uid]' AND a.fid=f.fid
-				WHERE f.status='1' AND ff.redirect=''"
-			: "SELECT f.fid, f.name, f.threads, f.recyclebin, ff.viewperm, ff.redirect FROM ".DB::table('forum_forum')." f
-				LEFT JOIN ".DB::table('forum_forumfield')." ff USING(fid)
-				WHERE f.status='1' AND f.type<>'group' AND ff.redirect=''";
-		$query = DB::query($sql);
-		while ($tforum = DB::fetch($query)) {
+		$query = C::t('forum_forum')->fetch_all_info_by_fids(0, 1, 0, 0, 0, 1, 1);
+		if(!empty($_G['member']['accessmasks'])) {
+			$fids = array_keys($query);
+			$accesslist = C::t('forum_access')->fetch_all_by_fid_uid($fids, $_G['uid']);
+			foreach($query as $key => $val) {
+				$query[$key]['allowview'] = $accesslist[$key];
+			}
+		}
+		foreach($query as $tforum) {
 			$tforum['allowview'] = !isset($tforum['allowview']) ? '' : $tforum['allowview'];
 			if($tforum['allowview'] == 1 || ($tforum['allowview'] == 0 && ((!$tforum['viewperm'] && $_G['group']['readaccess']) || ($tforum['viewperm'] && forumperm($tforum['viewperm']))))) {
 				$modforums['fids'] .= $comma.$tforum['fid']; $comma = ',';
@@ -71,6 +66,13 @@ if($modforums === null) {
 	$modsession->set('modforums', $modforums, true);
 }
 
+$threadclasslist = array();
+if($_G['fid'] && in_array($_G['fid'], explode(',', $modforums['fids']))) {
+	foreach(C::t('forum_threadclass')->fetch_all_by_fid($_G['fid']) as $tc) {
+		$threadclasslist[] = $tc;
+	}
+}
+
 if($_G['fid'] && $_G['forum']['ismoderator']) {
 	dsetcookie('modcpfid', $_G['fid']);
 	$forcefid = "&amp;fid=$_G[fid]";
@@ -81,7 +83,7 @@ if($_G['fid'] && $_G['forum']['ismoderator']) {
 }
 
 $script = $modtpl = '';
-switch ($_G['gp_action']) {
+switch ($_GET['action']) {
 
 	case 'announcement':
 		$_G['group']['allowpostannounce'] && $script = 'announcement';
@@ -136,7 +138,7 @@ switch ($_G['gp_action']) {
 		break;
 
 	default:
-		$_G['gp_action'] = $script = 'home';
+		$_GET['action'] = $script = 'home';
 		$modtpl = 'modcp_home';
 }
 
@@ -148,7 +150,7 @@ $op = isset($op) ? trim($op) : '';
 if($script != 'log') {
 	include libfile('function/misc');
 	$extra = implodearray(array('GET' => $_GET, 'POST' => $_POST), array('cppwd', 'formhash', 'submit', 'addsubmit'));
-	$modcplog = array(TIMESTAMP, $_G['username'], $_G['adminid'], $_G['clientip'], $_G['gp_action'], $op, $_G['fid'], $extra);
+	$modcplog = array(TIMESTAMP, $_G['username'], $_G['adminid'], $_G['clientip'], $_GET['action'], $op, $_G['fid'], $extra);
 	writelog('modcp', implode("\t", clearlogstring($modcplog)));
 }
 
@@ -158,16 +160,14 @@ $reportnum = $modpostnum = $modthreadnum = $modforumnum = 0;
 $modforumnum = count($modforums['list']);
 $modnum = '';
 if($modforumnum) {
-	if($_G['group']['allowmodpost']) {
-		$modnum = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_moderate')." m
-			INNER JOIN ".DB::table('forum_thread')." t ON t.tid=m.id AND t.fid IN($modforums[fids])
-			WHERE m.idtype='tid' AND m.status='0'");
-		$modnum += DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_moderate')." m
-			INNER JOIN ".DB::table('forum_post')." p ON p.pid=m.id AND p.fid IN($modforums[fids])
-			WHERE m.idtype='pid' AND m.status='0'");
-	}
-	if($_G['group']['allowmoduser']) {
-		$modnum += DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_member_validate')." WHERE status='0'");
+	if(!empty($_G['setting']['moddetail'])) {
+		if($_G['group']['allowmodpost']) {
+			$modnum = C::t('common_moderate')->count_by_idtype_status_fid('tid', 0, explode(',', $modforums['fids']));
+			$modnum += C::t('common_moderate')->count_by_idtype_status_fid('pid', 0, explode(',', $modforums['fids']));
+		}
+		if($_G['group']['allowmoduser']) {
+			$modnum += C::t('common_member_validate')->count_by_status(0);
+		}
 	}
 }
 
@@ -176,7 +176,7 @@ switch($_G['adminid']) {
 	case 2: $access = '2,3,6,7'; break;
 	default: $access = '1,3,5,7'; break;
 }
-$notenum = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_adminnote')." WHERE access IN ($access)");
+$notenum = C::t('common_adminnote')->count_by_access(explode(',', $access));
 
 include template('forum/modcp');
 
@@ -187,7 +187,7 @@ function getposttableselect() {
 	if(!empty($_G['cache']['posttable_info']) && is_array($_G['cache']['posttable_info'])) {
 		$posttableselect = '<select name="posttableid" id="posttableid" class="ps">';
 		foreach($_G['cache']['posttable_info'] as $posttableid => $data) {
-			$posttableselect .= '<option value="'.$posttableid.'"'.($_G['gp_posttableid'] == $posttableid ? ' selected="selected"' : '').'>'.($data['memo'] ? $data['memo'] : 'post_'.$posttableid).'</option>';
+			$posttableselect .= '<option value="'.$posttableid.'"'.($_GET['posttableid'] == $posttableid ? ' selected="selected"' : '').'>'.($data['memo'] ? $data['memo'] : 'post_'.$posttableid).'</option>';
 		}
 		$posttableselect .= '</select>';
 	} else {

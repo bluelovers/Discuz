@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: topicadmin_warn.php 22857 2011-05-26 08:50:06Z monkey $
+ *      $Id: topicadmin_warn.php 26578 2011-12-15 10:10:18Z yangli $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -15,7 +15,7 @@ if(!$_G['group']['allowwarnpost']) {
 	showmessage('no_privilege_warnpost');
 }
 
-$topiclist = $_G['gp_topiclist'];
+$topiclist = $_GET['topiclist'];
 if(!($warnpids = dimplode($topiclist))) {
 	showmessage('admin_warn_invalid');
 } elseif(!$_G['group']['allowbanpost'] || !$_G['tid']) {
@@ -24,10 +24,16 @@ if(!($warnpids = dimplode($topiclist))) {
 
 $posts = $authors = array();
 $authorwarnings = $warningauthor = $warnstatus = '';
-$posttable = getposttablebytid($_G['tid']);
-$query = DB::query("SELECT p.pid, p.authorid, p.author, p.status, p.dateline, p.message, m.adminid FROM ".DB::table($posttable)." p
-	LEFT JOIN ".DB::table('common_member')." m ON p.authorid=m.uid WHERE p.pid IN ($warnpids) AND p.tid='$_G[tid]'");
-while($post = DB::fetch($query)) {
+$postlist = C::t('forum_post')->fetch_all('tid:'.$_G['tid'], $topiclist);
+foreach($postlist as $post) {
+	$uids[] = $post['authorid'];
+}
+$memberlist = C::t('common_member')->fetch_all($uids);
+foreach($postlist as $post) {
+	if($post['tid'] != $_G['tid']) {
+		continue;
+	}
+	$post['adminid'] = $memberlist[$post['authorid']]['adminid'];
 	if($_G['adminid'] == 1 && $post['adminid'] != 1 ||
 		$_G['adminid'] == 2 && !in_array($post['adminid'], array(1, 2)) ||
 		$_G['adminid'] == 3 && in_array($post['adminid'], array(0, -1))) {
@@ -36,6 +42,7 @@ while($post = DB::fetch($query)) {
 		$posts[] = $post;
 	}
 }
+unset($memberlist, $postlist, $uids);
 
 if(!$posts) {
 	showmessage('admin_warn_nopermission');
@@ -44,7 +51,7 @@ $authorcount = count(array_keys($authors));
 $modpostsnum = count($posts);
 
 if($modpostsnum == 1 || $authorcount == 1) {
-	$authorwarnings = DB::result_first("SELECT COUNT(*) FROM ".DB::table('forum_warning')." WHERE authorid='{$posts[0][authorid]}'");
+	$authorwarnings = C::t('forum_warning')->count_by_authorid_dateline($posts[0][authorid]);
 	$warningauthor = $posts[0]['author'];
 }
 
@@ -61,22 +68,33 @@ if(!submitcheck('modsubmit')) {
 
 } else {
 
-	$warned = intval($_G['gp_warned']);
+	$warned = intval($_GET['warned']);
 	$modaction = $warned ? 'WRN' : 'UWN';
 
 	$reason = checkreasonpm();
 
+	include_once libfile('function/member');
+
 	$pids = $comma = '';
 	foreach($posts as $k => $post) {
 		if($warned && !($post['status'] & 2)) {
-			my_post_log('warn', array('pid' => $post['pid'], 'uid' => $post['authorid']));
-			DB::query("UPDATE ".DB::table($posttable)." SET status=status|2 WHERE pid='$post[pid]'", 'UNBUFFERED');
-			$reason = cutstr(dhtmlspecialchars($_G['gp_reason']), 40);
-			DB::query("INSERT INTO ".DB::table('forum_warning')." (pid, operatorid, operator, authorid, author, dateline, reason) VALUES ('$post[pid]', '$_G[uid]', '$_G[username]', '$post[authorid]', '".addslashes($post['author'])."', '$_G[timestamp]', '$reason')", 'UNBUFFERED');
-			$authorwarnings = DB::result_first("SELECT COUNT(*) FROM ".DB::table('forum_warning')." WHERE authorid='$post[authorid]' AND dateline>=$_G[timestamp]-".$_G[setting][warningexpiration]*86400);
+			C::t('forum_post')->increase_status_by_pid('tid:'.$_G['tid'], $post['pid'], 2, '|', true);
+			$reason = cutstr(dhtmlspecialchars($_GET['reason']), 40);
+			C::t('forum_warning')->insert(array(
+				'pid' => $post['pid'],
+				'operatorid' => $_G['uid'],
+				'operator' => $_G['username'],
+				'authorid' => $post['authorid'],
+				'author' => $post['author'],
+				'dateline' => $_G['timestamp'],
+				'reason' => $reason,
+			));
+			$authorwarnings = C::t('forum_warning')->count_by_authorid_dateline($post['authorid'], $_G['timestamp'] - $_G['setting']['warningexpiration'] * 86400);
 			if($authorwarnings >= $_G['setting']['warninglimit']) {
-				$member = DB::fetch_first("SELECT adminid, groupid, extgroupids FROM ".DB::table('common_member')." WHERE uid='$post[authorid]'");
-				$groupterms = unserialize(DB::result_first("SELECT groupterms FROM ".DB::table('common_member_field_forum')." WHERE uid='$post[authorid]'"));
+				$member = getuserbyuid($post[authorid]);
+				$memberfieldforum = C::t('common_member_field_forum')->fetch($post[authorid]);
+				$groupterms = dunserialize($memberfieldforum['groupterms']);
+				unset($memberfieldforum);
 				if($member && $member['groupid'] != 4) {
 					$extgroupidsarray = array();
 					foreach(array_unique(array_merge($member['extgroupids'], array(4))) as $extgroupid) {
@@ -87,16 +105,18 @@ if(!submitcheck('modsubmit')) {
 					$extgroupidsnew = implode("\t", $extgroupidsarray);
 					$banexpiry = TIMESTAMP + $_G['setting']['warningexpiration'] * 86400;
 					$groupterms['ext'][4] = $banexpiry;
-					DB::query("UPDATE ".DB::table('common_member')." SET groupid='4', groupexpiry='".groupexpiry($groupterms)."' WHERE uid='$post[authorid]'");
-					DB::query("UPDATE ".DB::table('common_member_field_forum')." SET groupterms='".addslashes(serialize($groupterms))."' WHERE uid='$post[authorid]'");
+					C::t('common_member')->update($post['authorid'], array('groupid' => 4, 'groupexpiry' => groupexpiry($groupterms)));
+					C::t('common_member_field_forum')->update($post['authorid'], array('groupterms' => serialize($groupterms)));
 				}
 			}
 			$pids .= $comma.$post['pid'];
 			$comma = ',';
+
+			crime('recordaction', $post['authorid'], 'crime_warnpost', lang('forum/misc', 'crime_postreason', array('reason' => $reason, 'tid' => $_G['tid'], 'pid' => $post['pid'])));
+
 		} elseif(!$warned && ($post['status'] & 2)) {
-			my_post_log('unwarn', array('pid' => $post['pid'], 'uid' => $post['authorid']));
-			DB::query("UPDATE ".DB::table($posttable)." SET status=status^2 WHERE pid='$post[pid]' AND status=status|2", 'UNBUFFERED');
-			DB::query("DELETE FROM ".DB::table('forum_warning')." WHERE pid='$post[pid]'", 'UNBUFFERED');
+			C::t('forum_post')->increase_status_by_pid('tid:'.$_G['tid'], $post['pid'], 2, '^', true);
+			C::t('forum_warning')->delete_by_pid($post['pid']);
 			$pids .= $comma.$post['pid'];
 			$comma = ',';
 		}
@@ -105,7 +125,7 @@ if(!submitcheck('modsubmit')) {
 	$resultarray = array(
 	'redirect'	=> "forum.php?mod=viewthread&tid=$_G[tid]&page=$page",
 	'reasonpm'	=> ($sendreasonpm ? array('data' => $posts, 'var' => 'post', 'item' => 'reason_warn_post') : array()),
-	'reasonvar'	=> array('tid' => $thread['tid'], 'subject' => $thread['subject'], 'modaction' => $modaction, 'reason' => stripslashes($reason),
+	'reasonvar'	=> array('tid' => $thread['tid'], 'subject' => $thread['subject'], 'modaction' => $modaction, 'reason' => $reason,
 			'warningexpiration' => $_G['setting']['warningexpiration'], 'warninglimit' => $_G['setting']['warninglimit'], 'warningexpiration' => $_G['setting']['warningexpiration'],
 			'authorwarnings' => $authorwarnings),
 	'modtids'	=> 0,

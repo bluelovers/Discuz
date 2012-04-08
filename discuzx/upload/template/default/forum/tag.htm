@@ -16,7 +16,7 @@
 		<p>
 			<input type="text" name="tags" id="tags" class="px vm" value="$tags" size="60" />
 			<img src="{IMGDIR}/faq.gif" alt="Tip" class="vm" tip="{lang posttag_comment}" onmouseover="showTip(this)" />
-			<input type="hidden" name="tid" id="tid" value="$_G[gp_tid]" />
+			<input type="hidden" name="tid" id="tid" value="$_GET[tid]" />
 		</p>
 		<!--{if $recent_use_tag}-->
 		<p class="mtn">{lang recent_use_tag}
@@ -30,12 +30,12 @@
 	</div>
 	<p class="o pns">
 		<button type="button" name="search_button" class="pn" value="false" onclick="tagset();"><strong>{lang submit}</strong></button>
-		<button type="button" id="closebtn" class="pn" onclick="hideWindow('$_G[gp_handlekey]');"><strong>{lang close}</strong></button>
+		<button type="button" id="closebtn" class="pn" onclick="hideWindow('$_GET[handlekey]');"><strong>{lang close}</strong></button>
 	</p>
 <!--{else}-->
 	<h3 class="flb">
 		<em>{lang choosetag}</em>
-		<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="hideWindow('$_G[gp_handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
+		<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="hideWindow('$_GET[handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
 	</h3>
 	<div class="c bart">
 		<div class="pns mbn cl">
@@ -46,7 +46,7 @@
 		<div id="taglistarea" style="width: 400px;"></div>
 	</div>
 	<p class="o pns">
-		<button type="button" class="pn pnc" id="closebtn" onclick="hideWindow('$_G[gp_handlekey]');"><strong>{lang close}</strong></button>
+		<button type="button" class="pn pnc" id="closebtn" onclick="hideWindow('$_GET[handlekey]');"><strong>{lang close}</strong></button>
 	</p>
 <!--{/if}-->
 	<script type="text/javascript">
@@ -70,7 +70,7 @@
 		var x = new Ajax();
 		x.get(url, function(s){
 			if(s) {
-				hideWindow('$_G[gp_handlekey]');
+				hideWindow('$_GET[handlekey]');
 				window.location.reload();
 			}
 		});

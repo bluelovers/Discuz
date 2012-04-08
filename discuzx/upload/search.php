@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: search.php 21641 2011-04-06 03:17:51Z svn_project_zhangjie $
+ *      $Id: search.php 26313 2011-12-08 09:12:56Z yangli $
  */
 
 define('APPTYPEID', 0);
@@ -12,7 +12,7 @@ define('CURSCRIPT', 'search');
 
 require './source/class/class_core.php';
 
-$discuz = & discuz_core::instance();
+$discuz = C::app();
 
 $modarray = array('my', 'user', 'curforum', 'newthread');
 
@@ -45,9 +45,9 @@ $navtitle = lang('core', 'title_search');
 
 if($mod == 'curforum') {
 	$mod = 'forum';
-	$_G['gp_srchfid'] = array($_G['gp_srhfid']);
+	$_GET['srchfid'] = array($_GET['srhfid']);
 } elseif($mod == 'forum') {
-	$_G['gp_srhfid'] = 0;
+	$_GET['srhfid'] = 0;
 }
 
 require DISCUZ_ROOT.'./source/module/search/search_'.$mod.'.php';

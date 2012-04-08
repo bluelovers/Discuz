@@ -2,17 +2,17 @@
 
 <!--{if $_GET['op'] == 'requote'}-->
 	[quote]{$comment[username]}: {$comment[message]}[/quote]
-	
+
 <!--{elseif $_GET['op'] == 'edit'}-->
-	
+
 	<h3 class="flb">
-		<em id="return_$_G[gp_handlekey]">{lang edit}</em>
-		<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="hideWindow('$_G[gp_handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
+		<em id="return_$_GET[handlekey]">{lang edit}</em>
+		<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="hideWindow('$_GET[handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
 	</h3>
-	<form id="editcommentform_{$cid}" name="editcommentform_{$cid}" method="post" autocomplete="off" action="portal.php?mod=portalcp&ac=comment&op=edit&cid=$cid{if $_G[gp_modarticlecommentkey]}&modarticlecommentkey=$_G[gp_modarticlecommentkey]{/if}">
+	<form id="editcommentform_{$cid}" name="editcommentform_{$cid}" method="post" autocomplete="off" action="portal.php?mod=portalcp&ac=comment&op=edit&cid=$cid{if $_GET[modarticlecommentkey]}&modarticlecommentkey=$_GET[modarticlecommentkey]{/if}">
 		<input type="hidden" name="referer" value="{echo dreferer()}" />
 		<input type="hidden" name="editsubmit" value="true" />
-		<!--{if $_G[inajax]}--><input type="hidden" name="handlekey" value="$_G[gp_handlekey]" /><!--{/if}-->
+		<!--{if $_G[inajax]}--><input type="hidden" name="handlekey" value="$_GET[handlekey]" /><!--{/if}-->
 		<input type="hidden" name="formhash" value="{FORMHASH}" />
 		<div class="c">
 			<p>
@@ -28,20 +28,20 @@
 <!--{elseif $_GET['op'] == 'delete'}-->
 
 	<h3 class="flb">
-		<em id="return_$_G[gp_handlekey]">{lang comment_delete}</em>
-		<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="hideWindow('$_G[gp_handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
+		<em id="return_$_GET[handlekey]">{lang comment_delete}</em>
+		<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="hideWindow('$_GET[handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
 	</h3>
 	<form id="deletecommentform_{$cid}" name="deletecommentform_{$cid}" method="post" autocomplete="off" action="portal.php?mod=portalcp&ac=comment&op=delete&cid=$cid">
 		<input type="hidden" name="referer" value="{echo dreferer()}" />
 		<input type="hidden" name="deletesubmit" value="true" />
 		<input type="hidden" name="formhash" value="{FORMHASH}" />
-		<!--{if $_G[inajax]}--><input type="hidden" name="handlekey" value="$_G[gp_handlekey]" /><!--{/if}-->
+		<!--{if $_G[inajax]}--><input type="hidden" name="handlekey" value="$_GET[handlekey]" /><!--{/if}-->
 		<div class="c">{lang comment_delete_confirm}</div>
 		<p class="o pns">
 			<button type="submit" name="deletesubmitbtn" value="true" class="pn pnc"><strong>{lang confirms}</strong></button>
 		</p>
 	</form>
-	
+
 <!--{/if}-->
 
 <!--{template common/footer}-->

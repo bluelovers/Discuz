@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: home_spacecp.php 22021 2011-04-20 07:00:41Z congyushuai $
+ *      $Id: home_spacecp.php 28214 2012-02-24 06:38:56Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -15,19 +15,14 @@ require_once libfile('function/spacecp');
 require_once libfile('function/magic');
 
 $acs = array('space', 'doing', 'upload', 'comment', 'blog', 'album', 'relatekw', 'common', 'class',
-	'swfupload', 'poke', 'friend', 'eccredit', 'favorite',
+	'swfupload', 'poke', 'friend', 'eccredit', 'favorite', 'follow',
 	'avatar', 'profile', 'theme', 'feed', 'privacy', 'pm', 'share', 'invite','sendmail',
 	'credit', 'usergroup', 'domain', 'click','magic', 'top', 'videophoto', 'index', 'plugin', 'search', 'promotion');
 
-$ac = (empty($_GET['ac']) || !in_array($_GET['ac'], $acs))?'profile':$_GET['ac'];
+$_GET['ac'] = $ac = (empty($_GET['ac']) || !in_array($_GET['ac'], $acs))?'profile':$_GET['ac'];
 $op = empty($_GET['op'])?'':$_GET['op'];
 $_G['mnid'] = 'mn_common';
 
-if(in_array($ac, array('privacy'))) {
-	if(!$_G['setting']['homestatus']) {
-		showmessage('home_status_off');
-	}
-}
 
 if(empty($_G['uid'])) {
 	if($_SERVER['REQUEST_METHOD'] == 'GET') {
@@ -38,7 +33,7 @@ if(empty($_G['uid'])) {
 	showmessage('to_login', '', array(), array('showmsg' => true, 'login' => 1));
 }
 
-$space = getspace($_G['uid']);
+$space = getuserbyuid($_G['uid']);
 if(empty($space)) {
 	showmessage('space_does_not_exist');
 }
@@ -57,6 +52,8 @@ $navtitle = lang('core', 'title_setup');
 if(lang('core', 'title_memcp_'.$ac)) {
 	$navtitle = lang('core', 'title_memcp_'.$ac);
 }
+
+$_G['disabledwidthauto'] = 0;
 
 require_once libfile('spacecp/'.$ac, 'include');
 

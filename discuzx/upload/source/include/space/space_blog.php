@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_blog.php 21922 2011-04-18 02:41:54Z zhengqingpeng $
+ *      $Id: space_blog.php 25870 2011-11-24 07:05:44Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -18,9 +18,14 @@ $id = empty($_GET['id'])?0:intval($_GET['id']);
 $_G['colorarray'] = array('', '#EE1B2E', '#EE5023', '#996600', '#3C9D40', '#2897C5', '#2B65B7', '#8F2A90', '#EC1282');
 
 if($id) {
-	$query = DB::query("SELECT bf.*, b.* FROM ".DB::table('home_blog')." b LEFT JOIN ".DB::table('home_blogfield')." bf ON bf.blogid=b.blogid WHERE b.blogid='$id' AND b.uid='$space[uid]'");
-	$blog = DB::fetch($query);
-	if(!(!empty($blog) && ($blog['status'] == 0 || $blog['uid'] == $_G['uid'] || $_G['adminid'] == 1 || $_G['gp_modblogkey'] == modauthkey($blog['blogid'])))) {
+	$blog = array_merge(
+		C::t('home_blog')->fetch($id),
+		C::t('home_blogfield')->fetch($id)
+	);
+	if($blog['uid'] != $space['uid']) {
+		$blog = null;
+	}
+	if(!(!empty($blog) && ($blog['status'] == 0 || $blog['uid'] == $_G['uid'] || $_G['adminid'] == 1 || $_GET['modblogkey'] == modauthkey($blog['blogid'])))) {
 		showmessage('view_to_info_did_not_exist');
 	}
 	if(!ckfriend($blog['uid'], $blog['friend'], $blog['target_ids'])) {
@@ -42,11 +47,10 @@ if($id) {
 		}
 	}
 
-	$query = DB::query("SELECT classid, classname FROM ".DB::table('home_class')." WHERE classid='$blog[classid]'");
-	$classarr = DB::fetch($query);
+	$classarr = C::t('home_class')->fetch($blog['classid']);
 
 	if($blog['catid']) {
-		$blog['catname'] = DB::result(DB::query("SELECT catname FROM ".DB::table('home_blog_category')." WHERE catid='$blog[catid]'"), 0);
+		$blog['catname'] = C::t('home_blog_category')->fetch_catname_by_catid($blog['catid']);
 		$blog['catname'] = dhtmlspecialchars($blog['catname']);
 	}
 
@@ -56,16 +60,16 @@ if($id) {
 	$otherlist = $newlist = array();
 
 	$otherlist = array();
-	$query = DB::query("SELECT * FROM ".DB::table('home_blog')." WHERE uid='$space[uid]' ORDER BY dateline DESC LIMIT 0,6");
-	while ($value = DB::fetch($query)) {
+	$query = C::t('home_blog')->fetch_all_by_uid($space['uid'], 'dateline', 0, 6);
+	foreach($query as $value) {
 		if($value['blogid'] != $blog['blogid'] && empty($value['friend'])) {
 			$otherlist[] = $value;
 		}
 	}
 
 	$newlist = array();
-	$query = DB::query("SELECT * FROM ".DB::table('home_blog')." WHERE hot>='$minhot' ORDER BY dateline DESC LIMIT 0,6");
-	while ($value = DB::fetch($query)) {
+	$query = C::t('home_blog')->fetch_all_by_hot($minhot, 'dateline', 0, 6);
+	foreach($query as $value) {
 		if($value['blogid'] != $blog['blogid'] && empty($value['friend'])) {
 			$newlist[] = $value;
 		}
@@ -82,31 +86,29 @@ if($id) {
 
 	$list = array();
 	if($count) {
-		$csql = '';
 		if($_GET['goto']) {
 			$page = ceil($count/$perpage);
 			$start = ($page-1)*$perpage;
 		} else {
 			$cid = empty($_GET['cid'])?0:intval($_GET['cid']);
-			$csql = $cid?"cid='$cid' AND":'';
 		}
 
-		$query = DB::query("SELECT * FROM ".DB::table('home_comment')." WHERE $csql id='$id' AND idtype='blogid' ORDER BY dateline LIMIT $start,$perpage");
-		while ($value = DB::fetch($query)) {
+		$query = C::t('home_comment')->fetch_all_by_id_idtype($id, 'blogid', $start, $perpage, $cid);
+		foreach($query as $value) {
 			$list[] = $value;
 		}
 
 		if(empty($list) && empty($cid)) {
-			$count = getcount('home_comment', array('id'=>$id, 'idtype'=>'blogid'));
-			DB::update('home_blog', array('replynum'=>$count), array('blogid'=>$blog['blogid']));
+			$count = C::t('home_comment')->count_by_id_idtype($id, 'blogid');
+			C::t('home_blog')->update($blog['blogid'], array('replynum'=>$count));
 		}
 	}
 
 	$multi = multi($count, $perpage, $page, "home.php?mod=space&uid=$blog[uid]&do=$do&id=$id#comment");
 
-	if(!$_G['setting']['preventrefresh'] || (!$space['self'] && $_G['cookie']['view_blogid'] != $blog['blogid'])) {
-		DB::query("UPDATE ".DB::table('home_blog')." SET viewnum=viewnum+1 WHERE blogid='$blog[blogid]'");
-		dsetcookie('view_blogid', $blog['blogid']);
+	if(!$_G['setting']['preventrefresh'] || !$space['self'] && $_G['cookie']['viewid'] != 'blog_'.$blog['blogid']) {
+		C::t('home_blog')->increase($blog['blogid'], 0, array('viewnum' => 1));
+		dsetcookie('viewid', 'blog_'.$blog['blogid']);
 	}
 
 	$hash = md5($blog['uid']."\t".$blog['dateline']);
@@ -125,11 +127,7 @@ if($id) {
 	}
 
 	$clickuserlist = array();
-	$query = DB::query("SELECT * FROM ".DB::table('home_clickuser')."
-		WHERE id='$id' AND idtype='$idtype'
-		ORDER BY dateline DESC
-		LIMIT 0,24");
-	while ($value = DB::fetch($query)) {
+	foreach(C::t('home_clickuser')->fetch_all_by_id_idtype($id, $idtype, 0, 24) as $value) {
 		$value['clickname'] = $clicks[$value['clickid']]['name'];
 		$clickuserlist[] = $value;
 	}
@@ -167,8 +165,11 @@ if($id) {
 	if(empty($metadescription)) {
 		$metadescription = $summary;
 	}
-
-	$_G['relatedlinks'] = getrelatedlink('blog');
+	if(!$_G['setting']['relatedlinkstatus']) {
+		$_G['relatedlinks'] = get_related_link('blog');
+	} else {
+		$blog['message'] = parse_related_link($blog['message'], 'blog');
+	}
 
 	include_once template("diy:home/space_blog_view");
 
@@ -209,14 +210,13 @@ if($id) {
 	$theurl = 'home.php?'.url_implode($gets);
 	$multi = '';
 
-	$wheresql = '1';
-	$f_index = '';
-	$ordersql = 'b.dateline DESC';
+	$f_index = $searchsubject = '';
+	$uids = array();
 	$need_count = true;
 
 	if($_GET['view'] == 'all') {
 		if($_GET['order'] == 'hot') {
-			$wheresql .= " AND b.hot>='$minhot'";
+			$gthot = $minhot;
 
 			$orderactives = array('hot' => ' class="a"');
 		} else {
@@ -228,19 +228,13 @@ if($id) {
 		space_merge($space, 'field_home');
 		$stickblogs = explode(',', $space['stickblogs']);
 		$stickblogs = array_filter($stickblogs);
-		$wheresql .= " AND b.uid='$space[uid]'";
+		$uids[] = $space['uid'];
 
 		$classid = empty($_GET['classid'])?0:intval($_GET['classid']);
-		if($classid) {
-			$wheresql .= " AND b.classid='$classid'";
-		}
 
-		$privacyfriend = empty($_G['gp_friend'])?0:intval($_G['gp_friend']);
-		if($privacyfriend) {
-			$wheresql .= " AND b.friend='$privacyfriend'";
-		}
-		$query = DB::query("SELECT classid, classname FROM ".DB::table('home_class')." WHERE uid='$space[uid]'");
-		while ($value = DB::fetch($query)) {
+		$privacyfriend = empty($_GET['friend'])?0:intval($_GET['friend']);
+		$query = C::t('home_class')->fetch_all_by_uid($space['uid']);
+		foreach($query as $value) {
 			$classarr[$value['classid']] = $value['classname'];
 		}
 
@@ -257,16 +251,16 @@ if($id) {
 			require_once libfile('function/friend');
 			$fuid = intval($_GET['fuid']);
 			if($fuid && friend_check($fuid, $space['uid'])) {
-				$wheresql = "b.uid='$fuid'";
+				$uids[] = $fuid;
 				$fuid_actives = array($fuid=>' selected');
 			} else {
-				$wheresql = "b.uid IN ($space[feedfriend])";
+				$uids = explode(',', $space['feedfriend']);
 				$theurl = "home.php?mod=space&uid=$space[uid]&do=$do&view=we";
-				$f_index = 'USE INDEX(dateline)';
+				$f_index = 'dateline';
 			}
 
-			$query = DB::query("SELECT * FROM ".DB::table('home_friend')." WHERE uid='$space[uid]' ORDER BY num DESC LIMIT 0,100");
-			while ($value = DB::fetch($query)) {
+			$query = C::t('home_friend')->fetch_all_by_uid($space['uid'], 0, 100, true);
+			foreach($query as $value) {
 				$userlist[] = $value;
 			}
 		} else {
@@ -278,27 +272,20 @@ if($id) {
 
 	if($need_count) {
 		if($searchkey = stripsearchkey($_GET['searchkey'])) {
-			$wheresql .= " AND b.subject LIKE '%$searchkey%'";
+			$searchsubject = $searchkey;
 			$searchkey = dhtmlspecialchars($searchkey);
 		}
 
 		$catid = empty($_GET['catid'])?0:intval($_GET['catid']);
-		if($catid) {
-			$wheresql .= " AND b.catid='$catid'";
-		}
 
-
-		$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('home_blog')." b WHERE $wheresql"),0);
+		$count = C::t('home_blog')->count_all_by_search(null, $uids, null, null, $gthot, null, null, null, null, null, $privacyfriend, null, null, null, $classid, $catid, $searchsubject, true);
 		if($count) {
-			$query = DB::query("SELECT bf.*, b.* FROM ".DB::table('home_blog')." b $f_index
-				LEFT JOIN ".DB::table('home_blogfield')." bf ON bf.blogid=b.blogid
-				WHERE $wheresql
-				ORDER BY $ordersql LIMIT $start,$perpage");
+			$query = C::t('home_blog')->fetch_all_by_search(1, null, $uids, null, null, $gthot, null, null, null, null, null, $privacyfriend, null, null, null, 'dateline', 'DESC', $start, $perpage, $classid, $catid, $searchsubject, $f_index);
 		}
 	}
 
 	if($count) {
-		while ($value = DB::fetch($query)) {
+		foreach($query as $value) {
 			if(ckfriend($value['uid'], $value['friend'], $value['target_ids']) && ($value['status'] == 0 || $value['uid'] == $_G['uid'] || $_G['adminid'] == 1)) {
 				if(!empty($stickblogs) && in_array($value['blogid'], $stickblogs)) {
 					continue;
@@ -326,16 +313,16 @@ if($id) {
 	dsetcookie('home_diymode', $diymode);
 
 	if($_G['uid']) {
-		if($_G['gp_view'] == 'all') {
+		if($_GET['view'] == 'all') {
 			$navtitle = lang('core', 'title_view_all').lang('core', 'title_blog');
-		} elseif($_G['gp_view'] == 'me') {
+		} elseif($_GET['view'] == 'me') {
 			$navtitle = lang('core', 'title_my_blog');
 		} else {
 			$navtitle = lang('core', 'title_friend_blog');
 
 		}
 	} else {
-		if($_G['gp_order'] == 'hot') {
+		if($_GET['order'] == 'hot') {
 			$navtitle = lang('core', 'title_recommend_blog');
 		} else {
 			$navtitle = lang('core', 'title_newest_blog');
@@ -346,7 +333,7 @@ if($id) {
 	}
 	$metakeywords = $navtitle;
 	$metadescription = $navtitle;
-	$navtitle = get_title_page($navtitle, $_G['page']);
+	$navtitle = helper_seo::get_title_page($navtitle, $_G['page']);
 
 	space_merge($space, 'field_home');
 	include_once template("diy:home/space_blog_list");
@@ -355,12 +342,11 @@ if($id) {
 
 function blog_get_stick($uid, $stickblogs, $summarylen) {
 	$list = array_flip($stickblogs);
-	$stickblogs = dimplode($stickblogs);
 	if($stickblogs) {
-		$query = DB::query("SELECT bf.*, b.* FROM ".DB::table('home_blog')." b $f_index
-			LEFT JOIN ".DB::table('home_blogfield')." bf ON bf.blogid=b.blogid
-			WHERE b.blogid IN ($stickblogs)");
-		while ($value = DB::fetch($query)) {
+		$data_blog = C::t('home_blog')->fetch_all($stickblogs);
+		$data_blogfield = C::t('home_blogfield')->fetch_all($stickblogs);
+		foreach($data_blog as $curblogid=>$value) {
+			$value = array_merge($value, (array)$data_blogfield[$curblogid]);
 			$value['message'] = getstr($value['message'], $summarylen, 0, 0, 0, -1);
 			$value['message'] = preg_replace("/&[a-z]+\;/i", '', $value['message']);
 			if($value['pic']) $value['pic'] = pic_cover_get($value['pic'], $value['picflag']);

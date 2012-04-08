@@ -4,13 +4,13 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: block_groupactivity.php 11418 2010-06-02 02:28:01Z xupeng $
+ *      $Id: block_groupactivity.php 25525 2011-11-14 04:39:11Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
-class block_groupactivity {
+class block_groupactivity extends discuz_block {
 	var $setting = array();
 
 	function block_groupactivity(){
@@ -135,6 +135,7 @@ class block_groupactivity {
 
 	function fields() {
 		return array(
+				'id' => array('name' => lang('blockclass', 'blockclass_field_id'), 'formtype' => 'text', 'datatype' => 'int'),
 				'url' => array('name' => lang('blockclass', 'blockclass_groupactivity_field_url'), 'formtype' => 'text', 'datatype' => 'string'),
 				'title' => array('name' => lang('blockclass', 'blockclass_groupactivity_field_title'), 'formtype' => 'title', 'datatype' => 'title'),
 				'pic' => array('name' => lang('blockclass', 'blockclass_groupactivity_field_pic'), 'formtype' => 'pic', 'datatype' => 'pic'),
@@ -185,10 +186,6 @@ class block_groupactivity {
 			$settings['class']['value'][] = array($item, $item);
 		}
 		return $settings;
-	}
-
-	function cookparameter($parameter) {
-		return $parameter;
 	}
 
 	function getdata($style, $parameter) {

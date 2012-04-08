@@ -1,6 +1,6 @@
 <!--{template common/header}-->
 
-<!--{if empty($_G['gp_infloat'])}-->
+<!--{if empty($_GET['infloat'])}-->
 <div id="ct" class="wp w cl">
 	<div class="mn mw">
 <!--{/if}-->
@@ -9,7 +9,7 @@
 	<div id="layer_login_myrepeats">
 		<h3 class="flb">
 			<em>{lang myrepeats:switch_title}</em>
-			<span><!--{if !empty($_G['gp_infloat'])}--><a href="javascript:;" class="flbc" onclick="hideWindow('$_G[gp_handlekey]', 0, 1);" title="{lang close}">{lang close}</a><!--{/if}--></span>
+			<span><!--{if !empty($_GET['infloat'])}--><a href="javascript:;" class="flbc" onclick="hideWindow('$_GET[handlekey]', 0, 1);" title="{lang close}">{lang close}</a><!--{/if}--></span>
 		</h3>
 		<form method="post" autocomplete="off" name="myrepeats" id="loginform_myrepeats" class="cl" action="plugin.php?id=myrepeats:switch&myrepeatssubmit=yes&handlekey=myrepeat" onsubmit="ajaxpost('loginform_myrepeats', 'returnmessage_myrepeats', 'returnmessage_myrepeats', 'onerror');return false;">
 			<div class="c cl">
@@ -44,13 +44,13 @@
 					<p><input type="text" name="answer" id="loginanswer_myrepeats" style="display:none" autocomplete="off" size="36" class="sipt" tabindex="1" /></p>
 					<p id="returnmessage_myrepeats"></p>
 				</div>
-				
+
 			</div>
 			<p class="fsb pns cl">
 				<button class="y pn pnc" type="submit" name="myrepeatssubmit" value="true" tabindex="1"><span>{lang myrepeats:confirm}</span></button>
 			</p>
 		</form>
-	</div>	
+	</div>
 </div>
 
 <script type="text/javascript" reload="1">
@@ -68,7 +68,7 @@ if(BROWSER.ie && BROWSER.ie < 7) {
 }
 </script>
 
-<!--{if empty($_G['gp_infloat'])}-->
+<!--{if empty($_GET['infloat'])}-->
 	</div></div>
 </div>
 <!--{/if}-->

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cloud_manyou.php 23441 2011-07-15 02:23:37Z zhengqingpeng $
+ *      $Id: cloud_manyou.php 29273 2012-03-31 07:58:50Z yexinhao $
  */
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
@@ -15,8 +15,8 @@ cpheader();
 if(!submitcheck('settingsubmit')) {
 	shownav('navcloud', 'setting_manyou');
 
-	$_G['gp_anchor'] = in_array($_G['gp_anchor'], array('base', 'manage')) ? $_G['gp_anchor'] : 'manage';
-	$current = array($_G['gp_anchor'] => 1);
+	$_GET['anchor'] = in_array($_GET['anchor'], array('base', 'manage')) ? $_GET['anchor'] : 'manage';
+	$current = array($_GET['anchor'] => 1);
 
 	$manyounav = array();
 
@@ -30,7 +30,7 @@ if(!submitcheck('settingsubmit')) {
 	showformheader('cloud&edit=yes');
 	showhiddenfields(array('operation' => $operation));
 
-	if($_G['gp_anchor'] == 'base') {
+	if($_GET['anchor'] == 'base') {
 
 		showtips('setting_manyou_tips');
 
@@ -73,7 +73,7 @@ EOF;
 	} elseif($_G['setting']['my_app_status']) {
 
 
-		$uchUrl = $_G['siteurl'].'/'.ADMINSCRIPT.'?action=cloud&operation=manyou&anchor=' . $_G['gp_anchor'];
+		$uchUrl = $_G['siteurl'].'/'.ADMINSCRIPT.'?action=cloud&operation=manyou&anchor=' . $_GET['anchor'];
 
 		if(empty($_GET['my_suffix'])) {
 			$_GET['my_suffix'] = '/appadmin/list';
@@ -132,27 +132,26 @@ EOF;
 
 } else {
 
-	$settingnew = $_G['gp_settingnew'];
+	$settingnew = $_GET['settingnew'];
 
 	$settings = array();
 	foreach($settingnew as $key => $val) {
 		if($_G['setting'][$key] != $val) {
 			$$key = $val;
 
-			$settings[] = "('$key', '$val')";
+			$settings[$key] = $val;
 		}
 	}
 
 	if($settings) {
-		DB::query("REPLACE INTO ".DB::table('common_setting')." (`skey`, `svalue`) VALUES ".implode(',', $settings));
-		updatecache('setting');
+		C::t('common_setting')->update_batch($settings);
 	}
 
 	$appName = 'manyou';
 	$status = $settingnew['my_app_status'] ? 'normal' : 'pause';
-	setcloudappstatus($appName, $status);
 
-	cpmsg('setting_update_succeed', 'action=cloud&operation='.$operation.(!empty($_G['gp_anchor']) ? '&anchor='.$_G['gp_anchor'] : ''), 'succeed');
+	$appService = Cloud::loadClass('Service_App');
+	$appService->setCloudAppStatus($appName, $status);
+
+	cpmsg('setting_update_succeed', 'action=cloud&operation='.$operation.(!empty($_GET['anchor']) ? '&anchor='.$_GET['anchor'] : ''), 'succeed');
 }
-
-?>

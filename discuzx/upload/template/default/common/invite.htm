@@ -1,18 +1,17 @@
 <!--{template common/header}-->
 <!--{if !$_G['inajax']}-->
 <div id="pt" class="bm cl">
-	<!--{subtemplate common/simplesearchform}-->
 	<div class="z"><a href="./" class="nvhm" title="{lang homepage}">$_G['setting']['bbname']</a> <em>&rsaquo;</em> {lang invite}</div>
 </div>
 <div id="ct" class="wp cl">
 	<div class="mn">
 		<div class="bm bw0">
-			<h1 class="mt">{lang invite_friend}$invitename</h1>
+			<h1 class="mt"><!--{if $at != 1}-->{lang invite_friend}<!--{/if}-->$invitename</h1>
 			<div class="usd usd2">
 <!--{else}-->
 		<div id="main_messaqge">
 			<h3 class="flb">
-				<em id="returnmessage4">{lang invite_friend}$invitename</em>
+				<em id="returnmessage5"><!--{if $at != 1}-->{lang invite_friend}<!--{/if}-->$invitename</em>
 				<span>
 					<!--{if $_G['inajax']}--><a href="javascript:;" class="flbc" onclick="hideWindow('invite')" title="{lang close}">{lang close}</a><!--{/if}-->
 				</span>
@@ -33,6 +32,9 @@
 						<p class="mtn">
 							<select class="ps" onchange="clearlist=1;getUser(1, this.value)">
 								<option value="-1">{lang invite_all_friend}</option>
+								<!--{if $at == 1 && $_G['group']['allowat']}-->
+									<option value="-2">{lang invite_my_follow}</option>
+								<!--{/if}-->
 								<!--{loop $friendgrouplist $groupid $group}-->
 									<option value="$groupid">$group</option>
 								<!--{/loop}-->
@@ -59,7 +61,7 @@
 					gid = isUndefined(gid) ? -1 : parseInt(gid);
 					username = $('username').value;
 					var x = new Ajax();
-					x.get('home.php?mod=spacecp&ac=friend&op=getinviteuser&inajax=1&page='+ page + '&gid=' + gid + '&username='+ username + '&' + Math.random(), function(s) {
+					x.get('home.php?mod=spacecp&ac=friend&op=getinviteuser&inajax=1&page='+ page + '&gid=' + gid + '&at={$at}&username='+ username + '&' + Math.random(), function(s) {
 						var data = eval('('+s+')');
 						var singlenum = parseInt(data['singlenum']);
 						var maxfriendnum = parseInt(data['maxfriendnum']);
@@ -67,12 +69,16 @@
 						haveFriend = singlenum && singlenum == 20 ? true : false;
 						if(singlenum && invitefs.allNumber < 20 && invitefs.allNumber < maxfriendnum && maxfriendnum > 20 && haveFriend) {
 							page++;
+							clearlist = 0;
 							getUser(page);
 						}
 					});
 				}
 				function selector() {
 					var parameter = {'searchId':'username', 'showId':'friends', 'formId':'inviteform', 'showType':1, 'handleKey':'invitefs', 'maxSelectNumber':'20', 'selectTabId':'selectNum', 'unSelectTabId':'unSelectTab', 'maxSelectTabId':'remainNum'};
+					<!--{if $at == 1 && $_G['group']['allowat']}-->
+						parameter.maxSelectNumber = $maxselect;
+					<!--{/if}-->
 					invitefs = new friendSelector(parameter);
 					<!--{if $inviteduids}-->
 					invitefs.addFilterUser([$inviteduids]);
@@ -109,10 +115,10 @@
 					$('append_parent').appendChild(scriptNode);
 				}
 			</script>
-			<form method="post" autocomplete="off" name="invite" id="inviteform" action="misc.php?mod=invite&action=$_G[gp_action]&id=$_G[gp_id]">
+			<form method="post" autocomplete="off" name="invite" id="inviteform" action="misc.php?mod=invite&action=$_GET[action]&id=$_GET[id]{if $_GET['activity']}&activity=1{/if}">
 				<input type="hidden" name="formhash" value="{FORMHASH}" />
 				<input type="hidden" name="referer" value="{echo dreferer()}" />
-				<!--{if !empty($_G['inajax'])}--><input type="hidden" name="handlekey" value="$_G['gp_handlekey']" /><!--{/if}-->
+				<!--{if !empty($_G['inajax'])}--><input type="hidden" name="handlekey" value="$_GET['handlekey']" /><!--{/if}-->
 				<p class="o pns{if empty($_G['inajax'])} mtw{/if}"><button type="submit" class="pn pnc" name="invitesubmit" value="yes"><strong>{lang invite_send}</strong></button></p>
 			</form>
 		</div>

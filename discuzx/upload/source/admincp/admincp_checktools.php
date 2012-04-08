@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_checktools.php 25634 2011-11-16 09:01:23Z chenmengshu $
+ *      $Id: admincp_checktools.php 28265 2012-02-27 02:46:37Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -17,7 +17,7 @@ if(!isfounder()) cpmsg('noaccess_isfounder', '', 'error');
 
 if($operation == 'filecheck') {
 
-	$step = max(1, intval($_G['gp_step']));
+	$step = max(1, intval($_GET['step']));
 	shownav('tools', 'nav_filecheck');
 	showsubmenusteps('nav_filecheck', array(
 		array('nav_filecheck_confirm', $step == 1),
@@ -35,10 +35,15 @@ if($operation == 'filecheck') {
 		}
 
 		$md5data = array();
-		$cachelist = checkcachefiles('data/cache/');
+		$cachelist = checkcachefiles('data/sysdata/');
 		checkfiles('./', '', 0);
 		checkfiles('config/', '', 1, 'config_global.php,config_ucenter.php');
 		checkfiles('data/', '\.xml', 0);
+		checkfiles('data/', '\.htm', 0);
+		checkfiles('data/log/', '\.htm', 0);
+		checkfiles('data/plugindata/', '\.htm', 0);
+		checkfiles('data/download/', '\.htm', 0);
+		checkfiles('data/addonmd5/', '\.htm', 0);
 		checkfiles('data/avatar/', '\.htm', 0);
 		checkfiles('data/cache/', '\.htm', 0);
 		checkfiles('data/ipdata/', '\.htm|\.dat', 0);
@@ -114,7 +119,7 @@ if($operation == 'filecheck') {
 			$class = $status == 'modify' ? 'edited' : ($status == 'del' ? 'del' : 'unknown');
 			$result .= '<tbody id="status_'.$status.'" style="display:'.($status != 'modify' ? 'none' : '').'">';
 			foreach($filelist as $dir => $files) {
-				$result .= '<tr><td colspan="4"><div class="ofolder">'.$dir.'</div><div class="lightfont filenum left">';
+				$result .= '<tr><td colspan="4"><div class="ofolder">'.$dir.'</div><div class="margintop marginbot">';
 				foreach($files as $filename => $file) {
 					$result .= '<tr><td><em class="files bold">'.$filename.'</em></td><td style="text-align: right">'.$file[0].'&nbsp;&nbsp;</td><td>'.$file[1].'</td><td><em class="'.$class.'">&nbsp;</em></td></tr>';
 				}
@@ -131,16 +136,114 @@ if($operation == 'filecheck') {
 		$result .= '<script>function showresult(o) {'.$resultjs.'$(\'status_\' + o).style.display=\'\';}</script>';
 		showtips('filecheck_tips');
 		showtableheader('filecheck_completed');
-		showtablerow('', 'colspan="4"', "<div class=\"lightfont filenum left\">".
+		showtablerow('', 'colspan="4"', "<div class=\"margintop marginbot\">".
 			"<em class=\"edited\">$lang[filecheck_modify]: $modifiedfiles</em> ".($modifiedfiles > 0 ? "<a href=\"###\" onclick=\"showresult('modify')\">[$lang[view]]</a> " : '').
-			"&nbsp;&nbsp;&nbsp;&nbsp;<em class=\"del\">$lang[filecheck_delete]: $deletedfiles</em> ".($deletedfiles > 0 ? "<a href=\"###\" onclick=\"showresult('del')\">[$lang[view]]</a> " : '').
-			"&nbsp;&nbsp;&nbsp;&nbsp;<em class=\"unknown\">$lang[filecheck_unknown]: $unknownfiles</em> ".($unknownfiles > 0 ? "<a href=\"###\" onclick=\"showresult('add')\">[$lang[view]]</a> " : '').
+			" &nbsp; <em class=\"del\">$lang[filecheck_delete]: $deletedfiles</em> ".($deletedfiles > 0 ? "<a href=\"###\" onclick=\"showresult('del')\">[$lang[view]]</a> " : '').
+			" &nbsp; <em class=\"unknown\">$lang[filecheck_unknown]: $unknownfiles</em> ".($unknownfiles > 0 ? "<a href=\"###\" onclick=\"showresult('add')\">[$lang[view]]</a> " : '').
 			($doubt > 0 ? "&nbsp;&nbsp;&nbsp;&nbsp;<em class=\"unknown\">$lang[filecheck_doubt]: $doubt</em> <a href=\"###\" onclick=\"showresult('doubt')\">[$lang[view]]</a> " : '').
 			"</div>");
 		showsubtitle(array('filename', '', 'lastmodified', ''));
 		echo $result;
 		showtablefooter();
 
+	}
+
+} elseif($operation == 'hookcheck') {
+
+	$step = max(1, intval($_GET['step']));
+	shownav('tools', 'nav_hookcheck');
+	showsubmenusteps('nav_hookcheck', array(
+		array('nav_hookcheck_confirm', $step == 1),
+		array('nav_hookcheck_verify', $step == 2),
+		array('nav_hookcheck_completed', $step == 3)
+	));
+	showtips('hookcheck_tips');
+	if($step == 1) {
+		$styleselect = "<br><br><select name=\"styleid\">";
+		foreach(C::t('common_style')->fetch_all_data() as $style) {
+			$styleselect .= "<option value=\"$style[styleid]\" ".
+				($style['styleid'] == $_G['setting']['styleid'] ? 'selected="selected"' : NULL).
+				">$style[name]</option>\n";
+		}
+		$styleselect .= '</select>';
+		cpmsg(cplang('hookcheck_tips_step1', array('template' => $styleselect)), 'action=checktools&operation=hookcheck&step=2', 'form', '', FALSE);
+	} elseif($step == 2) {
+		cpmsg(cplang('hookcheck_verifying'), "action=checktools&operation=hookcheck&step=3&styleid=$_POST[styleid]", 'loading', '', FALSE);
+	} elseif($step == 3) {
+		if(!$discuzfiles = @file('./source/admincp/discuzhook.dat')) {
+			cpmsg('filecheck_nofound_md5file', '', 'error');
+		}
+
+		$discuzhookdata = $hookdata = array();
+		$discuzhookdata_hook = array();
+
+		$styleid = intval($_GET['styleid']);
+		if(!$styleid) {
+			$styleid = $_G['setting']['styleid'];
+		}
+		$style = C::t('common_style')->fetch_by_styleid($styleid);
+		checkhook(substr($style['directory'], 2).'/', '\.htm', 1);
+
+		foreach($discuzfiles as $line) {
+			list($file, $hook) = explode(' *', substr($line, 0, -2));
+			if($hook) {
+				$discuzhookdata[$file][$hook][] = $hook;
+				$discuzhookdata_hook[$file][] = $hook;
+			}
+		}
+
+		$diffhooklist = $difffilelist = array();
+		$diffnum = 0;
+		foreach($discuzhookdata as $file => $hook) {
+			$dir = dirname($file);
+			if(isset($hookdata[$file])) {
+				foreach($hook as $k => $hookarr) {
+					if(($diff = count($hookarr) - count($hookdata[$file][$k])) > 0) {
+						for($i = 0; $i < $diff; $i++) {
+							$diffhooklist[$file][] = $k;
+						}
+					}
+				}
+				if(!empty($diffhooklist[$file])) {
+					$difffilelist[$dir][] = $file;
+					$diffnum++;
+				}
+			}
+		}
+
+		foreach($difffilelist as $dir => $files) {
+			$result .= '<tbody><tr><td class="td30"><a href="javascript:;" onclick="toggle_group(\'dir_'.$dir.'\')" id="a_dir_'.$dir.'">[-]</a></td><td colspan="3"><div class="ofolder">'.$dir.'</div></td></tr></tbody>';
+			$result .= '<tbody id="dir_'.$dir.'">';
+			foreach($files as $file) {
+				$result .= '<tr><td></td><td><em class="files bold">'.basename($file).'</em></td><td>';
+				foreach($discuzhookdata_hook[$file] as $hook) {
+					$result .= '<p>'.dhtmlspecialchars($hook).'</p>';
+				}
+				$result .= '</td><td>';
+				foreach($diffhooklist[$file] as $hook) {
+					$result .= '<p>'.dhtmlspecialchars($hook).'</p>';
+				}
+				$result .= '</td></tr>';
+			}
+			$result .= '</tbody>';
+		}
+		if($diffnum > 20) {
+			$result .= '<script type="text/javascript">hide_all_hook(\'dir_\', \'tbody\');</script>';
+		}
+		if($diffnum) {
+			showformheader('forums');
+			showtableheader('hookcheck_completed');
+			showtablerow('', 'colspan="4"', "<div class=\"margintop marginbot\">".
+				'<a href="javascript:;" onclick="show_all_hook(\'dir_\', \'tbody\')">'.$lang[show_all].'</a> | <a href="javascript:;" onclick="hide_all_hook(\'dir_\', \'tbody\')">'.$lang[hide_all].'</a>'.
+				" &nbsp; <em class=\"del\">$lang[hookcheck_delete]: $diffnum</em> ".
+				"</div>");
+			showsubtitle(array('', 'filename', 'hookcheck_discuzhook', 'hookcheck_delhook'));
+			echo $result;
+			showtablefooter();
+			showformfooter();
+		} else {
+			cpmsg('hookcheck_nodelhook', '', 'succeed', '', FALSE);
+		}
 	}
 
 } elseif($operation == 'ftpcheck') {
@@ -156,8 +259,8 @@ if($operation == 'filecheck') {
 	}
 
 	if(!$alertmsg) {
-		$settingnew = $_G['gp_settingnew'];
-		$settings['ftp'] = unserialize(DB::result_first("SELECT svalue FROM ".DB::table('common_setting')." WHERE skey='ftp'"));
+		$settingnew = $_GET['settingnew'];
+		$settings['ftp'] = C::t('common_setting')->fetch('ftp', true);
 		$settings['ftp']['password'] = authcode($settings['ftp']['password'], 'DECODE', md5($_G['config']['security']['authkey']));
 		$pwlen = strlen($settingnew['ftp']['password']);
 		if($settingnew['ftp']['password']{0} == $settings['ftp']['password']{0} && $settingnew['ftp']['password']{$pwlen - 1} == $settings['ftp']['password']{strlen($settings['ftp']['password']) - 1} && substr($settingnew['ftp']['password'], 1, $pwlen - 2) == '********') {
@@ -197,8 +300,8 @@ if($operation == 'filecheck') {
 	echo '<script language="javascript">alert(\''.str_replace('\'', '\\\'', $alertmsg).'\');parent.$(\'cpform\').action=\''.ADMINSCRIPT.'?action=setting&edit=yes\';parent.$(\'cpform\').target=\'_self\'</script>';
 
 } elseif($operation == 'mailcheck') {
-	$oldmail = unserialize($_G['setting']['mail']);
-	$settingnew = $_G['gp_settingnew'];
+	$oldmail = dunserialize($_G['setting']['mail']);
+	$settingnew = $_GET['settingnew'];
 	$oldsmtp = $settingnew['mail']['mailsend'] == 3 ? $settingnew['mail']['smtp'] : $settingnew['mail']['esmtp'];
 	$deletesmtp = $settingnew['mail']['mailsend'] != 1 ? ($settingnew['mail']['mailsend'] == 3 ? $settingnew['mail']['smtp']['delete'] : $settingnew['mail']['esmtp']['delete']) : array();
 	$settingnew['mail']['smtp'] = array();
@@ -210,24 +313,24 @@ if($operation == 'filecheck') {
 		}
 	}
 
-	if(!empty($_G['gp_newsmtp'])) {
-		foreach($_G['gp_newsmtp']['server'] as $id => $smtp) {
-			if(!empty($smtp) && !empty($_G['gp_newsmtp']['port'][$id])) {
+	if(!empty($_GET['newsmtp'])) {
+		foreach($_GET['newsmtp']['server'] as $id => $smtp) {
+			if(!empty($smtp) && !empty($_GET['newsmtp']['port'][$id])) {
 				$settingnew['mail']['smtp'][] = array(
 						'server' => $smtp,
-						'port' => $_G['gp_newsmtp']['port'][$id] ? intval($_G['gp_newsmtp']['port'][$id]) : 25,
-						'auth' => $_G['gp_newsmtp']['auth'][$id] ? 1 : 0,
-						'from' => $_G['gp_newsmtp']['from'][$id],
-						'auth_username' => $_G['gp_newsmtp']['auth_username'][$id],
-						'auth_password' => $_G['gp_newsmtp']['auth_password'][$id]
+						'port' => $_GET['newsmtp']['port'][$id] ? intval($_GET['newsmtp']['port'][$id]) : 25,
+						'auth' => $_GET['newsmtp']['auth'][$id] ? 1 : 0,
+						'from' => $_GET['newsmtp']['from'][$id],
+						'auth_username' => $_GET['newsmtp']['auth_username'][$id],
+						'auth_password' => $_GET['newsmtp']['auth_password'][$id]
 					);
 			}
 		}
 	}
 
 	$_G['setting']['mail'] = serialize($settingnew['mail']);
-	$test_to = $_G['gp_test_to'];
-	$test_from = $_G['gp_test_from'];
+	$test_to = $_GET['test_to'];
+	$test_from = $_GET['test_from'];
 	$date = date('Y-m-d H:i:s');
 	$alertmsg = '';
 
@@ -250,8 +353,8 @@ if($operation == 'filecheck') {
 
 } elseif($operation == 'imagepreview') {
 
-	$settingnew = $_G['gp_settingnew'];
-	if(!empty($_G['gp_previewthumb'])) {
+	$settingnew = $_GET['settingnew'];
+	if(!empty($_GET['previewthumb'])) {
 		$_G['setting']['imagelib'] = $settingnew['imagelib'];
 		$_G['setting']['imageimpath'] = $settingnew['imageimpath'];
 		$_G['setting']['thumbwidth'] = $settingnew['thumbwidth'];
@@ -284,7 +387,7 @@ if($operation == 'filecheck') {
 			cpmsg('imagepreview_errorcode_'.$r, '', 'error');
 		}
 	} else {
-		$type = $_G['gp_type'];
+		$type = $_GET['type'];
 		if(!$_G['setting']['watermarkstatus'][$type]) {
 			cpmsg('watermarkpreview_error', '', 'error');
 		}
@@ -419,7 +522,7 @@ function checkcachefiles($currentdir) {
 			$cachedata = fread($fp, filesize($file));
 			fclose($fp);
 
-			if(preg_match("/^<\?php\n\/\/Discuz! cache file, DO NOT modify me!\n\/\/Created: [\w\s,:]+\n\/\/Identify: (\w{32})\n\n(.+?)\?>$/s", $cachedata, $match)) {
+			if(preg_match("/^<\?php\n\/\/Discuz! cache file, DO NOT modify me!\n\/\/Identify: (\w+)\n\n(.+?)\?>$/s", $cachedata, $match)) {
 				$showlist[$file] = $md5 = $match[1];
 				$cachedata = $match[2];
 
@@ -451,4 +554,36 @@ function getremotefile($file) {
 	return $str;
 }
 
+function checkhook($currentdir, $ext = '', $sub = 1, $skip = '') {
+	global $hooks, $hookdata;
+	$dir = opendir($currentdir);
+	$exts = '/('.$ext.')$/i';
+	$skips = explode(',', $skip);
+
+	while($entry = readdir($dir)) {
+		$file = $currentdir.$entry;
+		if($entry != '.' && $entry != '..' && (preg_match($exts, $entry) || $sub && is_dir($file)) && !in_array($entry, $skips)) {
+			if($sub && is_dir($file)) {
+				checkhook($file.'/', $ext, $sub, $skip);
+			} else {
+				$data = file_get_contents($file);
+				$hooks = array();
+				preg_replace("/\{hook\/(\w+?)(\s+(.+?))?\}/ie", "findhook('\\1', '\\3')", $data);
+				if($hooks) {
+					foreach($hooks as $v) {
+						$hookdata[$file][$v][] = $v;
+					}
+				}
+			}
+		}
+	}
+}
+
+function findhook($hookid, $key) {
+	global $hooks;
+	if($key) {
+		$key = ' '.$key;
+	}
+	$hooks[] = '<!--{hook/'.$hookid.$key.'}-->';
+}
 ?>

@@ -70,7 +70,7 @@
 			</div>
 			<!--{if $multi}--><div class="pgs cl mtm">$multi</div><!--{/if}-->
 		</div>
-		<!--{if !$share[noreply]}-->
+		<!--{if !$share[noreply] && helper_access::check_module('share')}-->
 		<form id="quickcommentform_{$id}" name="quickcommentform_{$id}" action="home.php?mod=spacecp&ac=comment&handlekey=qcshare_{$id}" method="post" autocomplete="off" onsubmit="ajaxpost('quickcommentform_{$id}', 'return_qcshare_$id');doane(event);">
 			<!--{if $_G['uid']}-->
 				<p>

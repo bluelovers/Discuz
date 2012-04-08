@@ -1,8 +1,8 @@
 /*
-	[Discuz!] (C)2001-2009 Comsenz Inc.
+	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: home_blog.js 15155 2010-08-19 08:16:19Z monkey $
+	$Id: home_blog.js 23838 2011-08-11 06:51:58Z monkey $
 */
 
 function validate_ajax(obj) {

@@ -4,14 +4,14 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_credit.php 21595 2011-04-02 01:35:27Z congyushuai $
+ *      $Id: spacecp_credit.php 25246 2011-11-02 03:34:53Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
-if($_G['inajax'] && $_G['gp_showcredit']) {
+if($_G['inajax'] && $_GET['showcredit']) {
 	include template('common/extcredits');
 	exit;
 }
@@ -54,6 +54,9 @@ function makecreditlog($log, $otherinfo=array()) {
 			break;
 		case 'BMC':
 			$log['opinfo'] = '<a href="home.php?mod=magic&action=log&operation=buylog" target="_blank">'.lang('home/template', 'magics_operation_buy').' <strong>'.(!empty($_G['cache']['magics'][$log['relatedid']]['name']) ? $_G['cache']['magics'][$log['relatedid']]['name'] : '').'</strong> '.lang('home/template', 'magic').'</a>';
+			break;
+		case 'BME':
+			$log['opinfo'] = '<a href="home.php?mod=medal" target="_blank">'.lang('spacecp', 'buy_medal').'</a>';
 			break;
 		case 'BGC':
 			$log['opinfo'] = lang('spacecp','magic_space_gift');
@@ -122,6 +125,13 @@ function makecreditlog($log, $otherinfo=array()) {
 			break;
 		case 'RKC':
 			$log['opinfo'] = lang('spacecp', 'ranklist_top');
+			break;
+		case 'RPR':
+			$log['opinfo'] = lang('spacecp', 'admincp_op_credit');
+			break;
+		case 'RPZ':
+			$log['opinfo'] = lang('spacecp', 'admincp_op_credit');
+
 	}
 	return $log;
 }
@@ -130,42 +140,38 @@ function getotherinfo($aids, $pids, $tids, $taskids, $uids) {
 
 	$otherinfo = array('attachs' => array(), 'threads' => array(), 'tasks' => array(), 'users' => array());
 	if(!empty($aids)) {
-		$query = DB::query("SELECT * FROM ".DB::table('forum_attachment')." WHERE aid IN (".dimplode($aids).")");
-		while($value = DB::fetch($query)) {
+		$attachs = C::t('forum_attachment')->fetch_all($aids);
+		foreach($attachs as $value) {
 			$value['tableid'] = intval($value['tableid']);
 			$attachtable[$value['tableid']][] = $value['aid'];
 			$tids[$value['tid']] = $value['tid'];
 		}
 		foreach($attachtable as $id => $value) {
-			$query = DB::query("SELECT * FROM ".DB::table('forum_attachment_'.$id)." WHERE aid IN (".dimplode($value).")");
-			while($value = DB::fetch($query)) {
+			$attachs = C::t('forum_attachment_n')->fetch_all($id, $value);
+			foreach($attachs as $value) {
 				$otherinfo['attachs'][$value['aid']] = $value;
 			}
 		}
 	}
 	if(!empty($pids)) {
-		$query = DB::query("SELECT * FROM ".DB::table(getposttable())." WHERE pid IN (".dimplode($pids).")");
-		while($value = DB::fetch($query)) {
+		foreach(C::t('forum_post')->fetch_all(0, $pids) as $value) {
 			$tids[$value['tid']] = $value['tid'];
 			$otherinfo['post'][$value['pid']] = $value['tid'];
 		}
 	}
 	if(!empty($tids)) {
-		$query = DB::query("SELECT * FROM ".DB::table('forum_thread')." WHERE tid IN (".dimplode($tids).")");
-		while($value = DB::fetch($query)) {
+		foreach(C::t('forum_thread')->fetch_all_by_tid($tids) as $value) {
 			$otherinfo['threads'][$value['tid']] = $value;
 		}
 	}
 	if(!empty($taskids)) {
-		$query = DB::query("SELECT taskid,name FROM ".DB::table('common_task')." WHERE taskid IN (".dimplode($taskids).")");
-		while($value = DB::fetch($query)) {
-			$otherinfo['tasks'][$value['taskid']] = $value['name'];;
+		foreach(C::t('common_task')->fetch_all($taskids) as $value) {
+			$otherinfo['tasks'][$value['taskid']] = $value['name'];
 		}
 	}
 	if(!empty($uids)) {
-		$query = DB::query("SELECT uid,username FROM ".DB::table('common_member')." WHERE uid IN (".dimplode($uids).")");
-		while($value = DB::fetch($query)) {
-			$otherinfo['users'][$value['uid']] = $value['username'];
+		foreach(C::t('common_member')->fetch_all($uids) as $uid => $value) {
+			$otherinfo['users'][$uid] = $value['username'];
 		}
 	}
 	return $otherinfo;

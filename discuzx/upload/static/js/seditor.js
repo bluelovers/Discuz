@@ -1,8 +1,8 @@
 /*
-	[Discuz!] (C)2001-2009 Comsenz Inc.
+	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: seditor.js 21135 2011-03-16 06:24:11Z svn_project_zhangjie $
+	$Id: seditor.js 28601 2012-03-06 02:49:55Z monkey $
 */
 
 function seditor_showimgmenu(seditorkey) {
@@ -36,10 +36,17 @@ function seditor_menu(seditorkey, tag) {
 	var menuid = ctrlid + '_menu';
 	if(!$(menuid)) {
 		switch(tag) {
+			case 'at':
+				curatli = 0;
+				atsubmitid = ctrlid + '_submit';
+				setTimeout(function() {atFilter('', 'at_list','atListSet');$('atkeyword').focus();}, 100);
+				str = '請輸用戶名:<br /><input type="text" id="atkeyword" style="width:240px" value="" class="px" onkeydown="atFilter(this.value, \'at_list\',\'atListSet\',event);" /><div class="p_pop" id="at_list" style="width:250px;"><ul><li>@朋友賬號，就能提醒他來看帖子</li></ul></div>';
+				submitstr = 'seditor_insertunit(\'' + seditorkey + '\', \'@\' + $(\'atkeyword\').value.replace(/<\\/?b>/g, \'\')+\' \'); hideMenu();';
+				break;
 			case 'url':
 				str = '請輸入鏈接地址:<br /><input type="text" id="' + ctrlid + '_param_1" sautocomplete="off" style="width: 98%" value="" class="px" />' +
 					'<br />請輸入鏈接文字:<br /><input type="text" id="' + ctrlid + '_param_2" style="width: 98%" value="" class="px" />';
-				submitstr = "$('" + ctrlid + "_param_2').value !== '' ? seditor_insertunit('" + seditorkey + "', '[url='+$('" + ctrlid + "_param_1').value+']'+$('" + ctrlid + "_param_2').value, '[/url]', null, 1) : seditor_insertunit('" + seditorkey + "', '[url]'+$('" + ctrlid + "_param_1').value, '[/url]', null, 1);hideMenu();";
+				submitstr = "$('" + ctrlid + "_param_2').value !== '' ? seditor_insertunit('" + seditorkey + "', '[url='+seditor_squarestrip($('" + ctrlid + "_param_1').value)+']'+$('" + ctrlid + "_param_2').value, '[/url]', null, 1) : seditor_insertunit('" + seditorkey + "', '[url]'+$('" + ctrlid + "_param_1').value, '[/url]', null, 1);hideMenu();";
 				break;
 			case 'code':
 			case 'quote':
@@ -51,7 +58,7 @@ function seditor_menu(seditorkey, tag) {
 				str = '請輸入圖片地址:<br /><input type="text" id="' + ctrlid + '_param_1" style="width: 98%" value="" class="px" onchange="loadimgsize(this.value, \'' + seditorkey + '\',\'' + tag + '\')" />' +
 					'<p class="mtm">寬(可選): <input type="text" id="' + ctrlid + '_param_2" style="width: 15%" value="" class="px" /> &nbsp;' +
 					'高(可選): <input type="text" id="' + ctrlid + '_param_3" style="width: 15%" value="" class="px" /></p>';
-				submitstr = "seditor_insertunit('" + seditorkey + "', '[img' + ($('" + ctrlid + "_param_2').value !== '' && $('" + ctrlid + "_param_3').value !== '' ? '='+$('" + ctrlid + "_param_2').value+','+$('" + ctrlid + "_param_3').value : '')+']'+$('" + ctrlid + "_param_1').value, '[/img]', null, 1);hideMenu();";
+				submitstr = "seditor_insertunit('" + seditorkey + "', '[img' + ($('" + ctrlid + "_param_2').value !== '' && $('" + ctrlid + "_param_3').value !== '' ? '='+$('" + ctrlid + "_param_2').value+','+$('" + ctrlid + "_param_3').value : '')+']'+seditor_squarestrip($('" + ctrlid + "_param_1').value), '[/img]', null, 1);hideMenu();";
 				break;
 		}
 		var menu = document.createElement('div');
@@ -63,6 +70,12 @@ function seditor_menu(seditorkey, tag) {
 		menu.innerHTML = '<span class="y"><a onclick="hideMenu()" class="flbc" href="javascript:;">關閉</a></span><div class="p_opt cl"><form onsubmit="' + submitstr + ';return false;" autocomplete="off"><div>' + str + '</div><div class="pns mtn"><button type="submit" id="' + ctrlid + '_submit" class="pn pnc"><strong>提交</strong></button><button type="button" onClick="hideMenu()" class="pn"><em>取消</em></button></div></form></div>';
 	}
 	showMenu({'ctrlid':ctrlid,'evt':'click','duration':3,'cache':0,'drag':1});
+}
+
+function seditor_squarestrip(str) {
+	str = str.replace('[', '%5B');
+	str = str.replace(']', '%5D');
+	return str;
 }
 
 function seditor_insertunit(key, text, textend, moveend, selappend) {

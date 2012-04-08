@@ -1,8 +1,8 @@
 /*
-	[Discuz!] (C)2001-2009 Comsenz Inc.
+	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: forum_moderate.js 21562 2011-03-31 08:40:33Z monkey $
+	$Id: forum_moderate.js 26484 2011-12-14 02:08:03Z svn_project_zhangjie $
 */
 
 function modaction(action, pid, extra, mod) {
@@ -124,8 +124,23 @@ function tmodthreads(optgroup, operation) {
 	} else {
 		$('moderate').optgroup.value = optgroup;
 		$('moderate').operation.value = operation;
-		showWindow('mods', 'moderate', 'post');
+		hideWindow('mods');
+		showWindow('mods', 'moderate', 'post', 0);
 	}
+}
+
+function getthreadclass() {
+	var fid = $('fid');
+	if(fid) {
+		ajaxget('forum.php?mod=ajax&action=getthreadclass&fid=' + fid.value, 'threadclass', null, null, null, showthreadclass);
+	}
+}
+
+function showthreadclass() {
+	try{
+		$('append_parent').removeChild($('typeid_ctrl_menu'));
+	}catch(e) {}
+	simulateSelect('typeid');
 }
 
 loadcss('forum_moderator');

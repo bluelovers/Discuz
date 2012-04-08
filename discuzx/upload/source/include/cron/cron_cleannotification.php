@@ -4,21 +4,19 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cron_cleannotification.php 20530 2011-02-25 06:34:44Z zhengqingpeng $
+ *      $Id: cron_cleannotification.php 24556 2011-09-26 06:16:03Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
-$deltime = $_G['timestamp'] - 2*3600*24;
-$notifytime = $_G['timestamp'] - 30*3600*24;
-DB::query("DELETE FROM ".DB::table('home_notification')." WHERE new='0' AND dateline < '$deltime'");
-DB::query("DELETE FROM ".DB::table('home_notification')." WHERE new='1' AND dateline < '$notifytime'");
+C::t('home_notification')->delete_clear(0, 2);
+C::t('home_notification')->delete_clear(1, 30);
 
 $deltime = $_G['timestamp'] - 7*3600*24;
-DB::query("DELETE FROM ".DB::table('home_pokearchive')." WHERE dateline < '$deltime'");
+C::t('home_pokearchive')->delete_by_dateline($deltime);
 
-DB::query("OPTIMIZE TABLE ".DB::table('home_notification'), 'SILENT');
+C::t('home_notification')->optimize();
 
 ?>

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: magic_money.php 7830 2010-04-14 02:22:32Z monkey $
+ *      $Id: magic_visit.php 27372 2012-01-19 04:21:04Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -49,10 +49,12 @@ class magic_visit {
 
 		$num = !empty($this->parameters['num']) ? intval($this->parameters['num']) : 10;
 		$friends = $uids = $fids = array();
-		$query = DB::query('SELECT fuid as uid, fusername as username FROM '.DB::table('home_friend')." WHERE uid='$_G[uid]' LIMIT 500");
-		while($value=DB::fetch($query)) {
-			$uids[] = intval($value['uid']);
-			$friends[$value['uid']] = $value;
+		$query = C::t('home_friend')->fetch_all_by_uid($_G['uid'], 0, 500);
+		foreach($query as $value) {
+			$value['username'] = $value['fusername'];
+			$value['uid'] = $value['fuid'];
+			$uids[] = intval($value['fuid']);
+			$friends[$value['fuid']] = $value;
 		}
 		$count = count($uids);
 		if(!$count) {
@@ -78,14 +80,20 @@ class magic_visit {
 			$note = '';
 			$icon = intval($_POST['visitpoke']);
 			foreach ($fids as $fid) {
-				$inserts[] = "('$fid', '$_G[uid]', '$_G[username]', '$note', '$_G[timestamp]', '$icon')";
+				$insertdata = array(
+						'uid' => $fid,
+						'fromuid' => $_G['uid'],
+						'fromusername' => $_G['username'],
+						'note' => $note,
+						'dateline' => $_G['timestamp'],
+						'iconid' => $icon
+					);
+				C::t('home_poke')->insert($insertdata, false, true);
 			}
 			$repokeids = array();
-			$query = DB::query("SELECT * FROM ".DB::table('home_poke')." WHERE uid IN (".dimplode($fids).") AND fromuid = '$_G[uid]'");
-			while ($value = DB::fetch($query)) {
+			foreach(C::t('home_poke')->fetch_all_by_uid_fromuid($fids, $_G['uid']) as $value) {
 				$repokeids[] = $value['uid'];
 			}
-			DB::query('REPLACE INTO '.DB::table('home_poke').'(uid, fromuid, fromusername, note, dateline, iconid) VALUES '.implode(',',$inserts));
 			$ids = array_diff($fids, $repokeids);
 			if($ids) {
 				require_once libfile('function/spacecp');
@@ -103,23 +111,43 @@ class magic_visit {
 				}
 			}
 		} elseif($_POST['visitway'] == 'comment') {
-			$message = getstr($_POST['visitmsg'], 255, 1, 1);
+			$message = getstr($_POST['visitmsg'], 255);
 			$ip = $_G['clientip'];
 			$note_inserts = array();
 			foreach ($fids as $fid) {
 				$actor = "<a href=\"home.php?mod=space&uid=$_G[uid]\">$_G[username]</a>";
-				$inserts[] = "('$fid', '$fid', 'uid', '$_G[uid]', '$_G[username]','$ip', '$_G[timestamp]', '$message')";
+				$inserts[] = array(
+					'uid' => $fid,
+					'id' => $fid,
+					'idtype'=> uid,
+					'authorid' => $_G['uid'],
+					'author' => $_G['username'],
+					'ip' => $ip,
+					'dateline' => $_G['timestamp'],
+					'message' => $message
+				);
 				$note = lang('spacecp', 'magic_note_wall', array('actor' => $actor, 'url'=>"home.php?mod=space&uid=$fid&do=wall"));
-				$note_inserts[] = "('$fid', 'comment', '1', '$_G[uid]', '$_G[username]', '$note', '$_G[timestamp]')";
+				$note_inserts[] = array(
+					'uid' => $fid,
+					'type' => 'comment',
+					'new' => 1,
+					'authorid' => $_G['uid'],
+					'author' => $_G['username'],
+					'note' => $note,
+					'dateline' => $_G['timestamp']
+				);
 			}
-			DB::query('INSERT INTO '.DB::table('home_comment')."(uid, id, idtype, authorid, author, ip, dateline, message) VALUES ".implode(",", $inserts));
-			DB::query('INSERT INTO '.DB::table('home_notification')."(uid, type, new, authorid, author, note, dateline) VALUES ".implode(",",$note_inserts));
-			DB::query('UPDATE '.DB::table('common_member')." SET newprompt = newprompt + 1 WHERE uid IN (".dimplode($fids).")");
+			foreach($inserts as $insert) {
+				C::t('home_comment')->insert($insert);
+			}
+			foreach($note_inserts as $note_insert) {
+				C::t('home_notification')->insert($note_insert);
+			}
+			C::t('common_member')->increase($fids, array('newprompt' => 1));
 		} else {
 			foreach ($fids as $fid) {
-				$inserts[] = "('$fid', '$_G[uid]', '$_G[username]', '$_G[timestamp]')";
+				C::t('home_visitor')->insert(array('uid'=>$fid, 'vuid'=>$_G['uid'], 'vusername'=>$_G['username'], 'dateline'=>$_G['timestamp']), false, true);
 			}
-			DB::query('REPLACE INTO '.DB::table('home_visitor')."(uid, vuid, vusername, dateline) VALUES ".implode(",",$inserts));
 		}
 		usemagic($this->magic['magicid'], $this->magic['num']);
 		updatemagiclog($this->magic['magicid'], '2', '1', '0', '0', 'uid', $_G['uid']);

@@ -45,4 +45,18 @@
 		</div>
 	</div>
 </div>
+<script type="text/javascript">
+function succeedhandle_followmod(url, msg, values) {
+	var fObj = $('followmod');
+	if(values['type'] == 'add') {
+		fObj.innerHTML = '取消收聽';
+		fObj.className = 'flw_btn_unfo';
+		fObj.href = 'home.php?mod=spacecp&ac=follow&op=del&fuid='+values['fuid'];
+	} else if(values['type'] == 'del') {
+		fObj.innerHTML = '收聽TA';
+		fObj.className = 'flw_btn_fo';
+		fObj.href = 'home.php?mod=spacecp&ac=follow&op=add&hash={FORMHASH}&fuid='+values['fuid'];
+	}
+}
+</script>
 <!--{template common/footer}-->

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: search_album.php 22166 2011-04-25 02:03:44Z liulanbo $
+ *      $Id: search_album.php 29236 2012-03-30 05:34:47Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -29,11 +29,11 @@ $srchmod = 4;
 $cachelife_time = 300;		// Life span for cache of searching in specified range of time
 $cachelife_text = 3600;		// Life span for cache of text searching
 
-$srchtype = empty($_G['gp_srchtype']) ? '' : trim($_G['gp_srchtype']);
-$searchid = isset($_G['gp_searchid']) ? intval($_G['gp_searchid']) : 0;
+$srchtype = empty($_GET['srchtype']) ? '' : trim($_GET['srchtype']);
+$searchid = isset($_GET['searchid']) ? intval($_GET['searchid']) : 0;
 
-$srchtxt = $_G['gp_srchtxt'];
-$keyword = isset($srchtxt) ? htmlspecialchars(trim($srchtxt)) : '';
+$srchtxt = $_GET['srchtxt'];
+$keyword = isset($srchtxt) ? dhtmlspecialchars(trim($srchtxt)) : '';
 
 if(!submitcheck('searchsubmit', 1)) {
 
@@ -41,28 +41,28 @@ if(!submitcheck('searchsubmit', 1)) {
 
 } else {
 
-	$orderby = in_array($_G['gp_orderby'], array('dateline', 'replies', 'views')) ? $_G['gp_orderby'] : 'lastpost';
-	$ascdesc = isset($_G['gp_ascdesc']) && $_G['gp_ascdesc'] == 'asc' ? 'asc' : 'desc';
+	$orderby = in_array($_GET['orderby'], array('dateline', 'replies', 'views')) ? $_GET['orderby'] : 'lastpost';
+	$ascdesc = isset($_GET['ascdesc']) && $_GET['ascdesc'] == 'asc' ? 'asc' : 'desc';
 
 	if(!empty($searchid)) {
 
-		$page = max(1, intval($_G['gp_page']));
+		$page = max(1, intval($_GET['page']));
 		$start_limit = ($page - 1) * $_G['tpp'];
 
-		$index = DB::fetch_first("SELECT searchstring, keywords, num, ids FROM ".DB::table('common_searchindex')." WHERE searchid='$searchid' AND srchmod='$srchmod'");
+		$index = C::t('common_searchindex')->fetch_by_searchid_srchmod($searchid, $srchmod);
 		if(!$index) {
 			showmessage('search_id_invalid');
 		}
 
-		$keyword = htmlspecialchars($index['keywords']);
+		$keyword = dhtmlspecialchars($index['keywords']);
 		$keyword = $keyword != '' ? str_replace('+', ' ', $keyword) : '';
 
 		$index['keywords'] = rawurlencode($index['keywords']);
 
 		$albumlist = array();
 		$maxalbum = $nowalbum = 0;
-		$query = DB::query("SELECT * FROM ".DB::table('home_album')." WHERE albumid IN($index[ids]) ORDER BY updatetime DESC LIMIT $start_limit, $_G[tpp]");
-		while ($value = DB::fetch($query)) {
+		$query = C::t('home_album')->fetch_all(explode(',', $index['ids']), 'updatetime', $start_limit, $_G['tpp']);
+		foreach($query as $value) {
 			if($value['friend'] != 4 && ckfriend($value['uid'], $value['friend'], $value['target_ids'])) {
 				$value['pic'] = pic_cover_get($value['pic'], $value['picflag']);
 			} elseif ($value['picnum']) {
@@ -85,14 +85,7 @@ if(!submitcheck('searchsubmit', 1)) {
 		$searchstring = 'album|title|'.addslashes($srchtxt);
 		$searchindex = array('id' => 0, 'dateline' => '0');
 
-		$query = DB::query("SELECT searchid, dateline,
-			('".$_G['setting']['search']['album']['searchctrl']."'<>'0' AND ".(empty($_G['uid']) ? "useip='$_G[clientip]'" : "uid='$_G[uid]'")." AND $_G[timestamp]-dateline<'".$_G['setting']['search']['album']['searchctrl']."') AS flood,
-			(searchstring='$searchstring' AND expiration>'$_G[timestamp]') AS indexvalid
-			FROM ".DB::table('common_searchindex')."
-			WHERE srchmod='$srchmod' AND ('".$_G['setting']['search']['album']['searchctrl']."'<>'0' AND ".(empty($_G['uid']) ? "useip='$_G[clientip]'" : "uid='$_G[uid]'")." AND $_G[timestamp]-dateline<".$_G['setting']['search']['album']['searchctrl'].") OR (searchstring='$searchstring' AND expiration>'$_G[timestamp]')
-			ORDER BY flood");
-
-		while($index = DB::fetch($query)) {
+		foreach(C::t('common_searchindex')->fetch_all_search($_G['setting']['search']['album']['searchctrl'], $_G['clientip'], $_G['uid'], $_G['timestamp'], $searchstring, $srchmod) as $index) {
 			if($index['indexvalid'] && $index['dateline'] > $searchindex['dateline']) {
 				$searchindex = array('id' => $index['searchid'], 'dateline' => $index['dateline']);
 				break;
@@ -114,7 +107,7 @@ if(!submitcheck('searchsubmit', 1)) {
 			}
 
 			if($_G['adminid'] != '1' && $_G['setting']['search']['album']['maxspm']) {
-				if((DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_searchindex')." WHERE srchmod='$srchmod' AND dateline>'$_G[timestamp]'-60")) >= $_G['setting']['search']['album']['maxspm']) {
+				if(C::t('common_searchindex')->count_by_dateline($_G['timestamp'], $srchmod) >= $_G['setting']['search']['album']['maxspm']) {
 					showmessage('search_toomany', 'search.php?mod=album', array('maxspm' => $_G['setting']['search']['album']['maxspm']));
 				}
 			}
@@ -122,19 +115,27 @@ if(!submitcheck('searchsubmit', 1)) {
 			$num = $ids = 0;
 			$_G['setting']['search']['album']['maxsearchresults'] = $_G['setting']['search']['album']['maxsearchresults'] ? intval($_G['setting']['search']['album']['maxsearchresults']) : 500;
 			list($srchtxt, $srchtxtsql) = searchkey($keyword, "albumname LIKE '%{text}%'", true);
-			$query = DB::query("SELECT albumid FROM ".DB::table('home_album')." WHERE 1 $srchtxtsql ORDER BY albumid DESC LIMIT ".$_G['setting']['search']['album']['maxsearchresults']);
-			while($album = DB::fetch($query)) {
+			$query = C::t('home_album')->fetch_albumid_by_searchkey($srchtxtsql, $_G['setting']['search']['album']['maxsearchresults']);
+			foreach($query as $album) {
 				$ids .= ','.$album['albumid'];
 				$num++;
 			}
-			DB::free_result($query);
+			unset($query);
 
 			$keywords = str_replace('%', '+', $srchtxt);
 			$expiration = TIMESTAMP + $cachelife_text;
 
-			DB::query("INSERT INTO ".DB::table('common_searchindex')." (srchmod, keywords, searchstring, useip, uid, dateline, expiration, num, ids)
-					VALUES ('$srchmod', '$keywords', '$searchstring', '$_G[clientip]', '$_G[uid]', '$_G[timestamp]', '$expiration', '$num', '$ids')");
-			$searchid = DB::insert_id();
+			$searchid = C::t('common_searchindex')->insert(array(
+				'srchmod' => $srchmod,
+				'keywords' => $keywords,
+				'searchstring' => $searchstring,
+				'useip' => $_G['clientip'],
+				'uid' => $_G['uid'],
+				'dateline' => $_G['timestamp'],
+				'expiration' => $expiration,
+				'num' => $num,
+				'ids' => $ids
+			), true);
 
 			!($_G['group']['exempt'] & 2) && updatecreditbyaction('search');
 		}

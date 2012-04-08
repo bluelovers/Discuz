@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_exif.php 6741 2010-03-25 07:36:01Z cnteacher $
+ *      $Id: function_exif.php 23110 2011-06-20 05:08:35Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -38,6 +38,9 @@ function getexif($img) {
 	"7"		=>	"flash fired and strobe return light detected",
 	);
 
+	if(!function_exists('exif_read_data')) {
+		return exif_lang('img_info');
+	}
 	$exif = @exif_read_data($img,"IFD0");
 	if ($exif === false) {
 		$new_img_info	=	exif_lang('img_info');

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_onlinelist.php 16696 2010-09-13 05:02:24Z monkey $
+ *      $Id: cache_onlinelist.php 24596 2011-09-27 10:39:31Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -13,10 +13,8 @@ if(!defined('IN_DISCUZ')) {
 
 function build_cache_onlinelist() {
 	$data = array();
-	$query = DB::query("SELECT * FROM ".DB::table('forum_onlinelist')." ORDER BY displayorder");
-
 	$data['legend'] = '';
-	while($list = DB::fetch($query)) {
+	foreach(C::t('forum_onlinelist')->fetch_all_order_by_displayorder() as $list) {
 		$data[$list['groupid']] = $list['url'];
 		$data['legend'] .= !empty($list['url']) ? "<img src=\"".STATICURL."image/common/$list[url]\" /> $list[title] &nbsp; &nbsp; &nbsp; " : '';
 		if($list['groupid'] == 7) {
@@ -24,7 +22,7 @@ function build_cache_onlinelist() {
 		}
 	}
 
-	save_syscache('onlinelist', $data);
+	savecache('onlinelist', $data);
 }
 
 ?>

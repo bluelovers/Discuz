@@ -1,7 +1,6 @@
 <!--{subtemplate common/header}-->
 
 <div id="pt" class="bm cl">
-	<!--{subtemplate common/simplesearchform}-->
 	<div class="z"><a href="./" class="nvhm" title="{lang home}">$_G[setting][bbname]</a><em>&rsaquo;</em><a href="group.php">$_G[setting][navs][3][navname]</a>$groupnav</div>
 </div>
 
@@ -56,6 +55,7 @@
 									</dl>
 								</td>
 								<!--{/loop}-->
+								$endrows
 							</tr>
 						</table>
 					</div>
@@ -98,30 +98,32 @@
 	<div class="sd">
 		<!--[diy=diysidetop]--><div id="diysidetop" class="area"></div><!--[/diy]-->
 		<!--{hook/index_side_top}-->
-		<!--{if empty($gid) && empty($sgid)}-->
-			<div class="bm">
-				<div class="bm_h cl">
-					<h2>{lang create_group_step}</h2>
+		<!--{if helper_access::check_module('group')}-->
+			<!--{if empty($gid) && empty($sgid)}-->
+				<div class="bm">
+					<div class="bm_h cl">
+						<h2>{lang create_group_step}</h2>
+					</div>
+					<div class="bm_c">
+						<ul id="g_guide" class="mbm">
+							<li><label><strong class="xi1">{lang group_create}</strong><span class="xg1">{lang create_group_message1}</span></label></li>
+							<li><label><strong class="xi1">{lang personality_setting}</strong><span class="xg1">{lang create_group_message2}</span></label></li>
+							<li><label><strong class="xi1">{lang invite_friend}</strong><span class="xg1">{lang create_group_message3}</span></label></li>
+							<li><label><strong class="xi1">{lang group_upgrade}</strong><span class="xg1">{lang create_group_message4}</span></label></li>
+						</ul>
+						<a href="forum.php?mod=group&action=create" id="create_group_btn"><img src="{IMGDIR}/create_group.png" alt="{lang group_create}" /></a>
+					</div>
 				</div>
-				<div class="bm_c">
-					<ul id="g_guide" class="mbm">
-						<li><label><strong class="xi1">{lang group_create}</strong><span class="xg1">{lang create_group_message1}</span></label></li>
-						<li><label><strong class="xi1">{lang personality_setting}</strong><span class="xg1">{lang create_group_message2}</span></label></li>
-						<li><label><strong class="xi1">{lang invite_friend}</strong><span class="xg1">{lang create_group_message3}</span></label></li>
-						<li><label><strong class="xi1">{lang group_upgrade}</strong><span class="xg1">{lang create_group_message4}</span></label></li>
-					</ul>
-					<a href="forum.php?mod=group&action=create" id="create_group_btn"><img src="{IMGDIR}/create_group.png" alt="{lang group_create}" /></a>
+				<div class="drag">
+					<!--[diy=diy2]--><div id="diy2" class="area"></div><!--[/diy]-->
 				</div>
-			</div>
-			<div class="drag">
-				<!--[diy=diy2]--><div id="diy2" class="area"></div><!--[/diy]-->
-			</div>
-		<!--{else}-->
-			<div class="bm bw0">
-				<div class="bm_c">
-					<a href="forum.php?mod=group&action=create&fupid=$fup&groupid=$sgid" id="create_group_btn"><img src="{IMGDIR}/create_group.png" alt="{lang group_create}" /></a>
+			<!--{else}-->
+				<div class="bm bw0">
+					<div class="bm_c">
+						<a href="forum.php?mod=group&action=create&fupid=$fup&groupid=$sgid" id="create_group_btn"><img src="{IMGDIR}/create_group.png" alt="{lang group_create}" /></a>
+					</div>
 				</div>
-			</div>
+			<!--{/if}-->
 		<!--{/if}-->
 		<!--[diy=diytopgrouptop]--><div id="diytopgrouptop" class="area"></div><!--[/diy]-->
 		<!--{if $topgrouplist}-->

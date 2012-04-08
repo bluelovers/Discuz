@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: install.php 29198 2012-03-28 08:38:03Z songlixin $
+ *      $Id: install.php 29265 2012-03-31 06:03:26Z yexinhao $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS `pre_security_evilpost` (
   PRIMARY KEY (`pid`),
   KEY `type` (`tid`,`type`),
   KEY `operateresult` (`operateresult`,`createtime`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 CREATE TABLE IF NOT EXISTS `pre_security_eviluser` (
   `uid` int(10) unsigned NOT NULL COMMENT '用戶ID',
@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS `pre_security_eviluser` (
   `isreported` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否已經上報',
   PRIMARY KEY (`uid`),
   KEY `operateresult` (`operateresult`,`createtime`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 CREATE TABLE IF NOT EXISTS `pre_security_failedlog` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主鍵',
@@ -55,12 +55,10 @@ CREATE TABLE IF NOT EXISTS `pre_security_failedlog` (
   PRIMARY KEY (`id`),
   KEY `pid` (`pid`),
   KEY `uid` (`uid`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 EOF;
 
 runquery($sql);
 
 $finish = true;
-
-?>

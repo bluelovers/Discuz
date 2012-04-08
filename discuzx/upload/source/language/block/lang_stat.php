@@ -4,8 +4,12 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_blank.php 6757 2010-03-25 09:01:29Z cnteacher $
+ *      $Id: lang_stat.php 27449 2012-02-01 05:32:35Z zhangguosheng $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 $lang = array
 (
@@ -25,7 +29,7 @@ $lang = array
 	'stat_option_shares' => '分享數',
 
 	'stat_edit_showtitle' => '顯示名稱',
-	'stat_edit_showtitle_detail' => '你可以編輯以下對應項來自定義各統計項的顯示名稱',
+	'stat_edit_showtitle_detail' => '您可以編輯以下對應項來自定義各統計項的顯示名稱',
 
 	'stat_posts' => '帖子',
 	'stat_groups' => '群組',

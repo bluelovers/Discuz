@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_block.php 21678 2011-04-08 02:51:13Z zhangguosheng $
+ *      $Id: admincp_block.php 29236 2012-03-30 05:34:47Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -18,10 +18,10 @@ shownav('portal', 'block');
 loadcache('blockclass');
 
 if($operation=='perm') {
-	$bid = intval($_G['gp_bid']);
+	$bid = intval($_GET['bid']);
 	if(!submitcheck('permsubmit')) {
 		loadcache('diytemplatename');
-		$block = DB::fetch_first('SELECT * FROM '.DB::table('common_block')." WHERE bid='$bid'");
+		$block = C::t('common_block')->fetch($bid);
 		shownav('portal', 'block', 'block_perm');
 		showsubmenu(cplang('block_perm_edit').' - '.($block['name'] ? $block['name'] : cplang('block_name_null')));
 		showtips('block_perm_tips');
@@ -37,13 +37,14 @@ if($operation=='perm') {
 		'block_perm_inherited'
 		));
 
-		$query = DB::query("SELECT m.username, cp.* FROM ".DB::table('common_member')." m ,".DB::table('common_block_permission')." cp WHERE cp.bid='$bid' AND cp.uid=m.uid ORDER BY inheritedtplname");
+		$block_per = C::t('common_block_permission')->fetch_all_by_bid($bid);
+		$members = C::t('common_member')->fetch_all(array_keys($block_per));
 		$line = '&minus;';
-		while($value = DB::fetch($query)) {
+		foreach($block_per as $uid => $value) {
 			if(!empty($value['inheritedtplname'])) {
 				showtablerow('', array('class="td25"'), array(
 					"",
-					"$value[username]",
+					"{$members[$uid]['username']}",
 					$value['allowmanage'] ? '&radic;' : $line,
 					$value['allowrecommend'] ? '&radic;' : $line,
 					$value['needverify'] ? '&radic;' : $line,
@@ -51,14 +52,14 @@ if($operation=='perm') {
 				));
 			} else {
 				showtablerow('', array('class="td25"'), array(
-					"<input type=\"checkbox\" class=\"checkbox\" name=\"delete[$value[uid]]\" value=\"$value[uid]\" />
-					<input type=\"hidden\" name=\"perm[$value[uid]][allowmanage]\" value=\"$value[allowmanage]\" />
-					<input type=\"hidden\" name=\"perm[$value[uid]][allowrecommend]\" value=\"$value[allowrecommend]\" />
-					<input type=\"hidden\" name=\"perm[$value[uid]][needverify]\" value=\"$value[needverify]\" />",
-					"$value[username]",
-					"<input type=\"checkbox\" class=\"checkbox\" name=\"allowmanage[$value[uid]]\" value=\"1\" ".($value['allowmanage'] ? 'checked' : '').' />',
-					"<input type=\"checkbox\" class=\"checkbox\" name=\"allowrecommend[$value[uid]]\" value=\"1\" ".($value['allowrecommend'] ? 'checked' : '').' />',
-					"<input type=\"checkbox\" class=\"checkbox\" name=\"needverify[$value[uid]]\" value=\"1\" ".($value['needverify'] ? 'checked' : '').' />',
+					"<input type=\"checkbox\" class=\"checkbox\" name=\"delete[$uid]\" value=\"$uid\" />
+					<input type=\"hidden\" name=\"perm[$uid][allowmanage]\" value=\"$value[allowmanage]\" />
+					<input type=\"hidden\" name=\"perm[$uid][allowrecommend]\" value=\"$value[allowrecommend]\" />
+					<input type=\"hidden\" name=\"perm[$uid][needverify]\" value=\"$value[needverify]\" />",
+					"{$members[$uid]['username']}",
+					"<input type=\"checkbox\" class=\"checkbox\" name=\"allowmanage[$uid]\" value=\"1\" ".($value['allowmanage'] ? 'checked' : '').' />',
+					"<input type=\"checkbox\" class=\"checkbox\" name=\"allowrecommend[$uid]\" value=\"1\" ".($value['allowrecommend'] ? 'checked' : '').' />',
+					"<input type=\"checkbox\" class=\"checkbox\" name=\"needverify[$uid]\" value=\"1\" ".($value['needverify'] ? 'checked' : '').' />',
 					$line,
 				));
 			}
@@ -77,20 +78,19 @@ if($operation=='perm') {
 		showformfooter();
 	} else {
 
-		$block = DB::fetch_first('SELECT * FROM '.DB::table('common_block')." WHERE bid='".$bid."'");
-		if(empty($block)) {
+		if(!($block = C::t('common_block')->fetch($bid))) {
 			cpmsg('block_not_exists');
 		}
 
 		$users = array();
-		if(is_array($_G['gp_perm'])) {
-			foreach($_G['gp_perm'] as $uid => $value) {
+		if(is_array($_GET['perm'])) {
+			foreach($_GET['perm'] as $uid => $value) {
 				$user = array();
-				if(empty($_G['gp_delete']) || !in_array($uid, $_G['gp_delete'])) {
+				if(empty($_GET['delete']) || !in_array($uid, $_GET['delete'])) {
 					$user = array();
-					$user['allowmanage'] = $_G['gp_allowmanage'][$uid] ? 1 : 0;
-					$user['allowrecommend'] = $_G['gp_allowrecommend'][$uid] ? 1 : 0;
-					$user['needverify'] = $_G['gp_needverify'][$uid] ? 1 : 0;
+					$user['allowmanage'] = $_GET['allowmanage'][$uid] ? 1 : 0;
+					$user['allowrecommend'] = $_GET['allowrecommend'][$uid] ? 1 : 0;
+					$user['needverify'] = $_GET['needverify'][$uid] ? 1 : 0;
 					if($value['allowmanage'] != $user['allowmanage'] || $value['allowrecommend'] != $user['allowrecommend']	|| $value['needverify'] != $user['needverify'] ) {
 						$user['uid'] = intval($uid);
 						$users[] = $user;
@@ -98,16 +98,16 @@ if($operation=='perm') {
 				}
 			}
 		}
-		if(!empty($_G['gp_newuser'])) {
-			$value = DB::fetch_first("SELECT uid FROM ".DB::table('common_member')." WHERE username='$_G[gp_newuser]'");
-			if($value) {
-				$user['uid'] = $value['uid'];
-				$user['allowmanage'] = $_G['gp_newallowmanage'] ? 1 : 0;
-				$user['allowrecommend'] = $_G['gp_newallowrecommend'] ? 1 : 0;
-				$user['needverify'] = $_G['gp_newneedverify'] ? 1 : 0;
+		if(!empty($_GET['newuser'])) {
+			$uid = C::t('common_member')->fetch_uid_by_username($_GET['newuser']);
+			if($uid) {
+				$user['uid'] = $uid;
+				$user['allowmanage'] = $_GET['newallowmanage'] ? 1 : 0;
+				$user['allowrecommend'] = $_GET['newallowrecommend'] ? 1 : 0;
+				$user['needverify'] = $_GET['newneedverify'] ? 1 : 0;
 				$users[$user['uid']] = $user;
 			} else {
-				cpmsg_error($_G['gp_newuser'].cplang('block_has_no_allowauthorizedblock'));
+				cpmsg_error($_GET['newuser'].cplang('block_has_no_allowauthorizedblock'));
 			}
 		}
 
@@ -117,8 +117,8 @@ if($operation=='perm') {
 			$blockpermsission->add_users_perm($bid, $users);
 		}
 
-		if(!empty($_G['gp_delete'])) {
-			$blockpermsission->delete_users_perm($bid, $_G['gp_delete']);
+		if(!empty($_GET['delete'])) {
+			$blockpermsission->delete_users_perm($bid, $_GET['delete']);
 		}
 
 		$notinherited = !$_POST['inheritance'] ? '1' : '0';
@@ -128,7 +128,7 @@ if($operation=='perm') {
 			} else {
 				$blockpermsission->remake_inherited_perm($bid);
 			}
-			DB::update('common_block', array('notinherited'=>$notinherited), array('bid'=>$bid));
+			C::t('common_block')->update($bid, array('notinherited' => $notinherited));
 		}
 
 		cpmsg('block_perm_update_succeed', "action=block&operation=perm&bid=$bid", 'succeed');
@@ -139,10 +139,9 @@ if($operation=='perm') {
 	if(submitcheck('deletesubmit')) {
 
 		if($_POST['ids']) {
-			$_POST['ids'] = daddslashes($_POST['ids']);
-			DB::query('DELETE FROM '.DB::table('common_block_item')." WHERE bid IN (".dimplode($_POST['ids']).")");
-			DB::query('DELETE FROM '.DB::table('common_block')." WHERE bid IN (".dimplode($_POST['ids']).")");
-			DB::delete('common_block_permission', 'bid IN ('.dimplode($_POST['ids']).')');
+			C::t('common_block_item')->delete_by_bid($_POST['ids']);
+			C::t('common_block')->delete($_POST['ids']);
+			C::t('common_block_permission')->delete_by_bid_uid_inheritedtplname($_POST['ids']);
 			cpmsg('block_delete_succeed', 'action=block&operation=jscall', 'succeed');
 		} else {
 			cpmsg('block_choose_at_least_one_block', 'action=block&operation=jscall', 'error');
@@ -175,7 +174,7 @@ if($operation=='perm') {
 		$likekeys = array('name');
 		$results = getwheres($intkeys, $strkeys, $randkeys, $likekeys);
 		foreach($likekeys as $k) {
-			$_GET[$k] = htmlspecialchars(stripslashes($_GET[$k]));
+			$_GET[$k] = dhtmlspecialchars($_GET[$k]);
 		}
 		$wherearr = $results['wherearr'];
 		$mpurl .= '&'.implode('&', $results['urls']);
@@ -183,18 +182,14 @@ if($operation=='perm') {
 		$wherearr[] = $operation=='jscall' ? "blocktype='1'" : "blocktype='0'";
 		if($_GET['permname']) {
 			$bids = '';
-			$uid = DB::result_first('SELECT uid FROM '.DB::table('common_member')." WHERE username='$_GET[permname]'");
+			$uid = ($uid = C::t('common_member')->fetch_uid_by_username($_GET['permname'])) ? $uid : C::t('common_member_archive')->fetch_uid_by_username($_GET['permname']);
 			if($uid) {
-				$query = DB::query('SELECT bid FROM '.DB::table('common_block_permission')." WHERE uid='$uid' GROUP BY bid");
-				while($v = DB::fetch($query)) {
-					$bids[] = $v['bid'];
-				}
-				$bids = dimplode($bids);
+				$bids = array_keys(C::t('common_block_permission')->fetch_all_by_uid($uid));
 			}
-			if($bids) {
+			if(($bids = dimplode($bids))) {
 				$wherearr[] = 'bid IN ('.$bids.')';
 			} else {
-				cpmsg_error(stripslashes($_GET['permname']).cplang('block_the_username_has_not_block'));
+				cpmsg_error($_GET['permname'].cplang('block_the_username_has_not_block'));
 			}
 			$mpurl .= '&permname='.$_GET['permname'];
 		}
@@ -214,7 +209,7 @@ if($operation=='perm') {
 		$mpurl .= '&perpage='.$perpage;
 
 		$searchlang = array();
-		$keys = array('search', 'likesupport', 'resultsort', 'defaultsort', 'orderdesc', 'orderasc', 'perpage_10', 'perpage_20', 'perpage_50', 'perpage_100',
+		$keys = array('search', 'likesupport', 'lengthabove1', 'resultsort', 'defaultsort', 'orderdesc', 'orderasc', 'perpage_10', 'perpage_20', 'perpage_50', 'perpage_100',
 		'block_dateline', 'block_id', 'block_name', 'block_blockclass', 'block_add_jscall', 'block_choose_blockclass_to_add_jscall', 'block_diytemplate', 'block_permname', 'block_permname_tips');
 		foreach ($keys as $key) {
 			$searchlang[$key] = cplang($key);
@@ -250,7 +245,7 @@ if($operation=='perm') {
 						</tr>
 						<tr>
 							<th>$searchlang[block_id]</th><td><input type="text" class="txt" name="bid" value="$_GET[bid]"></td>
-							<th>$searchlang[block_name]*</th><td><input type="text" class="txt" name="name" value="$_GET[name]">*$searchlang[likesupport]</td>
+							<th>$searchlang[block_name]*</th><td><input type="text" class="txt" name="name" value="$_GET[name]">$searchlang[lengthabove1]&nbsp;&nbsp; *$searchlang[likesupport]</td>
 						</tr>
 						<tr>
 							<th>$searchlang[resultsort]</th>
@@ -300,10 +295,8 @@ SEARCH;
 		if($operation=='jscall') {
 			showsubtitle(array('', 'block_name', 'block_script', 'block_style', 'block_dateline', 'block_page', 'operation'));
 			$multipage = '';
-			$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('common_block')." b LEFT JOIN ".DB::table('common_template_block')." tb ON tb.bid=b.bid WHERE $wheresql"), 0);
-			if($count) {
-				$query = DB::query("SELECT b.*, tb.targettplname FROM ".DB::table('common_block')." b LEFT JOIN ".DB::table('common_template_block')." tb ON b.bid=tb.bid WHERE $wheresql $ordersql LIMIT $start,$perpage");
-				while($value = DB::fetch($query)) {
+			if(($count = C::t('common_block')->count_by_admincpwhere($wheresql))) {
+				foreach(C::t('common_block')->fetch_all_by_admincpwhere($wheresql, $ordersql, $start, $perpage) as $value) {
 					if($value['targettplname']) {
 						$diyurl = block_getdiyurl($value['targettplname']);
 						$diyurl = $diyurl['url'];
@@ -342,10 +335,8 @@ SEARCH;
 
 			showsubtitle(array('block_name', 'block_script', 'block_style', 'block_dateline', 'block_page', 'operation'));
 			$multipage = '';
-			$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('common_block')." b LEFT JOIN ".DB::table('common_template_block')." tb ON tb.bid=b.bid WHERE $wheresql"), 0);
-			if($count) {
-				$query = DB::query("SELECT b.*, tb.targettplname FROM ".DB::table('common_block')." b LEFT JOIN ".DB::table('common_template_block')." tb ON b.bid=tb.bid WHERE $wheresql $ordersql LIMIT $start,$perpage");
-				while($value = DB::fetch($query)) {
+			if(($count = C::t('common_block')->count_by_admincpwhere($wheresql))) {
+				foreach(C::t('common_block')->fetch_all_by_admincpwhere($wheresql, $ordersql, $start, $perpage) as $value) {
 					if($value['targettplname']) {
 						$diyurl = block_getdiyurl($value['targettplname']);
 						$diyurl = $diyurl['url'];

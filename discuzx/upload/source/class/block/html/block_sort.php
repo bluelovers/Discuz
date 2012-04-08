@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: block_sort.php 11418 2010-06-02 02:28:01Z xupeng $
+ *      $Id: block_sort.php 29174 2012-03-28 04:00:20Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -126,10 +126,6 @@ class block_sort extends commonblock_html {
 		return $settings;
 	}
 
-	function cookparameter($parameter) {
-		return $parameter;
-	}
-
 	function getdata($style, $parameter) {
 		global $_G;
 
@@ -145,7 +141,7 @@ class block_sort extends commonblock_html {
 		$orderby	= isset($parameter['orderby']) ? (in_array($parameter['orderby'],array('lastpost','dateline','replies','views','heats','recommends')) ? $parameter['orderby'] : 'lastpost') : 'lastpost';
 		$lastpost	= isset($parameter['lastpost']) ? intval($parameter['lastpost']) : 0;
 		$recommend	= !empty($parameter['recommend']) ? 1 : 0;
-		$sortids	= isset($parameter['sortids']) ? $parameter['sortids'] : '';
+		$sortid	= isset($parameter['sortids']) ? intval($parameter['sortids']) : '';
 
 		if($fids) {
 			$thefids = array();
@@ -168,7 +164,7 @@ class block_sort extends commonblock_html {
 		$threadtypeids = array();
 
 		$sql = ($tids ? ' AND t.tid IN ('.dimplode($tids).')' : '')
-			.($sortids ? ' AND t.sortid IN ('.dimplode($sortids).')' : '')
+			.($sortid ? ' AND t.sortid='.$sortid : '')
 			.($fids ? ' AND t.fid IN ('.dimplode($fids).')' : '')
 			.($digest ? ' AND t.digest IN ('.dimplode($digest).')' : '')
 			.($stick ? ' AND t.displayorder IN ('.dimplode($stick).')' : '')
@@ -188,97 +184,89 @@ class block_sort extends commonblock_html {
 			$sqlfrom .= " $joinmethod JOIN `".DB::table('forum_forumrecommend')."` fc ON fc.tid=t.tid";
 		}
 
+		require_once libfile('function/threadsort');
+		$templatearray = $sortoptionarray = array();
+		loadcache(array('threadsort_option_'.$sortid, 'threadsort_template_'.$sortid));
+		$templatearray[$sortid] = $_G['cache']['threadsort_template_'.$sortid]['block'];
+		$sortoptionarray[$sortid] = $_G['cache']['threadsort_option_'.$sortid];
+		$isthreadtype = (strpos($templatearray[$sortid], '{typename}') !== false || strpos($templatearray[$sortid], '{typename_url}') !== false ) ? true : false;
+		$threadtypes = array();
+		if($isthreadtype && $fids) {
+			foreach(C::t('forum_forumfield')->fetch_all($fids) as $fid => $forum) {
+				$threadtypes[$fid] = dunserialize($forum['threadtypes']);
+			}
+		}
+
 		$html = '';
-		$query = DB::query("SELECT t.tid,t.fid,t.readperm,t.author,t.authorid,t.subject,t.dateline,t.lastpost,t.lastposter,t.views,t.replies,t.highlight,t.digest,t.typeid,t.sortid,t.heats,t.recommends
+		$threadlist = $verify = $verifyuids = array();
+		$query = DB::query("SELECT t.*
 			$sqlfrom WHERE 1 $sql
 			AND t.readperm='0'
 			AND t.displayorder>='0'
 			ORDER BY t.$orderby DESC
 			LIMIT $startrow,$items;"
 			);
-		while($data = DB::fetch($query)) {
-			$html .= $this->showsort($data);
+
+		while($thread = DB::fetch($query)) {
+
+			if(isset($_G['setting']['verify']['enabled']) && $_G['setting']['verify']['enabled']) {
+				$verifyuids[$thread['authorid']] = $thread['authorid'];
+			}
+
+			if($thread['highlight']) {
+				$color = array('', '#EE1B2E', '#EE5023', '#996600', '#3C9D40', '#2897C5', '#2B65B7', '#8F2A90', '#EC1282');
+				$string = sprintf('%02d', $thread['highlight']);
+				$stylestr = sprintf('%03b', $string[0]);
+
+				$thread['highlight'] = ' style="';
+				$thread['highlight'] .= $stylestr[0] ? 'font-weight: bold;' : '';
+				$thread['highlight'] .= $stylestr[1] ? 'font-style: italic;' : '';
+				$thread['highlight'] .= $stylestr[2] ? 'text-decoration: underline;' : '';
+				$thread['highlight'] .= $string[1] ? 'color: '.$color[$string[1]] : '';
+				$thread['highlight'] .= '"';
+			} else {
+				$thread['highlight'] = '';
+			}
+
+			$thread['lastposterenc'] = rawurlencode($thread['lastposter']);
+			$fid = $thread['fid'];
+			if($thread['typeid'] && $isthreadtype && $threadtypes[$fid] && !empty($threadtypes[$fid]['prefix']) && isset($threadtypes[$fid]['types'][$thread['typeid']])) {
+				if($threadtypes[$fid]['prefix'] == 1) {
+					$thread['typehtml'] = '<em>[<a href="forum.php?mod=forumdisplay&fid='.$fid.'&amp;filter=typeid&amp;typeid='.$thread['typeid'].'">'.$threadtypes[$fid]['types'][$thread['typeid']].'</a>]</em>';
+				} elseif($threadtypes[$fid]['icons'][$thread['typeid']] && $threadtypes[$fid]['prefix'] == 2) {
+					$thread['typehtml'] = '<em><a title="'.$threadtypes[$fid]['types'][$thread['typeid']].'" href="forum.php?mod=forumdisplay&fid='.$fid.'&amp;filter=typeid&amp;typeid='.$thread['typeid'].'">'.'<img style="vertical-align: middle;padding-right:4px;" src="'.$threadtypes[$fid]['icons'][$thread['typeid']].'" alt="'.$threadtypes[$fid]['types'][$thread['typeid']].'" /></a></em>';
+				}
+				$thread['typename'] = $threadtypes[$fid]['types'][$thread['typeid']];
+			} else {
+				$thread['typename'] = $thread['typehtml'] = '';
+			}
+
+			$thread['dateline'] = dgmdate($thread['dateline'], 'u', '9999', getglobal('setting/dateformat'));
+			$thread['lastpost'] = dgmdate($thread['lastpost'], 'u');
+			$threadlist[$thread['tid']] = $thread;
 		}
+
+		if(!empty($threadlist)) {
+			if($verifyuids) {
+				foreach(C::t('common_member_verify')->fetch_all($verifyuids) as $value) {
+					foreach($_G['setting']['verify'] as $vid => $vsetting) {
+						if($vsetting['available'] && $vsetting['showicon'] && $value['verify'.$vid] == 1) {
+							$srcurl = '';
+							if(!empty($vsetting['icon'])) {
+								$srcurl = $vsetting['icon'];
+							}
+							$verify[$value['uid']] .= "<a href=\"home.php?mod=spacecp&ac=profile&op=verify&vid=$vid\" target=\"_blank\">".(!empty($srcurl) ? '<img src="'.$srcurl.'" class="vm" alt="'.$vsetting['title'].'" title="'.$vsetting['title'].'" />' : $vsetting['title']).'</a>';
+						}
+					}
+
+				}
+			}
+			$html = implode('', showsortmodetemplate($sortid, $fids, $sortoptionarray, $templatearray, $threadlist, array_keys($threadlist), $verify));
+		}
+
 		return array('html' => $html, 'data' => null);
 	}
 
-	function showsort($threaddata) {
-		global $_G;
-		$sortid = intval($threaddata['sortid']);
-		$tid = intval($threaddata['tid']);
-		loadcache(array('threadsort_option_'.$sortid, 'threadsort_template_'.$sortid));
-
-		$template = $_G['cache']['threadsort_template_'.$sortid]['block'];
-		$sortoption = $_G['cache']['threadsort_option_'.$sortid];
-
-		$optiondata = $optionvaluelist = $optiontitlelist = $optionunitlist = $searchtitle = $searchvalue = $searchunit = array();
-		$typetemplate = '';
-		$query = DB::query("SELECT optionid, value FROM ".DB::table('forum_typeoptionvar')." WHERE tid='$tid'");
-		while($option = DB::fetch($query)) {
-			$optiondata[$option['optionid']] = $option['value'];
-		}
-
-		$threaddata['subject'] = '<a href="'.'forum.php?mod=viewthread&tid='.$threaddata['tid'].'" '.$threaddata['highlight'].' target="_blank">'.$threaddata['subject'].'</a>';
-		$threaddata['author'] = '<a href="'.'home.php?mod=space&uid='.$threaddata['authorid'].'" target="_blank">'.$threaddata['author'].'</a>';
-
-		if($sortoption && $template && $optiondata && $threaddata) {
-			foreach($sortoption as $optionid => $option) {
-				$optiontitlelist[] = $sortoption[$optionid]['title'];
-				$optionunitlist[] = $sortoption[$optionid]['unit'];
-				if($sortoption[$optionid]['type'] == 'checkbox') {
-					$choicedata = '';
-					foreach(explode("\t", $optiondata[$optionid]) as $choiceid) {
-						$choicedata .= '<span>'.$sortoption[$optionid]['choices'][$choiceid].'</span>';
-					}
-					$optionvaluelist[] = $choicedata;
-				} elseif($sortoption[$optionid]['type'] == 'radio') {
-					$optionvaluelist[] = $sortoption[$optionid]['choices'][$optiondata[$optionid]];
-				} elseif($sortoption[$optionid]['type'] == 'select') {
-					$tmpchoiceid = $tmpidentifiervalue = array();
-					foreach(explode('.', $optiondata[$optionid]) as $choiceid) {
-						$tmpchoiceid[] = $choiceid;
-						$tmpidentifiervalue[] = $option['choices'][implode('.', $tmpchoiceid)];
-					}
-					$optionvaluelist[] = implode(' &raquo; ', $tmpidentifiervalue);
-					unset($tmpchoiceid, $tmpidentifiervalue);
-				} elseif($sortoption[$optionid]['type'] == 'image') {
-					if($optiondata[$optionid]) {
-						$imgvalue = unserialize($optiondata[$optionid]);
-						$optionvaluelist[] = $imgvalue['url'];
-					} else {
-						$optionvaluelist[] = STATICURL.'image/common/nophoto.gif';
-					}
-				} elseif($sortoption[$optionid]['type'] == 'url') {
-					$optiondata[$optionid] = preg_match('/^(ftp|http|)[s]?:\/\//', $optiondata[$optionid]) ? $optiondata[$optionid] : $optiondata[$optionid];
-					$optionvaluelist[] = $optiondata[$optionid] ? "<a href=\"".$optiondata[$optionid]."\" target=\"_blank\">".$optiondata[$optionid]."</a>" : '';
-				} elseif($sortoption[$optionid]['type'] == 'textarea') {
-					$optionvaluelist[] = $optiondata[$optionid] ? nl2br($optiondata[$optionid]) : '';
-				} else {
-					$optionvaluelist[] = $optiondata[$optionid] ? $optiondata[$optionid] : $sortoption[$optionid]['defaultvalue'];
-				}
-			}
-
-			foreach($sortoption as $option) {
-				$searchtitle[] = '/{('.$option['identifier'].')}/i';
-				$searchvalue[] = '/\[('.$option['identifier'].')value\]/i';
-				$searchunit[] = '/\[('.$option['identifier'].')unit\]/i';
-			}
-
-			$typetemplate = preg_replace(array("/\{author\}/i", "/\{subject\}/i", "/\{dateline\}/i", "/\{url\}/i", "/\[url\](.+?)\[\/url\]/i"),
-							array(
-								$threaddata['author'],
-								$threaddata['subject'],
-								dgmdate($threaddata['dateline'], 'n-j'),
-								"forum.php?mod=viewthread&tid=$tid",
-								"<a href=\""."forum.php?mod=viewthread&tid=$tid\" target=\"_blank\">\\1</a>"
-							), stripslashes($template));
-			$typetemplate = preg_replace($searchtitle, $optiontitlelist, $typetemplate);
-			$typetemplate = preg_replace($searchvalue, $optionvaluelist, $typetemplate);
-			$typetemplate = preg_replace($searchunit, $optionunitlist, $typetemplate);
-		}
-
-		return $typetemplate;
-	}
 }
 
 

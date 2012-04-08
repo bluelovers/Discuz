@@ -3,7 +3,7 @@
  *		[Discuz!] (C)2001-2099 Comsenz Inc.
  *		This is NOT a freeware, use is subject to license terms
  *
- *		$Id: sitemaster.inc.php 27071 2012-01-04 05:56:10Z songlixin $
+ *		$Id: sitemaster.inc.php 29265 2012-03-31 06:03:26Z yexinhao $
  */
 
 if (!defined('IN_DISCUZ')) {
@@ -14,29 +14,26 @@ if ($_G['adminid'] <= 0) {
 	exit('Access Denied');
 }
 
-if ($_G['gp_formhash'] != formhash()) {
-	exit('Access Denied');
+if ($_POST['formhash'] != formhash()) {
+    exit('Access Denied');
 }
 
-require_once libfile('function/sec');
-require_once libfile('class/sec');
+$securityService = Cloud::loadClass('Service_Security');
+$securityClient = Cloud::loadClass('Service_Client_Security');
 
 $typeArray = array('1' => 'post', '2' => 'member');
-
-$sec = Sec::getInstance();
 $operateType = 'member';
-$operateData = getOperateData($operateType);
+$operateData = $securityService->getOperateData($operateType);
 if (count($operateData) == 0) {
 	$operateType = 'post';
-	$operateData = getOperateData($operateType);
+	$operateData = $securityService->getOperateData($operateType);
 }
 if (count($operateData) == 0 || !is_array($operateData)) {
-    exit('clear');
+    exit;
 }
 
 $operateThreadData = array();
 $operatePostData = array();
-
 if ($operateType == 'post') {
 	foreach ($operateData as $tempData) {
 		if ($tempData['operateType'] == 'thread') {
@@ -46,12 +43,11 @@ if ($operateType == 'post') {
 		}
 	}
 	if (count($operateThreadData)) {
-		$res = $sec->reportOperate('thread', $operateThreadData);
+		$res = $securityClient->securityReportOperation('thread', $operateThreadData);
 	} elseif(count($operatePostData)) {
-		$res = $sec->reportOperate('post', $operatePostData);
+		$res = $securityClient->securityReportOperation('post', $operatePostData);
 	}
 } elseif(count($operateData)) {
-	$res = $sec->reportOperate($operateType, $operateData);
+	$res = $securityClient->securityReportOperation($operateType, $operateData);
 }
-markasreported($operateType, $operateData);
-?>
+$securityService->markasreported($operateType, $operateData);

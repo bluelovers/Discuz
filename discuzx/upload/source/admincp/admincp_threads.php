@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_threads.php 23581 2011-07-26 08:18:27Z liulanbo $
+ *      $Id: admincp_threads.php 26864 2011-12-26 09:20:38Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -15,44 +15,45 @@ require_once libfile('function/post');
 
 cpheader();
 
-$optype = $_G['gp_optype'];
-$fromumanage = $_G['gp_fromumanage'] ? 1 : 0;
+$optype = $_GET['optype'];
+$fromumanage = $_GET['fromumanage'] ? 1 : 0;
 
 if((!$operation && !$optype) || ($operation == 'group' && empty($optype))) {
-	if(!submitcheck('searchsubmit', 1) && empty($_G['gp_search'])) {
+	if(!submitcheck('searchsubmit', 1) && empty($_GET['search'])) {
 		$newlist = 1;
-		$_G['gp_intype'] = '';
-		$_G['gp_detail'] = 1;
-		$_G['gp_inforum'] = 'all';
-		$_G['gp_starttime'] = dgmdate(TIMESTAMP - 86400 * 30, 'Y-n-j');
+		$_GET['intype'] = '';
+		$_GET['detail'] = 1;
+		$_GET['inforum'] = 'all';
+		$_GET['starttime'] = dgmdate(TIMESTAMP - 86400 * 30, 'Y-n-j');
 	}
 	$intypes = '';
-	if($_G['gp_inforum'] && $_G['gp_inforum'] != 'all' && $_G['gp_intype']) {
-		$forumthreadtype = DB::result_first("SELECT threadtypes FROM ".DB::table('forum_forumfield')." WHERE fid='$_G[gp_inforum]'");
+	if($_GET['inforum'] && $_GET['inforum'] != 'all' && $_GET['intype']) {
+		$foruminfo = C::t('forum_forumfield')->fetch($_GET['inforum']);
+		$forumthreadtype = $foruminfo['threadtypes'];
 		if($forumthreadtype) {
-			$forumthreadtype = unserialize($forumthreadtype);
+			$forumthreadtype = dunserialize($forumthreadtype);
 			foreach($forumthreadtype['types'] as $typeid => $typename) {
-				$intypes .= '<option value="'.$typeid.'"'.($typeid == $_G['gp_intype'] ? ' selected' : '').'>'.$typename.'</option>';
+				$intypes .= '<option value="'.$typeid.'"'.($typeid == $_GET['intype'] ? ' selected' : '').'>'.$typename.'</option>';
 			}
 		}
 	}
 	require_once libfile('function/forumlist');
 	$forumselect = '<b>'.$lang['threads_search_forum'].':</b><br><br><select name="inforum" onchange="ajaxget(\'forum.php?mod=ajax&action=getthreadtypes&selectname=intype&fid=\' + this.value, \'forumthreadtype\')"><option value="all">&nbsp;&nbsp;> '.$lang['all'].'</option><option value="">&nbsp;</option>'.forumselect(FALSE, 0, 0, TRUE).'</select>';
 	$typeselect = $lang['threads_move_type'].' <span id="forumthreadtype"><select name="intype"><option value=""></option>'.$intypes.'</select></span>';
-	if(isset($_G['gp_inforum'])) {
-		$forumselect = preg_replace("/(\<option value=\"$_G[gp_inforum]\")(\>)/", "\\1 selected=\"selected\" \\2", $forumselect);
+	if(isset($_GET['inforum'])) {
+		$forumselect = preg_replace("/(\<option value=\"$_GET[inforum]\")(\>)/", "\\1 selected=\"selected\" \\2", $forumselect);
 	}
 
 	$sortselect = '';
-	$query = DB::query("SELECT * FROM ".DB::table('forum_threadtype')." ORDER BY displayorder");
-	while($type = DB::fetch($query)) {
+	$query = C::t('forum_threadtype')->fetch_all_for_order();
+	foreach($query as $type) {
 		if($type['special']) {
 			$sortselect .= '<option value="'.$type['typeid'].'">&nbsp;&nbsp;> '.$type['name'].'</option>';
 		}
 	}
 
-	if(isset($_G['gp_insort'])) {
-		$sortselect = preg_replace("/(\<option value=\"{$_G['gp_insort']}\")(\>)/", "\\1 selected=\"selected\" \\2", $sortselect);
+	if(isset($_GET['insort'])) {
+		$sortselect = preg_replace("/(\<option value=\"{$_GET['insort']}\")(\>)/", "\\1 selected=\"selected\" \\2", $sortselect);
 	}
 
 	echo <<<EOT
@@ -67,11 +68,11 @@ EOT;
 	shownav('topic', 'nav_maint_threads'.($operation ? '_'.$operation : ''));
 	showsubmenu('nav_maint_threads'.($operation ? '_'.$operation : ''), array(
 		array('newlist', 'threads'.($operation ? '&operation='.$operation : ''), !empty($newlist)),
-		array('search', 'threads&search=true'.($operation ? '&operation='.$operation : ''), empty($newlist)),
+		array('search', 'threads'.($operation ? '&operation='.$operation : '').'&search=true', empty($newlist)),
 	));
 	empty($newlist) && showsubmenusteps('', array(
-		array('threads_search', !$_G['gp_searchsubmit']),
-		array('nav_maint_threads', $_G['gp_searchsubmit'])
+		array('threads_search', !$_GET['searchsubmit']),
+		array('nav_maint_threads', $_GET['searchsubmit'])
 	));
 	if(empty($newlist)) {
 		$search_tips = 1;
@@ -79,66 +80,66 @@ EOT;
 	}
 	showtagheader('div', 'threadsearch', !submitcheck('searchsubmit', 1) && empty($newlist));
 	showformheader('threads'.($operation ? '&operation='.$operation : ''), '', 'threadforum');
-	showhiddenfields(array('page' => $page, 'pp' => $_G['gp_pp'] ? $_G['gp_pp'] : $_G['gp_perpage']));
+	showhiddenfields(array('page' => $page, 'pp' => $_GET['pp'] ? $_GET['pp'] : $_GET['perpage']));
 	showtableheader();
-	showsetting('threads_search_detail', 'detail', $_G['gp_detail'], 'radio');
+	showsetting('threads_search_detail', 'detail', $_GET['detail'], 'radio');
 	if($operation != 'group') {
 		showtablerow('', array('class="rowform" colspan="2" style="width:auto;"'), array($forumselect.$typeselect));
 	}
-	showsetting('threads_search_perpage', '', $_G['gp_perpage'], "<select name='perpage'><option value='20'>$lang[perpage_20]</option><option value='50'>$lang[perpage_50]</option><option value='100'>$lang[perpage_100]</option></select>");
+	showsetting('threads_search_perpage', '', $_GET['perpage'], "<select name='perpage'><option value='20'>$lang[perpage_20]</option><option value='50'>$lang[perpage_50]</option><option value='100'>$lang[perpage_100]</option></select>");
 	if(!$fromumanage) {
-		empty($_G['gp_starttime']) && $_G['gp_starttime'] = date('Y-m-d', time() - 86400 * 30);
+		empty($_GET['starttime']) && $_GET['starttime'] = date('Y-m-d', time() - 86400 * 30);
 	}
 	echo '<input type="hidden" name="fromumanage" value="'.$fromumanage.'">';
-	showsetting('threads_search_time', array('starttime', 'endtime'), array($_G['gp_starttime'], $_G['gp_endtime']), 'daterange');
-	showsetting('threads_search_user', 'users', $_G['gp_users'], 'text');
-	showsetting('threads_search_keyword', 'keywords', $_G['gp_keywords'], 'text');
+	showsetting('threads_search_time', array('starttime', 'endtime'), array($_GET['starttime'], $_GET['endtime']), 'daterange');
+	showsetting('threads_search_user', 'users', $_GET['users'], 'text');
+	showsetting('threads_search_keyword', 'keywords', $_GET['keywords'], 'text');
 
 	showtagheader('tbody', 'advanceoption');
 	showsetting('threads_search_sort', '', '', '<select name="insort"><option value="all">&nbsp;&nbsp;> '.$lang['all'].'</option><option value="">&nbsp;</option><option value="0">&nbsp;&nbsp;> '.$lang['threads_search_type_none'].'</option>'.$sortselect.'</select>');
-	showsetting('threads_search_viewrange', array('viewsmore', 'viewsless'), array($_G['gp_viewsmore'], $_G['gp_viewsless']), 'range');
-	showsetting('threads_search_replyrange', array('repliesmore', 'repliesless'), array($_G['gp_repliesmore'], $_G['gp_repliesless']), 'range');
-	showsetting('threads_search_readpermmore', 'readpermmore', $_G['gp_readpermmore'], 'text');
-	showsetting('threads_search_pricemore', 'pricemore', $_G['gp_pricemore'], 'text');
-	showsetting('threads_search_noreplyday', 'noreplydays', $_G['gp_noreplydays'], 'text');
+	showsetting('threads_search_viewrange', array('viewsmore', 'viewsless'), array($_GET['viewsmore'], $_GET['viewsless']), 'range');
+	showsetting('threads_search_replyrange', array('repliesmore', 'repliesless'), array($_GET['repliesmore'], $_GET['repliesless']), 'range');
+	showsetting('threads_search_readpermmore', 'readpermmore', $_GET['readpermmore'], 'text');
+	showsetting('threads_search_pricemore', 'pricemore', $_GET['pricemore'], 'text');
+	showsetting('threads_search_noreplyday', 'noreplydays', $_GET['noreplydays'], 'text');
 	showsetting('threads_search_type', array('specialthread', array(
 		array(0, cplang('unlimited'), array('showspecial' => 'none')),
 		array(1, cplang('threads_search_include_yes'), array('showspecial' => '')),
 		array(2, cplang('threads_search_include_no'), array('showspecial' => '')),
-	), TRUE), $_G['gp_specialthread'], 'mradio');
-	showtablerow('id="showspecial" style="display:'.($_G['gp_specialthread'] ? '' : 'none').'"', 'class="sub" colspan="2"', mcheckbox('special', array(
+	), TRUE), $_GET['specialthread'], 'mradio');
+	showtablerow('id="showspecial" style="display:'.($_GET['specialthread'] ? '' : 'none').'"', 'class="sub" colspan="2"', mcheckbox('special', array(
 		1 => cplang('thread_poll'),
 		2 => cplang('thread_trade'),
 		3 => cplang('thread_reward'),
 		4 => cplang('thread_activity'),
 		5 => cplang('thread_debate')
-	), $_G['gp_special'] ? $_G['gp_special'] : array(0)));
+	), $_GET['special'] ? $_GET['special'] : array(0)));
 	showsetting('threads_search_sticky', array('sticky', array(
 		array(0, cplang('unlimited')),
 		array(1, cplang('threads_search_include_yes')),
 		array(2, cplang('threads_search_include_no')),
-	), TRUE), $_G['gp_sticky'], 'mradio');
+	), TRUE), $_GET['sticky'], 'mradio');
 	showsetting('threads_search_digest', array('digest', array(
 		array(0, cplang('unlimited')),
 		array(1, cplang('threads_search_include_yes')),
 		array(2, cplang('threads_search_include_no')),
-	), TRUE), $_G['gp_digest'], 'mradio');
+	), TRUE), $_GET['digest'], 'mradio');
 	showsetting('threads_search_attach', array('attach', array(
 		array(0, cplang('unlimited')),
 		array(1, cplang('threads_search_include_yes')),
 		array(2, cplang('threads_search_include_no')),
-	), TRUE), $_G['gp_attach'], 'mradio');
+	), TRUE), $_GET['attach'], 'mradio');
 	showsetting('threads_rate', array('rate', array(
 		array(0, cplang('unlimited')),
 		array(1, cplang('threads_search_include_yes')),
 		array(2, cplang('threads_search_include_no')),
-	), TRUE), $_G['gp_rate'], 'mradio');
+	), TRUE), $_GET['rate'], 'mradio');
 	showsetting('threads_highlight', array('highlight', array(
 		array(0, cplang('unlimited')),
 		array(1, cplang('threads_search_include_yes')),
 		array(2, cplang('threads_search_include_no')),
-	), TRUE), $_G['gp_highlight'], 'mradio');
-	showsetting('threads_save', 'savethread', $_G['gp_savethread'], 'radio');
+	), TRUE), $_GET['highlight'], 'mradio');
+	showsetting('threads_save', 'savethread', $_GET['savethread'], 'radio');
 	showtagfooter('tbody');
 
 	showsubmit('searchsubmit', 'submit', '', 'more_options');
@@ -146,124 +147,126 @@ EOT;
 	showformfooter();
 	showtagfooter('div');
 	if(submitcheck('searchsubmit', 1) || $newlist) {
-		$operation == 'group' && $_G['gp_inforum'] = 'isgroup';
-		$sql = '';
-		$sql .= $_G['gp_inforum'] != '' && $_G['gp_inforum'] != 'all' && $_G['gp_inforum'] != 'isgroup' ? " AND fid='{$_G['gp_inforum']}'" : '';
-		$sql .= $_G['gp_inforum'] != '' && $_G['gp_inforum'] == 'isgroup' ? " AND isgroup='1'" : ' AND isgroup=\'0\'';
-		$sql .= $_G['gp_intype'] !== '' ? " AND typeid='{$_G['gp_intype']}'" : '';
-		$sql .= $_G['gp_insort'] != '' && $_G['gp_insort'] != 'all' ? " AND sortid='{$_G['gp_insort']}'" : '';
-		$sql .= $_G['gp_viewsless'] != '' ? " AND views<'{$_G['gp_viewsless']}'" : '';
-		$sql .= $_G['gp_viewsmore'] != '' ? " AND views>'{$_G['gp_viewsmore']}'" : '';
-		$sql .= $_G['gp_repliesless'] != '' ? " AND replies<'{$_G['gp_repliesless']}'" : '';
-		$sql .= $_G['gp_repliesmore'] != '' ? " AND replies>'{$_G['gp_repliesmore']}'" : '';
-		$sql .= $_G['gp_readpermmore'] != '' ? " AND readperm>'{$_G['gp_readpermmore']}'" : '';
-		$sql .= $_G['gp_pricemore'] != '' ? " AND price>'{$_G['gp_pricemore']}'" : '';
-		$sql .= $_G['gp_beforedays'] != '' ? " AND dateline<'$_G[timestamp]'-'{$_G['gp_beforedays']}'*86400" : '';
-		$sql .= $_G['gp_noreplydays'] != '' ? " AND lastpost<'$_G[timestamp]'-'{$_G['gp_noreplydays']}'*86400" : '';
-		$sql .= $_G['gp_starttime'] != '' ? " AND dateline>'".strtotime($_G['gp_starttime'])."'" : '';
-		$sql .= $_G['gp_endtime'] != '' ? " AND dateline<='".strtotime($_G['gp_endtime'])."'" : '';
-		$sql .= !empty($_G['gp_savethread']) ? " AND displayorder='-4'" : '';
+		$operation == 'group' && $_GET['inforum'] = 'isgroup';
 
-		if(trim($_G['gp_keywords'])) {
-			$sqlkeywords = '';
-			$or = '';
-			$keywords = explode(',', str_replace(' ', '', $_G['gp_keywords']));
-			for($i = 0; $i < count($keywords); $i++) {
-				$sqlkeywords .= " $or subject LIKE '%".$keywords[$i]."%'";
-				$or = 'OR';
-			}
-			$sql .= " AND ($sqlkeywords)";
+		$conditions['inforum'] = $_GET['inforum'] != '' && $_GET['inforum'] != 'all' && $_GET['inforum'] != 'isgroup' ? $_GET['inforum'] : '';
+		$conditions['isgroup'] = $_GET['inforum'] != '' && $_GET['inforum'] == 'isgroup' ? 1 : 0;
+		$conditions['intype'] = $_GET['intype'] !== '' ? $_GET['intype'] : '';
+		$conditions['insort'] = $_GET['insort'] != '' && $_GET['insort'] != 'all' ? $_GET['insort'] : '';
+		$conditions['viewsless'] = $_GET['viewsless'] != '' ? $_GET['viewsless'] : '';
+		$conditions['viewsmore'] = $_GET['viewsmore'] != '' ? $_GET['viewsmore'] : '';
+		$conditions['repliesless'] = $_GET['repliesless'] != '' ? $_GET['repliesless'] : '';
+		$conditions['repliesmore'] = $_GET['repliesmore'] != '' ? $_GET['repliesmore'] : '';
+		$conditions['readpermmore'] = $_GET['readpermmore'] != '' ? $_GET['readpermmore'] : '';
+		$conditions['pricemore'] = $_GET['pricemore'] != '' ? $_GET['pricemore'] : '';
+		$conditions['beforedays'] = $_GET['beforedays'] != '' ? $_GET['beforedays'] : '';
+		$conditions['noreplydays'] = $_GET['noreplydays'] != '' ? $_GET['noreplydays'] : '';
+		$conditions['starttime'] = $_GET['starttime'] != '' ? $_GET['starttime'] : '';
+		$conditions['endtime'] = $_GET['endtime'] != '' ? $_GET['endtime'] : '';
+		if(!empty($_GET['savethread'])) {
+			$conditions['sticky'] = 4;
+			$conditions['displayorder'] = -4;
 		}
 
-		$sql .= trim($_G['gp_users']) ? " AND author IN ('".str_replace(',', '\',\'', str_replace(' ', '', trim($_G['gp_users'])))."')" : '';
+		if(trim($_GET['keywords'])) {
+			$conditions['keywords'] = $_GET['keywords'];
+		}
 
-		if($_G['gp_sticky'] == 1) {
-			$sql .= " AND displayorder>'0'";
-		} elseif($_G['gp_sticky'] == 2) {
-			$sql .= " AND displayorder='0'";
+		$conditions['users'] = trim($_GET['users']) ? $_GET['users'] : '';
+		if($_GET['sticky'] == 1) {
+			$conditions['sticky'] = 1;
+		} elseif($_GET['sticky'] == 2) {
+			$conditions['sticky'] = 2;
 		}
-		if($_G['gp_digest'] == 1) {
-			$sql .= " AND digest>'0'";
-		} elseif($_G['gp_digest'] == 2) {
-			$sql .= " AND digest='0'";
+		if($_GET['digest'] == 1) {
+			$conditions['digest'] = 1;
+		} elseif($_GET['digest'] == 2) {
+			$conditions['digest'] = 2;
 		}
-		if($_G['gp_attach'] == 1) {
-			$sql .= " AND attachment>'0'";
-		} elseif($_G['gp_attach'] == 2) {
-			$sql .= " AND attachment='0'";
+		if($_GET['attach'] == 1) {
+			$conditions['attach'] = 1;
+		} elseif($_GET['attach'] == 2) {
+			$conditions['attach'] = 2;
 		}
-		if($_G['gp_rate'] == 1) {
-			$sql .= " AND rate>'0'";
-		} elseif($_G['gp_rate'] == 2) {
-			$sql .= " AND rate='0'";
+		if($_GET['rate'] == 1) {
+			$conditions['rate'] = 1;
+		} elseif($_GET['rate'] == 2) {
+			$conditions['rate'] = 2;
 		}
-		if($_G['gp_highlight'] == 1) {
-			$sql .= " AND highlight>'0'";
-		} elseif($_G['gp_highlight'] == 2) {
-			$sql .= " AND highlight='0'";
+		if($_GET['highlight'] == 1) {
+			$conditions['highlight'] = 1;
+		} elseif($_GET['highlight'] == 2) {
+			$conditions['highlight'] = 2;
 		}
-		if(!empty($_G['gp_special'])) {
+		if(!empty($_GET['special'])) {
 			$specials = $comma = '';
-			foreach($_G['gp_special'] as $val) {
+			foreach($_GET['special'] as $val) {
 				$specials .= $comma.'\''.$val.'\'';
 				$comma = ',';
 			}
-			if($_G['gp_specialthread'] == 1) {
-				$sql .=  " AND special IN ($specials)";
-			} elseif($_G['gp_specialthread'] == 2) {
-				$sql .=  " AND special NOT IN ($specials)";
+			$conditions['special'] = $_GET['special'];
+			if($_GET['specialthread'] == 1) {
+				$conditions['specialthread'] = 1;
+			} elseif($_GET['specialthread'] == 2) {
+				$conditions['specialthread'] = 2;
 			}
 		}
 
 		$fids = array();
 		$tids = $threadcount = '0';
-		if($sql) {
-			$sql = (empty($_G['gp_savethread']) ? "displayorder>='0'" : '1').' '.$sql;
-			if($_G['gp_detail']) {
-				$_G['gp_perpage'] = intval($_G['gp_perpage']) < 1 ? 20 : intval($_G['gp_perpage']);
-				$perpage = $_G['gp_pp'] ? $_G['gp_pp'] : $_G['gp_perpage'];
-				$query = DB::query("SELECT fid, tid, readperm, price, subject, authorid, author, views, replies, lastpost, isgroup, displayorder FROM ".DB::table('forum_thread')." FORCE INDEX(PRIMARY) WHERE $sql ORDER BY tid DESC LIMIT ".(($page - 1) * $perpage).",{$perpage}");
+		if($conditions) {
+			if(empty($_GET['savethread']) && !isset($conditions['displayorder']) && !isset($conditions['sticky'])) {
+				$conditions['sticky'] = 5;
+			}
+			if($_GET['detail']) {
+				$_GET['perpage'] = intval($_GET['perpage']) < 1 ? 20 : intval($_GET['perpage']);
+				$perpage = $_GET['pp'] ? $_GET['pp'] : $_GET['perpage'];
+				$start = ($page - 1) * $perpage;
 				$threads = '';
 				$groupsname = $groupsfid = $threadlist = array();
-				while($thread = DB::fetch($query)) {
-					$fids[] = $thread['fid'];
-					if($thread['isgroup']) {
-						$groupsfid[$thread[fid]] = $thread['fid'];
+				$threadcount = C::t('forum_thread')->count_search($conditions);
+				if($threadcount) {
+					foreach(C::t('forum_thread')->fetch_all_search($conditions, 0, $start, $perpage, 'tid', 'DESC', ' FORCE INDEX(PRIMARY) ') as $thread) {
+						$fids[] = $thread['fid'];
+						if($thread['isgroup']) {
+							$groupsfid[$thread[fid]] = $thread['fid'];
+						}
+						$thread['lastpost'] = dgmdate($thread['lastpost']);
+						$threadlist[] = $thread;
 					}
-					$thread['lastpost'] = dgmdate($thread['lastpost']);
-					$threadlist[] = $thread;
-				}
-				if($groupsfid) {
-					$query = DB::query("SELECT fid, name FROM ".DB::table('forum_forum')." WHERE fid IN(".dimplode($groupsfid).")");
-					while($row = DB::fetch($query)) {
-						$groupsname[$row[fid]] = $row['name'];
+					if($groupsfid) {
+						$query = C::t('forum_forum')->fetch_all_by_fid($groupsfid);
+						foreach($query as $row) {
+							$groupsname[$row[fid]] = $row['name'];
+						}
 					}
+					if($threadlist) {
+						foreach($threadlist as $thread) {
+							$threads .= showtablerow('', array('class="td25"', '', '', '', 'class="td25"', 'class="td25"'), array(
+								"<input class=\"checkbox\" type=\"checkbox\" name=\"tidarray[]\" value=\"$thread[tid]\" />",
+								"<a href=\"forum.php?mod=viewthread&tid=$thread[tid]".($thread['displayorder'] != -4 ? '' : '&modthreadkey='.modauthkey($thread['tid']))."\" target=\"_blank\">$thread[subject]</a>".($thread['readperm'] ? " - [$lang[threads_readperm] $thread[readperm]]" : '').($thread['price'] ? " - [$lang[threads_price] $thread[price]]" : ''),
+							"<a href=\"forum.php?mod=forumdisplay&fid=$thread[fid]\" target=\"_blank\">".(empty($thread['isgroup']) ? $_G['cache']['forums'][$thread[fid]]['name'] : $groupsname[$thread[fid]])."</a>",
+								"<a href=\"home.php?mod=space&uid=$thread[authorid]\" target=\"_blank\">$thread[author]</a>",
+								$thread['replies'],
+								$thread['views'],
+								$thread['lastpost']
+							), TRUE);
+						}
+					}
+
+					$multi = multi($threadcount, $perpage, $page, ADMINSCRIPT."?action=threads");
+					$multi = preg_replace("/href=\"".ADMINSCRIPT."\?action=threads&amp;page=(\d+)\"/", "href=\"javascript:page(\\1)\"", $multi);
+					$multi = str_replace("window.location='".ADMINSCRIPT."?action=threads&amp;page='+this.value", "page(this.value)", $multi);
 				}
-				if($threadlist) {
-					foreach($threadlist as $thread) {
-						$threads .= showtablerow('', array('class="td25"', '', '', '', 'class="td25"', 'class="td25"'), array(
-							"<input class=\"checkbox\" type=\"checkbox\" name=\"tidarray[]\" value=\"$thread[tid]\" />",
-							"<a href=\"forum.php?mod=viewthread&tid=$thread[tid]".($thread['displayorder'] != -4 ? '' : '&modthreadkey='.modauthkey($thread['tid']))."\" target=\"_blank\">$thread[subject]</a>".($thread['readperm'] ? " - [$lang[threads_readperm] $thread[readperm]]" : '').($thread['price'] ? " - [$lang[threads_price] $thread[price]]" : ''),
-						"<a href=\"forum.php?mod=forumdisplay&fid=$thread[fid]\" target=\"_blank\">".(empty($thread['isgroup']) ? $_G['cache']['forums'][$thread[fid]]['name'] : $groupsname[$thread[fid]])."</a>",
-							"<a href=\"home.php?mod=space&uid=$thread[authorid]\" target=\"_blank\">$thread[author]</a>",
-							$thread['replies'],
-							$thread['views'],
-							$thread['lastpost']
-						), TRUE);
+			} else {
+				$threadcount = C::t('forum_thread')->count_search($conditions);
+				if($threadcount) {
+					foreach(C::t('forum_thread')->fetch_all_search($conditions, 0, $start, $perpage, 'tid', 'DESC', ' FORCE INDEX(PRIMARY) ') as $thread) {
+						$fids[] = $thread['fid'];
+						$tids .= ','.$thread['tid'];
 					}
 				}
 
-				$threadcount = DB::result_first("SELECT count(*) FROM ".DB::table('forum_thread')." WHERE $sql");
-				$multi = multi($threadcount, $perpage, $page, ADMINSCRIPT."?action=threads");
-				$multi = preg_replace("/href=\"".ADMINSCRIPT."\?action=threads&amp;page=(\d+)\"/", "href=\"javascript:page(\\1)\"", $multi);
-				$multi = str_replace("window.location='".ADMINSCRIPT."?action=threads&amp;page='+this.value", "page(this.value)", $multi);
-			} else {
-				$query = DB::query("SELECT fid, tid FROM ".DB::table('forum_thread')." WHERE $sql");
-				while($thread = DB::fetch($query)) {
-					$fids[] = $thread['fid'];
-					$tids .= ','.$thread['tid'];
-				}
-				$threadcount = DB::result_first("SELECT count(*) FROM ".DB::table('forum_thread')." WHERE $sql");
 				$multi = '';
 			}
 		}
@@ -271,7 +274,7 @@ EOT;
 
 		showtagheader('div', 'threadlist', TRUE);
 		showformheader('threads&frame=no'.($operation ? '&operation='.$operation : ''), 'target="threadframe"');
-		showhiddenfields($_G['gp_detail'] ? array('fids' => $fids) : array('fids' => $fids, 'tids' => $tids));
+		showhiddenfields($_GET['detail'] ? array('fids' => $fids) : array('fids' => $fids, 'tids' => $tids));
 		if(!$search_tips) {
 			showtableheader(cplang('threads_new_result').' '.$threadcount, 'nobottom');
 		} else {
@@ -283,7 +286,7 @@ EOT;
 
 		} else {
 
-			if($_G['gp_detail']) {
+			if($_GET['detail']) {
 				showsubtitle(array('', 'subject', 'forum', 'author', 'threads_replies', 'threads_views', 'threads_lastpost'));
 				echo $threads;
 				showtablerow('', array('class="td25" colspan="7"'), array('<input name="chkall" id="chkall" type="checkbox" class="checkbox" onclick="checkAll(\'prefix\', this.form, \'tidarray\', \'chkall\')" /><label for="chkall">'.cplang('select_all').'</label>'));
@@ -343,53 +346,57 @@ EOT;
 
 } else {
 
-	$tidsarray = isset($_G['gp_tids']) ? explode(',', $_G['gp_tids']) : $_G['gp_tidarray'];
+	$tidsarray = isset($_GET['tids']) ? explode(',', $_GET['tids']) : $_GET['tidarray'];
 	$tidsadd = 'tid IN ('.dimplode($tidsarray).')';
 	if($optype == 'moveforum') {
-
-		if(!DB::result_first("SELECT fid FROM ".DB::table('forum_forum')." WHERE fid='{$_G['gp_toforum']}' AND type<>'group'")) {
+		if(!C::t('forum_forum')->check_forum_exists($_GET['toforum'])) {
 			cpmsg('threads_move_invalid', '', 'error');
 		}
-		DB::query("UPDATE ".DB::table('forum_thread')." SET fid='{$_G['gp_toforum']}', typeid='{$_G['gp_threadtypeid']}', isgroup='0' WHERE $tidsadd");
-		updatepost(array('fid' => $_G['gp_toforum']), $tidsadd);
+		C::t('forum_thread')->update($tidsarray, array('fid'=>$_GET['toforum'], 'typeid'=>$_GET['threadtypeid'], 'isgroup'=>0));
+		loadcache('posttableids');
+		$posttableids = $_G['cache']['posttableids'] ? $_G['cache']['posttableids'] : array('0');
+		foreach($posttableids as $id) {
+			C::t('forum_post')->update_by_tid($id, $tidsarray, array('fid' => $_GET['toforum']));
+		}
 
-		foreach(explode(',', $_G['gp_fids'].','.$_G['gp_toforum']) as $fid) {
+		foreach(explode(',', $_GET['fids'].','.$_GET['toforum']) as $fid) {
 			updateforumcount(intval($fid));
 		}
 
-		foreach($_G['gp_tidarray'] as $tid) {
-			my_thread_log('move', array('tid' => $tid, 'otherid' => $_G['gp_toforum']));
+		$log_handler = Cloud::loadClass('Cloud_Service_SearchHelper');
+		foreach($_GET['tidarray'] as $tid) {
+			$log_handler->myThreadLog('move', array('tid' => $tid, 'otherid' => $_GET['toforum']));
 		}
 
 		$cpmsg = cplang('threads_succeed');
 
 	} elseif($optype == 'movesort') {
 
-		if($_G['gp_tosort'] != 0) {
-			if(!DB::result_first("SELECT typeid FROM ".DB::table('forum_threadtype')." WHERE typeid='{$_G['gp_tosort']}'")) {
+		if($_GET['tosort'] != 0) {
+			if(!C::t('forum_threadtype')->fetch($_GET['tosort'])) {
 				cpmsg('threads_move_invalid', '', 'error');
 			}
 		}
 
-		DB::query("UPDATE ".DB::table('forum_thread')." SET sortid='{$_G['gp_tosort']}' WHERE $tidsadd");
-
+		C::t('forum_thread')->update($tidsarray, array('sortid'=>$_GET['tosort']));
 		$cpmsg = cplang('threads_succeed');
 
 	} elseif($optype == 'delete') {
 
 		require_once libfile('function/delete');
-		deletethread($tidsarray, !$_G['gp_donotupdatemember'], !$_G['gp_donotupdatemember']);
+		deletethread($tidsarray, !$_GET['donotupdatemember'], !$_GET['donotupdatemember']);
 
 		if($_G['setting']['globalstick']) {
 			updatecache('globalstick');
 		}
 
-		foreach(explode(',', $_G['gp_fids']) as $fid) {
+		foreach(explode(',', $_GET['fids']) as $fid) {
 			updateforumcount(intval($fid));
 		}
 
-		foreach($_G['gp_tidarray'] as $tid) {
-			my_thread_log('delete', array('tid' => $tid));
+		$log_handler = Cloud::loadClass('Cloud_Service_SearchHelper');
+		foreach($_GET['tidarray'] as $tid) {
+			$log_handler->myThreadLog('delete', array('tid' => $tid));
 		}
 		$cpmsg = cplang('threads_succeed');
 
@@ -397,17 +404,23 @@ EOT;
 
 		require_once libfile('function/delete');
 		deleteattach($tidsarray, 'tid');
-		DB::query("UPDATE ".DB::table('forum_thread')." SET attachment='0' WHERE $tidsadd");
-		updatepost(array('attachment' => '0'), $tidsadd);
+		C::t('forum_thread')->update($tidsarray, array('attachment'=>0));
+		loadcache('posttableids');
+		$posttableids = $_G['cache']['posttableids'] ? $_G['cache']['posttableids'] : array('0');
+		foreach($posttableids as $id) {
+			C::t('forum_post')->update_by_tid($id, $tidsarray, array('attachment' => '0'));
+		}
 
 		$cpmsg = cplang('threads_succeed');
 
 	} elseif($optype == 'stick') {
 
-		DB::query("UPDATE ".DB::table('forum_thread')." SET displayorder='{$_G['gp_stick_level']}' WHERE $tidsadd");
-		$my_act = $_G['gp_stick_level'] ? 'sticky' : 'update';
-		foreach($_G['gp_tidarray'] as $tid) {
-			my_thread_log($my_act, array('tid' => $tid));
+		C::t('forum_thread')->update($tidsarray, array('displayorder'=>$_GET['stick_level']));
+		$my_act = $_GET['stick_level'] ? 'sticky' : 'update';
+
+		$log_handler = Cloud::loadClass('Cloud_Service_SearchHelper');
+		foreach($_GET['tidarray'] as $tid) {
+			$log_handler->myThreadLog($my_act, array('tid' => $tid));
 		}
 
 		if($_G['setting']['globalstick']) {
@@ -418,31 +431,34 @@ EOT;
 
 	} elseif($optype == 'adddigest') {
 
-		$query = DB::query("SELECT tid, fid, authorid, digest FROM ".DB::table('forum_thread')." WHERE $tidsadd");
-		while($thread = DB::fetch($query)) {
-			if($_G['gp_digest_level'] == $thread['digest']) continue;
+		foreach(C::t('forum_thread')->fetch_all_by_tid($tidsarray) as $thread) {
+			if($_GET['digest_level'] == $thread['digest']) continue;
 			$extsql = array();
-			if($_G['gp_digest_level'] > 0 && $thread['digest'] == 0) {
+			if($_GET['digest_level'] > 0 && $thread['digest'] == 0) {
 				$extsql = array('digestposts' => 1);
 			}
-			if($_G['gp_digest_level'] == 0 && $thread['digest'] > 0) {
+			if($_GET['digest_level'] == 0 && $thread['digest'] > 0) {
 				$extsql = array('digestposts' => -1);
 			}
-			updatecreditbyaction('digest', $thread['authorid'], $extsql, '', $_G['gp_digest_level'] - $thread['digest'], 1, $thread['fid']);
+			updatecreditbyaction('digest', $thread['authorid'], $extsql, '', $_GET['digest_level'] - $thread['digest'], 1, $thread['fid']);
 		}
-		DB::query("UPDATE ".DB::table('forum_thread')." SET digest='{$_G['gp_digest_level']}' WHERE $tidsadd");
-		$my_act = $_G['gp_digest_level'] ? 'digest' : 'update';
-		foreach($_G['gp_tidarray'] as $tid) {
-			my_thread_log($my_act, array('tid' => $tid));
+		C::t('forum_thread')->update($tidsarray, array('digest'=>$_GET['digest_level']));
+		$my_act = $_GET['digest_level'] ? 'digest' : 'update';
+
+		$log_handler = Cloud::loadClass('Cloud_Service_SearchHelper');
+		foreach($_GET['tidarray'] as $tid) {
+			$log_handler->myThreadLog($my_act, array('tid' => $tid));
 		}
 		$cpmsg = cplang('threads_succeed');
 
 	} elseif($optype == 'addstatus') {
 
-		DB::query("UPDATE ".DB::table('forum_thread')." SET closed='{$_G['gp_status']}' WHERE $tidsadd");
-		$my_opt = $_G['gp_status'] ? 'close' : 'open';
-		foreach($_G['gp_tidarray'] as $tid) {
-			my_thread_log($my_opt, array('tid' => $tid));
+		C::t('forum_thread')->update($tidsarray, array('closed'=>$_GET['status']));
+		$my_opt = $_GET['status'] ? 'close' : 'open';
+
+		$log_handler = Cloud::loadClass('Cloud_Service_SearchHelper');
+		foreach($_GET['tidarray'] as $tid) {
+			$log_handler->myThreadLog($my_opt, array('tid' => $tid));
 		}
 
 		$cpmsg = cplang('threads_succeed');
@@ -450,8 +466,7 @@ EOT;
 	} elseif($operation == 'forumstick') {
 		shownav('topic', 'threads_forumstick');
 		loadcache(array('forums', 'grouptype'));
-		$forumstickthreads = DB::result_first("SELECT svalue FROM ".DB::table('common_setting')." WHERE skey='forumstickthreads'");
-		$forumstickthreads = isset($forumstickthreads) ? unserialize($forumstickthreads) : array();
+		$forumstickthreads = C::t('common_setting')->fetch('forumstickthreads', true);
 		if(!submitcheck('forumsticksubmit')) {
 			showsubmenu('threads_forumstick', array(
 				array('admin', 'threads&operation=forumstick', !$do),
@@ -502,19 +517,19 @@ EOT;
 				showformfooter();
 			} elseif($do == 'edit') {
 				require_once libfile('function/forumlist');
-				showformheader("threads&operation=forumstick&do=edit&id={$_G['gp_id']}");
+				showformheader("threads&operation=forumstick&do=edit&id={$_GET['id']}");
 				showtableheader('edit', 'fixpadding');
 				$targetsselect = '<select name="forumsticktargets[]" size="10" multiple="multiple">'.forumselect(FALSE, 0, 0, TRUE).'</select>';
 				require_once libfile('function/group');
 				$groupselect = '<select name="forumsticktargets[]" size="10" multiple="multiple">'.get_groupselect(0, 0, 0).'</select>';
-				foreach($forumstickthreads[$_G['gp_id']]['forums'] as $target) {
+				foreach($forumstickthreads[$_GET['id']]['forums'] as $target) {
 					$targetsselect = preg_replace("/(\<option value=\"$target\")([^\>]*)(\>)/", "\\1 \\2 selected=\"selected\" \\3", $targetsselect);
 					$groupselect = preg_replace("/(\<option value=\"$target\")([^\>]*)(\>)/", "\\1 \\2 selected=\"selected\" \\3", $groupselect);
 				}
 				showsetting('threads_forumstick_targets', '', '', $targetsselect);
 				showsetting('threads_forumstick_targetgroups', '', '', $groupselect);
 				echo '<input type="hidden" value="edit" name="do" />';
-				echo "<input type=\"hidden\" value=\"{$_G['gp_id']}\" name=\"id\" />";
+				echo "<input type=\"hidden\" value=\"{$_GET['id']}\" name=\"id\" />";
 				showsubmit('forumsticksubmit', 'submit');
 				showtablefooter();
 				showformfooter();
@@ -524,21 +539,21 @@ EOT;
 				$do = 'del';
 			}
 			if($do == 'del') {
-				if(!empty($_G['gp_delete']) && is_array($_G['gp_delete'])) {
+				if(!empty($_GET['delete']) && is_array($_GET['delete'])) {
 					$del_tids = array();
-					foreach($_G['gp_delete'] as $del_tid){
+					foreach($_GET['delete'] as $del_tid){
 						unset($forumstickthreads[$del_tid]);
 						$del_tids[] = $del_tid;
 					}
 					if($del_tids) {
-						DB::query("UPDATE ".DB::table('forum_thread')." SET displayorder='0' WHERE tid IN (".dimplode($del_tids).")");
+						C::t('forum_thread')->update($del_tids, array('displayorder'=>0));
 					}
 				} else {
 					cpmsg('threads_forumstick_del_nochoice', '', 'error');
 				}
 			} elseif($do == 'add') {
-				$_G['gp_forumstick_url'] = rawurldecode($_G['gp_forumstick_url']);
-				if(preg_match('/tid=(\d+)/i', $_G['gp_forumstick_url'], $matches)) {
+				$_GET['forumstick_url'] = rawurldecode($_GET['forumstick_url']);
+				if(preg_match('/tid=(\d+)/i', $_GET['forumstick_url'], $matches)) {
 					$forumstick_tid = $matches[1];
 				} elseif(in_array('forum_viewthread', $_G['setting']['rewritestatus']) && $_G['setting']['rewriterule']['forum_viewthread']) {
 					preg_match_all('/(\{tid\})|(\{page\})|(\{prevpage\})/', $_G['setting']['rewriterule']['forum_viewthread'], $matches);
@@ -557,7 +572,7 @@ EOT;
 
 					$rewriterule = str_replace(array('{tid}', '{page}', '{prevpage}'), '(\d+?)', $rewriterule);
 					$rewriterule = str_replace(array('{', '}'), array('\{', '\}'), $rewriterule);
-					preg_match("/$rewriterule/i", $_G['gp_forumstick_url'], $match_result);
+					preg_match("/$rewriterule/i", $_GET['forumstick_url'], $match_result);
 					$forumstick_tid = $match_result[$tidpos];
 				} elseif(in_array('all_script', $_G['setting']['rewritestatus']) && $_G['setting']['rewriterule']['all_script']) {
 					preg_match_all('/(\{script\})|(\{param\})/', $_G['setting']['rewriterule']['all_script'], $matches);
@@ -575,7 +590,7 @@ EOT;
 					$rewriterule = str_replace(array('{script}', '{param}'), '([\w\d\-=]+?)', $rewriterule);
 					$rewriterule = str_replace(array('{', '}'), array('\{', '\}'), $rewriterule);
 					$rewriterule = "/\\/$rewriterule/i";
-					preg_match($rewriterule, $_G['gp_forumstick_url'], $match_result);
+					preg_match($rewriterule, $_GET['forumstick_url'], $match_result);
 					$param = $match_result[$parampos];
 
 					if(preg_match('/viewthread-tid-(\d+)/i', $param, $tidmatch)) {
@@ -586,160 +601,32 @@ EOT;
 				} else {
 					cpmsg('threads_forumstick_url_invalid', "action=threads&operation=forumstick&do=add", 'error');
 				}
-				if(empty($_G['gp_forumsticktargets'])) {
+				if(empty($_GET['forumsticktargets'])) {
 					cpmsg('threads_forumstick_targets_empty', "action=threads&operation=forumstick&do=add", 'error');
 				}
+				$stickthread = C::t('forum_thread')->fetch($forumstick_tid);
 				$stickthread_tmp = array(
-					'subject' => DB::result_first("SELECT subject FROM ".DB::table('forum_thread')." WHERE tid='$forumstick_tid'"),
+					'subject' => $stickthread['subject'],
 					'tid' => $forumstick_tid,
-					'forums' => $_G['gp_forumsticktargets'],
+					'forums' => $_GET['forumsticktargets'],
 				);
 				$forumstickthreads[$forumstick_tid] = $stickthread_tmp;
-				DB::query("UPDATE ".DB::table('forum_thread')." SET displayorder='4' WHERE tid='$forumstick_tid'");
+				C::t('forum_thread')->update($forumstick_tid, array('displayorder'=>4));
 			} elseif($do == 'edit') {
-				if(empty($_G['gp_forumsticktargets'])) {
-					cpmsg('threads_forumstick_targets_empty', "action=threads&operation=forumstick&do=edit&id={$_G['gp_id']}", 'error');
+				if(empty($_GET['forumsticktargets'])) {
+					cpmsg('threads_forumstick_targets_empty', "action=threads&operation=forumstick&do=edit&id={$_GET['id']}", 'error');
 				}
-				$forumstickthreads[$_G['gp_id']]['forums'] = $_G['gp_forumsticktargets'];
-				DB::query("UPDATE ".DB::table('forum_thread')." SET displayorder='4' WHERE tid='$forumstick_tid'");
+				$forumstickthreads[$_GET['id']]['forums'] = $_GET['forumsticktargets'];
+				C::t('forum_thread')->update($forumstick_tid, array('displayorder'=>4));
 			}
 
-			$forumstickthreads = addslashes(serialize($forumstickthreads));
-			DB::query("REPLACE INTO ".DB::table('common_setting')."(skey, svalue) VALUES('forumstickthreads', '$forumstickthreads')");
+			C::t('common_setting')->update('forumstickthreads', $forumstickthreads);
 			updatecache(array('forumstick', 'setting'));
 			cpmsg('threads_forumstick_'.$do.'_succeed', "action=threads&operation=forumstick", 'succeed');
 		}
-	} elseif($operation == 'postposition') {
-
-		shownav('topic', 'threads_postposition');
-		if(!$do) {
-			if(submitcheck('delpositionsubmit')) {
-				delete_position($_G['gp_delete']);
-				cpmsg('delete_position_succeed', 'action=threads&operation=postposition', 'succeed');
-			} elseif(submitcheck('delandaddsubmit')) {
-				delete_position($_G['gp_delete']);
-				cpmsg('delete_position_gotu_add', 'action=threads&operation=postposition&do=add&addpositionsubmit=yes&formhash='.FORMHASH.'&tids='.urlencode(implode(',', $_G['gp_delete'])), 'succeed');
-			} else {
-				showsubmenu('threads_postposition', array(
-					array('admin', 'threads&operation=postposition', !$do),
-					array('add', 'threads&operation=postposition&do=add', $do == 'add'),
-				));
-				showtips('threads_postposition_tips');
-				loadcache('forums');
-				showformheader('threads&operation=postposition');
-				showtableheader('admin', 'fixpadding');
-				showsubtitle(array('', 'ID', 'subject', 'forum', 'replies', 'dateline'));
-				$limit_start = 20 * ($page - 1);
-				if($count = DB::result_first("SELECT COUNT(DISTINCT(tid)) FROM ".DB::table('forum_postposition')."")) {
-					$multipage = multi($count, 20, $page, ADMINSCRIPT."?action=threads&operation=postposition");
-					$query = DB::query("SELECT DISTINCT(tid) FROM ".DB::table('forum_postposition')." LIMIT $limit_start, 20");
-					$tids = 0;
-					while($row = DB::fetch($query)) {
-						$tids .= ", $row[tid]";
-					}
-					$query = DB::query("SELECT * FROM ".DB::table('forum_thread')." WHERE tid IN ($tids)");
-					while($v = DB::fetch($query)) {
-						showtablerow('', array('class="td25"'), array(
-								"<input type=\"checkbox\" class=\"checkbox\" name=\"delete[]\" value=\"$v[tid]\">",
-								$v['tid'],
-								"<a href=\"forum.php?mod=viewthread&tid=$v[tid]\" target=\"_blank\">$v[subject]</a>",
-								'<a href="forum.php?mod=forumdisplay&fid='.$v['fid'].'" target="_blank">'.$_G['cache']['forums'][$v['fid']]['name'].'</a>',
-								$v['replies'],
-								dgmdate($v['dateline'], 'u')
-							));
-					}
-				}
-				$multipage = isset($multipage) ? $multipage : '';
-				showsubmit('delpositionsubmit', 'deleteposition', 'select_all', '<input type="submit" class="btn" name="delandaddsubmit" value="'.cplang('delandadd').'" />', $multipage);
-				showtablefooter();
-				showformfooter();
-			}
-		} elseif($do == 'add') {
-			if(submitcheck('addpositionsubmit', 1)) {
-				$delete = isset($_G['gp_delete']) && is_array($_G['gp_delete']) ? $_G['gp_delete'] : (!empty($_G['gp_tids']) ? explode(',', $_G['gp_tids']) : '');
-				if(empty($delete)) {
-					cpmsg('select_thread_empty');
-				}
-				$lastpid = create_position($delete, intval($_G['gp_lastpid']));
-				if(empty($delete)) {
-					cpmsg('add_postposition_succeed', 'action=threads&operation=postposition', 'succeed');
-				}
-				cpmsg('addpostposition_continue', 'action=threads&operation=postposition&do=add&addpositionsubmit=yes&formhash='.FORMHASH.'&tids='.urlencode(implode(',', $delete)).'&lastpid='.$lastpid, 'succeed');
-
-			} else {
-				showsubmenu('threads_postposition', array(
-					array('admin', 'threads&operation=postposition', !$do),
-					array('add', 'threads&operation=postposition&do=add', $do == 'add'),
-				));
-				showtips('threads_postposition_tips');
-
-				showformheader('threads&operation=postposition&do=add');
-				showtableheader('srchthread', 'fixpadding');
-				echo '<tr><td>'.cplang('srch_replies').'<label><input type="radio" name="replies" value="5000"'.($_G['gp_replies'] == 5000 ? ' checked="checked"' : '').' />5000</label> &nbsp;&nbsp;'.
-				'<label><input type="radio" name="replies" value="10000"'.($_G['gp_replies'] == 10000 ? ' checked="checked"' : '').' />10000</label>&nbsp;&nbsp;'.
-				'<label><input type="radio" name="replies" value="20000"'.($_G['gp_replies'] == 20000 ? ' checked="checked"' : '').' />20000</label>&nbsp;&nbsp;'.
-				'<label><input type="radio" name="replies" value="50000"'.($_G['gp_replies'] == 50000 ? ' checked="checked"' : '').' />50000</label>&nbsp;&nbsp;'.
-				'<label><input id="replies_other" type="radio" name="replies" value="0"'.(isset($_G['gp_replies']) && $_G['gp_replies'] == 0 ? ' checked="checked"' : '').' onclick="$(\'above_replies\').focus()" />'.cplang('threads_postposition_replies').'</label>&nbsp;'.
-				'<input id="above_replies" onclick="$(\'replies_other\').checked=true" type="text class="txt" name="above_replies" value="'.$_G['gp_above_replies'].'" size="5" />&nbsp;&nbsp;&nbsp;&nbsp;'.
-				'&nbsp;&nbsp;&nbsp;&nbsp;<label>'.cplang('srch_tid').'&nbsp;<input type="text class="txt" name="srchtid" size="5" value="'.$_G[gp_srchtid].'" /></label>&nbsp;'.
-				'&nbsp;&nbsp;&nbsp;<input type="submit" class="btn" name="srchthreadsubmit" value="'.cplang('submit').'" />';
-				showtablefooter();
-				showformfooter();
-
-
-				loadcache('forums');
-				showformheader('threads&operation=postposition&do=add');
-				showtableheader('addposition', 'fixpadding');
-				showsubtitle(array('', 'ID', 'subject', 'forum', 'replies', 'dateline'));
-				if(submitcheck('srchthreadsubmit', 1)) {
-					if($srchtid = max(0, intval($_G['gp_srchtid']))) {
-						if($thread = DB::fetch_first("SELECT * FROM ".DB::table('forum_thread')." WHERE tid='$srchtid'")) {
-							showtablerow('', array('class="td25"'), array(
-								"<input type=\"checkbox\" class=\"checkbox\" name=\"delete[]\" value=\"$thread[tid]\">",
-								$thread['tid'],
-								"<a href=\"forum.php?mod=viewthread&tid=$thread[tid]\" target=\"_blank\">$thread[subject]</a>",
-								'<a href="forum.php?mod=forumdisplay&fid='.$thread['fid'].'" target="_blank">'.$_G['cache']['forums'][$thread['fid']]['name'].'</a>',
-								$thread['replies'],
-								dgmdate($thread['dateline'], 'u')
-							));
-						}
-					} else {
-						$r_replies = $_G['gp_replies'] ? $_G['gp_replies'] : $_G['gp_above_replies'];
-						if($r_replies = max(0, intval($r_replies))) {
-							$limit_start = 20 * ($page - 1);
-							if($count = DB::result_first("SELECT COUNT(*) FROM ".DB::table('forum_thread')." WHERE replies>'$r_replies'")) {
-								$multipage = multi($count, 20, $page, ADMINSCRIPT."?action=threads&operation=postposition&do=add&srchthreadsubmit=yes&replies=$r_replies");
-								$query = DB::query("SELECT * FROM ".DB::table('forum_thread')." WHERE replies>'$r_replies' LIMIT $limit_start, 20");
-								$have = 0;
-								while($thread = DB::fetch($query)) {
-									if(getstatus($thread['status'], 1)) continue;
-									$have = 1;
-									showtablerow('', array('class="td25"'), array(
-										"<input type=\"checkbox\" class=\"checkbox\" name=\"delete[]\" value=\"$thread[tid]\">",
-										$thread['tid'],
-										"<a href=\"forum.php?mod=viewthread&tid=$thread[tid]\" target=\"_blank\">$thread[subject]</a>",
-										'<a href="forum.php?mod=forumdisplay&fid='.$thread['fid'].'" target="_blank">'.$_G['cache']['forums'][$thread['fid']]['name'].'</a>',
-										$thread['replies'],
-										dgmdate($thread['dateline'], 'u')
-									));
-								}
-								if($have == 0) {
-									dheader("Location: ".ADMINSCRIPT."?action=threads&operation=postposition&do=add&srchthreadsubmit=yes&replies=$r_replies&page=".($page+1));
-								}
-							}
-
-						}
-					}
-				}
-				$multipage = isset($multipage) ? $multipage : '';
-				showsubmit('addpositionsubmit', 'addposition', 'select_all', '', $multipage);
-				showtablefooter();
-				showformfooter();
-			}
-		}
 	}
 
-	$_G['gp_tids'] && deletethreadcaches($_G['gp_tids']);
+	$_GET['tids'] && deletethreadcaches($_GET['tids']);
 	$cpmsg = $cpmsg ? "alert('$cpmsg');" : '';
 	echo '<script type="text/JavaScript">'.$cpmsg.'if(parent.$(\'threadforum\')) parent.$(\'threadforum\').searchsubmit.click();</script>';
 }
@@ -749,37 +636,8 @@ function delete_position($select) {
 		cpmsg('select_thread_empty', '', 'error');
 	}
 	$tids = dimplode($select);
-	DB::query("DELETE FROM ".DB::table('forum_postposition')." WHERE tid IN($tids)");
-	DB::query("UPDATE ".DB::table('forum_thread')." SET status=status & '1111111111111110' WHERE tid IN ($tids)");
-}
-
-function create_position(&$select, $lastpid = 0) {
-	if(empty($select) || !is_array($select)) {
-		return 0;
-	}
-	$tid = $select[0];
-	if(empty($lastpid)) {
-		$check = DB::result_first("SELECT tid FROM ".DB::table('forum_postposition')." WHERE tid='$tid' LIMIT 1");
-		if($check) {
-			unset($select[0]);
-			return 0;
-		}
-	}
-	$round = 500;
-	$posttable = getposttablebytid($tid);
-	$query = DB::query("SELECT pid FROM ".DB::table($posttable)." WHERE tid='$tid' AND pid>'$lastpid' ORDER BY pid ASC LIMIT 0, $round");
-	while($post = DB::fetch($query)) {
-		if(empty($post) || empty($post['pid'])) continue;
-		savepostposition($tid, $post['pid']);
-		$lastid = $post['pid'];
-	}
-	if(DB::num_rows($query) < $round) {
-		DB::query("UPDATE ".DB::table('forum_thread')." SET status=status | '1' WHERE tid='$tid'");
-		unset($select[0]);
-		return 0;
-	} else {
-		return $lastid;
-	}
+	C::t('forum_postposition')->delete_by_tid($select);
+	C::t('forum_thread')->update_status_by_tid($tids, '1111111111111110', '&');
 }
 
 ?>

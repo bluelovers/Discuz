@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_threadsorts.php 19677 2011-01-13 08:40:56Z congyushuai $
+ *      $Id: cache_threadsorts.php 26205 2011-12-05 10:09:32Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -13,15 +13,9 @@ if(!defined('IN_DISCUZ')) {
 
 function build_cache_threadsorts() {
 	$sortlist = $templatedata = $stemplatedata = $ptemplatedata = $btemplatedata = $template = array();
-	$query = DB::query("SELECT t.typeid AS sortid, tt.optionid, tt.title, tt.type, tt.unit, tt.rules, tt.identifier, tt.description, tv.required, tv.unchangeable, tv.search, tv.subjectshow, tt.expiration, tt.protect
-			FROM ".DB::table('forum_threadtype')." t
-			LEFT JOIN ".DB::table('forum_typevar')." tv ON t.typeid=tv.sortid
-			LEFT JOIN ".DB::table('forum_typeoption')." tt ON tv.optionid=tt.optionid
-			WHERE t.special='1' AND tv.available='1'
-			ORDER BY tv.displayorder");
-
-	while($data = DB::fetch($query)) {
-		$data['rules'] = unserialize($data['rules']);
+	$query = C::t('forum_threadtype')->fetch_all_for_cache();
+	foreach($query as $data) {
+		$data['rules'] = dunserialize($data['rules']);
 		$sortid = $data['sortid'];
 		$optionid = $data['optionid'];
 		$sortlist[$sortid][$optionid] = array(
@@ -30,12 +24,13 @@ function build_cache_threadsorts() {
 		'unit' => dhtmlspecialchars($data['unit']),
 		'identifier' => dhtmlspecialchars($data['identifier']),
 		'description' => dhtmlspecialchars($data['description']),
+		'permprompt' => $data['permprompt'],
 		'required' => intval($data['required']),
 		'unchangeable' => intval($data['unchangeable']),
 		'search' => intval($data['search']),
 		'subjectshow' => intval($data['subjectshow']),
 		'expiration' => intval($data['expiration']),
-		'protect' => unserialize($data['protect']),
+		'protect' => dunserialize($data['protect']),
 		);
 
 		if(in_array($data['type'], array('select', 'checkbox', 'radio'))) {
@@ -82,9 +77,8 @@ function build_cache_threadsorts() {
 			}
 		}
 	}
-	$query = DB::query("SELECT typeid, description, template, stemplate, ptemplate, btemplate FROM ".DB::table('forum_threadtype'));
-
-	while($data = DB::fetch($query)) {
+	$query = C::t('forum_threadtype')->range();
+	foreach($query as $data) {
 		$templatedata[$data['typeid']] = addcslashes($data['template'], '",\\');
 		$stemplatedata[$data['typeid']] = addcslashes($data['stemplate'], '",\\');
 		$ptemplatedata[$data['typeid']] = addcslashes($data['ptemplate'], '",\\');
@@ -99,8 +93,8 @@ function build_cache_threadsorts() {
 		$template['post'] = $ptemplatedata[$sortid];
 		$template['block'] = $btemplatedata[$sortid];
 
-		save_syscache('threadsort_option_'.$sortid, $option);
-		save_syscache('threadsort_template_'.$sortid, $template);
+		savecache('threadsort_option_'.$sortid, $option);
+		savecache('threadsort_template_'.$sortid, $template);
 	}
 
 }

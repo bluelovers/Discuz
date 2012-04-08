@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: block_vedio.php 6757 2010-03-25 09:01:29Z cnteacher $
+ *      $Id: block_vedio.php 25525 2011-11-14 04:39:11Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -48,6 +48,7 @@ class block_vedio extends commonblock_html {
 		require_once libfile('function/discuzcode');
 		$parameter['width'] = !empty($parameter['width']) ? intval($parameter['width']) : 'auto';
 		$parameter['height'] = !empty($parameter['height']) ? intval($parameter['height']) : 'auto';
+		$parameter['url'] = addslashes($parameter['url']);
 		$return = parseflv($parameter['url'], $parameter['width'], $parameter['height']);
 		if($return == false) {
 			$return = $parameter['url'];

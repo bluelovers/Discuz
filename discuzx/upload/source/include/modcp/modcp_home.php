@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: modcp_home.php 19561 2011-01-10 02:28:57Z liulanbo $
+ *      $Id: modcp_home.php 25246 2011-11-02 03:34:53Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_MODCP')) {
@@ -13,18 +13,24 @@ if(!defined('IN_DISCUZ') || !defined('IN_MODCP')) {
 
 
 if($op == 'addnote' && submitcheck('submit')) {
-	$newaccess = 4 + ($_G['gp_newaccess'][2] << 1) + $_G['gp_newaccess'][3];
-	$newexpiration = TIMESTAMP + (intval($_G['gp_newexpiration']) > 0 ? intval($_G['gp_newexpiration']) : 30) * 86400;
-	$newmessage = nl2br(dhtmlspecialchars(trim($_G['gp_newmessage'])));
+	$newaccess = 4 + ($_GET['newaccess'][2] << 1) + $_GET['newaccess'][3];
+	$newexpiration = TIMESTAMP + (intval($_GET['newexpiration']) > 0 ? intval($_GET['newexpiration']) : 30) * 86400;
+	$newmessage = nl2br(dhtmlspecialchars(trim($_GET['newmessage'])));
 	if($newmessage != '') {
-		DB::query("INSERT INTO ".DB::table('common_adminnote')." (admin, access, adminid, dateline, expiration, message)
-			VALUES ('$_G[username]', '$newaccess', '$_G[adminid]', '$_G[timestamp]', '$newexpiration', '$newmessage')");
+		C::t('common_adminnote')->insert(array(
+			'admin' => $_G['username'],
+			'access' => $newaccess,
+			'adminid' => $_G['adminid'],
+			'dateline' => $_G['timestamp'],
+			'expiration' => $newexpiration,
+			'message' => $newmessage,
+		));
 	}
 }
 
 if($op == 'delete' && submitcheck('notlistsubmit')) {
-	if(is_array($_G['gp_delete']) && $deleteids = dimplode($_G['gp_delete'])) {
-		DB::query("DELETE FROM ".DB::table('common_adminnote')." WHERE id IN($deleteids) AND ('$_G[adminid]'=1 OR admin='$_G[username]')");
+	if(is_array($_GET['delete']) && $deleteids = dimplode($_GET['delete'])) {
+		C::t('common_adminnote')->delete($_GET['delete'], ($_G['adminid'] == 1 ? '' : $_G['username']));
 	}
 }
 
@@ -35,10 +41,9 @@ switch($_G['adminid']) {
 }
 
 $notelist = array();
-$query = DB::query("SELECT * FROM ".DB::table('common_adminnote')." WHERE access IN ($access) ORDER BY dateline DESC");
-while($note = DB::fetch($query)) {
+foreach(C::t('common_adminnote')->fetch_all_by_access(explode(',', $access)) as $note) {
 	if($note['expiration'] < TIMESTAMP) {
-		DB::query("DELETE FROM ".DB::table('common_adminnote')." WHERE id='$note[id]'");
+		C::t('common_adminnote')->delete($note['id']);
 	} else {
 		$note['expiration'] = ceil(($note['expiration'] - $note['dateline']) / 86400);
 		$note['dateline'] = dgmdate($note['dateline']);

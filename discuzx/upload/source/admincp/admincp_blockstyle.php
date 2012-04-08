@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_blockstyle.php 20616 2011-03-01 01:05:56Z monkey $
+ *      $Id: admincp_blockstyle.php 29236 2012-03-30 05:34:47Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -76,20 +76,19 @@ BLOCKCLASSSEL;
 				'name' => $_POST['name'],
 				'blockclass' => $_GET['blockclass'],
 			);
-			$_POST['template'] = stripslashes($_POST['template']);
+			$_POST['template'] = $_POST['template'];
 
 			include_once libfile('function/block');
 			block_parse_template($_POST['template'], $arr);
 
-			$arr = daddslashes($arr);
 			if($_GET['styleid']) {
 				$styleid = intval($_GET['styleid']);
-				DB::update('common_block_style', $arr, array('styleid'=>$styleid));
+				C::t('common_block_style')->update($styleid, $arr);
 				require_once libfile('function/cache');
 				updatecache('blockclass');
 				cpmsg('blockstyle_edit_succeed', 'action=blockstyle&operation=edit&blockclass='.$_GET['blockclass'].'&styleid='.$styleid.'&preview='.($_POST['preview']?'1':'0'), 'succeed');
 			} else {
-				$styleid = DB::insert('common_block_style', $arr, true);
+				$styleid = C::t('common_block_style')->insert($arr, true);
 				$msg = 'blockstyle_create_succeed';
 				require_once libfile('function/cache');
 				updatecache('blockclass');
@@ -143,6 +142,9 @@ BLOCKCLASSSEL;
 		$template .= cplang('blockstyle_add_index').': <a href="###" onclick="insertunit(\'[index=N]\n\n[/index]\')">[index=N]...[/index]</a>';
 		$template .= cplang('blockstyle_add_urltitle').': <a href="###" onclick=\'insertunit("<a href=\"{url}\"{target}>{title}</a>")\'>&lt;a href=...</a>';
 		$template .= cplang('blockstyle_add_picthumb').': <a href="###" onclick=\'insertunit("<img src=\"{pic}\" width=\"{picwidth}\" height=\"{picheight}\" />")\'>&lt;img src=...&gt;</a>';
+		if(in_array($_GET['blockclass'], array('forum_thread', 'portal_article', 'group_thread'), true)) {
+			$template .= cplang('blockstyle_add_moreurl').': <a href="###" onclick="insertunit(\'{moreurl}\')">{moreurl}</a>';
+		}
 		$template .= cplang('blockstyle_add_currentorder').': <a href="###" onclick="insertunit(\'{currentorder}\')">{currentorder}</a>';
 		$template .= cplang('blockstyle_add_parity').': <a href="###" onclick="insertunit(\'{parity}\')">{parity}</a>';
 		$template .= '</div><br />';
@@ -160,14 +162,13 @@ BLOCKCLASSSEL;
 } elseif($operation=='delete') {
 
 	$_GET['styleid'] = intval($_GET['styleid']);
-	$thestyle = DB::fetch_first('SELECT * FROM '.DB::table('common_block_style')." WHERE styleid='$_GET[styleid]'");
+	$thestyle = C::t('common_block_style')->fetch($_GET['styleid']);
 	if(empty($thestyle)) {
 		cpmsg('blockstyle_not_found', 'action=blockstyle', 'error');
 	}
 	$styles = array();
-	$query = DB::query('SELECT * FROM '.DB::table('common_block_style')." WHERE blockclass='$thestyle[blockclass]' AND styleid != '$_GET[styleid]'");
-	while($value=DB::fetch($query)) {
-		$styles[$value['styleid']] = $value;
+	if(($styles = C::t('common_block_style')->fetch_all_by_blockclass($thestyle['blockclass']))) {
+		unset($styles[$_GET['styleid']]);
 	}
 	if(empty($styles)) {
 		cpmsg('blockstyle_should_be_kept', 'action=blockstyle', 'error');
@@ -175,18 +176,17 @@ BLOCKCLASSSEL;
 
 	if(submitcheck('deletesubmit')) {
 		$_POST['moveto'] = intval($_POST['moveto']);
-		$newstyle = DB::fetch_first('SELECT * FROM '.DB::table('common_block_style')." WHERE styleid='$_POST[moveto]'");
+		$newstyle = C::t('common_block_style')->fetch($_POST['moveto']);
 		if($newstyle['blockclass'] != $thestyle['blockclass']) {
 			cpmsg('blockstyle_blockclass_not_match', 'action=blockstyle', 'error');
 		}
-		DB::query('UPDATE '.DB::table('common_block')." SET styleid='$_POST[moveto]' WHERE styleid='$_GET[styleid]'");
-		DB::query('DELETE FROM '.DB::table('common_block_style')." WHERE styleid = '$_GET[styleid]'");
+		C::t('common_block')->update_by_styleid($styleid, array('styleid' => $_POST[moveto]));
+		C::t('common_block_style')->delete($_GET['styleid']);
 		updatecache('blockclass');
 		cpmsg('blockstyle_delete_succeed', 'action=blockstyle', 'succeed');
 	}
 
-	$value = DB::fetch_first('SELECT * FROM '.DB::table('common_block')." WHERE styleid = '$_GET[styleid]' LIMIT 1");
-	if($value) {
+	if(C::t('common_block')->fetch_by_styleid($_GET['styleid'])) {
 		showtips('blockstyle_delete_tips');
 		showformheader('blockstyle&operation=delete&styleid='.$_GET['styleid']);
 		showtableheader();
@@ -201,7 +201,7 @@ BLOCKCLASSSEL;
 		showformfooter();
 
 	} else {
-		DB::query('DELETE FROM '.DB::table('common_block_style')." WHERE styleid = '$_GET[styleid]'");
+		C::t('common_block_style')->delete($_GET['styleid']);
 		updatecache('blockclass');
 		cpmsg('blockstyle_delete_succeed', 'action=blockstyle', 'succeed');
 	}
@@ -225,7 +225,7 @@ BLOCKCLASSSEL;
 	$likekeys = array('name', 'template');
 	$results = getwheres($intkeys, $strkeys, $randkeys, $likekeys);
 	foreach($likekeys as $k) {
-		$_GET[$k] = htmlspecialchars(stripslashes($_GET[$k]));
+		$_GET[$k] = dhtmlspecialchars($_GET[$k]);
 	}
 	$wherearr = $results['wherearr'];
 	$mpurl .= '&'.implode('&', $results['urls']);
@@ -305,11 +305,9 @@ SEARCH;
 	showsubtitle(array('blockstyle_name', 'blockstyle_blockclass', 'operation'));
 
 	$multipage = '';
-	$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('common_block_style')." WHERE $wheresql"), 0);
-	if($count) {
+	if(($count = C::t(common_block_style)->count_by_where($wheresql))) {
 		include_once libfile('function/block');
-		$query = DB::query("SELECT * FROM ".DB::table('common_block_style')." WHERE $wheresql $ordersql LIMIT $start,$perpage");
-		while($value = DB::fetch($query)) {
+		foreach(C::t('common_block_style')->fetch_all_by_where($wheresql, $ordersql, $start, $perpage) as $value) {
 			$theclass = block_getclass($value['blockclass']);
 			list($c1, $c2) = explode('_', $value['blockclass']);
 			showtablerow('', array('class=""', 'class=""', 'class="td28"'), array(

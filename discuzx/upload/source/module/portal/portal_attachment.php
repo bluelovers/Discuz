@@ -4,17 +4,17 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portal_attachment.php 20078 2011-02-12 07:23:38Z monkey $
+ *      $Id: portal_attachment.php 25246 2011-11-02 03:34:53Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
-$operation = $_G['gp_op'] ? $_G['gp_op'] : '';
+$operation = $_GET['op'] ? $_GET['op'] : '';
 
 $id = empty($_GET['id']) ? 0 : intval($_GET['id']);
 $aid = empty($_GET['aid']) ? '' : intval($_GET['aid']);
-$attach = DB::fetch_first("SELECT * FROM ".DB::table('portal_attachment')." WHERE attachid='$id'");
+$attach = C::t('portal_attachment')->fetch($id);
 if(empty($attach)) {
 	showmessage('portal_attachment_noexist');
 }
@@ -24,11 +24,26 @@ if($operation == 'delete') {
 		showmessage('portal_attachment_nopermission_delete');
 	}
 	if($aid) {
-		DB::query("UPDATE ".DB::table('portal_article_title')." SET pic = '' WHERE aid='$aid'", 'UNBUFFERED');
+		C::t('portal_article_title')->update($aid, array('pic' => ''));
 	}
-	DB::query("DELETE FROM ".DB::table('portal_attachment')." WHERE attachid='$id'");
+	C::t('portal_attachment')->delete($id);
 	pic_delete($attach['attachment'], 'portal', $attach['thumb'], $attach['remote']);
 	showmessage('portal_image_noexist');
+
+} elseif($operation == 'getattach') {
+
+	require_once libfile('function/attachment');
+	if($attach['isimage']) {
+		require_once libfile('function/home');
+		$smallimg = pic_get($attach['attachment'], 'portal', $attach['thumb'], $attach['remote']);
+		$bigimg = pic_get($attach['attachment'], 'portal', 0, $attach['remote']);
+		$coverstr = addslashes(serialize(array('pic'=>'portal/'.$attach['attachment'], 'thumb'=>$attach['thumb'], 'remote'=>$attach['remote'])));
+	}
+	$attach['filetype'] = attachtype($attach['filetype']."\t".$attach['filetype']);
+	$attach['filesize'] = sizecount($attach['filesize']);
+	include template('portal/portal_attachment');
+
+	exit;
 
 } else {
 	$filename = $_G['setting']['attachdir'].'/portal/'.$attach['attachment'];
@@ -72,7 +87,6 @@ function getremotefile($file) {
 	global $_G;
 	@set_time_limit(0);
 	if(!@readfile($_G['setting']['ftp']['attachurl'].'portal/'.$file)) {
-		require_once libfile('class/ftp');
 
 		$ftp = new discuz_ftp();
 		if(!($_G['setting']['ftp']['connid'] = $ftp->connect())) {

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_bbcodes.php 16696 2010-09-13 05:02:24Z monkey $
+ *      $Id: cache_bbcodes.php 24610 2011-09-28 03:02:49Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -13,14 +13,14 @@ if(!defined('IN_DISCUZ')) {
 
 function build_cache_bbcodes() {
 	$data = array();
-	$query = DB::query("SELECT * FROM ".DB::table('forum_bbcode')." WHERE available>'0'");
+
 	$regexp = array	(
 		1 => "/\[{bbtag}]([^\"\[]+?)\[\/{bbtag}\]/is",
 		2 => "/\[{bbtag}=(['\"]?)([^\"\[]+?)(['\"]?)\]([^\"\[]+?)\[\/{bbtag}\]/is",
 		3 => "/\[{bbtag}=(['\"]?)([^\"\[]+?)(['\"]?),(['\"]?)([^\"\[]+?)(['\"]?)\]([^\"\[]+?)\[\/{bbtag}\]/is"
 	);
 
-	while($bbcode = DB::fetch($query)) {
+	foreach(C::t('forum_bbcode')->fetch_all_by_available_icon(0, false, '>') as $bbcode) {
 		$bbcode['perm'] = explode("\t", $bbcode['perm']);
 		if(in_array('', $bbcode['perm']) || !$bbcode['perm']) {
 			continue;
@@ -56,7 +56,7 @@ function build_cache_bbcodes() {
 		}
 	}
 
-	save_syscache('bbcodes', $data);
+	savecache('bbcodes', $data);
 }
 
 ?>

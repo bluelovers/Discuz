@@ -1,8 +1,8 @@
 /*
-	[Discuz!] (C)2001-2009 Comsenz Inc.
+	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: forum_slide.js 4479 2010-02-27 10:40:20Z liyulong $
+	$Id: forum_slide.js 23838 2011-08-11 06:51:58Z monkey $
 */
 
 

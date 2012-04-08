@@ -4,7 +4,7 @@
  *	  [Discuz!] (C)2001-2099 Comsenz Inc.
  *	  This is NOT a freeware, use is subject to license terms
  *
- *	  $Id: admincp_cloud.php 29038 2012-03-23 06:22:39Z songlixin $
+ *	  $Id: admincp_cloud.php 29273 2012-03-31 07:58:50Z yexinhao $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -14,21 +14,28 @@ if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 @set_time_limit(600);
 cpheader();
 
-require_once libfile('function/cloud');
-
-if(empty($admincp) || !is_object($admincp) || !$admincp->isfounder) {
+if(empty($admincp) || !is_object($admincp)) {
 	exit('Access Denied');
 }
 
 $adminscript = ADMINSCRIPT;
 
 $cloudDomain = 'http://cp.discuz.qq.com';
-if($operation == 'doctor' || $operation == 'siteinfo') {
-	$cloudstatus = checkcloudstatus(false);
-} else {
-	$cloudstatus = checkcloudstatus();
+
+$utilService = Cloud::loadClass('Service_Util');
+$appService = Cloud::loadClass('Service_App');
+$cloudClient = Cloud::loadClass('Service_Client_Cloud');
+
+try {
+	$cloudstatus = $appService->checkCloudStatus();
+} catch (Cloud_Service_AppException $e) {
+	if($operation == 'doctor' || $operation == 'siteinfo') {
+	} else {
+		cpmsg_error('cloud_status_error');
+	}
 }
-$forceOpen = $_GET['force_open'] == 1 ? true : false;
+
+$forceOpen = !empty($_GET['force_open']) ? true : false;
 
 if(!$operation || $operation == 'open') {
 
@@ -40,12 +47,12 @@ if(!$operation || $operation == 'open') {
 			ajaxshowfooter();
 		}
 
-		$step = max(1, intval($_G['gp_step']));
+		$step = max(1, intval($_GET['step']));
 		$type = $cloudstatus == 'upgrade' ? 'upgrade' : 'open';
 
 		if($step == 1) {
 
-			cloud_init_uniqueid();
+			$utilService->generateUniqueId();
 
 			if($cloudstatus == 'upgrade' || ($cloudstatus == 'cloud' &&  $forceOpen)) {
 				shownav('navcloud', 'menu_cloud_upgrade');
@@ -85,7 +92,7 @@ if(!$operation || $operation == 'open') {
 				</td>
 				</tr>';
 
-			showsubmit('submit', 'cloud_will_open');
+			showsubmit('submit', 'cloud_will_open', '', '<script type="text/javascript">$(\'submit_submit\').disabled = true; $(\'submit_submit\').style.color = \'#aaa\';</script><span id="cloud_doctor_site_test_result_div"><img src="' . $_G['style']['imgdir'] . '/loading.gif" class="vm"> '.cplang('cloud_waiting').'</span>');
 			showtablefooter();
 			showformfooter();
 
@@ -160,46 +167,59 @@ EOT;
 
 				$params['ADTAG'] = 'CP.DISCUZ.INTRODUCTION';
 
-				$signUrl = generateSiteSignUrl($params);
+				$signUrl = $utilService->generateSiteSignUrl($params);
 				$introUrl .= '?'.$signUrl;
 			}
 
 			echo '<script type="text/JavaScript" charset="UTF-8" src="'.$introUrl.'"></script>';
+			$doctorService = Cloud::loadClass('Service_Doctor');
+			$doctorService->showSiteTestAPIJS('open');
 
 		} elseif($step == 2) {
 
 			$statsUrl = $cloudDomain . '/cloud/stats/registerclick';
 			echo '<script type="text/JavaScript" charset="UTF-8" src="'.$statsUrl.'"></script>';
 
-			if($_G['setting']['my_siteid'] && $_G['setting']['my_sitekey']) {
+			try {
+				if($_G['setting']['my_siteid'] && $_G['setting']['my_sitekey']) {
 
-				if($_G['setting']['my_app_status']) {
-					manyouSync();
-				}
-
-				$registerResult = upgrademanyou($_G['gp_cloud_api_ip']);
-
-			} else {
-				$registerResult = registercloud($_G['gp_cloud_api_ip']);
-			}
-
-			if($registerResult['errCode'] === 0) {
-				$bindUrl = $cloudDomain.'/bind/index?'.generateSiteSignUrl(array('ADTAG' => 'CP.CLOUD.BIND.INDEX'));
-				die('<script>top.location="' . $bindUrl . '";</script>');
-			} elseif($registerResult['errCode'] == 1) {
-				cpmsg('cloud_unknown_dns', '', 'error');
-			} elseif($registerResult['errCode'] == 2) {
-				cpmsg('cloud_network_busy', '', 'error', $registerResult);
-			} else {
-				$checkUrl = preg_match('/<a.+?>.+?<\/a>/i', $registerResult['errMessage'], $results);
-				if($checkUrl) {
-					foreach($results as $key => $result) {
-						$registerResult['errMessage'] = str_replace($result, '{replace_' . $key . '}', $registerResult['errMessage']);
-						$msgValues = array('replace_' . $key => $result);
+					if($_G['setting']['my_app_status']) {
+						$manyouClient = Cloud::loadClass('Service_Client_Manyou');
+						$manyouClient->sync();
 					}
+
+					$cloudClient->upgradeManyou(trim($_GET['cloud_api_ip']));
+
+				} else {
+					$cloudClient->registerCloud(trim($_GET['cloud_api_ip']));
 				}
-				cpmsg($registerResult['errMessage'], '', 'error', $msgValues);
+			} catch (Cloud_Service_Client_RestfulException $exception) {
+				switch ($exception->getCode()) {
+				case 1:
+					cpmsg('cloud_unknown_dns', '', 'error');
+				case 2:
+					$msgValues = array(
+													'errorMessage' => $exception->getMessage(),
+													'errorCode' => $exception->getCode()
+												   );
+					cpmsg('cloud_network_busy', '', 'error', $msgValues);
+				default:
+					$msgValues = array();
+					$errorMessage = $exception->getMessage();
+					$checkUrl = preg_match('/<a.+?>.+?<\/a>/i', $errorMessage, $results);
+					if($checkUrl) {
+						foreach($results as $key => $result) {
+							$errorMessage = str_replace($result, '{replace_' . $key . '}', $errorMessage);
+							$msgValues = array('replace_' . $key => $result);
+						}
+					}
+					cpmsg($errorMessage, '', 'error', $msgValues);
+				}
 			}
+
+			$params['ADTAG'] = 'CP.CLOUD.BIND.INDEX';
+			$bindUrl = $cloudDomain . '/bind/index?' . $utilService->generateSiteSignUrl($params);
+			echo '<script>top.location="' . $bindUrl . '";</script>';
 		}
 	}
 
@@ -210,20 +230,19 @@ EOT;
 	}
 
 	$signParams = array('refer' => $_G['siteurl'], 'ADTAG' => 'CP.DISCUZ.APPLIST');
-	$signUrl = generateSiteSignUrl($signParams);
-	headerLocation($cloudDomain.'/cloud/appList/?'.$signUrl);
+	$signUrl = $utilService->generateSiteSignUrl($signParams);
+	$utilService->redirect($cloudDomain . '/cloud/appList/?' . $signUrl);
 
 } elseif(in_array($operation, array('siteinfo', 'doctor'))) {
 
 	require libfile("cloud/$operation", 'admincp');
 
-} elseif(in_array($operation, array('manyou', 'connect', 'security', 'stats', 'search',
-									'smilies', 'qqgroup', 'union', 'storage'))) {
+} elseif(in_array($operation, array('manyou', 'connect', 'security', 'stats', 'search', 'smilies', 'qqgroup', 'union', 'storage'))) {
 	if($cloudstatus != 'cloud') {
 		cpmsg('cloud_open_first', '', 'succeed', array(), '<p class="marginbot"><a href="###" onclick="top.location = \''.ADMINSCRIPT.'?frames=yes&action=cloud&operation=open\'" class="lightlink">'.cplang('message_redirect').'</a></p><script type="text/JavaScript">setTimeout("top.location = \''.ADMINSCRIPT.'?frames=yes&action=cloud&operation=open\'", 3000);</script>');
 	}
 
-	$apps = getcloudapps();
+	$apps = $appService->getCloudApps();
 	if(empty($apps) || empty($apps[$operation]) || $apps[$operation]['status'] == 'close') {
 		cpmsg('cloud_application_close', 'action=cloud&operation=applist', 'error');
 	}
@@ -236,50 +255,3 @@ EOT;
 } else {
 	exit('Access Denied');
 }
-
-function manyouSync() {
-	global $_G;
-	$setting = $_G['setting'];
-	$my_url = 'http://api.manyou.com/uchome.php';
-
-	$mySiteId = empty($_G['setting']['my_siteid'])?'':$_G['setting']['my_siteid'];
-	$siteName = $_G['setting']['bbname'];
-	$siteUrl = $_G['siteurl'];
-	$ucUrl = rtrim($_G['setting']['ucenterurl'], '/').'/';
-	$siteCharset = $_G['charset'];
-	$siteTimeZone = $_G['setting']['timeoffset'];
-	$mySiteKey = empty($_G['setting']['my_sitekey'])?'':$_G['setting']['my_sitekey'];
-	$siteKey = DB::result_first("SELECT svalue FROM ".DB::table('common_setting')." WHERE skey='siteuniqueid'");
-	$siteLanguage = $_G['config']['output']['language'];
-	$siteVersion = $_G['setting']['version'];
-	$myVersion = cloud_get_api_version();
-	$productType = 'DISCUZX';
-	$siteRealNameEnable = '';
-	$siteRealAvatarEnable = '';
-	$siteEnableApp = intval($setting['my_app_status']);
-
-	$key = $mySiteId . $siteName . $siteUrl . $ucUrl . $siteCharset . $siteTimeZone . $siteRealNameEnable . $mySiteKey . $siteKey;
-	$key = md5($key);
-	$siteTimeZone = urlencode($siteTimeZone);
-	$siteName = urlencode($siteName);
-
-	$register = false;
-	$postString = sprintf('action=%s&productType=%s&key=%s&mySiteId=%d&siteName=%s&siteUrl=%s&ucUrl=%s&siteCharset=%s&siteTimeZone=%s&siteEnableRealName=%s&siteEnableRealAvatar=%s&siteKey=%s&siteLanguage=%s&siteVersion=%s&myVersion=%s&siteEnableApp=%s&from=cloud', 'siteRefresh', $productType, $key, $mySiteId, $siteName, $siteUrl, $ucUrl, $siteCharset, $siteTimeZone, $siteRealNameEnable, $siteRealAvatarEnable, $siteKey, $siteLanguage, $siteVersion, $myVersion, $siteEnableApp);
-
-	$response = @dfsockopen($my_url, 0, $postString, '', false, $setting['my_ip']);
-	$res = unserialize($response);
-	if (!$response) {
-		$res['errCode'] = 111;
-		$res['errMessage'] = 'Empty Response';
-		$res['result'] = $response;
-	} elseif(!$res) {
-		$res['errCode'] = 110;
-		$res['errMessage'] = 'Error Response';
-		$res['result'] = $response;
-	}
-	if($res['errCode']) {
-		cpmsg('cloud_sync_failure', '', 'error', array('errCode'=>$res['errCode'], 'errMessage'=>$res['errMessage']));
-	}
-}
-
-?>

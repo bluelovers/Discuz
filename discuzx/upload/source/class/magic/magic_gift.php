@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: magic_money.php 7830 2010-04-14 02:22:32Z monkey $
+ *      $Id: magic_gift.php 26749 2011-12-22 07:38:37Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -38,7 +38,7 @@ class magic_gift {
 		$info = array(
 			'credits' => intval($_POST['credits']),
 			'percredit' => intval($_POST['percredit']),
-			'credittype' => $_G['gp_credittype'],
+			'credittype' => $_GET['credittype'],
 			'left' => intval($_POST['credits']),
 			'magicid' => intval($this->magic['magicid']),
 			'receiver' => array()
@@ -51,7 +51,7 @@ class magic_gift {
 		}
 		$member = array();
 		if(preg_match('/^extcredits[1-8]$/', $info['credittype'])) {
-			$member = DB::fetch_first('SELECT * FROM '.DB::table('common_member_count')." WHERE uid = '$_G[uid]'");
+			$member = C::t('common_member_count')->fetch($_G['uid']);
 			if($member[$info['credittype']] < $info['credits']) {
 				showmessage(lang('magic/gift', 'gift_credits_out_of_own'));
 			}
@@ -61,11 +61,11 @@ class magic_gift {
 			showmessage(lang('magic/gift', 'gift_bad_credittype_input'));
 		}
 
-		DB::update('common_member_field_home', array('magicgift'=>addslashes(serialize($info))), array('uid'=>$_G['uid']));
+		C::t('common_member_field_home')->update($_G['uid'], array('magicgift' => serialize($info)));
 		usemagic($this->magic['magicid'], $this->magic['num']);
 		updatemagiclog($this->magic['magicid'], '2', '1', '0', '0', 'uid', $_G['uid']);
 
-		showmessage(lang('magic/gift', 'gift_succeed'), dreferer(), array(), array('showdialog' => 1, 'locationtime' => true));
+		showmessage(lang('magic/gift', 'gift_succeed'), dreferer(), array(), array('alert' => 'right', 'showdialog' => 1, 'locationtime' => true));
 	}
 
 	function show() {

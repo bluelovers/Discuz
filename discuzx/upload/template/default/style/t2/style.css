@@ -40,10 +40,11 @@ body { background: #FFF url(bgimg.jpg) no-repeat 50% 0; }
 .moodfm_btn { background-image: url(mood_input_btn.png) !important; }
 #create_group_btn { display: block; background: url(create_group.png) no-repeat 0 0; }
 	#create_group_btn img { opacity: 0; filter: alpha(opacity=0); }
-.el .ec .hot { background-image: url(hotspot.gif); }
+.el .ec .hot, .clct_list .xld .m { background-image: url(hotspot.gif); }
 .pll .s { background-image:url(polljoins.gif); }
 
-/* 重定義側邊導航 */
+/* 重定義版塊快速跳轉和側邊導航 */
+#fjump_menu li.a a { background-color: #EBF5F6; }
 .bdl, .bdl dt, .bdl dd.bdl_a a { border-color: #C2D5E3; background-color: #EBF5F6; }
 	.bdl dt { background-image: url(titlebg_sd.png); }
 .bdl dd.bdl_a a { color: #429296; }

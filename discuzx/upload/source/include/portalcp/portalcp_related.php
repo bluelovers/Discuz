@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portalcp_related.php 12343 2010-07-05 08:56:47Z shanzongjun $
+ *      $Id: portalcp_related.php 25889 2011-11-24 09:52:20Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -12,8 +12,8 @@ if(!defined('IN_DISCUZ')) {
 }
 
 $op = in_array($_GET['op'], array('manual','search','add','get')) ? $_GET['op'] : '';
-$aid = intval($_G['gp_aid']);
-$catid = intval($_G['gp_catid']);
+$aid = intval($_GET['aid']);
+$catid = intval($_GET['catid']);
 if($aid) {
 	check_articleperm($catid, $aid);
 } else {
@@ -26,8 +26,7 @@ if($op == 'manual') {
 	$manualid = intval($_GET['manualid']);
 	$ra = array();
 	if($manualid) {
-		$query = DB::query("SELECT * FROM ".DB::table('portal_article_title')." WHERE aid='$manualid'");
-		$ra = DB::fetch($query);
+		$ra = C::t('portal_article_title')->fetch($manualid);
 	}
 } elseif($op == 'get') {
 	$id = trim($_GET['id']);
@@ -36,9 +35,9 @@ if($op == 'manual') {
 	$getidarr = array_unique($getidarr);
 	$getidarr = array_filter($getidarr);
 	if($getidarr) {
-		$query = DB::query("SELECT * FROM ".DB::table('portal_article_title')." WHERE aid IN (".dimplode($getidarr).")");
 		$list = array();
-		while(($value=DB::fetch($query))) {
+		$query = C::t('portal_article_title')->fetch_all($getidarr);
+		foreach($query as $value) {
 			$list[$value['aid']] = $value;
 		}
 		foreach($getidarr as $getid) {
@@ -62,13 +61,10 @@ if($op == 'manual') {
 		$wherearr[] = "catid IN  (".dimplode($catids).")";
 	}
 	$wheresql = implode(' AND ', $wherearr);
-	if($wheresql) {
-		$wheresql = " WHERE ".$wheresql;
-	}
-	$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('portal_article_title')."$wheresql LIMIT 50"), 0);
+	$count = C::t('portal_article_title')->fetch_all_by_sql($wheresql, '', 0, 0, 1);
 	if($count) {
-		$query = DB::query("SELECT * FROM ".DB::table('portal_article_title')."$wheresql ORDER BY dateline DESC LIMIT 50");
-		while($value = DB::fetch($query)) {
+		$query = C::t('portal_article_title')->fetch_all_by_sql($wheresql, 'ORDER BY dateline', 0, 50);
+		foreach($query as $value) {
 			$articlelist[] = $value;
 		}
 	}
@@ -80,9 +76,9 @@ if($op == 'manual') {
 	$relatedarr = array_unique($relatedarr);
 	$relatedarr = array_filter($relatedarr);
 	if($relatedarr) {
-		$query = DB::query("SELECT * FROM ".DB::table('portal_article_title')." WHERE aid IN (".dimplode($relatedarr).")");
+		$query = C::t('portal_article_title')->fetch_all($relatedarr);
 		$list = array();
-		while(($value=DB::fetch($query))) {
+		foreach($query as $value) {
 			$list[$value['aid']] = $value;
 		}
 		foreach($relatedarr as $relateid) {
@@ -91,14 +87,18 @@ if($op == 'manual') {
 			}
 		}
 	}
+
+	if($_GET['update'] && $aid) {
+		addrelatedarticle($aid, $relatedarr);
+	}
 } else {
 	$count = 0;
-	$query = DB::query("SELECT * FROM ".DB::table('portal_article_title')." ORDER BY dateline DESC LIMIT 50");
-	while($value = DB::fetch($query)) {
+	$query = C::t('portal_article_title')->range(0, 50);
+	foreach($query as $value) {
 		$articlelist[] = $value;
 		$count++;
 	}
 }
-$category = category_showselect('portal', 'searchcate', false, $_G[gp_searchcate]);
+$category = category_showselect('portal', 'searchcate', false, $_GET[searchcate]);
 include_once template("portal/portalcp_related_article");
 ?>

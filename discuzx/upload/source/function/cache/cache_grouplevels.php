@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_grouplevels.php 16696 2010-09-13 05:02:24Z monkey $
+ *      $Id: cache_grouplevels.php 24623 2011-09-28 06:54:39Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -13,16 +13,15 @@ if(!defined('IN_DISCUZ')) {
 
 function build_cache_grouplevels() {
 	$data = array();
-	$query = DB::query("SELECT * FROM ".DB::table('forum_grouplevel'));
-
-	while($level = DB::fetch($query)) {
+	$query = C::t('forum_grouplevel')->range();
+	foreach($query as $level) {
 		$level['creditspolicy'] = unserialize($level['creditspolicy']);
 		$level['postpolicy'] = unserialize($level['postpolicy']);
 		$level['specialswitch'] = unserialize($level['specialswitch']);
 		$data[$level['levelid']] = $level;
 	}
 
-	save_syscache('grouplevels', $data);
+	savecache('grouplevels', $data);
 }
 
 ?>

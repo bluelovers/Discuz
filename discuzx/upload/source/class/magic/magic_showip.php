@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: magic_showip.php 13786 2010-07-30 07:47:50Z monkey $
+ *      $Id: magic_showip.php 29236 2012-03-30 05:34:47Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -32,15 +32,16 @@ class magic_showip {
 
 	function usesubmit() {
 		global $_G;
-		if(empty($_G['gp_username'])) {
+		if(empty($_GET['username'])) {
 			showmessage(lang('magic/showip', 'showip_info_nonexistence'));
 		}
 
-		$member = getuserinfo($_G['gp_username'], array('uid', 'groupid'));
+		$member = getuserinfo($_GET['username']);
 		$this->_check($member['groupid']);
 
-		$ip = DB::result_first("SELECT lastip FROM ".DB::table('common_member_status')." WHERE uid='$member[uid]'");
-
+		$memberstatus = C::t('common_member_status')->fetch($member['uid']);
+		$ip = $memberstatus['lastip'];
+		unset($memberstatus);
 		usemagic($this->magic['magicid'], $this->magic['num']);
 		updatemagiclog($this->magic['magicid'], '2', '1', '0', 0, 'uid', $member['uid']);
 
@@ -48,14 +49,14 @@ class magic_showip {
 			notification_add($member['uid'], 'magic', lang('magic/showip', 'showip_notification'), array('magicname' => $this->magic['name']), 1);
 		}
 
-		showmessage(lang('magic/showip', 'showip_ip_message'), '', array('username' => stripslashes($_G['gp_username']), 'ip' => $ip), array('showdialog' => 1));
+		showmessage(lang('magic/showip', 'showip_ip_message'), '', array('username' => $_GET['username'], 'ip' => $ip), array('alert' => 'info', 'showdialog' => 1));
 	}
 
 	function show() {
 		global $_G;
-		$user = !empty($_G['gp_id']) ? htmlspecialchars($_G['gp_id']) : '';
+		$user = !empty($_GET['id']) ? uhtmlspecialchars($_GET['id']) : '';
 		if($user) {
-			$member = getuserinfo($user, array('groupid'));
+			$member = getuserinfo($user);
 			$this->_check($member['groupid']);
 		}
 		magicshowtype('top');
@@ -65,10 +66,10 @@ class magic_showip {
 
 	function buy() {
 		global $_G;
-		if(!empty($_G['gp_id'])) {
-			$member = getuserinfo($_G['gp_id'], array('groupid', 'username'));
+		if(!empty($_GET['id'])) {
+			$member = getuserinfo($_GET['id']);
 			if($_G['group']['allowviewip']) {
-				$_G['gp_username'] = $member['username'];
+				$_GET['username'] = $member['username'];
 				$this->usesubmit();
 			} else {
 				$this->_check($member['groupid']);

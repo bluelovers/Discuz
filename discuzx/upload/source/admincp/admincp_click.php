@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_click.php 20982 2011-03-09 10:02:57Z zhengqingpeng $
+ *      $Id: admincp_click.php 25246 2011-11-02 03:34:53Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -15,7 +15,7 @@ $operation = $operation ? $operation : '';
 cpheader();
 
 if(empty($operation)) {
-	$idtype = in_array($_G['gp_idtype'], array('blogid', 'picid', 'aid')) ? trim($_G['gp_idtype']) : 'blogid';
+	$idtype = in_array($_GET['idtype'], array('blogid', 'picid', 'aid')) ? trim($_GET['idtype']) : 'blogid';
 	if(!submitcheck('clicksubmit')) {
 
 		shownav('style', 'click_edit');
@@ -51,8 +51,7 @@ if(empty($operation)) {
 	];
 </script>
 EOF;
-		$query = DB::query("SELECT * FROM ".DB::table('home_click')." WHERE idtype='$idtype' ORDER BY displayorder DESC");
-		while($click = DB::fetch($query)) {
+		foreach(C::t('home_click')->fetch_all_by_idtype($idtype) as $click) {
 			$checkavailable = $click['available'] ? 'checked' : '';
 			$click['idtype'] = cplang('click_edit_'.$click['idtype']);
 			showtablerow('', array('class="td25"', 'class="td28"', 'class="td25"', 'class="td25"', '', '', '', 'class="td23"', 'class="td25"'), array(
@@ -72,47 +71,46 @@ EOF;
 
 	} else {
 		$ids = array();
-		if(is_array($_G['gp_delete'])) {
-			foreach($_G['gp_delete'] as $id) {
+		if(is_array($_GET['delete'])) {
+			foreach($_GET['delete'] as $id) {
 				$ids[] = $id;
 			}
 			if($ids) {
-				DB::query("DELETE FROM ".DB::table('home_click')." WHERE clickid IN (".dimplode($ids).")");
+				C::t('home_click')->delete($ids, true);
 			}
 		}
 
-		if(is_array($_G['gp_name'])) {
-			foreach($_G['gp_name'] as $id => $val) {
+		if(is_array($_GET['name'])) {
+			foreach($_GET['name'] as $id => $val) {
 				$id = intval($id);
 				$updatearr = array(
-					'name' => dhtmlspecialchars($_G['gp_name'][$id]),
-					'icon' => $_G['gp_icon'][$id],
+					'name' => dhtmlspecialchars($_GET['name'][$id]),
+					'icon' => $_GET['icon'][$id],
 					'idtype' => $idtype,
-					'available' => intval($_G['gp_available'][$id]),
-					'displayorder' => intval($_G['gp_displayorder'][$id]),
+					'available' => intval($_GET['available'][$id]),
+					'displayorder' => intval($_GET['displayorder'][$id]),
 				);
-				DB::update('home_click', $updatearr, array('clickid' => $id));
+				C::t('home_click')->update($id, $updatearr);
 			}
 		}
 
-		if(is_array($_G['gp_newname'])) {
-			foreach($_G['gp_newname'] as $key => $value) {
-				if($value != '' && $_G['gp_newicon'][$key] != '') {
+		if(is_array($_GET['newname'])) {
+			foreach($_GET['newname'] as $key => $value) {
+				if($value != '' && $_GET['newicon'][$key] != '') {
 					$data = array(
 						'name' => dhtmlspecialchars($value),
-						'icon' => $_G['gp_newicon'][$key],
+						'icon' => $_GET['newicon'][$key],
 						'idtype' => $idtype,
-						'available' => intval($_G['gp_newavailable'][$key]),
-						'displayorder' => intval($_G['gp_newdisplayorder'][$key])
+						'available' => intval($_GET['newavailable'][$key]),
+						'displayorder' => intval($_GET['newdisplayorder'][$key])
 					);
-					DB::insert('home_click', $data);
+					C::t('home_click')->insert($data);
 				}
 			}
 		}
 
 		$keys = $ids = $_G['cache']['click'] = array();
-		$query = DB::query("SELECT * FROM ".DB::table('home_click')." WHERE available='1' ORDER BY displayorder DESC");
-		while($value = DB::fetch($query)) {
+		foreach(C::t('home_click')->fetch_all_by_available() as $value) {
 			if(count($_G['cache']['click'][$value['idtype']]) < 8) {
 				$keys[$value['idtype']] = $keys[$value['idtype']] ? ++$keys[$value['idtype']] : 1;
 				$_G['cache']['click'][$value['idtype']][$keys[$value['idtype']]] = $value;
@@ -121,7 +119,7 @@ EOF;
 			}
 		}
 		if($ids) {
-			DB::query("UPDATE ".DB::table('home_click')." SET available='0' WHERE clickid IN (".dimplode($ids).")");
+			C::t('home_click')->update($ids, array('available'=>0), true);
 		}
 		updatecache('click');
 		cpmsg('click_edit_succeed', 'action=click&idtype='.$idtype, 'succeed');

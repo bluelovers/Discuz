@@ -1,7 +1,6 @@
 <!--{template common/header}-->
-<!--{if empty($_G['gp_infloat'])}-->
+<!--{if empty($_GET['infloat'])}-->
 <div id="pt" class="bm cl">
-	<!--{subtemplate common/simplesearchform}-->
 	<div class="z"><a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em> $navigation</div>
 </div>
 <div id="ct" class="wp cl">
@@ -35,16 +34,16 @@
 	}
 </script>
 
-<form id="tradeform" method="post" autocomplete="off" action="forum.php?mod=misc&action=tradeorder&tid=$_G[tid]&tradesubmit=yes&infloat=yes{if !empty($_G['gp_from'])}&from=$_G['gp_from']{/if}"{if !empty($_G['gp_infloat'])} onsubmit="ajaxpost('tradeform', 'return_$_G['gp_handlekey']', 'return_$_G['gp_handlekey']', 'onerror');return false;"{/if}>
+<form id="tradeform" method="post" autocomplete="off" action="forum.php?mod=misc&action=tradeorder&tid=$_G[tid]&tradesubmit=yes&infloat=yes{if !empty($_GET['from'])}&from=$_GET['from']{/if}"{if !empty($_GET['infloat'])} onsubmit="ajaxpost('tradeform', 'return_$_GET['handlekey']', 'return_$_GET['handlekey']', 'onerror');return false;"{/if}>
 <div class="f_c">
 	<h3 class="flb">
-		<em id="return_$_G['gp_handlekey']">{lang trade_displayorder}</em>
+		<em id="return_$_GET['handlekey']">{lang trade_displayorder}</em>
 		<span>
-			<!--{if !empty($_G['gp_infloat'])}--><a href="javascript:;" class="flbc" onclick="hideWindow('$_G['gp_handlekey']')" title="{lang close}">{lang close}</a><!--{/if}-->
+			<!--{if !empty($_GET['infloat'])}--><a href="javascript:;" class="flbc" onclick="hideWindow('$_GET['handlekey']')" title="{lang close}">{lang close}</a><!--{/if}-->
 		</span>
-	</h3>	
+	</h3>
 		<input type="hidden" name="formhash" value="{FORMHASH}" />
-		<!--{if !empty($_G['gp_infloat'])}--><input type="hidden" name="handlekey" value="$_G['gp_handlekey']" /><!--{/if}-->
+		<!--{if !empty($_GET['infloat'])}--><input type="hidden" name="handlekey" value="$_GET['handlekey']" /><!--{/if}-->
 		<div class="c">
 			<table class="list" cellspacing="0" cellpadding="0" style="width: 700px">
 				<thead class="th">
@@ -83,23 +82,23 @@
 				</tr>
 				<!--{/loop}-->
 			</table>
-		</div>	
+		</div>
 </div>
-<!--{if empty($_G['gp_infloat'])}--><div class="m_c"><!--{/if}-->
+<!--{if empty($_GET['infloat'])}--><div class="m_c"><!--{/if}-->
 <div class="o pns">
 	<span class="z">{lang trade_update_stickmax} {$_G['group']['tradestick']}</span>
 	<button tabindex="1" class="pn pnc" type="submit" name="tradesubmit" value="true"><span>{lang save}</span></button>
 </div>
-<!--{if empty($_G['gp_infloat'])}--></div><!--{/if}-->
+<!--{if empty($_GET['infloat'])}--></div><!--{/if}-->
 </form>
 
 <script type="text/javascript" reload="1">
-function succeedhandle_$_G['gp_handlekey'](locationhref) {
+function succeedhandle_$_GET['handlekey'](locationhref) {
 	location.href = locationhref;
 }
 </script>
 
-<!--{if empty($_G['gp_infloat'])}-->
+<!--{if empty($_GET['infloat'])}-->
 		</div>
 	</div>
 </div>

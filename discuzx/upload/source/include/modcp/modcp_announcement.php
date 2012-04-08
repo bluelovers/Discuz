@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: modcp_announcement.php 20630 2011-03-01 02:45:58Z congyushuai $
+ *      $Id: modcp_announcement.php 29236 2012-03-30 05:34:47Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_MODCP')) {
@@ -13,7 +13,7 @@ if(!defined('IN_DISCUZ') || !defined('IN_MODCP')) {
 
 $annlist = null;
 $add_successed = $edit_successed = false;
-$op = empty($_G['gp_op']) ? 'add' : $_G['gp_op'];
+$op = empty($_GET['op']) ? 'add' : $_GET['op'];
 
 $announce = array('subject' => '', 'message' => '', 'starttime' => '', 'endtime' => '');
 $announce['checked'] = array('selected="selected"', '');
@@ -22,12 +22,11 @@ switch($op) {
 
 	case 'add':
 
-		if(!submitcheck('submit')) {
-			$announce['starttime'] = dgmdate(TIMESTAMP, 'd');
-			$announce['endtime'] = dgmdate(TIMESTAMP + 86400 * 30, 'd');
-		} else {
-			$message = is_array($_G['gp_message']) ? $_G['gp_message'][$_G['gp_type']] : '';
-			save_announce(0, $_G['gp_starttime'], $_G['gp_endtime'], $_G['gp_subject'], $_G['gp_type'], $message, 0);
+		$announce['starttime'] = dgmdate(TIMESTAMP, 'd');
+		$announce['endtime'] = dgmdate(TIMESTAMP + 86400 * 30, 'd');
+		if(submitcheck('submit')) {
+			$message = is_array($_GET['message']) ? $_GET['message'][$_GET['type']] : '';
+			save_announce(0, $_GET['starttime'], $_GET['endtime'], $_GET['subject'], $_GET['type'], $message, 0);
 			$add_successed = true;
 		}
 		break;
@@ -38,8 +37,8 @@ switch($op) {
 
 		if(submitcheck('submit')) {
 			$delids = array();
-			if(!empty($_G['gp_delete']) && is_array($_G['gp_delete'])) {
-				foreach($_G['gp_delete'] as $id) {
+			if(!empty($_GET['delete']) && is_array($_GET['delete'])) {
+				foreach($_GET['delete'] as $id) {
 					$id = intval($id);
 					if(isset($annlist[$id])) {
 						unset($annlist[$id]);
@@ -47,17 +46,17 @@ switch($op) {
 					}
 				}
 				if($delids) {
-					DB::query("DELETE FROM ".DB::table('forum_announcement')." WHERE id IN(".dimplode($delids).") AND author='$_G[username]'", 'UNBUFFERED');
+					C::t('forum_announcement')->delete_by_id_username($delids, $_G['username']);
 				}
 			}
 
 			$updateorder = false;
-			if(!empty($_G['gp_order']) && is_array($_G['gp_order'])) {
-				foreach ($_G['gp_order'] as $id => $val) {
+			if(!empty($_GET['order']) && is_array($_GET['order'])) {
+				foreach ($_GET['order'] as $id => $val) {
 					$val = intval($val);
 					if(isset($annlist[$id]) && $annlist[$id]['displayorder'] != $val) {
 						$annlist[$id]['displayorder'] = $val;
-						DB::query("UPDATE ".DB::table('forum_announcement')." SET displayorder='$val' WHERE id='$id'", "UNBUFFERED");
+						C::t('forum_announcement')->update_displayorder_by_id_username($id, $val, $_G['username']);
 						$updateorder = true;
 					}
 				}
@@ -71,9 +70,9 @@ switch($op) {
 		break;
 
 	case 'edit':
-		$id = intval($_G['gp_id']);
-		$query = DB::query("SELECT * FROM ".DB::table('forum_announcement')." WHERE id='$id' AND author='$_G[username]'");
-		if(!$announce = DB::fetch($query)) {
+		$id = intval($_GET['id']);
+		$announce = C::t('forum_announcement')->fetch_by_id_username($id, $_G['username']);
+		if(!count($announce)) {
 			showmessage('modcp_ann_nofound');
 		}
 
@@ -83,11 +82,11 @@ switch($op) {
 			$announce['message'] = $announce['type'] != 1 ? dhtmlspecialchars($announce['message']) : $announce['message'];
 			$announce['checked'] = $announce['type'] != 1 ? array('selected="selected"', '') : array('', 'selected="selected"');
 		} else {
-			$announce['starttime'] = $_G['gp_starttime'];
-			$announce['endtime'] = $_G['gp_endtime'];
-			$announce['checked'] = $_G['gp_type'] != 1 ? array('selected="selected"', '') : array('', 'selected="selected"');
-			$message = $_G['gp_message'][$_G['gp_type']];
-			save_announce($id, $_G['gp_starttime'], $_G['gp_endtime'], $_G['gp_subject'], $_G['gp_type'], $message, $_G['gp_displayorder']);
+			$announce['starttime'] = $_GET['starttime'];
+			$announce['endtime'] = $_GET['endtime'];
+			$announce['checked'] = $_GET['type'] != 1 ? array('selected="selected"', '') : array('', 'selected="selected"');
+			$message = $_GET['message'][$_GET['type']];
+			save_announce($id, $_GET['starttime'], $_GET['endtime'], $_GET['subject'], $_GET['type'], $message, $_GET['displayorder']);
 			$edit_successed = true;
 		}
 
@@ -99,9 +98,8 @@ $annlist = get_annlist();
 
 function get_annlist() {
 	global $_G;
-	$annlist =  array();
-	$query = DB::query("SELECT * FROM ".DB::table('forum_announcement')." ORDER BY displayorder, starttime DESC, id DESC");
-	while($announce = DB::fetch($query)) {
+	$annlist = C::t('forum_announcement')->fetch_all_by_displayorder();
+	foreach ($annlist as $announce) {
 		$announce['disabled'] = $announce['author'] != $_G['member']['username'] ? 'disabled' : '';
 		$announce['starttime'] = $announce['starttime'] ? dgmdate($announce['starttime'], 'd') : '-';
 		$announce['endtime'] = $announce['endtime'] ? dgmdate($announce['endtime'], 'd') : '-';
@@ -124,7 +122,7 @@ function save_announce($id = 0, $starttime, $endtime, $subject, $type, $message,
 	$starttime = empty($starttime) || strtotime($starttime) < TIMESTAMP ? TIMESTAMP : strtotime($starttime);
 	$endtime = empty($endtime) ? 0 : (strtotime($endtime) < $starttime ? ($starttime + 86400 * 30) : strtotime($endtime));
 
-	$subject = htmlspecialchars(trim($subject));
+	$subject = dhtmlspecialchars(trim($subject));
 
 	if($type == 1) {
 		list($message) = explode("\n", trim($message));
@@ -139,13 +137,13 @@ function save_announce($id = 0, $starttime, $endtime, $subject, $type, $message,
 	} elseif($type == 1 && substr(strtolower($message), 0, 7) != 'http://') {
 		acpmsg('modcp_ann_urlerror');
 	} else {
-		$sql = "author='$_G[username]', subject='$subject', type='$type', starttime='$starttime', endtime='$endtime',
-			message='$message', displayorder='$displayorder'";
+		$data = array('author'=>$_G['username'], 'subject'=>$subject, 'type'=>$type, 'starttime'=>$starttime, 'endtime'=>$endtime,
+			'message'=>$message, 'displayorder'=>$displayorder);
 
 		if(empty($id)) {
-			DB::query("INSERT INTO ".DB::table('forum_announcement')." SET $sql");
+			C::t('forum_announcement')->insert($data);
 		} else {
-			DB::query("UPDATE ".DB::table('forum_announcement')." SET $sql WHERE id='$id'", 'UNBUFFERED');
+			C::t('forum_announcement')->update($id, $data, true);
 		}
 		update_announcecache();
 		return true;

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_ipbanned.php 16696 2010-09-13 05:02:24Z monkey $
+ *      $Id: cache_ipbanned.php 24468 2011-09-20 11:41:28Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -12,15 +12,14 @@ if(!defined('IN_DISCUZ')) {
 }
 
 function build_cache_ipbanned() {
-	DB::query("DELETE FROM ".DB::table('common_banned')." WHERE expiration<'".TIMESTAMP."'");
+	C::t('common_banned')->delete_by_expiration(TIMESTAMP);
 	$data = array();
-	$query = DB::query("SELECT ip1, ip2, ip3, ip4, expiration FROM ".DB::table('common_banned'));
-
-	if(DB::num_rows($query)) {
+	$bannedarr = C::t('common_banned')->fetch_all();
+	if(!empty($bannedarr)) {
 		$data['expiration'] = 0;
 		$data['regexp'] = $separator = '';
 	}
-	while($banned = DB::fetch($query)) {
+	foreach($bannedarr as $banned) {
 		$data['expiration'] = !$data['expiration'] || $banned['expiration'] < $data['expiration'] ? $banned['expiration'] : $data['expiration'];
 		$data['regexp'] .= $separator.
 			($banned['ip1'] == '-1' ? '\\d+\\.' : $banned['ip1'].'\\.').
@@ -30,7 +29,7 @@ function build_cache_ipbanned() {
 		$separator = '|';
 	}
 
-	save_syscache('ipbanned', $data);
+	savecache('ipbanned', $data);
 }
 
 ?>

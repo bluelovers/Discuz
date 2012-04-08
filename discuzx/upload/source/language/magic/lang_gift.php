@@ -4,8 +4,12 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_gift.php 7828 2010-04-14 02:11:48Z monkey $
+ *      $Id: lang_gift.php 27449 2012-02-01 05:32:35Z zhangguosheng $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 $lang = array
 (
@@ -16,7 +20,7 @@ $lang = array
 	'gift_bad_credits_input' => '輸入的積分總數有誤',
 	'gift_bad_percredit_input' => '輸入的每份積分數有誤',
 	'gift_bad_credittype_input' => '指定的積分類型有誤',
-	'gift_credits_out_of_own' => '輸入的積分數超出你擁有的積分數',
+	'gift_credits_out_of_own' => '輸入的積分數超出您擁有的積分數',
 	'gift_gc' => '回收紅包',
 	'gift_use' => '埋個紅包',
 

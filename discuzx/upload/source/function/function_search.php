@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_search.php 23827 2011-08-11 04:33:02Z zhouguoqiang $
+ *      $Id: function_search.php 27661 2012-02-09 04:49:46Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -25,7 +25,7 @@ function searchkey($keyword, $field, $returnsrchtxt = 0) {
 		$keyword = str_replace('*', '%', addcslashes($keyword, '%_'));
 		$srchtxt = $returnsrchtxt ? $keyword : '';
 		foreach(explode('+', $keyword) as $text) {
-			$text = trim($text);
+			$text = trim(daddslashes($text));
 			if($text) {
 				$keywordsrch .= $andor;
 				$keywordsrch .= str_replace('{text}', $text, $field);
@@ -58,50 +58,6 @@ function bat_highlight($message, $words, $color = '#ff0000') {
 		}
 	}
 	return $message;
-}
-
-function search_get_forum_hash() {
-	global $_G;
-	require_once DISCUZ_ROOT . './api/manyou/Manyou.php';
-	loadcache('search_forum_hash');
-	if (TIMESTAMP - $_G['cache']['search_forum_hash']['ts'] > 21600) {
-		$my_forums = SearchHelper::getForums();
-		$data = array('ts' => TIMESTAMP, 'sign' => $my_forums['sign']);
-		save_syscache('search_forum_hash', $data);
-	} else {
-		$data = $_G['cache']['search_forum_hash'];
-
-	}
-	return $data['sign'];
-}
-
-function search_get_usergroups($groupIds) {
-	global $_G;
-
-	require_once DISCUZ_ROOT . './api/manyou/Manyou.php';
-
-	$missGroupIds = array();
-	$res = array();
-	foreach($groupIds as $groupId) {
-		$kname = 'search_group_hash_' . $groupId;
-		loadcache($kname);
-		if (TIMESTAMP - $_G['cache'][$kname]['ts'] > 21600) {
-			$missGroupIds[] = $groupId;
-		} else {
-			$res[$groupId]['sign'] = $_G['cache'][$kname]['sign'];
-		}
-	}
-
-	if ($missGroupIds) {
-		$userGroups = SearchHelper::getUserGroupPermissions($missGroupIds);
-		foreach($userGroups as $groupId => $userGroup) {
-			$kname = $kname = 'search_group_hash_' . $groupId;
-			$data = array('ts' => TIMESTAMP, 'sign' => $userGroup['sign']);
-			save_syscache($kname, $data);
-			$res[$groupId]['sign'] = $userGroup['sign'];
-		}
-	}
-	return $res;
 }
 
 ?>

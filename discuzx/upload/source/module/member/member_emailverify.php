@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: member_emailverify.php 20095 2011-02-14 09:32:12Z liulanbo $
+ *      $Id: member_emailverify.php 25756 2011-11-22 02:47:45Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -13,11 +13,11 @@ if(!defined('IN_DISCUZ')) {
 
 define('NOROBOT', TRUE);
 
-$member = DB::fetch_first("SELECT mf.authstr FROM ".DB::table('common_member')." m, ".DB::table('common_member_field_forum')." mf
-	WHERE m.uid='$_G[uid]' AND mf.uid=m.uid AND m.groupid='8'");
-
-if(!$member) {
+$member = getuserbyuid($_G['uid']);
+if(!$member || $member['groupid'] != 8) {
 	showmessage('member_not_found');
+} else {
+	$member = array_merge(C::t('common_member_field_forum')->fetch($member['uid']), $member);
 }
 
 if($_G['setting']['regverify'] == 2) {
@@ -30,7 +30,7 @@ if($type == 2 && TIMESTAMP - $dateline < 86400) {
 }
 
 $idstring = $type == 2 && $idstring ? $idstring : random(6);
-DB::query("UPDATE ".DB::table('common_member_field_forum')." SET authstr='$_G[timestamp]\t2\t$idstring' WHERE uid='$_G[uid]'");
+C::t('common_member_field_forum')->update($_G['uid'], array('authstr'=>"$_G[timestamp]\t2\t$idstring"));
 $verifyurl = "{$_G[siteurl]}member.php?mod=activate&amp;uid={$_G[uid]}&amp;id=$idstring";
 $email_verify_message = lang('email', 'email_verify_message', array(
 	'username' => $_G['member']['username'],
@@ -39,7 +39,9 @@ $email_verify_message = lang('email', 'email_verify_message', array(
 	'url' => $verifyurl
 ));
 include_once libfile('function/mail');
-sendmail("{$_G[member][username]} <$_G[gp_email]>", lang('email', 'email_verify_subject'), $email_verify_message);
+if(!sendmail("{$_G[member][username]} <$_GET[email]>", lang('email', 'email_verify_subject'), $email_verify_message)) {
+	runlog('sendmail', "$_GET[email] sendmail failed.");
+}
 showmessage('email_verify_succeed');
 
 ?>

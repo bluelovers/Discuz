@@ -1,8 +1,8 @@
 /*
-	[Discuz!] (C)2001-2009 Comsenz Inc.
+	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: portal.js 21566 2011-03-31 09:00:16Z zhangguosheng $
+	$Id: portal.js 29037 2012-03-23 05:35:25Z zhengqingpeng $
 */
 
 function block_get_setting(classname, script, bid) {
@@ -63,6 +63,7 @@ function block_pushitem(bid, itemid) {
 		var x = new Ajax();
 		x.get('portal.php?mod=portalcp&ac=block&op=push&&bid='+bid+'&itemid='+itemid+'&idtype='+idtype+'&id='+id+'&inajax=1', function(s){
 			ajaxinnerhtml($('tbody_pushcontent'), s);
+			evalscript(s);
 		});
 	}
 }
@@ -84,9 +85,9 @@ function block_delete_item(bid, itemid, itemtype, itemfrom, from) {
 	doane();
 }
 
-function portal_comment_requote(cid) {
+function portal_comment_requote(cid, aid) {
 	var x = new Ajax();
-	x.get('portal.php?mod=portalcp&ac=comment&op=requote&cid='+cid+'&inajax=1', function(s){
+	x.get('portal.php?mod=portalcp&ac=comment&op=requote&cid='+cid+'&aid='+aid+'&inajax=1', function(s){
 		$('message').focus();
 		ajaxinnerhtml($('message'), s);
 	});
@@ -155,7 +156,7 @@ function recommenditem_byblock(bid, id, idtype) {
 		if(!$('recommendback')) {
 			var back = document.createElement('div');
 			back.innerHTML = '<em id="recommendback" onclick="recommenditem_back()" class="cur1">&nbsp;&nbsp;&laquo;返回</em>';
-			var return_mods = $('return_mods') || $('return_');
+			var return_mods = $('return_mods') || $('return_recommend') || $('return_');
 			if(return_mods) {
 				return_mods.parentNode.appendChild(back.childNodes[0]);
 			}
@@ -168,6 +169,18 @@ function recommenditem_byblock(bid, id, idtype) {
 		} else {
 			ajaxinnerhtml(editarea, '<tr><td>&nbsp;</td><td>&nbsp;</td></tr>');
 		}
+	}
+}
+
+function delete_recommenditem(dataid, bid) {
+	if(dataid && bid) {
+		var x = new Ajax();
+		x.get('portal.php?mod=portalcp&ac=block&op=delrecommend&bid='+bid+'&dataid='+dataid+'&inajax=1', function(s){
+			$('recommenditem_'+dataid).parentNode.removeChild($('recommenditem_'+dataid));
+			if(!$('recommenditem_ul').getElementsByTagName('li').length) {
+				$('hasinblocks').parentNode.removeChild($('hasinblocks'));
+			}
+		});
 	}
 }
 
@@ -299,7 +312,7 @@ function hideBlockSummary() {
 
 function blockconver(ele,bid) {
 	if(ele && bid) {
-		if(confirm('你確定要轉換模塊的類型從 '+ele.options[0].innerHTML+' 到 '+ele.options[ele.selectedIndex].innerHTML)) {
+		if(confirm('您確定要轉換模塊的類型從 '+ele.options[0].innerHTML+' 到 '+ele.options[ele.selectedIndex].innerHTML)) {
 			ajaxget('portal.php?mod=portalcp&ac=block&op=convert&bid='+bid+'&toblockclass='+ele.value,'blockshow');
 		} else {
 			ele.selectedIndex = 0;
@@ -311,4 +324,38 @@ function blockFavorite(bid){
 	if(bid) {
 		ajaxget('portal.php?mod=portalcp&ac=block&op=favorite&bid='+bid,'bfav_'+bid);
 	}
+}
+
+function strLenCalc(obj, checklen, maxlen) {
+	var v = obj.value, charlen = 0, maxlen = !maxlen ? 200 : maxlen, curlen = 0, len = strlen(v);
+	for(var i = 0; i < v.length; i++) {
+		if(v.charCodeAt(i) < 0 || v.charCodeAt(i) > 255) {
+			curlen += charset == 'utf-8' ? 2 : 1;
+		} else {
+			curlen += 1;
+		}
+	}
+	checklen = $(checklen);
+	if(checklen.style.display == 'none') checklen.style.display = '';
+	if(curlen <= maxlen) {
+		checklen.innerHTML = '已輸入 <b>'+(curlen)+'</b> 個字符';
+		return true;
+	} else {
+		checklen.innerHTML = '超出 <b style="color:red">'+(curlen - maxlen)+'</b> 個字符';
+		return false;
+	}
+}
+
+function check_itemdata_lentgh(form) {
+	if(form.title && (!strLenCalc(form.title, "titlechk", form.title.getAttribute('_maxlength')) || !form.title.value)) {
+		form.title.focus();
+		showDialog('標題長度不正確', 'error', null, function(){form.title.select();});
+		return false;
+	}
+	if(form.summary && !strLenCalc(form.summary, "summarychk", form.summary.getAttribute('_maxlength'))) {
+		form.summary.focus();
+		showDialog('簡介長度不正確', 'error', null, function(){form.summary.select();});
+		return false;
+	}
+	return true;
 }

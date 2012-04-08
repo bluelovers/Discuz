@@ -1,6 +1,6 @@
 <div class="bm bw0 mdcp">
 	<h1 class="mt">{lang mod_notice_title}</h1>
-	<form method="post" autocomplete="off" action="{$cpscript}?mod=modcp&action=$_G[gp_action]" id="list_adminnote">
+	<form method="post" autocomplete="off" action="{$cpscript}?mod=modcp&action=$_GET[action]" id="list_adminnote">
 		<input type="hidden" name="formhash" value="{FORMHASH}" />
 		<input type="hidden" name="op" value="addnote" />
 		<div class="exfm">
@@ -32,7 +32,7 @@
 
 	<h2 class="bbs pbm ptm">{lang modcp_home_message_list}</h2>
 	<!--{if $notelist}-->
-		<form method="post" autocomplete="off" action="{$cpscript}?mod=modcp&action=$_G[gp_action]" name="notelist" id="notelist">
+		<form method="post" autocomplete="off" action="{$cpscript}?mod=modcp&action=$_GET[action]" name="notelist" id="notelist">
 			<input type="hidden" name="formhash" value="{FORMHASH}" />
 			<input type="hidden" name="op" value="delete" />
 			<input type="hidden" name="notlistsubmit" value="yes" />

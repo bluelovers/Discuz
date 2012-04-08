@@ -1,8 +1,8 @@
 /*
-	[Discuz!] (C)2001-2009 Comsenz Inc.
+	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: forum_post.js 22843 2011-05-25 09:39:50Z monkey $
+	$Id: forum_post.js 28434 2012-02-29 11:03:43Z monkey $
 */
 
 var postSubmited = false;
@@ -22,12 +22,12 @@ var STATUSMSG = {
 	'3' : '用戶組限制無法上傳那麼大的附件',
 	'4' : '不支持此類擴展名',
 	'5' : '文件類型限制無法上傳那麼大的附件',
-	'6' : '今日你已無法上傳更多的附件',
+	'6' : '今日您已無法上傳更多的附件',
 	'7' : '請選擇圖片文件(' + imgexts + ')',
 	'8' : '附件文件無法保存',
 	'9' : '沒有合法的文件被上傳',
 	'10' : '非法操作',
-	'11' : '今日你已無法上傳那麼大的附件'
+	'11' : '今日您已無法上傳那麼大的附件'
 };
 
 EXTRAFUNC['validator'] = [];
@@ -55,7 +55,10 @@ function ctlent(event) {
 }
 
 function checklength(theform) {
-	var message = wysiwyg ? html2bbcode(getEditorContents()) : (!theform.parseurloff.checked ? parseurl(theform.message.value) : theform.message.value);
+	var message = wysiwyg ? html2bbcode(getEditorContents()) : theform.message.value;
+	if(!theform.parseurloff.checked) {
+		message = parseurl(message);
+	}
 	showDialog('當前長度: ' + mb_strlen(message) + ' 字節，' + (postmaxchars != 0 ? '系統限制: ' + postminchars + ' 到 ' + postmaxchars + ' 字節。' : ''), 'notice', '字數檢查');
 }
 
@@ -64,7 +67,10 @@ if(!tradepost) {
 }
 
 function validate(theform) {
-	var message = wysiwyg ? html2bbcode(getEditorContents()) : (!theform.parseurloff.checked ? parseurl(theform.message.value) : theform.message.value);
+	var message = wysiwyg ? html2bbcode(getEditorContents()) : theform.message.value;
+	if(!theform.parseurloff.checked) {
+		message = parseurl(message);
+	}
 	if(($('postsubmit').name != 'replysubmit' && !($('postsubmit').name == 'editsubmit' && !isfirstpost) && theform.subject.value == "") || !sortid && !special && trim(message) == "") {
 		showError('抱歉，您尚未輸入標題或內容');
 		return false;
@@ -73,8 +79,6 @@ function validate(theform) {
 		return false;
 	}
 	if(ispicstyleforum == 1 && ATTACHORIMAGE == 0 && isfirstpost) {
-		showError('帖圖版塊至少應上傳一張圖片作為封面');
-		return false;
 	}
 	if(in_array($('postsubmit').name, ['topicsubmit', 'editsubmit'])) {
 		if(theform.typeid && (theform.typeid.options && theform.typeid.options[theform.typeid.selectedIndex].value == 0) && typerequired) {
@@ -107,6 +111,11 @@ function validate(theform) {
 		showDialog('您有正在上傳的附件，請稍候，上傳完成後帖子將會自動發表...', 'notice');
 		AUTOPOST = 1;
 		return false;
+	}
+	if(isfirstpost && $('adddynamic') != null && $('adddynamic').checked && $('postsave') != null && isNaN(parseInt($('postsave').value)) && ($('readperm') != null && $('readperm').value || $('price') != null && $('price').value)) {
+		if(confirm('由於您設置了閱讀權限或出售帖，您確認還轉播給您的聽眾看嗎？') == false) {
+			return false;
+		}
 	}
 	if($(editorid + '_attachlist')) {
 		$('postbox').appendChild($(editorid + '_attachlist'));
@@ -279,7 +288,7 @@ function addAttach(prefix) {
 	for(i in tags) {
 		if(tags[i].name == 'Filedata') {
 			tags[i].id = prefix + 'attachnew_' + id;
-			tags[i].onchange = function() {insertAttach(prefix, id)};
+			tags[i].onchange = function() {insertAttach(prefix, id);};
 			tags[i].unselectable = 'on';
 		} else if(tags[i].name == 'attachid') {
 			tags[i].value = id;
@@ -313,7 +322,6 @@ function addAttach(prefix) {
 }
 
 function insertAttach(prefix, id) {
-	var localimgpreview = '';
 	var path = $(prefix + 'attachnew_' + id).value;
 	var extpos = path.lastIndexOf('.');
 	var ext = extpos == -1 ? '' : path.substr(extpos + 1, path.length).toLowerCase();
@@ -397,7 +405,7 @@ function appendAttachDel(ids) {
 		aids += '&aids[]=' + id;
 	}
 	var x = new Ajax();
-	x.get('forum.php?mod=ajax&action=deleteattach&inajax=yes&tid=' + (typeof tid == 'undefined' ? 0 : tid) + '&pid=' + (typeof pid == 'undefined' ? 0 : pid) + aids, function() {});
+	x.get('forum.php?mod=ajax&action=deleteattach&inajax=yes&tid=' + (typeof tid == 'undefined' ? 0 : tid) + '&pid=' + (typeof pid == 'undefined' ? 0 : pid) + aids + ($('modthreadkey') ? '&modthreadkey=' + $('modthreadkey').value : ''), function() {});
 	if($('delattachop')) {
 		$('delattachop').value = 1;
 	}
@@ -617,7 +625,7 @@ function insertsave(pid) {
 
 function userdataoption(op) {
 	if(!op) {
-		saveUserdata('forum', '');
+		saveUserdata('forum_'+discuz_uid, '');
 		display('rstnotice');
 	} else {
 		loadData();
@@ -649,6 +657,14 @@ function attachoption(type, op) {
 			if(type == 'attach') {
 				updateAttachList(1, aids);
 			} else {
+				list = $('imgattachlist').getElementsByTagName('TD');
+				re = /^image\_td\_(\d+)$/;
+				for(i = 0;i < list.length;i++) {
+					var matches = re.exec(list[i].id);
+					if(matches != null) {
+						aids += '|' + matches[1];
+					}
+				}
 				updateImageList(1, aids);
 			}
 		}
@@ -656,7 +672,7 @@ function attachoption(type, op) {
 	} else if(op == 2) {
 		showDialog('<div id="unusedwin" class="c altw" style="overflow:auto;height:100px;">' + $('unusedlist_' + type).innerHTML + '</div>' +
 			'<p class="o pns"><span class="z xg1"><label for="unusedwinchkall"><input id="unusedwinchkall" type="checkbox" onclick="attachoption(\'' + type + '\', 3)" checked="checked" />全選</label></span>' +
-			'<button onclick="attachoption(\'' + type + '\', 1);hideMenu(\'fwin_dialog\', \'dialog\')" class="pn pnc"><strong>確定</strong></button></p>', 'info', '未使用的' + (type == 'attach' ? '附件' : '圖片'));
+			'<button onclick="attachoption(\'' + type + '\', 1);hideMenu(\'fwin_dialog\', \'dialog\')" class="pn pnc"><strong>使用</strong></button></p>', 'info', '未使用的' + (type == 'attach' ? '附件' : '圖片'));
 	} else if(op == 3) {
 		list = $('unusedwin').getElementsByTagName('INPUT');
 		for(i = 0;i < list.length;i++) {
@@ -688,7 +704,7 @@ function insertAllAttachTag() {
 			var attach = attachListObj[i];
 			var ids = attach.id.split('_');
 			if(ids[0] == 'attach') {
-				if($('attachname'+ids[1])) {
+				if($('attachname'+ids[1]) && attach.style.display != 'none') {
 					if(parseInt($('attachname'+ids[1]).getAttribute('isimage'))) {
 						insertAttachimgTag(ids[1]);
 					} else {
@@ -755,6 +771,20 @@ function extraCheck(op) {
 		$('extra_rushreplyset_chk').className = $('rushreply').checked ? 'a' : '';
 	} else if(op == 4 && $('tags')) {
 		$('extra_tag_chk').className = $('tags').value !== '' ? 'a' : '';
+	} else if(op == 5 && $('cronpublish')) {
+		$('extra_pubdate_chk').className = $('cronpublish').checked ? 'a' : '';
+	}
+}
+
+function hidenFollowBtn(flag) {
+	var fobj = $('adddynamicspan');
+	if(fobj) {
+		if(flag) {
+			$('adddynamic').checked = !flag;
+			fobj.style.display = 'none';
+		} else {
+			fobj.style.display = '';
+		}
 	}
 }
 

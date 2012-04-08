@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: task_blog.php 6752 2010-03-25 08:47:54Z cnteacher $
+ *      $Id: task_blog.php 24741 2011-10-10 03:41:51Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -25,7 +25,7 @@ class task_blog {
 	function csc($task = array()) {
 		global $_G;
 
-		if(getcount('home_blog', array('uid' => $_G['uid']))) {
+		if(C::t('home_blog')->count_by_uid($_G['uid'])) {
 			return true;
 		}
 		return array('csc' => 0, 'remaintime' => 0);

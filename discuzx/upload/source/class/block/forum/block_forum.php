@@ -4,16 +4,20 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: block_forum.php 9038 2010-04-26 07:56:28Z xupeng $
+ *      $Id: block_forum.php 25525 2011-11-14 04:39:11Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
-class block_forum {
+class block_forum extends discuz_block {
 	var $setting = array();
 	function block_forum() {
 		$this->setting = array(
+			'fids'	=> array(
+				'title' => 'forumlist_fids',
+				'type' => 'text',
+			),
 			'fups'	=> array(
 				'title' => 'forumlist_fups',
 				'type' => 'mselect',
@@ -53,6 +57,7 @@ class block_forum {
 
 	function fields() {
 		return array(
+					'id' => array('name' => lang('blockclass', 'blockclass_field_id'), 'formtype' => 'text', 'datatype' => 'int'),
 					'url' => array('name' => lang('blockclass', 'blockclass_forum_field_url'), 'formtype' => 'text', 'datatype' => 'string'),
 					'title' => array('name' => lang('blockclass', 'blockclass_forum_field_title'), 'formtype' => 'title', 'datatype' => 'title'),
 					'summary' => array('name' => lang('blockclass', 'blockclass_forum_field_summary'), 'formtype' => 'summary', 'datatype' => 'summary'),
@@ -93,14 +98,11 @@ class block_forum {
 		return $settings;
 	}
 
-	function cookparameter($parameter) {
-		return $parameter;
-	}
-
 	function getdata($style, $parameter) {
 		global $_G;
 
 		$parameter = $this->cookparameter($parameter);
+		$fids	= !empty($parameter['fids']) ? explode(',',$parameter['fids']) : array();
 		$fups		= isset($parameter['fups']) && !in_array(0, (array)$parameter['fups']) ? $parameter['fups'] : '';
 		$orderby	= isset($parameter['orderby']) ? (in_array($parameter['orderby'],array('displayorder','threads','posts', 'todayposts')) ? $parameter['orderby'] : 'displayorder') : 'displayorder';
 		$titlelength = isset($parameter['titlelength']) ? intval($parameter['titlelength']) : 40;
@@ -120,13 +122,22 @@ class block_forum {
 			}
 		}
 
+		$wheres = array();
+		if($fids) {
+			$wheres[] = 'f.`fid` IN ('.dimplode($fids).')';
+		}
+		if($fups) {
+			$wheres[] = 'f.`fup` IN ('.dimplode($fups).')';
+		}
+		$wheres[] = "f.`status`='1'";
+		$wheres[] = "f.`type`!='group'";
+		$wheresql = implode(' AND ', $wheres);
+
 		$ffadd1 = ", ff.icon, ff.description";
 		$ffadd2 = "LEFT JOIN `".DB::table('forum_forumfield')."` ff ON f.`fid`=ff.`fid`";
 		$query = DB::query("SELECT f.* $ffadd1
 			FROM `".DB::table('forum_forum')."` f $ffadd2
-			WHERE
-			".($fups ? "f.`fup` IN (".dimplode($fups).") " : "1 ")."
-			AND f.`status`='1' AND f.`type`!='group'
+			WHERE $wheresql
 			$sqlban
 			ORDER BY ".($orderby == 'displayorder' ? "f.fup, f.`displayorder` ASC " : "f.`$orderby` DESC")
 			." LIMIT $startrow, $items"

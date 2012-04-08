@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_promotion.php 11620 2010-06-09 09:46:59Z monkey $
+ *      $Id: misc_promotion.php 25889 2011-11-24 09:52:20Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -13,20 +13,19 @@ if(!defined('IN_DISCUZ')) {
 
 global $_G;
 
-if(!empty($_G['gp_fromuid'])) {
-	$fromuid = intval($_G['gp_fromuid']);
+if(!empty($_GET['fromuid'])) {
+	$fromuid = intval($_GET['fromuid']);
 	$fromuser = '';
 } else {
-	$fromuser = $_G['gp_fromuser'];
+	$fromuser = $_GET['fromuser'];
 	$fromuid = '';
 }
 
 if(!$_G['uid'] || !($fromuid == $_G['uid'] || $fromuser == $_G['username'])) {
 
 	if($_G['setting']['creditspolicy']['promotion_visit']) {
-		if(!DB::fetch_first("SELECT * FROM ".DB::table('forum_promotion')." WHERE ip='$_G[clientip]'")) {
-			DB::query("REPLACE INTO ".DB::table('forum_promotion')." (ip, uid, username)
-				VALUES ('$_G[clientip]', '$fromuid', '$fromuser')");
+		if(!C::t('forum_promotion')->fetch($_G['clientip'])) {
+			C::t('forum_promotion')->insert(array('ip' => $_G['clientip'], 'uid' => $fromuid, 'username' => $fromuser), false, true);
 			updatecreditbyaction('promotion_visit', $fromuid);
 		}
 	}
@@ -34,7 +33,7 @@ if(!$_G['uid'] || !($fromuid == $_G['uid'] || $fromuser == $_G['username'])) {
 	if($_G['setting']['creditspolicy']['promotion_register']) {
 		if(!empty($fromuser) && empty($fromuid)) {
 			if(empty($_G['cookie']['promotion'])) {
-				$fromuid = DB::result_first("SELECT uid FROM ".DB::table('common_member')." WHERE username='$fromuser'");
+				$fromuid = C::t('common_member')->fetch_uid_by_username($fromuser);
 			} else {
 				$fromuid = intval($_G['cookie']['promotion']);
 			}

@@ -1,8 +1,8 @@
 /*
-	[Discuz!] (C)2001-2009 Comsenz Inc.
+	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: forum_viewthread.js 22866 2011-05-27 06:23:56Z zhangguosheng $
+	$Id: forum_viewthread.js 28794 2012-03-13 05:39:46Z zhangguosheng $
 */
 
 var replyreload = '', attachimgST = new Array(), zoomgroup = new Array(), zoomgroupinit = new Array();
@@ -56,17 +56,24 @@ function attachimgshow(pid, onlyinpost) {
 	}
 }
 
-function attachimglstshow(pid, islazy) {
+function attachimglstshow(pid, islazy, fid, showexif) {
 	var aimgs = aimgcount[pid];
+	var s = '';
+	if(fid) {
+		s = ' onmouseover="showMenu({\'ctrlid\':this.id, \'pos\': \'12!\'});"';
+	}
 	if(typeof aimgcount == 'object' && $('imagelistthumb_' + pid)) {
 		for(pid in aimgcount) {
 			var imagelist = '';
 			for(i = 0;i < aimgcount[pid].length;i++) {
-				if(!$('aimg_' + aimgcount[pid][i]) || $('aimg_' + aimgcount[pid][i]).getAttribute('inpost')) {
+				if(!$('aimg_' + aimgcount[pid][i]) || $('aimg_' + aimgcount[pid][i]).getAttribute('inpost') || parseInt(aimgcount[pid][i]) != aimgcount[pid][i]) {
 					continue;
 				}
+				if(fid) {
+					imagelist += '<div id="pattimg_' + aimgcount[pid][i] + '_menu" class="tip tip_4" style="display: none;"><div class="tip_horn"></div><div class="tip_c"><a href="forum.php?mod=ajax&action=setthreadcover&aid=' + aimgcount[pid][i] + '&fid=' + fid + '" class="xi2" onclick="showWindow(\'setcover' + aimgcount[pid][i] + '\', this.href)">設為封面</a></div></div>';
+				}
 				imagelist += '<div class="pattimg">' +
-					'<a class="pattimg_zoom" href="javascript:;" onclick="zoom($(\'aimg_' + aimgcount[pid][i] + '\'), attachimggetsrc(\'aimg_' + aimgcount[pid][i] + '\'))" title="點擊放大">點擊放大</a>' +
+					'<a id="pattimg_' + aimgcount[pid][i] + '" class="pattimg_zoom" href="javascript:;"' + s + ' onclick="zoom($(\'aimg_' + aimgcount[pid][i] + '\'), attachimggetsrc(\'aimg_' + aimgcount[pid][i] + '\'), 0, 0, ' + (parseInt(showexif) ? 1 : 0) + ')" title="點擊放大">點擊放大</a>' +
 					'<img ' + (islazy ? 'file' : 'src') + '="forum.php?mod=image&aid=' + aimgcount[pid][i] + '&size=100x100&key=' + imagelistkey + '&atid=' + tid + '" width="100" height="100" /></div>';
 			}
 			if($('imagelistthumb_' + pid)) {
@@ -283,6 +290,10 @@ function favoriteupdate() {
 	var obj = $('favoritenumber');
 	obj.innerHTML = parseInt(obj.innerHTML) + 1;
 }
+function relayupdate() {
+	var obj = $('relaynumber');
+	obj.innerHTML = parseInt(obj.innerHTML) + 1;
+}
 
 function shareupdate() {
 	var obj = $('sharenumber');
@@ -460,6 +471,7 @@ function lazyload(className) {
 						lazyload.imgs.push(imgs[j]);
 					} else {
 						imgs[j].setAttribute('src', imgs[j].getAttribute('file'));
+						imgs[j].setAttribute('lazyloaded', 'true');
 					}
 				}
 			}
@@ -473,7 +485,14 @@ function lazyload(className) {
 		for (var i=0; i<lazyload.imgs.length; i++) {
 			var img = lazyload.imgs[i];
 			var offsetTop = this.getOffset(img);
-			if (offsetTop > document.documentElement.clientHeight && (offsetTop  - scrollTop < document.documentElement.clientHeight)) {
+			if (!img.getAttribute('lazyloaded') && offsetTop > document.documentElement.clientHeight && (offsetTop  - scrollTop < document.documentElement.clientHeight)) {
+				var dom = document.createElement('div');
+				var width = img.getAttribute('width') ? img.getAttribute('width') : 100;
+				var height = img.getAttribute('height') ? img.getAttribute('height') : 100;
+				dom.innerHTML = '<div style="width: '+width+'px; height: '+height+'px;background: url('+IMGDIR + '/loading.gif) no-repeat center center;"></div>';
+				img.parentNode.insertBefore(dom.childNodes[0], img);
+				img.onload = function () {if(!this.getAttribute('_load')) {this.setAttribute('_load', 1);this.style.width = this.style.height = '';this.parentNode.removeChild(this.previousSibling);}};
+				img.style.width = img.style.height = '1px';
 				img.setAttribute('src', img.getAttribute('file') ? img.getAttribute('file') : img.getAttribute('src'));
 				img.setAttribute('lazyloaded', true);
 			} else {
@@ -483,6 +502,10 @@ function lazyload(className) {
 		lazyload.imgs = imgs;
 		return true;
 	};
-	this.initImages();
+	this.showImage();
 	_attachEvent(window, 'scroll', function(){obj.showImage();});
+}
+function update_collection(){
+	sum = 1;
+    $('collectionnumber').innerText = parseInt($('collectionnumber').innerText)+sum;
 }

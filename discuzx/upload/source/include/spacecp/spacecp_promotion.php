@@ -3,7 +3,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_promotion.php 22088 2011-04-21 07:50:14Z zhengqingpeng $
+ *      $Id: spacecp_promotion.php 25889 2011-11-24 09:52:20Z monkey $
  */
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');

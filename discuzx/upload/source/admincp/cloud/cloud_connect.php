@@ -4,21 +4,22 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cloud_connect.php 24520 2011-09-23 02:08:15Z yangli $
+ *      $Id: cloud_connect.php 29273 2012-03-31 07:58:50Z yexinhao $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
 }
 
-require_once libfile('function/connect');
+$utilService = Cloud::loadClass('Service_Util');
+$connectService = Cloud::loadClass('Service_Connect');
 
-$op = $_G['gp_op'];
+$op = $_GET['op'];
 
-$signUrl = generateSiteSignUrl();
+$signUrl = $utilService->generateSiteSignUrl();
 
-$_G['gp_anchor'] = in_array($_G['gp_anchor'], array('setting', 'service')) ? $_G['gp_anchor'] : 'setting';
-$current = array($_G['gp_anchor'] => 1);
+$_GET['anchor'] = in_array($_GET['anchor'], array('setting', 'service')) ? $_GET['anchor'] : 'setting';
+$current = array($_GET['anchor'] => 1);
 
 $connectnav = array();
 
@@ -29,22 +30,13 @@ if (!$_G['inajax']) {
 	cpheader();
 }
 
-if($_G['gp_anchor'] == 'service') {
-	headerLocation($cloudDomain.'/connect/service/?'.$signUrl);
+if($_GET['anchor'] == 'service') {
+	$utilService->redirect($cloudDomain.'/connect/service/?' . $signUrl);
 
-} elseif ($_G['gp_anchor'] == 'setting') {
-	$query = DB::query("SELECT * FROM ".DB::table('common_setting')." WHERE skey IN ('extcredits', 'connect', 'connectsiteid', 'connectsitekey', 'regconnect')");
-	while($row = DB::fetch($query)) {
-		$setting[$row['skey']] = $row['svalue'];
-	}
-	$setting['connect'] = (array)unserialize($setting['connect']);
+} elseif ($_GET['anchor'] == 'setting') {
 
-	$params = array(
-		's_id' => $setting['connectsiteid'],
-		'response_type' => 'php'
-	);
-	$params['sig'] = connect_get_sig($params, $setting['connectsiteid'].'|'.$setting['connectsitekey']);
-	$staturl = $setting['connectsiteid'] ? 'http://connect.manyou.com/site/stats/index?'.http_build_query($params) : '';
+	$setting = C::t('common_setting')->fetch_all(array('extcredits', 'connect', 'connectsiteid', 'connectsitekey', 'regconnect'));
+	$setting['connect'] = (array)dunserialize($setting['connect']);
 
 	if(!submitcheck('connectsubmit')) {
 
@@ -61,8 +53,8 @@ if($_G['gp_anchor'] == 'service') {
 			}
 		}
 
-		$connectrewardcredits = $connectgroup = '';
-		$setting['extcredits'] = unserialize($setting['extcredits']);
+		$connectrewardcredits = $connectgroup = $connectguestgroup = '';
+		$setting['extcredits'] = dunserialize($setting['extcredits']);
 		for($i = 0; $i <= 8; $i++) {
 			if($setting['extcredits'][$i]['available']) {
 				$extcredit = 'extcredits'.$i.' ('.$setting['extcredits'][$i]['title'].')';
@@ -70,14 +62,16 @@ if($_G['gp_anchor'] == 'service') {
 			}
 		}
 
-		$query = DB::query("SELECT groupid, grouptitle FROM ".DB::table('common_usergroup')." WHERE type='special'");
-		while($group = DB::fetch($query)) {
+		$groups = C::t('common_usergroup')->fetch_all_by_type('special');
+		foreach($groups as $group) {
 			$connectgroup .= "<option value=\"$group[groupid]\" ".($group['groupid'] == $setting['connect']['register_groupid'] ? 'selected' : '').">$group[grouptitle]</option>\n";
+			$connectguestgroup .= "<option value=\"$group[groupid]\" ".($group['groupid'] == $setting['connect']['guest_groupid'] ? 'selected' : '').">$group[grouptitle]</option>\n";
 		}
 
 		showformheader('cloud&operation=connect');
 		showtableheader();
 		showsetting('connect_setting_allow', 'connectnew[allow]', $setting['connect']['allow'], 'radio', 0, 1);
+		showsetting('setting_access_guest_connect_group', '', '', '<select name="connectnew[guest_groupid]"><option value="0">'.$lang['usergroups_system_0'].'</option>'.$connectguestgroup.'</select>');
 		showsetting('setting_access_register_connect_birthday', 'connectnew[register_birthday]', $setting['connect']['register_birthday'], 'radio');
 		showsetting('setting_access_register_connect_gender', 'connectnew[register_gender]', $setting['connect']['register_gender'], 'radio');
 		showsetting('setting_access_register_connect_uinlimit', 'connectnew[register_uinlimit]', $setting['connect']['register_uinlimit'], 'text');
@@ -96,6 +90,8 @@ if($_G['gp_anchor'] == 'service') {
 		showsetting('connect_setting_t_allow', 'connectnew[t][allow]', $setting['connect']['t']['allow'], 'radio', 0, 1);
 		showsetting('connect_setting_t_fids', '', '', $forumselect['t']);
 		showsetting('connect_setting_t_group', 'connectnew[t][group]', $setting['connect']['t']['group'], 'radio');
+		showsetting('connect_setting_t_reply', 'connectnew[t][reply]', $setting['connect']['t']['reply'], 'radio');
+		showsetting('connect_setting_t_reply_showauthor', 'connectnew[t][reply_showauthor]', $setting['connect']['t']['reply_showauthor'], 'radio');
 		showtagfooter('tbody');
 		showsetting('connect_setting_like_allow', 'connectnew[like_allow]', $setting['connect']['like_allow'], 'radio', 0, 1);
 		showsetting('connect_setting_like_url', 'connectnew[like_qq]', $setting['connect']['like_qq'], 'text');
@@ -104,7 +100,8 @@ if($_G['gp_anchor'] == 'service') {
 		showsetting('connect_setting_turl_qq', 'connectnew[turl_qq]', $setting['connect']['turl_qq'], 'text');
 		showtagfooter('tbody');
 		showsetting('connect_setting_qshare_allow', 'connectnew[qshare_allow]', $setting['connect']['qshare_allow'], 'radio', 0, 1);
-		showsetting('connect_setting_qshare_appkey', 'connectnew[qshare_appkey]', $setting['connect']['qshare_appkey'], 'text');
+		showtagfooter('tbody');
+		showsetting('connect_setting_weibo_appkey', 'connectnew[qshare_appkey]', $setting['connect']['qshare_appkey'], 'text');
 		showtagfooter('tbody');
 		showsubmit('connectsubmit');
 		showtablefooter();
@@ -112,43 +109,39 @@ if($_G['gp_anchor'] == 'service') {
 
 	} else {
 
-		if($_G['gp_connectnew']['turl_qq'] && !is_numeric($_G['gp_connectnew']['turl_qq'])) {
+		if($_GET['connectnew']['turl_qq'] && !is_numeric($_GET['connectnew']['turl_qq'])) {
 			cpmsg('connect_setting_turl_qq_failed', '', 'error');
 		}
 
-		if($_G['gp_connectnew']['like_url']) {
-			$url = parse_url($_G['gp_connectnew']['like_url']);
+		if($_GET['connectnew']['like_url']) {
+			$url = parse_url($_GET['connectnew']['like_url']);
 			if(!preg_match('/\.qq\.com$/i', $url['host'])) {
 				cpmsg('connect_like_url_error', '', 'error');
 			}
 		}
-		if($_G['gp_connectnew']['like_allow'] && $_G['gp_connectnew']['like_url'] === '') {
+		if($_GET['connectnew']['like_allow'] && $_GET['connectnew']['like_url'] === '') {
 			cpmsg('connect_like_url_miss', '', 'error');
 		}
-		$_G['gp_connectnew'] = array_merge($setting['connect'], $_G['gp_connectnew']);
-		$_G['gp_connectnew']['like_url'] = $_G['gp_connectnew']['like_qq'] ? 'http://open.qzone.qq.com/like?url=http%3A%2F%2Fuser.qzone.qq.com%2F'.$_G['gp_connectnew']['like_qq'].'&width=100&height=21&type=button_num' : '';
-		$_G['gp_connectnew']['turl_code'] = '';
-		$connectnew = addslashes(serialize(dstripslashes($_G['gp_connectnew'])));
-		$regconnectnew = !$setting['connect']['allow'] && $_G['gp_connectnew']['allow'] ? 1 : $setting['regconnect'];
-		DB::query("REPLACE INTO ".DB::table('common_setting')." (`skey`, `svalue`) VALUES
-			('regconnect', '$regconnectnew'),
-			('connect', '$connectnew')");
+		$_GET['connectnew'] = array_merge($setting['connect'], $_GET['connectnew']);
+		$_GET['connectnew']['like_url'] = $_GET['connectnew']['like_qq'] ? 'http://open.qzone.qq.com/like?url=http%3A%2F%2Fuser.qzone.qq.com%2F'.$_GET['connectnew']['like_qq'].'&width=100&height=21&type=button_num' : '';
+		$_GET['connectnew']['turl_code'] = '';
+		$connectnew = serialize($_GET['connectnew']);
+		$regconnectnew = !$setting['connect']['allow'] && $_GET['connectnew']['allow'] ? 1 : $setting['regconnect'];
+		C::t('common_setting')->update_batch(array('regconnect' => $regconnectnew, 'connect' => $connectnew));
 
-		require_once(DISCUZ_ROOT.'./api/manyou/Manyou.php');
-		$client = new Discuz_Cloud_Client();
-		$res = $client->connectSync($_G['gp_connectnew']['like_qq'], $_G['gp_connectnew']['turl_qq']);
-		if($client->errno) {
-			$res = array('status' => false, 'msg' => cplang('qqgroup_msg_remote_exception', array('errmsg' => $client->errmsg, 'errno' => $client->errno)));
-		} elseif(!is_array($res)) {
+		$connectClient = Cloud::loadClass('Service_Client_Connect');
+		try {
+			$res = $connectClient->sync($_GET['connectnew']['like_qq'], $_GET['connectnew']['turl_qq']);
+		} catch (Cloud_Service_Client_RestfulException $e) {
+			$res = array('status' => false, 'msg' => cplang('qqgroup_msg_remote_exception', array('errmsg' => $e->getMessage(), 'errno' => $e->getCode())));
+		}
+		if(!is_array($res)) {
 			$res = array('status' => false, 'msg' => 'qqgroup_msg_remote_error');
 		}
-		if($res['msg']) {
-			cpmsg($res['msg'], '', 'error');
-		}
 		if($res['mblogCode']) {
-			$_G['gp_connectnew']['turl_code'] = $res['mblogCode'];
-			$connectnew = addslashes(serialize(dstripslashes($_G['gp_connectnew'])));
-			DB::query("REPLACE INTO ".DB::table('common_setting')." (`skey`, `svalue`) VALUES ('connect', '$connectnew')");
+			$_GET['connectnew']['turl_code'] = $res['mblogCode'];
+			$connectnew = serialize($_GET['connectnew']);
+			C::t('common_setting')->update('connect', $connectnew);
 		}
 
 		updatecache(array('setting', 'fields_register', 'fields_connect_register'));
@@ -156,5 +149,3 @@ if($_G['gp_anchor'] == 'service') {
 
 	}
 }
-
-?>

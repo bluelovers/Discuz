@@ -4,33 +4,32 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: thread_trade.php 19369 2010-12-29 04:29:52Z zhengqingpeng $
+ *      $Id: thread_trade.php 28348 2012-02-28 06:16:29Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
-if(empty($_G['gp_do']) || $_G['gp_do'] == 'tradeinfo') {
+if(empty($_GET['do']) || $_GET['do'] == 'tradeinfo') {
 
-	if($_G['gp_do'] == 'tradeinfo') {
-		$_G['gp_pid'] = intval($_G['gp_pid']);
-		$tradelistadd = "AND pid = '$_G[gp_pid]'";
+	if($_GET['do'] == 'tradeinfo') {
+		$_GET['pid'] = intval($_GET['pid']);
 	} else {
-		$tradelistadd = '';
+		$_GET['pid'] = '';
 		!$tradenum && $allowpostreply = FALSE;
 	}
 
-	$query = DB::query("SELECT * FROM ".DB::table('forum_trade')." WHERE tid='$_G[tid]' $tradelistadd ORDER BY displayorder");
+	$query = C::t('forum_trade')->fetch_all_thread_goods($_G['tid'], $_GET['pid']);
 	$trades = $tradesstick = array();$tradelist = 0;
-	if(empty($_G['gp_do'])) {
+	if(empty($_GET['do'])) {
 		$sellerid = 0;
-		$listcount = DB::num_rows($query);
+		$listcount = count($query);
 		$tradelist = $tradenum - $listcount;
 	}
 
 	$tradesaids = $tradespids = array();
-	while($trade = DB::fetch($query)) {
+	foreach($query as $trade) {
 		if($trade['expiration']) {
 			$trade['expiration'] = ($trade['expiration'] - TIMESTAMP) / 86400;
 			if($trade['expiration'] > 0) {
@@ -48,13 +47,14 @@ if(empty($_G['gp_do']) || $_G['gp_do'] == 'tradeinfo') {
 			$tradesstick[$trade['pid']] = $trade;
 		}
 	}
+	if(empty($_GET['do'])) {
+		$tradepostlist = C::t('forum_post')->fetch_all('tid:'.$_G['tid'], $tradespids);
+	}
 	$trades = $tradesstick + $trades;
-	$tradespids = dimplode($tradespids);
 	unset($trade);
 
 	if($tradespids) {
-		$query = DB::query("SELECT * FROM ".DB::table(getattachtablebytid($_G['tid']))." WHERE pid IN ($tradespids)");
-		while($attach = DB::fetch($query)) {
+		foreach(C::t('forum_attachment_n')->fetch_all_by_id('tid:'.$_G['tid'], 'pid', $tradespids) as $attach) {
 			if($attach['isimage'] && is_array($tradesaids) && in_array($attach['aid'], $tradesaids)) {
 				$trades[$attach['pid']]['attachurl'] = ($attach['remote'] ? $_G['setting']['ftp']['attachurl'] : $_G['setting']['attachurl']).'forum/'.$attach['attachment'];
 				$trades[$attach['pid']]['thumb'] = $attach['thumb'] ? getimgthumbname($trades[$attach['pid']]['attachurl']) : $trades[$attach['pid']]['attachurl'];
@@ -63,35 +63,26 @@ if(empty($_G['gp_do']) || $_G['gp_do'] == 'tradeinfo') {
 		}
 	}
 
-	if($_G['gp_do'] == 'tradeinfo') {
-		$verifyadd = '';
-		if($_G['setting']['verify']['enabled']) {
-			$verifyadd = "LEFT JOIN ".DB::table('common_member_verify')." mv USING(uid)";
-			$fieldsadd .= ', mv.verify1, mv.verify2, mv.verify3, mv.verify4, mv.verify5';
-		}
-		$trade = $trades[$_G['gp_pid']];
+	if($_GET['do'] == 'tradeinfo') {
+		$trade = $trades[$_GET['pid']];
 		unset($trades);
-		$posttable = getposttablebytid($_G['tid']);
-		$post = DB::fetch_first("SELECT p.*, m.uid, mp.realname, m.username, m.groupid, m.adminid, m.regdate, ms.lastactivity,
-			m.credits, m.email, mp.gender, mp.site,	mp.icq, mp.qq, mp.yahoo, mp.msn, mp.taobao, mp.alipay,
-			ms.buyercredit, ms.sellercredit $fieldsadd
-			FROM ".DB::table($posttable)." p
-			LEFT JOIN ".DB::table('common_member')." m ON m.uid=p.authorid
-			LEFT JOIN ".DB::table('common_member_status')." ms USING(uid)
-			LEFT JOIN ".DB::table('common_member_profile')." mp USING(uid)
-			$verifyadd
-			WHERE pid='$_G[gp_pid]'");
+		$post = C::t('forum_post')->fetch('tid:'.$_G['tid'], $_GET['pid']);
+		if($post) {
+			$post = array_merge(C::t('common_member_status')->fetch($post['authorid']), C::t('common_member_profile')->fetch($post['authorid']),
+				$post, getuserbyuid($post['authorid']));
+			if($_G['setting']['verify']['enabled']) {
+				$post = array_merge($post, C::t('common_member_verify')->fetch($post['authorid']));
+			}
+		}
 
 		$postlist[$post['pid']] = viewthread_procpost($post, $lastvisit, $ordertype);
 
 		$usertrades = $userthreads = array();
 		if(!$_G['inajax']) {
 			$limit = 6;
-			$query = DB::query("SELECT t.tid, t.pid, t.aid, t.subject, t.price, t.credit, t.displayorder FROM ".DB::table('forum_trade')." t
-				LEFT JOIN ".DB::table(getattachtablebytid($_G['tid']))." a ON t.aid=a.aid
-				WHERE t.sellerid='".$_G['forum_thread']['authorid']."' AND t.tid='$_G[tid]' ORDER BY t.displayorder DESC LIMIT ".($limit + 1));
+			$query = C::t('forum_trade')->fetch_all_for_seller($_G['forum_thread']['authorid'], $limit + 1, $_G['tid']);
 			$usertradecount = 0;
-			while($usertrade = DB::fetch($query)) {
+			foreach($query as $usertrade) {
 				if($usertrade['pid'] == $post['pid']) {
 					continue;
 				}
@@ -104,12 +95,12 @@ if(empty($_G['gp_do']) || $_G['gp_do'] == 'tradeinfo') {
 
 		}
 
-		if($_G['forum_attachpids']) {
+		if($_G['forum_attachpids'] && !defined('IN_ARCHIVER')) {
 			require_once libfile('function/attachment');
 			parseattach($_G['forum_attachpids'], $_G['forum_attachtags'], $postlist, array($trade['aid']));
 		}
 
-		$post = $postlist[$_G['gp_pid']];
+		$post = $postlist[$_GET['pid']];
 
 		$post['buyerrank'] = 0;
 		if($post['buyercredit']){
@@ -133,7 +124,7 @@ if(empty($_G['gp_do']) || $_G['gp_do'] == 'tradeinfo') {
 		$navtitle = $trade['subject'];
 
 		if($post['authorid']) {
-			$online = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_session')." WHERE uid IN($post[authorid]) AND invisible=0");
+			$online = $sessioninfo = C::app()->session->fetch_by_uid($post['authorid']) && empty($sessioninfo['invisible']) ? 1 : 0;
 		}
 
 		include template('forum/trade_info');

@@ -44,7 +44,7 @@
 								<p class="d">{lang topic_domain_comment}</p>
 							</td>
 						</tr>
-						
+
 						<tr>
 							<th>{lang topic_description}</th>
 							<td><textarea name="summary" rows="4" cols="60" class="pt">$topic[summary]</textarea>
@@ -82,13 +82,16 @@
 							<!--{eval $pritplshow = empty($topic['primaltplname']) ? ' style="display:none;"' : '';}-->
 							<span id="pritplselect"$pritplhide><select name="primaltplname">
 								<!--{loop $tpls $k $v}-->
-								<!--{eval $selected = $topic['primaltplname'] == 'portal/'.$k ? ' selected' : '';}-->
+								<!--{eval $selected = $topic['primaltplname'] == $k ? ' selected' : '';}-->
 								<option value="$k"$selected>$v</option>
 								<!--{/loop}-->
 							</select>
+							<!--{loop $tpls $k $v}-->
+							<input type="hidden" name="signs[{echo dsign($k)}]" value="1"/>
+							<!--{/loop}-->
 							<!--{eval $pritplophide = !empty($topic['primaltplname']) ? '' : ' style="display:none;"';}-->
 							 <a href="javascript:;"$pritplophide onclick="$('pritplselect').style.display='none';$('pritplvalue').style.display='';" class="xi2">{lang cancel}</a></span>
-							<!--{eval $html = '<span id="pritplvalue"'.$pritplshow.'>'.str_replace('portal/', '', $topic['primaltplname'].'.htm <a href="javascript:;" onclick="$(\'pritplselect\').style.display=\'\';$(\'pritplvalue\').style.display=\'none\';" class="xi2">{lang modify}</a></span>')}-->
+							<!--{eval $html = '<span id="pritplvalue"'.$pritplshow.'>'.getprimaltplname($topic['primaltplname'].'.htm').' <a href="javascript:;" onclick="$(\'pritplselect\').style.display=\'\';$(\'pritplvalue\').style.display=\'none\';" class="xi2">{lang modify}</a></span>'}-->
 							$html
 							<p class="d">{lang topic_tplname_comment}</p></td>
 						</tr>

@@ -14,7 +14,7 @@
 				&nbsp;$comment[comment]&nbsp;
 				<!--{if $comment[rpid]}-->
 					<a href="forum.php?mod=redirect&goto=findpost&pid=$comment[rpid]&ptid=$_G[tid]" class="xi2">{lang detail}</a>
-					<a href="forum.php?mod=post&action=reply&fid=$_G[fid]&tid=$_G[tid]&reppost=$comment[rpid]&extra=$_G[gp_extra]&page=$page{if $_G[gp_from]}&from=$_G[gp_from]{/if}" class="xi2" onclick="showWindow('reply', this.href)">{lang reply}</a>
+					<a href="forum.php?mod=post&action=reply&fid=$_G[fid]&tid=$_G[tid]&reppost=$comment[rpid]&extra=$_GET[extra]&page=$page{if $_GET[from]}&from=$_GET[from]{/if}" class="xi2" onclick="showWindow('reply', this.href)">{lang reply}</a>
 				<!--{/if}-->
 				<span class="xg1">
 					{lang poston} $comment[dateline]

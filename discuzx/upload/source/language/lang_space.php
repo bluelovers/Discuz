@@ -4,8 +4,12 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_space.php 20882 2011-03-07 07:22:17Z lifangming $
+ *      $Id: lang_space.php 28726 2012-03-09 03:05:19Z yexinhao $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 $lang = array(
 	'hour' => '小時',
@@ -120,8 +124,7 @@ $lang = array(
 							<input type="hidden" name="refer" value="home.php?mod=space&uid={uid}" />
 							<input type="hidden" name="id" value="{uid}" />
 							<input type="hidden" name="idtype" value="uid" />
-							<input type="hidden" name="commentsubmit" value="true" />' :
-							'<div class="pt hm">你需要登錄後才可以留言 <a href="member.php?mod=logging&action=login" onclick="showWindow(\'login\', this.href)" class="xi2">登錄</a> | <a href="member.php?mod='.$_G['setting']['regname'].'" class="xi2">'.$_G['setting']['reglinkname'].'</a></div>').'
+							<input type="hidden" name="commentsubmit" value="true" />' : ($_G['connectguest'] ? '<div class="pt hm">您需要 <a href="member.php?mod=connect" class="xi2">完善帳號信息</a> 或 <a href="member.php?mod=connect&ac=bind" class="xi2">綁定已有帳號</a> 後才可以回帖</div>' : '<div class="pt hm">你需要登錄後才可以留言 <a href="member.php?mod=logging&action=login" onclick="showWindow(\'login\', this.href)" class="xi2">登錄</a> | <a href="member.php?mod='.$_G['setting']['regname'].'" class="xi2">'.$_G['setting']['reglinkname'].'</a></div>')).'
 							<p class="ptn"><button '.($_G['uid'] ? 'type="submit"' : 'type="button" onclick="showWindow(\'login\', \'member.php?mod=logging&action=login&guestmessage=yes\')"').' name="commentsubmit_btn" value="true" id="commentsubmit_btn" class="pn"><strong>留言</strong></button></p>
 							<input type="hidden" name="handlekey" value="commentwall_{uid}" />
 							<span id="return_commentwall_{uid}"></span>
@@ -158,6 +161,7 @@ $lang = array(
 	'block_profile_wall' => '查看留言',
 	'block_profile_avatar' => '編輯頭像',
 	'block_profile_update' => '更新資料',
+	'block_profile_follow' => '查看廣播',
 	'block_profile_wall_to_me' => '給我留言',
 	'block_profile_friend_add' => '加為好友',
 	'block_profile_friend_ignore' => '解除好友',
@@ -216,9 +220,10 @@ $lang = array(
 	'sb_wall' => '{who}的留言板',
 	'sb_profile' => '{who}的個人資料',
 	'sb_thread' => '{who}的帖子',
-	'doing_you_can' => '你可以更新記錄, 讓好友們知道你在做什麼...',
+	'doing_you_can' => '您可以更新記錄, 讓好友們知道您在做什麼...',
 	'block_profile_all' => '<p style="text-align: right;"><a href="home.php?mod=space&uid={uid}&do=profile">查看全部個人資料</a></p>',
 	'block_profile_edit' => '<span class="y xw0"><a href="home.php?mod=spacecp&ac=profile">編輯我的資料</a></span>',
+	'sb_follow' => '{who}的廣播',
 
 	'viewthread_userinfo_hour' => '小時',
 	'viewthread_userinfo_uid' => 'UID',
@@ -235,6 +240,33 @@ $lang = array(
 	'viewthread_userinfo_regtime' => '註冊時間',
 	'viewthread_userinfo_lastdate' => '最後登錄',
 	'viewthread_userinfo_oltime' => '在線時間',
+	'viewthread_userinfo_sellercredit' => '賣家信用',
+	'viewthread_userinfo_buyercredit' => '買家信用',
+	'viewthread_userinfo_follower' => '聽眾數',
+	'viewthread_userinfo_following' => '收聽數',
+	'follow_view_follow' => '我關注的',
+	'follow_view_special' => '特別關注',
+	'follow_view_other' => '廣播大廳',
+	'follow_view_feed' => '{who}的廣播',
+	'follow_view_thread' => '{who}的主題',
+	'follow_view_reply' => '{who}的回復',
+	'follow_view_profile' => '{who}的個人資料',
+	'follow_view_type_feed' => '廣播',
+	'follow_view_type_thread' => '主題',
+	'follow_view_type_reply' => '回帖',
+	'follow_view_type_profile' => '個人資料',
+	'follow_view_type_follower' => '聽眾列表',
+	'follow_view_type_following' => '收聽用戶',
+	'follow_view_my_follower' => '我的聽眾',
+	'follow_view_my_following' => '我收聽的人',
+	'follow_view_do_follower' => '他的聽眾',
+	'follow_view_do_following' => '他收聽的人',
+	'follow_view_fulltext' => '...查看全文',
+	'follow_retract' => '收起',
+	'follow_click_play' => '點擊播放',
+	'follow_cancle_follow' => '取消收聽',
+	'follow_follow_ta' => '收聽TA',
+
 
 );
 

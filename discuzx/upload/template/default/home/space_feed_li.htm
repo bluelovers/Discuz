@@ -11,9 +11,9 @@
 		<span class="xg1"><!--{date($value[dateline], 'u')}--></span>
 
 		<!--{if empty($_G['home']['tpl'][hidden_menu])}-->
-		<!--{eval $_G[gp_key] = $key = random(8);}-->
+		<!--{eval $_GET[key] = $key = random(8);}-->
 		<!--{if $value['idtype']=='doid'}-->
-		(<a href="javascript:;" {if $_G['uid']}onclick="docomment_get('$value[id]', '$key');"{else}onclick="showWindow(this.id, 'home.php?mod=spacecp&ac=feed', 'get', 0);doane(event);"{/if} id="{$_G[gp_key]}_do_a_op_$value[id]">{lang reply}</a>)
+		(<a href="javascript:;" {if $_G['uid']}onclick="docomment_get('$value[id]', '$key');"{else}onclick="showWindow(this.id, 'home.php?mod=spacecp&ac=feed', 'get', 0);doane(event);"{/if} id="{$_GET[key]}_do_a_op_$value[id]">{lang reply}</a>)
 		<!--{elseif in_array($value['idtype'], array('blogid','picid','sid','eventid'))}-->
 		(<a href="javascript:;" {if $_G['uid']}onclick="feedcomment_get($value[feedid]);"{else}onclick="showWindow(this.id, 'home.php?mod=spacecp&ac=feed', 'get', 0);doane(event);"{/if} id="feedcomment_a_op_$value[feedid]">{lang comment}</a>)
 		<!--{/if}-->
@@ -67,7 +67,7 @@
 			<!--{/if}-->
 		</div>
 	</div>
-	
+
 	<!--{if $value['idtype']=='doid'}-->
 	<div id="{$key}_$value[id]" style="display:none;"></div>
 	<!--{elseif $value['idtype']}-->

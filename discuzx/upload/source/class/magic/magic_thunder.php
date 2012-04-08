@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: magic_money.php 7830 2010-04-14 02:22:32Z monkey $
+ *      $Id: magic_thunder.php 27087 2012-01-05 01:49:09Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -48,7 +48,7 @@ class magic_thunder {
 		$_G['uid'] = $uid;
 		usemagic($this->magic['magicid'], $this->magic['num']);
 		updatemagiclog($this->magic['magicid'], '2', '1', '0', '0', 'uid', $_G['uid']);
-		showmessage('magics_thunder_message', '', array('magicname'=>$_G['setting']['magics']['thunder']), array('showdialog' => 1));
+		showmessage('magics_thunder_message', 'home.php?mod=space&do=home&view=all', array('magicname'=>$_G['setting']['magics']['thunder']), array('alert' => 'right', 'showdialog' => 1, 'locationtime' => true));
 	}
 
 	function show() {

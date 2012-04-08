@@ -62,7 +62,7 @@
 				<option value="$album[albumid]" {eval echo $album[albumid] == $albumid ? 'selected' : '';} >$album[albumname] - ($album[picnum] {lang magics_unit})</option>
 				<!--{/loop}-->
 			</select>
-		</span> 
+		</span>
 		<span>{lang editing}:</span>
 		<a id="diy_tag_body" href="javascript:;" onclick="spaceDiy.setCurrentDiy('body');return false;">{lang background}</a>
 		<span class="pipe">|</span><a id="diy_tag_hd" href="javascript:;" onclick="spaceDiy.setCurrentDiy('hd');return false;">{lang header}</a>
@@ -164,12 +164,12 @@
 	$blockhtml
 <!--{elseif $_GET['op'] == 'editnv'}-->
 	<h3 class="flb">
-		<em id="return_$_G[gp_handlekey]">{lang editing_nv}</em>
+		<em id="return_$_GET[handlekey]">{lang editing_nv}</em>
 		<span>
-			<!--{if $_G[inajax]}--><a href="javascript:;" class="flbc" onclick="hideWindow('$_G[gp_handlekey]');return false;" title="{lang close}">{lang close}</a><!--{/if}-->
+			<!--{if $_G[inajax]}--><a href="javascript:;" class="flbc" onclick="hideWindow('$_GET[handlekey]');return false;" title="{lang close}">{lang close}</a><!--{/if}-->
 		</span>
 	</h3>
-	<form id="nvformsetting" name="nvformsetting" method="post" autocomplete="off" action="home.php?mod=spacecp&ac=index" onsubmit="ajaxpost('nvformsetting','return_$_G[gp_handlekey]','return_$_G[gp_handlekey]','onerror');" class="fdiy">
+	<form id="nvformsetting" name="nvformsetting" method="post" autocomplete="off" action="home.php?mod=spacecp&ac=index" onsubmit="ajaxpost('nvformsetting','return_$_GET[handlekey]','return_$_GET[handlekey]','onerror');" class="fdiy">
 		<div class="c diywin" style="max-height:350px;width:420px;height:auto !important;height:320px;_margin-right:20px;overflow-y:auto;">
 			<div id="nv_setting">
 				<table class="tfm">
@@ -220,6 +220,14 @@
 							<label><input type="radio" name="banalbum" value="0"{if empty($personalnv[banitems][album])} checked="checked"{/if}>{lang nvshow}</label>
 						</td>
 					</tr>
+					<tr>
+						<th>廣播</th>
+						<td>
+							<input type="text" name="follow" value="{if !isset($personalnv[items][follow])}廣播{else}$personalnv[items][follow]{/if}" class="px" />
+							<label><input type="radio" name="banfollow" value="1"{if !empty($personalnv[banitems][follow])} checked="checked"{/if}>{lang nvhidden}</label>
+							<label><input type="radio" name="banfollow" value="0"{if empty($personalnv[banitems][follow])} checked="checked"{/if}>{lang nvshow}</label>
+						</td>
+					</tr>
 					<!--{if $_G['setting']['allowviewuserthread'] !== false}-->
 					<tr>
 						<th>{lang topic}</th>
@@ -267,25 +275,25 @@
 		</div>
 		<div class="o pns">
 			<input type="hidden" name="editnvsubmit" value="true" />
-			<input type="hidden" name="handlekey" value="$_G['gp_handlekey']" />
+			<input type="hidden" name="handlekey" value="$_GET['handlekey']" />
 			<input type="hidden" name="formhash" value="{FORMHASH}" />
 			<button type="submit" class="pn pnc" id="editnvsubmitbtn"><strong>{lang determine}</strong></button>
 		</div>
 	</form>
 <script type="text/javascript" reload="1">
-function succeedhandle_$_G['gp_handlekey'] (url, message, values) {
+function succeedhandle_$_GET['handlekey'] (url, message, values) {
 	spaceDiy.getPersonalNv();
-	hideWindow('{$_G['gp_handlekey']}');}
+	hideWindow('{$_GET['handlekey']}');}
 </script>
 <!--{elseif $_GET['op'] == 'edit'}-->
 <h3 class="flb">
-	<em id="return_$_G[gp_handlekey]">{lang editing_module}</em>
+	<em id="return_$_GET[handlekey]">{lang editing_module}</em>
 	<span>
-		<!--{if $_G[inajax]}--><a href="javascript:;" class="flbc" onclick="spaceDiy.delIframe();hideWindow('$_G[gp_handlekey]');return false;" title="{lang close}">{lang close}</a><!--{/if}-->
+		<!--{if $_G[inajax]}--><a href="javascript:;" class="flbc" onclick="spaceDiy.delIframe();hideWindow('$_GET[handlekey]');return false;" title="{lang close}">{lang close}</a><!--{/if}-->
 	</span>
 </h3>
 	<!--{if ($blockname != 'music')}-->
-		<form id="blockformsetting" name="blockformsetting" method="post" autocomplete="off" action="home.php?mod=spacecp&ac=index&blockname=$blockname" onsubmit="ajaxpost('blockformsetting','return_$_G[gp_handlekey]','return_$_G[gp_handlekey]','onerror');" class="fdiy">
+		<form id="blockformsetting" name="blockformsetting" method="post" autocomplete="off" action="home.php?mod=spacecp&ac=index&blockname=$blockname" onsubmit="ajaxpost('blockformsetting','return_$_GET[handlekey]','return_$_GET[handlekey]','onerror');" class="fdiy">
 			<div class="c diywin" style="max-height:350px;width:420px;height:auto !important;height:320px;_margin-right:20px;overflow-y:auto;">
 				<div id="block_setting">
 					<table class="tfm">
@@ -303,7 +311,7 @@ function succeedhandle_$_G['gp_handlekey'] (url, message, values) {
 								<label><input type="radio" name="avatar" value="small"{if $para[banavatar] == 'small'} checked="checked"{/if}>{lang small}</label>
 							</td>
 						</tr>
-						
+
 						<!--{elseif ($blockname == 'statistic')}-->
 						<tr>
 							<th>{lang showcountcontent}</th>
@@ -344,14 +352,14 @@ function succeedhandle_$_G['gp_handlekey'] (url, message, values) {
 							</td>
 						</tr>
 						<!--{elseif in_array($blockname, array('personalinfo'))}-->
-						
+
 						<!--{else}-->
 						<tr>
 							<th>{lang show_num_of}</th>
 							<td><input type="text" name="shownum" value="$para[shownum]" class="px" /></td>
 						</tr>
 						<!--{/if}-->
-						
+
 						<!--{if $blockname == 'blog'}-->
 						<tr>
 							<th>{lang show_message}</th>
@@ -372,7 +380,7 @@ function succeedhandle_$_G['gp_handlekey'] (url, message, values) {
 			</div>
 			<div class="o pns">
 				<input type="hidden" name="blocksubmit" value="true" />
-				<input type="hidden" name="handlekey" value="$_G['gp_handlekey']" />
+				<input type="hidden" name="handlekey" value="$_GET['handlekey']" />
 				<input type="hidden" name="eleid" value="$_GET['eleid']" />
 				<input type="hidden" name="formhash" value="{FORMHASH}" />
 				<button type="submit" class="pn pnc" id="blocksubmitbtn"><strong>{lang determine}</strong></button>
@@ -391,7 +399,7 @@ function succeedhandle_$_G['gp_handlekey'] (url, message, values) {
 		<li id="musicconfig"><a href="javascript:;" onclick="spaceDiy.menuChange('menutabs' ,'musicconfig');this.blur();return false;">{lang player_profile}</a></li>
 	</ul>
 	<div id="musicconfig_content" style="display:none">
-		<form method="post" name="musicconfigform" id="musicconfigform" autocomplete="off" action="home.php?mod=spacecp&ac=index&blockname=$blockname" onsubmit="spaceDiy.delIframe();ajaxpost('musicconfigform','return_$_G[gp_handlekey]','return_$_G[gp_handlekey]','onerror');">
+		<form method="post" name="musicconfigform" id="musicconfigform" autocomplete="off" action="home.php?mod=spacecp&ac=index&blockname=$blockname" onsubmit="spaceDiy.delIframe();ajaxpost('musicconfigform','return_$_GET[handlekey]','return_$_GET[handlekey]','onerror');">
 			<div class="c diywin" style="max-height:350px;width:480px;height:auto !important;height:320px;_margin-right:20px;overflow-y:auto;">
 				<table class="tfm">
 					<tr>
@@ -448,14 +456,14 @@ function succeedhandle_$_G['gp_handlekey'] (url, message, values) {
 			</div>
 			<div class="o pns">
 				<input type="hidden" name="musicsubmit" value="true" />
-				<input type="hidden" name="handlekey" value="$_G['gp_handlekey']" />
+				<input type="hidden" name="handlekey" value="$_GET['handlekey']" />
 				<input type="hidden" name="act" value="config" />
 				<input type="hidden" name="formhash" value="{FORMHASH}" />
 				<button type="submit" class="pn pnc"><strong>{lang determine}</strong></button>
 			</div>
 		</form>
 	</div>
-	
+
 	<div id="musicadd_content" style="display:$addshow;">
 		<script type="text/javascript">
 			function addMenu() {
@@ -520,7 +528,7 @@ function succeedhandle_$_G['gp_handlekey'] (url, message, values) {
 			}
 		</script>
 
-		<form method="post" name="musicaddform" id="musicaddform" autocomplete="off" action="home.php?mod=spacecp&ac=index&blockname=$blockname" onsubmit="spaceDiy.delIframe();ajaxpost('musicaddform','return_$_G[gp_handlekey]','return_$_G[gp_handlekey]','onerror');">
+		<form method="post" name="musicaddform" id="musicaddform" autocomplete="off" action="home.php?mod=spacecp&ac=index&blockname=$blockname" onsubmit="spaceDiy.delIframe();ajaxpost('musicaddform','return_$_GET[handlekey]','return_$_GET[handlekey]','onerror');">
 			<div class="c diywin" style="max-height:260px;width:480px;height:auto !important;height:260px;_margin-right:20px;overflow-y:auto;">
 				<table class="tfm">
 					<tr><td colspan="2" align="center">{lang mp3_warning_message}</td></tr>
@@ -553,7 +561,7 @@ function succeedhandle_$_G['gp_handlekey'] (url, message, values) {
 
 			<div class="o pns">
 				<input type="hidden" name="musicsubmit" value="true" />
-				<input type="hidden" name="handlekey" value="$_G['gp_handlekey']" />
+				<input type="hidden" name="handlekey" value="$_GET['handlekey']" />
 				<input type="hidden" name="act" value="addmusic" />
 				<input type="hidden" name="formhash" value="{FORMHASH}" />
 				<button type="button" name="addone" onclick="addMenu();return false;" class="pn"><em>{lang increase}</em></button>&nbsp;
@@ -564,7 +572,7 @@ function succeedhandle_$_G['gp_handlekey'] (url, message, values) {
 	<div id="musiclist_content" style="display:$listshow;">
 
 		<!--{if (!empty($musicmsgs['mp3list']))}-->
-		<form method="post" name="musiclistform" id="musiclistform" autocomplete="off" action="home.php?mod=spacecp&ac=index&blockname=$blockname" onsubmit="delList();spaceDiy.delIframe();ajaxpost('musiclistform','return_$_G[gp_handlekey]','return_$_G[gp_handlekey]','onerror');">
+		<form method="post" name="musiclistform" id="musiclistform" autocomplete="off" action="home.php?mod=spacecp&ac=index&blockname=$blockname" onsubmit="delList();spaceDiy.delIframe();ajaxpost('musiclistform','return_$_GET[handlekey]','return_$_GET[handlekey]','onerror');">
 			<div class="c diywin" style="max-height:350px;width:480px;height:auto !important;height:320px;_margin-right:20px;overflow-y:auto;">
 				<table width="100%" align="center" border="0" cellspacing="2" cellpadding="2">
 					<tr>
@@ -611,7 +619,7 @@ function succeedhandle_$_G['gp_handlekey'] (url, message, values) {
 			</div>
 			<div class="o pns">
 				<input type="hidden" name="musicsubmit" value="true" />
-				<input type="hidden" name="handlekey" value="$_G['gp_handlekey']" />
+				<input type="hidden" name="handlekey" value="$_GET['handlekey']" />
 				<input type="hidden" name="act" value="editlist" />
 				<input type="hidden" name="formhash" value="{FORMHASH}" />
 				<button type="submit" class="pn pnc"><strong>{lang update_album_list}</strong></button>
@@ -627,14 +635,14 @@ function succeedhandle_$_G['gp_handlekey'] (url, message, values) {
 	</div>
 	<!--{/if}-->
 <script type="text/javascript" reload="1">
-function succeedhandle_$_G['gp_handlekey'] (url, message, values) {
+function succeedhandle_$_GET['handlekey'] (url, message, values) {
 	var x = new Ajax();
 	x.get('home.php?mod=spacecp&ac=index&op=getblock&blockname='+values['blockname']+'&inajax=1', function(s) {
 		s = s.replace(/\<script.*\<\/script\>/ig,'<font color="red"> [{lang save_js_code_view}] </font>');
 		$(values['blockname']).innerHTML = s;
 		drag.initPosition();
 	});
-	hideWindow('{$_G['gp_handlekey']}');}
+	hideWindow('{$_GET['handlekey']}');}
 </script>
 <!--{elseif $_GET['op'] == 'savespaceinfo'}-->
 

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: topicadmin_merge.php 23560 2011-07-26 02:45:31Z liulanbo $
+ *      $Id: topicadmin_merge.php 28630 2012-03-06 09:43:46Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -22,13 +22,13 @@ if(!submitcheck('modsubmit')) {
 } else {
 
 	$posttable = getposttablebytid($_G['tid']);
-	$othertid = intval($_G['gp_othertid']);
+	$othertid = intval($_GET['othertid']);
 	$otherposttable = getposttablebytid($othertid);
 	$modaction = 'MRG';
 
 	$reason = checkreasonpm();
 
-	$other = DB::fetch_first("SELECT tid, fid, authorid, subject, views, replies, dateline, special FROM ".DB::table('forum_thread')." WHERE tid='$othertid' AND displayorder>='0'");
+	$other = C::t('forum_thread')->fetch_by_tid_displayorder($othertid, 0);
 	if(!$other) {
 		showmessage('admin_merge_nonexistence');
 	} elseif($other['special']) {
@@ -40,29 +40,66 @@ if(!submitcheck('modsubmit')) {
 
 	$other['views'] = intval($other['views']);
 	$other['replies']++;
-
+	if(!$other['maxposition']) {
+		$other['maxposition'] = C::t('forum_post')->fetch_maxposition_by_tid($other['posttableid'], $othertid);
+	}
+	if(!$thread['maxposition']) {
+		$thread['maxposition'] = C::t('forum_post')->fetch_maxposition_by_tid($thread['posttableid'], $_G['tid']);
+	}
+	$pos = 1;
 	if($posttable != $otherposttable) {
-		$query = DB::query("SELECT * FROM ".DB::table($otherposttable)." WHERE tid='$othertid'");
-		while($row = DB::fetch($query)) {
-			$row = daddslashes($row);
-			DB::insert($posttable, $row);
+		$pidlist = array();
+		C::t('forum_post')->increase_position_by_tid($thread['posttableid'], $_G['tid'], $other['maxposition'] + $thread['maxposition']);
+		C::t('forum_post')->increase_position_by_tid($other['posttableid'], $othertid, $other['maxposition'] + $thread['maxposition']);
+		foreach(C::t('forum_post')->fetch_all_by_tid('tid:'.$_G['tid'], $_G['tid'], false, 'ASC') as $row) {
+			$pidlist[$row['dateline']] = array('pid' => $row['pid'], 'tid' => $row['tid']);
 		}
-		DB::delete($otherposttable, "tid='$othertid'");
+		foreach(C::t('forum_post')->fetch_all_by_tid('tid:'.$othertid, $othertid, false, 'ASC') as $row) {
+			$pidlist[$row['dateline']] = array('pid' => $row['pid'], 'tid' => $row['tid']);
+		}
+		ksort($pidlist);
+		foreach($pidlist as $row) {
+			C::t('forum_post')->update('tid:'.$row['tid'], $row['pid'], array('position' => $pos));
+			$pos ++;
+		}
+		unset($pidlist);
+	} else {
+		C::t('forum_post')->increase_position_by_tid($thread['posttableid'], array($_G['tid'], $othertid), $other['maxposition'] + $thread['maxposition']);
+		foreach(C::t('forum_post')->fetch_all_by_tid('tid:'.$_G['tid'], array($_G['tid'], $othertid), false, 'ASC') as $row) {
+			C::t('forum_post')->update('tid:'.$_G['tid'], $row['pid'], array('position' => $pos));
+			$pos ++;
+		}
+	}
+	if($posttable != $otherposttable) {
+		foreach(C::t('forum_post')->fetch_all_by_tid('tid:'.$othertid, $othertid) as $row) {
+			C::t('forum_post')->insert('tid:'.$_G['tid'], $row);
+		}
+		C::t('forum_post')->delete_by_tid('tid:'.$othertid, $othertid);
 	}
 
-	$firstpost = DB::fetch_first("SELECT pid, fid, authorid, author, subject, dateline FROM ".DB::table($posttable)." WHERE tid IN ('$_G[tid]', '$othertid') AND invisible='0' ORDER BY dateline LIMIT 1");
+	$query = C::t('forum_post')->fetch_all_by_tid('tid:'.$_G['tid'], array($_G['tid'], $othertid), false, 'ASC', 0, 1, null, 0);
+	foreach($query as $row) {
+		$firstpost = $row;
+	}
 
-	DB::query("UPDATE ".DB::table($posttable)." SET tid='$_G[tid]' WHERE tid='$othertid'");
-	$postsmerged = DB::affected_rows();
+	$postsmerged = C::t('forum_post')->update_by_tid('tid:'.$_G['tid'], $othertid, array('tid' => $_G['tid']));
 
-	updateattachtid("tid='$othertid'", $othertid, $_G['tid']);
-	DB::query("DELETE FROM ".DB::table('forum_thread')." WHERE tid='$othertid'");
-	DB::query("DELETE FROM ".DB::table('forum_threadmod')." WHERE tid='$othertid'");
+	updateattachtid('tid', array($othertid), $othertid, $_G['tid']);
+	C::t('forum_thread')->delete($othertid);
+	C::t('forum_threadmod')->delete_by_tid($othertid);
 
-	DB::query("UPDATE ".DB::table($posttable)." SET first=(pid='$firstpost[pid]'), fid='".$_G['forum']['fid']."' WHERE tid='$_G[tid]'");
-	DB::query("UPDATE ".DB::table('forum_thread')." SET authorid='$firstpost[authorid]', author='".addslashes($firstpost['author'])."', subject='".addslashes($firstpost['subject'])."', dateline='$firstpost[dateline]', views=views+$other[views], replies=replies+$other[replies], moderated='1' WHERE tid='$_G[tid]'");
-
-	my_thread_log('merge', array('tid' => $othertid, 'otherid' => $_G['tid'], 'fid' => $thread['fid']));
+	C::t('forum_post')->update_by_tid('tid:'.$_G['tid'], $_G['tid'], array('first' => 0, 'fid' => $_G['forum']['fid']));
+	C::t('forum_post')->update('tid:'.$_G['tid'], $firstpost['pid'], array('first' => 1));
+	$fieldarr = array(
+			'authorid' => array($firstpost['authorid']),
+			'author' => array($firstpost['author']),
+			'subject' => array($firstpost['subject']),
+			'dateline' => array($firstpost['dateline']),
+			'views' => $other['views'],
+			'replies' => $other['replies'],
+			'moderated' => 1
+		);
+	C::t('forum_thread')->increase($_G['tid'], $fieldarr);
 
 	updateforumcount($other['fid']);
 	updateforumcount($_G['fid']);
@@ -73,7 +110,7 @@ if(!submitcheck('modsubmit')) {
 	$resultarray = array(
 	'redirect'	=> "forum.php?mod=forumdisplay&fid=$_G[fid]",
 	'reasonpm'	=> ($sendreasonpm ? array('data' => array($thread), 'var' => 'thread', 'item' => 'reason_merge') : array()),
-	'reasonvar'	=> array('tid' => $thread['tid'], 'subject' => $thread['subject'], 'modaction' => $modaction, 'reason' => stripslashes($reason)),
+	'reasonvar'	=> array('tid' => $thread['tid'], 'subject' => $thread['subject'], 'modaction' => $modaction, 'reason' => $reason),
 	'modtids'	=> $thread['tid'],
 	'modlog'	=> array($thread, $other)
 	);

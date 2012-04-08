@@ -4,31 +4,31 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_share.php 22995 2011-06-13 03:15:57Z zhangguosheng $
+ *      $Id: admincp_share.php 27696 2012-02-10 03:39:50Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
 }
 
-$detail = !empty($_GET['uid']) ? true : $_G['gp_detail'];
-$uid = $_G['gp_uid'];
-$users = $_G['gp_users'];
-$sid = $_G['gp_sid'];
-$type = $_G['gp_type'];
-$hot1 = $_G['gp_hot1'];
-$hot2 = $_G['gp_hot2'];
-$starttime = $_G['gp_starttime'];
-$endtime = $_G['gp_endtime'];
-$searchsubmit = $_G['gp_searchsubmit'];
-$sids = $_G['gp_sids'];
+$detail = $_GET['detail'];
+$uid = $_GET['uid'];
+$users = $_GET['users'];
+$sid = $_GET['sid'];
+$type = $_GET['type'];
+$hot1 = $_GET['hot1'];
+$hot2 = $_GET['hot2'];
+$starttime = $_GET['starttime'];
+$endtime = $_GET['endtime'];
+$searchsubmit = $_GET['searchsubmit'];
+$sids = $_GET['sids'];
 
-$fromumanage = $_G['gp_fromumanage'] ? 1 : 0;
+$fromumanage = $_GET['fromumanage'] ? 1 : 0;
 
 cpheader();
 
 if(!submitcheck('sharesubmit')) {
-	if(empty($_G['gp_search'])) {
+	if(empty($_GET['search'])) {
 		$newlist = 1;
 		$detail = 1;
 	}
@@ -61,11 +61,11 @@ function page(number) {
 </script>
 EOT;
 	showtagheader('div', 'searchposts', !$searchsubmit && empty($newlist));
-	showformheader("share".(!empty($_G['gp_search']) ? '&search=true' : ''), '', 'shareforum');
-	showhiddenfields(array('page' => $page, 'pp' => $_G['gp_pp'] ? $_G['gp_pp'] : $_G['gp_perpage']));
+	showformheader("share".(!empty($_GET['search']) ? '&search=true' : ''), '', 'shareforum');
+	showhiddenfields(array('page' => $page, 'pp' => $_GET['pp'] ? $_GET['pp'] : $_GET['perpage']));
 	showtableheader();
 	showsetting('share_search_detail', 'detail', $detail, 'radio');
-	showsetting('share_search_perpage', '', $_G['gp_perpage'], "<select name='perpage'><option value='20'>$lang[perpage_20]</option><option value='50'>$lang[perpage_50]</option><option value='100'>$lang[perpage_100]</option></select>");
+	showsetting('share_search_perpage', '', $_GET['perpage'], "<select name='perpage'><option value='20'>$lang[perpage_20]</option><option value='50'>$lang[perpage_50]</option><option value='100'>$lang[perpage_100]</option></select>");
 	$selected[$type] = $type ? 'selected="selected"' : '';
 	showsetting('share_search_icon', '', $type, "<select name='type'><option value=''>$lang[all]</option><option value='link' $selected[link]>$lang[link]</option>
 			<option value='video' $selected[video]>$lang[video]</option><option value='music' $selected[music]>$lang[music]</option><option value='flash' $selected[flash]>Flash</option>
@@ -84,7 +84,7 @@ EOT;
 
 } else {
 	$sids = authcode($sids, 'DECODE');
-	$sidsadd = $sids ? explode(',', $sids) : $_G['gp_delete'];
+	$sidsadd = $sids ? explode(',', $sids) : $_GET['delete'];
 	include_once libfile('function/delete');
 	$deletecount = count(deleteshares($sidsadd));
 	$cpmsg = cplang('share_succeed', array('deletecount' => $deletecount));
@@ -97,24 +97,24 @@ EOT;
 
 if(submitcheck('searchsubmit', 1) || $newlist) {
 
-	$sids = $sharecount = '0';
+	$uids = $sids = $sharecount = 0;
 	$sql = $error = '';
 	$users = trim($users);
+	$uids = array();
 
 	if($users != '') {
-		$uids = '-1';
-		$query = DB::query("SELECT uid FROM ".DB::table('home_share')." WHERE username IN ('".str_replace(',', '\',\'', str_replace(' ', '', $users))."')");
-		while($arr = DB::fetch($query)) {
-			$uids .= ",$arr[uid]";
+		foreach(C::t('home_share')->fetch_all_by_username(explode(',', str_replace(' ', '', $users))) as $arr) {
+			$uids[$arr['uid']] = $arr['uid'];
+		}
+		if(!$uids) {
+			$uids = array(-1);
 		}
 		$sql .= " AND s.uid IN ($uids)";
 	}
 
 	if($type != '') {
-		$query = DB::query("SELECT type FROM ".DB::table('home_share')." WHERE type ='$type'");
-		$arr = DB::fetch($query);
+		$arr = C::t('home_share')->fetch_by_type($type);
 		$type = $arr['type'];
-		$sql .= " AND s.type='$type'";
 	}
 
 	if($starttime != '') {
@@ -132,21 +132,29 @@ if(submitcheck('searchsubmit', 1) || $newlist) {
 	}
 
 	if($sid != '') {
-		$sids = '-1';
-		$query = DB::query("SELECT sid FROM ".DB::table('home_share')." WHERE sid IN ('".str_replace(',', '\',\'', str_replace(' ', '', $sid))."')");
-		while($arr = DB::fetch($query)) {
-			$sids .= ",$fidarr[sid]";
+		$sids = array();
+		foreach(C::t('home_share')->fetch_all(explode(',', str_replace(' ', '', $sid))) as $fidarr) {
+			$sids[] = $fidarr['sid'];
+		}
+		if(!$sids) {
+			$sids = array(-1);
 		}
 		$sql .= " AND  s.sid IN ($sids)";
 	}
 
 	if($uid != '') {
-		$uids = '-1';
-		$query = DB::query("SELECT uid FROM ".DB::table('home_share')." WHERE uid IN ('".str_replace(',', '\',\'', str_replace(' ', '', $uid))."')");
-		while($uidarr = DB::fetch($query)) {
-			$uids .= ",$uidarr[uid]";
+		$uidtmp = array();
+		foreach(C::t('home_share')->fetch_all_by_uid(explode(',', str_replace(' ', '', $uid))) as $uidarr) {
+			$uidtmp[$uidarr['uid']] = $uidarr['uid'];
 		}
-		$sql .= " AND s.uid IN ($uids)";
+		if($uids && $uids[0] != -1) {
+			$uids = array_intersect($uids, $uidtmp);
+		} else {
+			$uids = $uidtmp;
+		}
+		if(!$uids) {
+			$uids = array(-1);
+		}
 	}
 
 	$sql .= $hot1 ? " AND s.hot >= '$hot1'" : '';
@@ -158,31 +166,32 @@ if(submitcheck('searchsubmit', 1) || $newlist) {
 
 	if(!$error) {
 		if($detail) {
-			$_G['gp_perpage'] = intval($_G['gp_perpage']) < 1 ? 20 : intval($_G['gp_perpage']);
-			$perpage = $_G['gp_pp'] ? $_G['gp_pp'] : $_G['gp_perpage'];
-			$query = DB::query("SELECT * FROM ".DB::table('home_share')." s WHERE 1 $sql ORDER BY s.dateline DESC LIMIT ".(($page - 1) * $perpage).",{$perpage}");
-			$shares = '';
+			$_GET['perpage'] = intval($_GET['perpage']) < 1 ? 20 : intval($_GET['perpage']);
+			$perpage = $_GET['pp'] ? $_GET['pp'] : $_GET['perpage'];
+			$sharecount = C::t('home_share')->count_by_search($sids, $uids, $type, $starttime, $endtime, $hot1, $hot2);
+			if($sharecount) {
+				$shares = '';
+				require_once libfile('function/share');
 
-			require_once libfile('function/share');
-			while($share = DB::fetch($query)) {
-				$share['dateline'] = dgmdate($share['dateline']);
-				$share = mkshare($share);
-				$shares .= showtablerow('', array('', 'style="width:80px;"', 'style="width:150px;"', 'style="width:500px;"'), array(
-					"<input class=\"checkbox\" type=\"checkbox\" name=\"delete[]\" value=\"$share[sid]\" />",
-					"<a href=\"home.php?mod=space&uid=$share[uid]\" target=\"_blank\">".$share['username']."</a>",
-					$share['title_template'],
-					$share['body_template'],
-					$share['dateline']
-				), TRUE);
+				$start = ($page - 1) * $perpage;
+				foreach(C::t('home_share')->fetch_all_search($sids, $uids, $type, $starttime, $endtime, $hot1, $hot2, $start, $perpage) as $share) {
+					$share['dateline'] = dgmdate($share['dateline']);
+					$share = mkshare($share);
+					$shares .= showtablerow('', array('', 'style="width:80px;"', 'style="width:150px;"', 'style="width:500px;"'), array(
+						"<input class=\"checkbox\" type=\"checkbox\" name=\"delete[]\" value=\"$share[sid]\" />",
+						"<a href=\"home.php?mod=space&uid=$share[uid]\" target=\"_blank\">".$share['username']."</a>",
+						$share['title_template'],
+						$share['body_template'],
+						$share['dateline']
+					), TRUE);
+				}
+				$multi = multi($sharecount, $perpage, $page, ADMINSCRIPT."?action=share");
+				$multi = preg_replace("/href=\"".ADMINSCRIPT."\?action=share&amp;page=(\d+)\"/", "href=\"javascript:page(\\1)\"", $multi);
+				$multi = str_replace("window.location='".ADMINSCRIPT."?action=share&amp;page='+this.value", "page(this.value)", $multi);
 			}
-			$sharecount = DB::result_first("SELECT count(*) FROM ".DB::table('home_share')." s WHERE 1 $sql");
-			$multi = multi($sharecount, $perpage, $page, ADMINSCRIPT."?action=share");
-			$multi = preg_replace("/href=\"".ADMINSCRIPT."\?action=share&amp;page=(\d+)\"/", "href=\"javascript:page(\\1)\"", $multi);
-			$multi = str_replace("window.location='".ADMINSCRIPT."?action=share&amp;page='+this.value", "page(this.value)", $multi);
 		} else {
 			$sharecount = 0;
-			$query = DB::query("SELECT s.sid FROM ".DB::table('home_share')." s WHERE 1 $sql");
-			while($share = DB::fetch($query)) {
+			foreach(C::t('home_share')->fetch_all_search($sids, $uids, $type, $starttime, $endtime, $hot1, $hot2) as $share) {
 				$sids .= ','.$share['sid'];
 				$sharecount++;
 			}

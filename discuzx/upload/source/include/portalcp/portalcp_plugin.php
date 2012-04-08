@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portalcp_plugin.php 22486 2011-05-10 03:41:02Z monkey $
+ *      $Id: portalcp_plugin.php 25246 2011-11-02 03:34:53Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -12,9 +12,9 @@ if(!defined('IN_DISCUZ')) {
 }
 
 $pluginkey = 'portalcp';
-$navtitle = $_G['setting']['plugins'][$pluginkey][$_G['gp_id']]['name'];
+$navtitle = $_G['setting']['plugins'][$pluginkey][$_GET['id']]['name'];
 
-include pluginmodule($_G['gp_id'], $pluginkey);
+include pluginmodule($_GET['id'], $pluginkey);
 
 include template('portal/portalcp_plugin');
 

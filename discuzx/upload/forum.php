@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum.php 26654 2011-12-19 04:04:38Z zhengqingpeng $
+ *      $Id: forum.php 29133 2012-03-27 08:04:24Z liulanbo $
  */
 
 define('APPTYPEID', 2);
@@ -14,11 +14,9 @@ define('CURSCRIPT', 'forum');
 require './source/class/class_core.php';
 require './source/function/function_forum.php';
 
-$discuz = & discuz_core::instance();
-
 $modarray = array('ajax','announcement','attachment','forumdisplay',
 	'group','image','index','medal','misc','modcp','notice','post','redirect',
-	'relatekw','relatethread','rss','topicadmin','trade','viewthread','tag'
+	'relatekw','relatethread','rss','topicadmin','trade','viewthread','tag','collection','guide'
 );
 
 $modcachelist = array(
@@ -36,19 +34,19 @@ $modcachelist = array(
 	'group'		=> array('grouptype', 'diytemplatenamegroup'),
 );
 
-$mod = !in_array($discuz->var['mod'], $modarray) ? 'index' : $discuz->var['mod'];
+$mod = !in_array(C::app()->var['mod'], $modarray) ? 'index' : C::app()->var['mod'];
 
 define('CURMODULE', $mod);
 $cachelist = array();
 if(isset($modcachelist[CURMODULE])) {
 	$cachelist = $modcachelist[CURMODULE];
 }
-if($discuz->var['mod'] == 'group') {
+if(C::app()->var['mod'] == 'group') {
 	$_G['basescript'] = 'group';
 }
 
-$discuz->cachelist = $cachelist;
-$discuz->init();
+C::app()->cachelist = $cachelist;
+C::app()->init();
 
 loadforum();
 set_rssauth();

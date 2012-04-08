@@ -24,5 +24,9 @@
 			<script type="text/javascript" reload="1">smilies_show('{$seditor[0]}smiliesdiv', $_G['setting']['smcols'], '$seditor[0]');</script>
 		<!--{/if}-->
 	<!--{/if}-->
+	<!--{if in_array('at', $seditor[1]) && $_G['group']['allowat']}-->
+		<script type="text/javascript" src="{$_G['setting']['jspath']}at.js?{VERHASH}"></script>
+		<a id="{$seditor[0]}at" href="javascript:;" title="{lang e_at}" class="fat"{if empty($seditor[2])} onclick="seditor_menu('$seditor[0]', 'at');doane(event);"{/if}>{lang at_friend}</a>
+	<!--{/if}-->
 	$seditor[3]
 </div>

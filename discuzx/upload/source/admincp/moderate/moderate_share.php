@@ -4,23 +4,23 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: moderate_share.php 24018 2011-08-22 02:28:39Z svn_project_zhangjie $
+ *      $Id: moderate_share.php 27434 2012-01-31 08:57:34Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
 }
 
-if(!submitcheck('modsubmit') && !$_G['gp_fast']) {
+if(!submitcheck('modsubmit') && !$_GET['fast']) {
 
 	shownav('topic', $lang['moderate_shares']);
 	showsubmenu('nav_moderate_posts', $submenu);
 
-	$select[$_G['gp_tpp']] = $_G['gp_tpp'] ? "selected='selected'" : '';
+	$select[$_GET['tpp']] = $_GET['tpp'] ? "selected='selected'" : '';
 	$tpp_options = "<option value='20' $select[20]>20</option><option value='50' $select[50]>50</option><option value='100' $select[100]>100</option>";
-	$tpp = !empty($_G['gp_tpp']) ? $_G['gp_tpp'] : '20';
+	$tpp = !empty($_GET['tpp']) ? $_GET['tpp'] : '20';
 	$start_limit = ($page - 1) * $ppp;
-	$dateline = $_G['gp_dateline'] ? $_G['gp_dateline'] : '604800';
+	$dateline = $_GET['dateline'] ? $_GET['dateline'] : '604800';
 	$dateline_options = '';
 	foreach(array('all', '604800', '2592000', '7776000') as $v) {
 		$selected = '';
@@ -30,7 +30,7 @@ if(!submitcheck('modsubmit') && !$_G['gp_fast']) {
 		$dateline_options .= "<option value=\"$v\" $selected>".cplang("dateline_$v");
 	}
 	$share_status = 1;
-	if($_G['gp_filter'] == 'ignore') {
+	if($_GET['filter'] == 'ignore') {
 		$share_status = 2;
 	}
 	showformheader("moderate&operation=shares");
@@ -38,8 +38,8 @@ if(!submitcheck('modsubmit') && !$_G['gp_fast']) {
 
 	showtablerow('', array('width="60"', 'width="160"', 'width="60"'),
 		array(
-			cplang('username'), "<input size=\"15\" name=\"username\" type=\"text\" value=\"$_G[gp_username]\" />",
-			cplang('moderate_content_keyword'), "<input size=\"15\" name=\"keyword\" type=\"text\" value=\"$_G[gp_keyword]\" />",
+			cplang('username'), "<input size=\"15\" name=\"username\" type=\"text\" value=\"$_GET[username]\" />",
+			cplang('moderate_content_keyword'), "<input size=\"15\" name=\"keyword\" type=\"text\" value=\"$_GET[keyword]\" />",
 		)
 	);
 	showtablerow('', array('width="60"', 'width="160"', 'width="60"'),
@@ -57,41 +57,32 @@ if(!submitcheck('modsubmit') && !$_G['gp_fast']) {
 
 	$pagetmp = $page;
 	$sqlwhere = '';
-	if(!empty($_G['gp_username'])) {
-		$sqlwhere .= " AND s.username='{$_G['gp_username']}'";
+	if(!empty($_GET['username'])) {
+		$sqlwhere .= " AND s.username='{$_GET['username']}'";
 	}
 	if(!empty($dateline) && $dateline != 'all') {
 		$sqlwhere .= " AND s.dateline>'".(TIMESTAMP - $dateline)."'";
 	}
-	if(!empty($_G['gp_keyword'])) {
-		$keyword = str_replace(array('%', '_'), array('\%', '\_'), $_G['gp_keyword']);
+	if(!empty($_GET['keyword'])) {
+		$keyword = str_replace(array('%', '_'), array('\%', '\_'), $_GET['keyword']);
 		$sqlwhere .= " AND s.body_general LIKE '%$keyword%'";
 	}
-	$modcount = DB::result_first("SELECT COUNT(*)
-		FROM ".DB::table('common_moderate')." m
-		LEFT JOIN ".DB::table('home_share')." s ON s.sid=m.id
-		WHERE m.idtype='sid' AND m.status='$moderatestatus' $sqlwhere");
+	$modcount = C::t('common_moderate')->count_by_search_for_share($moderatestatus, $_GET['username'], (($dateline &&  $dateline != 'all') ? (TIMESTAMP - $dateline) : null), $_GET['keyword']);
 	do {
 		$start_limit = ($pagetmp - 1) * $tpp;
-		$query = DB::query("SELECT s.sid, s.type, s.uid, s.username, s.dateline, s.body_general, s.itemid, s.fromuid
-			FROM ".DB::table('common_moderate')." m
-			LEFT JOIN ".DB::table('home_share')." s ON s.sid=m.id
-			WHERE m.idtype='sid' AND m.status='$moderatestatus' $sqlwhere
-			ORDER BY m.dateline DESC
-			LIMIT $start_limit, $tpp");
-			$pagetmp = $pagetmp - 1;
-	} while($pagetmp > 0 && DB::num_rows($query) == 0);
+		$sharearr = C::t('common_moderate')->fetch_all_by_search_for_share($moderatestatus, $_GET['username'], (($dateline &&  $dateline != 'all') ? (TIMESTAMP - $dateline) : null), $_GET['keyword'], $start_limit, $tpp);
+		$pagetmp = $pagetmp - 1;
+	} while($pagetmp > 0 && empty($sharearr));
 	$page = $pagetmp + 1;
-	$multipage = multi($modcount, $tpp, $page, ADMINSCRIPT."?action=moderate&operation=shares&filter=$filter&dateline={$_G['gp_dateline']}&username={$_G['gp_username']}&keyword={$_G['gp_keyword']}&tpp=$tpp&showcensor=$showcensor");
+	$multipage = multi($modcount, $tpp, $page, ADMINSCRIPT."?action=moderate&operation=shares&filter=$filter&dateline={$_GET['dateline']}&username={$_GET['username']}&keyword={$_GET['keyword']}&tpp=$tpp&showcensor=$showcensor");
 
 	echo '<p class="margintop marginbot"><a href="javascript:;" onclick="expandall();">'.cplang('moderate_all_expand').'</a> <a href="javascript:;" onclick="foldall();">'.cplang('moderate_all_fold').'</a></p>';
 
 	showtableheader();
-	require_once libfile('class/censor');
 	$censor = & discuz_censor::instance();
 	$censor->highlight = '#FF0000';
 	require_once libfile('function/misc');
-	while($share = DB::fetch($query)) {
+	foreach($sharearr as $share) {
 		$short_desc = cutstr($share['body_general'], 30);
 		$share['dateline'] = dgmdate($share['dateline']);
 		if($showcensor) {
@@ -167,11 +158,10 @@ if(!submitcheck('modsubmit') && !$_G['gp_fast']) {
 		}
 	}
 
-	if($validate_sids = dimplode($moderation['validate'])) {
+	if(!empty($moderation['validate'])) {
 		require_once libfile('function/feed');
-		DB::update('home_share', array('status' => '0'), "sid IN ($validate_sids)");
-		$query_t = DB::query("SELECT * FROM ".DB::table('home_share')." WHERE sid IN ($validate_sids)");
-		while($share = DB::fetch($query_t)) {
+		$validates = C::t('home_share')->update($moderation['validate'], array('status' => 0));
+		foreach(C::t('home_share')->fetch_all($moderation['validate']) as $share) {
 			switch($share['type']) {
 				case 'thread':
 					$feed_hash_data = 'tid' . $share['itemid'];
@@ -205,7 +195,7 @@ if(!submitcheck('modsubmit') && !$_G['gp_fast']) {
 				'{actor} '.$share['title_template'],
 				array('hash_data' => $feed_hash_data),
 				$share['body_template'],
-				unserialize($share['body_data']),
+				dunserialize($share['body_data']),
 				$share['body_general'],
 				array($share['image']),
 				array($share['image_link']),
@@ -219,7 +209,6 @@ if(!submitcheck('modsubmit') && !$_G['gp_fast']) {
 				$share['username']
 			);
 		}
-		$validates = DB::affected_rows();
 		updatemoderate('sid', $moderation['validate'], 2);
 	}
 
@@ -231,16 +220,15 @@ if(!submitcheck('modsubmit') && !$_G['gp_fast']) {
 	}
 
 	if($ignore_sids = dimplode($moderation['ignore'])) {
-		DB::update('home_share', array('status' => '2'), "sid IN ($ignore_sids)");
-		$ignores = DB::affected_rows();
+		$ignores = C::t('home_share')->update($moderation['ignore'], array('status' => 2));
 		updatemoderate('sid', $moderation['ignore'], 1);
 	}
 
-	if($_G['gp_fast']) {
-		echo callback_js($_G['gp_sid']);
+	if($_GET['fast']) {
+		echo callback_js($_GET['sid']);
 		exit;
 	} else {
-		cpmsg('moderate_shares_succeed', "action=moderate&operation=shares&page=$page&filter=$filter&dateline={$_G['gp_dateline']}&username={$_G['gp_username']}&keyword={$_G['gp_keyword']}&tpp={$_G['gp_tpp']}&showcensor=$showcensor", 'succeed', array('validates' => $validates, 'ignores' => $ignores, 'deletes' => $deletes));
+		cpmsg('moderate_shares_succeed', "action=moderate&operation=shares&page=$page&filter=$filter&dateline={$_GET['dateline']}&username={$_GET['username']}&keyword={$_GET['keyword']}&tpp={$_GET['tpp']}&showcensor=$showcensor", 'succeed', array('validates' => $validates, 'ignores' => $ignores, 'deletes' => $deletes));
 	}
 
 }

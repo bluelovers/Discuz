@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_invite.php 20818 2011-03-04 08:21:11Z monkey $
+ *      $Id: spacecp_invite.php 25042 2011-10-24 03:27:47Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -49,8 +49,7 @@ $mailvar = array(
 
 $appinfo = array();
 if($appid) {
-	$query = DB::query("SELECT * FROM ".DB::table('common_myapp')." WHERE appid='$appid'");
-	$appinfo = DB::fetch($query);
+	$appinfo = C::t('common_myapp')->fetch($appid);
 	if($appinfo) {
 		$inviteapp = "&amp;app=$appid";
 		$mailvar['appid'] = $appid;
@@ -109,7 +108,7 @@ if(submitcheck('emailinvite')) {
 				'status' => 3,
 				'endtime' => ($_G['group']['maxinviteday']?($_G['timestamp']+$_G['group']['maxinviteday']*24*3600):0)
 			);
-			$id = DB::insert('common_invite', $setarr, 1);
+			$id = C::t('common_invite')->insert($setarr, true);
 
 			$mailvar['inviteurl'] = getinviteurl($id, $code, $appid);
 
@@ -135,7 +134,7 @@ if(submitcheck('emailinvite')) {
 
 	if($_G['group']['maxinvitenum']) {
 		$daytime = $_G['timestamp'] - 24*3600;
-		$invitecount = getcount('common_invite', "uid='$_G[uid]' AND dateline>'$daytime'");
+		$invitecount = C::t('common_invite')->count_by_uid_dateline($_G['uid'], $daytime);
 		if($invitecount + $invitenum > $_G['group']['maxinvitenum']) {
 			showmessage('max_invitenum_error', NULL, array('maxnum'=>$_G['group']['maxinvitenum']), array('showdialog'=>1, 'showmsg' => true, 'closetime' => true));
 		}
@@ -146,15 +145,22 @@ if(submitcheck('emailinvite')) {
 		showmessage('mail_credit_inadequate', $baseurl, array(), array('showdialog'=>1, 'showmsg' => true, 'closetime' => true));
 	}
 
-	$codes = array();
+	$havecode = false;
 	$dateline = $_G['timestamp'];
 	for($i=0; $i<$invitenum; $i++) {
 		$code = strtolower(random(6));
-		$codes[] = "('$_G[uid]', '$code', '$dateline', '".($_G['group']['maxinviteday']?($_G['timestamp']+$_G['group']['maxinviteday']*24*3600):0)."', '$_G[clientip]')";
+		$havecode = true;
+		$invitedata = array(
+				'uid' => $_G['uid'],
+				'code' => $code,
+				'dateline' => $dateline,
+				'endtime' => $_G['group']['maxinviteday'] ? ($_G['timestamp']+$_G['group']['maxinviteday']*24*3600) : 0,
+				'inviteip' => $_G['clientip']
+		);
+		C::t('common_invite')->insert($invitedata);
 	}
 
-	if($codes) {
-		DB::query("INSERT INTO ".DB::table('common_invite')." (uid, code, dateline, endtime, inviteip) VALUES ".implode(',', $codes));
+	if($havecode) {
 		require_once libfile('class/credit');
 		$creditobj = new credit();
 		$creditobj->updatemembercount(array($creditkey=>0-$allcredit), $_G['uid']);
@@ -172,8 +178,7 @@ if($_GET['op'] == 'resend') {
 			showmessage('send_result_resend_error', $baseurl);
 		}
 
-		$query = DB::query("SELECT * FROM ".DB::table('common_invite')." WHERE id='$id' AND uid='$_G[uid]'");
-		if($value = DB::fetch($query)) {
+		if($value = C::t('common_invite')->fetch_by_id_uid($id, $_G['uid'])) {
 			if($creditnum) {
 				$inviteurl = getinviteurl($value['id'], $value['code'], $value['appid']);
 			}
@@ -193,10 +198,9 @@ if($_GET['op'] == 'resend') {
 	if(empty($id)) {
 		showmessage('there_is_no_record_of_invitation_specified', $baseurl);
 	}
-	$query = DB::query("SELECT * FROM ".DB::table('common_invite')." WHERE id='$id' AND uid='$_G[uid]'");
-	if($value = DB::fetch($query)) {
+	if($value = C::t('common_invite')->fetch_by_id_uid($id, $_G['uid'])) {
 		if(submitcheck('deletesubmit')) {
-			DB::query("DELETE FROM ".DB::table('common_invite')." WHERE id='$id'");
+			C::t('common_invite')->delete($id);
 			showmessage('do_success', dreferer(), array('id' => $id), array('showdialog'=>1, 'showmsg' => true, 'closetime' => true));
 		}
 	} else {
@@ -204,8 +208,7 @@ if($_GET['op'] == 'resend') {
 	}
 
 } elseif ($_GET['op'] == 'showinvite') {
-	$query = DB::query("SELECT * FROM ".DB::table('common_invite')." WHERE uid='$_G[uid]' ORDER BY dateline DESC");
-	while ($value = DB::fetch($query)) {
+	foreach(C::t('common_invite')->fetch_all_by_uid($_G['uid']) as $value) {
 		if(!$value['fuid'] && !$value['type']) {
 			$inviteurl = getinviteurl($value['id'], $value['code'], $value['appid']);
 			$list[$value[code]] = $inviteurl;
@@ -216,9 +219,7 @@ if($_GET['op'] == 'resend') {
 	$list = $flist = $dels = array();
 	$invitedcount = $count = 0;
 
-	$query = DB::query("SELECT * FROM ".DB::table('common_invite')." WHERE uid='$_G[uid]' ORDER BY dateline DESC");
-	while ($value = DB::fetch($query)) {
-
+	foreach(C::t('common_invite')->fetch_all_by_uid($_G['uid']) as $value) {
 		if($value['fuid']) {
 			$flist[] = $value;
 			$invitedcount++;
@@ -245,7 +246,7 @@ if($_GET['op'] == 'resend') {
 	}
 
 	if($dels) {
-		DB::query("DELETE FROM ".DB::table('common_invite')." WHERE id IN (".dimplode($dels).")");
+		C::t('common_invite')->delete($dels);
 	}
 
 	$uri = $_SERVER['REQUEST_URI']?$_SERVER['REQUEST_URI']:($_SERVER['PHP_SELF']?$_SERVER['PHP_SELF']:$_SERVER['SCRIPT_NAME']);
@@ -268,7 +269,9 @@ function createmail($mail, $mailvar) {
 	$subject = lang('spacecp', $appinfo?'app_invite_subject':'invite_subject', $mailvar);
 	$message = lang('spacecp', $appinfo?'app_invite_massage':'invite_massage', $mailvar);
 
-	sendmail($mail, $subject, $message);
+	if(!sendmail($mail, $subject, $message)) {
+		runlog('sendmail', "$mail sendmail failed.");
+	}
 }
 
 function getinviteurl($inviteid, $invitecode, $appid) {

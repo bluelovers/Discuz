@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: index.php 24668 2011-09-30 03:01:00Z svn_project_zhangjie $
+ *      $Id: index.php 22348 2011-05-04 01:16:02Z monkey $
  */
 
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
@@ -52,7 +52,7 @@ if(in_array($method, array('app_reg', 'ext_info'))) {
 	$PHP_SELF = $_SERVER['PHP_SELF'] ? $_SERVER['PHP_SELF'] : $_SERVER['SCRIPT_NAME'];
 	$bbserver = 'http://'.preg_replace("/\:\d+/", '', $_SERVER['HTTP_HOST']).($_SERVER['SERVER_PORT'] && $_SERVER['SERVER_PORT'] != 80 ? ':'.$_SERVER['SERVER_PORT'] : '');
 	$default_ucapi = $bbserver.'/ucenter';
-	$default_appurl = $bbserver.substr($PHP_SELF, 0, strpos($PHP_SELF, 'install/') - 1);
+	$default_appurl = $bbserver.substr($PHP_SELF, 0, strrpos($PHP_SELF, '/') - 8);
 }
 
 if($method == 'show_license') {
@@ -68,7 +68,7 @@ if($method == 'show_license') {
 
 	dirfile_check($dirfile_items);
 
-	show_env_result($env_items, $dirfile_items, $func_items);
+	show_env_result($env_items, $dirfile_items, $func_items, $filesock_items);
 
 } elseif($method == 'app_reg') {
 
@@ -304,7 +304,7 @@ if($method == 'show_license') {
 		if($username && $email && $password) {
 			if(strlen($username) > 15 || preg_match("/^$|^c:\\con\\con$|　|[,\"\s\t\<\>&]|^Guest/is", $username)) {
 				show_msg('admin_username_invalid', $username, 0);
-			} elseif(!strstr($email, '@') || $email != stripslashes($email) || $email != htmlspecialchars($email)) {
+			} elseif(!strstr($email, '@') || $email != stripslashes($email) || $email != dhtmlspecialchars($email)) {
 				show_msg('admin_email_invalid', $email, 0);
 			} else {
 				if(!DZUCFULL) {
@@ -387,6 +387,9 @@ if($method == 'show_license') {
 		$db->query("UPDATE {$tablepre}common_cron SET lastrun='0', nextrun='".($timestamp + 3600)."'");
 
 		install_data($username, $uid);
+
+		$testdata = $portalstatus = 1;
+		$groupstatus = $homestatus = 0;
 
 		if($testdata) {
 			install_testdata($username, $uid);

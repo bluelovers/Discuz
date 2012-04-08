@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_userstats.php 16696 2010-09-13 05:02:24Z monkey $
+ *      $Id: cache_userstats.php 26680 2011-12-20 01:05:48Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -12,9 +12,17 @@ if(!defined('IN_DISCUZ')) {
 }
 
 function build_cache_userstats() {
-	$totalmembers = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_member'));
-	$newsetuser = DB::result_first("SELECT username FROM ".DB::table('common_member')." ORDER BY regdate DESC LIMIT 1");
-	save_syscache('userstats', array('totalmembers' => $totalmembers, 'newsetuser' => $newsetuser));
+	global $_G;
+	$totalmembers = C::t('common_member')->count();
+	$member = C::t('common_member')->range(0, 1, 'DESC');
+	$member = current($member);
+	$newsetuser = $member['username'];
+	$data = array('totalmembers' => $totalmembers, 'newsetuser' => $newsetuser);
+	if($_G['setting']['plugins']['func'][HOOKTYPE]['cacheuserstats']) {
+		$_G['userstatdata'] = & $data;
+		hookscript('cacheuserstats', 'global', 'funcs', array(), 'cacheuserstats');
+	}
+	savecache('userstats', $data);
 }
 
 ?>

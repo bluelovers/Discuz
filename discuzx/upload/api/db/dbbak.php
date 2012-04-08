@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: dbbak.php 23143 2011-06-21 07:22:50Z svn_project_zhangjie $
+ *      $Id: dbbak.php 29239 2012-03-30 06:37:30Z chenmengshu $
  */
 
 @define('IN_API', true);

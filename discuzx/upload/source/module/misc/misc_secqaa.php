@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_secqaa.php 10395 2010-05-11 04:48:31Z monkey $
+ *      $Id: misc_secqaa.php 25246 2011-11-02 03:34:53Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -13,7 +13,7 @@ if(!defined('IN_DISCUZ')) {
 
 require_once libfile('function/seccode');
 
-if($_G['gp_action'] == 'update') {
+if($_GET['action'] == 'update') {
 
 	$refererhost = parse_url($_SERVER['HTTP_REFERER']);
 	$refererhost['host'] .= !empty($refererhost['port']) ? (':'.$refererhost['port']) : '';
@@ -24,16 +24,16 @@ if($_G['gp_action'] == 'update') {
 
 	$message = '';
 	if($_G['setting']['secqaa']) {
-		$question = make_secqaa($_G['gp_idhash']);
+		$question = make_secqaa($_GET['idhash']);
 	}
 	include template('common/header_ajax');
 	echo lang('core', 'secqaa_tips').$question;
 	include template('common/footer_ajax');
 
-} elseif($_G['gp_action'] == 'check') {
+} elseif($_GET['action'] == 'check') {
 
 	include template('common/header_ajax');
-	echo check_secqaa($_G['gp_secverify'], $_G['gp_idhash']) ? 'succeed' : 'invalid';
+	echo check_secqaa($_GET['secverify'], $_GET['idhash']) ? 'succeed' : 'invalid';
 	include template('common/footer_ajax');
 
 }

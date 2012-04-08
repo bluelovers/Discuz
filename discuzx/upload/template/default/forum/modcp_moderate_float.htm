@@ -7,11 +7,11 @@
 			<!--{if $op == 'members'}-->{lang mod_moderate_member}<!--{elseif $op == 'threads'}-->{lang mod_moderate_thread}<!--{elseif $op == 'replies'}-->{lang mod_moderate_reply}<!--{/if}-->
 			(<!--{echo count($list)}-->)</em>
 		<span>
-			<!--{if !empty($_G['gp_infloat'])}--><a href="javascript:;" class="flbc" onclick="hideWindow('mods')" title="{lang close}">{lang close}</a><!--{/if}-->
+			<!--{if !empty($_GET['infloat'])}--><a href="javascript:;" class="flbc" onclick="hideWindow('mods')" title="{lang close}">{lang close}</a><!--{/if}-->
 		</span>
 	</h3>
 
-	<form id="moderateform" method="post" autocomplete="off" action="{$cpscript}?mod=modcp&action=$_G[gp_action]&op=$op&infloat=yes" onsubmit="ajaxpost('moderateform', 'return_mods', 'return_mods', 'onerror');return false;">
+	<form id="moderateform" method="post" autocomplete="off" action="{$cpscript}?mod=modcp&action=$_GET[action]&op=$op&infloat=yes" onsubmit="ajaxpost('moderateform', 'return_mods', 'return_mods', 'onerror');return false;">
 		<div class="c">
 		<!--{if $list}-->
 			<input type="hidden" name="formhash" value="{FORMHASH}" />
@@ -19,10 +19,10 @@
 			<input type="hidden" name="modact" value="$modact" />
 			<input type="hidden" name="modsubmit" value="1" />
 			<!--{if $op == 'replies'}-->
-			<!--{eval $_G['gp_posttableid'] = intval($_G['gp_posttableid']);}-->
-			<input type="hidden" name="posttableid" value="$_G['gp_posttableid']" />
+			<!--{eval $_GET['posttableid'] = intval($_GET['posttableid']);}-->
+			<input type="hidden" name="posttableid" value="$_GET['posttableid']" />
 			<!--{/if}-->
-			<!--{if !empty($_G['gp_infloat'])}--><input type="hidden" name="handlekey" value="$_G['gp_handlekey']" /><!--{/if}-->
+			<!--{if !empty($_GET['infloat'])}--><input type="hidden" name="handlekey" value="$_GET['handlekey']" /><!--{/if}-->
 			<!--{loop $list $id}-->
 				<input type="hidden" name="moderate[]" value="$id" />
 			<!--{/loop}-->
@@ -40,7 +40,7 @@
 </div>
 
 <script type="text/javascript" reload="1">
-function succeedhandle_$_G['gp_handlekey'](locationhref) {
+function succeedhandle_$_GET['handlekey'](locationhref) {
 	<!--{loop $list $id}-->
 		$('pidcheck_$id').parentNode.removeChild($('pidcheck_$id'));
 		$('pid_$id').style.display = 'none';

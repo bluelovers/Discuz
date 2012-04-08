@@ -4,8 +4,12 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_spacecp.php 22088 2011-04-21 07:50:14Z zhengqingpeng $
+ *      $Id: lang_spacecp.php 28195 2012-02-24 02:59:57Z svn_project_zhangjie $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 $lang = array(
 
@@ -16,10 +20,10 @@ $lang = array(
 	'share_action' => '分享了',
 
 	'pm_comment' => '答覆點評',
-	'pm_thread_about' => '關於你在「{subject}」的帖子',
+	'pm_thread_about' => '關於您在「{subject}」的帖子',
 
-	'wall_pm_subject' => '你好，我給你留言了',
-	'wall_pm_message' => '我在你的留言板給你留言了，[url=\\1]點擊這裡去留言板看看吧[/url]',
+	'wall_pm_subject' => '您好，我給您留言了',
+	'wall_pm_message' => '我在您的留言板給您留言了，[url=\\1]點擊這裡去留言板看看吧[/url]',
 	'reward' => '懸賞',
 	'reward_info' => '參與投票可獲得  \\1 積分',
 	'poll_separator' => '"、"',
@@ -40,63 +44,64 @@ $lang = array(
 	'message_can_not_send_13' => '這不是群聊消息',
 	'message_can_not_send_14' => '這不是私人消息',
 	'message_can_not_send_15' => '數據有誤',
+	'message_can_not_send_16' => '您超出了24小時內發短消息數量的上限',
 	'message_can_not_send_onlyfriend' => '該用戶只接收好友發送的短消息',
 
 
-	'friend_subject' => '<a href="{url}" target="_blank">{username} 請求加你為好友</a>',
+	'friend_subject' => '<a href="{url}" target="_blank">{username} 請求加您為好友</a>',
 	'friend_request_note' => '，附言：{note}',
-	'comment_friend' =>'<a href="\\2" target="_blank">\\1 給你留言了</a>',
-	'photo_comment' => '<a href="\\2" target="_blank">\\1 評論了你的照片</a>',
-	'blog_comment' => '<a href="\\2" target="_blank">\\1 評論了你的日誌</a>',
-	'poll_comment' => '<a href="\\2" target="_blank">\\1 評論了你的投票</a>',
-	'share_comment' => '<a href="\\2" target="_blank">\\1 評論了你的分享</a>',
-	'friend_pm' => '<a href="\\2" target="_blank">\\1 給你發私信了</a>',
-	'poke_subject' => '<a href="\\2" target="_blank">\\1 向你打招呼</a>',
-	'mtag_reply' => '<a href="\\2" target="_blank">\\1 回復了你的話題</a>',
-	'event_comment' => '<a href="\\2" target="_blank">\\1 評論了你的活動</a>',
+	'comment_friend' =>'<a href="\\2" target="_blank">\\1 給您留言了</a>',
+	'photo_comment' => '<a href="\\2" target="_blank">\\1 評論了您的照片</a>',
+	'blog_comment' => '<a href="\\2" target="_blank">\\1 評論了您的日誌</a>',
+	'poll_comment' => '<a href="\\2" target="_blank">\\1 評論了您的投票</a>',
+	'share_comment' => '<a href="\\2" target="_blank">\\1 評論了您的分享</a>',
+	'friend_pm' => '<a href="\\2" target="_blank">\\1 給您發私信了</a>',
+	'poke_subject' => '<a href="\\2" target="_blank">\\1 向您打招呼</a>',
+	'mtag_reply' => '<a href="\\2" target="_blank">\\1 回復了您的話題</a>',
+	'event_comment' => '<a href="\\2" target="_blank">\\1 評論了您的活動</a>',
 
-	'friend_pm_reply' => '\\1 回復了你的私信',
-	'comment_friend_reply' => '\\1 回復了你的留言',
-	'blog_comment_reply' => '\\1 回復了你的日誌評論',
-	'photo_comment_reply' => '\\1 回復了你的照片評論',
-	'poll_comment_reply' => '\\1 回復了你的投票評論',
-	'share_comment_reply' => '\\1 回復了你的分享評論',
-	'event_comment_reply' => '\\1 回復了你的活動評論',
+	'friend_pm_reply' => '\\1 回復了您的私信',
+	'comment_friend_reply' => '\\1 回復了您的留言',
+	'blog_comment_reply' => '\\1 回復了您的日誌評論',
+	'photo_comment_reply' => '\\1 回復了您的照片評論',
+	'poll_comment_reply' => '\\1 回復了您的投票評論',
+	'share_comment_reply' => '\\1 回復了您的分享評論',
+	'event_comment_reply' => '\\1 回復了您的活動評論',
 
 	'mail_my' => '好友與我的互動提醒',
   	'mail_system' => '系統提醒',
 
-	'invite_subject' => '{username}邀請你加入{sitename}，並成為好友',
+	'invite_subject' => '{username}邀請您加入{sitename}，並成為好友',
 	'invite_massage' => '<table border="0">
 		<tr>
 		<td valign="top">{avatar}</td>
 		<td valign="top">
-		<h3>Hi，我是{username}，邀請你也加入{sitename}並成為我的好友</h3><br>
-		請加入到我的好友中，你就可以瞭解我的近況，與我一起交流，隨時與我保持聯繫。<br>
+		<h3>Hi，我是{username}，邀請您也加入{sitename}並成為我的好友</h3><br>
+		請加入到我的好友中，您就可以瞭解我的近況，與我一起交流，隨時與我保持聯繫。<br>
 		<br>
 		邀請附言：<br>{saymsg}
 		<br><br>
-		<strong>請你點擊以下鏈接，接受好友邀請：</strong><br>
+		<strong>請您點擊以下鏈接，接受好友邀請：</strong><br>
 		<a href="{inviteurl}">{inviteurl}</a><br>
 		<br>
-		<strong>如果你擁有{sitename}上面的賬號，請點擊以下鏈接查看我的個人主頁：</strong><br>
+		<strong>如果您擁有{sitename}上面的賬號，請點擊以下鏈接查看我的個人主頁：</strong><br>
 		<a href="{siteurl}home.php?mod=space&uid={uid}">{siteurl}home.php?mod=space&uid={uid}</a><br>
 		</td></tr></table>',
 
-	'app_invite_subject' => '{username}邀請你加入{sitename}，一起來玩{appname}',
+	'app_invite_subject' => '{username}邀請您加入{sitename}，一起來玩{appname}',
 	'app_invite_massage' => '<table border="0">
 		<tr>
 		<td valign="top">{avatar}</td>
 		<td valign="top">
-		<h3>Hi，我是{username}，在{sitename}上玩 {appname}，邀請你也加入一起玩</h3><br>
+		<h3>Hi，我是{username}，在{sitename}上玩 {appname}，邀請您也加入一起玩</h3><br>
 		<br>
 		邀請附言：<br>
 		{saymsg}
 		<br><br>
-		<strong>請你點擊以下鏈接，接受好友邀請一起玩{appname}：</strong><br>
+		<strong>請您點擊以下鏈接，接受好友邀請一起玩{appname}：</strong><br>
 		<a href="{inviteurl}">{inviteurl}</a><br>
 		<br>
-		<strong>如果你擁有{sitename}上面的賬號，請點擊以下鏈接查看我的個人主頁：</strong><br>
+		<strong>如果您擁有{sitename}上面的賬號，請點擊以下鏈接查看我的個人主頁：</strong><br>
 		<a href="{siteurl}home.php?mod=space&uid={uid}">{siteurl}home.php?mod=space&uid={uid}</a><br>
 		</td></tr></table>',
 
@@ -105,8 +110,8 @@ $lang = array(
 
 	'space_update' => '{actor} 被SHOW了一下',
 
-	'active_email_subject' => '你的郵箱激活郵件',
-	'active_email_msg' => '請複製下面的激活鏈接到瀏覽器進行訪問，以便激活你的郵箱。<br>郵箱激活鏈接:<br><a href="{url}" target="_blank">{url}</a>',
+	'active_email_subject' => '您的郵箱激活郵件',
+	'active_email_msg' => '請複製下面的激活鏈接到瀏覽器進行訪問，以便激活您的郵箱。<br>郵箱激活鏈接:<br><a href="{url}" target="_blank">{url}</a>',
 	'share_space' => '分享了一個用戶',
 	'share_blog' => '分享了一篇日誌',
 	'share_album' => '分享了一個相冊',
@@ -134,11 +139,11 @@ $lang = array(
 
 	'thread_edit_trail' => '<ins class="modify">[本話題由 \\1 於 \\2 編輯]</ins>',
 	'create_a_new_album' => '創建了新相冊',
-	'not_allow_upload' => '你現在沒有權限上傳圖片',
+	'not_allow_upload' => '您現在沒有權限上傳圖片',
 	'not_allow_upload_extend' => '不允許上傳{extend}類型的圖片',
 	'files_can_not_exceed_size' => '{extend}類文件不能超過{size}',
 	'get_passwd_subject' => '取回密碼郵件',
-	'get_passwd_message' => '你只需在提交請求後的三天之內，通過點擊下面的鏈接重置你的密碼：<br />\\1<br />(如果上面不是鏈接形式，請將地址手工粘帖到瀏覽器地址欄再訪問)<br />上面的頁面打開後，輸入新的密碼後提交，之後你即可使用新的密碼登錄了。',
+	'get_passwd_message' => '您只需在提交請求後的三天之內，通過點擊下面的鏈接重置您的密碼：<br />\\1<br />(如果上面不是鏈接形式，請將地址手工粘帖到瀏覽器地址欄再訪問)<br />上面的頁面打開後，輸入新的密碼後提交，之後您即可使用新的密碼登錄了。',
 	'file_is_too_big' => '文件過大',
 
 	'take_part_in_the_voting' => '{actor} 參與了 {touser} 的{reward}投票 <a href="{url}" target="_blank">{subject}</a>',
@@ -153,8 +158,8 @@ $lang = array(
 	'upload_album' => '更新了相冊',
 	'the_total_picture' => '共 \\1 張圖片',
 
-	'space_open_subject' => '快來打理一下你的個人主頁吧',
-	'space_open_message' => 'hi，我今天去拜訪了一下你的個人主頁，發現你自己還沒有打理過呢。趕快來看看吧。地址是：\\1space.php',
+	'space_open_subject' => '快來打理一下您的個人主頁吧',
+	'space_open_message' => 'hi，我今天去拜訪了一下您的個人主頁，發現您自己還沒有打理過呢。趕快來看看吧。地址是：\\1space.php',
 
 
 
@@ -162,12 +167,12 @@ $lang = array(
 
 
 	'magicunit' => '個',
-	'magic_note_wall' => '{actor}在留言板上給你<a href="{url}" target="_blank">留言</a>',
-	'magic_call' => '在日誌中點了你的名，<a href="{url}" target="_blank">快去看看吧</a>',
+	'magic_note_wall' => '{actor}在留言板上給您<a href="{url}" target="_blank">留言</a>',
+	'magic_call' => '在日誌中點了您的名，<a href="{url}" target="_blank">快去看看吧</a>',
 
 
-	'present_user_magics' => '你收到了管理員贈送的道具：\\1',
-	'has_not_more_doodle' => '你沒有塗鴉板了',
+	'present_user_magics' => '您收到了管理員贈送的道具：\\1',
+	'has_not_more_doodle' => '您沒有塗鴉板了',
 
 	'do_stat_login' => '來訪用戶',
 	'do_stat_mobilelogin' => '手機訪問',
@@ -236,11 +241,14 @@ $lang = array(
 	'logs_credit_update_RCA' => '回帖中獎',
 	'logs_credit_update_RCB' => '返還回帖獎勵積分',
 	'logs_credit_update_CDC' => '卡密充值',
-
 	'logs_credit_update_RGC' => '回收紅包',
 	'logs_credit_update_BGC' => '埋下紅包',
 	'logs_credit_update_AGC' => '獲得紅包',
 	'logs_credit_update_RKC' => '競價排名',
+	'logs_credit_update_BME' => '購買勳章',
+	'logs_credit_update_RPR' => '後台積分獎懲',
+	'logs_credit_update_RPZ' => '後台積分獎懲清零',
+	'logs_credit_update_reward_clean' => '清零',
 	'logs_select_operation' => '請選擇操作類型',
 	'task_credit' => '任務獎勵積分',
 	'special_3_credit' => '懸賞主題扣除積分',
@@ -264,6 +272,7 @@ $lang = array(
 	'thread_credit2' => '主題支出積分',
 	'buy_credit' => '對積分充值',
 	'buy_usergroup' => '購買擴展用戶組支出積分',
+	'buy_medal' => '購買勳章',
 	'report_credit' => '舉報功能中的獎懲',
 	'join' => '參與',
 	'activity_credit' => '活動扣除積分',
@@ -275,6 +284,8 @@ $lang = array(
 	'replycredit_thread' => '散發的帖子',
 	'card_credit' => '卡密充值獲得的積分',
 	'ranklist_top' => '參加競價排名消費積分',
+	'admincp_op_credit' => '後台積分獎懲操作',
+	'credit_update_reward_clean' => '清零',
 
 	'profile_unchangeable' => '此項資料提交後不可修改',
 	'profile_is_verifying' => '此項資料正在審核中',
@@ -291,11 +302,32 @@ $lang = array(
 	'district_level_4' => '-鄉鎮-',
 	'invite_you_to_visit' => '{user}邀請您訪問{bbname}',
 
+	'portal' => '門戶',
+	'group' => '群組',
+	'follow' => '廣播',
+	'collection' => '淘帖',
+	'guide' => '導讀',
+	'feed' => '動態',
+	'blog' => '日誌',
+	'doing' => '記錄',
+	'wall' => '留言板',
+	'homepage' => '個人主頁',
+	'ranklist' => '排行榜',
+	'select_the_navigation_position' => '選擇{type}導航位置',
+	'close_module' => '關閉{type}功能',
+
+	'follow_add_remark' => '添加備註',
+	'follow_modify_remark' => '修改備註',
+	'follow_specified_group' => '廣播專區',
+	'follow_specified_forum' => '廣播專版',
+
+	'filesize_lessthan' => '文件大小應該小於',
+
 	'spacecp_message_prompt' => '(支持 {msg} 代碼,最大 1000 字)',
 	'card_update_doing' => ' <a class="xi2" href="###">[更新記錄]</a>',
 	'email_acitve_message' => '<img src="{imgdir}/mail_inactive.png" alt="未驗證" class="vm" /> <span class="xi1">新郵箱({newemail})等待驗證中...</span><br />
 								系統已經向該郵箱發送了一封驗證激活郵件，請查收郵件，進行驗證激活。<br>
-								如果沒有收到驗證郵件，你可以更換一個郵箱，或者<a href="home.php?mod=spacecp&ac=profile&op=password&resend=1" class="xi2">重新接收驗證郵件</a>',
+								如果沒有收到驗證郵件，您可以更換一個郵箱，或者<a href="home.php?mod=spacecp&ac=profile&op=password&resend=1" class="xi2">重新接收驗證郵件</a>',
 
 );
 

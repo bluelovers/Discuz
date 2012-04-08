@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: adv_threadlist.php 22111 2011-04-21 10:21:03Z monkey $
+ *      $Id: adv_threadlist.php 29052 2012-03-23 09:07:40Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -94,7 +94,7 @@ class adv_threadlist {
 	function evalcode() {
 		return array(
 			'check' => '
-			if($GLOBALS[\'page\'] != 1 || !empty($_GET[\'filter\']) || !empty($_GET[\'orderby\'])
+			if($GLOBALS[\'page\'] != 1 || !empty($_GET[\'filter\'])
 			|| $_G[\'basescript\'] == \'forum\' && $parameter[\'fids\'] && !in_array($_G[\'fid\'], $parameter[\'fids\'])
 			|| $_G[\'basescript\'] == \'group\' && $parameter[\'groups\'] && !in_array($_G[\'grouptypeid\'], $parameter[\'groups\'])
 			) {
@@ -117,8 +117,7 @@ class adv_threadlist {
 			'create' => '
 			$_G[\'adv_vtp_count\']++;
 			if($_G[\'adv_vtp_count\'] == 1 && !empty($_G[\'adv_vtp_tids\'])) {
-				$query = DB::query("SELECT * FROM ".DB::table(\'forum_thread\')." WHERE tid IN (".dimplode($_G[\'adv_vtp_tids\']).")");
-				while($row = DB::fetch($query)) {
+				foreach(C::t(\'forum_thread\')->fetch_all_by_tid($_G[\'adv_vtp_tids\']) as $row) {
 					$_G[\'adv_vtp_thread\'][$row[\'tid\']] = $row;
 				}
 			}
@@ -129,9 +128,9 @@ class adv_threadlist {
 			$_G[\'adv_vtp_showed\'][] = $adid;
 			$vttid = $parameters[$adid][\'tid\'];
 			$notag = true;
-			$adcode = $adid ? (!$parameters[$adid][\'mode\'] ? \'<tbody><tr><td colspan=\'.($_G[\'forum\'][\'ismoderator\'] && !$_G[\'gp_archiveid\'] ? 6 : 5).\'>\'.$codes[$adid].\'</td></tr></tbody>\'
+			$adcode = $adid ? (!$parameters[$adid][\'mode\'] ? \'<tbody><tr><td colspan=\'.($_G[\'forum\'][\'ismoderator\'] && !$_GET[\'archiveid\'] ? 6 : 5).\'>\'.$codes[$adid].\'</td></tr></tbody>\'
 			: \'<tr><td class="icn"><a href="forum.php?mod=viewthread&tid=\'.$vt[$vttid][\'tid\'].\'" target="_blank"><img src="\'.$_G[\'style\'][\'imgdir\'].\'/folder_new.gif" /></a></td>\'.
-				($_G[\'forum\'][\'ismoderator\'] && !$_G[\'gp_archiveid\'] ? \'<td class="o"></td>\' : \'\').
+				($_G[\'forum\'][\'ismoderator\'] && !$_GET[\'archiveid\'] ? \'<td class="o"></td>\' : \'\').
 				\'<td class="new"><a href="\'.($parameters[$adid][\'threadurl\'] ? $parameters[$adid][\'threadurl\'] : \'forum.php?mod=viewthread&tid=\'.$vt[$vttid][\'tid\']).\'" class="xst">\'.$codes[$adid].\'</a></td>\'.
 				\'<td class="by"><cite><a href="home.php?mod=space&uid=\'.$vt[$vttid][\'authorid\'].\'">\'.$vt[$vttid][\'author\'].\'</a></cite><em>\'.dgmdate($vt[$vttid][\'dateline\'], \'d\').\'</em></td>\'.
 				\'<td class="num"><a href="forum.php?mod=viewthread&tid=\'.$vt[$vttid][\'tid\'].\'" class="xi2">\'.$vt[$vttid][\'replies\'].\'</a><em>\'.$vt[$vttid][\'views\'].\'</em></td>\'.

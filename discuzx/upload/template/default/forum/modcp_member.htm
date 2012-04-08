@@ -1,7 +1,7 @@
 <div class="bm bw0 mdcp">
 <!--{if $op == 'edit' || $op == 'ban'}-->
 	<h1 class="mt"><!--{if $op == 'edit'}-->{lang mod_member_edit}<!--{else}-->{lang mod_member_ban}<!--{/if}--></h1>
-	<form method="post" autocomplete="off" action="{$cpscript}?mod=modcp&action=$_G[gp_action]&op=$op">
+	<form method="post" autocomplete="off" action="{$cpscript}?mod=modcp&action=$_GET[action]&op=$op">
 		<input type="hidden" name="formhash" value="{FORMHASH}">
 		<div class="exfm">
 			<table cellspacing="0" cellpadding="0">
@@ -37,10 +37,10 @@
 <!--{/if}-->
 
 <!--{if $op == 'edit' && $member && !$error}-->
-	<form method="post" autocomplete="off" action="{$cpscript}?mod=modcp&action=$_G[gp_action]&op=$op" class="schresult">
+	<form method="post" autocomplete="off" action="{$cpscript}?mod=modcp&action=$_GET[action]&op=$op" class="schresult">
 		<input type="hidden" name="formhash" value="{FORMHASH}">
-		<input type="hidden" name="username" value="$_G['gp_username']">
-		<input type="hidden" name="uid" value="$_G['gp_uid']">
+		<input type="hidden" name="username" value="$_GET['username']">
+		<input type="hidden" name="uid" value="$_GET['uid']">
 		<table cellspacing="0" cellpadding="0" class="tfm">
 			<tr>
 				<th>&nbsp;</th>
@@ -74,10 +74,10 @@
 <!--{/if}-->
 
 <!--{if $op == 'ban' && $member && !$error}-->
-	<form method="post" autocomplete="off" action="{$cpscript}?mod=modcp&action=$_G[gp_action]&op=$op" class="schresult">
+	<form method="post" autocomplete="off" action="{$cpscript}?mod=modcp&action=$_GET[action]&op=$op" class="schresult">
 		<input type="hidden" name="formhash" value="{FORMHASH}">
-		<input type="hidden" name="username" value="$_G['gp_username']">
-		<input type="hidden" name="uid" value="$_G['gp_uid']">
+		<input type="hidden" name="username" value="$_GET['username']">
+		<input type="hidden" name="uid" value="$_GET['uid']">
 		<table cellspacing="0" cellpadding="0" class="tfm">
 			<tr>
 				<th>&nbsp;</th>
@@ -94,11 +94,60 @@
 					</table>
 				</td>
 			</tr>
+			<!--{if $clist}-->
+				<tr>
+					<th>{lang crime_record}</th>
+					<td style="padding-top: 0;">
+						<table cellspacing="0" cellpadding="0" class="dt">
+							<tr>
+								<td width="15%">{lang crime_action}</td>
+								<td width="15%">{lang crime_dateline}</td>
+								<td>{lang crime_reason}</td>
+								<td width="15%">{lang crime_operator}</td>
+							</tr>
+							<!--{loop $clist $crime}-->
+							<tbody id="$crime[cid]">
+								<tr>
+									<td>
+										<!--{if $crime[action] == 'crime_delpost'}-->
+										{lang crime_delpost}
+										<!--{elseif $crime[action] == 'crime_warnpost'}-->
+										{lang crime_warnpost}
+										<!--{elseif $crime[action] == 'crime_banpost'}-->
+										{lang crime_banpost}
+										<!--{elseif $crime[action] == 'crime_banspeak'}-->
+										{lang crime_banspeak}
+										<!--{elseif $crime[action] == 'crime_banvisit'}-->
+										{lang crime_banvisit}
+										<!--{elseif $crime[action] == 'crime_banstatus'}-->
+										{lang crime_banstatus}
+										<!--{elseif $crime[action] == 'crime_avatar'}-->
+										{lang crime_avatar}
+										<!--{elseif $crime[action] == 'crime_sightml'}-->
+										{lang crime_sightml}
+										<!--{elseif $crime[action] == 'crime_customstatus'}-->
+										{lang crime_customstatus}
+										<!--{/if}-->
+									</td>
+									<td>
+										<!--{date($crime[dateline])}-->
+									</td>
+									<td>$crime[reason]</td>
+									<td>
+										<a href="home.php?mod=space&uid=$crime[operatorid]" class="xi2">$crime[operator]</a>
+									</td>
+								</tr>
+							</tbody>
+							<!--{/loop}-->
+						</table>
+					</td>
+				</tr>
+			<!--{/if}-->
 			<tr>
 				<th>{lang changeto}:</th>
 				<td>
 					<!--{if $member[groupid] == 4 || $member[groupid] == 5}-->
-						<label for="bannew_0" class="lb"><input type="radio" name="bannew" id="bannew_0" value="0" checked="checked" class="pr" />{lang modcp_members_status_normal}</label> 
+						<label for="bannew_0" class="lb"><input type="radio" name="bannew" id="bannew_0" value="0" checked="checked" class="pr" />{lang modcp_members_status_normal}</label>
 					<!--{/if}-->
 					<!--{if $member[groupid] != 4 && $_G[group][allowbanuser]}--><label for="bannew_4" class="lb"><input type="radio" name="bannew" id="bannew_4" class="pr" value="4" {if $member[groupid] != 4 && $member[groupid] != 5}checked="checked"{/if} />{lang modcp_members_status_banpost}</label><!--{/if}-->
 					<!--{if $member[groupid] != 5 && $_G[group][allowbanvisituser]}--><label for="bannew_5" class="lb"><input type="radio" name="bannew" id="bannew_5" class="pr" value="5" {if $member[groupid] != 4 && $member[groupid] != 5 && !$_G[group][allowbanuser]}checked="checked"{/if} />{lang modcp_members_status_banvisit}</label><!--{/if}-->
@@ -129,7 +178,7 @@
 
 <!--{if $op == 'ipban'}-->
 	<h1 class="mt">{lang mod_option_member_ipban}</h1>
-	<form method="post" autocomplete="off" action="{$cpscript}?mod=modcp&action=$_G[gp_action]&op=$op">
+	<form method="post" autocomplete="off" action="{$cpscript}?mod=modcp&action=$_GET[action]&op=$op">
 		<input type="hidden" name="formhash" value="{FORMHASH}">
 		<div class="exfm">
 			<table cellspacing="0" cellpadding="0">

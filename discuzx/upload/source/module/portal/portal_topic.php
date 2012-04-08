@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portal_topic.php 18898 2010-12-08 05:23:26Z zhangguosheng $
+ *      $Id: portal_topic.php 27332 2012-01-16 09:24:24Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -19,13 +19,10 @@ if($_GET['diy']=='yes' && !$_G['group']['allowaddtopic'] && !$_G['group']['allow
 $topicid = $_GET['topicid'] ? intval($_GET['topicid']) : 0;
 
 if($topicid) {
-	$where = "topicid = '$topicid'";
+	$topic = C::t('portal_topic')->fetch($topicid);
 } elseif($_GET['topic']) {
-	$where = "name = '$_GET[topic]'";
-} else {
-	$where = '0';
+	$topic = C::t('portal_topic')->fetch_by_name($_GET['topic']);
 }
-$topic = DB::fetch_first('SELECT * FROM '.DB::table('portal_topic')." WHERE $where");
 
 if(empty($topic)) {
 	showmessage('topic_not_exist');
@@ -42,7 +39,7 @@ if($_GET['diy'] == 'yes' && $topic['uid'] != $_G['uid'] && !$_G['group']['allowm
 
 $topicid = intval($topic['topicid']);
 
-DB::query("UPDATE ".DB::table('portal_topic')." SET viewnum=viewnum+1 WHERE topicid='$topicid'");
+C::t('portal_topic')->increase($topicid, array('viewnum' => 1));
 
 $navtitle = $topic['title'];
 $metadescription = empty($topic['summary']) ? $topic['title'] : $topic['summary'];
@@ -54,17 +51,25 @@ $seccodecheck = $_G['group']['seccode'] ? $_G['setting']['seccodestatus'] & 4 : 
 $secqaacheck = $_G['group']['seccode'] ? $_G['setting']['secqaa']['status'] & 2 : 0;
 
 $file = 'portal/portal_topic_content:'.$topicid;
-include template('diy:'.$file, NULL, NULL, NULL, $topic['primaltplname']);
+$tpldirectory = '';
+$primaltplname = $topic['primaltplname'];
+if(strpos($primaltplname, ':') !== false) {
+	list($tpldirectory, $primaltplname) = explode(':', $primaltplname);
+}
+include template('diy:'.$file, NULL, $tpldirectory, NULL, $primaltplname);
 
 function portaltopicgetcomment($topcid, $limit = 20, $start = 0) {
+	global $_G;
 	$topcid = intval($topcid);
 	$limit = intval($limit);
 	$start = intval($start);
 	$data = array();
 	if($topcid) {
-		$query = DB::query("SELECT * FROM ".DB::table('portal_comment')." WHERE id='$topcid' AND idtype='topicid' ORDER BY dateline DESC LIMIT $start, $limit");
-		while($value = DB::fetch($query)) {
-			$data[$value['cid']] = $value;
+		$query = C::t('portal_comment')->fetch_all_by_id_idtype($topcid, 'topicid', 'dateline', 'DESC', $start, $limit);
+		foreach($query as $value) {
+			if($value['status'] == 0 || $value['uid'] == $_G['uid'] || $_G['adminid'] == 1) {
+				$data[$value['cid']] = $value;
+			}
 		}
 	}
 	return $data;

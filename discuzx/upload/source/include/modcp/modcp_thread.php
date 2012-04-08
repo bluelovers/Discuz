@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: modcp_thread.php 27049 2011-12-31 04:04:41Z chenmengshu $
+ *      $Id: modcp_thread.php 28845 2012-03-15 00:59:32Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_MODCP')) {
@@ -25,60 +25,58 @@ if($op == 'thread') {
 
 	$result = array();
 
-	foreach (array('threadoption', 'viewsless', 'viewsmore', 'repliesless', 'repliesmore', 'noreplydays') as $key) {
-		$_G['gp_'.$key] = isset($_G['gp_'.$key]) && is_numeric($_G['gp_'.$key]) ? intval($_G['gp_'.$key]) : '';
-		$result[$key] = $_G['gp_'.$key];
+	foreach (array('threadoption', 'viewsless', 'viewsmore', 'repliesless', 'repliesmore', 'noreplydays', 'typeid') as $key) {
+		$_GET[''.$key] = isset($_GET[''.$key]) && is_numeric($_GET[''.$key]) ? intval($_GET[''.$key]) : '';
+		$result[$key] = $_GET[''.$key];
 	}
 
 	foreach (array('starttime', 'endtime', 'keywords', 'users') as $key) {
-		$result[$key] = isset($_G['gp_'.$key]) ? dhtmlspecialchars($_G['gp_'.$key]) : '';
+		$result[$key] = isset($_GET[''.$key]) ? dhtmlspecialchars($_GET[''.$key]) : '';
 	}
 
 	if($_G['fid'] && $_G['forum']['ismoderator']) {
+
 		if($do == 'search' &&  submitcheck('submit', 1)) {
 
-			$sql = '';
-
-			if($_G['gp_threadoption'] > 0 && $_G['gp_threadoption'] < 255) {
-				$sql .= " AND special='$_G[gp_threadoption]'";
-			} elseif($_G['gp_threadoption'] == 999) {
-				$sql .= " AND digest in(1,2,3)";
-			} elseif($_G['gp_threadoption'] == 888) {
-				$sql .= " AND displayorder IN(1,2,3)";
+			$conditions = array();
+			if($_GET['threadoption'] > 0 && $_GET['threadoption'] < 255) {
+				$conditions['specialthread'] = 1;
+				$conditions['special'] = $_GET['threadoption'];
+			} elseif($_GET['threadoption'] == 999) {
+				$conditions['digest'] = array(1,2,3);
+			} elseif($_GET['threadoption'] == 888) {
+				$conditions['sticky'] = 1;
 			}
 
-			$sql .= $_G['gp_viewsless'] !== ''? " AND views<='$_G[gp_viewsless]'" : '';
-			$sql .= $_G['gp_viewsmore'] !== ''? " AND views>='$_G[gp_viewsmore]'" : '';
-			$sql .= $_G['gp_repliesless'] !== ''? " AND replies<='$_G[gp_repliesless]'" : '';
-			$sql .= $_G['gp_repliesmore'] !== ''? " AND replies>='$_G[gp_repliesmore]'" : '';
-			$sql .= $_G['gp_noreplydays'] !== ''? " AND lastpost<='$_G[timestamp]'-'$_G[gp_noreplydays]'*86400" : '';
-			$sql .= $_G['gp_starttime'] != '' ? " AND dateline>='".strtotime($_G['gp_starttime'])."'" : '';
-			$sql .= $_G['gp_endtime'] != '' ? " AND dateline<='".strtotime($_G['gp_endtime'])."'" : '';
 
-			if(trim($_G['gp_keywords'])) {
-				$sqlkeywords = '';
-				$or = '';
-				$keywords = explode(',', str_replace(' ', '', $_G['gp_keywords']));
-				for($i = 0; $i < count($keywords); $i++) {
-					$sqlkeywords .= " $or subject LIKE '%".$keywords[$i]."%'";
-					$or = 'OR';
-				}
-				$sql .= " AND ($sqlkeywords)";
+			$_GET['viewsless'] !== ''? $conditions['viewsless'] = $_GET['viewsless'] : '';
+			$_GET['viewsmore'] !== ''? $conditions['viewsmore'] = $_GET['viewsmore'] : '';
+			$_GET['repliesless'] !== ''? $conditions['repliesless'] = $_GET['repliesless'] : '';
+			$_GET['repliesmore'] !== ''? $conditions['repliesmore'] = $_GET['repliesmore'] : '';
+			$_GET['noreplydays'] !== ''? $conditions['noreplydays'] = $_GET['noreplydays'] : '';
+			$_GET['starttime'] != '' ? $conditions['starttime'] = $_GET['starttime'] : '';
+			$_GET['endtime'] != '' ? $conditions['endtime'] = $_GET['endtime'] : '';
 
-				$keywords = implode(', ', $keywords);
+			if(trim($_GET['keywords'])) {
+
+				$conditions['keywords'] = $_GET['keywords'];
 			}
 
-			if(trim($_G['gp_users'])) {
-				$sql .= " AND author IN ('".str_replace(',', '\',\'', str_replace(' ', '', trim($_G['gp_users'])))."')";
+			if(trim($_GET['users'])) {
+				$conditions['users'] = trim($_GET['users']);
 			}
 
-			if($sql) {
+			if($_GET['typeid']) {
+				$conditions['intype'] = $_GET['typeid'];
+			}
 
-				$query = DB::query("SELECT tid FROM ".DB::table('forum_thread')." WHERE fid='$_G[fid]' AND displayorder>='0' $sql ORDER BY displayorder DESC, lastpost DESC LIMIT 1000");
+			if(!empty($conditions)) {
+				$conditions['inforum'] = $_G['fid'];
+				if(!isset($conditions['sticky'])) $conditions['sticky'] = 0;
 				$tids = $comma = '';
 				$count = 0;
-				while($tid = DB::fetch($query)) {
-					$tids .= $comma.$tid['tid'];
+				foreach(C::t('forum_thread')->fetch_all_search($conditions, 0, 0, 1000, 'displayorder DESC, lastpost') as $thread) {
+					$tids .= $comma.$thread['tid'];
 					$comma = ',';
 					$count ++;
 				}
@@ -89,7 +87,6 @@ if($op == 'thread') {
 
 				$modsession->set('srchresult', $result, true);
 
-				DB::free_result($query);
 				unset($result, $tids);
 				$do = 'list';
 				$page = 1;
@@ -105,13 +102,13 @@ if($op == 'thread') {
 
 		if(empty($do)) {
 
-			$total = DB::result_first("SELECT count(*) FROM ".DB::table('forum_thread')." WHERE fid='$_G[fid]' AND displayorder>='0'");
+			$total = C::t('forum_thread')->count_by_fid_typeid_displayorder($_G['fid'], $_GET['typeid'], 0, '>=');
 			$tpage = ceil($total / $_G['tpp']);
 			$page = min($tpage, $page);
-			$multipage = multi($total, $_G['tpp'], $page, "$cpscript?mod=modcp&amp;action=$_G[gp_action]&amp;op=$op&amp;fid=$_G[fid]&amp;do=$do");
+			$multipage = multi($total, $_G['tpp'], $page, "$cpscript?mod=modcp&amp;action=$_GET[action]&amp;op=$op&amp;fid=$_G[fid]&amp;do=$do");
 			if($total) {
 				$start = ($page - 1) * $_G['tpp'];
-				$query = DB::query("SELECT * FROM ".DB::table('forum_thread')." WHERE fid='$_G[fid]' AND displayorder>='0' ORDER BY displayorder DESC, lastpost DESC LIMIT $start, $_G[tpp]");
+				$threads = C::t('forum_thread')->fetch_all_by_fid_typeid_displayorder($_G['fid'], $_GET['typeid'], 0, '>=', $start, $_G['tpp']);
 			}
 
 		} else {
@@ -123,18 +120,18 @@ if($op == 'thread') {
 				$total = $result['count'];
 				$tpage = ceil($total / $_G['tpp']);
 				$page = min($tpage, $page);
-				$multipage = multi($total, $_G['tpp'], $page, "$cpscript?mod=modcp&amp;action=$_G[gp_action]&amp;op=$op&amp;fid=$_G[fid]&amp;do=$do");
+				$multipage = multi($total, $_G['tpp'], $page, "$cpscript?mod=modcp&amp;action=$_GET[action]&amp;op=$op&amp;fid=$_G[fid]&amp;do=$do");
 				if($total) {
 					$start = ($page - 1) * $_G['tpp'];
-					$query = DB::query("SELECT * FROM ".DB::table('forum_thread')." WHERE tid in($result[tids]) ORDER BY lastpost DESC LIMIT $start, $_G[tpp]");
+					$threads = C::t('forum_thread')->fetch_all_by_tid_fid_displayorder(explode(',', $result['tids']), null, null, 'lastpost', $start, $_G['tpp']);
 				}
 			}
 		}
 
 		$postlist = array();
-		if($query) {
+		if(!empty($threads)) {
 			require_once libfile('function/misc');
-			while ($thread = DB::fetch($query)) {
+			foreach($threads as $thread) {
 				$postlist[] = procthread($thread);
 			}
 		}
@@ -149,29 +146,33 @@ if($op == 'post') {
 
 	$result = array();
 
-	$_G['gp_starttime'] = !preg_match("/^(0|\d{4}\-\d{1,2}\-\d{1,2})$/", getgpc('starttime')) ? dgmdate(TIMESTAMP - 86400 * ($_G['adminid'] == 2 ? 13 : ($_G['adminid'] == 3 ? 6 : 60)), 'Y-m-d') : getgpc('starttime');
-	$_G['gp_endtime'] = $_G['adminid'] == 3 || !preg_match("/^(0|\d{4}\-\d{1,2}\-\d{1,2})$/", getgpc('endtime')) ? dgmdate(TIMESTAMP, 'Y-m-d') : getgpc('endtime');
+	$_GET['starttime'] = !preg_match("/^(0|\d{4}\-\d{1,2}\-\d{1,2})$/", getgpc('starttime')) ? dgmdate(TIMESTAMP - 86400 * ($_G['adminid'] == 2 ? 13 : ($_G['adminid'] == 3 ? 6 : 60)), 'Y-m-d') : getgpc('starttime');
+	$_GET['endtime'] = $_G['adminid'] == 3 || !preg_match("/^(0|\d{4}\-\d{1,2}\-\d{1,2})$/", getgpc('endtime')) ? dgmdate(TIMESTAMP, 'Y-m-d') : getgpc('endtime');
 
 	foreach (array('threadoption', 'starttime', 'endtime', 'keywords', 'users', 'useip') as $key) {
-		$$key = isset($_G['gp_'.$key]) ? trim($_G['gp_'.$key]) : '';
+		$$key = isset($_GET[''.$key]) ? trim($_GET[''.$key]) : '';
 		$result[$key] = dhtmlspecialchars($$key);
 	}
 
 	$threadoptionselect = range(1, 3);
 
-	$posttableid = intval($_G['gp_posttableid']);
+	$posttableid = intval($_GET['posttableid']);
 	$posttableselect = getposttableselect();
 
 	$cachekey = 'srchresult_p_'.$posttableid.'_'.$_G['fid'];
 	$fidadd = '';
+	$fidaddarr = array();
 	if($_G['fid'] && $modforums['list'][$_G['fid']]) {
+		$fidaddarr = array($_G['fid']);
 		$fidadd = "AND fid='$_G[fid]'";
 	} else {
 		if($_G['adminid'] == 1 && $_G['adminid'] == $_G['groupid']) {
 			$fidadd = '';
 		} elseif(!$modforums['fids']) {
+			$fidaddarr = array(0);
 			$fidadd = 'AND 0 ';
 		} else {
+			$fidaddarr = explode(',', $modforums['fids']);
 			$fidadd = "AND fid in($modforums[fids])";
 		}
 	}
@@ -186,13 +187,14 @@ if($op == 'post') {
 		$pidsdelete = $tidsdelete = array();
 		$prune = array('forums' => array(), 'thread' => array());
 
-		if($pids = dimplode($_G['gp_delete'])) {
+		if($pids = dimplode($_GET['delete'])) {
 			$result = $modsession->get($cachekey);
 			$result['pids'] = explode(',', $result['pids']);
 			$keys = array_flip($result['pids']);
-
-			$query = DB::query('SELECT fid, tid, pid, first, authorid FROM '.DB::table(getposttable($posttableid)).' WHERE '."pid IN ($pids) $fidadd");
-			while($post = DB::fetch($query)) {
+			foreach(C::t('forum_post')->fetch_all($posttableid, $_GET['delete'], false) as $post) {
+				if($fidaddarr && !in_array($post['fid'], $fidaddarr)) {
+					continue;
+				}
 				$prune['forums'][$post['fid']] = $post['fid'];
 				$pidsdelete[$post['fid']][$post['pid']] = $post['pid'];
 				$pids_tids[$post['pid']] = $post['tid'];
@@ -213,18 +215,14 @@ if($op == 'post') {
 		if($pidsdelete) {
 			require_once libfile('function/post');
 			require_once libfile('function/delete');
-			$forums = array();
-			$query = DB::query('SELECT fid, recyclebin FROM '.DB::table('forum_forum')." WHERE fid IN (".dimplode($prune['forums']).")");
-			while($value = DB::fetch($query)) {
-				$forums[$value['fid']] = $value;
-			}
+			$forums = C::t('forum_forum')->fetch_all($prune['forums']);
 			foreach($pidsdelete as $fid => $pids) {
 				foreach($pids as $pid) {
 					if(!$tidsdelete[$pid]) {
 						$deletedposts = deletepost($pid, 'pid', !getgpc('nocredit'), $posttableid, $forums[$fid]['recyclebin']);
 						updatemodlog($pids_tids[$pid], 'DLP');
 					} else {
-						$deletedthreads = deletethread($tidsdelete[$pid], false, !getgpc('nocredit'), $forums[$fid]['recyclebin']);
+						$deletedthreads = deletethread(array($tidsdelete[$pid]), false, !getgpc('nocredit'), $forums[$fid]['recyclebin']);
 						updatemodlog($tidsdelete[$pid], 'DEL');
 					}
 				}
@@ -239,7 +237,7 @@ if($op == 'post') {
 					$repliesarray[$decrease][] = $tid;
 				}
 				foreach($repliesarray as $decrease => $tidarray) {
-					DB::query("UPDATE ".DB::table('forum_thread')." SET replies=replies-'$decrease' WHERE tid IN (".implode(',', $tidarray).")");
+					C::t('forum_thread')->increase($tidarray, array('replies'=>-$decrease));
 				}
 			}
 
@@ -250,6 +248,8 @@ if($op == 'post') {
 		}
 
 		$do = 'list';
+
+		showmessage('modcp_thread_delete_succeed', '', array(), array('break' => 1));
 	}
 
 	if($do == 'search' && submitcheck('searchsubmit', 1)) {
@@ -259,23 +259,21 @@ if($op == 'post') {
 			return ;
 		}
 
-		$sql = " AND invisible='0'";
+		$sql = '';
 
 		if($threadoption == 1) {
-			$sql .= " AND first='1'";
+			$first = 1;
 		} elseif($threadoption == 2) {
-			$sql .= " AND first='0'";
+			$first = 0;
 		}
 
 		if($starttime != '0') {
 			$starttime = strtotime($starttime);
-			$sql .= " AND dateline>'$starttime'";
 		}
 
 		if($_G['adminid'] == 1 && $endtime != dgmdate(TIMESTAMP, 'Y-m-d')) {
 			if($endtime != '0') {
 				$endtime = strtotime($endtime);
-				$sql .= " AND dateline<'$endtime'";
 			}
 		} else {
 			$endtime = TIMESTAMP;
@@ -287,46 +285,30 @@ if($op == 'post') {
 		}
 
 		if($users != '') {
-			$comma = '';
-			$uids = '';
-			$query = DB::query("SELECT uid FROM ".DB::table('common_member')." WHERE username IN ('".str_replace(',', '\',\'', str_replace(' ', '', $users))."')");
-			while($member = DB::fetch($query)) {
-				$uids .= $comma.$member['uid'];
-				$comma = ',';
-			}
-			if($uids != '') {
-				$sql .= " AND authorid IN ($uids)";
-			} else {
-				$sql .= ' AND 0';
+			$uids = C::t('common_member')->fetch_all_uid_by_username(array_map('trim', explode(',', $users)));
+			if(!$uids) {
+				$uids = array(0);
 			}
 		}
 
 		if(trim($keywords)) {
-			$sqlkeywords = '';
-			$or = '';
-			$keywords = explode(',', str_replace(' ', '', $keywords));
-			for($i = 0; $i < count($keywords); $i++) {
-				if(strlen($keywords[$i]) > 3) {
-					$sqlkeywords .= " $or message LIKE '%".$keywords[$i]."%'";
-					$or = 'OR';
-				} else {
+			foreach(explode(',', str_replace(' ', '', $keywords)) as $value) {
+				if(strlen($value) <= 3) {
 					$error = 3;
-					return ;
+					return;
 				}
 			}
-			$sql .= " AND ($sqlkeywords)";
 		}
 
 		$useip = trim($useip);
 		if($useip != '') {
-			$sql .= " AND useip LIKE '".str_replace('*', '%', $useip)."'";
+			$useip = str_replace('*', '%', $useip);
 		}
 
-		if($sql) {
+		if($uids || $keywords || $useip) {
 
-			$query = DB::query('SELECT pid FROM '.DB::table(getposttable($posttableid))." WHERE 1 $fidadd $sql ORDER BY dateline DESC LIMIT 1000");
 			$pids = array();
-			while($post = DB::fetch($query)) {
+			foreach(C::t('forum_post')->fetch_all_by_search($posttableid, null, $keywords, 0, $fidaddarr, $uids, null, $starttime, $endtime, $useip, $first, 0, 1000) as $post) {
 				$pids[] = $post['pid'];
 			}
 
@@ -359,18 +341,20 @@ if($op == 'post') {
 			$total = $result['count'];
 			$tpage = ceil($total / $_G['tpp']);
 			$page = min($tpage, $page);
-			$multipage = multi($total, $_G['tpp'], $page, "$cpscript?mod=modcp&amp;action=$_G[gp_action]&amp;op=$op&amp;fid=$_G[fid]&amp;do=$do");
+			$multipage = multi($total, $_G['tpp'], $page, "$cpscript?mod=modcp&amp;action=$_GET[action]&amp;op=$op&amp;fid=$_G[fid]&amp;do=$do");
 			if($total && $result['pids']) {
 				$start = ($page - 1) * $_G['tpp'];
-				$query = DB::query('SELECT p.*, t.subject as tsubject '.
-					'FROM '.DB::table(getposttable($result['posttableid']))." p LEFT JOIN ".DB::table('forum_thread')." t USING(tid) ".
-					"WHERE pid IN ($result[pids]) ".
-					'ORDER BY dateline DESC '.
-					"LIMIT $start, $_G[tpp]"
-					);
-				while($value = DB::fetch($query)) {
-					$postarray[] = $value;
+				$tids = array();
+				$postlist = C::t('forum_post')->fetch_all_by_pid($result['posttableid'], explode(',', $result['pids']), true, 'DESC', $start, $_G['tpp']);
+				foreach($postlist as $post) {
+					$tids[$post['tid']] = $post['tid'];
 				}
+				$threadlist = C::t('forum_thread')->fetch_all($tids);
+				foreach($postlist as $post) {
+					$post['tsubject'] = $threadlist[$post['tid']]['subject'];
+					$postarray[] = $post;
+				}
+				unset($threadlist, $postlist, $tids);
 			}
 		}
 	}

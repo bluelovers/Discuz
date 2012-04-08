@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_wall.php 16680 2010-09-13 03:01:08Z wangjinbo $
+ *      $Id: space_wall.php 24613 2011-09-28 05:07:03Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -25,13 +25,12 @@ $theurl = "home.php?mod=space&uid=$space[uid]&do=$do";
 $diymode = 1;
 
 $cid = empty($_GET['cid'])?0:intval($_GET['cid']);
-$csql = $cid?"cid='$cid' AND":'';
 
 $list = array();
-$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('home_comment')." WHERE $csql id='$space[uid]' AND idtype='uid'"),0);
+$count = C::t('home_comment')->count_by_id_idtype($space['uid'], 'uid', $cid);
 if($count) {
-	$query = DB::query("SELECT * FROM ".DB::table('home_comment')." WHERE $csql id='$space[uid]' AND idtype='uid' ORDER BY dateline DESC LIMIT $start,$perpage");
-	while ($value = DB::fetch($query)) {
+	$query = C::t('home_comment')->fetch_all_by_id_idtype($space['uid'], 'uid', $start, $perpage, $cid);
+	foreach($query as $value) {
 		$list[] = $value;
 	}
 }

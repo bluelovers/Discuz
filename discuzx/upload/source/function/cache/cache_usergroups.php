@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_usergroups.php 19929 2011-01-24 09:41:05Z monkey $
+ *      $Id: cache_usergroups.php 29056 2012-03-23 09:27:47Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -14,11 +14,11 @@ if(!defined('IN_DISCUZ')) {
 function build_cache_usergroups() {
 	global $_G;
 
-	$data = array();
-	$query = DB::query("SELECT u.groupid, u.type, u.grouptitle, u.creditshigher, u.creditslower, u.stars, u.color, u.icon, uf.readaccess, u.system, uf.allowgetattach, uf.allowgetimage, uf.allowmediacode FROM ".DB::table('common_usergroup')." u
-		LEFT JOIN ".DB::table('common_usergroup_field')." uf ON u.groupid=uf.groupid ORDER BY u.creditslower");
 
-	while($group = DB::fetch($query)) {
+	$data_uf = C::t('common_usergroup_field')->fetch_all_fields(null, array('groupid', 'readaccess', 'allowgetattach', 'allowgetimage', 'allowmediacode', 'maxsigsize'));
+
+	foreach(C::t('common_usergroup')->range_orderby_creditshigher() as $key=>$value) {
+		$group = array_merge(array('groupid' => $value['groupid'], 'type' => $value['type'], 'grouptitle' => $value['grouptitle'], 'creditshigher' => $value['creditshigher'], 'creditslower' => $value['creditslower'], 'stars' => $value['stars'], 'color' => $value['color'], 'icon' => $value['icon'], 'system' => $value['system']), $data_uf[$key]);
 		if($group['type'] == 'special') {
 			if($group['system'] != 'private') {
 				list($dailyprice) = explode("\t", $group['system']);
@@ -43,24 +43,23 @@ function build_cache_usergroups() {
 		unset($group['groupid']);
 		$data[$groupid] = $group;
 	}
-	save_syscache('usergroups', $data);
+	savecache('usergroups', $data);
 
 	build_cache_usergroups_single();
 
-	$query = DB::query("SELECT * FROM ".DB::table('common_admingroup'));
-	while($data = DB::fetch($query)) {
-		save_syscache('admingroup_'.$data['admingid'], $data);
+	foreach(C::t('common_admingroup')->range() as $data) {
+		savecache('admingroup_'.$data['admingid'], $data);
 	}
 }
 
 function build_cache_usergroups_single() {
 	$pluginvalue = pluginsettingvalue('groups');
-	$allowthreadplugin = unserialize(DB::result_first("SELECT svalue FROM ".DB::table('common_setting')." WHERE skey='allowthreadplugin'"));
+	$allowthreadplugin = C::t('common_setting')->fetch('allowthreadplugin', true);
 
-	$query = DB::query("SELECT * FROM ".DB::table('common_usergroup')." u
-		LEFT JOIN ".DB::table('common_usergroup_field')." uf ON u.groupid=uf.groupid
-		LEFT JOIN ".DB::table('common_admingroup')." a ON u.groupid=a.admingid");
-	while($data = DB::fetch($query)) {
+	$data_uf = C::t('common_usergroup_field')->range();
+	$data_ag = C::t('common_admingroup')->range();
+	foreach(C::t('common_usergroup')->range() as $gid => $data) {
+		$data = array_merge($data, (array)$data_uf[$gid], (array)$data_ag[$gid]);
 		$ratearray = array();
 		if($data['raterange']) {
 			foreach(explode("\n", $data['raterange']) as $rating) {
@@ -78,6 +77,6 @@ function build_cache_usergroups_single() {
 		$data['allowthreadplugin'] = !empty($allowthreadplugin[$data['groupid']]) ? $allowthreadplugin[$data['groupid']] : array();
 		$data['plugin'] = $pluginvalue[$data['groupid']];
 		unset($data['type'], $data['system'], $data['creditshigher'], $data['creditslower'], $data['groupavatar'], $data['admingid']);
-		save_syscache('usergroup_'.$data['groupid'], $data);
+		savecache('usergroup_'.$data['groupid'], $data);
 	}
 }

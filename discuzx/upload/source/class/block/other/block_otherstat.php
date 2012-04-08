@@ -4,14 +4,14 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: block_otherstat.php 19210 2010-12-22 05:14:18Z zhangguosheng $
+ *      $Id: block_otherstat.php 25525 2011-11-14 04:39:11Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
-class block_otherstat {
+class block_otherstat extends discuz_block {
 
 	function block_otherstat() {}
 
@@ -151,6 +151,7 @@ class block_otherstat {
 
 	function getdata($style, $parameter) {
 		global $_G;
+		$parameter = $this->cookparameter($parameter);
 		$fields = array(
 			'posts' => 0,
 			'posts_title' => !empty($parameter['posts_title']) ? $parameter['posts_title'] : lang('block/stat', 'stat_posts'),
@@ -208,7 +209,7 @@ class block_otherstat {
 			$fields['bbslastposts'] = intval($postdata[0]);
 		}
 		if(in_array('onlinemembers', $parameter['option'])) {
-			$num = !empty($_G['cookie']['onlineusernum']) ? intval($_G['cookie']['onlineusernum']) : DB::result_first("SELECT count(*) FROM ".DB::table('common_session'));
+			$num = !empty($_G['cookie']['onlineusernum']) ? intval($_G['cookie']['onlineusernum']) : C::app()->session->count();
 			$fields['onlinemembers'] = intval($num);
 		}
 		if(in_array('maxmembers', $parameter['option'])) {
@@ -217,23 +218,23 @@ class block_otherstat {
 			$fields['maxmembers'] = !empty($onlineinfo[0]) ? intval($onlineinfo[0]) : 0;
 		}
 		if(in_array('doings', $parameter['option'])) {
-			$num = DB::result_first('SELECT COUNT(*) FROM '.DB::table('home_doing'));
+			$num = C::t('home_doing')->count();
 			$fields['doings'] = intval($num);
 		}
 		if(in_array('blogs', $parameter['option'])) {
-			$num = DB::result_first('SELECT COUNT(*) FROM '.DB::table('home_blog'));
+			$num = C::t('home_blog')->count();
 			$fields['blogs'] = intval($num);
 		}
 		if(in_array('albums', $parameter['option'])) {
-			$num = DB::result_first('SELECT COUNT(*) FROM '.DB::table('home_album'));
+			$num = C::t('home_album')->count();
 			$fields['albums'] = intval($num);
 		}
 		if(in_array('pics', $parameter['option'])) {
-			$num = DB::result_first('SELECT COUNT(*) FROM '.DB::table('home_pic'));
+			$num = C::t('home_pic')->count();
 			$fields['pics'] = intval($num);
 		}
 		if(in_array('shares', $parameter['option'])) {
-			$num = DB::result_first('SELECT COUNT(*) FROM '.DB::table('home_share'));
+			$num = C::t('home_share')->count();
 			$fields['shares'] = intval($num);
 		}
 		$list = array();

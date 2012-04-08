@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_portalcategory.php 17789 2010-11-02 05:20:11Z zhangguosheng $
+ *      $Id: cache_portalcategory.php 24948 2011-10-18 03:21:06Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -14,13 +14,7 @@ if(!defined('IN_DISCUZ')) {
 function build_cache_portalcategory() {
 	global $_G;
 
-	$data = array();
-	$query = DB::query("SELECT * FROM ".DB::table('portal_category')." ORDER BY displayorder,catid");
-
-	while($value = DB::fetch($query)) {
-		$value['catname'] = dhtmlspecialchars($value['catname']);
-		$data[$value['catid']] = $value;
-	}
+	$data = C::t('portal_category')->range();
 	foreach($data as $key => $value) {
 		$upid = $value['upid'];
 		$data[$key]['level'] = 0;
@@ -79,18 +73,18 @@ function build_cache_portalcategory() {
 		$data[$key]['caturl'] = $url;
 
 		if($data[$key]['shownav']) {
-			$rs = DB::update('common_nav', array('url' => addslashes($url), 'name' =>addslashes($value['catname'])), array('type' => '4','identifier' => $key));
+			$rs = C::t('common_nav')->update_by_type_identifier(4, $key, array('url' => addslashes($url), 'name' =>$value['catname']));
 		}
 	}
 
-	save_syscache('portalcategory', $data);
+	savecache('portalcategory', $data);
 
 	if(!function_exists('get_cachedata_mainnav')) {
 		include_once libfile('cache/setting','function');
 	}
 	$data = $_G['setting'];
 	list($data['navs'], $data['subnavs'], $data['menunavs'], $data['navmns'], $data['navmn'], $data['navdms']) = get_cachedata_mainnav();
-	save_syscache('setting', $data);
+	savecache('setting', $data);
 }
 
 ?>

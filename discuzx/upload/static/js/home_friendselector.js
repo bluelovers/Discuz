@@ -1,8 +1,8 @@
 /*
-	[Discuz!] (C)2001-2009 Comsenz Inc.
+	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: home_friendselector.js 22000 2011-04-19 14:35:46Z svn_project_zhangjie $
+	$Id: home_friendselector.js 26733 2011-12-21 07:18:01Z zhengqingpeng $
 */
 
 (function() {
@@ -18,6 +18,7 @@
 		this.selectNumber = 0;
 		this.maxSelectNumber = isUndefined(parameter['maxSelectNumber']) ? 0 : parseInt(parameter['maxSelectNumber']);
 		this.allNumber = 0;
+		this.notInDataSourceNumber = 0;
 		this.handleKey = isUndefined(parameter['handleKey']) ? 'this' : parameter['handleKey'];
 		this.selectTabId = isUndefined(parameter['selectTabId']) ? 'selectTabId' : parameter['selectTabId'];
 		this.unSelectTabId = isUndefined(parameter['unSelectTabId']) ? 'unSelectTabId' : parameter['unSelectTabId'];
@@ -246,8 +247,9 @@
 			filtrate = isUndefined(filtrate) ? 0 : filtrate;
 			form = isUndefined(form) ? 0 : form;
 			var liObj = document.createElement("li");
-			var username = this.dataSource[uid]['username'];
-			liObj.userid = this.dataSource[uid]['uid'];
+			var appendUserData = this.dataSource[uid] || this.selectUser[uid];
+			var username = appendUserData['username'];
+			liObj.userid = appendUserData['uid'];
 			if(typeof this.selectUser[uid] != 'undefined') {
 				liObj.className = "a";
 			}
@@ -256,17 +258,17 @@
 				username = username.replace(reg , "<strong>$1</strong>");
 			}
 			if(this.showType == 1) {
-				liObj.innerHTML = '<a href="javascript:;" id="' + liObj.userid + '" onclick="' + this.handleKey + '.select(this.id)" class="cl"><span class="avt brs" style="background-image: url(' + this.dataSource[uid]['avatar'] + ');"><span></span></span><span class="d">' + username + '</span></a>';
+				liObj.innerHTML = '<a href="javascript:;" id="' + liObj.userid + '" onclick="' + this.handleKey + '.select(this.id)" class="cl"><span class="avt brs" style="background-image: url(' + appendUserData['avatar'] + ');"><span></span></span><span class="d">' + username + '</span></a>';
 			} else if(this.showType == 2) {
-				if(this.dataSource[uid]['new'] && typeof this.newPMUser[uid] == 'undefined') {
+				if(appendUserData['new'] && typeof this.newPMUser[uid] == 'undefined') {
 					this.newPMUser[uid] = uid;
 				}
 				liObj.className = this.interlaced ? 'alt' : '';
-				liObj.innerHTML = '<div id="avt_' + liObj.userid + '" class="avt"><a href="home.php?mod=spacecp&ac=pm&op=showmsg&handlekey=showmsg_' + liObj.userid + '&touid=' + liObj.userid + '&pmid='+this.dataSource[uid]['pmid']+'&daterange='+this.dataSource[uid]['daterange']+'" title="'+username+'" id="avatarmsg_' + liObj.userid + '" onclick="'+this.handleKey+'.delNewFlag(' + liObj.userid + ');showWindow(\'showMsgBox\', this.href, \'get\', 0);"><img src="' + this.dataSource[uid]['avatar'] + '" alt="'+username+'" /></a></div><p><a class="xg1" href="home.php?mod=spacecp&ac=pm&op=showmsg&handlekey=showmsg_' + liObj.userid + '&touid=' + liObj.userid + '&pmid='+this.dataSource[uid]['pmid']+'&daterange='+this.dataSource[uid]['daterange']+'" title="'+username+'" id="usernamemsg_' + liObj.userid + '" onclick="'+this.handleKey+'.delNewFlag(' + liObj.userid + ');showWindow(\'showMsgBox\', this.href, \'get\', 0);">'+username+'</a></p>';
+				liObj.innerHTML = '<div id="avt_' + liObj.userid + '" class="avt"><a href="home.php?mod=spacecp&ac=pm&op=showmsg&handlekey=showmsg_' + liObj.userid + '&touid=' + liObj.userid + '&pmid='+appendUserData['pmid']+'&daterange='+appendUserData['daterange']+'" title="'+username+'" id="avatarmsg_' + liObj.userid + '" onclick="'+this.handleKey+'.delNewFlag(' + liObj.userid + ');showWindow(\'showMsgBox\', this.href, \'get\', 0);"><img src="' + appendUserData['avatar'] + '" alt="'+username+'" /></a></div><p><a class="xg1" href="home.php?mod=spacecp&ac=pm&op=showmsg&handlekey=showmsg_' + liObj.userid + '&touid=' + liObj.userid + '&pmid='+appendUserData['pmid']+'&daterange='+appendUserData['daterange']+'" title="'+username+'" id="usernamemsg_' + liObj.userid + '" onclick="'+this.handleKey+'.delNewFlag(' + liObj.userid + ');showWindow(\'showMsgBox\', this.href, \'get\', 0);">'+username+'</a></p>';
 			} else {
 				if(form) {
 					var checkstate = typeof this.selectUser[uid] == 'undefined' ? '' : ' checked="checked" ';
-					liObj.innerHTML = '<label><input type="checkbox" name="selUsers[]" id="chk'+uid+'" value="'+ this.dataSource[uid]['username'] +'" onclick="if(this.checked) {' + this.handleKey + '.selectUserName(this.value);} else {' + this.handleKey + '.delSelUser(\'uid'+uid+'\');}" '+checkstate+' class="pc" /> <span class="xi2">' + username + '</span></label>';
+					liObj.innerHTML = '<label><input type="checkbox" name="selUsers[]" id="chk'+uid+'" value="'+ appendUserData['username'] +'" onclick="if(this.checked) {' + this.handleKey + '.selectUserName(this.value);} else {' + this.handleKey + '.delSelUser(\'uid'+uid+'\');}" '+checkstate+' class="pc" /> <span class="xi2">' + username + '</span></label>';
 					this.selBoxObj.appendChild(liObj);
 					return true;
 				} else {
@@ -324,10 +326,16 @@
 				$(this.selectTabId).innerHTML = this.selectNumber;
 			}
 			if($(this.unSelectTabId) != null && typeof $(this.unSelectTabId) != 'undefined') {
-				$(this.unSelectTabId).innerHTML = this.allNumber - this.selectNumber;
+				this.notInDataSourceNumber = 0;
+				for(var i in this.selectUser) {
+					if(typeof this.dataSource[i] == 'undefined') {
+						this.notInDataSourceNumber++;
+					}
+				}
+				$(this.unSelectTabId).innerHTML = this.allNumber + this.notInDataSourceNumber - this.selectNumber;
 			}
 			if($(this.maxSelectTabId) != null && this.maxSelectNumber && typeof $(this.maxSelectTabId) != 'undefined') {
-				$(this.maxSelectTabId).innerHTML = this.maxSelectNumber -this.selectNumber;
+				$(this.maxSelectTabId).innerHTML = this.maxSelectNumber - this.selectNumber;
 			}
 
 		},

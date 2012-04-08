@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: config_global_default.php 23921 2011-08-16 09:18:28Z cnteacher $
+ *      $Id: config_global_default.php 27685 2012-02-09 09:10:16Z zhangguosheng $
  */
 
 $_config = array();
@@ -27,13 +27,13 @@ $_config = array();
  * ...
  *
  */
-$_config['db'][1]['dbhost']  		= 'localhost';		
-$_config['db'][1]['dbuser']  		= 'root';		
-$_config['db'][1]['dbpw'] 	 	= 'root';		
-$_config['db'][1]['dbcharset'] 		= 'utf8';		
-$_config['db'][1]['pconnect'] 		= 0;			
-$_config['db'][1]['dbname']  		= 'ultrax';		
-$_config['db'][1]['tablepre'] 		= 'pre_';		
+$_config['db'][1]['dbhost']  		= 'localhost';
+$_config['db'][1]['dbuser']  		= 'root';
+$_config['db'][1]['dbpw'] 	 	= 'root';
+$_config['db'][1]['dbcharset'] 		= 'utf8';
+$_config['db'][1]['pconnect'] 		= 0;
+$_config['db'][1]['dbname']  		= 'ultrax';
+$_config['db'][1]['tablepre'] 		= 'pre_';
 
 /**
  * 數據庫從服務器設置( slave, 只讀 ), 支持多組服務器設置, 當設置多組服務器時, 系統每次隨機使用
@@ -48,7 +48,7 @@ $_config['db'][1]['tablepre'] 		= 'pre_';
  *
  * $_config['db']['slave']['2']['dbhost'] = 'localhost';
  * ...
- * 
+ *
  */
 $_config['db']['slave'] = array();
 
@@ -87,28 +87,43 @@ $_config['db']['common']['slave_except_table'] = '';
 //內存變量前綴, 可更改,避免同服務器中的程序引用錯亂
 $_config['memory']['prefix'] = 'discuz_';
 
-$_config['memory']['eaccelerator'] = 1;					// 啟動對 eaccelerator 的支持
-$_config['memory']['apc'] = 1;							// 啟動對 apc 的支持
-$_config['memory']['xcache'] = 1;						// 啟動對 xcache 的支持
+/* reids設置, 需要PHP擴展組件支持, timeout參數的作用沒有查證 */
+$_config['memory']['redis']['server'] = '';
+$_config['memory']['redis']['port'] = 6379;
+$_config['memory']['redis']['pconnect'] = 1;
+$_config['memory']['redis']['timeout'] = 0;
+/**
+ * 是否使用 Redis::SERIALIZER_IGBINARY選項,需要igbinary支持,windows下測試時請關閉，否則會出>現錯誤Reading from client: Connection reset by peer
+ * 支持以下選項，默認使用PHP的serializer
+ * [重要] 該選項已經取代原來的 $_config['memory']['redis']['igbinary'] 選項
+ * Redis::SERIALIZER_IGBINARY =2
+ * Redis::SERIALIZER_PHP =1
+ * Redis::SERIALIZER_NONE =0 //則不使用serialize,即無法保存array
+ */
+$_config['memory']['redis']['serializer'] = 1;
+
 $_config['memory']['memcache']['server'] = '';			// memcache 服務器地址
 $_config['memory']['memcache']['port'] = 11211;			// memcache 服務器端口
 $_config['memory']['memcache']['pconnect'] = 1;			// memcache 是否長久連接
 $_config['memory']['memcache']['timeout'] = 1;			// memcache 服務器連接超時
 
+$_config['memory']['apc'] = 1;							// 啟動對 apc 的支持
+$_config['memory']['xcache'] = 1;						// 啟動對 xcache 的支持
+$_config['memory']['eaccelerator'] = 1;					// 啟動對 eaccelerator 的支持
 // 服務器相關設置
 $_config['server']['id']		= 1;			// 服務器編號，多webserver的時候，用於標識當前服務器的ID
 
 // 附件下載相關
-// 
+//
 // 本地文件讀取模式; 模式2為最節省內存方式，但不支持多線程下載
 // 1=fread 2=readfile 3=fpassthru 4=fpassthru+multiple
-$_config['download']['readmod'] = 2;				
+$_config['download']['readmod'] = 2;
 
 // 是否啟用 X-Sendfile 功能（需要服務器支持）0=close 1=nginx 2=lighttpd 3=apache
 $_config['download']['xsendfile']['type'] = 0;
 
 // 啟用 nginx X-sendfile 時，論壇附件目錄的虛擬映射路徑，請使用 / 結尾
-$_config['download']['xsendfile']['dir'] = '/down/';		
+$_config['download']['xsendfile']['dir'] = '/down/';
 
 //  CONFIG CACHE
 $_config['cache']['type'] 			= 'sql';	// 緩存類型 file=文件緩存, sql=數據庫緩存
@@ -163,5 +178,8 @@ $_config['remote']['appkey'] = md5($_config['security']['authkey']);
 
 // 遠程調用: 開啟外部 cron 任務. 系統內部不再執行cron, cron任務由外部程序激活
 $_config['remote']['cron'] = 0;
+
+// $_GET|$_POST的兼容處理，0為關閉，1為開啟；開啟後即可使用$_G['gp_xx'](xx為變量名，$_GET和$_POST集合的所有變量名)，值為已經addslashes()處理過
+$_config['input']['compatible'] = 1;
 
 ?>

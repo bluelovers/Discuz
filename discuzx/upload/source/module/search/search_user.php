@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: search_my.php 12937 2010-07-16 08:45:13Z zhouguoqiang $
+ *      $Id: search_user.php 25889 2011-11-24 09:52:20Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -25,8 +25,8 @@ if($_G['setting']['domain']['app']['home'] || $_G['setting']['domain']['app']['d
 	$url = 'http://'.$domain.$port.'/';
 }
 $url .= 'home.php?mod=spacecp&ac=search';
-if($_G['gp_srchtxt']) {
-	$url .= '&username='.$_G['gp_srchtxt'].'&searchsubmit=yes';
+if($_GET['srchtxt']) {
+	$url .= '&username='.$_GET['srchtxt'].'&searchsubmit=yes';
 }
 
 dheader('Location: '.$url);

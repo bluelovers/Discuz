@@ -4,8 +4,12 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_misc.php 20740 2011-03-02 09:55:01Z liulanbo $
+ *      $Id: lang_misc.php 29327 2012-04-01 09:37:17Z liudongdong $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 $lang = array
 (
@@ -25,7 +29,7 @@ $lang = array
 	'post_single_banned' => '**** 該帖被屏蔽 ****',
 	'message_ishidden_hiddenreplies' => '此帖僅作者可見',
 	'post_reply_quote' => '{author} 發表於 {time}',
-	'post_edit' => '[i=s] 本帖最後由 {editor} 於 {edittime} 編輯 [/i]\n\n',
+	'post_edit' => "[i=s] 本帖最後由 {editor} 於 {edittime} 編輯 [/i]\n\n",
 	'post_edit_regexp' => '/^\[i=s\] 本帖最後由 .*? 於 .*? 編輯 \[\/i\]\n\n/s',
 	'post_edithtml' => '[i=s] 本帖最後由 {editor} 於 {edittime} 編輯 [/i]<br /><br />',
 	'post_edithtml_regexp' => '/^\[i=s\] 本帖最後由 .*? 於 .*? 編輯 \[\/i\]&lt;br \/&gt;&lt;br \/&gt;/s',
@@ -57,7 +61,6 @@ $lang = array
 	'post_trade_pm_buynum' => '購買數量',
 	'post_trade_pm_wishprice' => '我期望的價格是',
 	'post_trade_pm_reason' => '我議價的理由是',
-	'post_deleted' => '無效樓層，該帖已經被刪除',
 	'postappend_content' => '補充內容',
 	'payment_unit' => '元',
 
@@ -113,6 +116,8 @@ $lang = array
 	'credit_payment' => '積分充值',
 	'credit_forum_payment' => '論壇積分充值',
 	'credit_forum_royalty' => '交易手續費',
+
+	'credit_total' => '總積分',
 
 	'invite_payment' => '購買邀請碼',
 	'invite_forum_payment' => '購買邀請碼',
@@ -264,6 +269,11 @@ $lang = array
 	'perms_allowstat' => '允許查看趨勢統計',
 	'perms_allowpostarticle' => '發表文章',
 	'perms_raterange' => '允許參與評分',
+	'perms_allowcommentpost' => '允許參與點評',
+	'perms_allowat' => '允許 @ 的人數',
+	'perms_allowreplycredit' => '允許設置回帖獎勵',
+	'perms_allowposttag' => '允許使用標籤',
+	'perms_allowcreatecollection' => '允許創建淘專輯的數量',
 	'perms_allowsendpm' => '允許發短消息',
 	'perms_maximagesize' => '單張圖片最大尺寸',
 	'perms_allowmediacode' => '允許使用多媒體代碼',
@@ -274,11 +284,41 @@ $lang = array
 	'join_reward' => '參與懸賞',
 	'join_activity' => '參與活動',
 	'join_debate' => '參與辯論',
+	'at_invite' => '@我的好友',
 
 	'lower' => '低於',
 	'higher' => '高於',
 	'report_msg_your' => '您的 ',
 	'report_noreward' => '不獎懲',
+	'activity_viewimg' => '點擊查看',
+
+	'crime_postreason' => '{reason} &nbsp; <a href="forum.php?mod=redirect&goto=findpost&pid={pid}&ptid={tid}" target="_blank" class="xi2">查看詳情</a>',
+	'crime_reason' => '{reason}',
+
+	'connectguest_message_search' => array('尚未登錄', '先登錄'),
+	'connectguest_message_replace' => array('尚未 <a href="member.php?mod=connect" class="xi2">完善帳號信息</a> 或 <a href="member.php?mod=connect&ac=bind" class="xi2">綁定已有帳號</a> ', '先 <a href="member.php?mod=connect" class="xi2">完善帳號信息</a> 或 <a href="member.php?mod=connect&ac=bind" class="xi2">綁定已有帳號</a> '),
+	'connectguest_message_mobile_search' => array('尚未登錄', '先登錄'),
+	'connectguest_message_mobile_replace' => '在電腦版完善資料或綁定已有帳號，',
+
+	'avatar' => '頭像',
+	'signature' => '簽名',
+	'custom_title' => '自定義頭銜',
+
+	'forum_guide' => '導讀',
+
+	'patch_site_have' => '您的網站有',
+	'patch_is_fixed' => '個安全漏洞，已修復',
+	'patch_need_fix' => '個安全漏洞，請盡快修復',
+	'patch_fixed_status' => '已修復',
+	'patch_unfix_status' => '未修復',
+	'patch_fix_failed_status' => '修復失敗',
+	'patch_fix_right_now' => '立即修復',
+	'patch_view_fix_detail' => '查看詳情',
+	'patch_name' => '漏洞名稱',
+	'patch_dateline' => '發佈日期',
+	'patch_status' => '當前狀態',
+	'patch_close' => '關閉',
+
 );
 
 ?>

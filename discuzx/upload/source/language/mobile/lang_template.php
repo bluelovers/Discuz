@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_template.php 22880 2011-05-30 01:23:41Z congyushuai $
+ *      $Id: lang_template.php 28113 2012-02-22 09:25:55Z svn_project_zhangjie $
  *
  *      This file is automatically generate
  */
@@ -92,7 +92,6 @@ $lang = array (
   'user_mobile_pm_comment' => '短消息發出後將跳回上一頁',
   'reset' => '重填',
   'reg_username' => '用戶名必須為大於3位小於15位',
-  'viewimg' => '查看圖片',
 );
 
 ?>

@@ -1,14 +1,15 @@
 /*
-	[Discuz!] (C)2001-2009 Comsenz Inc.
+	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: calendar.js 21580 2011-04-01 02:22:19Z svn_project_zhangjie $
+	$Id: calendar.js 27363 2012-01-18 08:46:14Z monkey $
 */
 
 var controlid = null;
 var currdate = null;
 var startdate = null;
 var enddate  = null;
+var halfhour = false;
 var yy = null;
 var mm = null;
 var hh = null;
@@ -23,7 +24,7 @@ function loadcalendar() {
 	s = '';
 	s += '<div id="calendar" style="display:none; position:absolute; z-index:100000;" onclick="doane(event)">';
 	s += '<div style="width: 210px;"><table cellspacing="0" cellpadding="0" width="100%" style="text-align: center;">';
-	s += '<tr align="center" id="calendar_week"><td><a href="javascript:;" onclick="refreshcalendar(yy, mm-1)" title="上一月">&laquo;</a></td><td colspan="5" style="text-align: center"><a href="javascript:;" onclick="showdiv(\'year\');doane(event)" class="dropmenu" title="點擊選擇年份" id="year"></a>&nbsp; - &nbsp;<a id="month" class="dropmenu" title="點擊選擇月份" href="javascript:;" onclick="showdiv(\'month\');doane(event)"></a></td><td><A href="javascript:;" onclick="refreshcalendar(yy, mm+1)" title="下一月">&raquo;</A></td></tr>';
+	s += '<tr align="center" id="calendar_week"><td onclick="refreshcalendar(yy, mm-1)" title="上一月" style="cursor: pointer;"><a href="javascript:;">&laquo;</a></td><td colspan="5" style="text-align: center"><a href="javascript:;" onclick="showdiv(\'year\');doane(event)" class="dropmenu" title="點擊選擇年份" id="year"></a>&nbsp; - &nbsp;<a id="month" class="dropmenu" title="點擊選擇月份" href="javascript:;" onclick="showdiv(\'month\');doane(event)"></a></td><td onclick="refreshcalendar(yy, mm+1)" title="下一月" style="cursor: pointer;"><a href="javascript:;">&raquo;</a></td></tr>';
 	s += '<tr id="calendar_header"><td>日</td><td>一</td><td>二</td><td>三</td><td>四</td><td>五</td><td>六</td></tr>';
 	for(var i = 0; i < 6; i++) {
 		s += '<tr>';
@@ -31,7 +32,10 @@ function loadcalendar() {
 			s += "<td id=d" + (i * 7 + j) + " height=\"19\">0</td>";
 		s += "</tr>";
 	}
-	s += '<tr id="hourminute" class="pns"><td colspan="4" align="left"><input type="text" size="1" value="" id="hour" class="px vm" onKeyUp=\'this.value=this.value > 23 ? 23 : zerofill(this.value);controlid.value=controlid.value.replace(/\\d+(\:\\d+)/ig, this.value+"$1")\'> 點 <input type="text" size="1" value="" id="minute" class="px vm" onKeyUp=\'this.value=this.value > 59 ? 59 : zerofill(this.value);controlid.value=controlid.value.replace(/(\\d+\:)\\d+/ig, "$1"+this.value)\'> 分</td><td align="right" colspan="3"><button class="pn" onclick="confirmcalendar();"><em>確定</em></button></td></tr>';
+	s += '<tr id="hourminute" class="pns"><td colspan="4" align="left"><input type="text" size="1" value="" id="hour" class="px vm" onKeyUp=\'this.value=this.value > 23 ? 23 : zerofill(this.value);controlid.value=controlid.value.replace(/\\d+(\:\\d+)/ig, this.value+"$1")\'>點';
+	s += '<span id="fullhourselector"><input type="text" size="1" value="" id="minute" class="px vm" onKeyUp=\'this.value=this.value > 59 ? 59 : zerofill(this.value);controlid.value=controlid.value.replace(/(\\d+\:)\\d+/ig, "$1"+this.value)\'>分</span>';
+	s += '<span id="halfhourselector"><select id="minutehalfhourly" onchange=\'this.value=this.value > 59 ? 59 : zerofill(this.value);controlid.value=controlid.value.replace(/(\\d+\:)\\d+/ig, "$1"+this.value)\'><option value="00">00</option><option value="30">30</option></select>分</span>';
+	s += '</td><td align="right" colspan="3"><button class="pn" onclick="confirmcalendar();"><em>確定</em></button></td></tr>';
 	s += '</table></div></div>';
 	s += '<div id="calendar_year" onclick="doane(event)" style="display: none;z-index:100001;"><div class="col">';
 	for(var k = 2020; k >= 1931; k--) {
@@ -96,12 +100,12 @@ function settime(d) {
 			$('calendariframe').style.display = 'none';
 		}
 	}
-	controlid.value = yy + "-" + zerofill(mm + 1) + "-" + zerofill(d) + (addtime ? ' ' + zerofill($('hour').value) + ':' + zerofill($('minute').value) : '');
+	controlid.value = yy + "-" + zerofill(mm + 1) + "-" + zerofill(d) + (addtime ? ' ' + zerofill($('hour').value) + ':' + zerofill($((halfhour) ? 'minutehalfhourly' : 'minute').value) : '');
 }
 
 function confirmcalendar() {
 	if(addtime && controlid.value === '') {
-		controlid.value = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate() + ' ' + zerofill($('hour').value) + ':' + zerofill($('minute').value);
+		controlid.value = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate() + ' ' + zerofill($('hour').value) + ':' + zerofill($((halfhour) ? 'minutehalfhourly' : 'minute').value);
 	}
 	closecalendar();
 }
@@ -116,7 +120,7 @@ function initclosecalendar() {
 		aim = aim.parentNode;
 	}
 }
-function showcalendar(event, controlid1, addtime1, startdate1, enddate1) {
+function showcalendar(event, controlid1, addtime1, startdate1, enddate1, halfhour1) {
 	controlid = controlid1;
 	addtime = addtime1;
 	startdate = startdate1 ? parsedate(startdate1) : false;
@@ -124,6 +128,7 @@ function showcalendar(event, controlid1, addtime1, startdate1, enddate1) {
 	currday = controlid.value ? parsedate(controlid.value) : today;
 	hh = currday.getHours();
 	ii = currday.getMinutes();
+	halfhour = halfhour1 ? true : false;
 	var p = fetchOffset(controlid);
 	$('calendar').style.display = 'block';
 	$('calendar').style.left = p['left']+'px';
@@ -143,6 +148,13 @@ function showcalendar(event, controlid1, addtime1, startdate1, enddate1) {
 	$('hourminute').style.display = addtime ? '' : 'none';
 	lastcheckedyear = currday.getFullYear();
 	lastcheckedmonth = currday.getMonth() + 1;
+	if(halfhour) {
+		$('halfhourselector').style.display = '';
+		$('fullhourselector').style.display = 'none';
+	} else {
+		$('halfhourselector').style.display = 'none';
+		$('fullhourselector').style.display = '';
+	}
 	if(BROWSER.ie && BROWSER.ie < 7) {
 		$('calendariframe').style.top = $('calendar').style.top;
 		$('calendariframe').style.left = $('calendar').style.left;
@@ -171,7 +183,12 @@ function refreshcalendar(y, m) {
 
 	while(x.getMonth() == mm) {
 		dd = $("d" + (d + mv));
-		dd.innerHTML = '<a href="javascript:;" onclick="settime(' + d + ');return false">' + d + '</a>';
+		dd.style.cursor = 'pointer';
+		dd.onclick = function () {
+			settime(this.childNodes[0].innerHTML);
+			doane();
+		};
+		dd.innerHTML = '<a href="javascript:;">' + d + '</a>';
 		if(x.getTime() < today.getTime() || (enddate && x.getTime() > enddate.getTime()) || (startdate && x.getTime() < startdate.getTime())) {
 			dd.className = 'calendar_expire';
 		} else {

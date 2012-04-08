@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_db.php 22570 2011-05-12 08:59:24Z liulanbo $
+ *      $Id: admincp_db.php 28648 2012-03-07 02:24:19Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -25,14 +25,12 @@ if(!isfounder()) cpmsg('noaccess_isfounder', '', 'error');
 
 $excepttables = array($tablepre.'common_admincp_session', $tablepre.'common_syscache', $tablepre.'common_failedlogin', $tablepre.'forum_rsscache', $tablepre.'common_searchindex', $tablepre.'forum_spacecache', $tablepre.'common_session');
 
-$query = DB::query("SELECT skey, svalue FROM ".DB::table('common_setting')." WHERE skey IN ('backupdir', 'custombackup')");
-while($var = DB::fetch($query)) {
-	${$var['skey']} = $var['svalue'];
-}
+$backupdir = C::t('common_setting')->fetch('backupdir');
+
 if(!$backupdir) {
 	$backupdir = random(6);
 	@mkdir('./data/backup_'.$backupdir, 0777);
-	DB::query("REPLACE INTO ".DB::table('common_setting')." (skey, svalue) values ('backupdir', '$backupdir')");
+	C::t('common_setting')->update('backupdir',$backupdir);
 }
 $backupdir = 'backup_'.$backupdir;
 if(!is_dir('./data/'.$backupdir)) {
@@ -47,10 +45,7 @@ if($operation == 'export') {
 
 		$tables = '';
 		$dztables = array();
-		if($tables = $custombackup) {
-			$tables = unserialize($tables['svalue']);
-			$tables = is_array($tables) ? $tables : '';
-		}
+		$tables = C::t('common_setting')->fetch('custombackup', true);
 
 		$discuz_tables = fetchtablelist($tablepre);
 
@@ -131,23 +126,20 @@ if($operation == 'export') {
 
 		DB::query('SET SQL_QUOTE_SHOW_CREATE=0', 'SILENT');
 
-		if(!$_G['gp_filename'] || preg_match("/(\.)(exe|jsp|asp|aspx|cgi|fcgi|pl)(\.|$)/i", $_G['gp_filename'])) {
+		if(!$_GET['filename'] || preg_match("/(\.)(exe|jsp|asp|aspx|cgi|fcgi|pl)(\.|$)/i", $_GET['filename'])) {
 			cpmsg('database_export_filename_invalid', '', 'error');
 		}
 
 		$time = dgmdate(TIMESTAMP);
-		if($_G['gp_type'] == 'discuz' || $_G['gp_type'] == 'discuz_uc') {
+		if($_GET['type'] == 'discuz' || $_GET['type'] == 'discuz_uc') {
 			$tables = arraykeys2(fetchtablelist($tablepre), 'Name');
-		} elseif($_G['gp_type'] == 'custom') {
+		} elseif($_GET['type'] == 'custom') {
 			$tables = array();
-			if(empty($_G['gp_setup'])) {
-				if($tables = DB::fetch_first("SELECT svalue FROM ".DB::table('common_setting')." WHERE skey='custombackup'")) {
-					$tables = unserialize($tables['svalue']);
-				}
+			if(empty($_GET['setup'])) {
+				$tables = C::t('common_setting')->fetch('custombackup', true);
 			} else {
-				$customtablesnew = empty($_G['gp_customtables'])? '' : addslashes(serialize($_G['gp_customtables']));
-				DB::query("REPLACE INTO ".DB::table('common_setting')." (skey, svalue) VALUES ('custombackup', '$customtablesnew')");
-				$tables = & $_G['gp_customtables'];
+				C::t('common_setting')->update('custombackup', empty($_GET['customtables'])? '' : $_GET['customtables']);
+				$tables = & $_GET['customtables'];
 			}
 			if( !is_array($tables) || empty($tables)) {
 				cpmsg('database_export_custom_invalid', '', 'error');
@@ -160,34 +152,34 @@ if($operation == 'export') {
 			array_unshift($tables, DB::table('common_member'));
 		}
 
-		$volume = intval($_G['gp_volume']) + 1;
-		$idstring = '# Identify: '.base64_encode("$_G[timestamp],".$_G['setting']['version'].",{$_G['gp_type']},{$_G['gp_method']},{$volume},{$tablepre},{$dbcharset}")."\n";
+		$volume = intval($_GET['volume']) + 1;
+		$idstring = '# Identify: '.base64_encode("$_G[timestamp],".$_G['setting']['version'].",{$_GET['type']},{$_GET['method']},{$volume},{$tablepre},{$dbcharset}")."\n";
 
 
-		$dumpcharset = $_G['gp_sqlcharset'] ? $_G['gp_sqlcharset'] : str_replace('-', '', $_G['charset']);
-		$setnames = ($_G['gp_sqlcharset'] && $db->version() > '4.1' && (!$_G['gp_sqlcompat'] || $_G['gp_sqlcompat'] == 'MYSQL41')) ? "SET NAMES '$dumpcharset';\n\n" : '';
+		$dumpcharset = $_GET['sqlcharset'] ? $_GET['sqlcharset'] : str_replace('-', '', $_G['charset']);
+		$setnames = ($_GET['sqlcharset'] && $db->version() > '4.1' && (!$_GET['sqlcompat'] || $_GET['sqlcompat'] == 'MYSQL41')) ? "SET NAMES '$dumpcharset';\n\n" : '';
 		if($db->version() > '4.1') {
-			if($_G['gp_sqlcharset']) {
-				DB::query("SET NAMES '".$_G['gp_sqlcharset']."';\n\n");
+			if($_GET['sqlcharset']) {
+				DB::query('SET NAMES %s', array($_GET['sqlcharset']));
 			}
-			if($_G['gp_sqlcompat'] == 'MYSQL40') {
+			if($_GET['sqlcompat'] == 'MYSQL40') {
 				DB::query("SET SQL_MODE='MYSQL40'");
-			} elseif($_G['gp_sqlcompat'] == 'MYSQL41') {
+			} elseif($_GET['sqlcompat'] == 'MYSQL41') {
 				DB::query("SET SQL_MODE=''");
 			}
 		}
 
-		$backupfilename = './data/'.$backupdir.'/'.str_replace(array('/', '\\', '.', "'"), '', $_G['gp_filename']);
+		$backupfilename = './data/'.$backupdir.'/'.str_replace(array('/', '\\', '.', "'"), '', $_GET['filename']);
 
-		if($_G['gp_usezip']) {
+		if($_GET['usezip']) {
 			require_once './source/class/class_zip.php';
 		}
 
-		if($_G['gp_method'] == 'multivol') {
+		if($_GET['method'] == 'multivol') {
 
 			$sqldump = '';
-			$tableid = intval($_G['gp_tableid']);
-			$startfrom = intval($_G['gp_startfrom']);
+			$tableid = intval($_GET['tableid']);
+			$startfrom = intval($_GET['startfrom']);
 
 			if(!$tableid && $volume == 1) {
 				foreach($tables as $table) {
@@ -196,7 +188,7 @@ if($operation == 'export') {
 			}
 
 			$complete = TRUE;
-			for(; $complete && $tableid < count($tables) && strlen($sqldump) + 500 < $_G['gp_sizelimit'] * 1000; $tableid++) {
+			for(; $complete && $tableid < count($tables) && strlen($sqldump) + 500 < $_GET['sizelimit'] * 1000; $tableid++) {
 				$sqldump .= sqldumptable($tables[$tableid], $startfrom, strlen($sqldump));
 				if($complete) {
 					$startfrom = 0;
@@ -211,7 +203,7 @@ if($operation == 'export') {
 					"# Discuz! Multi-Volume Data Dump Vol.$volume\n".
 					"# Version: Discuz! {$_G[setting][version]}\n".
 					"# Time: $time\n".
-					"# Type: {$_G['gp_type']}\n".
+					"# Type: {$_GET['type']}\n".
 					"# Table Prefix: $tablepre\n".
 					"#\n".
 					"# Discuz! Home: http://www.discuz.com\n".
@@ -227,7 +219,7 @@ if($operation == 'export') {
 					cpmsg('database_export_file_invalid', '', 'error');
 				} else {
 					fclose($fp);
-					if($_G['gp_usezip'] == 2) {
+					if($_GET['usezip'] == 2) {
 						$fp = fopen($dumpfilename, "r");
 						$content = @fread($fp, filesize($dumpfilename));
 						fclose($fp);
@@ -240,14 +232,14 @@ if($operation == 'export') {
 						fclose($fp);
 					}
 					unset($sqldump, $zip, $content);
-					cpmsg('database_export_multivol_redirect', "action=db&operation=export&type=".rawurlencode($_G['gp_type'])."&saveto=server&filename=".rawurlencode($_G['gp_filename'])."&method=multivol&sizelimit=".rawurlencode($_G['gp_sizelimit'])."&volume=".rawurlencode($volume)."&tableid=".rawurlencode($tableid)."&startfrom=".rawurlencode($startrow)."&extendins=".rawurlencode($_G['gp_extendins'])."&sqlcharset=".rawurlencode($_G['gp_sqlcharset'])."&sqlcompat=".rawurlencode($_G['gp_sqlcompat'])."&exportsubmit=yes&usehex={$_G['gp_usehex']}&usezip={$_G['gp_usezip']}", 'loading', array('volume' => $volume));
+					cpmsg('database_export_multivol_redirect', "action=db&operation=export&type=".rawurlencode($_GET['type'])."&saveto=server&filename=".rawurlencode($_GET['filename'])."&method=multivol&sizelimit=".rawurlencode($_GET['sizelimit'])."&volume=".rawurlencode($volume)."&tableid=".rawurlencode($tableid)."&startfrom=".rawurlencode($startrow)."&extendins=".rawurlencode($_GET['extendins'])."&sqlcharset=".rawurlencode($_GET['sqlcharset'])."&sqlcompat=".rawurlencode($_GET['sqlcompat'])."&exportsubmit=yes&usehex={$_GET['usehex']}&usezip={$_GET['usezip']}", 'loading', array('volume' => $volume));
 				}
 			} else {
 				$volume--;
 				$filelist = '<ul>';
 				cpheader();
 
-				if($_G['gp_usezip'] == 1) {
+				if($_GET['usezip'] == 1) {
 					$zip = new zipfile();
 					$zipfilename = $backupfilename.'.zip';
 					$unlinks = array();
@@ -276,7 +268,7 @@ if($operation == 'export') {
 				} else {
 					@touch('./data/'.$backupdir.'/index.htm');
 					for($i = 1; $i <= $volume; $i++) {
-						$filename = sprintf($_G['gp_usezip'] == 2 ? $backupfilename."-%s".'.zip' : $dumpfile, $i);
+						$filename = sprintf($_GET['usezip'] == 2 ? $backupfilename."-%s".'.zip' : $dumpfile, $i);
 						$filelist .= "<li><a href=\"$filename\">$filename</a></li>\n";
 					}
 					cpmsg('database_export_multivol_succeed', '', 'succeed', array('volume' => $volume, 'filelist' => $filelist));
@@ -300,12 +292,12 @@ if($operation == 'export') {
 			@unlink($dumpfile);
 
 			$mysqlbin = $mysql_base == '/' ? '' : addslashes($mysql_base).'bin/';
-			@shell_exec($mysqlbin.'mysqldump --force --quick '.($db->version() > '4.1' ? '--skip-opt --create-options' : '-all').' --add-drop-table'.($_G['gp_extendins'] == 1 ? ' --extended-insert' : '').''.($db->version() > '4.1' && $_G['gp_sqlcompat'] == 'MYSQL40' ? ' --compatible=mysql40' : '').' --host="'.$dbhost.($dbport ? (is_numeric($dbport) ? ' --port='.$dbport : ' --socket="'.$dbport.'"') : '').'" --user="'.$dbuser.'" --password="'.$dbpw.'" "'.$dbname.'" '.$tablesstr.' > '.$dumpfile);
+			@shell_exec($mysqlbin.'mysqldump --force --quick '.($db->version() > '4.1' ? '--skip-opt --create-options' : '-all').' --add-drop-table'.($_GET['extendins'] == 1 ? ' --extended-insert' : '').''.($db->version() > '4.1' && $_GET['sqlcompat'] == 'MYSQL40' ? ' --compatible=mysql40' : '').' --host="'.$dbhost.($dbport ? (is_numeric($dbport) ? ' --port='.$dbport : ' --socket="'.$dbport.'"') : '').'" --user="'.$dbuser.'" --password="'.$dbpw.'" "'.$dbname.'" '.$tablesstr.' > '.$dumpfile);
 
 			if(@file_exists($dumpfile)) {
 
-				if($_G['gp_usezip']) {
-					require_once adminfile('function/zip');
+				if($_GET['usezip']) {
+					require_once libfile('class/zip');
 					$zip = new zipfile();
 					$zipfilename = $backupfilename.'.zip';
 					$fp = fopen($dumpfile, "r");
@@ -465,8 +457,8 @@ if($operation == 'export') {
 		showtablefooter();
 
 	} else {
-		if(is_array($_G['gp_delete'])) {
-			foreach($_G['gp_delete'] as $filename) {
+		if(is_array($_GET['delete'])) {
+			foreach($_GET['delete'] as $filename) {
 				$file_path = './data/'.$backupdir.'/'.str_replace(array('/', '\\'), '', $filename);
 				if(is_file($file_path)) {
 					@unlink($file_path);
@@ -512,7 +504,7 @@ if($operation == 'export') {
 		if($runqueryselect) {
 			$runqueryselect = '<select name="queryselect" style="width:500px">'.$runqueryselect.'</select>';
 		}
-		$queryselect = intval($_G['gp_queryselect']);
+		$queryselect = intval($_GET['queryselect']);
 		$queries = $queryselect ? $runquerys[$queryselect] : '';
 
 		shownav('founder', 'nav_db', 'nav_db_runquery');
@@ -542,9 +534,9 @@ if($operation == 'export') {
 		showtablefooter();
 
 	} else {
-		$queries = $_G['gp_queries'];
-		if($_G['gp_option'] == 'simple') {
-			$queryselect = intval($_G['gp_queryselect']);
+		$queries = $_GET['queries'];
+		if($_GET['option'] == 'simple') {
+			$queryselect = intval($_GET['queryselect']);
 			$queries = isset($simplequeries[$queryselect]) && $simplequeries[$queryselect]['sql'] ? $simplequeries[$queryselect]['sql'] : '';
 		} elseif(!$checkperm) {
 			cpmsg('database_run_query_denied', '', 'error');
@@ -553,9 +545,9 @@ if($operation == 'export') {
 		$affected_rows = 0;
 		foreach($sqlquery as $sql) {
 			if(trim($sql) != '') {
-				$sql = !empty($_G['gp_createcompatible']) ? syntablestruct(trim($sql), $db->version() > '4.1', $dbcharset) : $sql;
+				$sql = !empty($_GET['createcompatible']) ? syntablestruct(trim($sql), $db->version() > '4.1', $dbcharset) : $sql;
 
-				DB::query(dstripslashes($sql), 'SILENT');
+				DB::query($sql, 'SILENT');
 				if($sqlerror = DB::error()) {
 					break;
 				} else {
@@ -620,18 +612,24 @@ if($operation == 'export') {
 		foreach($tablearray as $tp) {
 			$query = DB::query("SHOW TABLE STATUS LIKE '$tp%'", 'SILENT');
 			while($table = DB::fetch($query)) {
-				if(is_array($_G['gp_optimizetables']) && in_array($table['Name'], $_G['gp_optimizetables'])) {
-					DB::query("OPTIMIZE TABLE $table[Name]");
+				if($table['Data_free'] && $table[$tabletype] == 'MyISAM') {
+					$optimizeinput = "<input class=\"checkbox\" type=\"checkbox\" name=\"optimizetables[]\" value=\"$table[Name]\" $checked>";
+					if(is_array($_GET['optimizetables']) && in_array($table['Name'], $_GET['optimizetables'])) {
+						DB::query("OPTIMIZE TABLE $table[Name]");
+						$table[Data_free] = 0;
+						$optimizeinput = '';
+					}
+					showtablerow('', '', array(
+						$optimizeinput,
+						$table[Name],
+						$db->version() > '4.1' ?  $table['Engine'] : $table['Type'],
+						$table[Rows],
+						$table[Data_length],
+						$table[Index_length],
+						$table[Data_free]
+					));
+					$totalsize += $table['Data_length'] + $table['Index_length'];
 				}
-				showtablerow('', '', array(
-					$table[Name],
-					$db->version() > '4.1' ?  $table['Engine'] : $table['Type'],
-					$table[Rows],
-					$table[Data_length],
-					$table[Index_length],
-					0
-				));
-				$totalsize += $table['Data_length'] + $table['Index_length'];
 			}
 		}
 		showtablerow('', 'colspan="6"', $lang['db_optimize_used'].' '.sizecount($totalsize));
@@ -642,11 +640,11 @@ if($operation == 'export') {
 
 } elseif($operation == 'dbcheck') {
 
-	if(!DB::query("SHOW FIELDS FROM ".DB::table('common_setting')."", 'SILENT')) {
+	if(!C::t('common_setting')->fetch_all_field()) {
 		cpmsg('dbcheck_permissions_invalid', '', 'error');
 	}
 
-	$step = max(1, intval($_G['gp_step']));
+	$step = max(1, intval($_GET['step']));
 	if($step == 3) {
 
 		if(!file_exists('source/admincp/discuzdb.md5')) {
@@ -660,17 +658,16 @@ if($operation == 'export') {
 		$discuzdb = fread($fp, filesize(DISCUZ_ROOT.'./source/admincp/discuzdb.md5'));
 		fclose($fp);
 		$dbmd5 = substr($discuzdb, 0, 32);
-		$discuzdb = unserialize(substr($discuzdb, 34));
+		$discuzdb = dunserialize(substr($discuzdb, 34));
 		$settingsdata = $discuzdb[1];
 		$discuzdb = $discuzdb[0][0];
-		$repair = !empty($_G['gp_repair']) ? $_G['gp_repair'] : array();
-		$setting = !empty($_G['gp_setting']) ? $_G['gp_setting'] : array();
-		$missingtable = !empty($_G['gp_missingtable']) ? $_G['gp_missingtable'] : array();
-		$repairtable = is_array($_G['gp_repairtable']) && !empty($_G['gp_repairtable']) ? $_G['gp_repairtable'] : array();
+		$repair = !empty($_GET['repair']) ? $_GET['repair'] : array();
+		$setting = !empty($_GET['setting']) ? $_GET['setting'] : array();
+		$missingtable = !empty($_GET['missingtable']) ? $_GET['missingtable'] : array();
+		$repairtable = is_array($_GET['repairtable']) && !empty($_GET['repairtable']) ? $_GET['repairtable'] : array();
 
 		$except = array('threads' => array('sgid'));
-		$query = DB::query("SELECT fieldid FROM ".DB::table('common_member_profile_setting')."");
-		while($profilefields = DB::fetch($query)) {
+		foreach(C::t('common_member_profile_setting')->range() as $profilefields) {
 			$except['memberfields'][] = 'field_'.$profilefields[$fieldid];
 		}
 
@@ -748,18 +745,20 @@ if($operation == 'export') {
 			}
 
 			if(!empty($setting)) {
-				$settingsdatanow = array();
-				$settingsquery = DB::query("SELECT skey FROM ".DB::table('common_setting')." ORDER BY skey");
-				while($settings = DB::fetch($settingsquery)) {
-					$settingsdatanew[] = $settings['skey'];
-				}
+				$settingsdatanow = $newsettings = array();
+				$allsetting = C::t('common_setting')->fetch_all();
+				$settingsdatanew = array_keys($allsetting);
+				unset($allsetting);
 				$settingsdellist = @array_diff($settingsdata, $settingsdatanew);
 				if($setting['del'] && is_array($settingsdellist)) {
 					foreach($settingsdellist as $variable) {
-						DB::insert('common_setting', array('skey' => $variable, 'svalue' => ''), 0, 0, 1);
+						$newsettings[$variable] = '';
 					}
 				}
-				updatecache('setting');
+				if($newsettings) {
+					C::t('common_setting')->update_batch($newsettings);
+					updatecache('setting');
+				}
 			}
 
 			if($errorcount) {
@@ -812,10 +811,9 @@ if($operation == 'export') {
 		$dbmd5new = md5(serialize($discuzdbnew));
 
 		$settingsdatanow = array();
-		$settingsquery = DB::query("SELECT skey FROM ".DB::table('common_setting')." ORDER BY skey");
-		while($settings = DB::fetch($settingsquery)) {
-			$settingsdatanew[] = $settings['skey'];
-		}
+		$allsetting = C::t('common_setting')->fetch_all();
+		$settingsdatanew = array_keys($allsetting);
+		unset($allsetting);
 		$settingsdellist = @array_diff($settingsdata, $settingsdatanew);
 
 		if($dbmd5 == $dbmd5new && empty($charseterror) && empty($settingsdellist)) {
@@ -1052,16 +1050,16 @@ function sqldumptablestruct($table) {
 	}
 	$tabledump .= $create[1];
 
-	if($_G['gp_sqlcompat'] == 'MYSQL41' && $db->version() < '4.1') {
+	if($_GET['sqlcompat'] == 'MYSQL41' && $db->version() < '4.1') {
 		$tabledump = preg_replace("/TYPE\=(.+)/", "ENGINE=\\1 DEFAULT CHARSET=".$dumpcharset, $tabledump);
 	}
-	if($db->version() > '4.1' && $_G['gp_sqlcharset']) {
-		$tabledump = preg_replace("/(DEFAULT)*\s*CHARSET=.+/", "DEFAULT CHARSET=".$_G['gp_sqlcharset'], $tabledump);
+	if($db->version() > '4.1' && $_GET['sqlcharset']) {
+		$tabledump = preg_replace("/(DEFAULT)*\s*CHARSET=.+/", "DEFAULT CHARSET=".$_GET['sqlcharset'], $tabledump);
 	}
 
 	$tablestatus = DB::fetch_first("SHOW TABLE STATUS LIKE '$table'");
 	$tabledump .= ($tablestatus['Auto_increment'] ? " AUTO_INCREMENT=$tablestatus[Auto_increment]" : '').";\n\n";
-	if($_G['gp_sqlcompat'] == 'MYSQL40' && $db->version() >= '4.1' && $db->version() < '5.1') {
+	if($_GET['sqlcompat'] == 'MYSQL40' && $db->version() >= '4.1' && $db->version() < '5.1') {
 		if($tablestatus['Auto_increment'] <> '') {
 			$temppos = strpos($tabledump, ',');
 			$tabledump = substr($tabledump, 0, $temppos).' auto_increment'.substr($tabledump, $temppos);
@@ -1086,7 +1084,7 @@ function sqldumptable($table, $startfrom = 0, $currsize = 0) {
 	} elseif(!$query && DB::errno() == 1146) {
 		return;
 	} elseif(!$query) {
-		$_G['gp_usehex'] = FALSE;
+		$_GET['usehex'] = FALSE;
 	} else {
 		while($fieldrow = DB::fetch($query)) {
 			$tablefields[] = $fieldrow;
@@ -1098,8 +1096,8 @@ function sqldumptable($table, $startfrom = 0, $currsize = 0) {
 		$numrows = $offset;
 		$firstfield = $tablefields[0];
 
-		if($_G['gp_extendins'] == '0') {
-			while($currsize + strlen($tabledump) + 500 < $_G['gp_sizelimit'] * 1000 && $numrows == $offset) {
+		if($_GET['extendins'] == '0') {
+			while($currsize + strlen($tabledump) + 500 < $_GET['sizelimit'] * 1000 && $numrows == $offset) {
 				if($firstfield['Extra'] == 'auto_increment') {
 					$selectsql = "SELECT * FROM $table WHERE $firstfield[Field] > $startfrom ORDER BY $firstfield[Field] LIMIT $offset";
 				} else {
@@ -1113,10 +1111,10 @@ function sqldumptable($table, $startfrom = 0, $currsize = 0) {
 				while($row = $db->fetch_row($rows)) {
 					$comma = $t = '';
 					for($i = 0; $i < $numfields; $i++) {
-						$t .= $comma.($_G['gp_usehex'] && !empty($row[$i]) && (strexists($tablefields[$i]['Type'], 'char') || strexists($tablefields[$i]['Type'], 'text')) ? '0x'.bin2hex($row[$i]) : '\''.mysql_escape_string($row[$i]).'\'');
+						$t .= $comma.($_GET['usehex'] && !empty($row[$i]) && (strexists($tablefields[$i]['Type'], 'char') || strexists($tablefields[$i]['Type'], 'text')) ? '0x'.bin2hex($row[$i]) : '\''.mysql_escape_string($row[$i]).'\'');
 						$comma = ',';
 					}
-					if(strlen($t) + $currsize + strlen($tabledump) + 500 < $_G['gp_sizelimit'] * 1000) {
+					if(strlen($t) + $currsize + strlen($tabledump) + 500 < $_GET['sizelimit'] * 1000) {
 						if($firstfield['Extra'] == 'auto_increment') {
 							$startfrom = $row[0];
 						} else {
@@ -1130,7 +1128,7 @@ function sqldumptable($table, $startfrom = 0, $currsize = 0) {
 				}
 			}
 		} else {
-			while($currsize + strlen($tabledump) + 500 < $_G['gp_sizelimit'] * 1000 && $numrows == $offset) {
+			while($currsize + strlen($tabledump) + 500 < $_GET['sizelimit'] * 1000 && $numrows == $offset) {
 				if($firstfield['Extra'] == 'auto_increment') {
 					$selectsql = "SELECT * FROM $table WHERE $firstfield[Field] > $startfrom LIMIT $offset";
 				} else {
@@ -1145,10 +1143,10 @@ function sqldumptable($table, $startfrom = 0, $currsize = 0) {
 					while($row = $db->fetch_row($rows)) {
 						$t2 = $comma2 = '';
 						for($i = 0; $i < $numfields; $i++) {
-							$t2 .= $comma2.($_G['gp_usehex'] && !empty($row[$i]) && (strexists($tablefields[$i]['Type'], 'char') || strexists($tablefields[$i]['Type'], 'text'))? '0x'.bin2hex($row[$i]) : '\''.mysql_escape_string($row[$i]).'\'');
+							$t2 .= $comma2.($_GET['usehex'] && !empty($row[$i]) && (strexists($tablefields[$i]['Type'], 'char') || strexists($tablefields[$i]['Type'], 'text'))? '0x'.bin2hex($row[$i]) : '\''.mysql_escape_string($row[$i]).'\'');
 							$comma2 = ',';
 						}
-						if(strlen($t1) + $currsize + strlen($tabledump) + 500 < $_G['gp_sizelimit'] * 1000) {
+						if(strlen($t1) + $currsize + strlen($tabledump) + 500 < $_GET['sizelimit'] * 1000) {
 							if($firstfield['Extra'] == 'auto_increment') {
 								$startfrom = $row[0];
 							} else {

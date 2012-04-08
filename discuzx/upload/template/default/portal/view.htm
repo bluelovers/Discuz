@@ -15,6 +15,7 @@
 	</div>
 </div>
 
+<!--{hook/view_article_top}-->
 <!--{ad/text/wp a_t}-->
 <style id="diy_style" type="text/css"></style>
 <div class="wp">
@@ -32,12 +33,22 @@
 					{lang view_comments}: <!--{if $article[commentnum] > 0}--><a href="$common_url" title="{lang view_all_comments}">$article[commentnum]</a><!--{else}-->0<!--{/if}-->
 					<!--{if $article[author]}--><span class="pipe">|</span>{lang view_author_original}: $article[author]<!--{/if}-->
 					<!--{if $article[from]}--><span class="pipe">|</span>{lang from}: <!--{if $article[fromurl]}--><a href="$article[fromurl]" target="_blank">$article[from]</a><!--{else}-->$article[from]<!--{/if}--><!--{/if}-->
+
+					<!--{if $_G['group']['allowmanagearticle'] || ($_G['group']['allowpostarticle'] && $article['uid'] == $_G['uid'] && (empty($_G['group']['allowpostarticlemod']) || $_G['group']['allowpostarticlemod'] && $article['status'] == 1)) || $categoryperm[$value['catid']]['allowmanage']}-->
+						<span class="pipe">|</span><a href="portal.php?mod=portalcp&ac=article&op=edit&aid=$article[aid]">{lang edit}</a>
+						<!--{if $article[status]>0 && ($_G['group']['allowmanagearticle'] || $categoryperm[$value['catid']]['allowmanage'])}-->
+							<span class="pipe">|</span><a href="portal.php?mod=portalcp&ac=article&op=verify&aid=$article[aid]" id="article_verify_$article[aid]" onclick="showWindow(this.id, this.href, 'get', 0);">{lang moderate}</a>
+						<!--{else}-->
+							<span class="pipe">|</span><a href="portal.php?mod=portalcp&ac=article&op=delete&aid=$article[aid]" id="article_delete_$article[aid]" onclick="showWindow(this.id, this.href, 'get', 0);">{lang delete}</a>
+						<!--{/if}-->
+					<!--{/if}-->
+					<!--{hook/view_article_subtitle}-->
 				</p>
 			</div>
 
 			<!--[diy=diysummarytop]--><div id="diysummarytop" class="area"></div><!--[/diy]-->
 
-			<!--{if $article[summary] && empty($cat[notshowarticlesummay])}--><div class="s"><div><strong>{lang article_description}</strong>: $article[summary]</div></div><!--{/if}-->
+			<!--{if $article[summary] && empty($cat[notshowarticlesummay])}--><div class="s"><div><strong>{lang article_description}</strong>: $article[summary]</div><!--{hook/view_article_summary}--></div><!--{/if}-->
 
 			<!--[diy=diysummarybottom]--><div id="diysummarybottom" class="area"></div><!--[/diy]-->
 
@@ -48,10 +59,11 @@
 				<table cellpadding="0" cellspacing="0" class="vwtb"><tr><td id="article_content">
 					<!--{ad/article/a_af/1}-->
 					<!--{if $content[title]}-->
-					<div><b>$content[title]</b></div>
+					<div class="vm_pagetitle xw1">$content[title]</div>
 					<!--{/if}-->
 					$content[content]
 				</td></tr></table>
+				<!--{hook/view_article_content}-->
 				<!--{if $multi}--><div class="ptw pbw cl">$multi</div><!--{/if}-->
 
 				<!--[diy=diycontentbottom]--><div id="diycontentbottom" class="area"></div><!--[/diy]-->
@@ -80,11 +92,23 @@
 				<script type="text/javascript" reload="1">aimgcount[{$content[pid]}] = [<!--{echo implode(',', $aimgs[$content[pid]]);}-->];attachimgshow($content[pid]);</script>
 			<!--{/if}-->
 
+			<!--{if !empty($_G['setting']['pluginhooks']['view_share_method'])}-->
+				<div class="tshare cl">
+					<strong>{lang viewthread_share_to}:</strong>
+					<!--{hook/view_share_method}-->
+				</div>
+			<!--{/if}-->
+
 			<div class="o cl ptm pbm">
+				<!--{hook/view_article_op_extra}-->
 				<a href="home.php?mod=spacecp&ac=favorite&type=article&id=$article[aid]&handlekey=favoritearticlehk_{$article[aid]}" id="a_favorite" onclick="showWindow(this.id, this.href, 'get', 0);" class="oshr ofav">{lang favorite}</a>
+				<!--{if helper_access::check_module('share')}-->
 				<a href="home.php?mod=spacecp&ac=share&type=article&id=$article[aid]&handlekey=sharearticlehk_{$article[aid]}" id="a_share" onclick="showWindow(this.id, this.href, 'get', 0);" class="oshr">{lang share}</a>
+				<!--{/if}-->
+				<a href="misc.php?mod=invite&action=article&id=$article[aid]" id="a_invite" onclick="showWindow('invite', this.href, 'get', 0);" class="oshr oivt">{lang invite}</a>
 				<!--{if $_G['group']['allowmanagearticle'] || ($_G['group']['allowpostarticle'] && $article['uid'] == $_G['uid'] && (empty($_G['group']['allowpostarticlemod']) || $_G['group']['allowpostarticlemod'] && $article['status'] == 1)) || $categoryperm[$value['catid']]['allowmanage']}-->
-					<a href="portal.php?mod=portalcp&ac=article&op=edit&aid=$article[aid]&page=$_G[page]">{lang edit}</a><span class="pipe">|</span>
+					<a href="portal.php?mod=portalcp&ac=article&op=edit&aid=$article[aid]">{lang edit}</a><span class="pipe">|</span>
+					<a  id="related_article" href="portal.php?mod=portalcp&ac=related&aid=$article[aid]&catid=$article[catid]&update=1" onclick="showWindow(this.id, this.href, 'get', 0);return false;">{lang article_related}</a><span class="pipe">|</span>
 					<!--{if $article[status]>0 && ($_G['group']['allowmanagearticle'] || $categoryperm[$value['catid']]['allowmanage'])}-->
 						<a href="portal.php?mod=portalcp&ac=article&op=verify&aid=$article[aid]" id="article_verify_$article[aid]" onclick="showWindow(this.id, this.href, 'get', 0);">{lang moderate}</a>
 					<!--{else}-->
@@ -109,9 +133,10 @@
 				<h3>{lang view_related}</h3>
 			</div>
 			<div class="bm_c">
-				<ul class="xl xl2 cl">
-				<!--{loop $article['related'] $value}-->
-					<li>&bull; <a href="portal.php?mod=view&aid=$value[aid]">$value[title]</a></li>
+				<ul class="xl xl2 cl" id="raid_div">
+				<!--{loop $article['related'] $raid $rtitle}-->
+					<input type="hidden" value="$raid" />
+					<li>&bull; <a href="portal.php?mod=view&aid=$raid">$rtitle</a></li>
 				<!--{/loop}-->
 				</ul>
 			</div>
@@ -130,6 +155,8 @@
 
 	</div>
 	<div class="sd pph">
+
+		<!--{hook/view_article_side_top}-->
 
 		<div class="drag">
 			<!--[diy=diyrighttop]--><div id="diyrighttop" class="area"></div><!--[/diy]-->
@@ -169,6 +196,8 @@
 			<!--[diy=diy2]--><div id="diy2" class="area"></div><!--[/diy]-->
 		</div>
 
+		<!--{hook/view_article_side_bottom}-->
+
 	</div>
 </div>
 
@@ -185,5 +214,6 @@
 <div class="wp mtn">
 	<!--[diy=diy3]--><div id="diy3" class="area"></div><!--[/diy]-->
 </div>
+<input type="hidden" id="portalview" value="1">
 
 <!--{subtemplate common/footer}-->

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_blog.php 20084 2011-02-14 02:58:04Z monkey $
+ *      $Id: spacecp_blog.php 28297 2012-02-27 08:35:59Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -16,10 +16,10 @@ $op = empty($_GET['op'])?'':$_GET['op'];
 
 $blog = array();
 if($blogid) {
-	$query = DB::query("SELECT bf.*, b.* FROM ".DB::table('home_blog')." b
-		LEFT JOIN ".DB::table('home_blogfield')." bf USING(blogid)
-		WHERE b.blogid='$blogid'");
-	$blog = DB::fetch($query);
+	$blog = array_merge(
+		C::t('home_blog')->fetch($blogid),
+		C::t('home_blogfield')->fetch($blogid)
+	);
 	if($blog['tag']) {
 		$tagarray_all = $array_temp = $blogtag_array = array();
 		$tagarray_all = explode("\t", $blog['tag']);
@@ -36,7 +36,7 @@ if($blogid) {
 }
 
 if(empty($blog)) {
-	if(!checkperm('allowblog')) {
+	if(!helper_access::check_module('blog') || !checkperm('allowblog')) {
 		showmessage('no_authority_to_add_log', '', array(), array('return' => true));
 	}
 
@@ -47,17 +47,17 @@ if(empty($blog)) {
 		showmessage('operating_too_fast', '', array('waittime' => $waittime), array('return' => true));
 	}
 
-	$blog['subject'] = empty($_GET['subject'])?'':getstr($_GET['subject'], 80, 1, 0);
-	$blog['message'] = empty($_GET['message'])?'':getstr($_GET['message'], 5000, 1, 0);
+	$blog['subject'] = empty($_GET['subject'])?'':getstr($_GET['subject'], 80);
+	$blog['message'] = empty($_GET['message'])?'':getstr($_GET['message'], 5000);
 
 } else {
 
-	if($_G['uid'] != $blog['uid'] && !checkperm('manageblog') && $_G['gp_modblogkey'] != modauthkey($blog['blogid'])) {
+	if($_G['uid'] != $blog['uid'] && !checkperm('manageblog') && $_GET['modblogkey'] != modauthkey($blog['blogid'])) {
 		showmessage('no_authority_operation_of_the_log');
 	}
 }
 
-if(submitcheck('blogsubmit', 0, $seccodecheck, $secqaacheck)) {
+if(submitcheck('blogsubmit', 0, $seccodecheck, $secqaacheck) && helper_access::check_module('blog')) {
 
 	if(empty($blog['blogid'])) {
 		$blog = array();
@@ -77,8 +77,8 @@ if(submitcheck('blogsubmit', 0, $seccodecheck, $secqaacheck)) {
 		} else {
 			$url = 'home.php?mod=space&uid='.$newblog['uid'].'&do=blog&quickforward=1&id='.$newblog['blogid'];
 		}
-		if($_G['gp_modblogkey']) {
-			$url .= "&modblogkey=$_G[gp_modblogkey]";
+		if($_GET['modblogkey']) {
+			$url .= "&modblogkey=$_GET[modblogkey]";
 		}
 		dsetcookie('clearUserdata', 'home');
 		showmessage('do_success', $url);
@@ -113,7 +113,7 @@ if($_GET['op'] == 'delete') {
 			$stickblogs = explode(',', $blogs);
 			$stickblogs = array_filter($stickblogs);
 			$space['stickblogs'] = implode(',', $stickblogs);
-			DB::update('common_member_field_home', array('stickblogs' => $space['stickblogs']), array('uid' => $space['uid']));
+			C::t('common_member_field_home')->update($space['uid'], array('stickblogs' => $space['stickblogs']));
 			showmessage('do_success', dreferer("home.php?mod=space&uid=$blog[uid]&do=blog&view=me"));
 		} else {
 			showmessage('failed_to_stick_operation');
@@ -127,12 +127,12 @@ if($_GET['op'] == 'delete') {
 
 	if(submitcheck('hotsubmit')) {
 		$_POST['hot'] = intval($_POST['hot']);
-		DB::update('home_blog', array('hot'=>$_POST['hot']), array('blogid'=>$blog['blogid']));
+		C::t('home_blog')->update($blog['blogid'], array('hot'=>$_POST['hot']));
 		if($_POST['hot']>0) {
 			require_once libfile('function/feed');
 			feed_publish($blog['blogid'], 'blogid');
 		} else {
-			DB::update('home_feed', array('hot'=>$_POST['hot']), array('id'=>$blog['blogid'], 'idtype'=>'blogid'));
+			C::t('home_feed')->update($blog['blogid'], array('hot'=>$_POST['hot']), 'blogid');
 		}
 
 		showmessage('do_success', "home.php?mod=space&uid=$blog[uid]&do=blog&id=$blog[blogid]");
@@ -151,9 +151,8 @@ if($_GET['op'] == 'delete') {
 		$selectgroupstyle = '';
 		if($blog['target_ids']) {
 			$names = array();
-			$query = DB::query("SELECT username FROM ".DB::table('common_member')." WHERE uid IN ($blog[target_ids])");
-			while ($value = DB::fetch($query)) {
-				$names[] = $value['username'];
+			foreach(C::t('common_member')->fetch_all($blog['target_ids']) as $uid => $value) {
+				$names[$uid] = $value['username'];
 			}
 			$blog['target_names'] = implode(' ', $names);
 		}
@@ -179,7 +178,8 @@ if($_GET['op'] == 'delete') {
 	}
 	$menuactives = array('space'=>' class="active"');
 }
-
+require_once libfile('function/upload');
+$swfconfig = getuploadconfig($_G['uid'], 0, false);
 include_once template("home/spacecp_blog");
 
 ?>

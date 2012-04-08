@@ -26,7 +26,7 @@
 					</div>
 					<dl{if !empty($sub[extra][iconwidth]) && !empty($sub[icon])} style="margin-left: {$sub[extra][iconwidth]}px;"{/if}>
 						<dt><a href="$forumurl" {if !empty($sub[redirect])}target="_blank"{/if} style="{if !empty($sub[extra][namecolor])}color: {$sub[extra][namecolor]};{/if}">$sub[name]</a><!--{if $sub[todayposts] && !$sub['redirect']}--><em class="xw0 xi1" title="{lang forum_todayposts}"> ($sub[todayposts])</em><!--{/if}--></dt>
-						<!--{if empty($sub[redirect])}--><dd><em>{lang forum_threads}: $sub[threads]</em>, <em>{lang forum_posts}: $sub[posts]</em></dd><!--{/if}-->
+						<!--{if empty($sub[redirect])}--><dd><em>{lang forum_threads}: <!--{echo dnumber($sub[threads])}--></em>, <em>{lang forum_posts}: <!--{echo dnumber($sub[posts])}--></em></dd><!--{/if}-->
 						<dd>
 						<!--{if $sub['permission'] == 1}-->
 							{lang private_forum}
@@ -43,6 +43,7 @@
 								{lang never}
 							<!--{/if}-->
 						<!--{/if}-->
+						<!--{hook/forumdisplay_subforum_extra $sub[fid]}-->
 						</dd>
 					</dl>
 				</td>
@@ -59,9 +60,10 @@
 					<!--{if $sub[description]}--><p class="xg2">$sub[description]</p><!--{/if}-->
 					<!--{if $sub['subforums']}--><p>{lang forum_subforums}: $sub['subforums']</p><!--{/if}-->
 					<!--{if $sub['moderators']}--><p>{lang forum_moderators}: $sub[moderators]</p><!--{/if}-->
+					<!--{hook/forumdisplay_subforum_extra $sub[fid]}-->
 				</td>
 				<td class="fl_i">
-					<!--{if empty($sub[redirect])}--><span class="xi2">$sub[threads]</span><span class="xg1"> / $sub[posts]</span><!--{/if}-->
+					<!--{if empty($sub[redirect])}--><span class="xi2"><!--{echo dnumber($sub[threads])}--></span><span class="xg1"> / <!--{echo dnumber($sub[posts])}--></span><!--{/if}-->
 				</td>
 				<td class="fl_by">
 					<div>

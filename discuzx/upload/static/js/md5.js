@@ -1,8 +1,8 @@
 /*
-	[Discuz!] (C)2001-2009 Comsenz Inc.
+	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: md5.js 15149 2010-08-19 08:02:46Z monkey $
+	$Id: md5.js 29228 2012-03-30 01:46:00Z monkey $
 */
 
 var hexcase = 0;
@@ -138,4 +138,16 @@ function binl2hex(binarray) {
 		str += hex_tab.charAt((binarray[i>>2] >> ((i%4)*8+4)) & 0xF) + hex_tab.charAt((binarray[i>>2] >> ((i%4)*8  )) & 0xF);
 	}
 	return str;
+}
+var pwmd5log = new Array();
+function pwmd5() {
+	if(!$(pwmd5.arguments[0]) || $(pwmd5.arguments[0]).value == '') {
+		return;
+	}
+	numargs = pwmd5.arguments.length;
+	for(var i = 0; i < numargs; i++) {
+		if(!pwmd5log[pwmd5.arguments[i]] || $(pwmd5.arguments[i]).value.length != 32) {
+			pwmd5log[pwmd5.arguments[i]] = $(pwmd5.arguments[i]).value = hex_md5($(pwmd5.arguments[i]).value);
+		}
+	}
 }

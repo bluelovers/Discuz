@@ -1,8 +1,8 @@
 /*
-	[Discuz!] (C)2001-2009 Comsenz Inc.
+	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: bbcode.js 22924 2011-06-01 07:41:29Z monkey $
+	$Id: bbcode.js 27688 2012-02-10 01:24:30Z svn_project_zhangjie $
 */
 
 var re, DISCUZCODE = [];
@@ -34,7 +34,11 @@ function bbcode2html(str) {
 		return '';
 	}
 
-	if(!fetchCheckbox('bbcodeoff') && allowbbcode) {
+	if(typeof(parsetype) == 'undefined') {
+		parsetype = 0;
+	}
+
+	if(!fetchCheckbox('bbcodeoff') && allowbbcode && parsetype != 1) {
 		str = str.replace(/\[code\]([\s\S]+?)\[\/code\]/ig, function($1, $2) {return parsecode($2);});
 	}
 
@@ -81,11 +85,13 @@ function bbcode2html(str) {
 		str = str.replace(/\[size=(\d+?)\]/ig, '<font size="$1">');
 		str = str.replace(/\[size=(\d+(\.\d+)?(px|pt)+?)\]/ig, '<font style="font-size: $1">');
 		str = str.replace(/\[font=([^\[\<]+?)\]/ig, '<font face="$1">');
-		str = str.replace(/\[align=([^\[\<]+?)\]/ig, '<p align="$1">');
+		str = str.replace(/\[align=([^\[\<]+?)\]/ig, '<div align="$1">');
 		str = str.replace(/\[p=(\d{1,2}|null), (\d{1,2}|null), (left|center|right)\]/ig, '<p style="line-height: $1px; text-indent: $2em; text-align: $3;">');
 		str = str.replace(/\[float=left\]/ig, '<br style="clear: both"><span style="float: left; margin-right: 5px;">');
 		str = str.replace(/\[float=right\]/ig, '<br style="clear: both"><span style="float: right; margin-left: 5px;">');
-		str = str.replace(/\[quote]([\s\S]*?)\[\/quote\]\s?\s?/ig, '<div class="quote"><blockquote>$1</blockquote></div>\n');
+		if(parsetype != 1) {
+			str = str.replace(/\[quote]([\s\S]*?)\[\/quote\]\s?\s?/ig, '<div class="quote"><blockquote>$1</blockquote></div>\n');
+		}
 
 		re = /\[table(?:=(\d{1,4}%?)(?:,([\(\)%,#\w ]+))?)?\]\s*([\s\S]+?)\s*\[\/table\]/ig;
 		for (i = 0; i < 4; i++) {
@@ -97,7 +103,7 @@ function bbcode2html(str) {
 			'\\\[i\\\]', '\\\[\\\/i\\\]', '\\\[u\\\]', '\\\[\\\/u\\\]', '\\\[s\\\]', '\\\[\\\/s\\\]', '\\\[hr\\\]', '\\\[list\\\]', '\\\[list=1\\\]', '\\\[list=a\\\]',
 			'\\\[list=A\\\]', '\\s?\\\[\\\*\\\]', '\\\[\\\/list\\\]', '\\\[indent\\\]', '\\\[\\\/indent\\\]', '\\\[\\\/float\\\]'
 			], [
-			'</font>', '</font>', '</font>', '</font>', '</p>', '</p>', '<b>', '</b>', '<i>',
+			'</font>', '</font>', '</font>', '</font>', '</div>', '</p>', '<b>', '</b>', '<i>',
 			'</i>', '<u>', '</u>', '<strike>', '</strike>', '<hr class="l" />', '<ul>', '<ul type=1 class="litype_1">', '<ul type=a class="litype_2">',
 			'<ul type=A class="litype_3">', '<li>', '</ul>', '<blockquote>', '</blockquote>', '</span>'
 			], str, 'g');
@@ -118,9 +124,9 @@ function bbcode2html(str) {
 						width = matches[2];
 					}
 				}
-				return '<img src="' + $('image_' + $2).src + '" border="0" aid="attachimg_' + $2 + '" width="' + width + '" alt="" style="max-width:400px" />';
+				return '<img src="' + $('image_' + $2).src + '" border="0" aid="attachimg_' + $2 + '" width="' + width + '" alt="" />';
 			});
-			str = str.replace(/\[img=(\d{1,4})[x|\,](\d{1,4})\]\s*([^\[\<\r\n]+?)\s*\[\/img\]/ig, function ($1, $2, $3, $4) {return '<img' + ($2 > 0 ? ' width="' + $2 + '"' : '') + ($3 > 0 ? ' height="' + $3 + '"' : '') + ' src="' + $4 + '" border="0" alt="" style="max-width:400px" />'});
+			str = str.replace(/\[img=(\d{1,4})[x|\,](\d{1,4})\]\s*([^\[\<\r\n]+?)\s*\[\/img\]/ig, function ($1, $2, $3, $4) {return '<img' + ($2 > 0 ? ' width="' + $2 + '"' : '') + ($3 > 0 ? ' iheight="' + $3 + '"' : '') + ' src="' + $4 + '" border="0" alt="" />'});
 		} else {
 			str = str.replace(/\[img\]\s*([^\[\<\r\n]+?)\s*\[\/img\]/ig, '<a href="$1" target="_blank">$1</a>');
 			str = str.replace(/\[img=(\d{1,4})[x|\,](\d{1,4})\]\s*([^\[\<\r\n]+?)\s*\[\/img\]/ig, '<a href="$1" target="_blank">$1</a>');
@@ -135,6 +141,8 @@ function bbcode2html(str) {
 		str = str.replace(/(^|>)([^<]+)(?=<|$)/ig, function($1, $2, $3) {
 			return $2 + preg_replace(['\t', '   ', '  ', '(\r\n|\n|\r)'], ['&nbsp; &nbsp; &nbsp; &nbsp; ', '&nbsp; &nbsp;', '&nbsp;&nbsp;', '<br />'], $3);
 		});
+	} else {
+		str = str.replace(/<script[^\>]*?>([^\x00]*?)<\/script>/ig, '');
 	}
 
 	return str;

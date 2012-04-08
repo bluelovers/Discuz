@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: home_rss.php 20828 2011-03-04 09:51:43Z zhengqingpeng $
+ *      $Id: home_rss.php 25756 2011-11-22 02:47:45Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -18,7 +18,7 @@ $uid = empty($_GET['uid'])?0:intval($_GET['uid']);
 $list = array();
 
 if(!empty($uid)) {
-	$space = getspace($uid);
+	$space = getuserbyuid($uid, 1);
 }
 if(empty($space)) {
 	$space['username'] = $_G['setting']['sitename'];
@@ -31,13 +31,10 @@ if(empty($space)) {
 }
 
 $uidsql = empty($space['uid'])?'':" AND b.uid='$space[uid]'";
-$query = DB::query("SELECT bf.message, b.*
-	FROM ".DB::table('home_blog')." b
-	LEFT JOIN ".DB::table('home_blogfield')." bf ON bf.blogid=b.blogid
-	WHERE b.friend='0' $uidsql
-	ORDER BY dateline DESC
-	LIMIT 0,$pagenum");
 
+$data_blog = C::t('home_blog')->range(0, $pagenum, 'DESC', 'dateline', 0, null, $uid);
+$blogids = array_keys($data_blog);
+$data_blogfield = C::t('home_blogfield')->fetch_all($blogids);
 
 $charset = $_G['config']['output']['charset'];
 dheader("Content-type: application/xml");
@@ -56,7 +53,8 @@ echo 	"<?xml version=\"1.0\" encoding=\"".$charset."\"?>\n".
 	"      <link>{$_G[siteurl]}</link>\n".
 	"    </image>\n";
 
-while ($value = DB::fetch($query)) {
+foreach($data_blog as $curblogid => $value) {
+	$value = array_merge($value, (array)$data_blogfield[$curblogid]);
 	$value['message'] = getstr($value['message'], 300, 0, 0, 0, -1);
 	if($value['pic']) {
 		$value['pic'] = pic_cover_get($value['pic'], $value['picflag']);

@@ -1,10 +1,9 @@
-<!--{eval 
+<!--{eval
 	$_G['home_tpl_titles'] = array('{lang magic}');
 }-->
 <!--{template common/header}-->
-<!--{if empty($_G['gp_infloat'])}-->
+<!--{if empty($_GET['infloat'])}-->
 <div id="pt" class="bm cl">
-	<!--{subtemplate common/simplesearchform}-->
 	<div class="z"><a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em> $navigation</div>
 </div>
 <div id="ct" class="ct2_a wp cl">
@@ -12,26 +11,26 @@
 		<div class="bm bw0">
 <!--{/if}-->
 
-<form id="magicform" method="post" action="home.php?mod=magic&action=shop&infloat=yes"{if $_G[inajax]} onsubmit="ajaxpost('magicform', 'return_$_G[gp_handlekey]', 'return_$_G[gp_handlekey]', 'onerror');return false;"{/if}>
+<form id="magicform" method="post" action="home.php?mod=magic&action=shop&infloat=yes"{if $_G[inajax]} onsubmit="ajaxpost('magicform', 'return_$_GET[handlekey]', 'return_$_GET[handlekey]', 'onerror');return false;"{/if}>
 <div class="f_c">
 	<h3 class="flb">
-		<em id="return_$_G[gp_handlekey]">
+		<em id="return_$_GET[handlekey]">
 		<!--{if $operation == 'buy'}-->
 			{lang magics_operation_buy}{lang magic}
 		<!--{elseif $operation == 'give'}-->
 			{lang magics_operation_present}{lang magic}
 		<!--{/if}-->
 		</em>
-		<span><!--{if !empty($_G['gp_infloat'])}--><a href="javascript:;" class="flbc" onclick="hideWindow('$_G[gp_handlekey]');return false;" title="{lang close}">{lang close}</a><!--{/if}--></span>
+		<span><!--{if !empty($_GET['infloat'])}--><a href="javascript:;" class="flbc" onclick="hideWindow('$_GET[handlekey]');return false;" title="{lang close}">{lang close}</a><!--{/if}--></span>
 	</h3>
 	<div class="c">
 		<input type="hidden" name="formhash" value="{FORMHASH}" />
-		<!--{if !empty($_G['gp_infloat'])}--><input type="hidden" name="handlekey" value="$_G[gp_handlekey]" /><!--{/if}-->
+		<!--{if !empty($_GET['infloat'])}--><input type="hidden" name="handlekey" value="$_GET[handlekey]" /><!--{/if}-->
 		<input type="hidden" name="operation" value="$operation" />
-		<input type="hidden" name="mid" value="$_G['gp_mid']" />
-		<!--{if !empty($_G['gp_idtype']) && !empty($_G['gp_id'])}-->
-			<input type="hidden" name="idtype" value="$_G[gp_idtype]" />
-			<input type="hidden" name="id" value="$_G[gp_id]" />
+		<input type="hidden" name="mid" value="$_GET['mid']" />
+		<!--{if !empty($_GET['idtype']) && !empty($_GET['id'])}-->
+			<input type="hidden" name="idtype" value="$_GET[idtype]" />
+			<input type="hidden" name="id" value="$_GET[id]" />
 		<!--{/if}-->
 		<!--{if $operation == 'buy'}-->
 			<dl class="xld cl">
@@ -94,7 +93,7 @@
 		<!--{/if}-->
 	</div>
 </div>
-<!--{if empty($_G['gp_infloat'])}--><div class="m_c"><!--{/if}-->
+<!--{if empty($_GET['infloat'])}--><div class="m_c"><!--{/if}-->
 <div class="o pns">
 	<!--{if $operation == 'buy'}-->
 		<button class="pn pnc" type="submit" name="operatesubmit" id="operatesubmit" value="true"><span>{lang magics_operation_buy}</span></button>
@@ -102,16 +101,16 @@
 		<button class="pn pnc" type="submit" name="operatesubmit" id="operatesubmit" value="true" onclick="return confirmMagicOp(e)"><span>{lang magics_operation_present}</span></button>
 	<!--{/if}-->
 </div>
-<!--{if empty($_G['gp_infloat'])}--></div><!--{/if}-->
+<!--{if empty($_GET['infloat'])}--></div><!--{/if}-->
 </form>
 
 <script type="text/javascript" reload="1">
-	function succeedhandle_$_G[gp_handlekey](url, msg) {
-		hideWindow('$_G[gp_handlekey]');
+	function succeedhandle_$_GET[handlekey](url, msg) {
+		hideWindow('$_GET[handlekey]');
 		<!--{if !$location}-->
 			showDialog(msg, 'notice', null, function () { location.href=url; }, 0);
 		<!--{else}-->
-			showWindow('$_G[gp_handlekey]', 'home.php?$querystring');
+			showWindow('$_GET[handlekey]', 'home.php?$querystring');
 		<!--{/if}-->
 		showCreditPrompt();
 	}
@@ -147,7 +146,7 @@
 	}
 </script>
 
-<!--{if empty($_G['gp_infloat'])}-->
+<!--{if empty($_GET['infloat'])}-->
 	</div></div>
 	<div class="appl"><!--{subtemplate common/userabout}--></div>
 </div>

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_diytemplatename.php 21671 2011-04-07 06:21:13Z zhangguosheng $
+ *      $Id: cache_diytemplatename.php 24927 2011-10-17 03:13:33Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -13,23 +13,33 @@ if(!defined('IN_DISCUZ')) {
 
 function build_cache_diytemplatename() {
 	$data = array();
-	$query = DB::query("SELECT * FROM ".DB::table('common_diy_data'));
 	$apps = array('portal', 'forum', 'group', 'home');
-	$scriptarr = array();
+	$nullname = lang('portalcp', 'diytemplate_name_null');
+	$scriptarr = $lostname = array();
 
-	while($datarow = DB::fetch($query)){
-		$langtplname = lang('portalcp', $datarow['targettplname'], '', lang('portalcp', 'diytemplate_name_null'));
-		$datarow['name'] = $datarow['name'] ? $datarow['name'] : $langtplname;
+	foreach(C::t('common_diy_data')->range() as $datarow) {
+		$datarow['name'] = $datarow['name'] ? $datarow['name'] : lang('portalcp', $datarow['targettplname'], '', '');
+		if(empty($datarow['name'])) {
+			$lostname[$datarow['targettplname']] = $datarow['targettplname'];
+			$datarow['name'] = $nullname;
+		}
 		$data[$datarow['targettplname']] = dhtmlspecialchars($datarow['name']);
 		$curscript = substr($datarow['targettplname'], 0, strpos($datarow['targettplname'], '/'));
 		if(in_array($curscript, $apps)) {
 			$scriptarr[$curscript][$datarow['targettplname']] = true;
 		}
 	}
-
-	save_syscache('diytemplatename', $data);
+	if($lostname) {
+		require_once libfile('function/portalcp');
+		foreach(getdiytplnames($lostname) as $pre => $datas) {
+			foreach($datas as $id => $name) {
+				$data[$pre.$id] = $name;
+			}
+		}
+	}
+	savecache('diytemplatename', $data);
 	foreach($scriptarr as $curscript => $value) {
-		save_syscache('diytemplatename'.$curscript, $value);
+		savecache('diytemplatename'.$curscript, $value);
 	}
 }
 

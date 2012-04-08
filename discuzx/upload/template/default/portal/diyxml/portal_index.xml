@@ -2695,42 +2695,42 @@
 				<item id="dateuformat"><![CDATA[0]]></item>
 				<item id="script"><![CDATA[blank]]></item>
 				<item id="param">
-					<item id="content"><![CDATA[<form action=\"home.php\" method=\"get\">
-	<table cellpadding=\"0\" cellspacing=\"0\" class=\"pns\">
+					<item id="content"><![CDATA[<form action="home.php" method="get">
+	<table cellpadding="0" cellspacing="0" class="pns">
 		<tr>
-			<th width=\"70\" class=\"ptm\">性別</th>
-			<td class=\"ptm\">
-				<select id=\"gender\" name=\"gender\">
-					<option value=\"0\">任意</option>
-					<option value=\"1\">男</option>
-					<option value=\"2\" selected=\"selected\">女</option>
+			<th width="70" class="ptm">性別</th>
+			<td class="ptm">
+				<select id="gender" name="gender">
+					<option value="0">任意</option>
+					<option value="1">男</option>
+					<option value="2" selected="selected">女</option>
 				</select>
 			</td>
 		</tr>
 		<tr>
-			<th class=\"ptm\">年齡段</th>
-			<td class=\"ptm\"><input type=\"text\" name=\"startage\" value=\"18\" size=\"1\" class=\"px p_fre\" /> ~ <input type=\"text\" name=\"endage\" value=\"23\" size=\"1\" class=\"px p_fre\" /></td>
+			<th class="ptm">年齡段</th>
+			<td class="ptm"><input type="text" name="startage" value="18" size="1" class="px p_fre" /> ~ <input type="text" name="endage" value="23" size="1" class="px p_fre" /></td>
 		</tr>
 		<tr>
 			<th>&nbsp;</th>
-			<td class=\"ptm\"><label><input type=\"checkbox\" name=\"avatarstatus\" value=\"1\" class=\"pc\" /> 已經上傳頭像</label></td>
+			<td class="ptm"><label><input type="checkbox" name="avatarstatus" value="1" class="pc" /> 已經上傳頭像</label></td>
 		</tr>
 		<tr>
-			<th class=\"ptm\">用戶名</th>
-			<td class=\"ptm\"><input type=\"text\" name=\"username\" value=\"\" size=\"10\" class=\"px p_fre\" /></td>
+			<th class="ptm">用戶名</th>
+			<td class="ptm"><input type="text" name="username" value="" size="10" class="px p_fre" /></td>
 		</tr>
 		<tr>
 			<th>&nbsp;</th>
-			<td class=\"ptm\">
-				<button type=\"submit\" class=\"pn\"><em>查找</em></button>
-				<a href=\"home.php?mod=spacecp&ac=search&all=yes\" class=\"lit\">高級查找 &rsaquo;</a>
+			<td class="ptm">
+				<button type="submit" class="pn"><em>查找</em></button>
+				<a href="home.php?mod=spacecp&ac=search&all=yes" class="lit">高級查找 &rsaquo;</a>
 			</td>
 		</tr>
 	</table>
-	<input type=\"hidden\" name=\"mod\" value=\"spacecp\" />
-	<input type=\"hidden\" name=\"ac\" value=\"search\" />
-	<input type=\"hidden\" name=\"searchsubmit\" value=\"true\" />
-	<input type=\"hidden\" name=\"type\" value=\"base\" />
+	<input type="hidden" name="mod" value="spacecp" />
+	<input type="hidden" name="ac" value="search" />
+	<input type="hidden" name="searchsubmit" value="true" />
+	<input type="hidden" name="type" value="base" />
 </form>]]></item>
 					<item id="items"><![CDATA[0]]></item>
 				</item>

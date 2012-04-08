@@ -24,7 +24,7 @@
 		<!--[diy=listcontenttop]--><div id="listcontenttop" class="area"></div><!--[/diy]-->
 		<div class="bm">
 			<div class="bm_h cl">
-				<!--{if $_G[setting][rssstatus] && !$_G['gp_archiveid']}--><a href="portal.php?mod=rss&catid=$cat[catid]" class="y xi2 rss" target="_blank" title="RSS">{lang rss_subscribe_this}</a><!--{/if}-->
+				<!--{if $_G[setting][rssstatus] && !$_GET['archiveid']}--><a href="portal.php?mod=rss&catid=$cat[catid]" class="y xi2 rss" target="_blank" title="RSS">{lang rss_subscribe_this}</a><!--{/if}-->
 				<!--{if ($_G['group']['allowpostarticle'] || $_G['group']['allowmanagearticle'] || $categoryperm[$catid]['allowmanage'] || $categoryperm[$catid]['allowpublish']) && empty($cat['disallowpublish'])}-->
 				<a href="portal.php?mod=portalcp&ac=article&catid=$cat[catid]" class="y xi2 addnew">{lang article_publish}</a>
 				<!--{/if}-->
@@ -67,12 +67,12 @@
 		</div>
 		<!--{ad/articlelist/mbm hm/3}--><!--{ad/articlelist/mbm hm/4}-->
 		<!--{if $list['multi']}--><div class="pgs cl">{$list['multi']}</div><!--{/if}-->
-		
+
 		<!--[diy=diycontentbottom]--><div id="diycontentbottom" class="area"></div><!--[/diy]-->
 
 	</div>
 	<div class="sd pph">
-		
+
 		<div class="drag">
 			<!--[diy=diyrighttop]--><div id="diyrighttop" class="area"></div><!--[/diy]-->
 		</div>

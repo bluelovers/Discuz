@@ -1,19 +1,21 @@
 /*
-	[Discuz!] (C)2001-2009 Comsenz Inc.
+	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: editor.js 27008 2011-12-30 01:39:09Z monkey $
+	$Id: editor.js 28974 2012-03-21 05:02:26Z monkey $
 */
 
 var editorcurrentheight = 400, editorminheight = 400, savedataInterval = 30, editbox = null, editwin = null, editdoc = null, editcss = null, savedatat = null, savedatac = 0, autosave = 1, framemObj = null, cursor = -1, stack = [], initialized = false, postSubmited = false, editorcontroltop = false, editorcontrolwidth = false, editorcontrolheight = false, editorisfull = 0, fulloldheight = 0, savesimplodemode = null;
+EXTRAFUNC['keydown'] = [];
+EXTRAFUNC['keyup'] = [];
+EXTRAFUNC['mouseup'] = [];
+EXTRAFUNC['showEditorMenu'] = [];
+var EXTRASELECTION = '', EXTRASEL = null;
 
 function newEditor(mode, initialtext) {
 	wysiwyg = parseInt(mode);
 	if(!(BROWSER.ie || BROWSER.firefox || (BROWSER.opera >= 9))) {
 		allowswitcheditor = wysiwyg = 0;
-	}
-	if(!BROWSER.ie) {
-		$(editorid + '_paste').parentNode.style.display = 'none';
 	}
 	if(!allowswitcheditor) {
 		$(editorid + '_switcher').style.display = 'none';
@@ -80,7 +82,6 @@ function initEditor() {
 		}
 	}
 	setUnselectable($(editorid + '_controls'));
-	textobj.onkeydown = function(e) {ctlent(e ? e : event)};
 	if(editorcontroltop === false && (BROWSER.ie && BROWSER.ie > 6 || !BROWSER.ie)) {
 		seteditorcontrolpos();
 		var obj = wysiwyg ? editwin.document.body.parentNode : $(editorid + '_textarea');
@@ -94,7 +95,7 @@ function initEditor() {
 	}
 	if($(editorid + '_fullswitcher') && BROWSER.ie && BROWSER.ie < 7) {
 		$(editorid + '_fullswitcher').onclick = function () {
-			showDialog('你的瀏覽器不支持此功能，請升級瀏覽器版本', 'notice', '友情提示');
+			showDialog('您的瀏覽器不支持此功能，請升級瀏覽器版本', 'notice', '友情提示');
 		};
 		$(editorid + '_fullswitcher').className = 'xg1';
 	}
@@ -104,6 +105,36 @@ function initEditor() {
 		savedataTime();
 		savedatat = setInterval("savedataTime()", 10000);
 	}
+	initcstbar();
+	checkFocus();
+}
+
+function initcstbar() {
+	if(!$(editorid + '_cst')) {
+		return;
+	}
+	$(editorid + '_cst').style.position = 'static';
+	$(editorid + '_cst').style.width = '44px';
+	$(editorid + '_cst').style.display = '';
+	$(editorid + '_cst').style.overflow = 'hidden';
+	$(editorid + '_cst').onmouseover = function () {
+		$(editorid + '_cst').hs = $(editorid + '_cst').style.height;
+		$(editorid + '_cst').style.height = 'auto';
+		if($(editorid + '_cst').offsetHeight < 50) {
+			return;
+		}
+		pos = fetchOffset($(editorid + '_cst'), 1);
+		$(editorid + '_cst').style.position = 'absolute';
+		$(editorid + '_cst').style.left = pos.left + 'px';
+		$(editorid + '_cst').style.top = pos.top + 'px';
+		$(editorid + '_cst').style.overflow = 'visible';
+		$(editorid + '_cst').className = 'b2r cst';
+	};
+	$(editorid + '_cst').onmouseout = function () {
+		$(editorid + '_cst').style.height = $(editorid + '_cst').hs;
+		$(editorid + '_cst').style.overflow = 'hidden';
+		$(editorid + '_cst').className = 'b2r cst nbb';
+	};
 }
 
 function savedataTime() {
@@ -228,9 +259,6 @@ function editorfull(op) {
 		bbar.style.top = (document.documentElement.clientHeight - bbar.offsetHeight) + 'px';
 		return;
 	}
-	if(iswysiwyg) {
-		switchEditor(0);
-	}
 	if(!editorisfull) {
 		savesimplodemode = 0;
 		if(simplodemode) {
@@ -259,7 +287,8 @@ function editorfull(op) {
 		bbar.style.top = (document.documentElement.clientHeight - bbar.offsetHeight) + 'px';
 		bbar.style.left = '0px';
 		bbar.style.width = '100%';
-		control.style.zIndex = area.style.zIndex = bbar.style.zIndex = '200';
+		control.style.zIndex = '500';
+		area.style.zIndex = bbar.style.zIndex = '200';
 		if($(editorid + '_resize')) {
 			$(editorid + '_resize').style.display = 'none';
 		}
@@ -285,10 +314,8 @@ function editorfull(op) {
 		editorisfull = 0;
 		editorcontrolpos();
 	}
-	if(iswysiwyg) {
-		switchEditor(1);
-	}
 	$(editorid + '_fullswitcher').innerHTML = editorisfull ? '返回' : '全屏';
+	initcstbar();
 }
 
 function editorsimple() {
@@ -296,9 +323,8 @@ function editorsimple() {
 		v = 'none';
 		$(editorid + '_simple').innerHTML = '高級';
 		$(editorid + '_body').className = 'edt simpleedt';
-		$(editorid + '_adv_s0').className = 'b2r';
 		$(editorid + '_adv_s1').className = 'b2r';
-		$(editorid + '_adv_s2').className = 'b2r';
+		$(editorid + '_adv_s2').className = 'b2r nbl';
 		if(allowswitcheditor) {
 			$(editorid + '_switcher').style.display = 'none';
 		}
@@ -307,9 +333,8 @@ function editorsimple() {
 		v = '';
 		$(editorid + '_simple').innerHTML = '常用';
 		$(editorid + '_body').className = 'edt';
-		$(editorid + '_adv_s0').className = 'b1r';
 		$(editorid + '_adv_s1').className = 'b1r';
-		$(editorid + '_adv_s2').className = 'b2r nbr';
+		$(editorid + '_adv_s2').className = 'b2r nbr nbl';
 		if(allowswitcheditor) {
 			$(editorid + '_switcher').style.display = '';
 		}
@@ -321,6 +346,7 @@ function editorsimple() {
 			$(editorid + '_adv_' + i).style.display = v;
 		}
 	}
+	initcstbar();
 }
 
 function pasteWord(str) {
@@ -350,7 +376,7 @@ function pasteWord(str) {
 			}
 			return '<' + $2 + style + $4;
 		});
-		htstrml = str.replace(/<(\w[^>]*) lang=([^ |>]*)([^>]*)/gi, "<$1$3");
+		str = str.replace(/<(\w[^>]*) lang=([^ |>]*)([^>]*)/gi, "<$1$3");
 		str = str.replace(/<\\?\?xml[^>]*>/gi, "");
 		str = str.replace(/<\/?\w+:[^>]*>/gi, "");
 		str = str.replace(/&nbsp;/, " ");
@@ -363,6 +389,7 @@ function pasteWord(str) {
 	}
 }
 
+var ctlent_enable = {8:1,9:1,13:1};
 function ctlent(event) {
 	if(postSubmited == false && (event.ctrlKey && event.keyCode == 13) || (event.altKey && event.keyCode == 83) && editorsubmit) {
 		if(in_array(editorsubmit.name, ['topicsubmit', 'replysubmit', 'editsubmit']) && !validate(editorform)) {
@@ -374,10 +401,19 @@ function ctlent(event) {
 		editorform.submit();
 		return;
 	}
-	if(event.keyCode == 9) {
+	if(ctlent_enable[13] && event.keyCode == 13 && wysiwyg && $(editorid + '_insertorderedlist').className != 'hover' && $(editorid + '_insertunorderedlist').className != 'hover') {
+		if(!BROWSER.opera) {
+			insertText('<br>*', 5, 0);
+                } else {
+			insertText('<br> ', 5, 0);
+		}
+		keyBackspace();
 		doane(event);
 	}
-	if(event.keyCode == 8 && wysiwyg) {
+	if(ctlent_enable[9] && event.keyCode == 9) {
+		doane(event);
+	}
+	if(ctlent_enable[8] && event.keyCode == 8 && wysiwyg) {
 		var sel = getSel();
 		if(sel) {
 			insertText('', sel.length - 1, 0);
@@ -386,23 +422,57 @@ function ctlent(event) {
 	}
 }
 
+function keyBackspace() {
+	if(!wysiwyg) {
+		return;
+	}
+	if(BROWSER.ie) {
+		sel = editdoc.selection.createRange();
+		sel.moveStart('character', -1);
+		sel.moveEnd('character', 0);
+		sel.select();
+		editdoc.selection.clear();
+	} else {
+		editdoc.execCommand('delete', false, true);
+	}
+}
+
+function keyMenu(code, func) {
+	var km = 'kM' + Math.random();
+	var hs = '<span id="' + km + '">' + code + '</span>';
+	if(BROWSER.ie) {
+		var range = document.selection.createRange();
+		range.pasteHTML(hs);
+		range.moveToElementText(editdoc.getElementById(km));
+		range.moveStart("character");
+		range.select();
+	} else {
+		var selection = editwin.getSelection();
+		var range = selection.getRangeAt(0);
+		var fragment = range.createContextualFragment(hs);
+		range.insertNode(fragment);
+		var tmp = editdoc.getElementById(km).firstChild;
+		range.setStart(tmp, 1);
+		range.setEnd(tmp, 1);
+		selection.removeAllRanges();
+		selection.addRange(range);
+	}
+	keyMenuObj = editdoc.getElementById(km);
+	var b = fetchOffset(editbox);
+	var o = fetchOffset(keyMenuObj);
+	var scrollTop = Math.max(document.documentElement.scrollTop, document.body.scrollTop);
+	func(b.left + o.left, b.top + o.top - scrollTop);
+}
+
 function checkFocus() {
-	var obj = wysiwyg ? (!BROWSER.chrome ? editwin.document.body : editwin) : textobj;
-	if(!obj.hasfocus) {
-		if(!BROWSER.safari || BROWSER.chrome) {
-			obj.focus();
-		}
+	if(wysiwyg) {
 		try {
-			if(BROWSER.safari && !obj.safarifocus) {
-				var sel = editwin.getSelection();
-				var node = editdoc.body.lastChild;
-				var range = editdoc.createRange();
-				range.selectNodeContents(node);
-				sel.removeAllRanges();
-				sel.addRange(range);
-				obj.safarifocus = true;
-			}
-		} catch(e) {}
+			editwin.focus();
+		} catch(e) {
+			editwin.document.body.focus();
+		}
+	} else {
+		textobj.focus();
 	}
 }
 
@@ -432,7 +502,7 @@ function writeEditorContents(text) {
 		if(initialized && !(BROWSER.firefox && BROWSER.firefox >= '3' || BROWSER.opera)) {
 			editdoc.body.innerHTML = text;
 		} else {
-			text = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">' +
+			text = '<!DOCTYPE html PUBLIC "-/' + '/W3C/' + '/DTD XHTML 1.0 Transitional/' + '/EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">' +
 				'<html><head id="editorheader"><meta http-equiv="Content-Type" content="text/html; charset=' + charset + '" />' +
 				(BROWSER.ie && BROWSER.ie > 7 ? '<meta http-equiv="X-UA-Compatible" content="IE=7" />' : '' ) +
 				'<link rel="stylesheet" type="text/css" href="data/cache/style_' + STYLEID + '_wysiwyg.css?' + VERHASH + '" />' +
@@ -503,23 +573,57 @@ function setEditorStyle() {
 			} catch(e) {}
 		}
 	}
+	if($('at_menu')) {
+		$('at_menu').style.display = 'none';
+	}
 }
 
 function setEditorEvents() {
-	if(wysiwyg) {
-		if(BROWSER.firefox || BROWSER.opera) {
-			editdoc.addEventListener('mouseup', function(e) {setContext();}, true);
-			editdoc.addEventListener('keyup', function(e) {setContext();}, true);
-			editwin.addEventListener('keydown', function(e) {ctlent(e);}, true);
-		} else if(editdoc.attachEvent) {
-			editdoc.body.attachEvent('onmouseup', setContext);
-			editdoc.body.attachEvent('onkeyup', setContext);
-			editdoc.body.attachEvent('onkeydown', ctlent);
-		}
+	if(BROWSER.firefox || BROWSER.opera) {
+		editdoc.addEventListener('mouseup', function(e) {mouseUp(e)}, true);
+		editdoc.addEventListener('keyup', function(e) {keyUp(e)}, true);
+		editwin.addEventListener('keydown', function(e) {keyDown(e)}, true);
+	} else if(editdoc.attachEvent) {
+		try{
+			editdoc.body.attachEvent('onmouseup', mouseUp);
+			editdoc.body.attachEvent('onkeyup', keyUp);
+			editdoc.body.attachEvent('onkeydown', keyDown);
+		} catch(e) {}
 	}
-	editwin.onfocus = function(e) {this.hasfocus = true;};
-	editwin.onblur = function(e) {this.hasfocus = false;};
-	editwin.onclick = function(e) {this.safarifocus = true;}
+}
+
+function mouseUp(event) {
+	if(wysiwyg) {
+		setContext();
+	}
+	for(i in EXTRAFUNC['mouseup']) {
+		EXTRAEVENT = event;
+		try {
+			eval(EXTRAFUNC['mouseup'][i] + '()');
+		} catch(e) {}
+	}
+}
+
+function keyUp(event) {
+	if(wysiwyg) {
+		setContext();
+	}
+	for(i in EXTRAFUNC['keyup']) {
+		EXTRAEVENT = event;
+		try {
+			eval(EXTRAFUNC['keyup'][i] + '()');
+		} catch(e) {}
+	}
+}
+
+function keyDown(event) {
+	ctlent(event);
+	for(i in EXTRAFUNC['keydown']) {
+		EXTRAEVENT = event;
+		try {
+			eval(EXTRAFUNC['keydown'][i] + '()');
+		} catch(e) {}
+	}
 }
 
 function wrapTags(tagname, useoption, selection) {
@@ -550,12 +654,6 @@ function applyFormat(cmd, dialog, argument) {
 		return;
 	}
 	switch(cmd) {
-		case 'paste':
-			if(BROWSER.ie) {
-				var str = clipboardData.getData("TEXT");
-				insertText(str, str.length, 0);
-			}
-			break;
 		case 'bold':
 		case 'italic':
 		case 'underline':
@@ -657,7 +755,7 @@ function discuzcode(cmd, arg) {
 
 	checkFocus();
 
-	if(in_array(cmd, ['sml', 'url', 'quote', 'code', 'free', 'hide', 'aud', 'vid', 'fls', 'attach', 'image', 'pasteword']) || cmd == 'tbl' || in_array(cmd, ['fontname', 'fontsize', 'forecolor', 'backcolor']) && !arg) {
+	if(in_array(cmd, ['sml', 'url', 'quote', 'code', 'free', 'hide', 'aud', 'vid', 'fls', 'attach', 'image', 'pasteword']) || typeof EXTRAFUNC['showEditorMenu'][cmd] != 'undefined' || cmd == 'tbl' || in_array(cmd, ['fontname', 'fontsize', 'forecolor', 'backcolor']) && !arg) {
 		showEditorMenu(cmd);
 		return;
 	} else if(cmd.substr(0, 3) == 'cst') {
@@ -819,7 +917,11 @@ function setContext(cmd) {
 		}
 	}
 
-	var fs = editdoc.queryCommandValue('fontname');
+	try {
+		var fs = editdoc.queryCommandValue('fontname');
+	} catch(e) {
+		fs = null;
+	}
 	if(fs == '' && !BROWSER.ie && window.getComputedStyle) {
 		fs = editdoc.body.style.fontFamily;
 	} else if(fs == null) {
@@ -841,7 +943,9 @@ function setContext(cmd) {
 				ss = formatFontsize(ss);
 			}
 		}
-	} catch(e) {}
+	} catch(e) {
+		ss = '大小';
+	}
 
 	if(ss != $(editorid + '_size').sizestate) {
 		if($(editorid + '_size').sizestate == null) {
@@ -851,7 +955,6 @@ function setContext(cmd) {
 		$(editorid + '_size').sizestate = ss;
 	}
 }
-
 
 function buttonContext(obj, state) {
 	if(state == 'mouseover') {
@@ -957,7 +1060,7 @@ function showEditorMenu(tag, params) {
 				}
 				var lang = {'quote' : '請輸入要插入的引用', 'code' : '請輸入要插入的代碼', 'hide' : '請輸入要隱藏的信息內容', 'free' : '如果您設置了帖子售價，請輸入購買前免費可見的信息內容'};
 				str += lang[tag] + ':<br /><textarea id="' + ctrlid + '_param_1" style="width: 98%" cols="50" rows="5" class="txtarea"></textarea>' +
-					(tag == 'hide' ? '<br /><label><input type="radio" name="' + ctrlid + '_radio" id="' + ctrlid + '_radio_1" class="pc" checked="checked" />只有當瀏覽者回復本帖時才顯示</label><br /><label><input type="radio" name="' + ctrlid + '_radio" id="' + ctrlid + '_radio_2" class="pc" />只有當瀏覽者積分高於</label> <input type="text" size="3" id="' + ctrlid + '_param_2" class="px pxs" /> 時才顯示' : '');
+					(tag == 'hide' ? '<br /><label><input type="radio" name="' + ctrlid + '_radio" id="' + ctrlid + '_radio_1" class="pc" checked="checked" />只有當瀏覽者回復本帖時才顯示</label><br /><label><input type="radio" name="' + ctrlid + '_radio" id="' + ctrlid + '_radio_2" class="pc" />只有當瀏覽者積分高於</label> <input type="text" size="3" id="' + ctrlid + '_param_2" class="px pxs" /> 時才顯示<br /><br /><label>有效天數:</label> <input type="text" size="3" id="' + ctrlid + '_param_3" class="px pxs" /> <br />距離發帖日期大於這個天數時標籤自動失效' : '');
 				break;
 			case 'tbl':
 				str = '<p class="pbn">表格行數: <input type="text" id="' + ctrlid + '_param_1" size="2" value="2" class="px" /> &nbsp; 表格列數: <input type="text" id="' + ctrlid + '_param_2" size="2" value="2" class="px" /></p><p class="pbn">表格寬度: <input type="text" id="' + ctrlid + '_param_3" size="2" value="" class="px" /> &nbsp; 背景顏色: <input type="text" id="' + ctrlid + '_param_4" size="2" class="px" onclick="showColorBox(this.id, 2)" /></p><p class="xg2 pbn" style="cursor:pointer" onclick="showDialog($(\'tbltips_msg\').innerHTML, \'notice\', \'小提示\', null, 0)"><img id="tbltips" title="小提示" class="vm" src="' + IMGDIR + '/info_small.gif"> 快速書寫表格提示</p>';
@@ -980,14 +1083,24 @@ function showEditorMenu(tag, params) {
 				menutype = 'win';
 				break;
 			default:
-				var haveSel = selection == null || selection == false || in_array(trim(selection), ['', 'null', 'undefined', 'false']) ? 0 : 1;
-				if(params == 1 && haveSel) {
-					return insertText((opentag + selection + closetag), strlen(opentag), strlen(closetag), true, sel);
+				for(i in EXTRAFUNC['showEditorMenu']) {
+					EXTRASELECTION = selection;
+					EXTRASEL = sel;
+					try {
+						eval('str = ' + EXTRAFUNC['showEditorMenu'][i] + '(\'' + tag + '\', 0)');
+					} catch(e) {}
 				}
-				var promptlang = custombbcodes[tag]['prompt'].split("\t");
-				for(var i = 1; i <= params; i++) {
-					if(i != params || !haveSel) {
-						str += (promptlang[i - 1] ? promptlang[i - 1] : '請輸入第 ' + i + ' 個參數:') + '<br /><input type="text" id="' + ctrlid + '_param_' + i + '" style="width: 98%" value="" class="px" />' + (i < params ? '<br />' : '');
+				if(!str) {
+					str = '';
+					var haveSel = selection == null || selection == false || in_array(trim(selection), ['', 'null', 'undefined', 'false']) ? 0 : 1;
+					if(params == 1 && haveSel) {
+						return insertText((opentag + selection + closetag), strlen(opentag), strlen(closetag), true, sel);
+					}
+					var promptlang = custombbcodes[tag]['prompt'].split("\t");
+					for(var i = 1; i <= params; i++) {
+						if(i != params || !haveSel) {
+							str += (promptlang[i - 1] ? promptlang[i - 1] : '請輸入第 ' + i + ' 個參數:') + '<br /><input type="text" id="' + ctrlid + '_param_' + i + '" style="width: 98%" value="" class="px" />' + (i < params ? '<br />' : '');
+						}
 					}
 				}
 				break;
@@ -1042,7 +1155,7 @@ function showEditorMenu(tag, params) {
 				href = (isEmail(href) ? 'mailto:' : '') + href;
 				if(href != '') {
 					var v = selection ? selection : ($(ctrlid + '_param_2').value ? $(ctrlid + '_param_2').value : href);
-					str = wysiwyg ? ('<a href="' + href + '">' + v + '</a>') : '[url=' + href + ']' + v + '[/url]';
+					str = wysiwyg ? ('<a href="' + href + '">' + v + '</a>') : '[url=' + squarestrip(href) + ']' + v + '[/url]';
 					if(wysiwyg) insertText(str, str.length - v.length, 0, (selection ? true : false), sel);
 					else insertText(str, str.length - v.length - 6, 6, (selection ? true : false), sel);
 				}
@@ -1065,9 +1178,21 @@ function showEditorMenu(tag, params) {
 				}
 			case 'hide':
 			case 'free':
-				if(tag == 'hide' && $(ctrlid + '_radio_2').checked) {
+				if(tag == 'hide') {
 					var mincredits = parseInt($(ctrlid + '_param_2').value);
-					opentag = mincredits > 0 ? '[hide=' + mincredits + ']' : '[hide]';
+					var expire = parseInt($(ctrlid + '_param_3').value);
+					if(expire > 0 || (mincredits > 0 && $(ctrlid + '_radio_2').checked)) {
+						opentag = '[hide=';
+						if(expire > 0) {
+							opentag += 'd'+expire;
+						}
+						if(mincredits > 0 && $(ctrlid + '_radio_2').checked) {
+							opentag += (expire > 0 ? ',' : '')+mincredits;
+						}
+						opentag += ']';
+					} else {
+						opentag = '[hide]';
+					}
 				}
 				str = $(ctrlid + '_param_1') && $(ctrlid + '_param_1').value ? $(ctrlid + '_param_1').value : (selection ? selection : '');
 				if(wysiwyg) {
@@ -1084,10 +1209,10 @@ function showEditorMenu(tag, params) {
 				var bgcolor = $(ctrlid + '_param_4').value;
 				rows = /^[-\+]?\d+$/.test(rows) && rows > 0 && rows <= 30 ? rows : 2;
 				columns = /^[-\+]?\d+$/.test(columns) && columns > 0 && columns <= 30 ? columns : 2;
-				width = width.substr(width.length - 1, width.length) == '%' ? (width.substr(0, width.length - 1) <= 98 ? width : '98%') : (width <= 560 ? width : '98%');
+				width = width.substr(width.length - 1, width.length) == '%' ? (width.substr(0, width.length - 1) <= 98 ? width : '98%') : (width <= 560 ? width + 'px' : '98%');
 				bgcolor = /[\(\)%,#\w]+/.test(bgcolor) ? bgcolor : '';
 				if(wysiwyg) {
-					str = '<table cellspacing="0" cellpadding="0" width="' + (width ? width : '50%') + '" class="t_table"' + (bgcolor ? ' bgcolor="' + bgcolor + '"' : '') + '>';
+					str = '<table cellspacing="0" cellpadding="0" style="width:' + (width ? width : '50%') + '" class="t_table"' + (bgcolor ? ' bgcolor="' + bgcolor + '"' : '') + '>';
 					for (var row = 0; row < rows; row++) {
 						str += '<tr>\n';
 						for (col = 0; col < columns; col++) {
@@ -1114,9 +1239,9 @@ function showEditorMenu(tag, params) {
 				break;
 			case 'fls':
 				if($(ctrlid + '_param_2').value && $(ctrlid + '_param_3').value) {
-					insertText('[flash=' + parseInt($(ctrlid + '_param_2').value) + ',' + parseInt($(ctrlid + '_param_3').value) + ']' + $(ctrlid + '_param_1').value + '[/flash]', 7, 8, false, sel);
+					insertText('[flash=' + parseInt($(ctrlid + '_param_2').value) + ',' + parseInt($(ctrlid + '_param_3').value) + ']' + squarestrip($(ctrlid + '_param_1').value) + '[/flash]', 7, 8, false, sel);
 				} else {
-					insertText('[flash]' + $(ctrlid + '_param_1').value + '[/flash]', 7, 8, false, sel);
+					insertText('[flash]' + squarestrip($(ctrlid + '_param_1').value) + '[/flash]', 7, 8, false, sel);
 				}
 				break;
 			case 'vid':
@@ -1131,7 +1256,7 @@ function showEditorMenu(tag, params) {
 						ext = 'rtsp';
 					}
 				}
-				var str = '[media=' + ext + ',' + $(ctrlid + '_param_2').value + ',' + $(ctrlid + '_param_3').value + ']' + mediaUrl + '[/media]';
+				var str = '[media=' + ext + ',' + $(ctrlid + '_param_2').value + ',' + $(ctrlid + '_param_3').value + ']' + squarestrip(mediaUrl) + '[/media]';
 				insertText(str, str.length, 0, false, sel);
 				break;
 			case 'image':
@@ -1146,8 +1271,9 @@ function showEditorMenu(tag, params) {
 					insertText(str, str.length, 0, false, sel);
 				} else {
 					style += width || height ? '=' + width + ',' + height : '';
-					insertText('[img' + style + ']' + src + '[/img]', 0, 0, false, sel);
+					insertText('[img' + style + ']' + squarestrip(src) + '[/img]', 0, 0, false, sel);
 				}
+				hideMenu('', 'win');
 				$(ctrlid + '_param_1').value = '';
 				break;
 			case 'pasteword':
@@ -1155,20 +1281,29 @@ function showEditorMenu(tag, params) {
 				hideMenu('', 'win');
 				break;
 			default:
-				var first = $(ctrlid + '_param_1').value;
-				if($(ctrlid + '_param_2')) var second = $(ctrlid + '_param_2').value;
-				if($(ctrlid + '_param_3')) var third = $(ctrlid + '_param_3').value;
-				if((params == 1 && first) || (params == 2 && first && (haveSel || second)) || (params == 3 && first && second && (haveSel || third))) {
-					if(params == 1) {
-						str = first;
-					} else if(params == 2) {
-						str = haveSel ? selection : second;
-						opentag = '[' + tag + '=' + first + ']';
-					} else {
-						str = haveSel ? selection : third;
-						opentag = '[' + tag + '=' + first + ',' + second + ']';
+				for(i in EXTRAFUNC['showEditorMenu']) {
+					EXTRASELECTION= selection;
+					try {
+						eval('str = ' + EXTRAFUNC['showEditorMenu'][i] + '(\'' + tag + '\', 1)');
+					} catch(e) {}
+				}
+				if(!str) {
+					str = '';
+					var first = $(ctrlid + '_param_1').value;
+					if($(ctrlid + '_param_2')) var second = $(ctrlid + '_param_2').value;
+					if($(ctrlid + '_param_3')) var third = $(ctrlid + '_param_3').value;
+					if((params == 1 && first) || (params == 2 && first && (haveSel || second)) || (params == 3 && first && second && (haveSel || third))) {
+						if(params == 1) {
+							str = first;
+						} else if(params == 2) {
+							str = haveSel ? selection : second;
+							opentag = '[' + tag + '=' + first + ']';
+						} else {
+							str = haveSel ? selection : third;
+							opentag = '[' + tag + '=' + first + ',' + second + ']';
+						}
+						insertText((opentag + str + closetag), strlen(opentag), strlen(closetag), true, sel);
 					}
-					insertText((opentag + str + closetag), strlen(opentag), strlen(closetag), true, sel);
 				}
 				break;
 		}
@@ -1182,9 +1317,8 @@ function autoTypeset() {
 		sel = wysiwyg ? editdoc.selection.createRange() : document.selection.createRange();
 	}
 	var selection = sel ? (wysiwyg ? sel.htmlText.replace(/<\/?p>/ig, '<br />') : sel.text) : getSel();
-	selection = wysiwyg ? selection.replace(/<br[^\>]*>/ig, "\n") : selection.replace(/\r?\n/g, "\n");
 	selection = trim(selection);
-	selection = wysiwyg ? selection.replace(/\n\n+/g, '</p><p style="line-height: 30px; text-indent: 2em;">') : selection.replace(/\n/g, '[/p][p=30, 2, left]');
+	selection = wysiwyg ? selection.replace(/<br( \/)?>(<br( \/)?>)+/ig, '</p>\n<p style="line-height: 30px; text-indent: 2em;">') : selection.replace(/\n\n+/g, '[/p]\n[p=30, 2, left]');
 	opentag = wysiwyg ? '<p style="line-height: 30px; text-indent: 2em;">' : '[p=30, 2, left]';
 	var s = opentag + selection + (wysiwyg ? '</p>' : '[/p]');
 	insertText(s, strlen(opentag), 4, false, sel);
@@ -1459,6 +1593,12 @@ function getSnapshot() {
 	} else {
 		return false;
 	}
+}
+
+function squarestrip(str) {
+	str = str.replace('[', '%5B');
+	str = str.replace(']', '%5D');
+	return str;
 }
 
 function loadimgsize(imgurl, editor, p) {

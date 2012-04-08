@@ -4,10 +4,14 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_navtitle.php 19830 2011-01-19 07:53:48Z shanzongjun $
+ *      $Id: lang_navtitle.php 29183 2012-03-28 06:39:26Z zhengqingpeng $
  *
  *      This file is automatically generate
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 $lang = array(
   'ranklist_title_member_credit' => '用戶積分排行',

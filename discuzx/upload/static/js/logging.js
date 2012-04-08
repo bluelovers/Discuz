@@ -1,8 +1,8 @@
 /*
-	[Discuz!] (C)2001-2009 Comsenz Inc.
+	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: logging.js 21541 2011-03-31 02:44:01Z monkey $
+	$Id: logging.js 23838 2011-08-11 06:51:58Z monkey $
 */
 
 function lsSubmit(op) {

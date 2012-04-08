@@ -1,8 +1,8 @@
 /*
-	[Discuz!] (C)2001-2009 Comsenz Inc.
+	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: register.js 22639 2011-05-16 07:05:16Z lifangming $
+	$Id: register.js 27312 2012-01-16 02:39:24Z monkey $
 */
 
 var lastusername = '', lastpassword = '', lastemail = '', lastinvitecode = '', stmp = new Array();
@@ -23,7 +23,8 @@ function errormessage(id, msg) {
 		if($('chk_' + id)) {
 			$('chk_' + id).innerHTML = msg;
 		}
-		$(id).className = !msg ? $(id).className.replace(/ er/, '') : $(id).className + ' er';
+		$(id).className = $(id).className.replace(/ er/, '');
+		$(id).className += !msg ? '' : ' er';
 	}
 }
 
@@ -50,11 +51,22 @@ function addFormEvent(formid, focus){
 	};
 	formNode[stmp[1]].onblur = function () {
 		if(formNode[stmp[1]].value == '') {
-			errormessage(formNode[stmp[1]].id, '請填寫密碼');
+			var pwmsg = '請填寫密碼';
+			if(pwlength > 0) {
+				pwmsg += ', 最小長度為 '+pwlength+' 個字符';
+			}
+			errormessage(formNode[stmp[1]].id, pwmsg);
 		}else{
 			errormessage(formNode[stmp[1]].id, 'succeed');
 		}
 		checkpassword(formNode[stmp[1]].id, formNode[stmp[2]].id);
+	};
+	formNode[stmp[1]].onkeyup = function () {
+		if(pwlength == 0 || $(formNode[stmp[1]].id).value.length >= pwlength) {
+			var passlevels = new Array('','弱','中','強');
+			var passlevel = checkstrongpw(formNode[stmp[1]].id);
+			errormessage(formNode[stmp[1]].id, '<span class="passlevel passlevel'+passlevel+'">密碼強度:'+passlevels[passlevel]+'</span>');
+		}
 	};
 	formNode[stmp[2]].onblur = function () {
 		if(formNode[stmp[2]].value == '') {
@@ -62,22 +74,7 @@ function addFormEvent(formid, focus){
 		}
 		checkpassword(formNode[stmp[1]].id, formNode[stmp[2]].id);
 	};
-	formNode[stmp[3]].onclick = function (event) {
-		emailMenu(event, formNode[stmp[3]].id);
-	};
-	formNode[stmp[3]].onkeyup = function (event) {
-		emailMenu(event, formNode[stmp[3]].id);
-	};
-	formNode[stmp[3]].onkeydown = function (event) {
-		emailMenuOp(4, event, formNode[stmp[3]].id);
-	};
-	formNode[stmp[3]].onblur = function () {
-		if(formNode[stmp[3]].value == '') {
-			errormessage(formNode[stmp[3]].id, '請輸入郵箱地址');
-		}
-		emailMenuOp(3, null, formNode[stmp[3]].id);
-	};
-	stmp['email'] = formNode[stmp[3]].id;
+	addMailEvent(formNode[stmp[3]]);
 	try {
 		if(focus) {
 			$('invitecode').focus();
@@ -87,6 +84,38 @@ function addFormEvent(formid, focus){
 	} catch(e) {}
 }
 
+function addMailEvent(mailObj) {
+
+	mailObj.onclick = function (event) {
+		emailMenu(event, mailObj.id);
+	};
+	mailObj.onkeyup = function (event) {
+		emailMenu(event, mailObj.id);
+	};
+	mailObj.onkeydown = function (event) {
+		emailMenuOp(4, event, mailObj.id);
+	};
+	mailObj.onblur = function () {
+		if(mailObj.value == '') {
+			errormessage(mailObj.id, '請輸入郵箱地址');
+		}
+		emailMenuOp(3, null, mailObj.id);
+	};
+	stmp['email'] = mailObj.id;
+}
+function checkstrongpw(id) {
+	var passlevel = 0;
+	if($(id).value.match(/\d+/g)) {
+		passlevel ++;
+	}
+	if($(id).value.match(/[a-z]+/ig)) {
+		passlevel ++;
+	}
+	if($(id).value.match(/[^a-z0-9]+/ig)) {
+		passlevel ++;
+	}
+	return passlevel;
+}
 function showInputTip(id) {
 	var p_tips = $('registerform').getElementsByTagName('i');
 	for(i = 0;i < p_tips.length;i++){
@@ -237,7 +266,7 @@ function checkusername(id) {
 	}
 	var unlen = username.replace(/[^\x00-\xff]/g, "**").length;
 	if(unlen < 3 || unlen > 15) {
-		errormessage(id, unlen < 3 ? '用戶名小於 3 個字符' : '用戶名超過 15 個字符');
+		errormessage(id, unlen < 3 ? '用戶名不得小於 3 個字符' : '用戶名不得超過 15 個字符');
 		return;
 	}
 	var x = new Ajax();
@@ -250,6 +279,42 @@ function checkusername(id) {
 function checkpassword(id1, id2) {
 	if(!$(id1).value && !$(id2).value) {
 		return;
+	}
+	if(pwlength > 0) {
+		if($(id1).value.length < pwlength) {
+			errormessage(id1, '密碼太短，不得少於 '+pwlength+' 個字符');
+			return;
+		}
+	}
+	if(strongpw) {
+		var strongpw_error = false, j = 0;
+		var strongpw_str = new Array();
+		for(var i in strongpw) {
+			if(strongpw[i] === 1 && !$(id1).value.match(/\d+/g)) {
+				strongpw_error = true;
+				strongpw_str[j] = '數字';
+				j++;
+			}
+			if(strongpw[i] === 2 && !$(id1).value.match(/[a-z]+/g)) {
+				strongpw_error = true;
+				strongpw_str[j] = '小寫字母';
+				j++;
+			}
+			if(strongpw[i] === 3 && !$(id1).value.match(/[A-Z]+/g)) {
+				strongpw_error = true;
+				strongpw_str[j] = '大寫字母';
+				j++;
+			}
+			if(strongpw[i] === 4 && !$(id1).value.match(/[^A-Za-z0-9]+/g)) {
+				strongpw_error = true;
+				strongpw_str[j] = '特殊符號';
+				j++;
+			}
+		}
+		if(strongpw_error) {
+			errormessage(id1, '密碼太弱，密碼中必須包含 '+strongpw_str.join('，'));
+			return;
+		}
 	}
 	errormessage(id2);
 	if($(id1).value != $(id2).value) {

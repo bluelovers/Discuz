@@ -1,8 +1,8 @@
 /*
-	[Discuz!] (C)2001-2009 Comsenz Inc.
+	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: smilies.js 21444 2011-03-25 10:12:35Z lifangming $
+	$Id: smilies.js 23838 2011-08-11 06:51:58Z monkey $
 */
 
 function _smilies_show(id, smcols, seditorkey) {

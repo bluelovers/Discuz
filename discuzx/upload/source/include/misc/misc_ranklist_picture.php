@@ -7,10 +7,10 @@ loadcache('click');
 $clicks = empty($_G['cache']['click']['picid'])?array():$_G['cache']['click']['picid'];
 
 $picturelist = '';
-$orderby = in_array($_G['gp_orderby'], array('thisweek', 'thismonth', 'today', 'all')) ? $_G['gp_orderby'] : '';
+$orderby = in_array($_GET['orderby'], array('thisweek', 'thismonth', 'today', 'all')) ? $_GET['orderby'] : '';
 
 $navname = $_G['setting']['navs'][8]['navname'];
-switch($_G['gp_view']) {
+switch($_GET['view']) {
 	case 'hot':
 		$view = 'hot';
 		$navtitle = lang('ranklist/navtitle', 'ranklist_title_picture_heat').' - '.$navname;
@@ -24,13 +24,13 @@ switch($_G['gp_view']) {
 		$metadescription = lang('ranklist/navtitle', 'ranklist_title_picture_share');
 		break;
 	default:
-		if($clicks[$_G['gp_view']]) {
-			$view = 'click'.$_G['gp_view'];
-			$navtitle = lang('ranklist/navtitle', 'ranklist_title_picture_'.$_G['gp_view']).' - '.$navname;
-			$metakeywords = lang('ranklist/navtitle', 'ranklist_title_picture_'.$_G['gp_view']);
-			$metadescription = lang('ranklist/navtitle', 'ranklist_title_picture_'.$_G['gp_view']);
+		if($clicks[$_GET['view']]) {
+			$view = 'click'.$_GET['view'];
+			$navtitle = lang('ranklist/navtitle', 'ranklist_title_picture_'.$_GET['view']).' - '.$navname;
+			$metakeywords = lang('ranklist/navtitle', 'ranklist_title_picture_'.$_GET['view']);
+			$metadescription = lang('ranklist/navtitle', 'ranklist_title_picture_'.$_GET['view']);
 		} else {
-			$_G['gp_view'] = 'hot';
+			$_GET['view'] = 'hot';
 			$view = 'hot';
 		}
 }

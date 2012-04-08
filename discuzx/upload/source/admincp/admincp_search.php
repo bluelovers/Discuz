@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_search.php 22381 2011-05-05 03:05:16Z monkey $
+ *      $Id: admincp_search.php 25246 2011-11-02 03:34:53Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -21,14 +21,14 @@ if(!$searchindex) {
 	cpmsg('searchindex_not_found', '', 'error');
 }
 
-$keywords = trim($_G['gp_keywords']);
+$keywords = trim($_GET['keywords']);
 $kws = explode(' ', $keywords);
 $kws = array_map('trim', $kws);
 $keywords = implode(' ', $kws);
 
 $result = $html = array();
 
-if($_G['gp_searchsubmit'] && $keywords) {
+if($_GET['searchsubmit'] && $keywords) {
 	foreach($searchindex as $skey => $items) {
 		foreach($kws as $kw) {
 			foreach($items['text'] as $k => $text) {

@@ -1,7 +1,7 @@
 <!--{template common/header}-->
 
 <!--{eval $loginhash = 'L'.random(4);}-->
-<!--{if empty($_G['gp_infloat'])}-->
+<!--{if empty($_GET['infloat'])}-->
 <div id="ct" class="ptm wp w cl">
 	<div class="nfl" id="main_succeed" style="display: none">
 		<div class="f_c altw">
@@ -28,12 +28,12 @@
 	<div id="layer_login_$loginhash">
 		<h3 class="flb">
 			<em id="returnmessage_$loginhash">
-				<!--{if !empty($_G['gp_infloat'])}--><!--{if !empty($_G['gp_guestmessage'])}-->{lang login_guestmessage}<!--{elseif $auth}-->{lang profile_renew}<!--{else}-->{lang login_member}<!--{/if}--><!--{/if}-->
+				<!--{if !empty($_GET['infloat'])}--><!--{if !empty($_GET['guestmessage'])}-->{lang login_guestmessage}<!--{elseif $auth}-->{lang profile_renew}<!--{else}-->{lang login_member}<!--{/if}--><!--{/if}-->
 			</em>
-			<span><!--{if !empty($_G['gp_infloat']) && !isset($_G['gp_frommessage'])}--><a href="javascript:;" class="flbc" onclick="hideWindow('$_G[gp_handlekey]', 0, 1);" title="{lang close}">{lang close}</a><!--{/if}--></span>
+			<span><!--{if !empty($_GET['infloat']) && !isset($_GET['frommessage'])}--><a href="javascript:;" class="flbc" onclick="hideWindow('$_GET[handlekey]', 0, 1);" title="{lang close}">{lang close}</a><!--{/if}--></span>
 		</h3>
 		<!--{hook/logging_top}-->
-		<form method="post" autocomplete="off" name="login" id="loginform_$loginhash" class="cl" onsubmit="{if $this->setting['pwdsafety']}pwmd5('password3_$loginhash');{/if}pwdclear = 1;ajaxpost('loginform_$loginhash', 'returnmessage_$loginhash', 'returnmessage_$loginhash', 'onerror');return false;" action="member.php?mod=logging&action=login&loginsubmit=yes{if !empty($_G['gp_handlekey'])}&handlekey=$_G[gp_handlekey]{/if}{if isset($_G['gp_frommessage'])}&frommessage{/if}&loginhash=$loginhash">
+		<form method="post" autocomplete="off" name="login" id="loginform_$loginhash" class="cl" onsubmit="{if $this->setting['pwdsafety']}pwmd5('password3_$loginhash');{/if}pwdclear = 1;ajaxpost('loginform_$loginhash', 'returnmessage_$loginhash', 'returnmessage_$loginhash', 'onerror');return false;" action="member.php?mod=logging&action=login&loginsubmit=yes{if !empty($_GET['handlekey'])}&handlekey=$_GET[handlekey]{/if}{if isset($_GET['frommessage'])}&frommessage{/if}&loginhash=$loginhash">
 			<div class="c cl">
 				<input type="hidden" name="formhash" value="{FORMHASH}" />
 				<input type="hidden" name="referer" value="{echo dreferer()}" />
@@ -83,12 +83,12 @@
 				</div>
 				<!--{/if}-->
 
-				<!--{if empty($_G['gp_auth']) || $questionexist}-->
+				<!--{if empty($_GET['auth']) || $questionexist}-->
 				<div class="rfm">
 					<table>
 						<tr>
 							<th>{lang security_q}:</th>
-							<td><select id="loginquestionid_$loginhash" width="213" name="questionid"{if !$questionexist} onchange="if($('loginquestionid_$loginhash').value > 0) {$('loginanswer_row_$loginhash').style.display='';} else {$('loginanswer_row_$loginhash').style.display='none';}"{/if}>
+							<td><select id="loginquestionid_$loginhash" width="213" name="questionid"{if !$questionexist} onchange="if($('loginquestionid_$loginhash').value > 0) {$('loginanswer_row_$loginhash').style.display='';} else {$('loginanswer_row_$loginhash').style.display='none';}"<!--{/if}-->>
 								<option value="0"><!--{if $questionexist}-->{lang security_question_0}<!--{else}-->{lang security_question}<!--{/if}--></option>
 								<option value="1">{lang security_question_1}</option>
 								<option value="2">{lang security_question_2}</option>
@@ -118,7 +118,7 @@
 
 				<!--{hook/logging_input}-->
 
-				<div class="rfm {if !empty($_G['gp_infloat'])} bw0{/if}">
+				<div class="rfm {if !empty($_GET['infloat'])} bw0{/if}">
 					<table>
 						<tr>
 							<th></th>
@@ -135,15 +135,15 @@
 								<button class="pn pnc" type="submit" name="loginsubmit" value="true" tabindex="1"><strong>{lang login}</strong></button>
 							</td>
 							<td>
-								<!--{if $this->setting['sitemessage'][login] && empty($_G['gp_infloat'])}--><a href="javascript:;" id="custominfo_login_$loginhash" class="y">&nbsp;<img src="{IMGDIR}/info_small.gif" alt="{lang faq}" class="vm" /></a><!--{/if}-->
-								<!--{if !$this->setting['bbclosed'] && empty($_G['gp_infloat'])}--><a href="javascript:;" onclick="ajaxget('member.php?mod=clearcookies&formhash={FORMHASH}', 'returnmessage_$loginhash', 'returnmessage_$loginhash');return false;" title="{lang login_clearcookies}" class="y">{lang login_clearcookies}</a><!--{/if}-->
+								<!--{if $this->setting['sitemessage'][login] && empty($_GET['infloat'])}--><a href="javascript:;" id="custominfo_login_$loginhash" class="y">&nbsp;<img src="{IMGDIR}/info_small.gif" alt="{lang faq}" class="vm" /></a><!--{/if}-->
+								<!--{if !$this->setting['bbclosed'] && empty($_GET['infloat'])}--><a href="javascript:;" onclick="ajaxget('member.php?mod=clearcookies&formhash={FORMHASH}', 'returnmessage_$loginhash', 'returnmessage_$loginhash');return false;" title="{lang login_clearcookies}" class="y">{lang login_clearcookies}</a><!--{/if}-->
 							</td>
 						</tr>
 					</table>
 				</div>
 
 				<!--{if !empty($_G['setting']['pluginhooks']['logging_method'])}-->
-					<div class="rfm bw0 {if empty($_G['gp_infloat'])} mbw{/if}">
+					<div class="rfm bw0 {if empty($_GET['infloat'])} mbw{/if}">
 						<hr class="l" />
 						<table>
 							<tr>
@@ -159,7 +159,7 @@
 	<div id="layer_lostpw_$loginhash" style="display: none;">
 		<h3 class="flb">
 			<em id="returnmessage3_$loginhash">{lang getpassword}</em>
-			<span><!--{if !empty($_G['gp_infloat']) && !isset($_G['gp_frommessage'])}--><a href="javascript:;" class="flbc" onclick="hideWindow('login')" title="{lang close}">{lang close}</a><!--{/if}--></span>
+			<span><!--{if !empty($_GET['infloat']) && !isset($_GET['frommessage'])}--><a href="javascript:;" class="flbc" onclick="hideWindow('login')" title="{lang close}">{lang close}</a><!--{/if}--></span>
 		</h3>
 		<form method="post" autocomplete="off" id="lostpwform_$loginhash" class="cl" onsubmit="ajaxpost('lostpwform_$loginhash', 'returnmessage3_$loginhash', 'returnmessage3_$loginhash', 'onerror');return false;" action="member.php?mod=lostpasswd&lostpwsubmit=yes&infloat=yes">
 			<div class="c cl">
@@ -168,16 +168,16 @@
 				<div class="rfm">
 					<table>
 						<tr>
-							<th><label for="lostpw_username">{lang username}:</label></th>
-							<td><input type="text" name="username" id="lostpw_username" size="30" value=""  tabindex="1" class="px p_fre" /></td>
+							<th><span class="rq">*</span><label for="lostpw_email">{lang email}:</label></th>
+							<td><input type="text" name="email" id="lostpw_email" size="30" value=""  tabindex="1" class="px p_fre" /></td>
 						</tr>
 					</table>
 				</div>
 				<div class="rfm">
 					<table>
 						<tr>
-							<th><label for="lostpw_email">{lang email}:</label></th>
-							<td><input type="text" name="email" id="lostpw_email" size="30" value=""  tabindex="1" class="px p_fre" /></td>
+							<th><label for="lostpw_username">{lang username}:</label></th>
+							<td><input type="text" name="username" id="lostpw_username" size="30" value=""  tabindex="1" class="px p_fre" /></td>
 						</tr>
 					</table>
 				</div>
@@ -195,9 +195,9 @@
 	</div>
 </div>
 
-<div id="layer_message_$loginhash"{if empty($_G['gp_infloat'])} class="f_c blr nfl"{/if} style="display: none;">
+<div id="layer_message_$loginhash"{if empty($_GET['infloat'])} class="f_c blr nfl"{/if} style="display: none;">
 	<h3 class="flb" id="layer_header_$loginhash">
-		<!--{if !empty($_G['gp_infloat']) && !isset($_G['gp_frommessage'])}-->
+		<!--{if !empty($_GET['infloat']) && !isset($_GET['frommessage'])}-->
 		<em>{lang login_member}</em>
 		<span><a href="javascript:;" class="flbc" onclick="hideWindow('login')" title="{lang close}">{lang close}</a></span>
 		<!--{/if}-->
@@ -208,9 +208,8 @@
 	</div>
 </div>
 
-<script type="text/javascript" src="{$this->setting['jspath']}md5.js?{VERHASH}" reload="1"></script>
 <script type="text/javascript" reload="1">
-<!--{if !isset($_G['gp_viewlostpw'])}-->
+<!--{if !isset($_GET['viewlostpw'])}-->
 	var pwdclear = 0;
 	function initinput_login() {
 		document.body.focus();
@@ -227,20 +226,6 @@
 	<!--{if $this->setting['sitemessage']['login']}-->
 	showPrompt('custominfo_login_$loginhash', 'mouseover', '<!--{echo trim($this->setting['sitemessage'][login][array_rand($this->setting['sitemessage'][login])])}-->', $this->setting['sitemessage'][time]);
 	<!--{/if}-->
-	<!--{if $this->setting['pwdsafety']}-->
-	var pwmd5log = new Array();
-	function pwmd5() {
-		if(!$(pwmd5.arguments[i])) {
-			return;
-		}
-		numargs = pwmd5.arguments.length;
-		for(var i = 0; i < numargs; i++) {
-			if(!pwmd5log[pwmd5.arguments[i]] || $(pwmd5.arguments[i]).value.length != 32) {
-				pwmd5log[pwmd5.arguments[i]] = $(pwmd5.arguments[i]).value = hex_md5($(pwmd5.arguments[i]).value);
-			}
-		}
-	}
-	<!--{/if}-->
 
 	function clearpwd() {
 		if(pwdclear) {
@@ -251,12 +236,12 @@
 <!--{else}-->
 	display('layer_login_$loginhash');
 	display('layer_lostpw_$loginhash');
-	$('lostpw_username').focus();
+	$('lostpw_email').focus();
 <!--{/if}-->
 </script>
 
 <!--{eval updatesession();}-->
-<!--{if empty($_G['gp_infloat'])}-->
+<!--{if empty($_GET['infloat'])}-->
 	</div></div></div></div>
 </div>
 <!--{/if}-->

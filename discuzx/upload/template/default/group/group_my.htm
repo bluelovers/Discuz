@@ -148,7 +148,7 @@
 						<!--{loop $grouplist $groupid $group}-->
 						<li>
 							<a href="forum.php?mod=group&fid=$groupid" title="$group[name]" class="avt"><img src="$group[icon]" alt="$group[name]" /></a>
-							<p><a href="forum.php?mod=group&fid=$groupid" title="$group[name]">$group[name]</a></p>
+							<p><!--{if $group['flevel'] == '-1'}-->({lang group_wait_mod})<!--{/if}--><a href="forum.php?mod=group&fid=$groupid" title="$group[name]">$group[name]</a></p>
 						</li>
 						<!--{/loop}-->
 					</ul>
@@ -167,9 +167,11 @@
 		<div class="drag">
 			<!--[diy=diysidebtntop]--><div id="diysidebtntop" class="area"></div><!--[/diy]-->
 		</div>
+		<!--{if helper_access::check_module('group')}-->
 		<div class="hm pbm">
 			<a href="forum.php?mod=group&action=create" id="create_group_btn"><img src="{IMGDIR}/create_group.png" alt="{lang group_create}" /></a>
 		</div>
+		<!--{/if}-->
 		<div class="drag">
 			<!--[diy=diysidetop]--><div id="diysidetop" class="area"></div><!--[/diy]-->
 		</div>

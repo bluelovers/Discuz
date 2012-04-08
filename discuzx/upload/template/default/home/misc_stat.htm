@@ -2,7 +2,6 @@
 <!--{template common/header}-->
 
 <div id="pt" class="bm cl">
-	<!--{subtemplate common/simplesearchform}-->
 	<div class="z">
 		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a><em>&rsaquo;</em>
 		<a href="misc.php?mod=stat">{lang stats}</a><em>&rsaquo;</em>
@@ -25,7 +24,7 @@
 					<td>
 						<a href="misc.php?mod=stat&op=trend"$actives[all]>{lang comprehensive_overview}</a> &nbsp;
 						<!--{loop $cols['login'] $value}-->
-						<label$actives[$value]><input type="checkbox" name="types[]" value="$value" class="pc" {if in_array($value, $_G[gp_types])} checked="checked"{/if} /><!--{eval echo lang('spacecp', "do_stat_$value");}--></label> &nbsp;
+						<label$actives[$value]><input type="checkbox" name="types[]" value="$value" class="pc" {if in_array($value, $_GET[types])} checked="checked"{/if} /><!--{eval echo lang('spacecp', "do_stat_$value");}--></label> &nbsp;
 						<!--{/loop}-->
 					</td>
 				</tr>
@@ -33,23 +32,23 @@
 					<th>$_G[setting][navs][2][navname]:</th>
 					<td>
 						<!--{loop $cols['forum'] $value}-->
-						<label$actives[$value]><input type="checkbox" name="types[]" value="$value" class="pc" {if in_array($value, $_G[gp_types])} checked="checked"{/if} /><!--{eval echo lang('spacecp', "do_stat_$value");}--></label> &nbsp;
+						<label$actives[$value]><input type="checkbox" name="types[]" value="$value" class="pc" {if in_array($value, $_GET[types])} checked="checked"{/if} /><!--{eval echo lang('spacecp', "do_stat_$value");}--></label> &nbsp;
 						<!--{/loop}-->
 					</td>
 				</tr>
 				<tr class="tbmu">
-					<th>$_G[setting][navs][3][navname]:</th>
+					<th>{lang tgroup}:</th>
 					<td>
 						<!--{loop $cols['tgroup'] $value}-->
-						<label $actives[$value]><input type="checkbox" name="types[]" value="$value" class="pc" {if in_array($value, $_G[gp_types])} checked="checked"{/if} /><!--{eval echo lang('spacecp', "do_stat_$value");}--></label> &nbsp;
+						<label $actives[$value]><input type="checkbox" name="types[]" value="$value" class="pc" {if in_array($value, $_GET[types])} checked="checked"{/if} /><!--{eval echo lang('spacecp', "do_stat_$value");}--></label> &nbsp;
 						<!--{/loop}-->
 					</td>
 				</tr>
 				<tr class="tbmu">
-					<th>$_G[setting][navs][4][navname]:</th>
+					<th>{lang home}:</th>
 					<td>
 						<!--{loop $cols['home'] $value}-->
-						<label$actives[$value]><input type="checkbox" name="types[]" value="$value" class="pc" {if in_array($value, $_G[gp_types])} checked="checked"{/if} /><!--{eval echo lang('spacecp', "do_stat_$value");}--></label> &nbsp;
+						<label$actives[$value]><input type="checkbox" name="types[]" value="$value" class="pc" {if in_array($value, $_GET[types])} checked="checked"{/if} /><!--{eval echo lang('spacecp', "do_stat_$value");}--></label> &nbsp;
 						<!--{/loop}-->
 					</td>
 				</tr>
@@ -58,7 +57,7 @@
 					<th>{lang info_interactive}:</th>
 					<td>
 						<!--{loop $cols['comment'] $value}-->
-						<label$actives[$value]><input type="checkbox" name="types[]" value="$value" class="pc" {if in_array($value, $_G[gp_types])} checked="checked"{/if} /><!--{eval echo lang('spacecp', "do_stat_$value");}--></label> &nbsp;
+						<label$actives[$value]><input type="checkbox" name="types[]" value="$value" class="pc" {if in_array($value, $_GET[types])} checked="checked"{/if} /><!--{eval echo lang('spacecp', "do_stat_$value");}--></label> &nbsp;
 						<!--{/loop}-->
 					</td>
 				</tr-->
@@ -66,7 +65,7 @@
 					<th>{lang member_interactive}:</th>
 					<td>
 						<!--{loop $cols['space'] $value}-->
-						<label$actives[$value]><input type="checkbox" name="types[]" value="$value" class="pc" {if in_array($value, $_G[gp_types])} checked="checked"{/if} /><!--{eval echo lang('spacecp', "do_stat_$value");}--></label> &nbsp;
+						<label$actives[$value]><input type="checkbox" name="types[]" value="$value" class="pc" {if in_array($value, $_GET[types])} checked="checked"{/if} /><!--{eval echo lang('spacecp', "do_stat_$value");}--></label> &nbsp;
 						<!--{/loop}-->
 					</td>
 				</tr>
@@ -80,7 +79,7 @@
 					</td>
 				</tr>
 			</table>
-			<input type="hidden" name="type" value="$_G[gp_type]" />
+			<input type="hidden" name="type" value="$_GET[type]" />
 			<input type="hidden" name="mod" value="stat" />
 			<input type="hidden" name="op" value="trend" />
 			</form>

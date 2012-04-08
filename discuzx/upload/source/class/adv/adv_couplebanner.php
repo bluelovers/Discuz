@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: adv_couplebanner.php 19237 2010-12-23 04:27:46Z monkey $
+ *      $Id: adv_couplebanner.php 26692 2011-12-20 05:27:38Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -13,7 +13,7 @@ if(!defined('IN_DISCUZ')) {
 
 class adv_couplebanner {
 
-	var $version = '1.0';
+	var $version = '1.1';
 	var $name = 'couplebanner_name';
 	var $description = 'couplebanner_desc';
 	var $copyright = '<a href="http://www.comsenz.com" target="_blank">Comsenz Inc.</a>';
@@ -52,6 +52,15 @@ class adv_couplebanner {
 				'type' => 'select',
 				'value' => array(),
 			),
+		        'disableclose' => array(
+			    'title' => 'couplebanner_disableclose',
+			    'type' => 'mradio',
+			    'value' => array(
+			            array(0, 'couplebanner_show'),
+				    array(1, 'couplebanner_hidden'),
+			    ),
+			    'default' => 0,
+			)
 		);
 		loadcache(array('forums', 'grouptype'));
 		$settings['fids']['value'][] = $settings['groups']['value'][] = array(0, '&nbsp;');
@@ -68,8 +77,7 @@ class adv_couplebanner {
 				}
 			}
 		}
-		$query = DB::query('SELECT * FROM '.DB::table('common_advertisement')." WHERE type='couplebanner'");
-		while($couple = DB::fetch($query)) {
+		foreach(C::t('common_advertisement')->fetch_all_by_type('couplebanner') as $couple) {
 			$settings['coupleadid']['value'][] = array($couple['advid'], $couple['title']);
 		}
 		loadcache('portalcategory');
@@ -122,7 +130,7 @@ class adv_couplebanner {
 			} else {
 				$coupleadid = $_G[\'couplebrother\'];
 			}
-			$adcode = empty($_G[\'cookie\'][\'adclose_\'.$coupleadid]) ? $codes[$coupleadid].\'<br /><a href="javascript:;" onclick="setcookie(\\\'adclose_\'.$coupleadid.\'\\\', 1, 86400);this.parentNode.style.display=\\\'none\\\'"><img src="\'.STATICURL.\'image/common/ad_close.gif" /></a>\' : \'\';
+			$adcode = empty($parameter[\'disableclose\']) ? (empty($_G[\'cookie\'][\'adclose_\'.$coupleadid]) ? $codes[$coupleadid].\'<br /><a href="javascript:;" onclick="setcookie(\\\'adclose_\'.$coupleadid.\'\\\', 1, 86400);this.parentNode.style.display=\\\'none\\\'"><img src="\'.STATICURL.\'image/common/ad_close.gif" /></a>\' : \'\') : $codes[$coupleadid];
 			',
 		);
 	}

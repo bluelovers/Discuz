@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_rss.php 19039 2010-12-14 08:40:59Z monkey $
+ *      $Id: forum_rss.php 28366 2012-02-28 07:38:23Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -40,7 +40,11 @@ if(empty($rssfid)) {
 } else {
 	$forum = isset($_G['cache']['forums'][$rssfid]) && $_G['cache']['forums'][$rssfid]['type'] != 'group' ? $_G['cache']['forums'][$rssfid] : array();
 	if(!isset($_G['cache']['forums'][$rssfid])) {
-		$forum = $_G['cache']['forums'][$rssfid] = DB::fetch_first("SELECT f.*, ff.viewperm FROM ".DB::table('forum_forum')." f LEFT JOIN ".DB::table('forum_forumfield')." ff ON ff.fid=f.fid WHERE f.fid='$rssfid' AND f.type='sub' LIMIT 1");
+		$forum = $_G['cache']['forums'][$rssfid] = array();
+		$subforum = C::t('forum_forum')->fetch_info_by_fid($rssfid);
+		if($subforum['type'] == 'sub') {
+			$forum = $_G['cache']['forums'][$rssfid] = $subforum;
+		}
 	}
 	if($forum && rssforumperm($forum)) {
 		$fidarray = array($rssfid);
@@ -48,6 +52,15 @@ if(empty($rssfid)) {
 	} else {
 		exit('Specified forum not found');
 	}
+}
+
+$frewriteflag = $trewriteflag = 0;
+$havedomain = implode('', $_G['setting']['domain']['app']);
+if(is_array($_G['setting']['rewritestatus']) && in_array('forum_forumdisplay', $_G['setting']['rewritestatus'])) {
+	$frewriteflag = 1;
+}
+if(is_array($_G['setting']['rewritestatus']) && in_array('forum_viewthread', $_G['setting']['rewritestatus'])) {
+	$trewriteflag = 1;
 }
 
 $charset = $_G['config']['output']['charset'];
@@ -61,7 +74,7 @@ echo 	"<?xml version=\"1.0\" encoding=\"".$charset."\"?>\n".
 		"    <description>Latest $num threads of all forums</description>\n"
 		:
 		"    <title>{$_G[setting][bbname]} - $forumname</title>\n".
-		"    <link>{$_G[siteurl]}forum.php?mod=forumdisplay&amp;fid=$rssfid</link>\n".
+		"    <link>{$_G[siteurl]}".($frewriteflag ? rewriteoutput('forum_forumdisplay', 1, '', $rssfid) : "forum.php?mod=forumdisplay&amp;fid=$rssfid")."</link>\n".
 		"    <description>Latest $num threads of $forumname</description>\n"
 	).
 	"    <copyright>Copyright(C) {$_G[setting][bbname]}</copyright>\n".
@@ -75,9 +88,9 @@ echo 	"<?xml version=\"1.0\" encoding=\"".$charset."\"?>\n".
 	"    </image>\n";
 
 if($fidarray) {
-	$query = DB::query("SELECT * FROM ".DB::table('forum_rsscache')." WHERE fid IN (".dimplode($fidarray).") ORDER BY dateline DESC LIMIT $num");
-	if(DB::num_rows($query)) {
-		while($thread = DB::fetch($query)) {
+	$alldata = C::t('forum_rsscache')->fetch_all_by_fid($fidarray, $num);
+	if($alldata) {
+		foreach($alldata as $thread) {
 			if(TIMESTAMP - $thread['lastupdate'] > $ttl * 60) {
 				updatersscache($num);
 				break;
@@ -92,7 +105,7 @@ if($fidarray) {
 				}
 				echo 	"    <item>\n".
 					"      <title>".$thread['subject']."</title>\n".
-					"      <link>$_G[siteurl]forum.php?mod=viewthread&amp;tid=$thread[tid]</link>\n".
+					"      <link>$_G[siteurl]".($trewriteflag ? rewriteoutput('forum_viewthread', 1, '', $thread['tid']) : "forum.php?mod=viewthread&amp;tid=$thread[tid]")."</link>\n".
 					"      <description><![CDATA[".dhtmlspecialchars($thread['description'])."]]></description>\n".
 					"      <category>".dhtmlspecialchars($thread['forum'])."</category>\n".
 					"      <author>".dhtmlspecialchars($thread['author'])."</author>\n".
@@ -109,37 +122,39 @@ if($fidarray) {
 echo 	"  </channel>\n".
 	"</rss>";
 
-
 function updatersscache($num) {
 	global $_G;
 	$processname = 'forum_rss_cache';
 	if(discuz_process::islocked($processname, 600)) {
 		return false;
 	}
-	DB::query("DELETE FROM ".DB::table('forum_rsscache')."");
+	C::t('forum_rsscache')->truncate();
 	require_once libfile('function/post');
 	foreach($_G['cache']['forums'] as $fid => $forum) {
 		if($forum['type'] != 'group') {
-			$query = DB::query("SELECT tid, readperm, author, dateline, subject
-				FROM ".DB::table('forum_thread')."
-				WHERE fid='$fid' AND displayorder>='0'
-				ORDER BY tid DESC LIMIT $num");
 			$forum['name'] = addslashes($forum['name']);
-			while($thread = DB::fetch($query)) {
+			foreach(C::t('forum_thread')->fetch_all_by_fid_displayorder($fid, 0, null, null, 0, $num, 'tid') as $thread) {
 				$thread['author'] = $thread['author'] != '' ? addslashes($thread['author']) : 'Anonymous';
 				$thread['subject'] = addslashes($thread['subject']);
-				$posttable = getposttablebytid($thread['tid']);
-				$post = DB::fetch_first("SELECT pid, attachment, message, status FROM ".DB::table($posttable)." WHERE tid='{$thread['tid']}' AND first='1'");
+				$post = C::t('forum_post')->fetch_threadpost_by_tid_invisible($thread['tid']);
 				$attachdata = '';
 				if($post['attachment'] == 2) {
-					$attach = DB::fetch_first("SELECT remote, attachment, filesize FROM ".DB::table(getattachtablebytid($thread['tid']))." WHERE pid='{$post['pid']}' AND isimage='1' ORDER BY dateline LIMIT 1");
+					$attach = C::t('forum_attachment_n')->fetch_max_image('tid:'.$thread['tid'], 'pid', $post['pid']);
 					$attachdata = "\t".$attach['remote']."\t".$attach['attachment']."\t".$attach['filesize'];
 				}
 				$thread['message'] = $post['message'];
 				$thread['status'] = $post['status'];
 				$thread['description'] = $thread['readperm'] > 0 || $thread['price'] > 0 || $thread['status'] & 1 ? '' : addslashes(messagecutstr($thread['message'], 250 - strlen($attachdata)).$attachdata);
-				DB::query("REPLACE INTO ".DB::table('forum_rsscache')." (lastupdate, fid, tid, dateline, forum, author, subject, description)
-					VALUES ('$_G[timestamp]', '$fid', '$thread[tid]', '$thread[dateline]', '$forum[name]', '$thread[author]', '$thread[subject]', '$thread[description]')");
+				C::t('forum_rsscache')->insert(array(
+					'lastupdate'=>$_G['timestamp'],
+					'fid'=>$fid,
+					'tid'=>$thread['tid'],
+					'dateline'=>$thread['dateline'],
+					'forum'=>$forum['name'],
+					'author'=>$thread['author'],
+					'subject'=>$thread['subject'],
+					'description'=>$thread['description']
+				), false, true);
 			}
 		}
 	}

@@ -1,10 +1,9 @@
 <!--{subtemplate common/header}-->
 
 <div id="pt" class="bm cl">
-	<!--{subtemplate common/simplesearchform}-->
 	<div class="z">
 		<a href="./" class="nvhm" title="{lang homepage}">$_G['setting']['bbname']</a> <em>&rsaquo;</em>
-		<!--{if empty($_G[gp_action])}-->
+		<!--{if empty($_GET[action])}-->
 			{lang faq}
 		<!--{else}-->
 			<a href="misc.php?mod=faq">{lang faq}</a>$navigation
@@ -15,13 +14,13 @@
 <div id="ct" class="ct2_a wp cl">
 	<div class="mn">
 		<div class="bm bw0">
-			<form method="post" autocomplete="off" action="misc.php?mod=faq&action=search&searchsubmit=yes" class="y mtn pns">
+			<form method="post" autocomplete="off" action="misc.php?mod=faq&action=search" class="y mtn pns">
 				<input type="hidden" name="formhash" value="{FORMHASH}" />
 				<input type="hidden" name="searchtype" value="all" />
 				<input type="text" name="keyword" size="16" value="$keyword" class="px vm" />
-				<button type="submit" name="searchsubmit" class="pn vm"><em>{lang search}</em></button>
+				<button type="submit" name="searchsubmit" class="pn vm" value="yes"><em>{lang search}</em></button>
 			</form>
-			<!--{if empty($_G[gp_action])}-->
+			<!--{if empty($_GET[action])}-->
 				<h1 class="mt mbm">{lang all}{lang faq}</h1>
 				<div class="lum">
 					<!--{loop $faqparent $fpid $parent}-->
@@ -33,7 +32,7 @@
 						</ul>
 					<!--{/loop}-->
 				</div>
-			<!--{elseif $_G[gp_action] == 'faq'}-->
+			<!--{elseif $_GET[action] == 'faq'}-->
 				<h1 class="mt mbm">$ctitle</h1>
 				<!--{loop $faqlist $faq}-->
 					<div id="messageid$faq[id]_c" class="umh{if $messageid != $faq[id]} umn{/if}">
@@ -44,7 +43,7 @@
 					</div>
 					<div class="um" id="messageid$faq[id]" style="{if $messageid != $faq[id]} display: none {/if}">$faq[message]</div>
 				<!--{/loop}-->
-			<!--{elseif $_G[gp_action] == 'search'}-->
+			<!--{elseif $_GET[action] == 'search'}-->
 				<h1 class="mt mbm">{lang keyword_faq}</h1>
 				<!--{if $faqlist}-->
 					<!--{loop $faqlist $faq}-->
@@ -54,8 +53,8 @@
 				<!--{else}-->
 					<p class="emp">{lang faq_search_nomatch}</p>
 				<!--{/if}-->
-			<!--{elseif $_G[gp_action] == 'plugin'}-->
-				<!--{eval include(template($_G['gp_id']));}-->
+			<!--{elseif $_GET[action] == 'plugin'}-->
+				<!--{eval include(template($_GET['id']));}-->
 			<!--{/if}-->
 		</div>
 	</div>
@@ -63,13 +62,13 @@
 		<div class="tbn">
 			<h2 class="mt bbda">{lang faq}</h2>
 			<ul>
-				<li class="cl{if empty($_G[gp_action])} a{/if}"><a href="misc.php?mod=faq">{lang all}</a></li>
+				<li class="cl{if empty($_GET[action])} a{/if}"><a href="misc.php?mod=faq">{lang all}</a></li>
 				<!--{loop $faqparent $fpid $parent}-->
-					<li name="$parent[title]" class="cl{if $_G[gp_id] == $fpid} a{/if}"><a href="misc.php?mod=faq&action=faq&id=$fpid">$parent[title]</a></li>
+					<li name="$parent[title]" class="cl{if $_GET[id] == $fpid} a{/if}"><a href="misc.php?mod=faq&action=faq&id=$fpid">$parent[title]</a></li>
 				<!--{/loop}-->
 				<!--{if !empty($_G['setting']['plugins']['faq'])}-->
 					<!--{loop $_G['setting']['plugins']['faq'] $id $module}-->
-						<li class="cl{if $_G[gp_id] == $id} a{/if}"><a href="misc.php?mod=faq&action=plugin&id=$id">$module[name]</a></li>
+						<li class="cl{if $_GET[id] == $id} a{/if}"><a href="misc.php?mod=faq&action=plugin&id=$id">$module[name]</a></li>
 					<!--{/loop}-->
 				<!--{/if}-->
 			</ul>

@@ -1,8 +1,8 @@
 /*
-	[Discuz!] (C)2001-2009 Comsenz Inc.
+	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: home_uploadpic.js 17964 2010-11-09 01:11:24Z monkey $
+	$Id: home_uploadpic.js 23838 2011-08-11 06:51:58Z monkey $
 */
 
 var attachexts = new Array();

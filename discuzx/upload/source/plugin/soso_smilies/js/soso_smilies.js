@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: soso_smilies.js 84 2011-02-28 14:15:44Z yexinhao $
+	$Id: soso_smilies.js 28110 2012-02-22 08:54:16Z songlixin $
 */
 
 var sosojs = document.createElement('script');

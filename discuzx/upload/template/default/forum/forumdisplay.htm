@@ -7,7 +7,7 @@
 <!--[diy=diynavtop]--><div id="diynavtop" class="area"></div><!--[/diy]-->
 <div id="pt" class="bm cl">
 	<div class="z">
-		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> $navigation
+		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a><em>&raquo;</em><a href="forum.php"{if $_G['setting']['forumjump']} id="fjump" onmouseover="delayShow(this, 'showForummenu($_G[fid])');" class="showmenu" {/if}>{$_G[setting][navs][2][navname]}</a>$navigation
 	</div>
 </div>
 
@@ -38,9 +38,9 @@
 					<!--{if $_G['page'] == 1 && $_G['forum']['rules']}--><span class="o"><img id="forum_rules_{$_G[fid]}_img" src="{IMGDIR}/collapsed_{$collapse[forum_rulesimg]}.gif" title="{lang spread}" alt="{lang spread}" onclick="toggle_collapse('forum_rules_{$_G[fid]}')" /></span><!--{/if}-->
 					<span class="y">
 						<a href="home.php?mod=spacecp&ac=favorite&type=forum&id=$_G[fid]&handlekey=favoriteforum" id="a_favorite" class="fa_fav" onclick="showWindow(this.id, this.href, 'get', 0);">{lang forum_favorite}</a>
-						<!--{if rssforumperm($_G['forum']) && $_G[setting][rssstatus] && !$_G['gp_archiveid'] && !$subforumonly}--><span class="pipe">|</span><a href="forum.php?mod=rss&fid=$_G[fid]&auth=$rssauth" class="fa_rss" target="_blank" title="RSS">{lang rss_subscribe_this}</a><!--{/if}-->
+						<!--{if rssforumperm($_G['forum']) && $_G[setting][rssstatus] && !$_GET['archiveid'] && !$subforumonly}--><span class="pipe">|</span><a href="forum.php?mod=rss&fid=$_G[fid]&auth=$rssauth" class="fa_rss" target="_blank" title="RSS">{lang rss_subscribe_this}</a><!--{/if}-->
 						<!--{if !empty($forumarchive)}-->
-							<span class="pipe">|</span><a id="forumarchive" href="javascript:;" class="fa_achv" onmouseover="showMenu(this.id)"><!--{if $_G['gp_archiveid']}-->$forumarchive[$_G['gp_archiveid']]['displayname']<!--{else}-->{lang forum_archive}<!--{/if}--></a>
+							<span class="pipe">|</span><a id="forumarchive" href="javascript:;" class="fa_achv" onmouseover="showMenu(this.id)"><!--{if $_GET['archiveid']}-->$forumarchive[$_GET['archiveid']]['displayname']<!--{else}-->{lang forum_archive}<!--{/if}--></a>
 						<!--{/if}-->
 						<!--{hook/forumdisplay_forumaction}-->
 
@@ -48,7 +48,7 @@
 						<!--{if $_G['forum']['recyclebin']}-->
 							<span class="pipe">|</span><a href="{if $_G['adminid'] == 1}admin.php?mod=forum&action=recyclebin&frames=yes{elseif $_G['forum']['ismoderator']}forum.php?mod=modcp&action=recyclebin&fid=$_G[fid]{/if}" class="fa_bin" target="_blank">{lang forum_recyclebin}</a>
 						<!--{/if}-->
-						<!--{if $_G['forum']['ismoderator'] && !$_G['gp_archiveid']}-->
+						<!--{if $_G['forum']['ismoderator'] && !$_GET['archiveid']}-->
 							<span class="pipe">|</span><strong>
 							<!--{if $_G['forum']['status'] != 3}-->
 								<a href="forum.php?mod=modcp&fid=$_G[fid]">{lang modcp}</a>
@@ -56,9 +56,6 @@
 								<a href="forum.php?mod=group&action=manage&fid=$_G[fid]">{lang modcp}</a>
 							<!--{/if}-->
 							</strong>
-						<!--{/if}-->
-						<!--{if $_G['forum']['modworks']}-->
-							<!--{if $modusernum}--><span class="pipe">|</span><a href="forum.php?mod=modcp&action=moderate&op=members&fid=$_G[fid]" target="_blank">{lang mod_works_moduser_existence}</a><!--{/if}-->
 						<!--{/if}-->
 						<!--{hook/forumdisplay_modlink}-->
 						<!--{/if}-->
@@ -117,7 +114,7 @@
 			<!--{if !$subforumonly}-->
 
 				<!--{if $recommendgroups && !$_G['forum']['allowside']}-->
-				<div class="bm bmw fl">
+				<div class="bm bmw fl{if $_G['forum']['forumcolumns']} flg{/if}">
 					<div class="bm_h cl">
 						<span class="o"><img id="recommendgroups_{$_G[forum][fid]}_img" src="{IMGDIR}/$collapseimg[recommendgroups]" title="{lang spread}" alt="{lang spread}" onclick="toggle_collapse('recommendgroups_{$_G[forum][fid]}');" /></span>
 						<h2>{lang recommended_groups}</h2>
@@ -125,27 +122,55 @@
 					<div class="bm_c" id="recommendgroups_{$_G[forum][fid]}" style="$collapse[recommendgroups]">
 						<table cellspacing="0" cellpadding="0" class="fl_tb">
 							<!--{loop $recommendgroups $key $group}-->
-							<tr {if $key != 0}class="fl_row"{/if}>
-								<td class="fl_icn">
-									<a href="forum.php?mod=group&fid=$group[fid]" title="$group[name]" target="_blank"><img src="$group[icon]" alt="$group[name]" width="32" /></a>
-								</td>
-								<td>
-									<h2><a href="forum.php?mod=group&fid=$group[fid]" target="_blank">$group[name]</a><span class="xg1 xw0"> ($group[membernum] {lang activity_member_unit})</span></h2>
-									<p><!--{echo cutstr($group[description], 100)}--></p>
-								</td>
-								<td class="fl_i">
-									<span class="xi2">$group[threads] {lang index_threads}</span>
-								</td>
-								<td class="fl_by">
-									<div>
-										<!--{if is_array($group['lastpost'])}-->
-										<a href="forum.php?mod=redirect&tid=$group[lastpost][tid]&goto=lastpost#lastpost" class="xi2"><!--{echo cutstr($group[lastpost][subject], 30)}--></a> <cite>$group[lastpost][dateline] <!--{if $group['lastpost']['author']}--><a href="home.php?mod=space&username={$group[lastpost][encode_author]}">{$group[lastpost][author]}</a><!--{else}-->$_G[setting][anonymoustext]<!--{/if}--></cite>
-										<!--{else}-->
-										{lang never}
-										<!--{/if}-->
+							<!--{if $_G['forum']['forumcolumns']}-->
+								<!--{if $key && ($key % $_G['forum']['forumcolumns'] == 0)}-->
+									</tr>
+									<!--{if $key < $_G['forum']['forumcolumns']}-->
+										<tr class="fl_row">
+									<!--{/if}-->
+								<!--{/if}-->
+								<td class="fl_g">
+									<div class="fl_icn_g">
+										<a href="forum.php?mod=group&fid=$group[fid]" title="$group[name]" target="_blank"><img src="$group[icon]" alt="$group[name]" width="32" /></a>
 									</div>
+									<dl>
+										<dt><a href="forum.php?mod=group&fid=$group[fid]" target="_blank">$group[name]</a><span class="xg1 xw0"> ($group[membernum] {lang activity_member_unit})</span>
+										<dd><em>{lang forum_threads}: $group[threads]</em></dd>
+										<dd>
+											<!--{if is_array($group['lastpost'])}-->
+												<!--{if $_G['forum']['forumcolumns'] < 3}-->
+												<a href="forum.php?mod=redirect&tid=$group[lastpost][tid]&goto=lastpost#lastpost" class="xi2"><!--{echo cutstr($group[lastpost][subject], 30)}--></a> <cite>$group[lastpost][dateline] <!--{if $group['lastpost']['author']}--><a href="home.php?mod=space&username={$group[lastpost][encode_author]}">{$group[lastpost][author]}</a><!--{else}-->$_G[setting][anonymoustext]<!--{/if}--></cite>
+												<!--{else}-->
+													<a href="forum.php?mod=redirect&tid=$group[lastpost][tid]&goto=lastpost#lastpost" class="xi2">$group[lastpost][dateline]</a>
+												<!--{/if}-->				<!--{else}-->
+											{lang never}
+											<!--{/if}-->
+										</dd>
+									</dl>
 								</td>
-							</tr>
+							<!--{else}-->
+								<tr {if $key != 0}class="fl_row"{/if}>
+									<td class="fl_icn">
+										<a href="forum.php?mod=group&fid=$group[fid]" title="$group[name]" target="_blank"><img src="$group[icon]" alt="$group[name]" width="32" /></a>
+									</td>
+									<td>
+										<h2><a href="forum.php?mod=group&fid=$group[fid]" target="_blank">$group[name]</a><span class="xg1 xw0"> ($group[membernum] {lang activity_member_unit})</span></h2>
+										<p><!--{echo cutstr($group[description], 100)}--></p>
+									</td>
+									<td class="fl_i">
+										<span class="xi2">$group[threads] {lang index_threads}</span>
+									</td>
+									<td class="fl_by">
+										<div>
+											<!--{if is_array($group['lastpost'])}-->
+											<a href="forum.php?mod=redirect&tid=$group[lastpost][tid]&goto=lastpost#lastpost" class="xi2"><!--{echo cutstr($group[lastpost][subject], 30)}--></a> <cite>$group[lastpost][dateline] <!--{if $group['lastpost']['author']}--><a href="home.php?mod=space&username={$group[lastpost][encode_author]}">{$group[lastpost][author]}</a><!--{else}-->$_G[setting][anonymoustext]<!--{/if}--></cite>
+											<!--{else}-->
+											{lang never}
+											<!--{/if}-->
+										</div>
+									</td>
+								</tr>
+							<!--{/if}-->
 							<!--{/loop}-->
 						</table>
 					</div>
@@ -155,15 +180,48 @@
 				<!--{if $threadmodcount}--><div class="bm"><div class="ntc_l hm xi2"><strong>{lang forum_moderate_unhandled}</strong></div></div><!--{/if}-->
 
 				<div id="pgt" class="bm bw0 pgs cl">
-					$multipage
+					<span id="fd_page_top">$multipage</span>
 					<span class="pgb y" {if $_G[setting][visitedforums]}id="visitedforums" onmouseover="$('visitedforums').id = 'visitedforumstmp';this.id = 'visitedforums';showMenu({'ctrlid':this.id,'pos':'34'})"{/if} ><a href="forum.php">{lang return_index}</a></span>
-					<!--{if !$_G['gp_archiveid']}--><a href="javascript:;" id="newspecial" onmouseover="$('newspecial').id = 'newspecialtmp';this.id = 'newspecial';showMenu({'ctrlid':this.id})"{if !$_G['forum']['allowspecialonly'] && empty($_G['forum']['picstyle']) && !$_G['forum']['threadsorts']['required']} onclick="showWindow('newthread', 'forum.php?mod=post&action=newthread&fid=$_G[fid]')"{else} onclick="location.href='forum.php?mod=post&action=newthread&fid=$_G[fid]';return false;"{/if} title="{lang send_posts}"><img src="{IMGDIR}/pn_post.png" alt="{lang send_posts}" /></a><!--{/if}-->
+					<!--{if !$_GET['archiveid']}--><a href="javascript:;" id="newspecial" onmouseover="$('newspecial').id = 'newspecialtmp';this.id = 'newspecial';showMenu({'ctrlid':this.id})"{if !$_G['forum']['allowspecialonly'] && empty($_G['forum']['picstyle']) && !$_G['forum']['threadsorts']['required']} onclick="showWindow('newthread', 'forum.php?mod=post&action=newthread&fid=$_G[fid]')"{else} onclick="location.href='forum.php?mod=post&action=newthread&fid=$_G[fid]';return false;"{/if} title="{lang send_posts}"><img src="{IMGDIR}/pn_post.png" alt="{lang send_posts}" /></a><!--{/if}-->
 					<!--{hook/forumdisplay_postbutton_top}-->
 				</div>
-				<!--{subtemplate forum/forumdisplay_list}-->
+				<!--{if ($_G['forum']['threadtypes'] && $_G['forum']['threadtypes']['listable']) || count($_G['forum']['threadsorts']['types']) > 0}-->
+					<ul id="thread_types" class="ttp bm cl">
+						<!--{hook/forumdisplay_threadtype_inner}-->
+						<li id="ttp_all" {if !$_GET['typeid'] && !$_GET['sortid']}class="xw1 a"{/if}><a href="forum.php?mod=forumdisplay&fid=$_G[fid]{if $_G['forum']['threadsorts']['defaultshow']}&filter=sortall&sortall=1{/if}{if $_GET['archiveid']}&archiveid={$_GET['archiveid']}{/if}">{lang forum_viewall}</a></li>
+						<!--{if $_G['forum']['threadtypes']}-->
+							<!--{loop $_G['forum']['threadtypes']['types'] $id $name}-->
+								<!--{if $_GET['typeid'] == $id}-->
+								<li class="xw1 a"><a href="forum.php?mod=forumdisplay&fid=$_G[fid]{if $_GET['sortid']}&filter=sortid&sortid=$_GET['sortid']{/if}{if $_GET['archiveid']}&archiveid={$_GET['archiveid']}{/if}"><!--{if $_G[forum][threadtypes][icons][$id] && $_G['forum']['threadtypes']['prefix'] == 2}--><img class="vm" src="$_G[forum][threadtypes][icons][$id]" alt="" /> <!--{/if}-->$name</a></li>
+								<!--{else}-->
+								<li><a href="forum.php?mod=forumdisplay&fid=$_G[fid]&filter=typeid&typeid=$id$forumdisplayadd[typeid]{if $_GET['archiveid']}&archiveid={$_GET['archiveid']}{/if}"><!--{if $_G[forum][threadtypes][icons][$id] && $_G['forum']['threadtypes']['prefix'] == 2}--><img class="vm" src="$_G[forum][threadtypes][icons][$id]" alt="" /> <!--{/if}-->$name</a></li>
+								<!--{/if}-->
+							<!--{/loop}-->
+						<!--{/if}-->
+
+						<!--{if $_G['forum']['threadsorts']}-->
+							<!--{if $_G['forum']['threadtypes']}--><li><span class="pipe">|</span></li><!--{/if}-->
+							<!--{loop $_G['forum']['threadsorts']['types'] $id $name}-->
+								<!--{if $_GET['sortid'] == $id}-->
+								<li class="xw1 a"><a href="forum.php?mod=forumdisplay&fid=$_G[fid]{if $_GET['typeid']}&filter=typeid&typeid=$_GET['typeid']{/if}{if $_GET['archiveid']}&archiveid={$_GET['archiveid']}{/if}">$name</a></li>
+								<!--{else}-->
+								<li><a href="forum.php?mod=forumdisplay&fid=$_G[fid]&filter=sortid&sortid=$id$forumdisplayadd[sortid]{if $_GET['archiveid']}&archiveid={$_GET['archiveid']}{/if}">$name</a></li>
+								<!--{/if}-->
+							<!--{/loop}-->
+						<!--{/if}-->
+						<!--{hook/forumdisplay_filter_extra}-->
+					</ul>
+					<script type="text/javascript">showTypes('thread_types');</script>
+				<!--{/if}-->
+				<!--{hook/forumdisplay_threadtype_extra}-->
+				<!--{if empty($_G['forum']['sortmode'])}-->
+					<!--{subtemplate forum/forumdisplay_list}-->
+				<!--{else}-->
+					<!--{subtemplate forum/forumdisplay_sort}-->
+				<!--{/if}-->
 			<!--{/if}-->
 			<!--[diy=diyfastposttop]--><div id="diyfastposttop" class="area"></div><!--[/diy]-->
-			<!--{if $fastpost && ($_G['group']['allowpost'] || !$_G['uid'])}-->
+			<!--{if $fastpost}-->
 				<!--{template forum/forumdisplay_fastpost}-->
 			<!--{/if}-->
 
@@ -265,44 +323,32 @@
 		<!--{if $_G['setting']['threadplugins']}-->
 			<!--{loop $_G['forum']['threadplugin'] $tpid}-->
 				<!--{if array_key_exists($tpid, $_G['setting']['threadplugins']) && @in_array($tpid, $_G['group']['allowthreadplugin'])}-->
-					<li class="popupmenu_option"{if $_G['setting']['threadplugins'][$tpid][icon]} style="background-image:url($_G[setting][threadplugins][$tpid][icon])"{/if}><a href="forum.php?mod=post&action=newthread&fid=$_G[fid]&specialextra=$tpid">{$_G[setting][threadplugins][$tpid][name]}</a></li>
+					<li class="popupmenu_option"{if $_G['setting']['threadplugins'][$tpid][icon]} style="background-image:url(source/plugin/$tpid/$_G[setting][threadplugins][$tpid][icon])"{/if}><a href="forum.php?mod=post&action=newthread&fid=$_G[fid]&specialextra=$tpid">{$_G[setting][threadplugins][$tpid][name]}</a></li>
 				<!--{/if}-->
 			<!--{/loop}-->
 		<!--{/if}-->
 	</ul>
 <!--{/if}-->
 
-<!--{if $_G['setting']['visitedforums'] || $oldthreads}-->
-	<div id="visitedforums_menu" class="{if $oldthreads}visited_w {/if}p_pop blk cl" style="display: none;">
+<!--{if $_G['setting']['visitedforums'] && $_G['forum']['status'] != 3}-->
+	<div id="visitedforums_menu" class="p_pop blk cl" style="display: none;">
 		<table cellspacing="0" cellpadding="0">
 			<tr>
-				<!--{if $oldthreads}-->
-					<td id="v_threads">
-						<h3 class="mbn pbn bbda xg1">{lang viewd_threads}</h3>
-						<ul class="xl xl1">
-						<!--{loop $oldthreads $oldtid $oldsubject}-->
-							<li><a href="forum.php?mod=viewthread&tid=$oldtid">$oldsubject</a></li>
-						<!--{/loop}-->
-						</ul>
-					</td>
-				<!--{/if}-->
-				<!--{if $_G['setting']['visitedforums']}-->
-					<td id="v_forums">
-						<h3 class="mbn pbn bbda xg1">{lang viewed_forums}</h3>
-						<ul class="xl xl1">
-							$_G['setting']['visitedforums']
-						</ul>
-					</td>
-				<!--{/if}-->
+				<td id="v_forums">
+					<h3 class="mbn pbn bbda xg1">{lang viewed_forums}</h3>
+					<ul class="xl xl1">
+						$_G['setting']['visitedforums']
+					</ul>
+				</td>
 			</tr>
 		</table>
 	</div>
 <!--{/if}-->
 <!--{if $_G['setting']['threadmaxpages'] > 1 && $page && !$subforumonly}-->
-	<script type="text/javascript">document.onkeyup = function(e){keyPageScroll(e, <!--{if $page > 1}-->1<!--{else}-->0<!--{/if}-->, <!--{if $page < $_G['setting']['threadmaxpages'] && $page < $_G['page_next']}-->1<!--{else}-->0<!--{/if}-->, 'forum.php?mod=forumdisplay&fid={$_G[fid]}&filter={$filter}&orderby={$_G[gp_orderby]}{$forumdisplayadd[page]}&{$multipage_archive}', $page);}</script>
+	<script type="text/javascript">document.onkeyup = function(e){keyPageScroll(e, <!--{if $page > 1}-->1<!--{else}-->0<!--{/if}-->, <!--{if $page < $_G['setting']['threadmaxpages'] && $page < $_G['page_next']}-->1<!--{else}-->0<!--{/if}-->, 'forum.php?mod=forumdisplay&fid={$_G[fid]}&filter={$filter}&orderby={$_GET[orderby]}{$forumdisplayadd[page]}&{$multipage_archive}', $page);}</script>
 <!--{/if}-->
 
-<!--{if empty($_G['forum']['picstyle']) && $_G['gp_orderby'] == 'lastpost' && empty($_G['gp_filter']) }-->
+<!--{if empty($_G['forum']['picstyle']) && $_GET['orderby'] == 'lastpost' && empty($_GET['filter']) }-->
 	<script type="text/javascript">checkForumnew_handle = setTimeout(function () {checkForumnew($_G[fid], lasttime);}, checkForumtimeout);</script>
 <!--{/if}-->
 

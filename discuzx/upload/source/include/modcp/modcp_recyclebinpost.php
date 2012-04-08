@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: modcp_recyclebinpost.php 22097 2011-04-21 08:49:57Z monkey $
+ *      $Id: modcp_recyclebinpost.php 27222 2012-01-11 08:01:39Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_MODCP')) {
@@ -13,22 +13,22 @@ if(!defined('IN_DISCUZ') || !defined('IN_MODCP')) {
 
 
 $op = !in_array($op , array('list', 'delete', 'search', 'restore')) ? 'list' : $op;
-$do = !empty($_G['gp_do']) ? dhtmlspecialchars($_G['gp_do']) : '';
+$do = !empty($_GET['do']) ? dhtmlspecialchars($_GET['do']) : '';
 
 $pidarray = array();
-$action = $_G['gp_action'];
+$action = $_GET['action'];
 
 $result = array();
 
 foreach (array('starttime', 'endtime', 'keywords', 'users') as $key) {
-	$$key = isset($_G['gp_'.$key]) ? trim($_G['gp_'.$key]) : '';
-	$result[$key] = isset($_G['gp_'.$key]) ? dhtmlspecialchars($_G['gp_'.$key]) : '';
+	$$key = isset($_GET[''.$key]) ? trim($_GET[''.$key]) : '';
+	$result[$key] = isset($_GET[''.$key]) ? dhtmlspecialchars($_GET[''.$key]) : '';
 }
 
 $postlist = array();
 $total = $multipage = '';
 
-$posttableid = intval($_G['gp_posttableid']);
+$posttableid = intval($_GET['posttableid']);
 $posttableselect = getposttableselect();
 
 $cachekey = 'srchresult_recycle_post_'.$posttableid.'_'.$_G['fid'];
@@ -38,10 +38,12 @@ if($_G['fid'] && $_G['forum']['ismoderator'] && $modforums['recyclebins'][$_G['f
 	$srchupdate = false;
 
 	if(in_array($_G['adminid'], array(1, 2, 3)) && ($op == 'delete' || $op == 'restore') && submitcheck('dosubmit')) {
-		if($ids = dimplode($_G['gp_moderate'])) {
+		if($ids = dimplode($_GET['moderate'])) {
 			$pidarray = array();
-			$query = DB::query('SELECT pid FROM '.DB::table(getposttable($posttableid))." WHERE pid IN ($ids) AND fid='$_G[fid]' AND invisible='-5'");
-			while($post = DB::fetch($query)) {
+			foreach(C::t('forum_post')->fetch_all($posttableid, $_GET['moderate'], false) as $post) {
+				if($post['fid'] != $_G['fid'] || $post['invisible'] != '-5') {
+					continue;
+				}
 				$pidarray[] = $post['pid'];
 			}
 			if($pidarray) {
@@ -53,48 +55,26 @@ if($_G['fid'] && $_G['forum']['ismoderator'] && $modforums['recyclebins'][$_G['f
 					recyclebinpostundelete($pidarray, $posttableid);
 				}
 
-				if($_G['gp_oldop'] == 'search') {
+				if($_GET['oldop'] == 'search') {
 					$srchupdate = true;
 				}
 			}
 		}
 
-		$op = dhtmlspecialchars($_G['gp_oldop']);
+		$op = dhtmlspecialchars($_GET['oldop']);
+
+		showmessage('modcp_recyclebinpost_'.$op.'_succeed', '', array(), array('break' => 1));
+
 	}
 
 	if($op == 'search' &&  submitcheck('searchsubmit')) {
 
-		$sql = '';
 
-		$sql .= $starttime != '' ? " AND dateline>='".strtotime($starttime)."'" : '';
-		$sql .= $endtime != '' ? " AND dateline<='".strtotime($endtime)."'" : '';
-
-		if(trim($keywords)) {
-			$sqlkeywords = '';
-			$or = '';
-			$keywords = explode(',', str_replace(' ', '', $keywords));
-			for($i = 0; $i < count($keywords); $i++) {
-				$sqlkeywords .= " $or message LIKE '%".$keywords[$i]."%'";
-				$or = 'OR';
-			}
-			$sql .= " AND ($sqlkeywords)";
-
-			$keywords = implode(', ', $keywords);
-		}
-
-		if(trim($users)) {
-			$sql .= " AND author IN ('".str_replace(',', '\',\'', str_replace(' ', '', trim($users)))."')";
-		}
-
-		if($sql) {
+		if($starttime || $endtime || trim($keywords) || trim($users)) {
 
 			$pids = array();
-			$query = DB::query('SELECT message, pid, tid, fid, author, dateline, subject, authorid
-					FROM '.DB::table(getposttable($posttableid))."
-					WHERE invisible='-5' $sql
-					ORDER BY dateline DESC
-					LIMIT 1000");
-			while($value = DB::fetch($query)){
+
+			foreach(C::t('forum_post')->fetch_all_by_search($posttableid, null, $keywords, -5, null, null, ($users ? explode(',', str_replace(' ', '', trim($users))) : null), strtotime($starttime), strtotime($endtime), null, null, 0, 1000) as $value) {
 				$postlist[] = $value;
 				$pids[] = $value['pid'];
 			}
@@ -106,7 +86,6 @@ if($_G['fid'] && $_G['forum']['ismoderator'] && $modforums['recyclebins'][$_G['f
 
 			$modsession->set($cachekey, $result, true);
 
-			DB::free_result($query);
 			unset($result, $pids);
 			$page = 1;
 
@@ -121,18 +100,13 @@ if($_G['fid'] && $_G['forum']['ismoderator'] && $modforums['recyclebins'][$_G['f
 	$fields = 'message, useip, attachment, htmlon, smileyoff, bbcodeoff, pid, tid, fid, author, dateline, subject, authorid, anonymous';
 
 	if($op == 'list') {
-		$total = DB::result_first('SELECT COUNT(*) FROM '.DB::table(getposttable($posttableid))." WHERE fid='$_G[fid]' AND invisible='-5'");
+		$total = C::t('forum_post')->count_by_fid_invisible($posttableid, $_G['fid'], '-5');
 		$tpage = ceil($total / $_G['tpp']);
 		$page = min($tpage, $page);
 		$multipage = multi($total, $_G['tpp'], $page, "$cpscript?mod=modcp&action=$action&amp;op=$op&amp;fid=$_G[fid]&amp;do=$do");
 		if($total) {
 			$start = ($page - 1) * $_G['tpp'];
-			$query = DB::query("SELECT $fields
-					FROM ".DB::table(getposttable($posttableid))."
-					WHERE fid='$_G[fid]' AND invisible='-5'
-					ORDER BY dateline DESC
-					LIMIT $start, $_G[tpp]");
-			while($value = DB::fetch($query)){
+			foreach(C::t('forum_post')->fetch_all_by_fid($posttableid, $_G['fid'], true, 'DESC', $start, $_G['tpp'], null, '-5') as $value) {
 				$postlist[] = $value;
 			}
 		}
@@ -167,14 +141,7 @@ if($_G['fid'] && $_G['forum']['ismoderator'] && $modforums['recyclebins'][$_G['f
 			$multipage = multi($total, $_G['tpp'], $page, "$cpscript?mod=modcp&action=$action&amp;op=$op&amp;fid=$_G[fid]&amp;do=$do");
 			if($total) {
 				$start = ($page - 1) * $_G['tpp'];
-				$query = DB::query("SELECT $fields
-						FROM ".DB::table(getposttable($posttableid))."
-						WHERE pid IN ($result[pids]) AND fid='$_G[fid]' AND invisible='-5'
-						ORDER BY dateline DESC
-						LIMIT $start, $_G[tpp]");
-				while($value = DB::fetch($query)){
-					$postlist[] = $value;
-				}
+				$postlist = C::t('forum_post')->fetch_all_by_pid($posttableid, explode(',', $result['pids']), true, 'DESC', $start, $_G['tpp'], $_G['fid'], -5);
 			}
 
 		}

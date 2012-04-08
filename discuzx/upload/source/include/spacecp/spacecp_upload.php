@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_upload.php 22318 2011-04-29 09:34:15Z zhengqingpeng $
+ *      $Id: spacecp_upload.php 28297 2012-02-27 08:35:59Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -14,21 +14,23 @@ if(!defined('IN_DISCUZ')) {
 $albumid = empty($_GET['albumid'])?0:intval($_GET['albumid']);
 
 if($_GET['op'] == 'recount') {
-	$newsize = DB::result(DB::query("SELECT SUM(size) FROM ".DB::table('home_pic')." WHERE uid='$_G[uid]'"), 0);
-	DB::update('common_member_count', array('attachsize'=>$newsize), array('uid'=>$_G['uid']));
+	$newsize = C::t('home_pic')->count_size_by_uid($_G['uid']);
+	C::t('common_member_count')->update($_G['uid'], array('attachsize'=>$newsize));
 	showmessage('do_success', 'home.php?mod=spacecp&ac=upload');
 }
 
-if(submitcheck('albumsubmit')) {
+if(submitcheck('albumsubmit') && helper_access::check_module('album')) {
+
+	if(!count($_POST['title'])) {
+		showmessage('upload_select_image');
+	}
 	if($_POST['albumop'] == 'creatalbum') {
-		$_POST['albumname'] = empty($_POST['albumname'])?'':getstr($_POST['albumname'], 50, 1, 1);
+		$catid = intval($catid);
+		$_POST['albumname'] = empty($_POST['albumname'])?'':getstr($_POST['albumname'], 50);
 		$_POST['albumname'] = censor($_POST['albumname'], NULL, TRUE);
 
 		if(is_array($_POST['albumname']) && $_POST['albumname']['message']) {
-			echo "<script>";
-			echo "parent.showDialog('{$_POST['albumname']['message']}');";
-			echo "</script>";
-			exit();
+			showmessage($_POST['albumname']['message']);
 		}
 
 		if(empty($_POST['albumname'])) $_POST['albumname'] = gmdate('Ymd');
@@ -38,12 +40,9 @@ if(submitcheck('albumsubmit')) {
 		$_POST['target_ids'] = '';
 		if($_POST['friend'] == 2) {
 			$uids = array();
-			$names = empty($_POST['target_names'])?array():explode(' ', str_replace(array(lang('spacecp', 'tab_space'), "\r\n", "\n", "\r"), ' ', $_POST['target_names']));
+			$names = empty($_POST['target_names']) ? array() : explode(' ', str_replace(array(lang('spacecp', 'tab_space'), "\r\n", "\n", "\r"), ' ', $_POST['target_names']));
 			if($names) {
-				$query = DB::query("SELECT uid FROM ".DB::table('common_member')." WHERE username IN (".dimplode($names).")");
-				while ($value = DB::fetch($query)) {
-					$uids[] = $value['uid'];
-				}
+				$uids = C::t('common_member')->fetch_all_uid_by_username($names);
 			}
 			if(empty($uids)) {
 				$_POST['friend'] = 3;
@@ -72,100 +71,45 @@ if(submitcheck('albumsubmit')) {
 		$setarr['target_ids'] = $_POST['target_ids'];
 		$setarr['depict'] = dhtmlspecialchars($_POST['depict']);
 
-		$albumid = DB::insert('home_album', $setarr, 1);
+		$albumid = C::t('home_album')->insert($setarr ,true);
 
 		if($setarr['catid']) {
-			DB::query("UPDATE ".DB::table('home_album_category')." SET num=num+1 WHERE catid='$setarr[catid]'");
+			C::t('home_album_category')->update_num_by_catid('1', $setarr[catid]);
 		}
 
 		if(empty($space['albumnum'])) {
-			$space['albums'] = getcount('home_album', array('uid'=>$space['uid']));
-			$albumnumsql = "albums=".$space['albums'];
+			$space['albums'] = C::t('home_album')->count_by_uid($space['uid']);
+			C::t('common_member_count')->update($_G['uid'], array('albums' => $space['albums']));
 		} else {
-			$albumnumsql = 'albums=albums+1';
+			C::t('common_member_count')->increase($_G['uid'], array('albums' => 1));
 		}
-		DB::query("UPDATE ".DB::table('common_member_count')." SET {$albumnumsql} WHERE uid='$_G[uid]'");
 
 	} else {
 		$albumid = intval($_POST['albumid']);
 	}
-
-	if($_G['mobile']) {
-		showmessage('do_success', 'home.php?mod=spacecp&ac=upload');
-	} else {
-		echo "<script>";
-		echo "parent.no_insert = 1;";
-		echo "parent.albumid = $albumid;";
-		echo "parent.start_upload();";
-		echo "</script>";
-	}
-	exit();
-
-} elseif(submitcheck('uploadsubmit')) {
-
-	$albumid = $picid = 0;
-
-	if(!checkperm('allowupload')) {
-		if($_G['mobile']) {
-			showmessage(lang('spacecp', 'not_allow_upload'));
-		} else {
-			echo "<script>";
-			echo "alert(\"".lang('spacecp', 'not_allow_upload')."\")";
-			echo "</script>";
-			exit();
-		}
-	}
-
-	$uploadfiles = pic_save($_FILES['attach'], $_POST['albumid'], $_POST['pic_title']);
-	if($uploadfiles && is_array($uploadfiles)) {
-		$albumid = $uploadfiles['albumid'];
-		$picid = $uploadfiles['picid'];
-		$uploadStat = 1;
-		if($albumid > 0) {
-			album_update_pic($albumid);
+	$havetitle = trim(implode('', $_POST['title']));
+	if(!empty($havetitle)) {
+		foreach($_POST['title'] as $picid => $title) {
+			C::t('home_pic')->update_for_uid($_G['uid'], $picid, array('title'=>$title, 'albumid' => $albumid));
 		}
 	} else {
-		$uploadStat = $uploadfiles;
+		$picids = array_keys($_POST['title']);
+		C::t('home_pic')->update_for_uid($_G['uid'], $picids, array('albumid' => $albumid));
 	}
-
-	if($_G['mobile']) {
-		if($picid) {
-			if(ckprivacy('upload', 'feed')) {
-				require_once libfile('function/feed');
-				feed_publish($albumid, 'albumid');
-			}
-			showmessage('do_success', "home.php?mod=space&uid=$_G[uid]&do=album&picid=$picid");
-		} else {
-			showmessage($uploadStat, 'home.php?mod=spacecp&ac=upload');
-		}
-	} else {
-		echo "<script>";
-		echo "parent.albumid = $albumid;";
-		echo "parent.uploadStat = '$uploadStat';";
-		echo "parent.picid = $picid;";
-		echo "parent.upload();";
-		echo "</script>";
-	}
-	exit();
-
-} elseif(submitcheck('viewAlbumid')) {
-
-	if($_POST['opalbumid'] > 0) {
-		album_update_pic($_POST['opalbumid']);
+	if($albumid) {
+		album_update_pic($albumid);
 	}
 
 	if(ckprivacy('upload', 'feed')) {
 		require_once libfile('function/feed');
-		feed_publish($_POST['opalbumid'], 'albumid');
+		feed_publish($albumid, 'albumid');
 	}
 
-	$url = "home.php?mod=space&uid=$_G[uid]&do=album&quickforward=1&id=".(empty($_POST['opalbumid'])?-1:$_POST['opalbumid']);
-
-	showmessage('upload_images_completed', $url);
+	showmessage('upload_images_completed', "home.php?mod=space&uid=$_G[uid]&do=album&quickforward=1&id=".(empty($albumid)?-1:$albumid));
 
 } else {
 
-	if(!checkperm('allowupload')) {
+	if(!checkperm('allowupload') || !helper_access::check_module('album')) {
 		showmessage('no_privilege_upload', '', array(), array('return' => true));
 	}
 
@@ -201,10 +145,9 @@ if(submitcheck('albumsubmit')) {
 	}
 }
 
-if(!$_G['gp_op']) {
-	$_G['gp_op'] = 'normal';
-}
-$navtitle = lang('core', 'title_'.$_G['gp_op'].'_upload');
+$navtitle = lang('core', 'title_'.(!empty($_GET['op']) ? $_GET['op'] : 'normal').'_upload');
+require_once libfile('function/upload');
+$swfconfig = getuploadconfig($_G['uid'], 0, false);
 
 include_once template("home/spacecp_upload");
 

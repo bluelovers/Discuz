@@ -5,15 +5,17 @@ http://www.comsenz.com
 */
 .edt { border: 1px solid; border-color: #999 #CCC #CCC #999; }
 	.edt .bar { padding: 4px; height: 44px; border-bottom: 1px solid #DDD; background: {COMMONBG}; }
+		.edt .cst { background: {COMMONBG}; border-bottom: 1px solid #DDD; }
+		.edt .cst.nbb { border-bottom: none !important; }
 		.edt .bbar { height: 20px; border-top: 1px solid #DDD; text-align: right; background: {COMMONBG}; }
 			.edt .bbar img { vertical-align: bottom; *margin-right: -4px; cursor: row-resize; }
 			.edt .bbar em { width: 200px; height: 20px; overflow: hidden; white-space: nowrap; float: left; text-align: left; }
 		.edt .bbar, .edt .bbar a { color: #999; }
-		.edt .btn { float: left; border-left: 1px solid #DDD; border-right: 1px solid #FEFEFE; }
+		.edt .btn { float: left; border-right: 1px solid #FEFEFE; }
 			.edt .b1r, .edt .b2r { position: relative; float: left; padding: 0 3px; height: 44px; border-right: 1px solid #DDD; border-left: 1px solid #FEFEFE; }
 			.edt .b2r p, .edt .b2r br { clear: both; }
 		.edt .bar a { float: left; border: 1px solid {COMMONBG}; background: transparent url({STATICURL}image/editor/editor.gif) no-repeat 0 0; overflow: hidden; }
-			.edt .b1r a { padding-top: 27px; width: 35px; height: 15px; text-align: center; font-size: 11px; font-family: Arial, PMingLiU, sans-serif; }
+			.edt .b1r a { padding-top: 27px; width: 35px; height: 15px; text-align: center; font-size: 11px; font-family: Arial, PMingLiU, sans-serif; -webkit-text-size-adjust: none; }
 			.edt .b2r a { width: 20px; height: 20px; text-indent: -9999px; }
 				.edt .b2r a.dp { margin-right: 1px; padding-left: 2px; width: 78px; height: 20px; text-indent: 0; border-color: {INPUTBORDERDARKCOLOR} {INPUTBORDER} {INPUTBORDER} {INPUTBORDERDARKCOLOR}; background: #FFF url({STATICURL}image/common/newarow.gif) no-repeat 100% 0; }
 				.edt .b2r a:hover.dp { border-color: #09C; background-position: 100% -23px; }
@@ -75,8 +77,6 @@ http://www.comsenz.com
 		.b2r #e_code	{ background-position: -120px -20px; }
 	#e_quote		{ background-position: -163px -80px; }
 		.b2r #e_quote	{ background-position: -140px -20px; }
-	#e_paste		{ background-position: -203px -80px; }
-		.b2r #e_paste	{ background-position: -40px -60px; }
 	#e_pasteword		{ background-position: -60px -60px; }
 	#e_downremoteimg	{ background-position: -80px -60px; }
 
@@ -86,6 +86,8 @@ http://www.comsenz.com
 		.b2r #e_aud	{ background-position: -220px -20px; }
 	#e_vid			{ background-position: -83px -120px; }
 		.b2r #e_vid	{ background-position: -240px -20px; }
+	#e_at			{ background-position: -126px -120px; }
+		.b2r #e_at	{ background-position: -140px 0; }
 
 	#e_imagen, #e_attachn { position: absolute; top: 3px; left: 63px; width: 14px; height: 15px; background: url({STATICURL}image/editor/editor.gif) no-repeat -244px -80px; text-indent: -9999px; }
 		#e_attachn { left: 100px; }

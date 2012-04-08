@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_blockxml.php 22455 2011-05-09 07:57:07Z monkey $
+ *      $Id: admincp_blockxml.php 25246 2011-11-02 03:34:53Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -20,7 +20,7 @@ if($operation == 'add') {
 
 	if(submitcheck('addsubmit')) {
 		require_once libfile('function/importdata');
-		import_block($_G['gp_xmlurl'], $_G['gp_clientid'], $_G['gp_key'], $_G['gp_signtype'], $_G['gp_ignoreversion']);
+		import_block($_GET['xmlurl'], $_GET['clientid'], $_GET['key'], $_GET['signtype'], $_GET['ignoreversion']);
 		require_once libfile('function/block');
 		blockclass_cache();
 		cpmsg('blockxml_xmlurl_add_succeed', 'action=blockxml', 'succeed');
@@ -43,16 +43,15 @@ if($operation == 'add') {
 		showformfooter();
 	}
 
-} elseif($operation == 'edit' && !empty($_G['gp_id'])) {
+} elseif($operation == 'edit' && !empty($_GET['id'])) {
 
-	$id = intval($_G['gp_id']);
-	$blockxml = DB::fetch_first("SELECT * FROM ".DB::table('common_block_xml')." WHERE `id`='$id'");
-	if(!$blockxml) {
+	$id = intval($_GET['id']);
+	if(!($blockxml = C::t('common_block_xml')->fetch($id))) {
 		cpmsg('blockxml_xmlurl_notfound', '', 'error');
 	}
 	if(submitcheck('editsubmit')) {
 		require_once libfile('function/importdata');
-		import_block($_G['gp_xmlurl'], $_G['gp_clientid'], $_G['gp_key'], $_G['gp_signtype'], 1, $id);
+		import_block($_GET['xmlurl'], $_GET['clientid'], $_GET['key'], $_GET['signtype'], 1, $id);
 
 		require_once libfile('function/block');
 		blockclass_cache();
@@ -75,11 +74,10 @@ if($operation == 'add') {
 		showformfooter();
 	}
 
-} elseif($operation == 'update' && !empty($_G['gp_id'])) {
+} elseif($operation == 'update' && !empty($_GET['id'])) {
 
-	$id = intval($_G['gp_id']);
-	$blockxml = DB::fetch_first("SELECT * FROM ".DB::table('common_block_xml')." WHERE `id`='$id'");
-	if(!$blockxml) {
+	$id = intval($_GET['id']);
+	if(!($blockxml = C::t('common_block_xml')->fetch($id))) {
 		cpmsg('blockxml_xmlurl_notfound', '', 'error');
 	}
 	require_once libfile('function/importdata');
@@ -90,11 +88,11 @@ if($operation == 'add') {
 
 	cpmsg('blockxml_xmlurl_update_succeed', 'action=blockxml', 'succeed');
 
-} elseif($operation == 'delete' && !empty($_G['gp_id'])) {
+} elseif($operation == 'delete' && !empty($_GET['id'])) {
 
-	$id = intval($_G['gp_id']);
-	if(!empty($_G['gp_confirm'])) {
-		DB::delete('common_block_xml', "`id`='$id'");
+	$id = intval($_GET['id']);
+	if(!empty($_GET['confirm'])) {
+		C::t('common_block_xml')->delete($id);
 
 		require_once libfile('function/block');
 		blockclass_cache();
@@ -109,11 +107,10 @@ if($operation == 'add') {
 		array('list', 'blockxml', 1),
 		array('add', 'blockxml&operation=add', 0)
 	));
-	$query = DB::query("SELECT url, name, id FROM ".DB::table('common_block_xml'));
 
 	showtableheader('blockxml_list');
 	showsubtitle(array('blockxml_name', 'blockxml_xmlurl', 'operation'));
-	while($row = DB::fetch($query)) {
+	foreach(C::t('common_block_xml')->range() as $row) {
 		showtablerow('', array('class=""', 'class=""', 'class="td28"'), array(
 			$row['name'],
 			$row['url'],

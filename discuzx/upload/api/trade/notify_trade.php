@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: notify_trade.php 22319 2011-04-29 09:40:43Z monkey $
+ *      $Id: notify_trade.php 29236 2012-03-30 05:34:47Z chenmengshu $
  */
 
 define('IN_API', true);
@@ -13,14 +13,14 @@ define('CURSCRIPT', 'api');
 require '../../source/class/class_core.php';
 require '../../source/function/function_forum.php';
 
-$discuz = & discuz_core::instance();
+$discuz = C::app();
 $discuz->init();
 
-$apitype = empty($_G['gp_attach']) || !preg_match('/^[a-z0-9]+$/i', $_G['gp_attach']) ? 'alipay' : $_G['gp_attach'];
+$apitype = empty($_GET['attach']) || !preg_match('/^[a-z0-9]+$/i', $_GET['attach']) ? 'alipay' : $_GET['attach'];
 require_once DISCUZ_ROOT.'./api/trade/api_' . $apitype . '.php';
 
 $PHP_SELF = $_SERVER['PHP_SELF'];
-$_G['siteurl'] = htmlspecialchars('http://'.$_SERVER['HTTP_HOST'].preg_replace("/\/+(api\/trade)?\/*$/i", '', substr($PHP_SELF, 0, strrpos($PHP_SELF, '/'))).'/');
+$_G['siteurl'] = dhtmlspecialchars('http://'.$_SERVER['HTTP_HOST'].preg_replace("/\/+(api\/trade)?\/*$/i", '', substr($PHP_SELF, 0, strrpos($PHP_SELF, '/'))).'/');
 
 $notifydata = trade_notifycheck('trade');
 
@@ -30,12 +30,15 @@ if($notifydata['validator']) {
 
 	if($orderid) {
 
-		$tradelog = DB::fetch_first("SELECT * FROM ".DB::table('forum_tradelog')." WHERE orderid = '$orderid'");
-		$tradelog = daddslashes($tradelog, 1);
+		$tradelog = C::t('forum_tradelog')->fetch($orderid);
 
 		if($tradelog && $tradelog['status'] != STATUS_TRADE_SUCCESS && $tradelog['status'] != STATUS_REFUND_CLOSE && ($apitype == 'tenpay' || $tradelog['selleraccount'] == $_REQUEST['seller_email'])) {
 			$status = $notifydata['status'];
-			DB::query("UPDATE ".DB::table('forum_tradelog')." SET status = '$status', lastupdate='$_G[timestamp]', tradeno='$notifydata[trade_no]' WHERE orderid='$orderid'", 'UNBUFFERED');
+			C::t('forum_tradelog')->update($orderid, array(
+				'status' => $status,
+				'lastupdate' => $_G['timestamp'],
+				'tradeno' => $notifydata['trade_no']
+			));
 			if($status != $tradelog['status']) {
 
 				if($status == STATUS_SELLER_SEND) {
@@ -64,7 +67,8 @@ if($notifydata['validator']) {
 					} else {
 						$netcredit = 0;
 					}
-					DB::query("UPDATE ".DB::table('forum_trade')." SET lastbuyer='$tradelog[buyer]', lastupdate='$_G[timestamp]', totalitems=totalitems+'$tradelog[number]', tradesum=tradesum+'$tradelog[price]', credittradesum=credittradesum+'$netcredit' WHERE tid='$tradelog[tid]' AND pid='$tradelog[pid]'", 'UNBUFFERED');
+					C::t('forum_trade')->update($tradelog['tid'], $tradelog['pid'], array('lastbuyer' => $tradelog['buyer'], 'lastupdate' => $_G['timestamp']));
+					C::t('forum_trade')->update_counter($tradelog['tid'], $tradelog['pid'], $tradelog['number'], $tradelog['price'], $netcredit);
 
 					updatecreditbyaction('tradefinished', $tradelog['sellerid']);
 					updatecreditbyaction('tradefinished', $tradelog['buyerid']);
@@ -80,7 +84,7 @@ if($notifydata['validator']) {
 
 				} elseif($status == STATUS_REFUND_CLOSE) {
 
-					DB::query("UPDATE ".DB::table('forum_trade')." SET amount=amount+'$tradelog[number]' WHERE tid='$tradelog[tid]' AND pid='$tradelog[pid]'", 'UNBUFFERED');
+					C::t('forum_trade')->update_counter($tradelog['tid'], $tradelog['pid'], 0, 0, 0, $tradelog['number']);
 					notification_add($tradelog['sellerid'], 'goods', 'trade_fefund_success', array(
 						'orderid' => $orderid,
 						'subject' => $tradelog['subject']

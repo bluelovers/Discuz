@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: block_banner.php 11474 2010-06-03 08:29:43Z zhangguosheng $
+ *      $Id: block_banner.php 28625 2012-03-06 09:09:49Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -65,19 +65,15 @@ class block_banner extends commonblock_html {
 	}
 
 	function getdata($style, $parameter) {
+		$parameter = dhtmlspecialchars($this->cookparameter($parameter));
 		$return = '<img src="'.$parameter['pic'].'"'
 			.($parameter['width'] ? ' width="'.$parameter['width'].'"' : '')
 			.($parameter['height'] ? ' height="'.$parameter['height'].'"' : '')
-			.($parameter['text'] ? ' alt="'.$parameter['text'].'"' : '')
+			.($parameter['text'] ? ' alt="'.$parameter['text'].'" title="'.$parameter['text'].'"' : '')
 			.' />';
 		if($parameter['url']) {
 			$target = $parameter['atarget']  ? " target=\"$parameter[atarget]\"" : '';
 			$return = "<a href=\"$parameter[url]\"$target>$return</a>";
-		}
-		if($parameter['text']) {
-			$return .= '<center><p>';
-			$return .= $parameter['url'] ? "<a href=\"$parameter[url]\">$parameter[text]</a>" : $parameter['text'];
-			$return .= '</p></center>';
 		}
 		return array('html' => $return, 'data' => null);
 	}

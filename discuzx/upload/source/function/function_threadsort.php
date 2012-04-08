@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_threadsort.php 22937 2011-06-03 01:15:26Z monkey $
+ *      $Id: function_threadsort.php 29264 2012-03-31 05:47:37Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -59,7 +59,7 @@ function gettypetemplate($option, $optionvalue, $optionid) {
 			}
 		}
 	} elseif(in_array($option['type'], array('textarea'))) {
-		$showoption[$option['identifier']]['value'] = '<span><textarea name="typeoption['.$option['identifier'].']" id="typeoption_'.$option['identifier'].'" class="pt" tabindex="1" rows="'.$option['rowsize'].'" cols="'.$option['colsize'].'" onBlur="checkoption(\''.$option['identifier'].'\', \''.$option['required'].'\', \''.$option['type'].'\', 0, 0{if $option[maxlength]}, \'$option[maxlength]\'{/if})" '.$optionvalue['unchangeable'].'>'.$optionvalue['value'].'</textarea><span>';
+		$showoption[$option['identifier']]['value'] = '<span><textarea name="typeoption['.$option['identifier'].']" id="typeoption_'.$option['identifier'].'" class="pt" tabindex="1" rows="'.$option['rowsize'].'" cols="'.$option['colsize'].'" onBlur="checkoption(\''.$option['identifier'].'\', \''.$option['required'].'\', \''.$option['type'].'\', 0, 0'.($option['maxlength'] ? ', \'$option[maxlength]\'' : '').'" '.$optionvalue['unchangeable'].'>'.$optionvalue['value'].'</textarea><span>';
 	}
 
 	return $showoption;
@@ -119,14 +119,14 @@ function sortsearch($sortid, $sortoptionarray, $searchoption = array(), $selectu
 				if($optionide[$fieldname] == 'range') {
 					$value = explode('|', $value);
 					if($value[0] == 'd') {
-						$sql = "$fieldname<'$value[1]'";
+						$sql = DB::field($fieldname, $value[1], '<');
 					} elseif($value[0] == 'u') {
-						$sql = "$fieldname>'$value[1]'";
+						$sql = DB::field($fieldname, $value[1], '>');
 					} else {
 						$sql = "($fieldname BETWEEN ".intval($value[0])." AND ".intval($value[1]).")";
 					}
 				} elseif($optionide[$fieldname] == 'checkbox') {
-					$sql = "$fieldname LIKE '%".$value."%'";
+					$sql = DB::field($fieldname, '%'.$value.'%', 'like');
 				} elseif($optionide[$fieldname] == 'select') {
 					$subvalues = $currentchoices = array();
 					if(!empty($_G['forum_optionlist'])) {
@@ -144,9 +144,9 @@ function sortsearch($sortid, $sortoptionarray, $searchoption = array(), $selectu
 							}
 						}
 					}
-					$sql = "$fieldname IN (".dimplode($subvalues).")";
+					$sql = DB::field($fieldname, $subvalues);
 				} else {
-					$sql = "$fieldname='$value'";
+					$sql = DB::field($fieldname, $value);
 				}
 				$selectsql .= "AND $sql ";
 			}
@@ -163,7 +163,7 @@ function sortsearch($sortid, $sortoptionarray, $searchoption = array(), $selectu
 					if($option['condition']) {
 						$exp = $option['condition'] == 1 ? '>' : '<';
 					}
-					$sql = "$fieldname$exp'$option[value]'";
+					$sql = DB::field($fieldname, $option['value'], $exp);
 				} elseif($option['type'] == 'select') {
 					$subvalues = $currentchoices = array();
 					if(!empty($_G['forum_optionlist'])) {
@@ -181,44 +181,39 @@ function sortsearch($sortid, $sortoptionarray, $searchoption = array(), $selectu
 							}
 						}
 					}
-					$sql = "$fieldname IN (".dimplode($subvalues).")";
+					$sql = DB::field($fieldname, $subvalues);
 				} elseif($option['type'] == 'checkbox') {
-					$sql = "$fieldname LIKE '%".(implode("%", $option['value']))."%'";
+					$sql = DB::field($fieldname, '%'.implode('%', $option['value']).'%', 'like');
 				} elseif($option['type'] == 'range') {
 					$value = explode('|', $option['value']);
 					if($value[0] == 'd') {
-						$sql = "$fieldname<'$value[1]'";
+						$sql = DB::field($fieldname, $value[1], '<');
 					} elseif($value[0] == 'u') {
-						$sql = "$fieldname>'$value[1]'";
+						$sql = DB::field($fieldname, $value[1], '>');
 					} else {
 						$sql = $value[0] || $value[1] ? "($fieldname BETWEEN ".intval($value[0])." AND ".intval($value[1]).")" : '';
 					}
 				} else {
-					$sql = "$fieldname LIKE '%$option[value]%'";
+					$sql = DB::field($fieldname, '%'.$option['value'].'%', 'like');
 				}
 				$selectsql .= "AND $sql ";
 			}
 		}
 	}
 
-	$query = DB::query("SELECT tid FROM ".DB::table('forum_optionvalue')."$sortid WHERE 1 $selectsql ".($sortfid ? "AND fid='$sortfid'" : '')."");
-	while($thread = DB::fetch($query)) {
-		$searchsorttids[] = $thread['tid'];
-	}
+	$searchsorttids = C::t('forum_optionvalue')->fetch_all_tid($sortid, "WHERE 1 $selectsql ".($sortfid ? "AND fid='$sortfid'" : ''));
 
 	return $searchsorttids;
 
 }
 
-function showsorttemplate($sortid, $fid, $sortoptionarray, $templatearray, $threadlist, $threadids = array()) {
+function showsorttemplate($sortid, $fid, $sortoptionarray, $templatearray, $threadlist, $threadids = array(), $sortmode = false) {
 	global $_G;
 
 	$searchtitle = $searchvalue = $searchunit = $stemplate = $searchtids = $sortlistarray = $skipaids = $sortdata = array();
 
-	$addsortid = !empty($sortid) ? "sortid='$sortid' AND" : '';
-	$addthreadid = !empty($threadids) ? "AND tid IN (".dimplode($threadids).")" : '';
-	$query = DB::query("SELECT sortid, tid, optionid, value, expiration FROM ".DB::table('forum_typeoptionvar')." WHERE $addsortid fid='$fid' $addthreadid");
-	while($sortthread = DB::fetch($query)) {
+	$sortthreadlist = array();
+	foreach(C::t('forum_typeoptionvar')->fetch_all_by_search($sortid, $fid, $threadids) as $sortthread) {
 		$optionid = $sortthread['optionid'];
 		$sortid = $sortthread['sortid'];
 		$tid = $sortthread['tid'];
@@ -238,7 +233,7 @@ function showsorttemplate($sortid, $fid, $sortoptionarray, $templatearray, $thre
 					$sortthreadlist[$tid][$arrayoption['title']] = $_G['optionvaluelist'][$sortid][$tid][$arrayoption['identifier']]['value'] = $arrayoption['choices'][$sortthread['value']];
 				}
 			} elseif($arrayoption['type'] == 'image') {
-				$imgoptiondata = unserialize($sortthread['value']);
+				$imgoptiondata = dunserialize($sortthread['value']);
 				if(empty($templatearray[$sortid])) {
 					$maxwidth = $arrayoption['maxwidth'] ? 'width="'.$arrayoption['maxwidth'].'"' : '';
 					$maxheight = $arrayoption['maxheight'] ? 'height="'.$arrayoption['maxheight'].'"' : '';
@@ -263,7 +258,13 @@ function showsorttemplate($sortid, $fid, $sortoptionarray, $templatearray, $thre
 	if($templatearray && $sortthreadlist) {
 		foreach($threadlist as $thread) {
 			$thread['digest'] = $thread['digest'] ? '&nbsp;<img src="'.$_G['style']['imgdir'].'/digest_'.$thread['digest'].'.gif" class="vm" alt="" title="" />' : '';
-			$sortdata[$thread['tid']]['subject'] = '<a href="forum.php?mod=viewthread&tid='.$thread['tid'].'" '.$thread['highlight'].'>'.$thread['subject'].'</a>'.$thread['digest'];
+			if($thread['highlight']) {
+				$thread['subject'] = '<span '.$thread['highlight'].'>'.$thread['subject'].'</span>';
+			}
+			if($thread['digest']) {
+				$thread['subject'] .= ' '.$thread['digest'];
+			}
+			$sortdata[$thread['tid']]['subject'] = !$sortmode ? '<a href="forum.php?mod=viewthread&tid='.$thread['tid'].'">'.$thread['subject'].'</a>' : $thread['subject'];
 			$sortdata[$thread['tid']]['author'] = '<a href="home.php?mod=space&uid='.$thread['authorid'].'" target="_blank">'.$thread['author'].'</a>';
 		}
 
@@ -272,7 +273,9 @@ function showsorttemplate($sortid, $fid, $sortoptionarray, $templatearray, $thre
 				if($option['subjectshow']) {
 					$searchtitle[$sortid][] = '/{('.$option['identifier'].')}/e';
 					$searchvalue[$sortid][] = '/\[('.$option['identifier'].')value\]/e';
+					$searchvalue[$sortid][] = '/{('.$option['identifier'].')_value}/e';
 					$searchunit[$sortid][] = '/\[('.$option['identifier'].')unit\]/e';
+					$searchunit[$sortid][] = '/{('.$option['identifier'].')_unit}/e';
 				}
 			}
 		}
@@ -283,7 +286,7 @@ function showsorttemplate($sortid, $fid, $sortoptionarray, $templatearray, $thre
 			$stemplate[$sortid][$tid] = preg_replace(
 							array("/\{sortname\}/i", "/\{author\}/i", "/\{subject\}/i", "/\[url\](.+?)\[\/url\]/i"),
 							array(
-								'<a href="forum.php?mod=forumdisplay&fid='.$_G['fid'].'&filter=sortid&sortid='.$sortid.'">'.$_G['forum']['threadsorts']['types'][$sortid].'</a>',
+								'<a href="forum.php?mod=forumdisplay&fid='.$sortthreadlist[$tid]['fid'].'&filter=sortid&sortid='.$sortid.'">'.$_G['forum']['threadsorts']['types'][$sortid].'</a>',
 								$sortdata[$tid]['author'],
 								$sortdata[$tid]['subject'],
 								"<a href=\"forum.php?mod=viewthread&tid=$tid\">\\1</a>"
@@ -298,6 +301,48 @@ function showsorttemplate($sortid, $fid, $sortoptionarray, $templatearray, $thre
 	$sortlistarray['expiration'] = $sortexpiration;
 
 	return $sortlistarray;
+}
+
+function showsortmodetemplate($sortid, $fid, $sortoptionarray, $templatearray, $threadlist, $threadids = array(), &$verify = array()) {
+	global $_G;
+	$sorttemplate = $replaces = array();
+	if(strexists($templatearray[$sortid], '[loop]') && strexists($templatearray[$sortid], '[/loop]')) {
+		preg_match('/^(.+?)\[loop\](.+?)\[\/loop\](.+?)$/s', $templatearray[$sortid], $r);
+		$sorttemplate['header'] = stripslashes($r[1]);
+		$templatearray[$sortid] = stripslashes($r[2]);
+		$sorttemplate['footer'] = stripslashes($r[3]);
+	}
+	$rewritespace = is_array($_G['setting']['rewritestatus']) && in_array('home_space', $_G['setting']['rewritestatus']);
+	$rewriteviewthread = is_array($_G['setting']['rewritestatus']) && in_array('forum_viewthread', $_G['setting']['rewritestatus']);
+	$sortlistarray = showsorttemplate($sortid, $fid, $sortoptionarray, $templatearray, $threadlist, $threadids, true);
+	foreach($threadlist as $thread) {
+		foreach($thread as $k => $v) {
+			$replaces['{'.$k.'}'] = $v;
+		}
+		$body = $sortlistarray['template'][$sortid][$thread['tid']];
+		$replaces['{author_url}'] = $rewritespace ? rewriteoutput('home_space', 1, '', $thread['authorid']) : 'home.php?mod=space&amp;uid='.$thread['authorid'];
+		$replaces['{lastposter_url}'] = $rewritespace ? rewriteoutput('home_space', 1, '', '', $thread['lastposter']) : 'home.php?mod=space&amp;username='.$thread['lastposterenc'];
+		$replaces['{subject_url}'] = $rewriteviewthread ? rewriteoutput('forum_viewthread', 1, '', $thread['tid']) : 'forum.php?mod=viewthread&amp;tid='.$thread['tid'];
+		$replaces['{lastpost_url}'] = 'forum.php?mod=redirect&tid='.$thread['tid'].'&goto=lastpost#lastpost';
+		$replaces['{lastpost_url}'] = 'forum.php?mod=redirect&tid='.$thread['tid'].'&goto=lastpost#lastpost';
+		$replaces['{avatar_small}'] = avatar($thread['authorid'], 'small', true);
+		$replaces['{typename_url}'] = 'forum.php?mod=forumdisplay&fid='.$fid.'&filter=typeid&typeid='.$thread['tid'];
+		$replaces['{attachment}'] = ($thread['attachment'] == 2 ? '<img src="'.STATICURL.'image/filetype/image_s.gif" align="absmiddle" />' :
+						($thread['attachment'] == 1 ? '<img src="'.STATICURL.'image/filetype/common.gif" align="absmiddle" />' : ''));
+		$replaces['{author_verify}'] = $verify[$thread['authorid']] ? $verify[$thread['authorid']] : '';
+		if($_G['forum']['ismoderator']) {
+			if($thread['fid'] == $fid && $thread['displayorder'] <= 3 || $_G['adminid'] == 1) {
+				$replaces['{modcheck}'] = '<input onclick="tmodclick(this)" type="checkbox" name="moderate[]" value="'.$thread['tid'].'" />';
+			} else {
+				$replaces['{modcheck}'] = '<input type="checkbox" disabled="disabled" />';
+			}
+		} else {
+			$replaces['{modcheck}'] = '';
+		}
+		$body = str_replace(array_keys($replaces), $replaces, $body);
+		$sorttemplate['body'] .= $body;
+	}
+	return $sorttemplate;
 }
 
 function showlistoption($var, $type, $tid, $sortid) {
@@ -318,8 +363,7 @@ function threadsortshow($sortid, $tid) {
 	$threadsortshow = $optiondata = $searchtitle = $searchvalue = $searchunit = $memberinfofield = $_G['forum_option'] = array();
 	if($sortoptionarray) {
 
-		$query = DB::query("SELECT optionid, value, expiration FROM ".DB::table('forum_typeoptionvar')." WHERE tid='$tid'");
-		while($option = DB::fetch($query)) {
+		foreach(C::t('forum_typeoptionvar')->fetch_all_by_tid_optionid($tid) as $option) {
 			$optiondata[$option['optionid']]['value'] = $option['value'];
 			$optiondata[$option['optionid']]['expiration'] = $option['expiration'] && $option['expiration'] <= TIMESTAMP ? 1 : 0;
 			$sortdataexpiration = $option['expiration'];
@@ -331,7 +375,7 @@ function threadsortshow($sortid, $tid) {
 			$_G['forum_option'][$option['identifier']]['type'] = $option['type'];
 
 			if(($option['expiration'] && !$optiondata[$optionid]['expiration']) || empty($option['expiration'])) {
-				if(($option['protect']['usergroup'] && strstr("\t".$option['protect']['usergroup']."\t", "\t$_G[groupid]\t")) || empty($option['protect']['usergroup']) || $_G['forum_thread']['authorid'] == $_G['uid']) {
+				if(!protectguard($option['protect'])) {
 					if($option['type'] == 'checkbox') {
 						$_G['forum_option'][$option['identifier']]['value'] = '';
 						foreach(explode("\t", $optiondata[$optionid]['value']) as $choiceid) {
@@ -348,7 +392,7 @@ function threadsortshow($sortid, $tid) {
 						$_G['forum_option'][$option['identifier']]['value'] = implode(' &raquo; ', $tmpidentifiervalue);
 						unset($tmpchoiceid, $tmpidentifiervalue);
 					} elseif($option['type'] == 'image') {
-						$imgoptiondata = unserialize($optiondata[$optionid]['value']);
+						$imgoptiondata = dunserialize($optiondata[$optionid]['value']);
 						$threadsortshow['sortaids'][] = $imgoptiondata['aid'];
 						if(empty($templatearray['viewthread'])) {
 							$maxwidth = $option['maxwidth'] ? 'width="'.$option['maxwidth'].'"' : '';
@@ -363,17 +407,21 @@ function threadsortshow($sortid, $tid) {
 						}
 					} elseif($option['type'] == 'url') {
 						$_G['forum_option'][$option['identifier']]['value'] = $optiondata[$optionid]['value'] ? "<a href=\"".$optiondata[$optionid]['value']."\" target=\"_blank\">".$optiondata[$optionid]['value']."</a>" : '';
-					} elseif($option['type'] == 'textarea') {
-						$_G['forum_option'][$option['identifier']]['value'] = $optiondata[$optionid]['value'] ? nl2br($optiondata[$optionid]['value']) : '';
 					} else {
 						if($option['protect']['status'] && $optiondata[$optionid]['value']) {
-							$optiondata[$optionid]['value'] = $option['protect']['mode'] == 1 ? '<image src="forum.php?mod=misc&action=protectsort&tid='.$tid.'&sortvalue='.$optiondata[$optionid]['value'].'">' : '<span id="sortmessage_'.$option['identifier'].'"><a href="###" onclick="ajaxget(\'forum.php?mod=misc&action=protectsort&tid='.$tid.'&optionid='.$optionid.'\', \'sortmessage_'.$option['identifier'].'\');return false;">'.lang('forum/misc', 'click_view').'</a></span>';
+							$optiondata[$optionid]['value'] = $option['protect']['mode'] == 1 ? '<image src="'.makevaluepic($optiondata[$optionid]['value']).'">' : (!defined('IN_MOBILE') ? '<span id="sortmessage_'.$option['identifier'].'"><a href="###" onclick="ajaxget(\'forum.php?mod=misc&action=protectsort&tid='.$tid.'&optionid='.$optionid.'\', \'sortmessage_'.$option['identifier'].'\');return false;">'.lang('forum/misc', 'click_view').'</a></span>' : $optiondata[$optionid]['value']);
+							$_G['forum_option'][$option['identifier']]['value'] = $optiondata[$optionid]['value'] ? $optiondata[$optionid]['value'] : $option['defaultvalue'];
+						} elseif($option['type'] == 'textarea') {
+							$_G['forum_option'][$option['identifier']]['value'] = $optiondata[$optionid]['value'] ? nl2br($optiondata[$optionid]['value']) : '';
 						}
-
-						$_G['forum_option'][$option['identifier']]['value'] = $optiondata[$optionid]['value'] ? $optiondata[$optionid]['value'] : $option['defaultvalue'];
 					}
 				} else {
-					$_G['forum_option'][$option['identifier']]['value'] = lang('forum/misc', 'view_noperm');
+					if(empty($option['permprompt'])) {
+						$_G['forum_option'][$option['identifier']]['value'] = lang('forum/misc', 'view_noperm');
+					} else {
+						$_G['forum_option'][$option['identifier']]['value'] = $option['permprompt'];
+					}
+
 				}
 			} else {
 				$_G['forum_option'][$option['identifier']]['value'] = lang('forum/misc', 'has_expired');
@@ -385,7 +433,9 @@ function threadsortshow($sortid, $tid) {
 			foreach($sortoptionarray as $option) {
 				$searchtitle[] = '/{('.$option['identifier'].')}/e';
 				$searchvalue[] = '/\[('.$option['identifier'].')value\]/e';
+				$searchvalue[] = '/{('.$option['identifier'].')_value}/e';
 				$searchunit[] = '/\[('.$option['identifier'].')unit\]/e';
+				$searchunit[] = '/{('.$option['identifier'].')_unit}/e';
 			}
 
 			$threadexpiration = $sortdataexpiration ? dgmdate($sortdataexpiration) : lang('forum/misc', 'never_expired');
@@ -409,6 +459,33 @@ function showoption($var, $type) {
 		return $_G['forum_option'][$var][$type];
 	} else {
 		return '';
+	}
+}
+
+function protectguard($protect) {
+	global $_G, $member_verifys;
+	if(!isset($member_verifys) && $_G['setting']['verify']['enabled']) {
+		$member_verifys = array();
+		getuserprofile('verify1');
+		foreach($_G['setting']['verify'] as $vid => $verify) {
+			if($verify['available'] && $_G['member']['verify'.$vid] == 1) {
+				$member_verifys[] = $vid;
+			}
+		}
+	}
+	$verifyflag = 0;
+	if($_G['setting']['verify']['enabled'] && $protect['verify']) {
+		if(array_intersect(explode("\t", $protect['verify']), $member_verifys)) {
+			$verifyflag = 1;
+		}
+	}
+	if(($protect['usergroup'] && strstr("\t".$protect['usergroup']."\t", "\t$_G[groupid]\t"))
+			|| (empty($protect['usergroup']) && empty($protect['verify']))
+			|| $verifyflag
+			|| $_G['forum_thread']['authorid'] == $_G['uid']) {
+		return false;
+	} else {
+		return true;
 	}
 }
 
@@ -487,7 +564,7 @@ function threadsort_checkoption($sortid = 0, $unchangeable = 1) {
 			$_G['forum_checkoption'][$option['identifier']]['title'] = $option['title'];
 			$_G['forum_checkoption'][$option['identifier']]['type'] = $option['type'];
 			$_G['forum_checkoption'][$option['identifier']]['required'] = $option['required'] ? 1 : 0;
-			$_G['forum_checkoption'][$option['identifier']]['unchangeable'] = $_G['gp_action'] == 'edit' && $unchangeable && $option['unchangeable'] ? 1 : 0;
+			$_G['forum_checkoption'][$option['identifier']]['unchangeable'] = $_GET['action'] == 'edit' && $unchangeable && $option['unchangeable'] ? 1 : 0;
 			$_G['forum_checkoption'][$option['identifier']]['maxnum'] = $option['maxnum'] ? intval($option['maxnum']) : '';
 			$_G['forum_checkoption'][$option['identifier']]['minnum'] = $option['minnum'] ? intval($option['minnum']) : '';
 			$_G['forum_checkoption'][$option['identifier']]['maxlength'] = $option['maxlength'] ? intval($option['maxlength']) : '';
@@ -501,8 +578,7 @@ function threadsort_optiondata($pid, $sortid, $sortoptionarray, $templatearray) 
 	$id = $_G['tid'];
 
 	if($id) {
-		$query = DB::query("SELECT optionid, value, expiration FROM ".DB::table('forum_typeoptionvar')." WHERE tid='$id'");
-		while($option = DB::fetch($query)) {
+		foreach(C::t('forum_typeoptionvar')->fetch_all_by_tid_optionid($id) as $option) {
 			$_G['forum_optiondata'][$option['optionid']] = $option['value'];
 			$_G['forum_optiondata']['expiration'] = $option['expiration'];
 		}
@@ -512,7 +588,7 @@ function threadsort_optiondata($pid, $sortid, $sortoptionarray, $templatearray) 
 
 	foreach($sortoptionarray as $optionid => $option) {
 		if($id) {
-			$_G['forum_optionlist'][$optionid]['unchangeable'] = $sortoptionarray[$optionid]['unchangeable'] ? 'readonly' : '';
+			$_G['forum_optionlist'][$optionid]['unchangeable'] = $sortoptionarray[$optionid]['unchangeable'] ? 'disabled' : '';
 			if($sortoptionarray[$optionid]['type'] == 'radio') {
 				$_G['forum_optionlist'][$optionid]['value'] = array($_G['forum_optiondata'][$optionid] => 'checked="checked"');
 			} elseif($sortoptionarray[$optionid]['type'] == 'select') {
@@ -522,13 +598,17 @@ function threadsort_optiondata($pid, $sortid, $sortoptionarray, $templatearray) 
 					$_G['forum_optionlist'][$optionid]['value'][$value] = array($value => 'checked="checked"');
 				}
 			} elseif($sortoptionarray[$optionid]['type'] == 'image') {
-				$_G['forum_optionlist'][$optionid]['value'] = unserialize($_G['forum_optiondata'][$optionid]);
+				$_G['forum_optionlist'][$optionid]['value'] = dunserialize($_G['forum_optiondata'][$optionid]);
 			} else {
 				$_G['forum_optionlist'][$optionid]['value'] = $_G['forum_optiondata'][$optionid];
 			}
 			if(!isset($_G['forum_optiondata'][$optionid])) {
-				DB::query("INSERT INTO ".DB::table('forum_typeoptionvar')." (sortid, tid, fid, optionid)
-				VALUES ('$sortid', '$id', '$_G[fid]', '$optionid')");
+				C::t('forum_typeoptionvar')->insert(array(
+					'sortid' => $sortid,
+					'tid' => $id,
+					'fid' => $_G['fid'],
+					'optionid' => $optionid,
+				));
 			}
 		}
 
@@ -544,10 +624,15 @@ function threadsort_optiondata($pid, $sortid, $sortoptionarray, $templatearray) 
 
 			$searchcontent['title'][] = '/{('.$option['identifier'].')}/e';
 			$searchcontent['value'][] = '/\[('.$option['identifier'].')value\]/e';
+			$searchcontent['value'][] = '/{('.$option['identifier'].')_value}/e';
 			$searchcontent['unit'][] = '/\[('.$option['identifier'].')unit\]/e';
+			$searchcontent['unit'][] = '/{('.$option['identifier'].')_unit}/e';
 			$searchcontent['description'][] = '/\[('.$option['identifier'].')description\]/e';
+			$searchcontent['description'][] = '/{('.$option['identifier'].')_description}/e';
 			$searchcontent['required'][] = '/\[('.$option['identifier'].')required\]/e';
+			$searchcontent['required'][] = '/{('.$option['identifier'].')_required}/e';
 			$searchcontent['tips'][] = '/\[('.$option['identifier'].')tips\]/e';
+			$searchcontent['tips'][] = '/{('.$option['identifier'].')_tips}/e';
 		}
 	}
 
@@ -566,7 +651,7 @@ function threadsort_validator($sortoption, $pid) {
 	$postaction = $_G['tid'] && $pid ? "edit&tid=$_G[tid]&pid=$pid" : 'newthread';
 	$_G['forum_optiondata'] = array();
 	foreach($_G['forum_checkoption'] as $var => $option) {
-		if($_G['forum_checkoption'][$var]['required'] && (!$sortoption[$var] && $_G['forum_checkoption'][$var]['type'] != 'number')) {
+		if($_G['forum_checkoption'][$var]['required'] && ($sortoption[$var] === '' && $_G['forum_checkoption'][$var]['type'] != 'number')) {
 			showmessage('threadtype_required_invalid', "forum.php?mod=post&action=$postaction&fid=$_G[fid]&sortid=".$_G['forum_selectsortid'], array('typetitle' => $_G['forum_checkoption'][$var]['title']));
 		} elseif($sortoption[$var] && ($_G['forum_checkoption'][$var]['type'] == 'number' && !is_numeric($sortoption[$var]) || $_G['forum_checkoption'][$var]['type'] == 'email' && !isemail($sortoption[$var]))){
 			showmessage('threadtype_format_invalid', "forum.php?mod=post&action=$postaction&fid=$_G[fid]&sortid=".$_G['forum_selectsortid'], array('typetitle' => $_G['forum_checkoption'][$var]['title']));
@@ -588,7 +673,10 @@ function threadsort_validator($sortoption, $pid) {
 		}
 
 		if($_G['forum_checkoption'][$var]['type'] == 'image') {
-			$sortoption[$var] = addslashes(serialize($sortoption[$var]));
+			if($sortoption[$var]['aid']) {
+				$_GET['attachnew'][$sortoption[$var]['aid']] = $sortoption[$var];
+			}
+			$sortoption[$var] = serialize($sortoption[$var]);
 		} elseif($_G['forum_checkoption'][$var]['type'] == 'select') {
 			$sortoption[$var] = censor(trim($sortoption[$var]));
 		} else {
@@ -627,7 +715,7 @@ function optionlistxml($input, $pre = '') {
 				$value = ($value == true) ? 'true' : 'false';
 			}
 			$value = str_replace("\r\n", '<br>', $value);
-			if(htmlspecialchars($value) != $value) {
+			if(dhtmlspecialchars($value) != $value) {
 				$str .= "<$key><![CDATA[$value]]></$key>";
 			} else {
 				$str .= "<$key>$value</$key>";
@@ -636,4 +724,76 @@ function optionlistxml($input, $pre = '') {
 	}
 	return $str;
 }
+
+
+function makevaluepic($value) {
+	$basedir = !getglobal('setting/attachdir') ? './data/attachment' : getglobal('setting/attachdir');
+	$url = !getglobal('setting/attachurl') ? './data/attachment/' : getglobal('setting/attachurl');
+	$subdir1 = substr(md5($value), 0, 2);
+	$subdir2 = substr(md5($value), 2, 2);
+	$target = 'temp/'.$subdir1.'/'.$subdir2.'/';
+	$targetname = substr(md5($value), 8, 16).'.png';
+	discuz_upload::check_dir_exists('temp', $subdir1, $subdir2);
+	if(file_exists($basedir.'/'.$target.$targetname)) {
+		return $url.$target.$targetname;
+	}
+	$value = str_replace("\n", '', $value);
+	$fontfile = $fontname = '';
+	$ttfenabled = false;
+	$size = 4;
+	$w = 130;
+	$rowh = 25;
+	if(function_exists('imagettftext')) {
+		$fontroot = DISCUZ_ROOT.'./static/image/seccode/font/ch/';
+		$dirs = opendir($fontroot);
+		while($entry = readdir($dirs)) {
+			if($entry != '.' && $entry != '..' && in_array(strtolower(fileext($entry)), array('ttf', 'ttc'))) {
+				$fontname = $entry;
+				break;
+			}
+		}
+		if(!empty($fontname)) {
+			$fontfile = DISCUZ_ROOT.'./static/image/seccode/font/ch/'.$fontname;
+		}
+		if($fontfile) {
+			if(strtoupper(CHARSET) != 'UTF-8') {
+				include DISCUZ_ROOT.'./source/class/class_chinese.php';
+				$cvt = new Chinese(CHARSET, 'utf8');
+				$value = $cvt->Convert($value);
+			}
+			$size = 9;
+			$ttfenabled = true;
+		}
+	}
+	$value = explode("\r", $value);
+	foreach($value as $str) {
+		if($ttfenabled) {
+			$box = imagettfbbox($size, 0, $fontfile, $str);
+			$height = max($box[1], $box[3]) - min($box[5], $box[7]);
+			$len = (max($box[2], $box[4]) - min($box[0], $box[6]));
+			$rowh = max(array($height, $strh));
+		} else {
+			$len = strlen($str) * 9;
+		}
+		$w = max(array($len, $w));
+	}
+	$h = $rowh * count($value) + count($value) * 2;
+	$im = @imagecreate($w, $h);
+	$background_color = imagecolorallocate($im, 255, 255, 255);
+	$text_color = imagecolorallocate($im, 23, 14, 91);
+	$h = $ttfenabled ? $rowh : 4;
+	foreach($value as $str) {
+		if($ttfenabled) {
+			imagettftext($im, $size, 0, 0, $h, $text_color, $fontfile, $str);
+			$h += 2;
+		} else {
+			imagestring($im, $size, 0, $h, $str, $text_color);
+		}
+		$h += $rowh;
+	}
+	imagepng($im, $basedir.'/'.$target.$targetname);
+	imagedestroy($im);
+	return $url.$target.$targetname;
+}
+
 ?>

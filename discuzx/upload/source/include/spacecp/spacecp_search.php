@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_search.php 24331 2011-09-08 08:29:58Z zhangguosheng $
+ *      $Id: spacecp_search.php 28292 2012-02-27 07:23:14Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -22,7 +22,7 @@ foreach ($_G['cache']['profilesetting'] as $key => $value) {
 }
 
 $nowy = dgmdate($_G['timestamp'], 'Y');
-
+$_GET = daddslashes($_GET);
 if(!empty($_GET['searchsubmit']) || !empty($_GET['searchmode'])) {
 	$_GET['searchsubmit'] = $_GET['searchmode'] = 1;
 	$wherearr = $fromarr = $uidjoin = array();
@@ -31,16 +31,16 @@ if(!empty($_GET['searchsubmit']) || !empty($_GET['searchmode'])) {
 	$fromarr['member'] = DB::table('common_member').' s';
 
 	if($searchkey = stripsearchkey($_GET['searchkey'])) {
-		$wherearr[] = "s.username='$searchkey'";
+		$wherearr[] = 's.'.DB::field('username', $searchkey);
 		$searchkey = dhtmlspecialchars($searchkey);
 	} else {
 		foreach (array('uid','username','videophotostatus','avatarstatus') as $value) {
 			if($_GET[$value]) {
 				if($value == 'username' && empty($_GET['precision'])) {
 					$_GET[$value] = stripsearchkey($_GET[$value]);
-					$wherearr[] = "s.$value LIKE '%{$_GET[$value]}%'";
+					$wherearr[] = 's.'.DB::field($value, '%'.$_GET[$value].'%', 'like');
 				} else {
-					$wherearr[] = "s.$value='{$_GET[$value]}'";
+					$wherearr[] = 's.'.DB::field($value, $_GET[$value]);
 				}
 			}
 		}
@@ -55,11 +55,11 @@ if(!empty($_GET['searchsubmit']) || !empty($_GET['searchmode'])) {
 	}
 
 	if($startage && $endage && $endage > $startage) {
-		$wherearr[] = '(sf.birthyear>='.$startage.' AND sf.birthyear<='.$endage.')';
+		$wherearr[] = 'sf.'.DB::field('birthyear', $startage, '>=').' AND sf.'.DB::field('birthyear', $endage, '<=');
 	} else if($startage && empty($endage)) {
-		$wherearr[] = 'sf.birthyear>='.$startage;
+		$wherearr[] = 'sf.'.DB::field('birthyear', $startage, '>=');
 	} else if(empty($startage) && $endage) {
-		$wherearr[] = 'sf.birthyear<='.$endage;
+		$wherearr[] = 'sf.'.DB::field('birthyear', $endage, '<=');
 	}
 
 	$havefield = 0;
@@ -67,7 +67,7 @@ if(!empty($_GET['searchsubmit']) || !empty($_GET['searchmode'])) {
 		$_GET[$fkey] = trim($_GET[$fkey]);
 		if($_GET[$fkey]) {
 			$havefield = 1;
-			$wherearr[] = "sf.$fkey = '$_GET[$fkey]'";
+			$wherearr[] = 'sf.'.DB::field($fkey, $_GET[$fkey]);
 		}
 	}
 
@@ -75,7 +75,7 @@ if(!empty($_GET['searchsubmit']) || !empty($_GET['searchmode'])) {
 		$_GET['field_'.$fkey] = empty($_GET['field_'.$fkey])?'':stripsearchkey($_GET['field_'.$fkey]);
 		if($_GET['field_'.$fkey]) {
 			$havefield = 1;
-			$wherearr[] = "sf.$fkey LIKE '%".$_GET['field_'.$fkey]."%'";
+			$wherearr[] = 'sf.'.DB::field($fkey, '%'.$_GET['field_'.$fkey].'%', 'like');
 		}
 	}
 
@@ -88,15 +88,18 @@ if(!empty($_GET['searchsubmit']) || !empty($_GET['searchmode'])) {
 	if($wherearr) {
 
 		$space['friends'] = array();
-		$query = DB::query("SELECT fuid, fusername FROM ".DB::table('home_friend')." WHERE uid='$_G[uid]'");
-		while ($value = DB::fetch($query)) {
+		$query = C::t('home_friend')->fetch_all_by_uid($_G['uid'], 0, 0);
+		foreach($query as $value) {
 			$space['friends'][$value['fuid']] = $value['fuid'];
 		}
 
-		$query = DB::query("SELECT s.* $fsql FROM ".implode(',', $fromarr)." WHERE ".implode(' AND ', $wherearr)." LIMIT 0,100");
-		while ($value = DB::fetch($query)) {
+		foreach(C::t('common_member')->fetch_all_for_spacecp_search($wherearr, $fromarr, 0, 100) as $value) {
 			$value['isfriend'] = ($value['uid']==$space['uid'] || $space['friends'][$value['uid']])?1:0;
 			$list[$value['uid']] = $value;
+		}
+		$follows = C::t('home_follow')->fetch_all_by_uid_followuid($_G['uid'], array_keys($list));
+		foreach($list as $uid => $value) {
+			$list[$uid]['follow'] = isset($follows[$uid]) ? 1 : 0;
 		}
 	}
 

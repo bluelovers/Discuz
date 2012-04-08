@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_manyou.php 18436 2010-11-23 08:12:18Z zhengqingpeng $
+ *      $Id: function_manyou.php 28663 2012-03-07 05:50:37Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -15,14 +15,25 @@ if(!defined('IN_DISCUZ')) {
 function manyou_getuserapp($panel = 0) {
 	global $_G;
 
-	$panelapp = $_G['my_menu'] = $userapplist = $_G['my_panelapp'] = array();
+	$myapps = $panelapp = $_G['my_menu'] = $userapplist = $_G['my_panelapp'] = array();
 	$showcount = $_G['my_menu_more'] = 0;
 
 	if($_G['uid'] && $_G['setting']['my_app_status']) {
 		space_merge($_G['member'], 'field_home');
 		if($_G['member']['menunum'] < 3) $_G['member']['menunum'] = 10;
-		$query = DB::query("SELECT ua.*, my.iconstatus, my.userpanelarea, my.appstatus FROM ".DB::table('home_userapp')." ua LEFT JOIN ".DB::table('common_myapp')." my USING(appid) WHERE ua.uid='$_G[uid]' ORDER BY ua.menuorder DESC");
-		while($value = DB::fetch($query)) {
+		$userapps = C::t('home_userapp')->fetch_all_by_uid_appid($_G['uid'], 0, 'menuorder');
+		$appids = array();
+		foreach($userapps as $app) {
+			$appids[$app['appid']] = $app['appid'];
+		}
+		if(!empty($appids)) {
+			$myapps = C::t('common_myapp')->fetch_all($appids);
+		}
+		foreach($userapps as $value) {
+			$value['iconstatus'] = $myapps[$value['appid']]['iconstatus'];
+			$value['userpanelarea'] = $myapps[$value['appid']]['userpanelarea'];
+			$value['appstatus'] = $myapps[$value['appid']]['appstatus'];
+
 			$value['icon'] = getmyappiconpath($value['appid'], $value['iconstatus']);
 			if($value['iconstatus']=='0' && empty($_G['myapp_icon_downloaded'])) {
 				$_G['myapp_icon_downloaded'] = '1';
@@ -80,10 +91,11 @@ function downloadmyappicon($appid) {
 	if(!is_dir(dirname($iconpath))) {
 		dmkdir(dirname($iconpath));
 	}
-	DB::update('common_myapp', array('iconstatus'=>'-1'), array('appid'=>$appid));
-	$icondata = file_get_contents(getmyappiconpath($appid, 0));
+	C::t('common_myapp')->update($appid, array('iconstatus'=>'-1'));
+	$ctx = stream_context_create(array('http' => array('timeout' => 10)));
+	$icondata = file_get_contents(getmyappiconpath($appid, 0), false, $ctx);
 	if($icondata) {
 		file_put_contents($iconpath, $icondata);
-		DB::update('common_myapp', array('iconstatus'=>'1', 'icondowntime'=>TIMESTAMP), array('appid'=>$appid));
+		C::t('common_myapp')->update($appid, array('iconstatus'=>'1', 'icondowntime'=>TIMESTAMP));
 	}
 }

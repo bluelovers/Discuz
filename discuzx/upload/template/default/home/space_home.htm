@@ -2,25 +2,42 @@
 	<!--{subtemplate common/header}-->
 
 	<div id="pt" class="bm cl">
-		<!--{subtemplate common/simplesearchform}-->
 		<div class="z">
 			<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
-			$_G[setting][navs][4][navname]
+			<!--{if $_G[setting][homestyle]}--><a href="home.php">$_G[setting][navs][4][navname]</a><!--{else}-->{lang feed}</a><!--{/if}-->
 		</div>
 	</div>
 
-	<!--{ad/text/wp a_t}-->
+	<!--{if $_G[setting][homestyle]}--><!--{ad/text/wp a_t}--><!--{/if}-->
 	<style id="diy_style" type="text/css"></style>
 	<div class="wp">
 		<!--[diy=diy1]--><div id="diy1" class="area"></div><!--[/diy]-->
 	</div>
 
-	<div id="ct" class="ct3_a wp cl">
+	<div id="ct" class="{if $_G[setting][homestyle]}ct3_a{else}ct2_a{/if} wp cl">
+
 		<div class="appl">
-			<!--{template common/userabout}-->
+			<!--{if $_G[setting][homestyle]}-->
+				<!--{template common/userabout}-->
+			<!--{else}-->
+				<div class="tbn">
+					<h2 class="mt bbda">{lang feed}</h2>
+					<ul>
+						<li$actives[we]><a href="home.php?mod=space&do=home&view=we">{lang friend_feed}</a></li>
+						<li$actives[me]><a href="home.php?mod=space&do=home&view=me">{lang my_feed}</a></li>
+						<li$actives[all]><a href="home.php?mod=space&do=home&view=all">{lang view_all}</a></li>
+						<!--{if $_G['setting']['my_app_status']}-->
+						<li$actives[app]><a href="home.php?mod=space&do=home&view=app">{lang view_app_feed}</a></li>
+						<!--{/if}-->
+						<!--{hook/space_home_navlink}-->
+					</ul>
+				</div>
+			<!--{/if}-->
 		</div>
 		<!--/sidebar-->
+		<!--{if $_G[setting][homestyle]}-->
 		<div class="sd ptm">
+			<!--{hook/space_home_side_top}-->
 			<div class="drag">
 				<!--[diy=diysidetop]--><div id="diysidetop" class="area"></div><!--[/diy]-->
 			</div>
@@ -45,12 +62,12 @@
 						<p class="pbm">{lang space_home_message}</p>
 						<hr class="da m0" />
 						<dl class="xld cl">
-							<dd class="m"><img src="$task[icon]" width="64" height="64" alt="Icon" /></dd>
+							<dd class="m mbw"><img src="$task[icon]" width="64" height="64" alt="Icon" /></dd>
 							<dt><a href="home.php?mod=task&do=view&id=$task[taskid]">$task[name]</a></dt>
 							<dd>
 								<p>$task[description]</p>
 								<!--{if in_array($task['reward'], array('credit', 'magic', 'medal', 'invite', 'group'))}-->
-									<p>
+									<p class="mtn">
 										<!--{if $task['reward'] == 'credit'}-->
 											{lang gettable}$_G['setting']['extcredits'][$task[prize]][title] <strong class="xi1">$task[bonus]</strong> $_G['setting']['extcredits'][$task[prize]][unit]
 										<!--{elseif $task['reward'] == 'magic'}-->
@@ -82,18 +99,18 @@
 					</div>
 					<div class="bm_c">
 						<dl class="xld cl">
-							<dd class="m"><img src="{STATICURL}/image/magic/$magic[pic]" alt="$magic[name]" title="$magic[description]" /></dd>
+							<dd class="m mbw"><img src="{STATICURL}/image/magic/$magic[pic]" alt="$magic[name]" title="$magic[description]" /></dd>
 							<dt>$magic[name]</dt>
 							<dd>
 								<p>$magic[description]</p>
-								<p>{lang magics_price}
+								<p class="mtn">{lang magics_price}
 									<!--{if {$_G['setting']['extcredits'][$magic[credit]][unit]}}-->
 										{$_G['setting']['extcredits'][$magic[credit]][title]} <strong class="xi1">$magic[price]</strong> {$_G['setting']['extcredits'][$magic[credit]][unit]}/{lang magics_unit}
 									<!--{else}-->
 										<strong class="xi1">$magic[price]</strong> {$_G['setting']['extcredits'][$magic[credit]][title]}/{lang magics_unit}
 									<!--{/if}-->
 								</p>
-								<p>
+								<p class="mtn">
 									<!--{if $magic[num] > 0}-->
 										<a href="home.php?mod=magic&action=shop&operation=buy&mid=$magic[identifier]" onclick="showWindow('magics', this.href);return false;" class="xi2 xw1">{lang magics_operation_buy}</a>
 										<!--{if $_G['group']['allowmagics'] > 1}-->
@@ -291,9 +308,11 @@
 
 			<!--{hook/space_home_side_bottom}-->
 		</div>
-		<div class="mn ptm">
+		<!--{/if}-->
+		<div class="mn ptm pbm">
 			<!--[diy=diycontenttop]--><div id="diycontenttop" class="area"></div><!--[/diy]-->
 			<!--{if $space['uid'] && $space[self]}-->
+			<!--{if $_G[setting][homestyle]}-->
 				<div class="bm bw0">
 					<table cellpadding="0" cellspacing="0" class="mi mbm">
 						<tr>
@@ -333,7 +352,7 @@
 						<li class="y"><a id="a_magic_thunder" href="home.php?mod=magic&mid=thunder" onclick="showWindow('magics', this.href, 'get', 0)" style="padding-left: 18px; background: url({STATICURL}image/magic/thunder.small.gif) no-repeat 0 50%;">{$_G[setting][magics][thunder]}</a></li>
 						<!--{/if}-->
 					</ul>
-
+				<!--{/if}-->
 			<!--{else}-->
 				<div class="bm bw0">
 				<!--{eval
@@ -345,6 +364,9 @@
 
 			<!--{if $_GET[view] == 'all'}-->
 				<p class="tbmu">
+					<!--{if !$_G[setting][homestyle] && $_G['setting']['magicstatus'] && $_G['setting']['magics']['thunder']}-->
+					<a id="a_magic_thunder" href="home.php?mod=magic&mid=thunder" onclick="showWindow('magics', this.href, 'get', 0)" style="padding-left: 18px; background: url({STATICURL}image/magic/thunder.small.gif) no-repeat 0 50%;" class="y">{$_G[setting][magics][thunder]}</a>
+					<!--{/if}-->
 					<a href="home.php?mod=space&do=home&view=all&order=dateline"$orderactives[dateline]>{lang newest_feed}</a><span class="pipe">|</span>
 					<a href="home.php?mod=space&do=home&view=all&order=hot"$orderactives[hot]>{lang hot_feed}</a>
 				</p>
@@ -356,20 +378,47 @@
 				</p>
 			<!--{elseif $groups}-->
 				<p class="tbmu">
+					<!--{if !$_G[setting][homestyle] && $_G['setting']['magicstatus'] && $_G['setting']['magics']['thunder']}-->
+					<a id="a_magic_thunder" href="home.php?mod=magic&mid=thunder" onclick="showWindow('magics', this.href, 'get', 0)" style="padding-left: 18px; background: url({STATICURL}image/magic/thunder.small.gif) no-repeat 0 50%;" class="y">{$_G[setting][magics][thunder]}</a>
+					<!--{/if}-->
 					<a href="home.php?mod=space&do=home&view=we"{$gidactives[-1]}>{lang all_friends}</a><!--{loop $groups $key $value}--><span class="pipe">|</span><a href="home.php?mod=space&do=home&view=we&gid=$key"{$gidactives[$key]}>$value</a><!--{/loop}-->
+				</p>
+			<!--{elseif !$_G[setting][homestyle] && $_G['setting']['magicstatus'] && $_G['setting']['magics']['thunder']}-->
+				<p class="tbmu cl">
+					<a id="a_magic_thunder" href="home.php?mod=magic&mid=thunder" onclick="showWindow('magics', this.href, 'get', 0)" style="padding-left: 18px; background: url({STATICURL}image/magic/thunder.small.gif) no-repeat 0 50%;" class="y">{$_G[setting][magics][thunder]}</a>
 				</p>
 			<!--{/if}-->
 
 <!--{else}-->
-
-<!--{template home/space_header}-->
-<div id="ct" class="ct2 wp cl">
-	<div class="mn">
-		<div class="bm">
-			<div class="bm_h cl">
-				<h1 class="mt">{lang feed}</h1>
+	<!--{if $_G[setting][homepagestyle]}-->
+		<!--{subtemplate home/space_header}-->
+		<div id="ct" class="ct2 wp cl">
+			<div class="mn">
+				<div class="bm">
+					<div class="bm_h">
+						<h1 class="mt">{lang memcp_profile}</h1>
+					</div>
+				<div class="bm_c">
+	<!--{else}-->
+		<!--{template common/header}-->
+		<div id="pt" class="bm cl">
+			<div class="z">
+				<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
+				<a href="home.php?mod=space&uid=$space[uid]">{$space[username]}</a> <em>&rsaquo;</em>
+				<a href="home.php?mod=space&uid=$space[uid]&do=blog&view=me">{lang memcp_profile}</a>
 			</div>
-			<div class="bm_c">
+		</div>
+		<style id="diy_style" type="text/css"></style>
+		<div class="wp">
+			<!--[diy=diy1]--><div id="diy1" class="area"></div><!--[/diy]-->
+		</div>
+		<!--{template home/space_menu}-->
+		<div id="ct" class="ct1 wp cl">
+			<div class="mn">
+				<!--[diy=diycontenttop]--><div id="diycontenttop" class="area"></div><!--[/diy]-->
+				<div class="bm bw0">
+					<div class="bm_c">
+	<!--{/if}-->
 <!--{/if}-->
 
 			<div id="feed_div" class="e">
@@ -385,55 +434,7 @@
 
 			<!--{if $list}-->
 				<!--{if $_GET[view] == 'app' && $_G['setting']['my_app_status']}-->
-				
-					<div class="xld xlda mtm">
-						<!--{loop $list $appicon $values}-->
-							<dl class="bbda cl">
-								<dd class="m avt">
-									<a href="userapp.php?mod=app&id=$appicon"><img src="http://appicon.manyou.com/logos/$appicon" alt="" /></a>
-								</dd>
-								<dd class="cl">
-									<ul class="el">
-										<!--{loop $values $value}-->
-										<li class="cl">
-											<a class="t" href="userapp.php?icon=$value[icon]" title="{lang just_look_dynamic}">
-												<img width="16" height="16" {if $_G[cache][myapp][$value[icon]][icon]}src="$_G[cache][myapp][$value[icon]][icon]" onerror="this.onerror=null;this.src='http://appicon.manyou.com/icons/$value[icon]'"{else} src="http://appicon.manyou.com/icons/$value[icon]"{/if} />
-											</a>
-											$value[title_template] 
-											<span class="xg1"><!--{date($value[dateline], 'n-j H:i')}--></span>
-	
-											<div class="ec">
-												<!--{if $value['image_1']}-->
-												<a href="$value[image_1_link]"{$value[target]}><img src="$value[image_1]" class="tn" /></a>
-												<!--{/if}-->
-												<!--{if $value['image_2']}-->
-												<a href="$value[image_2_link]"{$value[target]}><img src="$value[image_2]" class="tn" /></a>
-												<!--{/if}-->
-												<!--{if $value['image_3']}-->
-												<a href="$value[image_3_link]"{$value[target]}><img src="$value[image_3]" class="tn" /></a>
-												<!--{/if}-->
-												<!--{if $value['image_4']}-->
-												<a href="$value[image_4_link]"{$value[target]}><img src="$value[image_4]" class="tn" /></a>
-												<!--{/if}-->
-	
-												<!--{if $value['body_template']}-->
-												<div class="detail"{if $value['image_3']} style="clear: both; zoom: 1;"{/if}>
-													$value[body_template]
-												</div>
-												<!--{/if}-->
-	
-												<!--{if $value['body_general']}-->
-												<div class="quote"><blockquote>$value[body_general]</blockquote></div>
-												<!--{/if}-->
-											</div>
-										</li>
-									<!--{/loop}-->
-									</ul>
-								</dd>
-							</dl>
-						<!--{/loop}-->
-					</div>
-				
+					<!--{template home/space_home_feed_app}-->
 				<!--{else}-->
 					<!--{loop $list $day $values}-->
 						<!--{if $_GET['view']!='hot'}-->
@@ -441,7 +442,7 @@
 								<!--{if $day=='yesterday'}-->{lang yesterday}<!--{elseif $day=='today'}-->{lang today}<!--{else}-->$day<!--{/if}-->
 							</h4>
 						<!--{/if}-->
-	
+
 						<ul class="el">
 						<!--{loop $values $value}-->
 							<!--{template home/space_feed_li}-->
@@ -533,14 +534,15 @@
 
 			</div>
 		</div>
+	<!--{if $_G[setting][homepagestyle]}-->
 	</div>
 	<div class="sd">
 		<!--{subtemplate home/space_userabout}-->
-	</div>
+	<!--{/if}-->
 </div>
 <!--{/if}-->
 
-<!--{eval my_checkupdate();}-->
+<!--{eval helper_manyou::checkupdate();}-->
 
 <script type="text/javascript">
 	function filter_more(id) {

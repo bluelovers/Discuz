@@ -1,4 +1,4 @@
-<!--{if $debate[umpire]}-->	
+<!--{if $debate[umpire]}-->
 	<!--{if $debate['umpirepoint']}-->
 	<div>
 		<p>
@@ -34,7 +34,7 @@
         <strong>{lang debate_opponent_point} ($debate[negavotes]) ({lang debater}:$debate[negadebaters])</strong>
         <p class="xg2">$debate[negapoint]</p>
         <p><a href="forum.php?mod=misc&action=debatevote&tid=$_G[tid]&stand=2" id="negabutton" >{lang debate_support}</a></p>
-    </div>	
+    </div>
 </div>
 
 <div>
@@ -45,9 +45,9 @@
 <!--{if $debate[umpire] && $_G['username'] && $debate[umpire] == $_G['member']['username']}-->
 	<p class="mtn">
 	<!--{if $debate[remaintime] && !$debate[umpirepoint]}-->
-	 <a href="forum.php?mod=misc&action=debateumpire&tid=$_G[tid]&pid=$post[pid]{if $_G[gp_from]}&from=$_G[gp_from]{/if}" >{lang debate_umpire_end}</a>
+	 <a href="forum.php?mod=misc&action=debateumpire&tid=$_G[tid]&pid=$post[pid]{if $_GET[from]}&from=$_GET[from]{/if}" >{lang debate_umpire_end}</a>
 	<!--{elseif TIMESTAMP - $debate['dbendtime'] < 3600}-->
-	 <a href="forum.php?mod=misc&action=debateumpire&tid=$_G[tid]&pid=$post[pid]{if $_G[gp_from]}&from=$_G[gp_from]{/if}" >{lang debate_umpirepoint_edit}</a>
+	 <a href="forum.php?mod=misc&action=debateumpire&tid=$_G[tid]&pid=$post[pid]{if $_GET[from]}&from=$_GET[from]{/if}" >{lang debate_umpirepoint_edit}</a>
 	<!--{/if}-->
 	</p>
 <!--{/if}-->

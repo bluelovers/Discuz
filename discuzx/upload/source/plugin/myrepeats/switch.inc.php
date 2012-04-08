@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: switch.inc.php 21516 2011-03-30 01:43:15Z monkey $
+ *      $Id: switch.inc.php 29236 2012-03-30 05:34:47Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -15,26 +15,59 @@ if(!$_G['uid']) {
 	showmessage('not_loggedin', NULL, array(), array('login' => 1));
 }
 
-if($_G['gp_formhash'] != FORMHASH) {
+$myrepeatsusergroups = (array)dunserialize($_G['cache']['plugin']['myrepeats']['usergroups']);
+
+if(!empty($_GET['list'])) {
+	if(in_array('', $myrepeatsusergroups)) {
+		$myrepeatsusergroups = array();
+	}
+	$userlist = array();
+	if(!in_array($_G['groupid'], $myrepeatsusergroups)) {
+		$userlist = get_rrepeats($_G['username']);
+		$count = count($userlist);
+		if(!$count) {
+			unset($_G['setting']['plugins']['spacecp']['myrepeats:memcp']);
+		}
+	}
+
+	$userlist = get_rrepeats($_G['username']);
+	foreach(C::t('#myrepeats#myrepeats')->fetch_all_by_uid($_G['uid']) as $user) {
+		$userlist[$user['username']] = $user['username'];
+	}
+	$list = '<ul>';
+	foreach($userlist as $user) {
+		if(!$user) {
+			continue;
+		}
+		$list .= '<li><a href="plugin.php?id=myrepeats:switch&username='.rawurlencode($user).'&formhash='.FORMHASH.'" onclick="showWindow(\'myrepeat\', this.href);return false;">'.$user.'</a></li>';
+	}
+	$list .= '<li><a href="home.php?mod=spacecp&ac=plugin&id=myrepeats:memcp">'.lang('plugin/myrepeats', 'memcp').'</a></li>';
+	include template('common/header_ajax');
+	echo $list;
+	include template('common/footer_ajax');
+	exit;
+}
+
+if($_GET['formhash'] != FORMHASH) {
 	showmessage('undefined_action');
 }
 
-$myrepeatsusergroups = (array)unserialize($_G['cache']['plugin']['myrepeats']['usergroups']);
 $referer = dreferer();
 
 if(in_array('', $myrepeatsusergroups)) {
 	$myrepeatsusergroups = array();
 }
 if(!in_array($_G['groupid'], $myrepeatsusergroups)) {
-	$query = DB::query("SELECT * FROM ".DB::table('myrepeats')." WHERE username='$_G[username]'");
-	if(!DB::num_rows($query)) {
+	$users = C::t('#myrepeats#myrepeats')->fetch_all_by_username($_G['username']);
+	if(!$users) {
 		showmessage('myrepeats:usergroup_disabled');
 	} else {
 		$permusers = array();
-		while($user = DB::fetch($query)) {
+		foreach($users as $user) {
 			$permusers[] = $user['uid'];
 		}
-		if(!DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_member')." WHERE username='$_G[gp_username]' AND uid IN (".dimplode($permusers).")")) {
+		$member = C::t('common_member')->fetch_by_username($_GET['username']);
+		if(!$member || !in_array($member['uid'], $permusers)) {
 			showmessage('myrepeats:usergroup_disabled');
 		}
 	}
@@ -42,51 +75,56 @@ if(!in_array($_G['groupid'], $myrepeatsusergroups)) {
 
 require_once libfile('function/member');
 
-$_G['myrepeats_loginperm'] = logincheck($_G['gp_username']);
+$_G['myrepeats_loginperm'] = logincheck($_GET['username']);
 if(!$_G['myrepeats_loginperm']) {
 	showmessage('myrepeats:login_strike', '', array('loginperm' => $_G['myrepeats_loginperm']));
 }
 
-if(!empty($_G['gp_authorfirst']) && submitcheck('myrepeatssubmit')) {
-	$result = userlogin($_G['gp_username'], $_G['gp_password'], $_G['gp_questionid'], $_G['gp_answer']);
+if(!empty($_GET['authorfirst']) && submitcheck('myrepeatssubmit')) {
+	$result = userlogin($_GET['username'], $_GET['password'], $_GET['questionid'], $_GET['answer'], 'username', $_G['clientip']);
 	$_G['myrepeats_ucresult'] = $result['ucresult'];
 	if($result['status'] > 0) {
-		$logindata = addslashes(authcode($_G['gp_password']."\t".$_G['gp_questionid']."\t".$_G['gp_answer'], 'ENCODE', $_G['config']['security']['authkey']));
-		if(DB::result_first("SELECT COUNT(*) FROM ".DB::table('myrepeats')." WHERE uid='$_G[uid]' AND username='$_G[gp_username]'")) {
-			DB::query("UPDATE ".DB::table('myrepeats')." SET logindata='$logindata' WHERE uid='$_G[uid]' AND username='$_G[gp_username]'");
+		$logindata = addslashes(authcode($_GET['password']."\t".$_GET['questionid']."\t".$_GET['answer'], 'ENCODE', $_G['config']['security']['authkey']));
+		if(C::t('#myrepeats#myrepeats')->count_by_uid_username($_G['uid'], $_GET['username'])) {
+			C::t('#myrepeats#myrepeats')->update_logindata_by_uid_username($_G['uid'], $_GET['username'], $logindata);
 		} else {
-			DB::query("INSERT INTO ".DB::table('myrepeats')." (uid, username, logindata, comment) VALUES ('$_G[uid]', '$_G[gp_username]', '$logindata', '')");
+			C::t('#myrepeats#myrepeats')->insert(array(
+				'uid' => $_G['uid'],
+				'username' => $_GET[username],
+				'logindata' => $logindata,
+				'comment' => ''
+			));
 		}
 	} else {
-		myrepeats_loginfailure($_G['gp_username'], $_G['gp_password'], $_G['gp_questionid'], $_G['gp_answer']);
+		myrepeats_loginfailure($_GET['username'], $_GET['password'], $_GET['questionid'], $_GET['answer']);
 	}
 }
 
-$user = DB::fetch_first("SELECT * FROM ".DB::table('myrepeats')." WHERE uid='$_G[uid]' AND username='$_G[gp_username]'");
+$user = C::t('#myrepeats#myrepeats')->fetch_all_by_uid_username($_G['uid'], $_GET['username']);
+$user = current($user);
 $olddiscuz_uid = $_G['uid'];
 $olddiscuz_user = $_G['username'];
 $olddiscuz_userss = $_G['member']['username'];
 
 if(!$user) {
-	$newuid = DB::result_first("SELECT uid FROM ".DB::table('common_member')." WHERE username='$_G[gp_username]'");
-	if(DB::result_first("SELECT COUNT(*) FROM ".DB::table('myrepeats')." WHERE uid='$newuid' AND username='".addslashes($olddiscuz_userss)."'")) {
-		$username = htmlspecialchars($_G['gp_username']);
+	$newuid = C::t('common_member')->fetch_uid_by_username($_GET['username']);
+	if(C::t('#myrepeats#myrepeats')->count_by_uid_username($newuid, $olddiscuz_userss)) {
+		$username = dhtmlspecialchars($_GET['username']);
 		include template('myrepeats:switch_login');
 		exit;
 	}
 	showmessage('myrepeats:user_nonexistence');
 } elseif($user['locked']) {
-	$usernamess = stripslashes($_G['gp_username']);
-	showmessage('myrepeats:user_locked', '', array('user' => $usernamess));
+	showmessage('myrepeats:user_locked', '', array('user' => $_GET['username']));
 }
 
 list($password, $questionid, $answer) = explode("\t", authcode($user['logindata'], 'DECODE', $_G['config']['security']['authkey']));
 
-$result = userlogin($_G['gp_username'], $password, $questionid, $answer);
+$result = userlogin($_GET['username'], $password, $questionid, $answer, 'username', $_G['clientip']);
 $_G['myrepeats_ucresult'] = $result['ucresult'];
 if($result['status'] > 0) {
 	setloginstatus($result['member'], 2592000);
-	DB::query("UPDATE ".DB::table('myrepeats')." SET lastswitch='".TIMESTAMP."' WHERE uid='$olddiscuz_uid' AND username='$_G[gp_username]'");
+	C::t('#myrepeats#myrepeats')->update_lastswitch_by_uid_username($olddiscuz_uid, $_GET['username'], TIMESTAMP);
 	$ucsynlogin = $_G['setting']['allowsynlogin'] ? uc_user_synlogin($_G['uid']) : '';
 	dsetcookie('mrn', '');
 	dsetcookie('mrd', '');
@@ -100,7 +138,7 @@ if($result['status'] > 0) {
 	$auth = authcode($_G['myrepeats_ucresult']['username']."\t".formhash(), 'ENCODE');
 	showmessage('myrepeats:login_activation', 'member.php?mod='.$_G['setting']['regname'].'&action=activation&auth='.rawurlencode($auth).'&referer='.rawurlencode($referer), array('user' => $_G['myrepeats_ucresult']['username']), array('showmsg' => 1, 'showdialog' => 1, 'locationtime' => 3));
 } else {
-	myrepeats_loginfailure($_G['gp_username'], $password, $questionid, $answer);
+	myrepeats_loginfailure($_GET['username'], $password, $questionid, $answer);
 }
 
 function myrepeats_loginfailure($username, $password, $questionid, $answer) {
@@ -115,7 +153,26 @@ function myrepeats_loginfailure($username, $password, $questionid, $answer) {
 	writelog('illegallog', $errorlog);
 	loginfailed($username);
 	$fmsg = $_G['myrepeats_ucresult']['uid'] == '-3' ? (empty($questionid) || $answer == '' ? 'login_question_empty' : 'login_question_invalid') : 'login_invalid';
-	showmessage('myrepeats:'.$fmsg, '', array('loginperm' => $_G['myrepeats_loginperm']));
+	if($_G['myrepeats_loginperm'] > 1) {
+		showmessage('myrepeats:'.$fmsg, '', array('loginperm' => $_G['myrepeats_loginperm']));
+	} elseif($_G['myrepeats_loginperm'] == -1) {
+		showmessage('myrepeats:login_password_invalid');
+	} else {
+		showmessage('myrepeats:login_strike');
+	}
+}
+
+function get_rrepeats($username) {
+	$users = C::t('#myrepeats#myrepeats')->fetch_all_by_username($username);
+	$uids = array();
+	foreach($users as $user) {
+		$uids[] = $user['uid'];
+	}
+	$userlist = array();
+	foreach(C::t('common_member')->fetch_all($uids) as $user) {
+		$userlist[$user['username']] = $user['username'];
+	}
+	return $userlist;
 }
 
 ?>

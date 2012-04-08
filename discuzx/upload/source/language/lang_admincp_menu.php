@@ -7,6 +7,10 @@
  *      $Id: lang_admincp_menu.php 29171 2012-03-28 02:59:31Z monkey $
  */
 
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
+
 $lang = array
 (
 
@@ -22,7 +26,7 @@ $lang = array
 	'header_adv' => '廣告',
 	'header_tools' => '工具',
 	'header_uc' => 'UCenter',
-	'header_welcome' => '你好',
+	'header_welcome' => '您好',
 	'header_logout' => '退出',
 	'header_bbs' => '站點首頁',
 	'header_portal' => '門戶',
@@ -35,7 +39,7 @@ $lang = array
 	'menu_home_clearhistorymenus' => '清空歷史操作',
 
 	'menu_setting_basic' => '站點信息',
-	'menu_setting_access' => '註冊與訪問',
+	'menu_setting_access' => '註冊與訪問控制',
 	'menu_setting_customnav' => '導航設置',
 	'menu_setting_styles' => '界面設置',
 	'menu_setting_optimize' => '性能優化',
@@ -51,6 +55,7 @@ $lang = array
 	'menu_setting_imgwater' => '水印設置',
 	'menu_setting_uc' => 'UCenter 設置',
 	'menu_setting_uchome' => 'UCHome 設置',
+	'menu_setting_follow' => '廣播設置',
 	'menu_setting_home' => '空間設置',
 	'menu_setting_search' => '搜索設置',
 	'menu_setting_district' => '地區設置',
@@ -67,6 +72,7 @@ $lang = array
 	'menu_members_add' => '添加用戶',
 	'menu_members_edit' => '用戶管理',
 	'menu_members_newsletter' => '發送通知',
+	'menu_usertag' => '用戶標籤',
 	'menu_members_edit_ban_user' => '禁止用戶',
 	'menu_members_ipban' => '禁止 IP',
 	'menu_members_credits' => '積分獎懲',
@@ -78,7 +84,7 @@ $lang = array
 	'menu_profilefields' => '用戶欄目定制',
 	'menu_admingroups' => '管理組',
 	'menu_usergroups' => '用戶組',
-	'menu_hotuser' => '明星會員',
+	'menu_follow' => '推薦關注',
 	'menu_defaultuser' => '推薦好友',
 
 	'menu_moderate_posts' => '內容審核',
@@ -95,6 +101,7 @@ $lang = array
 	'menu_maint_threads_group' => '群組主題管理',
 	'menu_maint_prune_group' => '群組批量刪帖',
 	'menu_maint_attaches_group' => '群組附件管理',
+	'menu_setting_collection' => '淘帖管理',
 	'menu_posting_tags' => '標籤管理',
 	'menu_posting_censors' => '詞語過濾',
 	'menu_maint_report' => '用戶舉報',
@@ -118,6 +125,9 @@ $lang = array
 	'menu_founder_groupperm' => '編輯團隊職務權限 - {group}',
 	'menu_founder_permgrouplist' => '編輯權限 - {perm}',
 	'menu_founder_memberperm' => '編輯團隊成員 - {username}',
+
+	'menu_patch' => '安全中心',
+	'menu_upgrade' => '在線升級',
 
 	'menu_addons' => '應用中心',
 	'menu_plugins' => '插件',
@@ -151,11 +161,13 @@ $lang = array
 	'menu_tools_relatedtag' => ' 標籤聚合',
 	'menu_tools_creditwizard' => '積分策略嚮導',
 	'menu_tools_fileperms' => '文件權限檢查',
+	'menu_tools_hookcheck' => '嵌入點校驗',
 	'menu_tools_filecheck' => '文件校驗',
 	'menu_forum_scheme' => '站點方案管理',
 	'menu_db' => '數據庫',
 	'menu_postsplit' => '帖子分表',
 	'menu_threadsplit' => '主題分表',
+	'menu_membersplit' => '用戶表優化',
 	'menu_logs' => '運行記錄',
 	'menu_custommenu_manage' => '常用操作管理',
 	'menu_misc_cron' => '計劃任務',
@@ -166,6 +178,7 @@ $lang = array
 	'menu_albumcategory' => '相冊分類',
 	'menu_block' => '模塊管理',
 	'menu_blockstyle' => '模塊模板',
+	'menu_portalpermission' => '權限列表',
 	'menu_blockxml' => '第三方模塊',
 	'menu_topic' => '專題管理',
 	'menu_diytemplate' => '頁面管理',
@@ -175,6 +188,7 @@ $lang = array
 	'menu_group_manage' => '群組管理',
 	'menu_group_userperm' => '群主權限',
 	'menu_group_level' => '群組等級',
+	'menu_group_mod' => '審核群組',
 
 	'menu_setting_manyou' => 'Manyou 設置',
 	'menu_setting_qqconnect' => 'QQ 綁定設置',

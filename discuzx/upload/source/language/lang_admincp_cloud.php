@@ -4,9 +4,12 @@
  *	  [Discuz!] (C)2001-2099 Comsenz Inc.
  *	  This is NOT a freeware, use is subject to license terms
  *
- *	  $Id: lang_admincp_cloud.php 29038 2012-03-23 06:22:39Z songlixin $
+ *	  $Id: lang_admincp_cloud.php 29353 2012-04-06 03:00:07Z liudongdong $
  */
 
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 $extend_lang = array
 (
 	'header_cloud' => '雲平台',
@@ -30,13 +33,14 @@ $extend_lang = array
 	'menu_cloud_smilies' => 'SOSO表情',
 	'menu_cloud_qqgroup' => '社區QQ群',
 	'menu_cloud_union' => 'Discuz!聯盟',
-	'menu_cloud_mobile' => '手機客戶端',
 	'menu_cloud_storage' => '旋風存儲',
+	'menu_cloud_mobile' => '手機客戶端',
 
 	'close' => '關閉',
 	'continue' => '繼續',
 	'message_title' => '提示信息',
 	'jump_to_cloud' => '您即將轉向Discuz!雲平台（http://cp.discuz.qq.com）完成開通流程',
+	'cloud_waiting' => '請稍候...',
 
 	'cloud_status_error' => '出了點小錯，由於站點ID/通信KEY等關鍵信息丟失導致Discuz!雲平台服務出現異常，使用<a href="admin.php?action=cloud&operation=doctor">診斷工具</a>檢測站點ID和KEY，如有疑問請訪問<a href="http://www.discuz.net/forum-3926-1.html" target="_blank">官方論壇</a>尋求幫助',
 
@@ -62,7 +66,7 @@ $extend_lang = array
 	'cloud_select_return' => '請選擇站點分類，返回',
 	'cloud_open_success' => 'Discuz!雲平台開通成功 ',
 	'cloud_upgrade_success' => 'Discuz!雲平台升級成功 ',
-	'cloud_network_busy' => '網絡繁忙，稍後請重新操作，原因：<br />{errMessage} (ERRCODE:{errCode})',
+	'cloud_network_busy' => '網絡繁忙，稍後請重新操作，原因：<br />{errorMessage} (ERRCODE:{errorCode})',
 	'cloud_turnto_applist' => '您的站點已開通Discuz!雲平台，現跳轉到平台首頁',
 	'cloud_site_id' => '站點ID',
 	'cloud_api_ip_btn' => '設置雲平台接口IP',
@@ -71,23 +75,21 @@ $extend_lang = array
 	'cloud_manyou_ip' => '漫遊接口IP',
 	'cloud_manyou_ip_comment' => '若站點服務器由於DNS解析問題無法連接到漫遊接口，請填寫api.manyou.com的IP地址，使用<a href="admin.php?action=cloud&operation=doctor">診斷工具</a>檢測，<a href="http://faq.comsenz.com/viewnews-400" target="_blank">查看幫助</a>',
 	'cloud_connect_api_ip' => 'QQ互聯接口IP',
-	'cloud_connect_api_ip_comment' => '若站點服務器由於DNS解析問題無法連接到QQ互聯接口，請填寫openapi.qzone.qq.com的IP地址，使用<a href="admin.php?action=cloud&operation=doctor">診斷工具</a>檢測，<a href="http://cp.discuz.qq.com/faq?fId=1316571929&ADTAG=CP.CLOUD.FAQ.FID" target="_blank">查看幫助</a>',
+	'cloud_connect_api_ip_comment' => '若站點服務器由於DNS解析問題無法連接到QQ互聯接口，請填寫openapi.qzone.qq.com的IP地址，使用<a href="admin.php?action=cloud&operation=doctor">診斷工具</a>檢測，<a href="http://cp.discuz.qq.com/faq?fId=1322796393&ADTAG=CP.CLOUD.FAQ.FID" target="_blank">查看幫助</a>',
 	'cloud_ipsetting_success' => '雲平台接口IP設置成功 ',
 	'cloud_open_first' => '請先開通Discuz!雲平台',
 	'cloud_sync' => '同步站點信息',
 	'cloud_sync_success' => '站點信息同步成功 ',
-	'cloud_sync_failure' => '站點信息同步失敗，原因：<br />{errMessage} (ERRCODE:{errCode})<br /><br />如有疑問，請訪問<a href="http://www.discuz.net/forum-3926-1.html" target="_blank">官方論壇</a>尋求幫助',
+	'cloud_sync_failure' => '站點信息同步失敗，原因：<br />{errorMessage} (ERRCODE:{errorCode})<br /><br />如有疑問，請訪問<a href="http://www.discuz.net/forum-3926-1.html" target="_blank">官方論壇</a>尋求幫助',
 	'cloud_resetkey' => '更換站點KEY',
 	'cloud_reset_success' => '站點KEY更換成功 ',
 
 	'cloud_siteinfo_tips' => '<li>如果站點名稱或者站點URL有變動，請點擊「同步站點信息」按鈕。</li><li>站點KEY是站點與雲平台通信的驗證密鑰，若近期有危險操作洩漏站點KEY等信息，請點擊「更換站點KEY」按鈕。<span style="color:red;">請謹慎使用此功能。</span></li>',
 
-	'cloud_doctor_tips' => '<li>Discuz!雲平台診斷工具是幫助您分析站點上的狀況，是否能與雲平台正常通信等功能。</li>
-		<li>站點ID是您的站點在雲平台的唯一標識，請勿和其他站點共用一套站點ID和站點通信KEY</li>',
+	'cloud_doctor_tips' => '<li>Discuz!雲平台診斷工具是幫助您分析站點上的狀況，是否能與雲平台正常通信等功能。</li><li>站點ID是您的站點在雲平台的唯一標識，請勿和其他站點共用一套站點ID和站點通信KEY</li>',
 
 	'cloud_doctor_setidkey' => '修改Discuz!上的站點ID和KEY',
-	'cloud_doctor_setidkey_tips' => '<li style="color:red">修改Discuz!上的站點ID和KEY，可能會導致通信錯誤、簽名錯誤以及其他的故障，請勿在沒有官方人員指導的情況下修改。</li>
-		<li style="color:red">修改ID、KEY和狀態前，請先備份論壇的common_setting表。</li>',
+	'cloud_doctor_setidkey_tips' => '<li style="color:red">修改Discuz!上的站點ID和KEY，可能會導致通信錯誤、簽名錯誤以及其他的故障，請勿在沒有官方人員指導的情況下修改。</li><li style="color:red">修改ID、KEY和狀態前，請先備份論壇的common_setting表。</li>',
 	'cloud_site_key' => '站點通信KEY',
 	'cloud_site_key_safetips' => '(出於安全考慮，部分隱藏)',
 	'cloud_site_key_comment' => '站點通信KEY請勿對外公佈',
@@ -117,10 +119,6 @@ $extend_lang = array
 
 	'cloud_doctor_title_result' => '檢測結果(<a href="#" onClick="self.location.reload();">重新檢測</a>)',
 
-	'cloud_doctor_php_ini_separator' => 'URL分隔符',
-	'cloud_doctor_php_ini_separator_true' => '空或&',
-	'cloud_doctor_php_ini_separator_false' => 'php.ini 的 arg_separator.output 設置成非&值 或 ini_get 函數被禁用，請聯繫空間商',
-
 	'cloud_doctor_fsockopen_function' => 'fsockopen函數',
 	'cloud_doctor_gethostbyname_function' => 'DNS解析函數',
 	'cloud_doctor_function_disable' => '函數被禁用，請聯繫空間商',
@@ -134,6 +132,8 @@ $extend_lang = array
 	'cloud_doctor_dns_qzone' => 'QQ互聯域名解析',
 	'cloud_doctor_dns_qzone_test' => 'QQ互聯主接口測試',
 	'cloud_doctor_other_qzone_test' => 'QQ互聯其他接口測試',
+	'cloud_doctor_site_test' => '雲平台到站點測試',
+	'cloud_doctor_site_test_result' => '<div id="cloud_doctor_site_test_result_div"><img src="{imgdir}/loading.gif" class="vm"> 請稍候...</div>',
 
 	'cloud_doctor_setting_ip' => '手動設置的IP：',
 
@@ -142,8 +142,8 @@ $extend_lang = array
 
 	'cloud_doctor_title_plugin' => '系統插件檢測',
 	'cloud_doctor_system_plugin_status' => '系統插件狀態',
-	'cloud_doctor_system_plugin_list' => '<a href="admin.php?action=plugins">查看插件列表和版本</a>',
-	'cloud_doctor_system_plugin_status_false' => ' 系統插件未初始化 <a href="misc.php?mod=initsys" target="_doctor_initframe" onClick="$(\'_doctor_initframe\').onload = function () {self.location.reload();};">點擊修復</a><iframe id="_doctor_initframe" name="_doctor_initframe" src="" width="0" height="0" style="display:none;"></iframe>',
+	'cloud_doctor_system_plugin_list' => '<a href="admin.php?action=plugins&system=1">查看插件列表和版本</a>',
+	'cloud_doctor_system_plugin_status_false' => ' 系統插件未初始化 <a href="misc.php?mod=initsys&formhash={formhash}" target="_doctor_initframe" onClick="$(\'_doctor_initframe\').onload = function () {self.location.reload();};">點擊修復</a><iframe id="_doctor_initframe" name="_doctor_initframe" src="" width="0" height="0" style="display:none;"></iframe>',
 	'cloud_doctor_plugin_module_error' => 'common_plugin表modules字段值不正確',
 
 	'cloud_doctor_title_connect' => 'QQ互聯檢測',
@@ -159,7 +159,7 @@ $extend_lang = array
 	'cloud_stats' => '騰訊分析',
 	'cloud_stats_tips' => '<li>選擇的樣式會顯示在論壇底部的右下方。</li>',
 	'cloud_stats_status' => '啟用騰訊分析',
-	'cloud_stats_icon_set' => '選擇樣式（圖標或文字將顯示在論壇右下角）',
+	'cloud_stats_icon_set' => '選擇樣式',
 	'cloud_stats_icon_none' => '不顯示圖標和文字',
 	'cloud_stats_icon_word9' => '騰訊分析',
 	'cloud_stats_icon_word10' => '網站統計',
@@ -167,17 +167,14 @@ $extend_lang = array
 	'cloud_stats_summary' => '網站概況',
 
 	'cloud_smilies' => 'SOSO表情',
-	'cloud_smilies_tips' => '<li>搜盡天下表情，為網站帶來無窮的樂趣與體驗。</li>
-		<li>省略繁瑣的上傳表情流程，無縫「偷渡」QQ表情到您的網站，論壇表情變得不再單調無味。</li>',
-	'cloud_storage' => '旋風存儲',
-	'cloud_storage_tips' => '<li>為網站節省空間帶寬，讓用戶享受超大文件的高速存儲，上傳下載盡在雲端。</li>
-		<li>體驗高速上傳下載，支持單個文件高達2GB的附件上傳，附件永久有效，為論壇降低成本。</li>',
+	'cloud_smilies_tips' => '<li>搜盡天下表情，為網站帶來無窮的樂趣與體驗。</li><li>省略繁瑣的上傳表情流程，無縫「偷渡」QQ表情到您的網站，論壇表情變得不再單調無味。</li>',
 
 	'cloud_smilies_status' => '啟用SOSO 表情',
+	'cloud_storage' => '旋風存儲',
+	'cloud_storage_tips' => '<li>為網站節省空間帶寬，讓用戶享受超大文件的高速存儲，上傳下載盡在雲端。</li><li>體驗高速上傳下載，支持單個文件高達2GB的附件上傳，附件永久有效，為論壇降低成本。</li>',
 
 	'setting_manyou' => '漫遊應用設置',
-	'setting_manyou_tips' => '<li>開啟漫遊應用功能後，用戶可以自由選擇各種不同的應用(諸如德克薩斯撲克、彈彈堂、十年一劍......)在站內進行使用。</li>
-		<li>漫遊應用功能由 <a target="_blank" href="http://www.manyou.com/www/">MYOP開放平台</a> 提供， Manyou Open Platform(Manyou開放平台/MYOP)服務是由 Comsenz 公司為應用開發者提供的開放平台，啟用漫遊服務前，<a href="http://wiki.developer.manyou.com/wiki/index.php?title=MYOP%E7%BD%91%E7%AB%99%E6%9C%8D%E5%8A%A1%E5%8D%8F%E8%AE%AE&printable=yes" target="_blank">請先閱讀MYOP網站服務協議</a></li>',
+	'setting_manyou_tips' => '<li>開啟漫遊應用功能後，用戶可以自由選擇各種不同的應用(諸如德克薩斯撲克、彈彈堂、十年一劍......)在站內進行使用。</li><li>漫遊應用功能由 <a target="_blank" href="http://www.manyou.com/www/">MYOP開放平台</a> 提供， Manyou Open Platform(Manyou開放平台/MYOP)服務是由 Comsenz 公司為應用開發者提供的開放平台，啟用漫遊服務前，<a href="http://wiki.developer.manyou.com/wiki/index.php?title=MYOP%E7%BD%91%E7%AB%99%E6%9C%8D%E5%8A%A1%E5%8D%8F%E8%AE%AE&printable=yes" target="_blank">請先閱讀MYOP網站服務協議</a></li>',
 	'setting_manyou_base' => '基本設置',
 	'setting_manyou_base_status' => '啟用漫遊應用',
 	'setting_manyou_base_status_comment' => '選擇是否開啟漫遊應用。如果關閉漫遊應用，您的網站用戶將不能使用任何基於漫遊的應用',
@@ -215,6 +212,10 @@ $extend_lang = array
 	'connect_setting_t_fids' => '允許推送的論壇版塊',
 	'connect_setting_t_group' => '群組是否允許推送',
 	'connect_setting_t_group_comment' => '設置在群組發表的主題是否可以推送到騰訊微博',
+	'connect_setting_t_reply_showauthor' => '顯示評論或轉播的微博用戶鏈接',
+	'connect_setting_t_reply_showauthor_comment' => '設置"是"，回流時會在內容下方標注評論或轉播的微博用戶暱稱和微博地址',
+	'connect_setting_t_reply' => '允許微博評論和轉播內容回流',
+	'connect_setting_t_reply_comment' => '推送主題或分享主題到騰訊微博後，是否允許微博評論和轉播內容回流',
 	'connect_setting_like_allow' => '顯示本站QQ認證空間喜歡的鏈接',
 	'connect_setting_like_allow_comment' => '用戶點擊本站QQ認證空間喜歡的鏈接，將立即成為本站QQ認證空間的粉絲，隨時收取認證空間的動態',
 	'connect_setting_like_url' => '認證空間QQ號碼',
@@ -226,8 +227,8 @@ $extend_lang = array
 	'connect_setting_turl_qq_failed' => '官方微博QQ號碼設置失敗，請確保該QQ號的有效性',
 	'connect_setting_qshare_allow' => '開啟Q-Share功能',
 	'connect_setting_qshare_allow_comment' => '用戶選中帖子內容中的任何一段文本時，可方便快捷的將選中的文本內容和區域內圖片轉播到騰訊微博',
-	'connect_setting_qshare_appkey' => '騰訊微博開放平台AppKey',
-	'connect_setting_qshare_appkey_comment' => '填寫AppKey將在騰訊微博中顯示設置的來源字段信息，可不填寫。怎樣申請AppKey？請訪問騰訊微博開放平台，<a href="http://open.t.qq.com/apps_welcome.php" target="_blank">創建應用獲取AppKey</a>',
+	'connect_setting_weibo_appkey' => '騰訊微博開放平台AppKey',
+	'connect_setting_weibo_appkey_comment' => '填寫AppKey將在騰訊微博中顯示設置的來源字段信息，可不填寫。怎樣申請AppKey？請訪問騰訊微博開放平台，<a href="http://open.t.qq.com/apps_welcome.php" target="_blank">創建應用獲取AppKey</a>',
 	'connect_member_info' => '用戶信息',
 	'connect_member_bindlog' => 'QQ綁定日誌',
 	'connect_member_bindlog_type' => '操作',
@@ -237,9 +238,11 @@ $extend_lang = array
 	'connect_member_bindlog_type_2' => '解除綁定',
 	'connect_member_bindlog_uin' => 'QQ帳號綁定日誌',
 	'connect_member_bindlog_uid' => '用戶帳號綁定日誌',
+	'connect_guest_group_name' => 'QQ遊客',
 
 	'qqgroup_menu_list' => '綁定管理',
 	'qqgroup_menu_manager' => '設置名稱',
+	'qqgroup_menu_setting' => '推送設置',
 	'qqgroup_menu_block' => '推送信息',
 	'qqgroup_menu_history' => '推送歷史',
 
@@ -291,6 +294,11 @@ $extend_lang = array
 	'qqgroup_preview_button' => '推送信息',
 	'attach_img' => '圖片附件',
 
+	'qqgroup_feed_setting' => '推送設置',
+	'qqgroup_usergroup_feed_list' => '允許推送的用戶組',
+	'qqgroup_usergroup_feed_list_comment' => '所選用戶組擁有推送權限，可以按住 CTRL 多選',
+	'qqgroup_setting_tips' => '<li>主題查看頁的「推送到QQ群」功能，可將帖子即時推送到QQ群聊天框。</li><li><img src="static/image/admincp/cloud/feed.png" align="left"></li>',
+
 	'security_member_list' => '違規用戶',
 	'security_thread_list' => '違規主題',
 	'security_post_list' => '違規回帖',
@@ -334,7 +342,7 @@ $extend_lang = array
 	'security_setting' => '白名單設置',
 	'security_blanklist' => '白名單設置',
 	'security_setting_list' => '白名單設置',
-	'security_tips' => '小貼士',
+	'security_tips' => '小技巧',
 	'security_tips_1' => '<li><p>系統識別到違規主題和違規回帖後，自動將主題和回帖放入<a href="admin.php?action=recyclebin" style="text-decoration:none; color:#0000FF;">回收站</a></p></li>',
 	'security_white_list_setting' => '白名單設置',
 	'security_usergroup_white_list' => '用戶組白名單',
@@ -347,6 +355,14 @@ $extend_lang = array
 	'security_post_status' => '回帖狀態',
 	'security_thread_member' => '用戶狀態',
 	'setting_update_succeed' => '當前設置更新成功',
+
+	'search_menu_setting' => '設置',
+	'search_menu_service' => '功能配置',
+	'search_setting_allow_hot_topic' => '開啟熱門話題',
+	'search_setting_allow_forum_recommend' => '開啟板塊推薦詞',
+	'search_setting_allow_thread_related' => '開啟主題相關帖',
+	'search_setting_allow_forum_related' => '開啟板塊相關帖',
+	'search_setting_allow_collection_related' => '開啟淘帖相關帖',
 );
 
 $GLOBALS['admincp_actions_normal'][] = 'cloud';

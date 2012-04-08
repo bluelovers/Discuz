@@ -5,13 +5,13 @@
 	<div class="rwdn">
 		<table cellspacing="0" cellpadding="0"><tr><td class="t_f" id="postmessage_$post[pid]">$post[message]</td></tr></table>
 		<!--{if $_G['forum_thread']['price'] > 0 && !$_G['forum_thread']['is_archived']}-->
-			<p class="pns mtw"><button name="answer" value="ture" class="pn" onclick="showWindow('reply', 'forum.php?mod=post&action=reply&fid=$_G[fid]&tid=$_G[tid]{if $_G[gp_from]}&from=$_G[gp_from]{/if}')"><span>{lang reward_answer}</span></button></p>
+			<p class="pns mtw"><button name="answer" value="ture" class="pn" onclick="showWindow('reply', 'forum.php?mod=post&action=reply&fid=$_G[fid]&tid=$_G[tid]{if $_GET[from]}&from=$_GET[from]{/if}')"><span>{lang reward_answer}</span></button></p>
 		<!--{/if}-->
 	</div>
 </div>
 
 <!--{if $post['attachment']}-->
-	<div class="locked">{lang attachment}: <em><!--{if $_G['uid']}-->{lang attach_nopermission}<!--{else}-->{lang attach_nopermission_login}<!--{/if}--></em></div>
+	<div class="locked">{lang attachment}: <em><!--{if $_G['uid']}-->{lang attach_nopermission}<!--{elseif $_G['connectguest']}-->{lang attach_nopermission_connect_fill_profile}<!--{else}-->{lang attach_nopermission_login}<!--{/if}--></em></div>
 <!--{elseif $post['imagelist'] || $post['attachlist']}-->
 	<div class="pattl">
 		<!--{if $post['imagelist']}-->

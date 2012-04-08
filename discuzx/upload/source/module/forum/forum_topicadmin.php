@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_topicadmin.php 22043 2011-04-20 08:56:19Z zhengqingpeng $
+ *      $Id: forum_topicadmin.php 25246 2011-11-02 03:34:53Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -13,7 +13,7 @@ if(!defined('IN_DISCUZ')) {
 define('NOROBOT', TRUE);
 
 $_G['inajax'] = 1;
-$_G['gp_topiclist'] = !empty($_G['gp_topiclist']) ? (is_array($_G['gp_topiclist']) ? array_unique($_G['gp_topiclist']) : $_G['gp_topiclist']) : array();
+$_GET['topiclist'] = !empty($_GET['topiclist']) ? (is_array($_GET['topiclist']) ? array_unique($_GET['topiclist']) : $_GET['topiclist']) : array();
 
 loadcache(array('modreasons', 'stamptypeid', 'threadtableids'));
 
@@ -24,25 +24,25 @@ $modpostsnum = 0;
 $resultarray = $thread = array();
 
 $threadtableids = !empty($_G['cache']['threadtableids']) ? $_G['cache']['threadtableids'] : array();
+$specialperm = $_GET['action'] == 'stickreply' && $_G['thread']['authorid'] == $_G['uid'];
 
-if(!$_G['uid'] || !$_G['forum']['ismoderator']) {
+if(!$specialperm && (!$_G['uid'] || !$_G['forum']['ismoderator'])) {
 	showmessage('admin_nopermission', NULL);
 }
 
-$frommodcp = !empty($_G['gp_frommodcp']) ? intval($_G['gp_frommodcp']) : 0;
+$frommodcp = !empty($_GET['frommodcp']) ? intval($_GET['frommodcp']) : 0;
 
 
 $navigation = $navtitle = '';
 
 if(!empty($_G['tid'])) {
-	$_G['gp_archiveid'] = intval($_G['gp_archiveid']);
-	if(!empty($_G['gp_archiveid']) && in_array($_G['gp_archiveid'], $threadtableids)) {
-		$threadtable = "forum_thread_{$_G['gp_archiveid']}";
-	} else {
-		$threadtable = 'forum_thread';
+	$_GET['archiveid'] = intval($_GET['archiveid']);
+	$archiveid = 0;
+	if(!empty($_GET['archiveid']) && in_array($_GET['archiveid'], $threadtableids)) {
+		$archiveid = $_GET['archiveid'];
 	}
-
-	$thread = DB::fetch_first("SELECT * FROM ".DB::table($threadtable)." WHERE tid='$_G[tid]' AND fid='$_G[fid]'".(!$_G['forum_auditstatuson'] ? "  AND displayorder>='0'" : ''));
+	$displayorder = !$_G['forum_auditstatuson'] ? 0 : null;
+	$thread = C::t('forum_thread')->fetch_by_tid_fid_displayorder($_G['tid'], $_G['fid'], $displayorder, $archiveid);
 	if(!$thread) {
 		showmessage('thread_nonexistence');
 	}
@@ -50,21 +50,21 @@ if(!empty($_G['tid'])) {
 	$navigation .= " &raquo; <a href=\"forum.php?mod=viewthread&tid=$_G[tid]\">$thread[subject]</a> ";
 	$navtitle .= ' - '.$thread['subject'].' - ';
 
-	if($thread['special'] && in_array($_G['gp_action'], array('copy', 'split', 'merge'))) {
+	if($thread['special'] && in_array($_GET['action'], array('copy', 'split', 'merge'))) {
 		showmessage('special_noaction');
 	}
 }
-if(($_G['group']['reasonpm'] == 2 || $_G['group']['reasonpm'] == 3) || !empty($_G['gp_sendreasonpm'])) {
+if(($_G['group']['reasonpm'] == 2 || $_G['group']['reasonpm'] == 3) || !empty($_GET['sendreasonpm'])) {
 	$forumname = strip_tags($_G['forum']['name']);
 	$sendreasonpm = 1;
 } else {
 	$sendreasonpm = 0;
 }
 
-$_G['gp_handlekey'] = 'mods';
+$_GET['handlekey'] = 'mods';
 
 
-if(preg_match('/^\w+$/', $_G['gp_action']) && file_exists($topicadminfile = libfile('topicadmin/'.$_G['gp_action'], 'include'))) {
+if(preg_match('/^\w+$/', $_GET['action']) && file_exists($topicadminfile = libfile('topicadmin/'.$_GET['action'], 'include'))) {
 	require_once $topicadminfile;
 } else {
 	showmessage('undefined_action', NULL);

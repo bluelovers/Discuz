@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <root>
 	<item id="Title"><![CDATA[Discuz! Style]]></item>
-	<item id="Version"><![CDATA[X2]]></item>
-	<item id="Time"><![CDATA[]]></item>
-	<item id="From"><![CDATA[]]></item>
+	<item id="Version"><![CDATA[X2.5]]></item>	
 	<item id="Data">
 		<item id="name"><![CDATA[默認風格]]></item>
 		<item id="templateid"><![CDATA[1]]></item>

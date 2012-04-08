@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: adv_custom.php 9396 2010-04-28 08:27:33Z monkey $
+ *      $Id: adv_custom.php 25246 2011-11-02 03:34:53Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -23,7 +23,7 @@ class adv_custom {
 
 	function getsetting() {
 		global $_G;
-		$custom = DB::fetch_first("SELECT name FROM ".DB::table('common_advertisement_custom')." WHERE id='$_G[gp_customid]'");
+		$custom = C::t('common_advertisement_custom')->fetch($_GET['customid']);
 		if(!$custom) {
 			echo '<br >';cpmsg(lang('adv/custom', 'custom_id_notfound'));
 		}

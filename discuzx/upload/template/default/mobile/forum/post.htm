@@ -1,7 +1,7 @@
 <!--{subtemplate common/header}-->
 
 <!--{block actiontitle}-->
-<!--{if $_G['gp_action'] == 'newthread'}-->
+<!--{if $_GET['action'] == 'newthread'}-->
 	<!--{if $special == 0}-->{lang post_newthread}
 	<!--{elseif $special == 1}-->{lang post_newthreadpoll}
 	<!--{elseif $special == 2}-->{lang post_newthreadtrade}
@@ -10,25 +10,25 @@
 	<!--{elseif $special == 5}-->{lang post_newthreaddebate}
 	<!--{elseif $specialextra}-->{$_G['setting']['threadplugins'][$specialextra][name]}
 	<!--{/if}-->
-<!--{elseif $_G['gp_action'] == 'reply'}-->
+<!--{elseif $_GET['action'] == 'reply'}-->
 	{lang join_thread}
-<!--{elseif $_G['gp_action'] == 'edit'}-->
+<!--{elseif $_GET['action'] == 'edit'}-->
 	<!--{if $special == 2}-->{lang edit_trade}<!--{else}-->{lang edit_thread}<!--{/if}-->
 <!--{/if}-->
 <!--{/block}-->
 
-<!--{if $_G['gp_action'] != 'newthread'}-->
+<!--{if $_GET['action'] != 'newthread'}-->
 	<!--{eval $subjectcut = cutstr($thread[subject], 30);}-->
 <!--{/if}-->
 <!--{block actionsubject}-->
-	<!--{if $_G['gp_action'] == 'reply'}-->
+	<!--{if $_GET['action'] == 'reply'}-->
 		<em>&rsaquo;</em><a href="forum.php?mod=viewthread&tid=$thread[tid]">$subjectcut</a>
-	<!--{elseif $_G['gp_action'] == 'edit'}-->
+	<!--{elseif $_GET['action'] == 'edit'}-->
 		<em>&rsaquo;</em><a href="forum.php?mod=redirect&goto=findpost&ptid=$thread[tid]&pid=$pid">$subjectcut</a>
 	<!--{/if}-->
 <!--{/block}-->
 <!--{block upnavlink}-->
-	forum.php?mod=forumdisplay&fid={$_G[gp_fid]}&mobile=yes
+	forum.php?mod=forumdisplay&fid={$_GET[fid]}&mobile=yes
 <!--{/block}-->
 
 <!--{if $_G['forum']['type'] == 'forum'}-->
@@ -38,7 +38,7 @@
 <!--{/if}-->
 
 <div class="tz ptn">
-<!--{if !$_G['forum']['allowspecialonly']}--><a href="forum.php?mod=post&action=newthread&fid=$_G[fid]" title="{lang send_threads}" <!--{if ($_G[gp_sortid] || !$special) && $_G['gp_action'] != 'edit' && $_G['gp_action'] != 'reply'}-->class="xw1"<!--{/if}-->>{lang send_threads}</a><span class="pipe">|</span><!--{/if}--><!--{if $_G['group']['allowpostpoll']}--><a href="forum.php?mod=post&action=newthread&fid=$_G[fid]&special=1" <!--{if !$_G[gp_sortid] && $special == 1}-->class="xw1"<!--{/if}-->>{lang post_newthreadpoll}</a><span class="pipe">|</span><!--{/if}--><!--{if $_G['group']['allowpostreward']}--><a href="forum.php?mod=post&action=newthread&fid=$_G[fid]&special=3" <!--{if !$_G[gp_sortid] && $special == 3}-->class="xw1"<!--{/if}-->>{lang post_newthreadreward}</a> <span class="pipe">|</span><!--{/if}--><!--{if $_G['group']['allowpostdebate']}--><a href="forum.php?mod=post&action=newthread&fid=$_G[fid]&special=5" <!--{if !$_G[gp_sortid] && $special == 5}-->class="xw1"<!--{/if}-->>{lang post_newthreaddebate}</a><span class="pipe">|</span><!--{/if}-->
+<!--{if !$_G['forum']['allowspecialonly']}--><a href="forum.php?mod=post&action=newthread&fid=$_G[fid]" title="{lang send_threads}" <!--{if ($_GET[sortid] || !$special) && $_GET['action'] != 'edit' && $_GET['action'] != 'reply'}-->class="xw1"<!--{/if}-->>{lang send_threads}</a><span class="pipe">|</span><!--{/if}--><!--{if $_G['group']['allowpostpoll']}--><a href="forum.php?mod=post&action=newthread&fid=$_G[fid]&special=1" <!--{if !$_GET[sortid] && $special == 1}-->class="xw1"<!--{/if}-->>{lang post_newthreadpoll}</a><span class="pipe">|</span><!--{/if}--><!--{if $_G['group']['allowpostreward']}--><a href="forum.php?mod=post&action=newthread&fid=$_G[fid]&special=3" <!--{if !$_GET[sortid] && $special == 3}-->class="xw1"<!--{/if}-->>{lang post_newthreadreward}</a> <span class="pipe">|</span><!--{/if}--><!--{if $_G['group']['allowpostdebate']}--><a href="forum.php?mod=post&action=newthread&fid=$_G[fid]&special=5" <!--{if !$_GET[sortid] && $special == 5}-->class="xw1"<!--{/if}-->>{lang post_newthreaddebate}</a><span class="pipe">|</span><!--{/if}-->
 <!--{if $_G['setting']['threadplugins']}-->
 <!--{loop $_G['forum']['threadplugin'] $tpid}-->
 <!--{if array_key_exists($tpid, $_G['setting']['threadplugins']) && @in_array($tpid, $_G['group']['allowthreadplugin'])}-->
@@ -49,33 +49,33 @@
 </div>
 
 <!--{if $special != 2 && $special != 4 }-->
-<!--{eval $adveditor = $isfirstpost && $special && ($_G['gp_action'] == 'newthread' || $_G['gp_action'] == 'reply' && !empty($_G['gp_addtrade']) || $_G['gp_action'] == 'edit' );}-->
+<!--{eval $adveditor = $isfirstpost && $special && ($_GET['action'] == 'newthread' || $_GET['action'] == 'reply' && !empty($_GET['addtrade']) || $_GET['action'] == 'edit' );}-->
 <form method="post" id="postform"
-			{if $_G[gp_action] == 'newthread'}action="forum.php?mod=post&action={if $special != 2}newthread{else}newtrade{/if}&fid=$_G[fid]&extra=$extra&topicsubmit=yes&mobile=yes"
-			{elseif $_G[gp_action] == 'reply'}action="forum.php?mod=post&action=reply&fid=$_G[fid]&tid=$_G[tid]&extra=$extra&replysubmit=yes&mobile=yes"
-			{elseif $_G[gp_action] == 'edit'}action="forum.php?mod=post&action=edit&extra=$extra&editsubmit=yes&mobile=yes" $enctype
+			{if $_GET[action] == 'newthread'}action="forum.php?mod=post&action={if $special != 2}newthread{else}newtrade{/if}&fid=$_G[fid]&extra=$extra&topicsubmit=yes&mobile=yes"
+			{elseif $_GET[action] == 'reply'}action="forum.php?mod=post&action=reply&fid=$_G[fid]&tid=$_G[tid]&extra=$extra&replysubmit=yes&mobile=yes"
+			{elseif $_GET[action] == 'edit'}action="forum.php?mod=post&action=edit&extra=$extra&editsubmit=yes&mobile=yes" $enctype
 			{/if}>
 <input type="hidden" name="formhash" id="formhash" value="{FORMHASH}" />
 <input type="hidden" name="posttime" id="posttime" value="{TIMESTAMP}" />
-<!--{if !empty($_G['gp_modthreadkey'])}--><input type="hidden" name="modthreadkey" id="modthreadkey" value="$_G['gp_modthreadkey']" /><!--{/if}-->
-<!--{if $_G[gp_action] == 'reply'}-->
+<!--{if !empty($_GET['modthreadkey'])}--><input type="hidden" name="modthreadkey" id="modthreadkey" value="$_GET['modthreadkey']" /><!--{/if}-->
+<!--{if $_GET[action] == 'reply'}-->
 	<input type="hidden" name="noticeauthor" value="$noticeauthor" />
 	<input type="hidden" name="noticetrimstr" value="$noticetrimstr" />
 	<input type="hidden" name="noticeauthormsg" value="$noticeauthormsg" />
 	<!--{if $reppid}-->
 		<input type="hidden" name="reppid" value="$reppid" />
 	<!--{/if}-->
-	<!--{if $_G[gp_reppost]}-->
-		<input type="hidden" name="reppost" value="$_G[gp_reppost]" />
-	<!--{elseif $_G[gp_repquote]}-->
-		<input type="hidden" name="reppost" value="$_G[gp_repquote]" />
+	<!--{if $_GET[reppost]}-->
+		<input type="hidden" name="reppost" value="$_GET[reppost]" />
+	<!--{elseif $_GET[repquote]}-->
+		<input type="hidden" name="reppost" value="$_GET[repquote]" />
 	<!--{/if}-->
 <!--{/if}-->
-<!--{if $_G[gp_action] == 'edit'}-->
+<!--{if $_GET[action] == 'edit'}-->
 	<input type="hidden" name="fid" id="fid" value="$_G[fid]" />
 	<input type="hidden" name="tid" value="$_G[tid]" />
 	<input type="hidden" name="pid" value="$pid" />
-	<input type="hidden" name="page" value="$_G[gp_page]" />
+	<input type="hidden" name="page" value="$_GET[page]" />
 <!--{/if}-->
 
 <!--{if $special}-->
@@ -95,7 +95,7 @@
             <option value="0">{lang select_thread_catgory}</option>
             <!--{loop $_G['forum'][threadtypes][types] $typeid $name}-->
 		<!--{if empty($_G['forum']['threadtypes']['moderators'][$typeid]) || $_G['forum']['ismoderator']}-->
-		<option value="$typeid"{if $thread['typeid'] == $typeid || $_G['gp_typeid'] == $typeid} selected="selected"{/if}><!--{echo strip_tags($name);}--></option>
+		<option value="$typeid"{if $thread['typeid'] == $typeid || $_GET['typeid'] == $typeid} selected="selected"{/if}><!--{echo strip_tags($name);}--></option>
 		<!--{/if}-->
             <!--{/loop}-->
         </select>
@@ -115,8 +115,8 @@
 	{lang threadsort_error}
 </div>
 <!--{else}-->
-<div class="inbox<!--{if $_G['gp_action'] != 'reply'}--> bt mtn<!--{/if}-->">
-	<!--{if $_G['gp_action'] != 'reply'}-->
+<div class="inbox<!--{if $_GET['action'] != 'reply'}--> bt mtn<!--{/if}-->">
+	<!--{if $_GET['action'] != 'reply'}-->
 	<span class="xw1">{lang subject}</span>
 	<input type="text" name="subject" value="$postinfo[subject]" class="txt" size="25"  />
 	<!--{else}-->
@@ -131,14 +131,14 @@
 </div>
 
 <div class="inbox">
-	<!--{if $_G[gp_action] != 'edit' && checkperm('seccode') && ($secqaacheck || $seccodecheck)}-->
+	<!--{if $_GET[action] != 'edit' && checkperm('seccode') && ($secqaacheck || $seccodecheck)}-->
 	<!--{subtemplate common/seccheck}-->
 	<!--{/if}-->
 </div>
 
 <div class="inbox">
-    <input type="submit" id="postsubmit" name="{if $_G[gp_action] == 'newthread'}topicsubmit{elseif $_G[gp_action] == 'reply'}replysubmit{elseif $_G[gp_action] == 'edit'}editsubmit{/if}" value="<!--{if $_G[gp_action] == 'newthread'}-->{lang post_newthread}<!--{elseif $_G[gp_action] == 'reply'}-->{lang join_thread}<!--{elseif $_G[gp_action] == 'edit'}-->{lang edit_save}<!--{/if}-->" />
-    <!--{if $_G[gp_action] == 'edit' && $isorigauthor && ($isfirstpost && $thread['replies'] < 1 || !$isfirstpost) && !$rushreply && $_G['setting']['editperdel']}-->
+    <input type="submit" id="postsubmit" name="{if $_GET[action] == 'newthread'}topicsubmit{elseif $_GET[action] == 'reply'}replysubmit{elseif $_GET[action] == 'edit'}editsubmit{/if}" value="<!--{if $_GET[action] == 'newthread'}-->{lang post_newthread}<!--{elseif $_GET[action] == 'reply'}-->{lang join_thread}<!--{elseif $_GET[action] == 'edit'}-->{lang edit_save}<!--{/if}-->" />
+    <!--{if $_GET[action] == 'edit' && $isorigauthor && ($isfirstpost && $thread['replies'] < 1 || !$isfirstpost) && !$rushreply && $_G['setting']['editperdel']}-->
         <label><input type="checkbox" name="delete" id="delete" class="pc" value="1" title="{lang post_delpost}{if $thread[special] == 3}{lang reward_price_back}{/if}"> {lang delete_check}</label>
     <!--{/if}-->
 </div>

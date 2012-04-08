@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_nav.php 22849 2011-05-26 01:57:02Z monkey $
+ *      $Id: admincp_nav.php 28810 2012-03-14 02:20:58Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -34,18 +34,16 @@ if($operation == 'headernav') {
 			showtagheader('tbody', '', true);
 
 			$navlist = $subnavlist = $pluginsubnav = array();
-			$query = DB::query("SELECT * FROM ".DB::table('common_nav')." WHERE navtype='0' ORDER BY displayorder");
-			while($nav = DB::fetch($query)) {
+			foreach(C::t('common_nav')->fetch_all_by_navtype(0) as $nav) {
 				if($nav['parentid']) {
 					$subnavlist[$nav['parentid']][] = $nav;
 				} else {
 					$navlist[$nav['id']] = $nav;
 				}
 			}
-			$query = DB::query("SELECT pluginid, available, name, identifier, modules FROM ".DB::table('common_plugin'));
-			while($plugin = DB::fetch($query)) {
+			foreach(C::t('common_plugin')->fetch_all_data() as $plugin) {
 				if($plugin['available']) {
-					$plugin['modules'] = unserialize($plugin['modules']);
+					$plugin['modules'] = dunserialize($plugin['modules']);
 					if(is_array($plugin['modules'])) {
 						unset($plugin['modules']['extra']);
 						foreach($plugin['modules'] as $k => $module) {
@@ -63,6 +61,9 @@ if($operation == 'headernav') {
 				}
 			}
 			foreach($navlist as $nav) {
+				if($nav['available'] < 0) {
+					continue;
+				}
 				$navsubtype = array();
 				$navsubtype[$nav['subtype']] = 'selected="selected"';
 				$readonly = $nav['type'] == '4' ? ' readonly="readonly"' : '';
@@ -75,7 +76,7 @@ if($operation == 'headernav') {
 					$nav['type'] == '0' || $nav['type'] == '4' ? "<span title='{$nav['url']}'>".$nav['url'].'<span>' : "<input type=\"text\" class=\"txt\" size=\"15\" name=\"urlnew[$nav[id]]\" value=\"".dhtmlspecialchars($nav['url'])."\">",
 					cplang($nav['type'] == '0' ? 'inbuilt' : ($nav['type'] == '3' ? 'nav_plugin' : ($nav['type'] == '4' ? 'channel' : 'custom'))),
 					$nav['url'] != '#' ? "<input name=\"defaultindex\" class=\"radio\" type=\"radio\" value=\"$nav[url]\"".($_G['setting']['defaultindex'] == $nav['url'] ? ' checked="checked"' : '')." />" : '',
-					"<input class=\"checkbox\" type=\"checkbox\" name=\"availablenew[$nav[id]]\" value=\"1\" ".($nav['available'] ? 'checked' : '').">",
+					"<input class=\"checkbox\" type=\"checkbox\" name=\"availablenew[$nav[id]]\" value=\"1\" ".($nav['available'] > 0 ? 'checked' : '').">",
 					"<a href=\"".ADMINSCRIPT."?action=nav&operation=headernav&do=edit&id=$nav[id]\" class=\"act\">$lang[edit]</a>"
 				));
 				if($nav['identifier'] == 6 && $nav['type'] == 0) {
@@ -137,12 +138,13 @@ if($operation == 'headernav') {
 				}
 				$applist .= '</select>';
 			}
+			$applist = str_replace("'", "\'", $applist);
 
 			echo <<<EOT
 <script type="text/JavaScript">
 	var rowtypedata = [
-		[[1, '', 'td25'], [1,'<input name="newdisplayorder[]" value="" size="3" type="text" class="txt">', 'td25'], [1, '<input name="newname[]" value="" size="15" type="text" class="txt">'], [1, '', ''], [5, '<input name="newurl[]" value="" size="15" type="text" class="txt"> $applist <input type="hidden" name="newparentid[]" value="0" />']],
-		[[1, '', 'td25'], [1,'<input name="newdisplayorder[]" value="" size="3" type="text" class="txt">', 'td25'], [1, '<div class=\"board\"><input name="newname[]" value="" size="15" type="text" class="txt"></div>'], [1, '', ''], [5, '<input name="newurl[]" value="" size="15" type="text" class="txt"> $applist <input type="hidden" name="newparentid[]" value="{1}" />']]
+		[[1, '', 'td25'], [1,'<input name="newdisplayorder[]" value="" size="3" type="text" class="txt">', 'td25'], [1, '<input name="newname[]" value="" size="15" type="text" class="txt">'],[1,'<select name="newsubtype[]"><option value="0">$lang[misc_customnav_subtype_menu]</option><option value="1">$lang[misc_customnav_subtype_sub]</option></select>'],[5, '<input name="newurl[]" value="" size="15" type="text" class="txt"> $applist <input type="hidden" name="newparentid[]" value="0" />']],
+		[[1, '', 'td25'], [1,'<input name="newdisplayorder[]" value="" size="3" type="text" class="txt">', 'td25'], [1, '<div class=\"board\"><input name="newname[]" value="" size="15" type="text" class="txt"></div>'], [1,'',''], [5, '<input name="newurl[]" value="" size="15" type="text" class="txt"> $applist <input type="hidden" name="newparentid[]" value="{1}" />']]
 	];
 	function app(obj) {
 		var inputs = obj.parentNode.parentNode.getElementsByTagName('input');
@@ -159,60 +161,75 @@ EOT;
 
 		} else {
 
-			if($ids = dimplode($_G['gp_delete'])) {
-				DB::query("DELETE FROM ".DB::table('common_nav')." WHERE navtype='0' AND id IN ($ids)");
-				DB::query("DELETE FROM ".DB::table('common_nav')." WHERE navtype='0' AND parentid IN ($ids)");
+			if($ids = dimplode($_GET['delete'])) {
+				C::t('common_nav')->delete_by_navtype_id(0, $_GET['delete']);
+				C::t('common_nav')->delete_by_navtype_parentid(0, $_GET['delete']);
 			}
 
-			if(is_array($_G['gp_namenew'])) {
-				foreach($_G['gp_namenew'] as $id => $name) {
+			if(is_array($_GET['namenew'])) {
+				foreach($_GET['namenew'] as $id => $name) {
+
+
 					$name = trim(dhtmlspecialchars($name));
-					$urlnew = str_replace(array('&amp;'), array('&'), dhtmlspecialchars($_G['gp_urlnew'][$id]));
-					$urladd = !empty($_G['gp_urlnew'][$id]) ? ", url='$urlnew'" : '';
-					$availablenew[$id] = $name && (!isset($_G['gp_urlnew'][$id]) || $_G['gp_urlnew'][$id]) && $_G['gp_availablenew'][$id];
-					$displayordernew[$id] = intval($_G['gp_displayordernew'][$id]);
-					$nameadd = !empty($name) ? ", name='$name'" : '';
-					$subtypeadd = isset($_G['gp_subtypenew'][$id]) ? ", subtype='".intval($_G['gp_subtypenew'][$id])."'" : '';
-					DB::query("UPDATE ".DB::table('common_nav')." SET displayorder='$displayordernew[$id]', available='$availablenew[$id]' $titleadd $urladd $nameadd $subtypeadd WHERE id='$id'");
-				}
-			}
-
-			if(is_array($_G['gp_pluginnamenew']))  {
-				foreach($_G['gp_pluginnamenew'] as $id => $rows) {
-					$module = unserialize(DB::result_first("SELECT modules FROM ".DB::table('common_plugin')." WHERE pluginid='$id'"));
-					foreach($rows as $key => $menunew) {
-						$module[$key]['menu'] = $menunew.($_G['gp_plugintitlenew'][$id][$key] ? '/'.$_G['gp_plugintitlenew'][$id][$key] : '');
-						$module[$key]['displayorder'] = $_G['gp_plugindisplayordernew'][$id][$key];
+					$urlnew = str_replace(array('&amp;'), array('&'), dhtmlspecialchars($_GET['urlnew'][$id]));
+					$urladd = !empty($_GET['urlnew'][$id]) ? ", url='$urlnew'" : '';
+					$availablenew[$id] = $name && (!isset($_GET['urlnew'][$id]) || $_GET['urlnew'][$id]) && $_GET['availablenew'][$id];
+					$displayordernew[$id] = intval($_GET['displayordernew'][$id]);
+					$data = array(
+							'displayorder' => $displayordernew[$id],
+							'available' => $availablenew[$id],
+						);
+					if(!empty($_GET['urlnew'][$id])) {
+						$data['url'] = $urlnew;
 					}
-					$module = addslashes(serialize($module));
-					DB::update('common_plugin', array('modules' => $module), "pluginid='$id'");
+					if(!empty($name)) {
+						$data['name'] = $name;
+					}
+					if(isset($_GET['subtypenew'][$id])) {
+						$data['subtype'] = intval($_GET['subtypenew'][$id]);
+					}
+					C::t('common_nav')->update($id, $data);
 				}
 			}
 
-			if(is_array($_G['gp_newname'])) {
-				foreach($_G['gp_newname'] as $k => $v) {
+			if(is_array($_GET['pluginnamenew']))  {
+				foreach($_GET['pluginnamenew'] as $id => $rows) {
+					$plugin = C::t('common_plugin')->fetch($id);
+					$module = dunserialize($plugin['modules']);
+					foreach($rows as $key => $menunew) {
+						$module[$key]['menu'] = $menunew.($_GET['plugintitlenew'][$id][$key] ? '/'.$_GET['plugintitlenew'][$id][$key] : '');
+						$module[$key]['displayorder'] = $_GET['plugindisplayordernew'][$id][$key];
+					}
+					C::t('common_plugin')->update($id, array('modules' => serialize($module)));
+				}
+			}
+
+			if(is_array($_GET['newname'])) {
+				foreach($_GET['newname'] as $k => $v) {
 					$v = dhtmlspecialchars(trim($v));
 					if(!empty($v)) {
-						$newavailable = $v && $_G['gp_newurl'][$k];
-						$newparentid[$k] = intval($_G['gp_newparentid'][$k]);
-						$newdisplayorder[$k] = intval($_G['gp_newdisplayorder'][$k]);
-						$newurl[$k] = str_replace('&amp;', '&', dhtmlspecialchars($_G['gp_newurl'][$k]));
+						$newavailable = $v && $_GET['newurl'][$k];
+						$newparentid[$k] = intval($_GET['newparentid'][$k]);
+						$newdisplayorder[$k] = intval($_GET['newdisplayorder'][$k]);
+						$subtype = isset($_GET['newsubtype'][$k]) ? intval($_GET['newsubtype'][$k]) : 0;
+						$newurl[$k] = str_replace('&amp;', '&', dhtmlspecialchars($_GET['newurl'][$k]));
 						$data = array(
 							'parentid' => $newparentid[$k],
 							'name' => $v,
 							'displayorder' => $newdisplayorder[$k],
+							'subtype' => $subtype,
 							'url' => $newurl[$k],
 							'type' => 1,
 							'available' => $newavailable,
 							'navtype' => 0
 						);
-						DB::insert('common_nav', $data);
+						C::t('common_nav')->insert($data);
 					}
 				}
 			}
 
-			if($_G['gp_defaultindex'] && $_G['gp_defaultindex'] != '#') {
-				DB::insert('common_setting', array('skey' => 'defaultindex', 'svalue' => $_G['gp_defaultindex']), 0, 1);
+			if($_GET['defaultindex'] && $_GET['defaultindex'] != '#') {
+				C::t('common_setting')->update('defaultindex', $_GET['defaultindex']);
 			}
 
 			updatecache('setting');
@@ -220,9 +237,9 @@ EOT;
 
 		}
 
-	} elseif($do == 'edit' && ($id = $_G['gp_id'])) {
+	} elseif($do == 'edit' && ($id = $_GET['id'])) {
 
-		$nav = DB::fetch_first("SELECT * FROM ".DB::table('common_nav')." WHERE navtype='0' AND id='$id'");
+		$nav = C::t('common_nav')->fetch_by_id_navtype($id, 0);
 		if(!$nav) {
 			cpmsg('nav_not_found', '', 'error');
 		}
@@ -233,10 +250,9 @@ EOT;
 
 			shownav('global', 'misc_customnav');
 			showsubmenu('nav_setting_customnav', $navdata);
-			$query = DB::query("SELECT * FROM ".DB::table('common_nav')." WHERE navtype='0' AND parentid='0' ORDER BY displayorder");
 			$parentselect = array(array('0', cplang('misc_customnav_parent_top')));
 			$parentname = '';
-			while($pnavs = DB::fetch($query)) {
+			foreach(C::t('common_nav')->fetch_all_by_navtype_parentid(0, 0) as $pnavs) {
 				if($pnavs['id'] != $id && !($pnavs['identifier'] == 6 && $pnavs['type'] == 0)) {
 					$parentselect[] = array($pnavs['id'], '&nbsp;&nbsp;'.$pnavs['name']);
 					if($nav['parentid'] == $pnavs['id']) {
@@ -298,34 +314,33 @@ EOT;
 
 		} else {
 
-			$namenew = trim(dhtmlspecialchars($_G['gp_namenew']));
-			$titlenew = trim(dhtmlspecialchars($_G['gp_titlenew']));
-			$urlnew = str_replace(array('&amp;'), array('&'), dhtmlspecialchars($_G['gp_urlnew']));
-			$colornew = $_G['gp_colornew'];
-			$parentidnew = $_G['gp_parentidnew'];
-			$subtypenew = $_G['gp_subtypenew'];
+			$namenew = trim(dhtmlspecialchars($_GET['namenew']));
+			$titlenew = trim(dhtmlspecialchars($_GET['titlenew']));
+			$urlnew = str_replace(array('&amp;'), array('&'), dhtmlspecialchars($_GET['urlnew']));
+			$colornew = $_GET['colornew'];
+			$parentidnew = $_GET['parentidnew'];
+			$subtypenew = $_GET['subtypenew'];
 			$stylebin = '';
 			for($i = 3; $i >= 1; $i--) {
-				$stylebin .= empty($_G['gp_stylenew'][$i]) ? '0' : '1';
+				$stylebin .= empty($_GET['stylenew'][$i]) ? '0' : '1';
 			}
 			$stylenew = bindec($stylebin);
-			$targetnew = intval($_G['gp_targetnew']) ? 1 : 0;
-			$levelnew = intval($_G['gp_levelnew']) && $_G['gp_levelnew'] > 0 && $_G['gp_levelnew'] < 4 ? intval($_G['gp_levelnew']) : 0 ;
+			$targetnew = intval($_GET['targetnew']) ? 1 : 0;
+			$levelnew = intval($_GET['levelnew']) && $_GET['levelnew'] > 0 && $_GET['levelnew'] < 4 ? intval($_GET['levelnew']) : 0 ;
 
 			$urladd = $nav['type'] != '0' && $urlnew ? ", url='".$urlnew."'" : '';
-			$subcols = ", subcols='".intval($_G['gp_subcolsnew'])."'";
+			$subcols = ", subcols='".intval($_GET['subcolsnew'])."'";
 
 			$logonew = addslashes($nav['logo']);
 			if($_FILES['logonew']) {
-				require_once libfile('class/upload');
 				$upload = new discuz_upload();
 				if($upload->init($_FILES['logonew'], 'common') && $upload->save()) {
 					$logonew = $upload->attach['attachment'];
 				}
 			} else {
-				$logonew = $_G['gp_logonew'];
+				$logonew = $_GET['logonew'];
 			}
-			if($_G['gp_deletelogo'] && $nav['logo']) {
+			if($_GET['deletelogo'] && $nav['logo']) {
 				$valueparse = parse_url($nav['logo']);
 				if(!isset($valueparse['host']) && !strexists($nav['logo'], '{STATICURL}')) {
 					@unlink($_G['setting']['attachurl'].'common/'.$nav['logo']);
@@ -334,7 +349,21 @@ EOT;
 			}
 			$logoadd = ", logo='$logonew'";
 
-			DB::query("UPDATE ".DB::table('common_nav')." SET name='$namenew', parentid='$parentidnew', title='$titlenew', highlight='$stylenew$colornew', target='$targetnew', level='$levelnew', subtype='$subtypenew' $urladd $subcols $logoadd WHERE id='$id'");
+			$data = array(
+					'name' => $namenew,
+					'parentid' => $parentidnew,
+					'title' => $titlenew,
+					'highlight' => "$stylenew$colornew",
+					'target' => $targetnew,
+					'level' => $levelnew,
+					'subtype' => $subtypenew,
+					'subcols' => intval($_GET['subcolsnew']),
+					'logo' => $logonew
+				);
+			if($nav['type'] != '0' && $urlnew) {
+				$data['url'] = $urlnew;
+			}
+			C::t('common_nav')->update($id, $data);
 
 			updatecache('setting');
 			cpmsg('nav_add_succeed', 'action=nav&operation=headernav', 'succeed');
@@ -357,8 +386,7 @@ EOT;
 			showsubtitle(array('', 'display_order', 'name', 'url', 'type', 'available', ''));
 
 			$navlist = array();
-			$query = DB::query("SELECT * FROM ".DB::table('common_nav')." WHERE navtype='1' ORDER BY displayorder");
-			while($nav = DB::fetch($query)) {
+			foreach(C::t('common_nav')->fetch_all_by_navtype(1) as $nav) {
 				$navlist[$nav['id']] = $nav;
 			}
 
@@ -388,29 +416,37 @@ EOT;
 
 		} else {
 
-			if($ids = dimplode($_G['gp_delete'])) {
-				DB::query("DELETE FROM ".DB::table('common_nav')." WHERE navtype='1' AND id IN ($ids)");
+			if($ids = dimplode($_GET['delete'])) {
+				C::t('common_nav')->delete_by_navtype_id(1, $_GET['delete']);
 			}
 
-			if(is_array($_G['gp_namenew'])) {
-				foreach($_G['gp_namenew'] as $id => $name) {
+			if(is_array($_GET['namenew'])) {
+				foreach($_GET['namenew'] as $id => $name) {
 					$name = trim(dhtmlspecialchars($name));
-					$urlnew = str_replace(array('&amp;'), array('&'), dhtmlspecialchars($_G['gp_urlnew'][$id]));
-					$urladd = !empty($_G['gp_urlnew'][$id]) ? ", url='$urlnew'" : '';
-					$availablenew[$id] = $name && (!isset($_G['gp_urlnew'][$id]) || $_G['gp_urlnew'][$id]) && $_G['gp_availablenew'][$id];
-					$displayordernew[$id] = intval($_G['gp_displayordernew'][$id]);
-					$nameadd = !empty($name) ? ", name='$name'" : '';
-					DB::query("UPDATE ".DB::table('common_nav')." SET displayorder='$displayordernew[$id]', available='$availablenew[$id]' $titleadd $urladd $nameadd WHERE id='$id'");
+					$urlnew = str_replace(array('&amp;'), array('&'), dhtmlspecialchars($_GET['urlnew'][$id]));
+					$availablenew[$id] = $name && (!isset($_GET['urlnew'][$id]) || $_GET['urlnew'][$id]) && $_GET['availablenew'][$id];
+					$displayordernew[$id] = intval($_GET['displayordernew'][$id]);
+					$data = array(
+							'displayorder' => $displayordernew[$id],
+							'available' => $availablenew[$id],
+						);
+					if(!empty($_GET['urlnew'][$id])) {
+						$data['url'] = $urlnew;
+					}
+					if(!empty($name)) {
+						$data['name'] = $name;
+					}
+					C::t('common_nav')->update($id, $data);
 				}
 			}
 
-			if(is_array($_G['gp_newname'])) {
-				foreach($_G['gp_newname'] as $k => $v) {
+			if(is_array($_GET['newname'])) {
+				foreach($_GET['newname'] as $k => $v) {
 					$v = dhtmlspecialchars(trim($v));
 					if(!empty($v)) {
-						$newavailable = $v && $_G['gp_newurl'][$k];
-						$newdisplayorder[$k] = intval($_G['gp_newdisplayorder'][$k]);
-						$newurl[$k] = str_replace('&amp;', '&', dhtmlspecialchars($_G['gp_newurl'][$k]));
+						$newavailable = $v && $_GET['newurl'][$k];
+						$newdisplayorder[$k] = intval($_GET['newdisplayorder'][$k]);
+						$newurl[$k] = str_replace('&amp;', '&', dhtmlspecialchars($_GET['newurl'][$k]));
 						$data = array(
 							'name' => $v,
 							'displayorder' => $newdisplayorder[$k],
@@ -419,7 +455,7 @@ EOT;
 							'available' => $newavailable,
 							'navtype' => 1
 						);
-						DB::insert('common_nav', $data);
+						C::t('common_nav')->insert($data);
 					}
 				}
 			}
@@ -429,9 +465,9 @@ EOT;
 
 		}
 
-	} elseif($do == 'edit' && ($id = $_G['gp_id'])) {
+	} elseif($do == 'edit' && ($id = $_GET['id'])) {
 
-		$nav = DB::fetch_first("SELECT * FROM ".DB::table('common_nav')." WHERE navtype='1' AND id='$id'");
+		$nav = C::t('common_nav')->fetch_by_id_navtype($id, 1);
 		if(!$nav) {
 			cpmsg('nav_not_found', '', 'error');
 		}
@@ -480,20 +516,30 @@ EOT;
 
 		} else {
 
-			$namenew = trim(dhtmlspecialchars($_G['gp_namenew']));
-			$titlenew = trim(dhtmlspecialchars($_G['gp_titlenew']));
-			$urlnew = str_replace(array('&amp;'), array('&'), dhtmlspecialchars($_G['gp_urlnew']));
-			$colornew = $_G['gp_colornew'];
+			$namenew = trim(dhtmlspecialchars($_GET['namenew']));
+			$titlenew = trim(dhtmlspecialchars($_GET['titlenew']));
+			$urlnew = str_replace(array('&amp;'), array('&'), dhtmlspecialchars($_GET['urlnew']));
+			$colornew = $_GET['colornew'];
 			$stylebin = '';
 			for($i = 3; $i >= 1; $i--) {
-				$stylebin .= empty($_G['gp_stylenew'][$i]) ? '0' : '1';
+				$stylebin .= empty($_GET['stylenew'][$i]) ? '0' : '1';
 			}
 			$stylenew = bindec($stylebin);
-			$targetnew = intval($_G['gp_targetnew']) ? 1 : 0;
-			$levelnew = $nav['type'] ? (intval($_G['gp_levelnew']) && $_G['gp_levelnew'] > 0 && $_G['gp_levelnew'] < 4 ? intval($_G['gp_levelnew']) : 0) : 0;
+			$targetnew = intval($_GET['targetnew']) ? 1 : 0;
+			$levelnew = $nav['type'] ? (intval($_GET['levelnew']) && $_GET['levelnew'] > 0 && $_GET['levelnew'] < 4 ? intval($_GET['levelnew']) : 0) : 0;
 			$urladd = $nav['type'] != '0' && $urlnew ? ", url='".$urlnew."'" : '';
 
-			DB::query("UPDATE ".DB::table('common_nav')." SET name='$namenew', title='$titlenew', highlight='$stylenew$colornew', target='$targetnew', level='$levelnew' $urladd WHERE id='$id'");
+			$data = array(
+					'name' => $namenew,
+					'title' => $titlenew,
+					'highlight' => "$stylenew$colornew",
+					'target' => $targetnew,
+					'level' => $levelnew
+				);
+			if($nav['type'] != '0' && $urlnew) {
+				$data['url'] = $urlnew;
+			}
+			C::t('common_nav')->update($id, $data);
 
 			updatecache('setting');
 			cpmsg('nav_add_succeed', 'action=nav&operation=footernav', 'succeed');
@@ -509,15 +555,18 @@ EOT;
 		if(!submitcheck('submit')) {
 
 			shownav('style', 'nav_setting_customnav');
-			showsubmenu('nav_setting_customnav', $navdata);
 
+			showsubmenu('nav_setting_customnav', $navdata);
+			showtips('nav_spacenav_tips');
 			showformheader('nav&operation=spacenav');
 			showtableheader();
 			showsubtitle(array('', 'display_order', 'name', 'url', 'type', 'available', ''));
 
 			$navlist = array();
-			$query = DB::query("SELECT * FROM ".DB::table('common_nav')." WHERE navtype='2' ORDER BY displayorder");
-			while($nav = DB::fetch($query)) {
+			foreach(C::t('common_nav')->fetch_all_by_navtype(2) as $nav) {
+				if($nav['available'] < 0) {
+					continue;
+				}
 				$navlist[$nav['id']] = $nav;
 			}
 
@@ -553,29 +602,39 @@ EOT;
 
 		} else {
 
-			if($ids = dimplode($_G['gp_delete'])) {
-				DB::query("DELETE FROM ".DB::table('common_nav')." WHERE navtype='2' AND id IN ($ids)");
+			if($ids = dimplode($_GET['delete'])) {
+				C::t('common_nav')->delete_by_navtype_id(2, $_GET['delete']);
 			}
 
-			if(is_array($_G['gp_namenew'])) {
-				foreach($_G['gp_namenew'] as $id => $name) {
+			if(is_array($_GET['namenew'])) {
+				foreach($_GET['namenew'] as $id => $name) {
 					$name = trim(dhtmlspecialchars($name));
-					$urlnew = str_replace(array('&amp;'), array('&'), dhtmlspecialchars($_G['gp_urlnew'][$id]));
-					$urladd = !empty($_G['gp_urlnew'][$id]) ? ", url='$urlnew'" : '';
-					$availablenew[$id] = $name && (!isset($_G['gp_urlnew'][$id]) || $_G['gp_urlnew'][$id]) && $_G['gp_availablenew'][$id];
-					$displayordernew[$id] = intval($_G['gp_displayordernew'][$id]);
+					$urlnew = str_replace(array('&amp;'), array('&'), dhtmlspecialchars($_GET['urlnew'][$id]));
+					$urladd = !empty($_GET['urlnew'][$id]) ? ", url='$urlnew'" : '';
+					$availablenew[$id] = $name && (!isset($_GET['urlnew'][$id]) || $_GET['urlnew'][$id]) && $_GET['availablenew'][$id];
+					$displayordernew[$id] = intval($_GET['displayordernew'][$id]);
 					$nameadd = !empty($name) ? ", name='$name'" : '';
-					DB::query("UPDATE ".DB::table('common_nav')." SET displayorder='$displayordernew[$id]', available='$availablenew[$id]' $titleadd $urladd $nameadd WHERE id='$id'");
+					$data = array(
+							'displayorder' => $displayordernew[$id],
+							'available' => $availablenew[$id]
+						);
+					if(!empty($_GET['urlnew'][$id])) {
+						$data['url'] = $urlnew;
+					}
+					if(!empty($name)) {
+						$data['name'] = $name;
+					}
+					C::t('common_nav')->update($id, $data);
 				}
 			}
 
-			if(is_array($_G['gp_newname'])) {
-				foreach($_G['gp_newname'] as $k => $v) {
+			if(is_array($_GET['newname'])) {
+				foreach($_GET['newname'] as $k => $v) {
 					$v = dhtmlspecialchars(trim($v));
 					if(!empty($v)) {
-						$newavailable = $v && $_G['gp_newurl'][$k];
-						$newdisplayorder[$k] = intval($_G['gp_newdisplayorder'][$k]);
-						$newurl[$k] = str_replace('&amp;', '&', dhtmlspecialchars($_G['gp_newurl'][$k]));
+						$newavailable = $v && $_GET['newurl'][$k];
+						$newdisplayorder[$k] = intval($_GET['newdisplayorder'][$k]);
+						$newurl[$k] = str_replace('&amp;', '&', dhtmlspecialchars($_GET['newurl'][$k]));
 						$data = array(
 							'name' => $v,
 							'displayorder' => $newdisplayorder[$k],
@@ -584,7 +643,7 @@ EOT;
 							'available' => $newavailable,
 							'navtype' => 2
 						);
-						DB::insert('common_nav', $data);
+						C::t('common_nav')->insert($data);
 					}
 				}
 			}
@@ -594,9 +653,9 @@ EOT;
 
 		}
 
-	} elseif($do == 'edit' && ($id = $_G['gp_id'])) {
+	} elseif($do == 'edit' && ($id = $_GET['id'])) {
 
-		$nav = DB::fetch_first("SELECT * FROM ".DB::table('common_nav')." WHERE navtype='2' AND id='$id'");
+		$nav = C::t('common_nav')->fetch_by_id_navtype($id, 2);
 		if(!$nav) {
 			cpmsg('nav_not_found', '', 'error');
 		}
@@ -646,30 +705,29 @@ EOT;
 
 		} else {
 
-			$namenew = trim(dhtmlspecialchars($_G['gp_namenew']));
-			$titlenew = trim(dhtmlspecialchars($_G['gp_titlenew']));
-			$subnamenew = trim(dhtmlspecialchars($_G['gp_subnamenew']));
-			$urlnew = str_replace(array('&amp;'), array('&'), dhtmlspecialchars($_G['gp_urlnew']));
-			$suburlnew = str_replace(array('&amp;'), array('&'), dhtmlspecialchars($_G['gp_suburlnew']));
-			$targetnew = intval($_G['gp_targetnew']) ? 1 : 0;
-			$levelnew = intval($_G['gp_levelnew']) && $_G['gp_levelnew'] > 0 && $_G['gp_levelnew'] < 4 ? intval($_G['gp_levelnew']) : 0 ;
+			$namenew = trim(dhtmlspecialchars($_GET['namenew']));
+			$titlenew = trim(dhtmlspecialchars($_GET['titlenew']));
+			$subnamenew = trim(dhtmlspecialchars($_GET['subnamenew']));
+			$urlnew = str_replace(array('&amp;'), array('&'), dhtmlspecialchars($_GET['urlnew']));
+			$suburlnew = str_replace(array('&amp;'), array('&'), dhtmlspecialchars($_GET['suburlnew']));
+			$targetnew = intval($_GET['targetnew']) ? 1 : 0;
+			$levelnew = intval($_GET['levelnew']) && $_GET['levelnew'] > 0 && $_GET['levelnew'] < 4 ? intval($_GET['levelnew']) : 0 ;
 			$urladd = $nav['type'] != '0' && $urlnew ? ", url='$urlnew'" : '';
 			$urladd .= $nav['type'] != '0' && $suburlnew ? ", suburl='$suburlnew'" : '';
 
-			if(empty($_G['gp_allowsubnew'])) {
+			if(empty($_GET['allowsubnew'])) {
 				$subnamenew = "\t".$subnamenew;
 			}
 			$iconnew = addslashes($nav['icon']);
 			if($_FILES['iconnew']) {
-				require_once libfile('class/upload');
 				$upload = new discuz_upload();
 				if($upload->init($_FILES['iconnew'], 'common') && $upload->save()) {
 					$iconnew = $upload->attach['attachment'];
 				}
 			} else {
-				$iconnew = $_G['gp_iconnew'];
+				$iconnew = $_GET['iconnew'];
 			}
-			if($_G['gp_deleteicon'] && $nav['icon']) {
+			if($_GET['deleteicon'] && $nav['icon']) {
 				$valueparse = parse_url($nav['icon']);
 				if(!isset($valueparse['host']) && !strexists($nav['icon'], '{STATICURL}')) {
 					@unlink($_G['setting']['attachurl'].'common/'.$nav['icon']);
@@ -678,8 +736,21 @@ EOT;
 			}
 			$iconadd = ", icon='$iconnew'";
 
-			DB::query("UPDATE ".DB::table('common_nav')." SET name='$namenew', subname='$subnamenew', title='$titlenew', target='$targetnew', level='$levelnew' $urladd $iconadd WHERE id='$id'");
-
+			$data = array(
+					'name' => $namenew,
+					'subname' => $subnamenew,
+					'title' => $titlenew,
+					'target' => $targetnew,
+					'level' => $levelnew,
+					'icon' => $iconnew
+				);
+			if($nav['type'] != '0' && $urlnew) {
+				$data['url'] = $urlnew;
+			}
+			if($nav['type'] != '0' && $suburlnew) {
+				$data['suburl'] = $suburlnew;
+			}
+			C::t('common_nav')->update($id, $data);
 			updatecache('setting');
 			cpmsg('nav_add_succeed', 'action=nav&operation=spacenav', 'succeed');
 
@@ -701,8 +772,10 @@ EOT;
 			showsubtitle(array('', 'display_order', 'name', 'url', 'type', 'available', ''));
 
 			$navlist = array();
-			$query = DB::query("SELECT * FROM ".DB::table('common_nav')." WHERE navtype='3' ORDER BY displayorder");
-			while($nav = DB::fetch($query)) {
+			foreach(C::t('common_nav')->fetch_all_by_navtype(3) as $nav) {
+				if($nav['available'] < 0) {
+					continue;
+				}
 				$navlist[$nav['id']] = $nav;
 			}
 
@@ -737,29 +810,39 @@ EOT;
 
 		} else {
 
-			if($ids = dimplode($_G['gp_delete'])) {
-				DB::query("DELETE FROM ".DB::table('common_nav')." WHERE navtype='3' AND id IN ($ids)");
+			if($_GET['delete']) {
+				C::t('common_nav')->delete_by_navtype_id(3, $_GET['delete']);
 			}
 
-			if(is_array($_G['gp_namenew'])) {
-				foreach($_G['gp_namenew'] as $id => $name) {
+			if(is_array($_GET['namenew'])) {
+				foreach($_GET['namenew'] as $id => $name) {
 					$name = trim(dhtmlspecialchars($name));
-					$urlnew = str_replace(array('&amp;'), array('&'), dhtmlspecialchars($_G['gp_urlnew'][$id]));
-					$urladd = !empty($_G['gp_urlnew'][$id]) ? ", url='$urlnew'" : '';
-					$availablenew[$id] = $name && (!isset($_G['gp_urlnew'][$id]) || $_G['gp_urlnew'][$id]) && $_G['gp_availablenew'][$id];
-					$displayordernew[$id] = intval($_G['gp_displayordernew'][$id]);
+					$urlnew = str_replace(array('&amp;'), array('&'), dhtmlspecialchars($_GET['urlnew'][$id]));
+					$urladd = !empty($_GET['urlnew'][$id]) ? ", url='$urlnew'" : '';
+					$availablenew[$id] = $name && (!isset($_GET['urlnew'][$id]) || $_GET['urlnew'][$id]) && $_GET['availablenew'][$id];
+					$displayordernew[$id] = intval($_GET['displayordernew'][$id]);
 					$nameadd = !empty($name) ? ", name='$name'" : '';
-					DB::query("UPDATE ".DB::table('common_nav')." SET displayorder='$displayordernew[$id]', available='$availablenew[$id]' $titleadd $urladd $nameadd WHERE id='$id'");
+					$data = array(
+							'displayorder' => $displayordernew[$id],
+							'available' => $availablenew[$id]
+						);
+					if(!empty($_GET['urlnew'][$id])) {
+						$data['url'] = $urlnew;
+					}
+					if(!empty($name)) {
+						$data['name'] = $name;
+					}
+					C::t('common_nav')->update($id, $data);
 				}
 			}
 
-			if(is_array($_G['gp_newname'])) {
-				foreach($_G['gp_newname'] as $k => $v) {
+			if(is_array($_GET['newname'])) {
+				foreach($_GET['newname'] as $k => $v) {
 					$v = dhtmlspecialchars(trim($v));
 					if(!empty($v)) {
-						$newavailable = $v && $_G['gp_newurl'][$k];
-						$newdisplayorder[$k] = intval($_G['gp_newdisplayorder'][$k]);
-						$newurl[$k] = str_replace('&amp;', '&', dhtmlspecialchars($_G['gp_newurl'][$k]));
+						$newavailable = $v && $_GET['newurl'][$k];
+						$newdisplayorder[$k] = intval($_GET['newdisplayorder'][$k]);
+						$newurl[$k] = str_replace('&amp;', '&', dhtmlspecialchars($_GET['newurl'][$k]));
 						$data = array(
 							'name' => $v,
 							'displayorder' => $newdisplayorder[$k],
@@ -768,7 +851,7 @@ EOT;
 							'available' => $newavailable,
 							'navtype' => 3
 						);
-						DB::insert('common_nav', $data);
+						C::t('common_nav')->insert($data);
 					}
 				}
 			}
@@ -778,9 +861,9 @@ EOT;
 
 		}
 
-	} elseif($do == 'edit' && ($id = $_G['gp_id'])) {
+	} elseif($do == 'edit' && ($id = $_GET['id'])) {
 
-		$nav = DB::fetch_first("SELECT * FROM ".DB::table('common_nav')." WHERE navtype='3' AND id='$id'");
+		$nav = C::t('common_nav')->fetch_by_id_navtype($id, 3);
 		if(!$nav) {
 			cpmsg('nav_not_found', '', 'error');
 		}
@@ -826,24 +909,23 @@ EOT;
 
 		} else {
 
-			$namenew = trim(dhtmlspecialchars($_G['gp_namenew']));
-			$titlenew = trim(dhtmlspecialchars($_G['gp_titlenew']));
-			$urlnew = str_replace(array('&amp;'), array('&'), dhtmlspecialchars($_G['gp_urlnew']));
-			$targetnew = intval($_G['gp_targetnew']) ? 1 : 0;
-			$levelnew = intval($_G['gp_levelnew']) && $_G['gp_levelnew'] > 0 && $_G['gp_levelnew'] < 4 ? intval($_G['gp_levelnew']) : 0 ;
+			$namenew = trim(dhtmlspecialchars($_GET['namenew']));
+			$titlenew = trim(dhtmlspecialchars($_GET['titlenew']));
+			$urlnew = str_replace(array('&amp;'), array('&'), dhtmlspecialchars($_GET['urlnew']));
+			$targetnew = intval($_GET['targetnew']) ? 1 : 0;
+			$levelnew = intval($_GET['levelnew']) && $_GET['levelnew'] > 0 && $_GET['levelnew'] < 4 ? intval($_GET['levelnew']) : 0 ;
 			$urladd = $nav['type'] != '0' && $urlnew ? ", url='$urlnew'" : '';
 
 			$iconnew = addslashes($nav['icon']);
 			if($_FILES['iconnew']) {
-				require_once libfile('class/upload');
 				$upload = new discuz_upload();
 				if($upload->init($_FILES['iconnew'], 'common') && $upload->save()) {
 					$iconnew = $upload->attach['attachment'];
 				}
 			} else {
-				$iconnew = $_G['gp_iconnew'];
+				$iconnew = $_GET['iconnew'];
 			}
-			if($_G['gp_deleteicon'] && $nav['icon']) {
+			if($_GET['deleteicon'] && $nav['icon']) {
 				$valueparse = parse_url($nav['icon']);
 				if(!isset($valueparse['host']) && !strexists($nav['icon'], '{STATICURL}')) {
 					@unlink($_G['setting']['attachurl'].'common/'.$nav['icon']);
@@ -852,7 +934,17 @@ EOT;
 			}
 			$iconadd = ", icon='$iconnew'";
 
-			DB::query("UPDATE ".DB::table('common_nav')." SET name='$namenew', title='$titlenew', target='$targetnew', level='$levelnew' $urladd $iconadd WHERE id='$id'");
+			$data = array(
+					'name' => $namenew,
+					'title' => $titlenew,
+					'target' => $targetnew,
+					'level' => $levelnew,
+					'icon' => $iconnew
+				);
+			if($nav['type'] != '0' && $urlnew) {
+				$data['url'] = $urlnew;
+			}
+			C::t('common_nav')->update($id, $data);
 
 			updatecache('setting');
 			cpmsg('nav_add_succeed', 'action=nav&operation=mynav', 'succeed');
@@ -875,8 +967,7 @@ EOT;
 			showsubtitle(array('', 'display_order', 'name', 'setting_styles_global_topnavtype', 'url', 'type', 'available', ''));
 
 			$navlist = array();
-			$query = DB::query("SELECT * FROM ".DB::table('common_nav')." WHERE navtype='4' ORDER BY displayorder");
-			while($nav = DB::fetch($query)) {
+			foreach(C::t('common_nav')->fetch_all_by_navtype(4) as $nav) {
 				$navlist[$nav['id']] = $nav;
 			}
 
@@ -902,46 +993,58 @@ EOT;
 			echo <<<EOT
 <script type="text/JavaScript">
 	var rowtypedata = [
-		[[1, '', 'td25'], [1,'<input name="newdisplayorder[]" value="" size="3" type="text" class="txt">', 'td25'], [2, '<input name="newname[]" value="" size="15" type="text" class="txt">'], [4, '<input name="newurl[]" value="" size="15" type="text" class="txt">']],
+		[[1, '', 'td25'], [1,'<input name="newdisplayorder[]" value="" size="3" type="text" class="txt">', 'td25'], [1, '<input name="newname[]" value="" size="15" type="text" class="txt">'], [1, '<select name="newsubtype[]"><option value="0">$lang[setting_styles_global_topnavtype_0]</option><option value="1">$lang[setting_styles_global_topnavtype_1]</option></select>'], [4, '<input name="newurl[]" value="" size="15" type="text" class="txt">']],
 	];
 </script>
 EOT;
 
 		} else {
 
-			if($ids = dimplode($_G['gp_delete'])) {
-				DB::query("DELETE FROM ".DB::table('common_nav')." WHERE navtype='4' AND id IN ($ids)");
+			if($_GET['delete']) {
+				C::t('common_nav')->delete_by_navtype_id(4, $_GET['delete']);
 			}
 
-			if(is_array($_G['gp_namenew'])) {
-				foreach($_G['gp_namenew'] as $id => $name) {
+			if(is_array($_GET['namenew'])) {
+				foreach($_GET['namenew'] as $id => $name) {
 					$name = trim(dhtmlspecialchars($name));
-					$urlnew = str_replace(array('&amp;'), array('&'), dhtmlspecialchars($_G['gp_urlnew'][$id]));
-					$urladd = !empty($_G['gp_urlnew'][$id]) ? ", url='$urlnew'" : '';
-					$availablenew[$id] = $name && (!isset($_G['gp_urlnew'][$id]) || $_G['gp_urlnew'][$id]) && $_G['gp_availablenew'][$id];
-					$displayordernew[$id] = intval($_G['gp_displayordernew'][$id]);
-					$nameadd = !empty($name) ? ", name='$name'" : '';
-					$subtypeadd = isset($_G['gp_subtypenew'][$id]) ? ", subtype='".intval($_G['gp_subtypenew'][$id])."'" : '';
-					DB::query("UPDATE ".DB::table('common_nav')." SET displayorder='$displayordernew[$id]', available='$availablenew[$id]' $titleadd $urladd $nameadd $subtypeadd WHERE id='$id'");
+					$urlnew = str_replace(array('&amp;'), array('&'), dhtmlspecialchars($_GET['urlnew'][$id]));
+					$availablenew[$id] = $name && (!isset($_GET['urlnew'][$id]) || $_GET['urlnew'][$id]) && $_GET['availablenew'][$id];
+					$displayordernew[$id] = intval($_GET['displayordernew'][$id]);
+					$data = array(
+							'displayorder' => $displayordernew[$id],
+							'available' => $availablenew[$id]
+						);
+					if(!empty($_GET['urlnew'][$id])) {
+						$data['url'] = $urlnew;
+					}
+					if(!empty($name)) {
+						$data['name'] = $name;
+					}
+					if(isset($_GET['subtypenew'][$id])) {
+						$data['subtype'] = intval($_GET['subtypenew'][$id]);
+					}
+					C::t('common_nav')->update($id, $data);
 				}
 			}
 
-			if(is_array($_G['gp_newname'])) {
-				foreach($_G['gp_newname'] as $k => $v) {
+			if(is_array($_GET['newname'])) {
+				foreach($_GET['newname'] as $k => $v) {
 					$v = dhtmlspecialchars(trim($v));
 					if(!empty($v)) {
-						$newavailable = $v && $_G['gp_newurl'][$k];
-						$newdisplayorder[$k] = intval($_G['gp_newdisplayorder'][$k]);
-						$newurl[$k] = str_replace('&amp;', '&', dhtmlspecialchars($_G['gp_newurl'][$k]));
+						$newavailable = $v && $_GET['newurl'][$k];
+						$newdisplayorder[$k] = intval($_GET['newdisplayorder'][$k]);
+						$subtype = isset($_GET['newsubtype'][$k]) ? intval($_GET['newsubtype'][$k]) : 0;
+						$newurl[$k] = str_replace('&amp;', '&', dhtmlspecialchars($_GET['newurl'][$k]));
 						$data = array(
 							'name' => $v,
 							'displayorder' => $newdisplayorder[$k],
+							'subtype' => $subtype,
 							'url' => $newurl[$k],
 							'type' => 1,
 							'available' => $newavailable,
 							'navtype' => 4
 						);
-						DB::insert('common_nav', $data);
+						C::t('common_nav')->insert($data);
 					}
 				}
 			}
@@ -951,9 +1054,9 @@ EOT;
 
 		}
 
-	} elseif($do == 'edit' && ($id = $_G['gp_id'])) {
+	} elseif($do == 'edit' && ($id = $_GET['id'])) {
 
-		$nav = DB::fetch_first("SELECT * FROM ".DB::table('common_nav')." WHERE navtype='4' AND id='$id'");
+		$nav = C::t('common_nav')->fetch_by_id_navtype($id, 4);
 		if(!$nav) {
 			cpmsg('nav_not_found', '', 'error');
 		}
@@ -1006,22 +1109,32 @@ EOT;
 
 		} else {
 
-			$namenew = trim(dhtmlspecialchars($_G['gp_namenew']));
-			$titlenew = trim(dhtmlspecialchars($_G['gp_titlenew']));
-			$urlnew = str_replace(array('&amp;'), array('&'), dhtmlspecialchars($_G['gp_urlnew']));
-			$colornew = $_G['gp_colornew'];
-			$subtypenew = $_G['gp_subtypenew'];
+			$namenew = trim(dhtmlspecialchars($_GET['namenew']));
+			$titlenew = trim(dhtmlspecialchars($_GET['titlenew']));
+			$urlnew = str_replace(array('&amp;'), array('&'), dhtmlspecialchars($_GET['urlnew']));
+			$colornew = $_GET['colornew'];
+			$subtypenew = $_GET['subtypenew'];
 			$stylebin = '';
 			for($i = 3; $i >= 1; $i--) {
-				$stylebin .= empty($_G['gp_stylenew'][$i]) ? '0' : '1';
+				$stylebin .= empty($_GET['stylenew'][$i]) ? '0' : '1';
 			}
 			$stylenew = bindec($stylebin);
-			$targetnew = intval($_G['gp_targetnew']) ? 1 : 0;
-			$levelnew = $nav['type'] ? (intval($_G['gp_levelnew']) && $_G['gp_levelnew'] > 0 && $_G['gp_levelnew'] < 4 ? intval($_G['gp_levelnew']) : 0) : 0;
+			$targetnew = intval($_GET['targetnew']) ? 1 : 0;
+			$levelnew = $nav['type'] ? (intval($_GET['levelnew']) && $_GET['levelnew'] > 0 && $_GET['levelnew'] < 4 ? intval($_GET['levelnew']) : 0) : 0;
 			$urladd = $nav['type'] != '0' && $urlnew ? ", url='".$urlnew."'" : '';
 
-			DB::query("UPDATE ".DB::table('common_nav')." SET name='$namenew', title='$titlenew', highlight='$stylenew$colornew', target='$targetnew', level='$levelnew', subtype='$subtypenew' $urladd WHERE id='$id'");
-
+			$data = array(
+					'name' => $namenew,
+					'title' => $titlenew,
+					'highlight' => "$stylenew$colornew",
+					'target' => $targetnew,
+					'level' => $levelnew,
+					'subtype' => $subtypenew
+				);
+			if($nav['type'] != '0' && $urlnew) {
+				$data['url'] = $urlnew;
+			}
+			C::t('common_nav')->update($id, $data);
 			updatecache('setting');
 			cpmsg('nav_add_succeed', 'action=nav&operation=topnav', 'succeed');
 

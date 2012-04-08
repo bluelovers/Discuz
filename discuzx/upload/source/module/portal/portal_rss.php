@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portal_rss.php 18139 2010-11-15 07:19:21Z svn_project_zhangjie $
+ *      $Id: portal_rss.php 24992 2011-10-20 09:41:00Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -39,6 +39,12 @@ if(empty($rsscatid)) {
 	}
 }
 
+$rewriteflag = 0;
+$havedomain = implode('', $_G['setting']['domain']['app']);
+if(is_array($_G['setting']['rewritestatus']) && in_array('portal_article', $_G['setting']['rewritestatus'])) {
+	$rewriteflag = 1;
+}
+
 $charset = $_G['config']['output']['charset'];
 dheader("Content-type: application/xml");
 echo 	"<?xml version=\"1.0\" encoding=\"".$charset."\"?>\n".
@@ -64,9 +70,9 @@ echo 	"<?xml version=\"1.0\" encoding=\"".$charset."\"?>\n".
 	"    </image>\n";
 
 if($catarray) {
-	$query = DB::query("SELECT * FROM ".DB::table('portal_rsscache')." WHERE catid IN (".dimplode($catarray).") ORDER BY dateline DESC LIMIT $num");
-	if(DB::num_rows($query)) {
-		while($article = DB::fetch($query)) {
+	$alldata = C::t('portal_rsscache')->fetch_all_by_catid($catarray, $num);
+	if($alldata) {
+		foreach($alldata as $article) {
 			if(TIMESTAMP - $article['lastupdate'] > $ttl * 60) {
 				updatersscache($num);
 				break;
@@ -81,7 +87,7 @@ if($catarray) {
 				}
 				echo 	"    <item>\n".
 					"      <title>".$article['subject']."</title>\n".
-					"      <link>$_G[siteurl]portal.php?mod=view&amp;aid=$article[aid]</link>\n".
+					"      <link>$_G[siteurl]".($rewriteflag ? rewriteoutput('portal_article', 1, '', $article[aid]) : "portal.php?mod=view&amp;aid=$article[aid]")."</link>\n".
 					"      <description><![CDATA[".dhtmlspecialchars($article['description'])."]]></description>\n".
 					"      <category>".dhtmlspecialchars($article['catname'])."</category>\n".
 					"      <author>".dhtmlspecialchars($article['author'])."</author>\n".
@@ -105,25 +111,30 @@ function updatersscache($num) {
 	if(discuz_process::islocked($processname, 600)) {
 		return false;
 	}
-	DB::query("DELETE FROM ".DB::table('portal_rsscache')."");
+	C::t('portal_rsscache')->truncate();
 	require_once libfile('function/post');
 	foreach($_G['cache']['portalcategory'] as $catid => $catarray) {
-		$query = DB::query("SELECT aid, username, author, dateline, title, summary
-			FROM ".DB::table('portal_article_title')."
-			WHERE catid='$catid' AND status=0
-			ORDER BY aid DESC LIMIT $num");
+		$query = C::t('portal_article_title')->fetch_all_for_cat($catid, 0, 1, 0, $num);
 		$catarray['catname'] = addslashes($catarray['catname']);
-		while($article = DB::fetch($query)) {
+		foreach($query as $article) {
 			$article['author'] = $article['author'] != '' ? addslashes($article['author']) : ($article['username'] ? addslashes($article['username']) : 'Anonymous');
 			$article['title'] = addslashes($article['title']);
-			$articleattach = DB::fetch_first("SELECT * FROM ".DB::table('portal_attachment')." WHERE aid='".$article['aid']."' AND isimage=1");
+			$articleattach = C::t('portal_attachment')->fetch_by_aid_image($article['aid']);
 			$attachdata = '';
 			if(!empty($articleattach)) {
 				$attachdata = "\t".$articleattach['remote']."\t".$articleattach['attachment']."\t".$articleattach['filesize'];
 			}
 			$article['description'] = addslashes(messagecutstr($article['summary'], 250 - strlen($attachdata)).$attachdata);
-			DB::query("REPLACE INTO ".DB::table('portal_rsscache')." (lastupdate, catid, aid, dateline, catname, author, subject, description)
-				VALUES ('$_G[timestamp]', '$catid', '$article[aid]', '$article[dateline]', '$catarray[catname]', '$article[author]', '$article[title]', '$article[description]')");
+			C::t('portal_rsscache')->insert(array(
+				'lastupdate'=>$_G['timestamp'],
+				'catid'=>$catid,
+				'aid'=>$article['aid'],
+				'dateline'=>$article['dateline'],
+				'catname'=>$catarray['catname'],
+				'author'=>$article['author'],
+				'subject'=>$article['title'],
+				'description'=>$article['description']
+			));
 		}
 	}
 	discuz_process::unlock($processname);

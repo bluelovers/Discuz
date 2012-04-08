@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_postsplit.php 26253 2011-12-07 06:35:01Z zhengqingpeng $
+ *      $Id: admincp_postsplit.php 26689 2011-12-20 05:05:58Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -21,38 +21,21 @@ if(empty($operation)) {
 	$operation = 'manage';
 }
 
-$query = DB::query("SELECT skey, svalue FROM ".DB::table('common_setting')." WHERE skey IN ('posttable_info', 'posttableids', 'threadtableids')");
-while($var = DB::fetch($query)) {
-	switch($var['skey']) {
-		case 'posttable_info':
-			$posttable_info = $var['svalue'];
-			break;
-		case 'posttableids':
-			$posttableids = $var['svalue'];
-			break;
-		case 'threadtableids':
-			$threadtableids = $var['svalue'];
-			break;
-	}
-}
-
-if(empty($posttable_info)) {
+$setting = C::t('common_setting')->fetch_all(array('posttable_info', 'posttableids', 'threadtableids'), true);
+if($setting['posttable_info']) {
+	$posttable_info = $setting['posttable_info'];
+} else {
 	$posttable_info = array();
 	$posttable_info[0]['type'] = 'primary';
-} else {
-	$posttable_info = unserialize($posttable_info);
 }
-
-if(empty($posttableids)) {
-	$posttableids = array();
-} else {
-	$posttableids = unserialize($posttableids);
-}
+$posttableids = $setting['posttableids'] ? $setting['posttableids'] : array();
+$threadtableids = $setting['threadtableids'];
 
 if($operation == 'manage') {
 	shownav('founder', 'nav_postsplit');
 	if(!submitcheck('postsplit_manage')) {
 
+		showsubmenu('nav_postsplit_manage');
 		showtips('postsplit_manage_tips');
 		showformheader('postsplit&operation=manage');
 		showtableheader();
@@ -60,9 +43,9 @@ if($operation == 'manage') {
 		showsubtitle(array('postsplit_manage_tablename', 'postsplit_manage_datalength', 'postsplit_manage_table_memo', ''));
 
 
-		$tablename = DB::table('forum_post');
+		$tablename = C::t('forum_post')->getposttable(0, true);
 		$tableid = 0;
-		$tablestatus = gettablestatus($tablename);
+		$tablestatus = helper_dbtool::gettablestatus($tablename);
 		$postcount = $tablestatus['Rows'];
 		$data_length = $tablestatus['Data_length'];
 		$index_length = $tablestatus['Index_length'];
@@ -72,14 +55,13 @@ if($operation == 'manage') {
 		$opstr = '<a href="'.ADMINSCRIPT.'?action=postsplit&operation=split&tableid=0">'.cplang('postsplit_name').'</a>';
 		showtablerow('', array('', '', '', 'class="td25"'), array($tablename, $data_length, "<input type=\"text\" class=\"txt\" name=\"memo[0]\" value=\"{$posttable_info[0]['memo']}\" />", $opstr));
 
-		$query = DB::query("SHOW TABLES LIKE '".DB::table('forum_post')."\_%'");
-		while($table = DB::fetch($query)) {
+		foreach(C::t('forum_post')->show_table() as $table) {
 			list($tempkey, $tablename) = each($table);
 			$tableid = gettableid($tablename);
 			if(!preg_match('/^\d+$/', $tableid)) {
 				continue;
 			}
-			$tablestatus = gettablestatus($tablename);
+			$tablestatus = helper_dbtool::gettablestatus($tablename);
 
 			$opstr = '<a href="'.ADMINSCRIPT.'?action=postsplit&operation=split&tableid='.$tableid.'">'.cplang('postsplit_name').'</a>';
 			showtablerow('', array('', '', '', 'class="td25"'), array($tablename, $tablestatus['Data_length'], "<input type=\"text\" class=\"txt\" name=\"memo[$tableid]\" value=\"{$posttable_info[$tableid]['memo']}\" />", $opstr));
@@ -89,16 +71,13 @@ if($operation == 'manage') {
 		showformfooter();
 	} else {
 		$posttable_info = array();
-		foreach($_G['gp_memo'] as $key => $value) {
+		foreach($_GET['memo'] as $key => $value) {
 			$key = intval($key);
 			$posttable_info[$key]['memo'] = $value;
 		}
 
-		DB::insert('common_setting', array(
-			'skey' => 'posttable_info',
-			'svalue' => daddslashes(serialize($posttable_info)),
-		), false, true);
-		save_syscache('posttable_info', $posttable_info);
+		C::t('common_setting')->update('posttable_info', $posttable_info);
+		savecache('posttable_info', $posttable_info);
 		update_posttableids();
 		updatecache('setting');
 
@@ -110,24 +89,24 @@ if($operation == 'manage') {
 		cpmsg('postsplit_forum_must_be_closed', 'action=postsplit&operation=manage', 'error');
 	}
 
-	$tableid = intval($_G['gp_tableid']);
+	$tableid = intval($_GET['tableid']);
 	$tablename = getposttable($tableid);
 	if($tableid && $tablename != 'forum_post' || !$tableid) {
-		$status = gettablestatus(DB::table($tablename), false);
+		$status = helper_dbtool::gettablestatus(getposttable($tableid, true), false);
 		$allowsplit = false;
 
 		if($status && ((!$tableid && $status['Data_length'] > 400 * 1048576) || ($tableid && $status['Data_length']))) {
 
 			if(!submitcheck('splitsubmit')) {
-
+				showsubmenu('nav_postsplit_manage');
 				showtips('postsplit_manage_tips');
 				showformheader('postsplit&operation=split&tableid='.$tableid);
 				showtableheader();
-				showsetting('postsplit_from', '', '', getposttable($tableid).(!empty($posttable_info[$tableid]['memo']) ? '('.$posttable_info[$tableid]['memo'].')' : ''));
+				showsetting('postsplit_from', '', '', getposttable($tableid, true).(!empty($posttable_info[$tableid]['memo']) ? '('.$posttable_info[$tableid]['memo'].')' : ''));
 				$tablelist = '<option value="-1">'.cplang('postsplit_create').'</option>';
 				foreach($posttable_info as $tid => $info) {
 					if($tableid != $tid) {
-						$tablestatus = gettablestatus(DB::table(getposttable($tid)));
+						$tablestatus = helper_dbtool::gettablestatus(getposttable($tid, true));
 						$tablelist .= '<option value="'.$tid.'">'.($info['memo'] ? $info['memo'] : 'forum_post'.($tid ? '_'.$tid : '')).'('.$tablestatus['Data_length'].')'.'</option>';
 					}
 				}
@@ -150,24 +129,21 @@ if($operation == 'manage') {
 				showformfooter();
 			} else {
 
-				$targettable = intval($_G['gp_targettable']);
+				$targettable = intval($_GET['targettable']);
 				$createtable = false;
 				if($targettable == -1) {
 					$maxtableid = getmaxposttableid();
 					DB::query('SET SQL_QUOTE_SHOW_CREATE=0', 'SILENT');
-					$tableinfo = DB::fetch_first("SHOW CREATE TABLE ".DB::table(getposttable()));
+					$tableinfo = C::t('forum_post')->show_table_by_tableid(0);
 					$createsql = $tableinfo['Create Table'];
 					$targettable = $maxtableid + 1;
 					$newtable = 'forum_post_'.$targettable;
 					$createsql = str_replace(getposttable(), $newtable, $createsql);
 					DB::query($createsql);
 
-					$posttable_info[$targettable]['memo'] = $_G['gp_memo'];
-					DB::insert('common_setting', array(
-						'skey' => 'posttable_info',
-						'svalue' => daddslashes(serialize($posttable_info)),
-					), false, true);
-					save_syscache('posttable_info', $posttable_info);
+					$posttable_info[$targettable]['memo'] = $_GET['memo'];
+					C::t('common_setting')->update('posttable_info', $posttable_info);
+					savecache('posttable_info', $posttable_info);
 					update_posttableids();
 					$createtable = true;
 				}
@@ -175,12 +151,12 @@ if($operation == 'manage') {
 				$targettablearr = gettablefields(getposttable($targettable));
 				$fields = array_diff(array_keys($sourcetablearr), array_keys($targettablearr));
 				if(!empty($fields)) {
-					cpmsg('postsplit_do_error', '', '', array('tableid' => DB::table(getposttable($targettable)), 'fields' => implode(',', $fields)));
+					cpmsg('postsplit_do_error', '', '', array('tableid' => getposttable($targettable, true), 'fields' => implode(',', $fields)));
 				}
 
-				$movesize = intval($_G['gp_movesize']);
+				$movesize = intval($_GET['movesize']);
 				$movesize = $movesize >= 100 && $movesize <= 1024 ? $movesize : 100;
-				$targetstatus = gettablestatus(DB::table(getposttable($targettable)), false);
+				$targetstatus = helper_dbtool::gettablestatus(getposttable($targettable, true), false);
 				$hash = urlencode(authcode("$tableid\t$movesize\t$targettable\t$targetstatus[Data_length]", 'ENCODE'));
 				if($createtable) {
 					cpmsg('postsplit_table_create_succeed', 'action=postsplit&operation=movepost&fromtable='.$tableid.'&movesize='.$movesize.'&targettable='.$targettable.'&hash='.$hash, 'loadingform');
@@ -199,13 +175,13 @@ if($operation == 'manage') {
 	if(!$_G['setting']['bbclosed']) {
 		cpmsg('postsplit_forum_must_be_closed', 'action=postsplit&operation=manage', 'error');
 	}
-	list($tableid, $movesize, $targettableid, $sourcesize) = explode("\t", urldecode(authcode($_G['gp_hash'])));
-	$hash = urlencode($_G['gp_hash']);
+	list($tableid, $movesize, $targettableid, $sourcesize) = explode("\t", urldecode(authcode($_GET['hash'])));
+	$hash = urlencode($_GET['hash']);
 
-	if($tableid == $_G['gp_fromtable'] && $movesize == $_G['gp_movesize'] && $targettableid == $_G['gp_targettable']) {
-		$fromtableid = intval($_G['gp_fromtable']);
-		$movesize = intval($_G['gp_movesize']);
-		$targettableid = intval($_G['gp_targettable']);
+	if($tableid == $_GET['fromtable'] && $movesize == $_GET['movesize'] && $targettableid == $_GET['targettable']) {
+		$fromtableid = intval($_GET['fromtable']);
+		$movesize = intval($_GET['movesize']);
+		$targettableid = intval($_GET['targettable']);
 
 		$targettable = gettablefields(getposttable($targettableid));
 		$fieldstr = '`'.implode('`, `', array_keys($targettable)).'`';
@@ -215,21 +191,23 @@ if($operation == 'manage') {
 		if(!empty($_G['cache']['threadtableids'])) {
 			$threadtableids = array_merge($threadtableids, $_G['cache']['threadtableids']);
 		}
-		$tableindex = intval(!empty($_G['gp_tindex']) ? $_G['gp_tindex'] : 0);
+		$tableindex = intval(!empty($_GET['tindex']) ? $_GET['tindex'] : 0);
 		if(isset($threadtableids[$tableindex])) {
 
 			if(!$fromtableid) {
 				$threadtableid = $threadtableids[$tableindex];
-				$table = $threadtableid > 0 ? "forum_thread_{$threadtableid}" : 'forum_thread';
 
-				$count = DB::result_first("SELECT count(*) FROM ".DB::table($table)." WHERE  posttableid='0' AND displayorder>='0'");
+				$count = C::t('forum_thread')->count_by_posttableid_displayorder($threadtableid);
 				if($count) {
-					$query = DB::query("SELECT tid FROM ".DB::table($table)." WHERE posttableid='0' AND displayorder>='0' ORDER BY lastpost LIMIT 0, 1000");
-					movedate($query);
+					$tids = array();
+					foreach(C::t('forum_thread')->fetch_all_by_posttableid_displayorder($threadtableid) as $tid => $thread) {
+						$tids[$tid] = $tid;
+					}
+					movedate($tids);
 				}
 				if($tableindex+1 < count($threadtableids)) {
 					$tableindex++;
-					$status = gettablestatus(DB::table(getposttable($targettableid)), false);
+					$status = helper_dbtool::gettablestatus(getposttable($targettableid, true), false);
 					$targetsize = $sourcesize + $movesize * 1048576;
 					$nowdatasize = $targetsize - $status['Data_length'];
 
@@ -237,10 +215,10 @@ if($operation == 'manage') {
 				}
 
 			} else {
-				$count = DB::result_first("SELECT count(*) FROM ".DB::table(getposttable($fromtableid))." WHERE `first`='1'");
+				$count = C::t('forum_post')->count_by_first($fromtableid, 1);
 				if($count) {
-					$query = DB::query("SELECT tid FROM ".DB::table(getposttable($fromtableid))." WHERE `first`='1' LIMIT 0, 1000");
-					movedate($query);
+					$tids = C::t('forum_post')->fetch_all_tid_by_first($fromtableid, 1, 0, 1000);
+					movedate($tids);
 				} else {
 					cpmsg('postsplit_done', 'action=postsplit&operation=optimize&tableid='.$fromtableid, 'form');
 				}
@@ -258,27 +236,24 @@ if($operation == 'manage') {
 		cpmsg('postsplit_forum_must_be_closed', 'action=postsplit&operation=manage', 'error');
 	}
 
-	$fromtableid = intval($_G['gp_tableid']);
+	$fromtableid = intval($_GET['tableid']);
 	$optimize = true;
 	$tablename = getposttable($fromtableid);
 	if($fromtableid && $tablename != 'forum_post') {
-		$count = DB::result_first("SELECT COUNT(*) FROM ".DB::table($tablename));
+		$count = C::t('forum_post')->count_table($fromtableid);
 		if(!$count) {
-			DB::query("DROP TABLE ".DB::table($tablename));
+			C::t('forum_post')->drop_table($fromtableid);
 
 			unset($posttable_info[$fromtableid]);
-			DB::insert('common_setting', array(
-				'skey' => 'posttable_info',
-				'svalue' => daddslashes(serialize($posttable_info)),
-			), false, true);
-			save_syscache('posttable_info', $posttable_info);
+			C::t('common_setting')->update('posttable_info', $posttable_info);
+			savecache('posttable_info', $posttable_info);
 			update_posttableids();
 			$optimize = false;
 		}
 
 	}
 	if($optimize) {
-		DB::query("OPTIMIZE TABLE ".DB::table($tablename), 'SILENT');
+		C::t('forum_post')->optimize_table($fromtableid);
 	}
 	cpmsg('postsplit_do_succeed', 'action=postsplit', 'succeed');
 
@@ -292,16 +267,16 @@ if($operation == 'manage') {
 	$pidmax = 0;
 	foreach($posttableids as $id) {
 		if($id == 0) {
-			$pidtmp = DB::result_first("SELECT MAX(pid) FROM ".DB::table('forum_post'));
+			$pidtmp = C::t('forum_post')->fetch_maxid(0);
 		} else {
-			$pidtmp = DB::result_first("SELECT MAX(pid) FROM ".DB::table("forum_post_$id"));
+			$pidtmp = C::t('forum_post')->fetch_maxid($id);
 		}
 		if($pidtmp > $pidmax) {
 			$pidmax = $pidtmp;
 		}
 	}
 	$auto_increment = $pidmax + 1;
-	DB::query("ALTER TABLE ".DB::table('forum_post_tableid')." AUTO_INCREMENT=$auto_increment");
+	C::t('forum_post_tableid')->alter_auto_increment($auto_increment);
 	cpmsg('postsplit_resetpid_succeed', 'action=postsplit&operation=manage', 'succeed');
 }
 
@@ -311,9 +286,8 @@ function gettableid($tablename) {
 }
 
 function getmaxposttableid() {
-	$query = DB::query("SHOW TABLES LIKE '".DB::table('forum_post')."\_%'");
 	$maxtableid = 0;
-	while($table = DB::fetch($query)) {
+	foreach(C::t('forum_post')->show_table() as $table) {
 		list($tempkey, $tablename) = each($table);
 		$tableid = intval(gettableid($tablename));
 		if($tableid > $maxtableid) {
@@ -325,17 +299,13 @@ function getmaxposttableid() {
 
 function update_posttableids() {
 	$tableids = get_posttableids();
-	DB::insert('common_setting', array(
-		'skey' => 'posttableids',
-		'svalue' => serialize($tableids),
-	), false, true);
-	save_syscache('posttableids', $tableids);
+	C::t('common_setting')->update('posttableids', $tableids);
+	savecache('posttableids', $tableids);
 }
 
 function get_posttableids() {
 	$tableids = array(0);
-	$query = DB::query("SHOW TABLES LIKE '".DB::table('forum_post')."\_%'");
-	while($table = DB::fetch($query)) {
+	foreach(C::t('forum_post')->show_table() as $table) {
 		list($tempkey, $tablename) = each($table);
 		$tableid = gettableid($tablename);
 		if(!preg_match('/^\d+$/', $tableid)) {
@@ -350,60 +320,34 @@ function get_posttableids() {
 	return $tableids;
 }
 
-function gettablestatus($tablename, $formatsize = true) {
-	$status = DB::fetch_first("SHOW TABLE STATUS LIKE '".str_replace('_', '\_', $tablename)."'");
 
-	if($formatsize) {
-		$status['Data_length'] = sizecount($status['Data_length']);
-		$status['Index_length'] = sizecount($status['Index_length']);
-	}
-
-	return $status;
-}
 
 function gettablefields($table) {
 	static $tables = array();
 
 	if(!isset($tables[$table])) {
-		$tables[$table] = array();
-		$db = DB::object();
-		if($db->version() > '4.1') {
-			$query = $db->query("SHOW FULL COLUMNS FROM ".DB::table($table), 'SILENT');
-		} else {
-			$query = $db->query("SHOW COLUMNS FROM ".DB::table($table), 'SILENT');
-		}
-		while($field = @DB::fetch($query)) {
-			$tables[$table][$field['Field']] = $field;
-		}
+		$tables[$table] = C::t('forum_post')->show_table_columns($table);
 	}
 	return $tables[$table];
 }
 
-function movedate($query) {
+function movedate($tids) {
 	global $sourcesize, $tableid, $movesize, $targettableid, $hash, $tableindex, $threadtableids, $fieldstr, $fromtableid, $posttable_info;
-	$tids = array();
-	while($value = DB::fetch($query)) {
-		$tids[$value['tid']] = $value['tid'];
-	}
+
 	$fromtable = getposttable($fromtableid, true);
-	$condition = " tid IN(".dimplode($tids).")";
-	DB::query("INSERT INTO ".DB::table(getposttable($targettableid))." ($fieldstr) SELECT $fieldstr FROM $fromtable WHERE $condition", 'SILENT');
+	C::t('forum_post')->move_table($targettableid, $fieldstr, $fromtable, $tids);
 	if(DB::errno()) {
-		DB::delete(getposttable($targettableid), $condition);
+		C::t('forum_post')->delete_by_tid($targettableid, $tids);
 	} else {
 		foreach($threadtableids as $threadtableid) {
-			$table = $threadtableid ? "forum_thread_$threadtableid" : 'forum_thread';
-			DB::update($table, array(
-				'posttableid' => $targettableid,
-			), $condition);
-			if(DB::affected_rows() == count($tids)) {
+			$affected_rows = C::t('forum_thread')->update($tids, array('posttableid' => $targettableid), false, false, $threadtableid);
+			if($affected_rows == count($tids)) {
 				break;
 			}
 		}
-		DB::delete(getposttable($fromtableid), $condition);
-
+		C::t('forum_post')->delete_by_tid($fromtableid, $tids);
 	}
-	$status = gettablestatus(DB::table(getposttable($targettableid)), false);
+	$status = helper_dbtool::gettablestatus(getposttable($targettableid, true), false);
 	$targetsize = $sourcesize + $movesize * 1048576;
 	$nowdatasize = $targetsize - $status['Data_length'];
 

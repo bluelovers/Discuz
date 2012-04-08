@@ -4,14 +4,14 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: block_otherfriendlink.php 19683 2011-01-13 10:03:19Z zhangguosheng $
+ *      $Id: block_otherfriendlink.php 25525 2011-11-14 04:39:11Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
-class block_otherfriendlink {
+class block_otherfriendlink extends discuz_block {
 
 	var $setting = array();
 
@@ -64,6 +64,7 @@ class block_otherfriendlink {
 
 	function getdata($style, $parameter) {
 
+		$parameter = $this->cookparameter($parameter);
 		$titlelength = isset($parameter['titlelength']) ? intval($parameter['titlelength']) : 40;
 		$summarylength = isset($parameter['summarylength']) ? intval($parameter['summarylength']) : 80;
 		$type = !empty($parameter['type']) && is_array($parameter['type']) ? $parameter['type'] : array();
@@ -75,8 +76,8 @@ class block_otherfriendlink {
 		}
 		$type = intval($b, '2');
 		$list = array();
-		$query = DB::query('SELECT * FROM '.DB::table('common_friendlink')."  WHERE (`type` & '$type' > 0) ORDER BY displayorder");
-		while($data = DB::fetch($query)) {
+		$query = C::t('common_friendlink')->fetch_all_by_displayorder($type);
+		foreach ($query as $data) {
 			$list[] = array(
 				'id' => $data['id'],
 				'idtype' => 'flid',

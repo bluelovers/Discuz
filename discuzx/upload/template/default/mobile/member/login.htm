@@ -48,19 +48,7 @@
 </div>
 
 <!--{if $_G['setting']['pwdsafety']}-->
-<script type="text/javascript">
-<!--
-var pwmd5log = new Array();
-function pwmd5() {
-	numargs = pwmd5.arguments.length;
-	for(var i = 0; i < numargs; i++) {
-		if(!pwmd5log[pwmd5.arguments[i]] || $(pwmd5.arguments[i]).value.length != 32) {
-			pwmd5log[pwmd5.arguments[i]] = $(pwmd5.arguments[i]).value = hex_md5($(pwmd5.arguments[i]).value);
-		}
-	}
-}
-//-->
-</script>
+	<script type="text/javascript" src="{$_G['setting']['jspath']}md5.js?{VERHASH}" reload="1"></script>
 <!--{/if}-->
 <!--{eval updatesession();}-->
 <!--{subtemplate common/footer}-->

@@ -4,8 +4,12 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_intercat.php 18860 2010-12-07 09:19:42Z maruitao $
+ *      $Id: lang_intercat.php 27449 2012-02-01 05:32:35Z zhangguosheng $
  */
+
+if(!defined('IN_DISCUZ')) {
+	exit('Access Denied');
+}
 
 $lang = array
 (
@@ -16,6 +20,7 @@ $lang = array
 	'intercat_position' => '投放位置',
 	'intercat_position_comment' => '設置廣告在哪個分區的下方顯示',
 	'intercat_position_random' => '所有位置隨機',
+	'intercat_position_fav' => '收藏欄',
 );
 
 ?>

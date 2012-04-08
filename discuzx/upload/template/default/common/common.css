@@ -96,7 +96,7 @@ CSS 寫作注意事項：
 		caption, th { text-align: left; font-weight: 400; }
 	ul li, .xl li { list-style: none; }
 	h1, h2, h3, h4, h5, h6 { font-size: 1em; }
-	em, cite { font-style: normal; }
+	em, cite, i { font-style: normal; }
 	a { color: {LINK}; text-decoration: none; }
 		a:hover { text-decoration: underline; }
 		a img { border: none; }
@@ -149,7 +149,7 @@ CSS 寫作注意事項：
 	Last Modify:	lushnis
 */
 	hr.da { height: 0; border: none; border-top: 1px dashed {COMMONBORDER}; background: transparent; color: transparent; }
-	
+
 	/* [!]使用注意 */
 	hr.bk { margin-bottom: 10px !important; *margin-bottom: 2px !important; height: 0; border: none; border-top: 1px solid {WRAPBG}; background: transparent; color: transparent; }
 		.n .sd hr.bk { border-top-color: #F9F9F9; }
@@ -253,8 +253,8 @@ CSS 寫作注意事項：
 			.ntc_l .d:hover { background-position: 0 -20px; }
 
 /* 圓角 [!]此處考慮棄用 */
-	.brs, .avt img { -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px; }
-	.brm, .oshr { -moz-border-radius: 10px; -webkit-border-radius: 10px;  border-radius: 10px; }
+	.brs, .avt img, .oshr { -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px; }
+	.brm { -moz-border-radius: 10px; -webkit-border-radius: 10px;  border-radius: 10px; }
 	.brw { -moz-border-radius: 20px; -webkit-border-radius: 20px; border-radius: 20px;  }
 /*
 	Name:			mod_margin
@@ -378,6 +378,7 @@ CSS 寫作注意事項：
 		.ps				select
 		.oshr			share button
 		.ofav			fav button with oshr
+		.oivt			invite button with oshr
 		*/
 
 /* 必填項 */ .rq { color: red; }
@@ -399,7 +400,6 @@ CSS 寫作注意事項：
 		.pt { overflow-y: auto; }
 			div.pt { height: 100px; line-height: 100px; }
 		.ps, select { padding: 2px 2px 2px 1px; }
-			.ie8 .ps, .ie8 select { padding: 2px; }
 		/* 自動調整高度的 textarea by Pony */
 		.pts { vertical-align: top; overflow: hidden; }
 		.cmt .pts { width: 60%; }
@@ -428,7 +428,7 @@ CSS 寫作注意事項：
 
 	.pnc, a.pnc { border-color: #235994; background-color: #06C; background-position: 0 -48px; color: #FFF !important; }
 		.pnc:active { background-position: 0 -71px; }
-	
+
 	.pnpost .pn { height: 26px; }
 
 /*
@@ -478,8 +478,10 @@ CSS 寫作注意事項：
 		.sltm li:hover { color: {HIGHLIGHTLINK}; }
 		.sltm li.current { color: {NOTICETEXT}; }
 
-/* 分享按鈕 */ .oshr { float: right; margin-left: 5px; padding: 0 5px 0 22px; border: 1px solid; border-color: #CCC #A9A9A9 #A9A9A9 #CCC; background: {WRAPBG} url({IMGDIR}/oshr.png) no-repeat 5px 50%;  }
+/* 分享按鈕 */ .oshr { float: right; margin-left: 5px; padding: 0 5px 0 22px; border: 1px solid; border-color: #CCC #A9A9A9 #A9A9A9 #CCC; background: {WRAPBG} url({IMGDIR}/oshr.png) no-repeat 5px 50%; }
+				.oshr:hover { text-decoration: none; }
 /* 收藏按鈕 with oshr */ .ofav { background-image: url({IMGDIR}/fav.gif); }
+/* 邀請按鈕 with oshr */ .oivt { background-image: url({IMGDIR}/activitysmall.gif); }
 
 
 /*
@@ -576,7 +578,10 @@ CSS 寫作注意事項：
 		#toptb .pipe { float: left; display: none; }
 	#hd { border-bottom: {HEADERBORDER} solid {SPECIALBORDER}; {HEADERBGCODE} }
 		#hd .wp { padding: 10px 0 0; }
-			#diy-tg { width: 55px; background: url({STATICURL}image/diy/panel-toggle.png) no-repeat 100% 1px; text-indent: -9999px; overflow: hidden; }
+			#diy-tg { float: right; width: 55px; background: url({STATICURL}image/diy/panel-toggle.png) no-repeat 100% 1px; text-indent: -9999px; overflow: hidden; }
+				#diy-tg_menu { position: absolute; margin: -2px 0 0 -1px; padding: 6px 0; width: 72px; height: 48px; background: url({STATICURL}image/diy/panel-toggle-drop.png) no-repeat 0 0; text-align: center; }
+				#diy-tg_menu a { float: none !important; }
+			#toptb #diy-tg_menu { margin: -6px 0 0 -10px; }
 
 			.hdc { min-height: 70px; }
 				.ie6 .hdc { height: 70px; }
@@ -588,6 +593,7 @@ CSS 寫作注意事項：
 				.scbar_icon_td { width: 50px; background: url({IMGDIR}/search.png) no-repeat 0 -74px; }
 				.scbar_txt_td, .scbar_type_td { background: url({IMGDIR}/search.png) repeat-x 0 -222px; }
 					#scbar_txt { width: 400px; border: 1px solid #FFF; outline: none; font-size: 14px; }
+					.scbar_narrow #scbar_txt { width: 260px; }
 				.scbar_btn_td { width: 67px; background: url({IMGDIR}/search.png) no-repeat 0 -296px; text-align: center; }
 					#scbar_btn { margin: 0; padding: 0; border: none; background: transparent none; }
 				.scbar_type_td { background: url({IMGDIR}/search.png) no-repeat 0 -370px; }
@@ -595,22 +601,12 @@ CSS 寫作注意事項：
 						#scbar_type_menu { margin-top: -8px; }
 				#scbar_hot { padding-left: 8px; height: 45px; overflow: hidden; }
 					#scbar_hot strong, #scbar_hot a { float: left; margin-right: 8px; white-space: nowrap; }
-			
-			#sc { display: none; }
-				#sc_txt { margin-right: 0; width: 109px; border-right: none; outline: none; }
-				#sc_type_w { border-left: none; }
-				#sc_type { height: 17px !important; line-height: 17px; }
-					.ie8 #sc_type { line-height: 18px; }
-				#sc_btn { margin-right: 0; }
-				#sc_type_menu { margin: 2px 0 0 -5px; width: 100px; line-height: 1.5; }
-					#sc_type_menu a { float: none; }
-				#pt #sc { margin: 3px 0 0 0; }				
 
 			#nv { overflow: hidden; padding-left: 3px; height: 33px; {MENUBGCODE}; }
 				#nv li { float: left; padding-right: 1px; height: 33px; line-height: 33px; background: url({IMGDIR}/nv_a.png) no-repeat 100% 0; font-weight: 700; font-size: 14px; }
 					.ie_all #nv li { line-height: 36px; }
 					.ie6 #nv li { line-height: 33px; }
-					#nv li a { float: left; padding: 0 20px; height: 33px; }
+					#nv li a { float: left; padding: 0 15px; height: 33px; }
 						#nv li a { color: {MENUTEXT}; }
 						#nv li span { display: none; }
 					#nv li.a { margin-left: -1px; {MENUHOVERBGCODE}; }
@@ -655,6 +651,7 @@ CSS 寫作注意事項：
 	#ct { min-height: 300px; }
 		.ie6 #ct { height: 300px; }
 		.mn { overflow: hidden; }
+		.ct1 { border: 1px solid {WRAPBORDERCOLOR}; border-top: none; }
 		.ct2 .mn { float: left; width: 730px; margin-bottom: 1em; }
 		.ct2 .sd { float: right; width: 220px; overflow: hidden; _overflow-y: visible; }
 
@@ -734,6 +731,29 @@ CSS 寫作注意事項：
 			/* XP 或 Windows 7，IE 最高版本為 8 或 9，這幾種組合情況對字體的渲染存在差異，所以需要對背景進行微調，以適應更多情況 by Pony 11050511 */
 			.ie_all #pt .z em { background-position: 3px 9px; }
 			.ie_all .nvhm { background-position: -8px -120px; }
+/*
+	Name:			mod_userheader
+	Level:			Global
+	Sample:			div id="uhd"
+	Explain:		論壇皮膚下用戶頁面頭部
+	Last Modify:	lushnis
+*/
+#uhd { padding-top: 10px;border: 1px solid #CCC; border-bottom: none; background: {SPECIALBG}; }
+	#uhd .tb a { border-width: 1px 0; border-top-color: {SPECIALBG}; border-bottom-color: {WRAPBORDERCOLOR}; }
+	#uhd .tb .a a { border: 1px solid #CCC; border-bottom-color: #FFF; }
+	.ie6 #uhd .tb .a { position: relative; }
+	#uhd .mn { float: right; margin-right: 15px; margin-bottom: -30px; line-height: 28px; }
+		#uhd .mn a { padding: 2px 0 2px 20px; background: no-repeat 0 50%; color: {MIDTEXT}; }
+			#uhd .mn a:hover { color: {HIGHLIGHTLINK}; }
+			#uhd .mn .addflw a { background-image: url({IMGDIR}/flw_ico.png); }
+			#uhd .mn .addf a { background-image: url({STATICURL}image/feed/friend.gif); }
+			#uhd .mn .pm2 a { background-image: url({IMGDIR}/pmto.gif); }
+	#uhd .h { padding-left: 75px; }
+		#uhd .avt { display: inline; float: left; margin-left: -65px; }
+		#uhd .mt { padding-bottom: 0; }
+	#uhd .flw_hd { float: right; width: 260px; margin-right: 10px; margin-bottom: -30px; }
+		#uhd .tns th, #uhd .tns td { padding-left: 20px; text-align: left; }
+		#uhd .flw_hd .o { padding-left: 20px; }
 /* 統計數據 */
 .tns { padding: 10px 0; }
 	.tns table { width: 100%; }
@@ -741,6 +761,8 @@ CSS 寫作注意事項：
 		.sd .tns th, .sd .tns td { width: 110px !important; }
 		.tns th { border-right: 1px solid #CCC; }
 		.tns th p, .tns td p { font-size: 14px; margin: 0; }
+	.pls .tns { padding: 0 10px 10px; }
+		.pls .tns th p, .pls .tns td p { font-size: 12px; margin: 0; }
 
 /* 帶圖標頁面頭部 ih. --> icon header */
 	.ih .icn { float: left; width: 60px; }
@@ -769,16 +791,17 @@ CSS 寫作注意事項：
 	.tb .y { float: right; margin-right: 0; }
 		.tb .y a { border: none; background: transparent; }
 	.tb .o { margin: 1px 4px 0 2px; border: 1px solid #235994; }
-	.tb .o, .tb .o a { height: 23px; line-height: 23px; background: url({IMGDIR}/pn.png) repeat-x 0 -48px; }
+	.tb .o, .tb .o a { height: 23px; line-height: 23px; background: #06C url({IMGDIR}/pn.png) repeat-x 0 -48px; }
 		.tb .o a { padding: 0 15px; border: none; font-weight: 700; color: #FFF; }
 		.ie6 .tb .o a { float: left; }
 	.tb_h { margin: 0; padding: 0; background-color: {SPECIALBG}; }
 		.tb_h li { margin-right: 0; }
 		.tb_h a { border-top: none; border-left: none; }
+		.tb_h .o { margin-top: 2px; }
 	.tb_s { margin-top: 0; line-height: 26px; }
-		
+
 	/* 類似menu的Tab */
-.tbmu { padding: 10px; border-bottom: 1px dashed {COMMONBORDER}; }
+.tbmu { padding: 8px 10px 8px 0; border-bottom: 1px dashed {COMMONBORDER}; }
 	.tbmu a { color: {HIGHLIGHTLINK}; }
 	.tbmu .a { color: {LINK}; font-weight: 700; }
 	/* tab的強調信息提示 */
@@ -801,7 +824,7 @@ CSS 寫作注意事項：
 	/* 格子廣告 */ .a_t { margin-bottom: 10px; }
 		.a_t table { width: 100%; }
 		.a_t td { padding: 4px 15px; border: 1px solid {COMMONBORDER}; }
-	/* 帖內廣告 */ .a_pr { float: right; width: 120px; overflow: hidden; }
+	/* 帖內廣告 */ .a_pr { float: right; overflow: hidden; }
 		.a_pt, .a_pb { background: url({IMGDIR}/ad.gif) no-repeat 0 50%; margin-bottom: 6px; padding-left: 20px; zoom: 1; }
 	/* 漂浮廣告 */ .a_fl, .a_fr { float: right; position: fixed; top: 350px; z-index: 100; }
 		.a_fl { left: 0; }
@@ -875,7 +898,7 @@ CSS 寫作注意事項：
 		.mlm img { width: 120px; height: 120px; }
 	.mla li { width: 140px; height: 224px; }
 	.mla1 li { height: 150px; }
-		.mla .c { margin: 0 auto; width: 136px; height: 150px; background: url({IMGDIR}/gb.gif) no-repeat 0 0; }
+		.mla .c { margin: 0 auto; width: 136px; height: 150px; background: url({IMGDIR}/gb.gif) no-repeat 0 0; text-align: left; }
 			.mla .a { background-position: 0 100%; }
 			.mla .c a { display: block; padding: 14px 4px 3px 8px; width: 120px; height: 120px; overflow: hidden; }
 		.mla img { max-width: 120px; max-height: 120px; _width: expression(this.width > 120 && this.width>=this.height ? 120 : true); _height: expression(this.height > 120 && this.width<=this.height ? 120 : true); }
@@ -910,12 +933,12 @@ CSS 寫作注意事項：
 		.tbn .mt { padding: 10px; }
 
 /* 道具 magic */
-.mg_img { padding: 10px; width: 76px; height: 76px; background: url({IMGDIR}/magic_imgbg.gif) no-repeat 0 0; } 
+.mg_img { padding: 10px; width: 76px; height: 76px; background: url({IMGDIR}/magic_imgbg.gif) no-repeat 0 0; }
 
 /*
 	Name:			mod_link
 	Level:			Global
-	Dependent:		
+	Dependent:
 	Sample:			<ul class="tb cl">
 						<li class="a"><a href="#">Active Tab Item</a></li>
 						<li><a href="#">Tab Item</a></li>
@@ -942,6 +965,7 @@ CSS 寫作注意事項：
 			.fpd a.fqt { background-position: -140px -20px; }
 			.fpd a.fcd { background-position: -120px -20px; }
 			.fpd a.fsml { background-position: -20px -20px; }
+			.fpd a.fat { background-position: -140px 0; }
 		.tedt .area { padding: 4px; background: {WRAPBG}; zoom: 1; }
 		.tedt .pt { width: 100%; margin-right: 0; padding: 0 !important; border: none; background: {WRAPBG} none; }
 			.tedt .pt:focus { outline: none; -moz-box-shadow: none; }
@@ -1124,8 +1148,9 @@ CSS 寫作注意事項：
 
 .rfm { margin: 0 auto; width: 760px; border-bottom: 1px dotted {COMMONBORDER}; }
 		.rfm a { color: {HIGHLIGHTLINK}; }
-		.rfm .rq {  }
+		.rfm .rq {}
 		.rfm th, .rfm td { padding: 10px 2px; vertical-align: top; line-height: 24px; }
+			.rfm .tipwide { padding-top: 0; }
 		.rfm th { padding-right: 10px; width: 10em; text-align: right; }
 		.rfm .px { width: 220px; }
 			.rfm .px:focus { border-color: {HIGHLIGHTLINK}; background: #FFF; }
@@ -1143,7 +1168,16 @@ CSS 寫作注意事項：
 	.fwin .loginb button { margin-left: 11.3em; }
 	.nfl .f_c .loginb button { margin-left: 12em; }
 
-
+/*
+	Name:			mod_passlevel
+	Level:			Function
+	Explain:		密碼強度檢測
+	Last Modify:	lushnis
+*/
+	.passlevel { padding-left: 70px; background: url({IMGDIR}/passlevel.png) no-repeat 0 5px; }
+	.passlevel1 { background-position: 0 -35px; }
+	.passlevel2 { background-position: 0 -75px; }
+	.passlevel3 { background-position: 0 -115px; }
 
 .blr { width: 580px; margin: 20px auto 30px; }
 	.m_c .blr { margin: 0 auto; }
@@ -1204,7 +1238,7 @@ CSS 寫作注意事項：
 	#ls_fastloginfield_ctrl { line-height: 20px; border: none; background-color: transparent; background-position: 100% -1px; }
 		#ls_fastloginfield_ctrl:hover { background-position: 100% -24px; }
 	.psw_w { padding-left: 5px; }
-	
+
 	.fastlg_l { padding-right: 4px !important; border-right: 1px solid {SPECIALBG}; }
 
 /* 打招呼 by Pony */
@@ -1247,13 +1281,16 @@ CSS 寫作注意事項：
 	.pgs #newspecial, .pgs #newspecialtmp, .pgs #post_reply, .pgs #post_replytmp { float: left; margin-right: 5px; }
 	.pg { float: right; }
 	.pg, .pgb { line-height: 26px; }
-		.pg a, .pg strong, .pgb a { float: left; display: inline; margin-left: 4px; padding: 0 8px; height: 26px; border: 1px solid; border-color: {SPECIALBORDER}; background-color: {WRAPBG}; background-repeat: no-repeat; color: {LINK}; overflow: hidden; text-decoration: none; }
+		.pg a, .pg strong, .pgb a, .pg label { float: left; display: inline; margin-left: 4px; padding: 0 8px; height: 26px; border: 1px solid; border-color: {SPECIALBORDER}; background-color: {WRAPBG}; background-repeat: no-repeat; color: {LINK}; overflow: hidden; text-decoration: none; }
 			.pg a.nxt, .pgb a { padding: 0 10px; }
 			.pg a:hover, .pgb a:hover { border-color: {HIGHLIGHTLINK}; color: {HIGHLIGHTLINK}; }
 			.pg a.nxt { padding-right: 25px; background-image: url({IMGDIR}/arw_r.gif); background-position: 90% 50%; }
 			.pg a.prev { background-image: url({IMGDIR}/arw_l.gif); background-position: 50% 50%; }
 			.pg strong { background-color: {SPECIALBG}; }
 		.pgb a { padding-left: 25px; background-image: url({IMGDIR}/arw_l.gif); background-position: 10px 50%; }
+		.pg label { cursor: text; }
+			.ie6 .pg label { padding-top: 3px; height: 23px; }
+			.pg label .px { padding: 0; width: 25px; height: 16px; line-height: 16px; }
 	#pgt .pg, #pgt .pgb { margin-top: 5px; }
 /* 用於行動的按鈕 button action */
 .bac {margin: 0; padding: 0; width: 70px; height: 30px;line-height: 30px; color: {LINK}; overflow: hidden; text-decoration: none; background: url({IMGDIR}/pg_arw.png) no-repeat 0 0; text-align: center; text-indent: -7px; display: block;}
@@ -1271,18 +1308,25 @@ CSS 寫作注意事項：
 			* html .pc_inner span { display: inline-block; }
 				.pc_inner span a { color: #FFEA97; text-decoration: underline; }
 				.pc_inner span em { color: {LIGHTLINK}; font-size: 18px; font-weight: 400; }
-				.pc_inner span u { font-size: 10px; text-decoration: none; }				
+				.pc_inner span u { font-size: 10px; text-decoration: none; }
 				.pc_inner span em.desc { color: #930; }
 			.pc_btn img { opacity: 0.5; }
 				.pc_btn:hover img { opacity: 1; }
 	.pc_r { background-position: -30px 0; }
 
 /* 快速跳轉菜單 */
-	#fjump_menu dl { width: 200px; }
-		#fjump_menu dt { font-weight: 700; }
-		#fjump_menu dd { text-indent: 1em; }
-			#fjump_menu li.sub { text-indent: 2em; }
-			#fjump_menu li.current a { background-color: {COMMONBG}; }
+#fjump_menu { padding: 7px 0 10px 10px; background: {COMMONBG}; }
+	.ie6 #fjump_menu { width: expression(this.getElementsByTagName('li')[2] ? '600px' : (this.getElementsByTagName('li')[1] ? '400px' : '200px')); }
+	#fjump_menu .sch { position: absolute; top: 6px; right: 10px; }
+.jump_bdl { overflow: hidden; }
+	.jump_bdl li { float: left; overflow-x: hidden; overflow-y: auto; margin-right: 10px; padding: 5px; width: 178px; height: 300px; border: 1px solid {WRAPBORDERCOLOR}; background: {WRAPBG}; }
+	.bdl_title li { float: left; margin-right: 9px; padding: 0 1px; width: 189px; height: 33px; line-height: 23px; font-weight: 700; }
+		.bdl_title .px { width: 80px; }
+	.jump_bdl p { overflow: hidden; height: 25px; line-height: 25px; }
+		.jump_bdl .sub { text-indent: 1em; }
+		.jump_bdl .child { text-indent: 2em; }
+	.jump_bdl a { display: block; position: static !important; padding: 0 4px; text-decoration: none; color: {TABLETEXT}; }
+	.jump_bdl .a a, .jump_bdl .a a:hover { background-color: {SPECIALBG}; }
 
 /* 可用道具列表 by lushnis */
 	.mgcmn { width: 100px; }
@@ -1295,9 +1339,13 @@ CSS 寫作注意事項：
 
 
 /* 熱點：站長推薦內容，在頁面右下角彈出 */
-.focus { position: fixed; right: 10px; bottom: 10px; z-index: 300; overflow: hidden; width: 270px; background: {WRAPBG}; }
+.focus { position: fixed; right: 10px; bottom: 0; z-index: 300; overflow: hidden; width: 270px; background: {WRAPBG}; }
 	* html .focus { position: absolute; top: expression(offsetParent.scrollTop+document.documentElement.clientHeight-this.offsetHeight); }
+	.fctrl { margin-left: 10px; font-weight: 400; }
+		.fctrl img { margin-bottom: -4px; }
+		.fctrl em { display: inline-block; }
 	.focus .m img { width: 60px; height: 60px; }
+	.focus dt { padding-top: 0; }
 
 /* 分享的驗證碼（全局） by Pony */
 .m_c .sec .secq { display: block; margin: 5px 0 10px; }
@@ -1329,14 +1377,35 @@ CSS 寫作注意事項：
 
 /* 上傳彈出層 */
 .upfile { width: 220px; }
-	#uploadform { border: 1px dashed {SPECIALBORDER}; background: {SPECIALBG}; }
+	.uploadform { padding: 0 10px; border: 1px dashed {COMMONBORDER}; background: {COMMONBG}; }
+
+/*
+	Name:			mod_flashupload
+	Level:			Global
+	Explain:		Flash 上傳時的處理界面，結構參見 /static/js/fileprogress.js
+	Last Modify:	Pony 2012022813
+*/
+.progressWrapper { overflow: hidden; width: 100%; }
+.progressContainer { overflow: hidden; margin: 5px; padding: 4px; border: solid 1px #E8E8E8; background-color: #F7F7F7; }
+.message { overflow: hidden; margin: 1em 0; padding: 10px 20px; border: solid 1px #FD9; background-color: #FFC; } /* Message */
+.red { border: solid 1px #B50000; background-color: #FFEBEB; } /* Error */
+.green { border: solid 1px #DDF0DD; background-color: #EBFFEB; } /* Current */
+.blue { border: solid 1px #CEE2F2; background-color: #F0F5FF; } /* Complete */
+.progressName { overflow: hidden; white-space: nowrap; width: 323px; height: 18px; text-align: left; font-weight: 700; color: #555; }
+.progressBarInProgress, .progressBarComplete, .progressBarError { clear: both; margin-top: 2px; width: 0; height: 2px; background-color: blue; font-size: 0; }
+.progressBarComplete { visibility: hidden; width: 100%; background-color: green; }
+.progressBarError { visibility: hidden; width: 100%; background-color: red; }
+.progressBarStatus { white-space: nowrap; margin-top: 2px; width: 337px; text-align: left; }
+a.progressCancel { display: block; float: right; width: 14px; height: 14px; background: url({IMGDIR}/cancelbutton.gif) no-repeat -14px 0; font-size: 0; }
+	a.progressCancel:hover { background-position: 0 0; }
+.swfupload { vertical-align: top; }
 
 
 /* ------------------------------------------------------------------------ 拖拽及頁面 DIY */
 .frame, .frame-tab { margin-bottom: 10px; border: 1px solid {WRAPBORDERCOLOR}; background: {WRAPBG}; }
 	.title { padding: 0 10px; height: 32px; font-size: 14px; font-weight: 700; line-height: 32px; overflow: hidden; }
 		.frame-title, .frametitle, .tab-title { background: {COMMONBG} url({IMGDIR}/title.png) repeat-x 0 100%; }
-		
+
 	/* 新的框架結構 */
 	.frame-1-1-l, .frame-1-1-1-l, .frame-1-1-1-c, .frame-2-1-l, .frame-1-2-l, .frame-3-1-l, .frame-1-3-l { float: left; }
 	.frame-1-1-r, .frame-1-1-1-r, .frame-2-1-r, .frame-1-2-r, .frame-3-1-r, .frame-1-3-r { float: right; }
@@ -1369,7 +1438,7 @@ CSS 寫作注意事項：
 	.frame-1-1-1 .col-l { float: left; width: 33.3%; }
 	.frame-1-1-1 .col-c { float: left; width: 33.3%; }
 	.frame-1-1-1 .col-r { float: right; width: 33.3%; }
-	
+
 	.frame .frame-1-1-1 .col-l, .frame .frame-1-1-1 .col-c, .frame .frame-1-1-1 .col-r { padding: 0; width: 33%; }
 	.frame .frame-1-1 .col-l, .frame .frame-1-1 .col-r { width: 49.9%; }
 	/* End */
@@ -1507,12 +1576,6 @@ CSS 寫作注意事項：
 		.b_debate p { height: 1.5em; overflow: hidden; }
 	.b_hstab td { padding: 5px 0; border-bottom: 1px solid {COMMONBORDER}; }
 
-/* 主題分類 菜單 */
-.tsm { overflow: hidden; }
-	.tsm dt { float: left; padding: 2px 0; width: 64px; clear: left; }
-	.tsm dd { padding: 2px 0; overflow: hidden; }
-	.tsm li { float: left; margin-right: 6px; white-space: nowrap; }
-	.tsm .a a { padding: 0 2px; background: #C00; color: {LIGHTLINK}; }
 
 /*
 	Name:			mod_tip
@@ -1575,6 +1638,12 @@ em.hot { position: absolute; left: -2px; top: -2px; text-indent: -9999px; overfl
 .colorpx { margin: 0 -3px 0 3px; border-right: none; }
 
 /*
-DIY圖片幻燈片未加載時隱藏
+DIY圖片幻燈片未加載時隱藏,模塊標識隱藏
 */
-.slidebox {display: none; }
+.slidebox, .block-name {display: none; }
+
+.imgzoom_title { padding: 10px 0 0; color: #666; }
+.imgzoom_exif { position: absolute; left: 10px; bottom: 24px; padding: 0 6px; height: 18px; background: rgba(0,0,0,.6); text-align: left; line-height: 1.5; color: white;  overflow: hidden;}
+.imgzoom_exif_hover { height: auto; }
+.ie_all .imgzoom_exif, .imgzoom_exif_hover { background: #000; }
+.ie6 .imgzoom_exif { bottom: 39px; }

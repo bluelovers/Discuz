@@ -20,7 +20,7 @@ body { padding-top: 170px; }
 				#savecachemsg { float: right; padding-right: 5px; text-align: right; }
 		#controlnav { padding-left: 50px; height: 46px; background: transparent url({STATICURL}image/diy/t-diy.png) no-repeat 0 100%; line-height: 35px; }
 			#controlnav li { float: left; margin-top: 7px; margin-right: 5px; font-size: 14px; font-weight: 700; }
-				#controlnav li a { float: left; padding: 0 15px; }
+				#controlnav li a { float: left; padding: 0 15px; color: #333 !important; }
 			#controlnav li.current { background: url({STATICURL}image/diy/cp-nav-active.png) no-repeat 0 0; }
 				#controlnav li.current a { background: url({STATICURL}image/diy/cp-nav-active.png) no-repeat 100% -50px; }
 				#controlnav li.current span { margin-right: -8px; }
@@ -29,6 +29,7 @@ body { padding-top: 170px; }
 	#controlcontent { margin: 0 10px; padding: 10px; height: 110px; he\ight: 90px; border: solid #CCBDCC; border-width: 0 1px; background: #FFF; overflow: hidden; }
 	#controlcontent li { float: left; margin-right: 4px; }
 		#controlcontent li a, #controlcontent li label { float: left; width: 90px; height: 90px; text-align: center; cursor: pointer; }
+			#controlcontent li a { color: #333 !important; }
 			#controlcontent li a:hover, #controlcontent li label.hover { background: url({STATICURL}image/diy/cp-item-selected.png) no-repeat 0 0; text-decoration: none; }
 			#controlcontent li img, #controlcontent li label span { display: block; margin: 7px auto 0; width: 80px; height: 60px; text-align: center; }
 				#controlcontent li span { background: url({STATICURL}image/diy/cp-module-type.png) no-repeat 0 0; }
@@ -59,8 +60,8 @@ body { padding-top: 170px; }
 
 /* DIY 部分 */
 dl.diy dt { margin-top: -10px; margin-bottom: 10px; padding-bottom: 5px; border-bottom: 1px solid #CCC; line-height: 26px; }
-	dl.diy dt a { color: #06C; text-decoration: underline; }
-		dl.diy dt a.activity { color: #222; font-weight: 700; text-decoration: none; }
+	dl.diy dt a { color: #06C !important; text-decoration: underline; }
+		dl.diy dt a.activity { color: #333 !important; font-weight: 700; text-decoration: none; }
 	dl.diy dl { clear: both; padding: 0 10px; }
 		dl.diy dl dt { float: left; margin: 0; padding: 0; width: 5em; border: none; }
 		#positiontable td { width: 12px; height: 12px; border: 2px solid #FFF; background: #EEE; line-height: 0; overflow: hidden; cursor: pointer; }

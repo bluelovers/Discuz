@@ -155,19 +155,19 @@
 </dl>
 <!--{elseif $op == 'import'}-->
 <h3 class="flb">
-	<em id="return_$_G[gp_handlekey]">{lang import_frame}</em>
+	<em id="return_$_GET[handlekey]">{lang import_frame}</em>
 	<span>
-		<!--{if $_G[inajax]}--><a href="javascript:;" class="flbc" onclick="hideWindow('$_G[gp_handlekey]');return false;" title="{lang close}">{lang close}</a><!--{/if}-->
+		<!--{if $_G[inajax]}--><a href="javascript:;" class="flbc" onclick="hideWindow('$_GET[handlekey]');return false;" title="{lang close}">{lang close}</a><!--{/if}-->
 	</span>
 </h3>
 <ul class="tb cl">
-	<li{if empty($_G['gp_type'])} class="a"{/if} id="li_import_upload"><a onclick="showWindow('showimport', this.getAttribute('href'));" href="portal.php?mod=portalcp&ac=diy&op=import&type=0&tpl=$_GET['tpl']">{lang diy_uploadfile}</a></li>
-	<li{if $_G['gp_type'] == 1} class="a"{/if} id="li_import_system"><a onclick="showWindow('showimport', this.getAttribute('href'));" href="portal.php?mod=portalcp&ac=diy&op=import&type=1&tpl=$_GET['tpl']">{lang diy_systemfile}</a></li>
+	<li{if empty($_GET['type'])} class="a"{/if} id="li_import_upload"><a onclick="showWindow('showimport', this.getAttribute('href'));" href="portal.php?mod=portalcp&ac=diy&op=import&type=0&tpl=$_GET['tpl']">{lang diy_uploadfile}</a></li>
+	<li{if $_GET['type'] == 1} class="a"{/if} id="li_import_system"><a onclick="showWindow('showimport', this.getAttribute('href'));" href="portal.php?mod=portalcp&ac=diy&op=import&type=1&tpl=$_GET['tpl']">{lang diy_systemfile}</a></li>
 </ul>
 
-<form name="frameimport" id="frameimport" enctype="multipart/form-data" method="post" autocomplete="off" action="portal.php?mod=portalcp&ac=diy&op=import" onsubmit="ajaxpost('frameimport','return_$_G[gp_handlekey]','','onerror',$('frameimportbutton'));">
+<form name="frameimport" id="frameimport" enctype="multipart/form-data" method="post" autocomplete="off" action="portal.php?mod=portalcp&ac=diy&op=import" onsubmit="ajaxpost('frameimport','return_$_GET[handlekey]','','onerror',$('frameimportbutton'));">
 	<div class="c" style="width:420px;line-height:100px; overflow-y: auto; ">
-	<!--{if $_G['gp_type'] == 1}-->
+	<!--{if $_GET['type'] == 1}-->
 		<!--{if $xmlarr}-->
 		{lang import_select_file}:
 		<select id="importfilename" name="importfilename" class="">
@@ -183,7 +183,7 @@
 	<!--{/if}-->
 	</div>
 	<div class="o pns">
-		<input type="hidden" name="handlekey" value="$_G['gp_handlekey']" />
+		<input type="hidden" name="handlekey" value="$_GET['handlekey']" />
 		<input type="hidden" name="importsubmit" value="true" />
 		<input type="hidden" name="tpl" value="$_GET['tpl']" />
 		<input type="hidden" name="formhash" value="{FORMHASH}" />
@@ -191,7 +191,7 @@
 	</div>
 </form>
 <script type="text/javascript" reload="1">
-function succeedhandle_$_G['gp_handlekey'] (url, message, values) {
+function succeedhandle_$_GET['handlekey'] (url, message, values) {
 	if (values['status'] == '1') {
 		if (values['css']) spaceDiy.initDiyStyle(values['css']);
 
@@ -217,7 +217,7 @@ function succeedhandle_$_G['gp_handlekey'] (url, message, values) {
 		drag.blockForceUpdateBatch(blocks);
 	}
 
-	hideWindow('$_G['gp_handlekey']');
+	hideWindow('$_GET['handlekey']');
 }
 </script>
 <!--{/if}-->
