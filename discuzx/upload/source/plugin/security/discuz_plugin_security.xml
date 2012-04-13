@@ -40,7 +40,7 @@
 				</item>
 			</item>
 		</item>
-		<item id="version"><![CDATA[X2]]></item>
+		<item id="version"><![CDATA[X2.5]]></item>
 		<item id="installfile"><![CDATA[install.php]]></item>
 		<item id="upgradefile"><![CDATA[upgrade.php]]></item>
 		<item id="language">
