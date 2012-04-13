@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_forum_groupuser.php 28051 2012-02-21 10:36:56Z zhangguosheng $
+ *      $Id: table_forum_groupuser.php 29459 2012-04-13 01:45:21Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -43,11 +43,17 @@ class table_forum_groupuser extends discuz_table
 		}
 		return DB::fetch_all("SELECT * FROM %t WHERE fid=%d AND ".DB::field('uid', $uids), array($this->_table, $fid));
 	}
-	public function fetch_all_by_fid($fid) {
+	public function fetch_all_by_fid($fid, $level = 0) {
 		if(empty($fid)) {
 			return array();
 		}
-		return DB::fetch_all("SELECT * FROM ".DB::table('forum_groupuser')." WHERE fid=%d AND level>'0'", array($fid));
+		$levelsql = ' AND level>0';
+		if($level == 1) {
+			$levelsql = ' AND level=0';
+		} elseif($level == -1) {
+			$levelsql = '';
+		}
+		return DB::fetch_all("SELECT * FROM %t WHERE fid=%d".$levelsql, array($this->_table, $fid));
 	}
 	public function fetch_count_by_fid($fid, $level = 0) {
 		$levelsql = ' AND level>0';

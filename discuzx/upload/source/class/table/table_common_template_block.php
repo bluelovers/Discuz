@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_template_block.php 27846 2012-02-15 09:04:33Z zhangguosheng $
+ *      $Id: table_common_template_block.php 29445 2012-04-12 07:14:40Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -21,8 +21,9 @@ class table_common_template_block extends discuz_table
 		parent::__construct();
 	}
 
-	public function delete_by_targettplname($tpl, $tpldirectory) {
-		return $tpl ? DB::delete($this->_table, DB::field('targettplname', $tpl).' AND '.DB::field('tpldirectory', $tpldirectory)) : false;
+	public function delete_by_targettplname($tpl, $tpldirectory = NULL) {
+		$add = $tpldirectory !== NULL ? ' AND '.DB::field('tpldirectory', $tpldirectory) : '';
+		return $tpl ? DB::delete($this->_table, DB::field('targettplname', $tpl).$add) : false;
 	}
 
 	public function fetch_targettplname_by_bid($bid) {
@@ -48,8 +49,9 @@ class table_common_template_block extends discuz_table
 		return ($bids = dintval($bids, true)) ? DB::fetch_all('SELECT * FROM '.DB::table($this->_table).' WHERE '.DB::field('bid', $bids), null, 'bid') : array();
 	}
 
-	public function fetch_all_by_targettplname($targettplname, $tpldirectory) {
-		return DB::fetch_all('SELECT * FROM %t WHERE targettplname=%s AND tpldirectory=%s', array($this->_table, $targettplname, $tpldirectory), 'bid');
+	public function fetch_all_by_targettplname($targettplname, $tpldirectory = NULL) {
+		$add = ($tpldirectory !== NULL) ? ' AND '.DB::field('tpldirectory', $tpldirectory) : '';
+		return DB::fetch_all('SELECT * FROM %t WHERE targettplname=%s'.$add, array($this->_table, $targettplname), 'bid');
 	}
 
 	public function insert_batch($targettplname, $tpldirectory, $bids) {

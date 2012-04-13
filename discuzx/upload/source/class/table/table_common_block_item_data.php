@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_block_item_data.php 27846 2012-02-15 09:04:33Z zhangguosheng $
+ *      $Id: table_common_block_item_data.php 29446 2012-04-12 07:46:32Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -58,7 +58,7 @@ class table_common_block_item_data extends discuz_table
 
 	public function delete_by_dataid_bid($dataids, $bid) {
 		if(($dataids = dintval($dataids, true)) && ($dataids = DB::fetch_all('SELECT dataid FROM %t WHERE dataid IN (%n) AND bid=%d', array($this->_table, $dataids, $bid), $this->_pk))) {
-			$this->delete($dataids);
+			$this->delete(array_keys($dataids));
 		}
 	}
 
