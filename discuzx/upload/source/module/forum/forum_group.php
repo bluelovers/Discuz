@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_group.php 29316 2012-04-01 07:51:49Z liulanbo $
+ *      $Id: forum_group.php 29459 2012-04-13 01:45:21Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -481,7 +481,7 @@ if($action == 'index') {
 			$checktype = intval($_GET['checktype']);
 		} elseif(getgpc('checkall') == 1 || getgpc('checkall') == 2) {
 			$checktype = $_GET['checkall'];
-			$query = C::t('forum_groupuser')->fetch_all_by_fid($_G['fid']);
+			$query = C::t('forum_groupuser')->fetch_all_by_fid($_G['fid'], 1);
 			foreach($query as $row) {
 				$checkusers[] = $row['uid'];
 			}

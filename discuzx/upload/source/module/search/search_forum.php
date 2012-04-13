@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: search_forum.php 29236 2012-03-30 05:34:47Z chenmengshu $
+ *      $Id: search_forum.php 29447 2012-04-12 08:15:15Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -69,8 +69,9 @@ if($mySearchData['status'] && !$srchfrom && !$searchid) {
 		dheader('Location: index.php');
 	}
 	$appService = Cloud::loadClass('Service_App');
-	if($appService->getCloudAppStatus('search')) {
+	if($appService->getCloudAppStatus('search') && $searchparams) {
 		$source = 'discuz';
+		$cloudSource = array('collectionsearch', 'hotsearch');
 		if(!empty($_GET['srhlocality'])) {
 			$sourcetype = explode('::', $_GET['srhlocality']);
 			if($sourcetype[0] == 'forum') {
@@ -84,8 +85,8 @@ if($mySearchData['status'] && !$srchfrom && !$searchid) {
 			} elseif($sourcetype[0] == 'misc' && $sourcetype[1] == 'ranklist') {
 				$source = 'toplist';
 			}
-		} elseif($_GET['source'] == 'hotsearch') {
-			$source = 'hotsearch';
+		} elseif(in_array($_GET['source'], $cloudSource)) {
+			$source = $_GET['source'];
 		}
 
 		$params = array();
