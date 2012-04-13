@@ -4,14 +4,14 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_group.php 28586 2012-03-05 07:41:37Z liulanbo $
+ *      $Id: function_group.php 29394 2012-04-10 07:26:16Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
-function delgroupcache($fid = 0, $cachearray) {
+function delgroupcache($fid, $cachearray) {
 	C::t('forum_groupfield')->delete_by_type($cachearray, $fid);
 }
 
@@ -183,7 +183,7 @@ function get_viewedgroup() {
 	return $groupviewed_list;
 }
 
-function getgroupthread($fid, $type, $timestamp = 0, $num = 10, $privacy = 0) {
+function getgroupthread($fid, $type, $timestamp = 0, $num = 10) {
 	$typearray = array('replies', 'views', 'dateline', 'lastpost', 'digest');
 	$type = in_array($type, $typearray) ? $type : '';
 
@@ -241,7 +241,7 @@ function getgroupcache($fid, $typearray = array(), $timestamp = 0, $num = 10, $p
 				$num = $type == 'activityuser' ? 50 : 8;
 				$groupcache[$type]['data'] = C::t('forum_groupuser')->groupuserlist($fid, $userdataarray[$type], $num, '', "AND level>'0'");
 			} else {
-				$groupcache[$type]['data'] = getgroupthread($fid, $type, $timestamp, $num, $privacy);
+				$groupcache[$type]['data'] = getgroupthread($fid, $type, $timestamp, $num);
 			}
 			if(!$force && $fid) {
 				C::t('forum_groupfield')->insert(array('fid' => $fid, 'dateline' => TIMESTAMP, 'type' => $type, 'data' => serialize($groupcache[$type])), false, true);
@@ -252,7 +252,7 @@ function getgroupcache($fid, $typearray = array(), $timestamp = 0, $num = 10, $p
 	return $groupcache;
 }
 
-function getgroupranking($fid = '', $nowranking = '', $num = 100) {
+function getgroupranking($fid = '', $nowranking = '') {
 	$topgroup = $rankingdata = $topyesterday = array();
 	$ranking = 1;
 	$query = C::t('forum_forum')->fetch_all_group_for_ranking();
@@ -305,7 +305,6 @@ function write_groupviewed($fid) {
 }
 
 function update_groupmoderators($fid) {
-	global $_G;
 	if(empty($fid)) return false;
 	$moderators = C::t('forum_groupuser')->groupuserlist($fid, 'level_join', 0, 0, array('level' => array('1', '2')), array('username', 'level'));
 	if(!empty($moderators)) {

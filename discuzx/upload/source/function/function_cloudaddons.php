@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_cloudaddons.php 29227 2012-03-30 01:31:28Z monkey $
+ *      $Id: function_cloudaddons.php 29396 2012-04-10 08:11:12Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -53,7 +53,7 @@ function cloudaddons_check() {
 }
 
 function cloudaddons_open($extra, $post = '') {
-	return dfsockopen(cloudaddons_url('&from=s').$extra, 0, $post, '', false, CLOUDADDONS_DOWNLOAD_IP);
+	return dfsockopen(cloudaddons_url('&from=s').$extra, 0, $post, '', false, CLOUDADDONS_DOWNLOAD_IP, 999);
 }
 
 function cloudaddons_pluginlogo_url($id) {

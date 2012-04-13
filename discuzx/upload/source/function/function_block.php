@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_block.php 29236 2012-03-30 05:34:47Z chenmengshu $
+ *      $Id: function_block.php 29445 2012-04-12 07:14:40Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -1085,6 +1085,9 @@ function update_template_block($targettplname, $tpldirectory, $blocks) {
 			$oldbids = array_keys(C::t('common_template_block')->fetch_all_by_targettplname($targettplname, $tpldirectory));
 			$newaddbids = array_diff($blocks, $oldbids);
 			C::t('common_template_block')->delete_by_targettplname($targettplname, $tpldirectory);
+			if($tpldirectory === './template/default') {
+				C::t('common_template_block')->delete_by_targettplname($targettplname, '');
+			}
 			$blocks = array_unique($blocks);
 			C::t('common_template_block')->insert_batch($targettplname, $tpldirectory, $blocks);
 			if(!empty($newaddbids)) {
