@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: post_editpost.php 29001 2012-03-22 03:59:39Z chenmengshu $
+ *      $Id: post_editpost.php 29454 2012-04-12 10:23:18Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -1098,9 +1098,11 @@ if(!submitcheck('editsubmit')) {
 			showmessage('post_edit_delete_succeed', "forum.php?mod=viewthread&tid=$_G[tid]&page=$_GET[page]&extra=$extra".($vid && $isfirstpost ? "&vid=$vid" : ''), $param);
 		} else {
 			if($isfirstpost && $modnewthreads) {
+				C::t('forum_post')->update($thread['posttableid'], $pid, array('status' => 4), false, false, null, -2, null, 0);
 				updatemoderate('tid', $_G['tid']);
 				showmessage('edit_newthread_mod_succeed', $redirecturl, $param);
 			} elseif(!$isfirstpost && $modnewreplies) {
+				C::t('forum_post')->update($thread['posttableid'], $pid, array('status' => 4), false, false, null, -2, null, 0);
 				updatemoderate('pid', $pid);
 				showmessage('edit_reply_mod_succeed', "forum.php?mod=forumdisplay&fid=$_G[fid]", $param);
 			} else {

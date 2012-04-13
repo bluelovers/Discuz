@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_pm.php 28297 2012-02-27 08:35:59Z monkey $
+ *      $Id: space_pm.php 29461 2012-04-13 02:14:54Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -165,12 +165,12 @@ if($_GET['subop'] == 'view') {
 		$newpmarr = uc_pm_checknew($_G['uid'], 1);
 		$newpm = $newpmarr['newpm'];
 	}
-	if($newpm && $_G['setting']['cloud_status'] &&  $_G['setting']['connect']['allow'] && $_G['member']['conisbind']) {
-		$msgService = Cloud::loadClass('Cloud_Service_Client_Message');
-		$msgService->setMsgFlag($_G['uid'], $_G['timestamp']);
-	}
 	$newpmcount = $newpm + $announcepm;
 	if($_G['member']['newpm']) {
+		if($newpm && $_G['setting']['cloud_status'] &&  $_G['setting']['connect']['allow'] && $_G['member']['conisbind']) {
+			$msgService = Cloud::loadClass('Cloud_Service_Client_Message');
+			$msgService->setMsgFlag($_G['uid'], $_G['timestamp']);
+		}
 		C::t('common_member')->update($_G['uid'], array('newpm' => 0));
 		uc_pm_ignore($_G['uid']);
 	}

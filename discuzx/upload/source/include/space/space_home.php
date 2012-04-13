@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_home.php 29153 2012-03-27 10:10:33Z zhengqingpeng $
+ *      $Id: space_home.php 29462 2012-04-13 02:21:59Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -140,7 +140,6 @@ if(!IS_ROBOT) {
 
 		} else {
 
-			if(empty($space['feedfriend'])) $_GET['type'] = 'me';
 
 			if($_GET['type'] == 'me') {
 				$uids = $_G['uid'];

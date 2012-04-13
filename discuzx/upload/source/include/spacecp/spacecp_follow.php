@@ -3,7 +3,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_follow.php 28801 2012-03-13 08:50:13Z zhengqingpeng $
+ *      $Id: spacecp_follow.php 29473 2012-04-13 07:12:18Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -122,6 +122,9 @@ if($op == 'add') {
 		$_POST['replysubmit'] = true;
 		$_GET['fid'] = $fid;
 		$_GET['action'] = 'newthread';
+		if(empty($_GET['syncbbs'])) {
+			$_GET['subject'] = cutstr($_GET['message'], 75, '');
+		}
 		include_once libfile('function/forum');
 		require_once libfile('function/post');
 		loadforum();
