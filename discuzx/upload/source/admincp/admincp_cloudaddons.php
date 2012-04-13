@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_cloudaddons.php 29225 2012-03-29 10:52:56Z monkey $
+ *      $Id: admincp_cloudaddons.php 29371 2012-04-09 06:36:06Z monkey $
  */
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
@@ -13,6 +13,10 @@ if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 require_once libfile('function/cloudaddons');
 
 cpheader();
+
+if(!$admincp->isfounder) {
+	cpmsg('noaccess_isfounder', '', 'error');
+}
 
 if(!$operation) {
 
