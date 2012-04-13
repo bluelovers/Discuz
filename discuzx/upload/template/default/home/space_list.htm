@@ -13,7 +13,7 @@
 			</p>
 			<div class="xg1">
 				<a href="javascript:;" id="interaction_$value[uid]" onmouseover="showMenu(this.id);" class="showmenu">{lang interactive}</a>
-				<!--{if isset($value['follow']) && $key != $_G['uid']}--><span class="pipe">|</span><a href="home.php?mod=spacecp&ac=follow&op={if $value['follow']}del{else}add{/if}&fuid=$value[uid]" id="a_followmod_$key" onclick="showWindow('followmod', this.href, 'get', 0)"><!--{if $value['follow']}-->{lang follow_del}<!--{else}-->{lang follow_add}TA<!--{/if}--></a><!--{/if}-->
+				<!--{if isset($value['follow']) && $key != $_G['uid']}--><span class="pipe">|</span><a href="home.php?mod=spacecp&ac=follow&op={if $value['follow']}del{else}add{/if}&hash={FORMHASH}&fuid=$value[uid]" id="a_followmod_$key" onclick="showWindow('followmod', this.href, 'get', 0)"><!--{if $value['follow']}-->{lang follow_del}<!--{else}-->{lang follow_add}TA<!--{/if}--></a><!--{/if}-->
 				<!--{if isset($value['isfriend']) && !$value['isfriend']}--><span class="pipe">|</span><a href="home.php?mod=spacecp&ac=friend&op=add&uid=$value[uid]" id="a_friend_$key" onclick="showWindow('friend_$key', this.href, 'get', 0)" title="{lang add_friend}">{lang add_friend}</a><!--{/if}-->
 			</div>
 			<div id="interaction_$value[uid]_menu" class="p_pop" style="display: none; width: 80px;">
