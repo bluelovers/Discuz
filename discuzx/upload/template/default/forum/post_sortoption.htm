@@ -66,7 +66,7 @@
 				<!--{if in_array($option['type'], array('number', 'text', 'email', 'calendar', 'image', 'url', 'range', 'upload', 'range'))}-->
 					<!--{if $option['type'] == 'calendar'}-->
 						<script type="text/javascript" src="{$_G['setting']['jspath']}calendar.js?{VERHASH}"></script>
-						<input type="text" name="typeoption[{$option[identifier]}]" id="typeoption_$option[identifier]" tabindex="1" size="$option[inputsize]" onBlur="checkoption('$option[identifier]', '$option[required]', '$option[type]')" value="$option[value]" onclick="showcalendar(event, this, false)" $option[unchangeable] class="px"/>
+						<input type="text" name="typeoption[{$option[identifier]}]" id="typeoption_$option[identifier]" tabindex="1" size="$option[inputsize]" onchange="checkoption('$option[identifier]', '$option[required]', '$option[type]')" value="$option[value]" onclick="showcalendar(event, this, false)" $option[unchangeable] class="px"/>
 					<!--{elseif $option['type'] == 'image'}-->
 						<!--{if !($option[unchangeable] && $option['value'])}-->
 						<button type="button" class="pn" onclick="uploadWindow(function (aid, url){sortaid_{$option[identifier]}_upload(aid, url)})"><em><!--{if $option['value']}-->{lang update}<!--{else}-->{lang upload}<!--{/if}--></em></button>
