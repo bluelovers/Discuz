@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: helper_form.php 28804 2012-03-13 09:51:37Z monkey $
+ *      $Id: helper_form.php 29417 2012-04-11 06:03:47Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -151,7 +151,7 @@ class helper_form {
 		$return = array();
 
 		(strpos($message, '[/img]') || strpos($message, '[/flash]')) && $message = preg_replace("/\[img[^\]]*\]\s*([^\[\<\r\n]+?)\s*\[\/img\]|\[flash[^\]]*\]\s*([^\[\<\r\n]+?)\s*\[\/flash\]/is", '', $message);
-		if(preg_match_all("/((https?|ftp|gopher|news|telnet|rtsp|mms|callto|bctp|thunder|qqdl|synacast){1}:\/\/|www\.)[^\[\]\"']+/i", $message, $urllist)) {
+		if(preg_match_all("/((https?|ftp|gopher|news|telnet|rtsp|mms|callto|bctp|thunder|qqdl|synacast){1}:\/\/|www\.)[^ \[\]\"']+/i", $message, $urllist)) {
 			foreach($urllist[0] as $key => $val) {
 				$val = trim($val);
 				$return[0][$key] = $val;
@@ -163,7 +163,6 @@ class helper_form {
 				}
 			}
 		}
-
 		return $return;
 	}
 
