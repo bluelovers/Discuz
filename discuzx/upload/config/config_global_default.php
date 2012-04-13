@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: config_global_default.php 27685 2012-02-09 09:10:16Z zhangguosheng $
+ *      $Id: config_global_default.php 29404 2012-04-11 02:21:21Z cnteacher $
  */
 
 $_config = array();
@@ -139,7 +139,7 @@ $_config['output']['ajaxvalidate']		= 0;		// 是否嚴格驗證 Ajax 頁面的�
 $_config['output']['iecompatible']		= 0;		// 頁面 IE 兼容模式
 
 // COOKIE 設置
-$_config['cookie']['cookiepre'] 		= 'uchome_'; 	// COOKIE前綴
+$_config['cookie']['cookiepre'] 		= 'discuz_'; 	// COOKIE前綴
 $_config['cookie']['cookiedomain'] 		= ''; 		// COOKIE作用域
 $_config['cookie']['cookiepath'] 		= '/'; 		// COOKIE作用路徑
 
@@ -159,7 +159,7 @@ $_config['admincp']['founder']			= '1';		// 站點創始人：擁有站點管理
 								// 可以使用uid，也可以使用用戶名；多個創始人之間請使用逗號「,」分開;
 $_config['admincp']['forcesecques']		= 0;		// 管理人員必須設置安全提問才能進入系統設置 0=否, 1=是[安全]
 $_config['admincp']['checkip']			= 1;		// 後台管理操作是否驗證管理員的 IP, 1=是[安全], 0=否。僅在管理員無法登陸後台時設置 0。
-$_config['admincp']['runquery']			= 1;		// 是否允許後台運行 SQL 語句 1=是 0=否[安全]
+$_config['admincp']['runquery']			= 0;		// 是否允許後台運行 SQL 語句 1=是 0=否[安全]
 $_config['admincp']['dbimport']			= 1;		// 是否允許後台恢復論壇數據  1=是 0=否[安全]
 
 /**
