@@ -92,6 +92,7 @@
 						<tr>
 						<!--{eval $favorderid = 0;}-->
 						<!--{loop $forum_favlist $key $favorite}-->
+						<!--{if $favforumlist[$favorite[id]]}-->
 						<!--{eval $forum=$favforumlist[$favorite[id]];}-->
 						<!--{eval $forumurl = !empty($forum['domain']) && !empty($_G['setting']['domain']['root']['forum']) ? 'http://'.$forum['domain'].'.'.$_G['setting']['domain']['root']['forum'] : 'forum.php?mod=forumdisplay&fid='.$forum['fid'];}-->
 							<!--{if $forumcolumns>1}-->
@@ -170,7 +171,7 @@
 							<tr class="fl_row">
 
 							<!--{/if}-->
-
+						<!--{/if}-->
 						<!--{/loop}-->
 						<!--{if ($columnspad = $favorderid % $forumcolumns) > 0}--><!--{echo str_repeat('<td class="fl_g"'.($forumcolwidth ? " width=\"$forumcolwidth\"" : '').'></td>', $forumcolumns - $columnspad);}--><!--{/if}-->
 						</tr>
