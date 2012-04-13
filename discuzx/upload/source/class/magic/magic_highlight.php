@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: magic_highlight.php 29236 2012-03-30 05:34:47Z chenmengshu $
+ *      $Id: magic_highlight.php 29373 2012-04-09 07:55:30Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -92,7 +92,7 @@ class magic_highlight {
 
 	function show() {
 		global $_G;
-		$id = !empty($_GET['id']) ? uhtmlspecialchars($_GET['id']) : '';
+		$id = !empty($_GET['id']) ? dhtmlspecialchars($_GET['id']) : '';
 		$idtype = !empty($_GET['idtype']) ? $_GET['idtype'] : '';
 		if(!in_array($idtype, $this->idtypearray)) {
 			showmessage(lang('magic/highlight', 'highlight_info_notype'), dreferer(), array(), array('showdialog' => 1, 'locationtime' => true));
