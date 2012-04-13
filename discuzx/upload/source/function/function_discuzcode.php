@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_discuzcode.php 29307 2012-04-01 06:36:42Z zhangguosheng $
+ *      $Id: function_discuzcode.php 29363 2012-04-09 02:50:41Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -287,7 +287,7 @@ function parseed2k($url) {
 	$name = addslashes($name);
 	if($type == 'file') {
 		$ed2kid = 'ed2k_'.random(3);
-		return '<a id="'.$ed2kid.'" href="'.$url.'" target="_blank"></a><script language="javascript">$(\''.$ed2kid.'\').innerHTML=htmlspecialchars(unescape(decodeURIComponent(\''.$name.'\')))+\' ('.sizecount($size).')\';</script>';
+		return '<a id="'.$ed2kid.'" href="'.$url.'" target="_blank">'.dhtmlspecialchars(urldecode($name)).' ('.sizecount($size).')</a><script language="javascript">$(\''.$ed2kid.'\').innerHTML=htmlspecialchars(unescape(decodeURIComponent(\''.$name.'\')))+\' ('.sizecount($size).')\';</script>';
 	} else {
 		return '<a href="'.$url.'" target="_blank">'.$url.'</a>';
 	}
