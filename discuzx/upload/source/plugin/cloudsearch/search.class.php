@@ -4,7 +4,7 @@
  *      [Discuz! X] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: search.class.php 29285 2012-03-31 09:47:46Z zhouxiaobo $
+ *      $Id: search.class.php 29372 2012-04-09 07:24:47Z zhouxiaobo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -113,6 +113,8 @@ class plugin_cloudsearch {
 									$my_opt = $_GET['sticklevel'] ? 'sticky' : 'update';
 								} elseif($operation == 'digest') {
 									$my_opt = $_GET['digestlevel'] ? 'digest' : 'update';
+								} elseif($operation == 'highlight') {
+									$my_opt = $_GET['highlight_color'] ? 'highlight' : 'update';
 								} else {
 									$my_opt = $operation;
 								}

@@ -9,7 +9,8 @@ $recwords[$k+1] = $v;
 }{eval }}{eval }}
 <!--{block return}-->
 	<!--{if is_array($recwords) && count($recwords) > 0 && !empty($searchparams[url])}-->
-		<div class="bm bmw fl bmb">
+	<div class="fl bm">
+		<div class="bm bmw hottopic cl">
 			<div class="bm_h cl">
 				<span class="y"></span>
 				<h2>{if $_G['fid']}{lang cloudsearch:current}{/if}{lang cloudsearch:hottopic}</h2>
@@ -38,6 +39,7 @@ $recwords[$k+1] = $v;
 				</ul>
 			</div>
 		</div>
+	</div>
 	<!--{/if}-->
 
 <!--{/block}-->

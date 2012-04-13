@@ -3,7 +3,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cloudsearch.inc.php 28962 2012-03-21 02:15:57Z zhouxiaobo $
+ *      $Id: cloudsearch.inc.php 29366 2012-04-09 03:00:26Z zhouxiaobo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -24,7 +24,7 @@ if($_G['cookie']['ffids' . $_G['uid']]) {
 
 require_once libfile('function/forum');
 $forbiddenFids = array();
-foreach(C::t('#cloudsearch#forum_forum')->fetch_all_forum_by_formula_for_plugin() as $forum) {
+foreach(C::t('#cloudsearch#forum_forum_plugin')->fetch_all_forum_by_formula_for_plugin() as $forum) {
 	if (check_formula_forum_isforbidden($forum['formulaperm'])) {
 		$forbiddenFids[] = $forum['fid'];
 	}

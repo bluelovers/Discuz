@@ -4,7 +4,7 @@
  *	  [Discuz! X] (C)2001-2099 Comsenz Inc.
  *	  This is NOT a freeware, use is subject to license terms
  *
- *	  $Id: forumdisplay.inc.php 28679 2012-03-07 11:02:09Z yangli $
+ *	  $Id: forumdisplay.inc.php 29449 2012-04-12 08:31:54Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -43,9 +43,9 @@ if($_GET['cloudop'] == 'relatedthread') {
         }
     }
 
-	include template('common/header_ajax');
+	include template('common/header');
 	echo tpl_cloudsearch_relate_threadlist_js_output($threadlist, $_GET['fid'] ? urlencode(strip_tags($_G['cache']['forums'][$_GET['fid']]['name'])) : urlencode(strip_tags($_GET['keyword'])), $searchparams, $srchotquery);
-	include template('common/footer_ajax');
+	include template('common/footer');
 }
 
 dexit();
