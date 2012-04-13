@@ -17,8 +17,9 @@
 				</div>
 			</div>
 		</div>
+		<!--{eval $focusi = 0;}-->
 		<!--{loop $_G['setting']['focus'][$_G[basescript]] $id}-->
-				<div class="bm_c" style="display: none" id="focus_$id">
+				<div class="bm_c" style="display: none" id="focus_$focusi">
 					<dl class="xld cl bbda">
 						<dt><a href="{$_G['cache']['focus']['data'][$id]['url']}" class="xi2" target="_blank">$_G['cache']['focus']['data'][$id]['subject']</a></dt>
 						<!--{if $_G['cache']['focus']['data'][$id][image]}-->
@@ -28,15 +29,11 @@
 					</dl>
 					<p class="ptn cl"><a href="{$_G['cache']['focus']['data'][$id]['url']}" class="xi2 y" target="_blank">{lang focus_show} &raquo;</a></p>
 				</div>
+		<!--{eval $focusi ++;}-->
 		<!--{/loop}-->
 		<script type="text/javascript">
-			//var focusautoshow = 1;
-			var focus = new Array();
-			<!--{loop $_G['setting']['focus'][$_G[basescript]] $key $id}-->
-				focus[$key] = '$id';
-			<!--{/loop}-->
 			var focusnum = $focusnum;
-			if('undefined' == typeof(focus[1])) {
+			if(focusnum < 2) {
 				$('focus_ctrl').style.display = 'none';
 			}
 			if(!$('focuscur').innerHTML) {
