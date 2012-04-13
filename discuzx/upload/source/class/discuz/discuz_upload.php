@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: discuz_upload.php 29236 2012-03-30 05:34:47Z chenmengshu $
+ *      $Id: discuz_upload.php 29368 2012-04-09 04:05:31Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -200,7 +200,6 @@ Class discuz_upload{
 			fclose($fp_s); fclose($fp_t);
 			$succeed = true;
 		}
-
 		if($succeed)  {
 			$this->errorcode = 0;
 			@chmod($target, 0644); @unlink($source);
