@@ -194,7 +194,7 @@
 									<!--{avatar($value[uid],small)}-->
 								</a>
 								<p><a href="home.php?mod=space&uid=$value[uid]" title="$value[username]">$value[username]</a></p>
-								<span><span title="$value[regdate]">$value[regdate]</span></span>
+								<span>$value[regdate]</span>
 							</li>
 							<!--{/loop}-->
 						</ul>
@@ -490,7 +490,7 @@
 				<!--{/loop}-->
 				</div>
 			<!--{else}-->
-				<p class="emp">{lang no_feed}</p>
+				<p class="emp"><!--{if $_GET[view] == 'app' && $_G['setting']['my_app_status']}-->{lang no_app_feed}<!--{else}-->{lang no_feed}<!--{/if}--></p>
 			<!--{/if}-->
 
 			<!--{if $filtercount}-->
