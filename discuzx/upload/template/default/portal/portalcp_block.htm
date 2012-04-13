@@ -52,6 +52,9 @@
 				drag.stopSlide(bid);
 				if($(bid+'_content')) $(bid+'_content').parentNode.removeChild($(bid+'_content'));
 				$(bid).innerHTML = obj.childNodes[0].innerHTML;
+				if(s.indexOf('runslideshow();') > 0) {
+					runslideshow();
+				}
 			} else {
 				$(eleid).parentNode.replaceChild(obj.childNodes[0],$(eleid));
 				openTitle = 1;
