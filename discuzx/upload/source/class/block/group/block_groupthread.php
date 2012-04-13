@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: block_groupthread.php 27934 2012-02-17 02:36:31Z zhangguosheng $
+ *      $Id: block_groupthread.php 29437 2012-04-12 05:24:35Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -309,12 +309,15 @@ class block_groupthread extends discuz_block {
 		if($orderby == 'heats') {
 			$sql .= " AND t.heats>'0'";
 		}
+		$sqlfrom = $sqlfield = $joinmethodpic = '';
 
-		$sqlfield = '';
-		$sqlfrom = "FROM `".DB::table('forum_thread')."` t";
-		$joinmethod = empty($tids) ? 'INNER' : 'LEFT';
 		if($picrequired) {
-			$sqlfrom .= " $joinmethod JOIN `".DB::table('forum_threadimage')."` ti ON t.tid=ti.tid AND ti.tid>0";
+			$joinmethodpic = 'INNER';
+		} else if($style['getpic']) {
+			$joinmethodpic = 'LEFT';
+		}
+		if($joinmethodpic) {
+			$sqlfrom .= " $joinmethodpic JOIN `".DB::table('forum_threadimage')."` ti ON t.tid=ti.tid AND ti.tid>0";
 			$sqlfield = ', ti.attachment as attachmenturl, ti.remote';
 		}
 		if(empty($fids)) {
@@ -323,6 +326,7 @@ class block_groupthread extends discuz_block {
 		}
 
 		$query = DB::query("SELECT t.* $sqlfield
+			FROM `".DB::table('forum_thread')."` t
 			$sqlfrom WHERE t.readperm='0'
 			$sql
 			AND t.displayorder>='0'
