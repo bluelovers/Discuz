@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_group.php 29236 2012-03-30 05:34:47Z chenmengshu $
+ *      $Id: admincp_group.php 29459 2012-04-13 01:45:21Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -559,12 +559,12 @@ var rowtypedata = [
 				}
 
 				$targetusers = $newgroupusers = array();
-				$query = C::t('forum_groupuser')->fetch_all_by_fid($targetgroup);
+				$query = C::t('forum_groupuser')->fetch_all_by_fid($targetgroup, -1);
 				foreach($query as $row) {
 					$targetusers[$row['uid']] = $row['uid'];
 				}
 				$adduser = 0;
-				$query = C::t('forum_groupuser')->fetch_all_by_fid($sourcefid);
+				$query = C::t('forum_groupuser')->fetch_all_by_fid($sourcefid, -1);
 				foreach($query as $row) {
 					if(empty($targetusers[$row['uid']])) {
 						$newgroupusers[$row[uid]] = daddslashes($row['username']);
