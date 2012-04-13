@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: switch.inc.php 29236 2012-03-30 05:34:47Z chenmengshu $
+ *      $Id: switch.inc.php 29364 2012-04-09 02:51:41Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -109,7 +109,7 @@ $olddiscuz_userss = $_G['member']['username'];
 if(!$user) {
 	$newuid = C::t('common_member')->fetch_uid_by_username($_GET['username']);
 	if(C::t('#myrepeats#myrepeats')->count_by_uid_username($newuid, $olddiscuz_userss)) {
-		$username = dhtmlspecialchars($_GET['username']);
+		$username = htmlspecialchars($_GET['username']);
 		include template('myrepeats:switch_login');
 		exit;
 	}

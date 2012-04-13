@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp.inc.php 29236 2012-03-30 05:34:47Z chenmengshu $
+ *      $Id: admincp.inc.php 29364 2012-04-09 02:51:41Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -70,7 +70,7 @@ loadcache('usergroups');
 
 showtableheader();
 showformheader('plugins&operation=config&do='.$pluginid.'&identifier=myrepeats&pmod=admincp', 'repeatsubmit');
-showsubmit('repeatsubmit', $Plang['search'], $lang['username'].': <input name="srchusername" value="'.dhtmlspecialchars($_GET['srchusername']).'" class="txt" />&nbsp;&nbsp;'.$Plang['repeat'].': <input name="srchrepeat" value="'.dhtmlspecialchars($_GET['srchrepeat']).'" class="txt" />', $searchtext);
+showsubmit('repeatsubmit', $Plang['search'], $lang['username'].': <input name="srchusername" value="'.htmlspecialchars($_GET['srchusername']).'" class="txt" />&nbsp;&nbsp;'.$Plang['repeat'].': <input name="srchrepeat" value="'.htmlspecialchars($_GET['srchrepeat']).'" class="txt" />', $searchtext);
 showformfooter();
 
 $statselect = '<select onchange="location.href=\''.ADMINSCRIPT.'?action=plugins&operation=config&do='.$pluginid.'&identifier=myrepeats&pmod=admincp'.$extra.'&status=\' + this.value">';
@@ -96,7 +96,7 @@ if(!$resultempty) {
 		$i++;
 		echo '<tr><td><a href="'.ADMINSCRIPT.'?action=plugins&operation=config&do='.$pluginid.'&identifier=myrepeats&pmod=admincp&srchuid='.$myrepeat['uid'].'">'.$users[$myrepeat['uid']]['username'].'</a></td>'.
 			'<td>'.$_G['cache']['usergroups'][$users[$myrepeat['uid']]['groupid']]['grouptitle'].'</td>'.
-			'<td><a href="'.ADMINSCRIPT.'?action=plugins&operation=config&do='.$pluginid.'&identifier=myrepeats&pmod=admincp&srchrepeat='.rawurlencode($myrepeat['username']).'" title="'.dhtmlspecialchars($myrepeat['comment']).'">'.$myrepeat['username'].'</a>'.'</td>'.
+			'<td><a href="'.ADMINSCRIPT.'?action=plugins&operation=config&do='.$pluginid.'&identifier=myrepeats&pmod=admincp&srchrepeat='.rawurlencode($myrepeat['username']).'" title="'.htmlspecialchars($myrepeat['comment']).'">'.$myrepeat['username'].'</a>'.'</td>'.
 			'<td>'.($myrepeat['lastswitch'] ? $myrepeat['lastswitch'] : '').'</td>'.
 			'<td><a id="d'.$i.'" onclick="ajaxget(this.href, this.id, \'\');return false" href="'.ADMINSCRIPT.'?action=plugins&operation=config&do='.$pluginid.'&identifier=myrepeats&pmod=admincp&uid='.$myrepeat['uid'].'&username='.$myrepeat['usernameenc'].'&op=lock">'.$opstr.'</a></td>'.
 			'<td><a id="p'.$i.'" onclick="ajaxget(this.href, this.id, \'\');return false" href="'.ADMINSCRIPT.'?action=plugins&operation=config&do='.$pluginid.'&identifier=myrepeats&pmod=admincp&uid='.$myrepeat['uid'].'&username='.$myrepeat['usernameenc'].'&op=delete">['.$lang['delete'].']</a></td></tr>';
