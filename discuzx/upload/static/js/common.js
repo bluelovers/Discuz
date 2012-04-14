@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: common.js 29315 2012-04-01 07:35:57Z zhengqingpeng $
+	$Id: common.js 29361 2012-04-09 02:43:46Z liulanbo $
 */
 
 var BROWSER = {};
@@ -2077,7 +2077,7 @@ function showfocus(ftype, autoshow) {
 		}
 	}
 	$('focuscur').innerHTML = id;
-	$('focus_con').innerHTML = $('focus_'+focus[(id-1)]).innerHTML;
+	$('focus_con').innerHTML = $('focus_'+(id-1)).innerHTML;
 }
 
 function rateStarHover(target,level) {

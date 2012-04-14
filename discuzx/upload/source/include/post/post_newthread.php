@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: post_newthread.php 28920 2012-03-20 01:44:27Z svn_project_zhangjie $
+ *      $Id: post_newthread.php 29473 2012-04-13 07:12:18Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -124,7 +124,7 @@ if(!submitcheck('topicsubmit', 0, $seccodecheck, $secqaacheck)) {
 } else {
 
 	if(trim($subject) == '') {
-		$subject = cutstr($message, 75, '');
+		showmessage('post_sm_isnull');
 	}
 
 	if(!$sortid && !$special && trim($message) == '') {

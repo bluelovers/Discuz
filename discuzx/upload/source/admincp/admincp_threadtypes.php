@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_threadtypes.php 29245 2012-03-30 10:59:43Z liulanbo $
+ *      $Id: admincp_threadtypes.php 29387 2012-04-10 02:21:02Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -791,7 +791,7 @@ EOT;
 		echo '<div id="ttype">'.
 			$showoption.
 			'<div id="ttype_tip"></div>'.
-			'<br /><textarea cols="100" rows="15" id="ttypetemplate" name="typetemplate" style="width: 95%;" onkeyup="textareasize(this)">'.$threadtype['template'].'</textarea>'.
+			'<br /><textarea cols="100" rows="15" id="ttypetemplate" name="typetemplate" style="width: 95%;" onkeyup="textareasize(this)">'.dhtmlspecialchars($threadtype['template']).'</textarea>'.
 			'</div>';
 
 		echo '<div id="stype" style="display:none">'.
@@ -817,13 +817,13 @@ EOT;
 			'<br />'.
 			$showoption.
 			'<div id="stype_tip"></div>'.
-			'<br /><textarea cols="100" rows="15" id="stypetemplate" name="stypetemplate" style="width: 95%;" onkeyup="textareasize(this)">'.$threadtype['stemplate'].'</textarea>'.
+			'<br /><textarea cols="100" rows="15" id="stypetemplate" name="stypetemplate" style="width: 95%;" onkeyup="textareasize(this)">'.dhtmlspecialchars($threadtype['stemplate']).'</textarea>'.
 			'</div>';
 
 		echo '<div id="ptype" style="display:none">'.
 			$showoption.
 			'<div id="ptype_tip"></div>'.
-			'<br /><textarea cols="100" rows="15" id="ptypetemplate" name="ptypetemplate" style="width: 95%;" onkeyup="textareasize(this)">'.$threadtype['ptemplate'].'</textarea>'.
+			'<br /><textarea cols="100" rows="15" id="ptypetemplate" name="ptypetemplate" style="width: 95%;" onkeyup="textareasize(this)">'.dhtmlspecialchars($threadtype['ptemplate']).'</textarea>'.
 			'</div>';
 
 		echo '<div id="btype" style="display:none">'.
@@ -839,7 +839,7 @@ EOT;
 			'<br />'.
 			$showoption.
 			'<div id="btype_tip"></div>'.
-			'<br /><textarea cols="100" rows="15" id="btypetemplate" name="btypetemplate" style="width: 95%;" onkeyup="textareasize(this)">'.$threadtype['btemplate'].'</textarea>'.
+			'<br /><textarea cols="100" rows="15" id="btypetemplate" name="btypetemplate" style="width: 95%;" onkeyup="textareasize(this)">'.dhtmlspecialchars($threadtype['btemplate']).'</textarea>'.
 			'</div>'.
 			'<input type="submit" class="btn" name="sorttemplatesubmit" value="'.$lang['submit'].'"></form>';
 

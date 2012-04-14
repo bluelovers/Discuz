@@ -4,7 +4,7 @@
  *		[Discuz! X] (C)2001-2099 Comsenz Inc.
  *		This is NOT a freeware, use is subject to license terms
  *
- *		$Id: connect.class.php 29265 2012-03-31 06:03:26Z yexinhao $
+ *		$Id: connect.class.php 29471 2012-04-13 06:54:01Z houdelei $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -111,12 +111,16 @@ class plugin_qqconnect extends plugin_qqconnect_base {
 			if($returnsrc || $size && $size != 'middle' || $uid != $avataruid) {
 				return;
 			}
-			if(!$_G['member']['conopenid']) {
-				$connectService = Cloud::loadClass('Service_Connect');
-				$connectService->connectMergeMember();
+
+			$connectUserInfo = array();
+			if ($uid) {
+				$connectUserInfo = C::t('#qqconnect#common_member_connect')->fetch($uid);
 			}
-			if($_G['member']['conisqqshow'] && $_G['member']['conopenid']) {
-				$_G['hookavatar'] = $this->_qqshow_img($_G['member']['conopenid']);
+
+			if ($connectUserInfo) {
+				if($connectUserInfo['conisqqshow'] && $connectUserInfo['conopenid']) {
+					$_G['hookavatar'] = $this->_qqshow_img($connectUserInfo['conopenid']);
+				}
 			}
 		}
 	}

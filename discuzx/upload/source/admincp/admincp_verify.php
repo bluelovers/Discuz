@@ -3,7 +3,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_verify.php 29236 2012-03-30 05:34:47Z chenmengshu $
+ *      $Id: admincp_verify.php 29362 2012-04-09 02:44:29Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -385,7 +385,7 @@ EOF;
 					$members = C::t('common_member')->fetch_all($verifyuids, false, 0);
 					$profiles = C::t('common_member_profile')->fetch_all($verifyuids, false, 0);
 					foreach($verifyusers as $uid => $value) {
-						$value = array_merge($value, $members[$uid], $profiles[$uids]);
+						$value = array_merge($value, $members[$uid], $profiles[$uid]);
 						$str = $common = '';
 						foreach($fields as $key => $field) {
 							if(in_array($key, array('constellation', 'zodiac', 'birthyear', 'birthmonth', 'birthprovince', 'birthdist', 'birthcommunity', 'resideprovince', 'residedist', 'residecommunity'))) {
@@ -413,6 +413,9 @@ EOF;
 					header('Content-Disposition: attachment; filename='.$filename);
 					header('Pragma: no-cache');
 					header('Expires: 0');
+					if($_G['charset'] != 'gbk') {
+						$verifylist = diconv($verifylist, $_G['charset'], 'GBK');
+					}
 					echo $verifylist;
 					exit();
 				} else {

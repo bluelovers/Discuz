@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_tag.php 27769 2012-02-14 06:29:36Z liulanbo $
+ *      $Id: table_common_tag.php 29434 2012-04-12 04:14:25Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -35,13 +35,7 @@ class table_common_tag extends discuz_table
 		if($returncount) {
 			return DB::result_first("SELECT count(*) FROM %t WHERE $statussql $namesql", $data);
 		}
-		if($startlimit) {
-			$limitsql = 'LIMIT '.intval($startlimit);
-			if($count) {
-				$limitsql .= ', '.intval($count);
-			}
-		}
-		return DB::fetch_all("SELECT * FROM %t WHERE $statussql $namesql ORDER BY tagid ASC $limitsql", $data);
+		return DB::fetch_all("SELECT * FROM %t WHERE $statussql $namesql ORDER BY tagid ASC ".DB::limit($startlimit, $count), $data);
 	}
 
 	public function insert($tagname, $status = 0) {

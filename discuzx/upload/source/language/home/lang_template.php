@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_template.php 29183 2012-03-28 06:39:26Z zhengqingpeng $
+ *      $Id: lang_template.php 29462 2012-04-13 02:21:59Z zhengqingpeng $
  *
  *      This file is automatically generate
  */
@@ -499,6 +499,7 @@ $lang = array (
   'new_join_members' => '新加入会员',
   'newest_feed' => '最新动态',
   'no_feed' => '还没有相关动态',
+  'no_app_feed' => '还没有相关应用动态，<a href="home.php?mod=space&do=friend">添加好友能为您的在玩游戏时带来更多的互动</a>',
   'open' => '展开',
   'own' => '我在玩的',
   'profile_completed' => '您的资料已完成',

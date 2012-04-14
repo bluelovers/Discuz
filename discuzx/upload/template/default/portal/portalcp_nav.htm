@@ -1,6 +1,6 @@
 <div class="tbn">
-	<ul>
 	<h2 class="mt bbda"><!--{if $_G['setting']['portalstatus'] }-->{lang portal_manage}<!--{else}-->{lang portal_block_manage}<!--{/if}--></h2>
+	<ul>
 	<!--{if $_G['setting']['portalstatus'] }-->
 		<!--{if $admincp2 || $_G['group']['allowmanagearticle']}--><li{if $ac == 'index'} class="a"{/if}><a href="portal.php?mod=portalcp&ac=index">{lang category_management}</a></li><!--{/if}-->
 		<!--{if $admincp2 || $admincp3 || $_G['group']['allowmanagearticle'] || $_G['group']['allowpostarticle']}--><li{if $ac == 'category'} class="a"{/if}><a href="portal.php?mod=portalcp&ac=category">{lang article_manage}</a></li><!--{/if}-->

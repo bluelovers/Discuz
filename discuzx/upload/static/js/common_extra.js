@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: common_extra.js 28605 2012-03-06 03:52:11Z monkey $
+	$Id: common_extra.js 29415 2012-04-11 05:20:28Z zhangguosheng $
 */
 
 function _relatedlinks(rlinkmsgid) {
@@ -279,7 +279,7 @@ function _zoom(obj, zimg, nocover, pn, showexif) {
 	var cover = !nocover ? 1 : 0;
 	var pn = !pn ? 0 : 1;
 	var maxh = (document.documentElement.clientHeight ? document.documentElement.clientHeight : document.body.clientHeight) - 70;
-	var loadCheck = function (obj) {;
+	var loadCheck = function (obj) {
 		if(obj.complete) {
 			var imgw = loading.width;
 			var imgh = loading.height;
@@ -424,7 +424,7 @@ function _zoom(obj, zimg, nocover, pn, showexif) {
 					adjustTimerCount = 0;
 					doane(e);return;
 				}
-				step = 4-parseInt(imgw/ele.width);
+				step = 4-parseInt(imgw/ele.width) || 2;
 			}
 			if(BROWSER.ie && BROWSER.ie<7) { step *= 5;}
 			wheelDelta = e.wheelDelta;

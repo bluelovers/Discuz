@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portalcp_block.php 29236 2012-03-30 05:34:47Z chenmengshu $
+ *      $Id: portalcp_block.php 29446 2012-04-12 07:46:32Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -344,7 +344,9 @@ if($op == 'block') {
 	if($start<0) $start = 0;
 
 	if(submitcheck('deletesubmit')) {
-		C::t('common_block_item_data')->delete_by_dataid_bid($dataids, $bid);
+		if(!empty($_POST['ids'])) {
+			C::t('common_block_item_data')->delete_by_dataid_bid($_POST['ids'], $bid);
+		}
 		showmessage('do_success', "portal.php?mod=portalcp&ac=block&op=itemdata&bid=$bid&page=$page");
 	}
 
@@ -692,7 +694,7 @@ if($op == 'block') {
 	}
 	if(in_array($block['blockclass'], array('forum_thread', 'portal_article', 'group_thread', 'space_blog'), true)) {
 		$picdatas = array();
-		$prefix = ($pic['remote'] ? $_G['setting']['ftp']['attachurl'] : $_G['setting']['attachurl']);
+		$prefix = ($item['picflag'] == 2 ? $_G['setting']['ftp']['attachurl'] : $_G['setting']['attachurl']);
 		$itemfields['pics'] = array();
 		$first = true;
 

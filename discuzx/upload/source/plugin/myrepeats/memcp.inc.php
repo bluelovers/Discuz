@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: memcp.inc.php 29236 2012-03-30 05:34:47Z chenmengshu $
+ *      $Id: memcp.inc.php 29364 2012-04-09 02:51:41Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -34,16 +34,14 @@ if(!$permusers && $singleprem) {
 }
 
 if($_GET['pluginop'] == 'add' && submitcheck('adduser')) {
-	if(empty($_GET['usernamenew']) || empty($_GET['passwordnew'])) {
-		showmessage('myrepeats:user_nonexistence', 'home.php?mod=spacecp&ac=plugin&id=myrepeats:memcp');
-	}
 	if($singleprem && in_array($_GET['usernamenew'], $permusers) || !$singleprem) {
 		$usernamenew = addslashes(strip_tags($_GET['usernamenew']));
 		$logindata = addslashes(authcode($_GET['passwordnew']."\t".$_GET['questionidnew']."\t".$_GET['answernew'], 'ENCODE', $_G['config']['security']['authkey']));
 		if(C::t('#myrepeats#myrepeats')->count_by_uid_username($_G['uid'], $usernamenew)) {
-			C::t('#myrepeats#myrepeats')->update_logindata_by_uid_username($_G['uid'], $usernamenew, $logindata);
+			DB::query("UPDATE ".DB::table('myrepeats')." SET logindata='$logindata' WHERE uid='$_G[uid]' AND username='$usernamenew'");
 		} else {
-			C::t('#myrepeats#myrepeats')->insert(array('uid' => $_G['uid'], 'username' => $usernamenew, 'logindata' => $logindata, 'comment' => strip_tags($_GET['commentnew'])));
+			$_GET['commentnew'] = addslashes($_GET['commentnew']);
+			DB::query("INSERT INTO ".DB::table('myrepeats')." (uid, username, logindata, comment) VALUES ('$_G[uid]', '$usernamenew', '$logindata', '".strip_tags($_GET['commentnew'])."')");
 		}
 		dsetcookie('mrn', '');
 		dsetcookie('mrd', '');
@@ -62,13 +60,13 @@ if($_GET['pluginop'] == 'add' && submitcheck('adduser')) {
 	showmessage('myrepeats:updateuser_succeed', 'home.php?mod=spacecp&ac=plugin&id=myrepeats:memcp');
 }
 
-$username = empty($_GET['username']) ? '' : dhtmlspecialchars($_GET['username']);
+$username = empty($_GET['username']) ? '' : htmlspecialchars($_GET['username']);
 
 $repeatusers = array();
 foreach(C::t('#myrepeats#myrepeats')->fetch_all_by_uid($_G['uid']) as $myrepeat) {
 	$myrepeat['lastswitch'] = $myrepeat['lastswitch'] ? dgmdate($myrepeat['lastswitch']) : '';
 	$myrepeat['usernameenc'] = rawurlencode($myrepeat['username']);
-	$myrepeat['comment'] = dhtmlspecialchars($myrepeat['comment']);
+	$myrepeat['comment'] = htmlspecialchars($myrepeat['comment']);
 	$repeatusers[] = $myrepeat;
 }
 

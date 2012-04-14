@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: magic_namepost.php 29236 2012-03-30 05:34:47Z chenmengshu $
+ *      $Id: magic_namepost.php 29373 2012-04-09 07:55:30Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -54,7 +54,7 @@ class magic_namepost {
 		if(empty($id)) {
 			showmessage(lang('magic/namepost', 'namepost_info_nonexistence'));
 		}
-		$idtype = !empty($_GET['idtype']) ? uhtmlspecialchars($_GET['idtype']) : '';
+		$idtype = !empty($_GET['idtype']) ? dhtmlspecialchars($_GET['idtype']) : '';
 		if(!in_array($idtype, array('pid', 'cid'))) {
 			showmessage(lang('magic/namepost', 'namepost_use_error'));
 		}
@@ -85,8 +85,8 @@ class magic_namepost {
 
 	function show() {
 		global $_G;
-		$id = !empty($_GET['id']) ? uhtmlspecialchars($_GET['id']) : '';
-		$idtype = !empty($_GET['idtype']) ? uhtmlspecialchars($_GET['idtype']) : '';
+		$id = !empty($_GET['id']) ? dhtmlspecialchars($_GET['id']) : '';
+		$idtype = !empty($_GET['idtype']) ? dhtmlspecialchars($_GET['idtype']) : '';
 		if($idtype == 'pid') {
 			list($id, $_G['tid']) = explode(':', $id);
 			if($id && $_G['tid']) {
@@ -108,8 +108,8 @@ class magic_namepost {
 
 	function buy() {
 		global $_G;
-		$id = !empty($_GET['id']) ? uhtmlspecialchars($_GET['id']) : '';
-		$idtype = !empty($_GET['idtype']) ? uhtmlspecialchars($_GET['idtype']) : '';
+		$id = !empty($_GET['id']) ? dhtmlspecialchars($_GET['id']) : '';
+		$idtype = !empty($_GET['idtype']) ? dhtmlspecialchars($_GET['idtype']) : '';
 		if(!empty($id) && $_GET['idtype'] == 'pid') {
 			list($id, $_G['tid']) = explode(':', $id);
 			$post = getpostinfo(intval($id), 'pid', array('p.fid', 'p.authorid'));

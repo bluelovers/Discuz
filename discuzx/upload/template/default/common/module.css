@@ -346,12 +346,19 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 		#f_pst .upfl td { padding: 4px 0; }
 		#f_pst .atds { width: 100px; }
 		#f_pst .px { padding: 2px; }
-	/* 手机发帖的相关样式 by Lushnis */
-	.mobile-type { position: absolute; margin-left: 103px; margin-top: -5px; width: 58px; height: 80px; background: url({IMGDIR}/mobile-type.png) no-repeat 100% 100%; }
-			.mobile-type a { display: block; width: 46px; height: 80px; background: url({IMGDIR}/mobile-type.png) no-repeat 0 0; }
-				.mobile-type-2 a { background-position: 0 -80px; }
-				.mobile-type-3 a { background-position: 0 -160px; }
-				.mobile-type-4 a { background-position: 0 -240px; }
+	/*
+		Name:			mod_mobile-type
+		Level:			Function
+		Explain:		手机发帖的相关样式
+		Author:			Lushnis
+		Last Modify:	Pony 1204111343
+	*/
+	.mobile-type { position: absolute; margin: -5px 0 -85px 103px; width: 58px; height: 80px; background: url({IMGDIR}/mobile-type.png) no-repeat 100% 100%; }
+		.ie6 .mobile-type, .ie7 .mobile-type { margin-left: 88px; }
+		.mobile-type a { display: block; width: 46px; height: 80px; background: url({IMGDIR}/mobile-type.png) no-repeat 0 0; }
+			.mobile-type-2 a { background-position: 0 -80px; }
+			.mobile-type-3 a { background-position: 0 -160px; }
+			.mobile-type-4 a { background-position: 0 -240px; }
 		.ie6 .mobile-type, .ie6 .mobile-type a { background-image: url({IMGDIR}/mobile-type-ie6.png) !important; }
 	.mobile-location { padding-left: 20px; background: url({IMGDIR}/mobile-attach-2.png) no-repeat 0 0; }
 /** end **/

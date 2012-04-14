@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: Restful.php 29274 2012-03-31 08:03:58Z yexinhao $
+ *      $Id: Restful.php 29399 2012-04-10 09:25:17Z songlixin $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -106,7 +106,6 @@ abstract class Cloud_Service_Client_Restful {
 	}
 
 	protected function _callMethod($method, $args, $isBatch = false) {
-
 		$this->errorCode = 0;
 		$this->errorMessage = '';
 		$url = $this->_url;

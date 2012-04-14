@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: magic_open.php 29236 2012-03-30 05:34:47Z chenmengshu $
+ *      $Id: magic_open.php 29373 2012-04-09 07:55:30Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -73,7 +73,7 @@ class magic_open {
 
 	function show() {
 		global $_G;
-		$tid = !empty($_GET['id']) ? uhtmlspecialchars($_GET['id']) : '';
+		$tid = !empty($_GET['id']) ? dhtmlspecialchars($_GET['id']) : '';
 		if($tid) {
 			$thread = getpostinfo($_GET['id'], 'tid', array('fid', 'authorid'));
 			$this->_check($thread);

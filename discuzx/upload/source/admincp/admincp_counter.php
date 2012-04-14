@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_counter.php 28831 2012-03-14 08:30:27Z monkey $
+ *      $Id: admincp_counter.php 29424 2012-04-11 09:15:37Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -205,7 +205,7 @@ if(submitcheck('forumsubmit', 1)) {
 	$optionvalues = array();
 
 	$optionvalues = $sortids = array();
-	foreach(C::t('forum_typevar')->fetch_all_by_search_optiontype(1, array('radio', 'select', 'number')) as $row) {
+	foreach(C::t('forum_typevar')->fetch_all_by_search_optiontype(1, array('checkbox', 'radio', 'select', 'number')) as $row) {
 		$optionvalues[$row['sortid']][$row['identifier']] = $row['type'];
 		$optionids[$row['sortid']][$row['optionid']] = $row['identifier'];
 		$searchs[$row['sortid']][$row['optionid']] = $row['search'];
@@ -229,7 +229,7 @@ if(submitcheck('forumsubmit', 1)) {
 
 		$tables = C::t('forum_optionvalue')->showcolumns($sortid);
 		foreach($optionids[$sortid] as $optionid => $identifier) {
-			if(!$tables[$identifier] && (in_array($options[$identifier], array('radio', 'select', 'number')) || $search[$optionid])) {
+			if(!$tables[$identifier] && (in_array($options[$identifier], array('checkbox', 'radio', 'select', 'number')) || $search[$optionid])) {
 				$fieldname = $identifier;
 				if(in_array($options[$identifier], array('radio'))) {
 					$fieldtype = 'smallint(6) UNSIGNED NOT NULL DEFAULT \'0\'';
@@ -377,7 +377,7 @@ if(submitcheck('forumsubmit', 1)) {
 	foreach($queryf as $group) {
 		$processed = 1;
 		$groupnum = C::t('forum_forum')->fetch_groupnum_by_fup($group['fid']);
-		C::t('forum_forumfield')->update_groupnum($group['fid'], $groupnum);
+		C::t('forum_forumfield')->update($group['fid'], array('groupnum' => intval($groupnum)));
 	}
 
 	if($processed) {

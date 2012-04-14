@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_forumdisplay.php 29236 2012-03-30 05:34:47Z chenmengshu $
+ *      $Id: forum_forumdisplay.php 29464 2012-04-13 03:58:54Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -757,7 +757,7 @@ if(!empty($grouptids)) {
 }
 
 $stemplate = null;
-if($_G['forum']['threadsorts']['types'] && $sortoptionarray && $templatearray) {
+if($_G['forum']['threadsorts']['types'] && $sortoptionarray && $templatearray && $threadids) {
 	$sortid = intval($_GET['sortid']);
 	if(!strexists($templatearray[$sortid], '{subject_url}') && !strexists($templatearray[$sortid], '{tid}')) {
 		$sortlistarray = showsorttemplate($sortid, $_G['fid'], $sortoptionarray, $templatearray, $_G['forum_threadlist'], $threadids);

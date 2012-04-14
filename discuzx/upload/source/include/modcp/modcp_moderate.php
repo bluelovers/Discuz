@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: modcp_moderate.php 28954 2012-03-20 09:23:02Z monkey $
+ *      $Id: modcp_moderate.php 29454 2012-04-12 10:23:18Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_MODCP')) {
@@ -276,7 +276,11 @@ if($op == 'replies') {
 				$post['lastpost'] = $threadlist[$post['tid']]['lastpost'];
 				$repliesmod ++;
 				$pidarray[] = $post['pid'];
-				updatepostcredits('+', $post['authorid'], 'reply', $post['fid']);
+				if(getstatus($post['status'], 3) == 0) {
+					updatepostcredits('+', $post['authorid'], 'reply', $post['fid']);
+					$attachcount = C::t('forum_attachment_n')->count_by_id('tid:'.$post['tid'], 'pid', $post['pid']);
+					updatecreditbyaction('postattach', $post['authorid'], array(), '', $attachcount, 1, $post['fid']);
+				}
 
 				$threads[$post['tid']]['posts']++;
 
@@ -429,7 +433,13 @@ if($op == 'replies') {
 			$tids = $moderatedthread = array();
 			foreach(C::t('forum_thread')->fetch_all_by_tid_displayorder($moderation['validate'], $pstat, '=', ($modfids ? explode(',', $modfids) : null)) as $thread) {
 				$tids[] = $thread['tid'];
-				updatepostcredits('+', $thread['authorid'], 'post', $thread['fid']);
+				$poststatus = C::t('forum_post')->fetch_threadpost_by_tid_invisible($thread['tid']);
+				$poststatus = $poststatus['status'];
+				if(getstatus($poststatus, 3) == 0) {
+					updatepostcredits('+', $thread['authorid'], 'post', $thread['fid']);
+					$attachcount = C::t('forum_attachment_n')->count_by_id('tid:'.$thread['tid'], 'tid', $thread['tid']);
+					updatecreditbyaction('postattach', $thread['authorid'], array(), '', $attachcount, 1, $thread['fid']);
+				}
 				$validatedthreads[] = $thread;
 
 				if($thread['authorid'] && $thread['authorid'] != $_G['uid']) {

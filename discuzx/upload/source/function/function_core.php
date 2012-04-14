@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_core.php 29286 2012-03-31 10:06:28Z chenmengshu $
+ *      $Id: function_core.php 29433 2012-04-12 04:01:54Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -195,34 +195,31 @@ function dfsockopen($url, $limit = 0, $post = '', $cookie = '', $bysocket = FALS
 	return _dfsockopen($url, $limit, $post, $cookie, $bysocket, $ip, $timeout, $block, $encodetype, $allowcurl);
 }
 
-function dhtmlspecialchars($string) {
+function dhtmlspecialchars($string, $flags = null) {
 	if(is_array($string)) {
 		foreach($string as $key => $val) {
-			$string[$key] = dhtmlspecialchars($val);
+			$string[$key] = dhtmlspecialchars($val, $flags);
 		}
 	} else {
-		$string = str_replace(array('&', '"', '<', '>'), array('&amp;', '&quot;', '&lt;', '&gt;'), $string);
-		if(strpos($string, '&amp;#') !== false) {
-			$string = preg_replace('/&amp;((#(\d{3,5}|x[a-fA-F0-9]{4}));)/', '&\\1', $string);
+		if($flags === null) {
+			$string = str_replace(array('&', '"', '<', '>'), array('&amp;', '&quot;', '&lt;', '&gt;'), $string);
+			if(strpos($string, '&amp;#') !== false) {
+				$string = preg_replace('/&amp;((#(\d{3,5}|x[a-fA-F0-9]{4}));)/', '&\\1', $string);
+			}
+		} else {
+			if(PHP_VERSION < '5.4.0') {
+				$string = htmlspecialchars($string, $flags);
+			} else {
+				if(strtolower(CHARSET) == 'utf-8') {
+					$charset = 'UTF-8';
+				} else {
+					$charset = 'ISO-8859-1';
+				}
+				$string = htmlspecialchars($string, $flags, $charset);
+			}
 		}
 	}
 	return $string;
-}
-
-function uhtmlspecialchars($string, $flags = null) {
-	if($flags === null) {
-		$flags = ENT_COMPAT | ENT_HTML401;
-	}
-	if(PHP_VERSION < '5.4.0') {
-		return htmlspecialchars($string, $flags);
-	} else {
-		if(strtolower(CHARSET) == 'utf-8') {
-			$charset = 'UTF-8';
-		} else {
-			$charset = 'ISO-8859-1';
-		}
-		return htmlspecialchars($string, $flags, $charset);
-	}
 }
 
 function dexit($message = '') {
@@ -519,7 +516,7 @@ function template($file, $templateid = 0, $tpldir = '', $gettplfile = 0, $primal
 				$tpldir = 'data/diy/'.$_G['style']['tpldirectory'].'/';
 				!$gettplfile && $_G['style']['tplsavemod'] = $tplsavemod;
 				$curtplname = $file;
-				if($_GET['diy'] == 'yes' || $_GET['preview'] == 'yes') { //DIY模式或预览模式下做以下判断
+				if(isset($_GET['diy']) && $_GET['diy'] == 'yes' || isset($_GET['diy']) && $_GET['preview'] == 'yes') { //DIY模式或预览模式下做以下判断
 					$flag = file_exists($diypath.$file.$preend.'.htm');
 					if($_GET['preview'] == 'yes') {
 						$file .= $flag ? $preend : '';
@@ -1325,7 +1322,9 @@ function adshow($parameter) {
 	$adfunc = 'ad_'.$params[0];
 	$_G['setting']['pluginhooks'][$adfunc] = null;
 	hookscript('ad', 'global', 'funcs', array('params' => $params, 'content' => $adcontent), $adfunc);
-	hookscript('ad', $_G['basescript'], 'funcs', array('params' => $params, 'content' => $adcontent), $adfunc);
+	if(!$_G['setting']['hookscript']['global']['ad']['funcs'][$adfunc]) {
+		hookscript('ad', $_G['basescript'], 'funcs', array('params' => $params, 'content' => $adcontent), $adfunc);
+	}
 	return $_G['setting']['pluginhooks'][$adfunc] === null ? $adcontent : $_G['setting']['pluginhooks'][$adfunc];
 }
 
@@ -1820,6 +1819,9 @@ function iswhitelist($host) {
 	}
 	$hostlen = strlen($host);
 	$iswhitelist[$host] = false;
+	if(!$_G['cache']['domainwhitelist']) {
+		loadcache('domainwhitelist');
+	}
 	if(is_array($_G['cache']['domainwhitelist'])) foreach($_G['cache']['domainwhitelist'] as $val) {
 		$domainlen = strlen($val);
 		if($domainlen > $hostlen) {
@@ -1965,7 +1967,7 @@ function dunserialize($data) {
 
 function browserversion($type) {
 	static $return = array();
-	$types = array('ie' => 'msie', 'firefox' => '', 'chrome' => '', 'opera' => '', 'safari' => '', 'mozilla' => '', 'webkit' => '', 'maxthon' => '', 'qq' => 'qqbrowser');
+	static $types = array('ie' => 'msie', 'firefox' => '', 'chrome' => '', 'opera' => '', 'safari' => '', 'mozilla' => '', 'webkit' => '', 'maxthon' => '', 'qq' => 'qqbrowser');
 	if(!$return) {
 		$useragent = strtolower($_SERVER['HTTP_USER_AGENT']);
 		$other = 1;

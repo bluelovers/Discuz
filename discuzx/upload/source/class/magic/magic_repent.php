@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: magic_repent.php 29236 2012-03-30 05:34:47Z chenmengshu $
+ *      $Id: magic_repent.php 29373 2012-04-09 07:55:30Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -88,7 +88,7 @@ class magic_repent {
 
 	function show() {
 		global $_G;
-		$pid = !empty($_GET['id']) ? uhtmlspecialchars($_GET['id']) : '';
+		$pid = !empty($_GET['id']) ? dhtmlspecialchars($_GET['id']) : '';
 		list($pid, $_G['tid']) = explode(':', $pid);
 		if($_G['tid']) {
 			$post = getpostinfo($_GET['id'], 'pid', array('p.fid', 'p.authorid', 't.status as thread_status'));

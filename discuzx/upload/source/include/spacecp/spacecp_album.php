@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_album.php 26402 2011-12-12 09:14:45Z chenmengshu $
+ *      $Id: spacecp_album.php 29410 2012-04-11 03:01:27Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -180,7 +180,7 @@ if($_GET['op'] == 'edit') {
 			}
 			$title = getstr($value, 150);
 			$title = censor($title);
-			if(censormod($title)) {
+			if(censormod($title) || $_G['group']['allowuploadmod']) {
 				$pic_status = 1;
 				manage_addnotify('verifypic');
 			} else {

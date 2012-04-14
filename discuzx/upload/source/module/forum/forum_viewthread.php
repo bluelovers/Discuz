@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_viewthread.php 29236 2012-03-30 05:34:47Z chenmengshu $
+ *      $Id: forum_viewthread.php 29474 2012-04-13 07:19:58Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -42,6 +42,9 @@ $posttable = $thread['posttable'];
 
 $_G['action']['fid'] = $_G['fid'];
 $_G['action']['tid'] = $_G['tid'];
+if($_G['fid'] == $_G['setting']['followforumid'] && $_G['adminid'] != 1) {
+	dheader("Location: home.php?mod=follow");
+}
 
 $_GET['authorid'] = !empty($_GET['authorid']) ? intval($_GET['authorid']) : 0;
 $_GET['ordertype'] = !empty($_GET['ordertype']) ? intval($_GET['ordertype']) : 0;

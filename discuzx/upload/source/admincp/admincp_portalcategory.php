@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_portalcategory.php 28706 2012-03-08 08:10:04Z zhangguosheng $
+ *      $Id: admincp_portalcategory.php 29386 2012-04-10 01:57:50Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_DISCUZ')) {
@@ -962,7 +962,7 @@ function showportalprimaltemplate($pritplname, $type) {
 				$file = strtolower($file);
 				if (fileext($file) == 'htm' && substr($file, 0, strlen($type)+1) == $type.'_') {
 					$key = $template['directory'].':portal/'.str_replace('.htm','',$file);
-					$tpls[$key] = getprimaltplname('portal/'.$file);
+					$tpls[$key] = getprimaltplname($template['directory'].':portal/'.$file);
 				}
 			}
 		}
