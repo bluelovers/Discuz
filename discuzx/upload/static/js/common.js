@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: common.js 29361 2012-04-09 02:43:46Z liulanbo $
+	$Id: common.js 29624 2012-04-23 06:56:28Z monkey $
 */
 
 var BROWSER = {};
@@ -1974,6 +1974,12 @@ function strLenCalc(obj, checklen, maxlen) {
 function patchNotice() {
 	if($('patch_notice')) {
 		ajaxget('misc.php?mod=patch&action=patchnotice', 'patch_notice', '');
+	}
+}
+
+function pluginNotice() {
+	if($('plugin_notice')) {
+		ajaxget('misc.php?mod=patch&action=pluginnotice', 'plugin_notice', '');
 	}
 }
 
