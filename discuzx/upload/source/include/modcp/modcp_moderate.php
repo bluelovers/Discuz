@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: modcp_moderate.php 29454 2012-04-12 10:23:18Z liulanbo $
+ *      $Id: modcp_moderate.php 29561 2012-04-19 01:52:54Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_MODCP')) {
@@ -41,18 +41,17 @@ if($op == 'members') {
 			include template('forum/modcp_moderate_float');
 			dexit();
 
-		} elseif ($uids = dimplode($list)) {
+		} elseif ($uids = $list) {
 
 			$members = $uidarray = array();
 
 
 			$member_validate = C::t('common_member_validate')->fetch_all($uids);
 			foreach(C::t('common_member')->fetch_all($uids, false, 0) as $uid => $member) {
-				if($member['groupid'] == 8 && $member['status'] == '$filter') {
+				if($member['groupid'] == 8 && $member['status'] == $filter) {
 					$members[$uid] = array_merge((array)$member_validate[$uid], $member);
 				}
 			}
-
 			if(($uids = array_keys($members))) {
 
 				$reason = dhtmlspecialchars(trim($_GET['reason']));
@@ -62,7 +61,6 @@ if($op == 'members') {
 				}
 
 				if($_GET['modact'] == 'validate') {
-
 					C::t('common_member')->update($uids, array('adminid' => '0', 'groupid' => $_G['setting']['newusergroupid']));
 					C::t('common_member_validate')->delete($uids);
 				}
