@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_member.php 28866 2012-03-16 01:11:04Z monkey $
+ *      $Id: table_common_member.php 29479 2012-04-13 08:21:02Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -303,10 +303,10 @@ class table_common_member extends discuz_table_archive
 		}
 	}
 
-	public function delete($val, $unbuffered = false) {
+	public function delete($val, $unbuffered = false, $fetch_archive = 0) {
 		$ret = false;
 		if(($val = dintval($val, true))) {
-			$ret = parent::delete($val, $unbuffered);
+			$ret = parent::delete($val, $unbuffered, $fetch_archive);
 			if($this->_allowmem) {
 				$data = ($data = memory('get', 'deleteuids')) === false ? array() : $data;
 				foreach((array)$val as $uid) {
