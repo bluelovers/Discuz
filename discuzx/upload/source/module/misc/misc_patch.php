@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_patch.php 28136 2012-02-23 03:26:19Z svn_project_zhangjie $
+ *      $Id: misc_patch.php 29774 2012-04-27 03:41:02Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -26,7 +26,7 @@ if($_GET['action'] == 'checkpatch') {
 		$discuz_patch = new discuz_patch();
 		$patchnotice = $discuz_patch->fetch_patch_notice();
 		if(!empty($patchnotice['data'])) {
-			include_once DISCUZ_ROOT.'./source/language/forum/lang_misc.php';
+			$lang = lang('forum/misc');
 			$patchlist .= '<div class="bm'.($patchnotice['fixed'] ? ' allfixed' : '').'"><div class="bm_h cl"><a href="javascript:;" onclick="$(\'patch_notice\').style.display=\'none\'" class="y" title="'.$lang['patch_close'].'">'.$lang['patch_close'].'</a><h2>';
 			if($patchnotice['fixed']) {
 				$patchlist .= $lang['patch_site_have'].' '.count($patchnotice['data']).' '.$lang['patch_is_fixed'];
@@ -54,6 +54,37 @@ if($_GET['action'] == 'checkpatch') {
 	include template('common/footer_ajax');
 	exit;
 
+} elseif($_GET['action'] == 'pluginnotice') {
+	require_once libfile('function/admincp');
+	require_once libfile('function/plugin');
+	require_once libfile('function/cloudaddons');
+	$pluginarray = C::t('common_plugin')->fetch_all_data();
+	$addonids = array();
+	foreach($pluginarray as $row) {
+		if(ispluginkey($row['identifier'])) {
+			$addonids[] = $row['identifier'].'.plugin';
+		}
+	}
+	$checkresult = dunserialize(cloudaddons_upgradecheck($addonids));
+	savecache('addoncheck_plugin', $checkresult);
+	$newversion = 0;
+	foreach($checkresult as $value) {
+		list(, $newver) = explode(':', $value);
+		if($newver) {
+			$newversion++;
+		}
+	}
+	include template('common/header_ajax');
+	if($newversion) {
+		$lang = lang('forum/misc');
+		echo '<div class="bm"><div class="bm_h cl"><a href="javascript:;" onclick="$(\'plugin_notice\').style.display=\'none\';setcookie(\'pluginnotice\', 1, 86400)" class="y" title="'.$lang['patch_close'].'">'.$lang['patch_close'].'</a><h2>';
+		echo '<h2>'.$lang['plugin_title'].'</h2></div><div class="bm_c">';
+		echo lang('forum/misc', 'plugin_memo', array('number' => $newversion));
+		echo '<div align="right"><a href="admin.php?action=plugins" class="xi2">'.$lang['plugin_link'].'</a></div>';
+		echo '</div></div>';
+	}
+	include template('common/footer_ajax');
+	exit;
 }
 
 ?>
