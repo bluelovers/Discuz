@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_core.php 29433 2012-04-12 04:01:54Z monkey $
+ *      $Id: function_core.php 29638 2012-04-23 09:26:04Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -509,6 +509,9 @@ function template($file, $templateid = 0, $tpldir = '', $gettplfile = 0, $primal
 			if(isset($_G['cache']['diytemplatename'.$basescript])) {
 				$diytemplatename = &$_G['cache']['diytemplatename'.$basescript];
 			} else {
+				if(!isset($_G['cache']['diytemplatename'])) {
+					loadcache('diytemplatename');
+				}
 				$diytemplatename = &$_G['cache']['diytemplatename'];
 			}
 			$tplsavemod = 0;
