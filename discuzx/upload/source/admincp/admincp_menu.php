@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_menu.php 29171 2012-03-28 02:59:31Z monkey $
+ *      $Id: admincp_menu.php 29721 2012-04-26 07:01:08Z zhengqingpeng $
  */
 
 global $_G;
@@ -111,6 +111,7 @@ $menu['user'] = array(
 	array('menu_members_profile', 'members_profile'),
 	array('menu_members_stat', 'members_stat'),
 	array('menu_members_newsletter', 'members_newsletter'),
+	array('menu_members_mobile', 'members_newsletter_mobile'),
 	array('menu_usertag', 'usertag'),
 	array('menu_members_edit_ban_user', 'members_ban'),
 	array('menu_members_ipban', 'members_ipban'),
