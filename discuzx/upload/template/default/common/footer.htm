@@ -45,19 +45,6 @@
 		</script>
 	<!--{/if}-->
 	<!--{if $_G['uid'] && $_G['member']['allowadmincp'] == 1 && $_G['setting']['showpatchnotice'] == 1}-->
-		<style type="text/css">
-		.patch { width: 300px; }
-			.patch .bm { border-color: #F26C4F; background: #FFF; }
-			.patch .allfixed { border-color: #6C3; }
-			.patch .bm_h { border: solid #FFF; border-width: 1px 1px 0; background: #F26C4F; }
-				.patch .allfixed .bm_h { background: #6C3; }
-				.patch h2, .patch .bm_h .y { color: #FFF; }
-			.patch table { table-layout: fixed; }
-				.patch th, .patch td { padding: 2px; border-bottom: 1px dotted #CDCDCD; }
-				.patchdate { width: 70px; }
-				.patchstat { width: 55px; }
-			.unfixed { color: #F26C4F; }
-		</style>
 		<div class="focus patch" id="patch_notice"></div>
 	<!--{/if}-->
 
@@ -141,6 +128,10 @@
 <!--{/if}-->
 <!--{if $_G['uid'] && $_G['member']['allowadmincp'] == 1 && $_G['setting']['showpatchnotice'] == 1}-->
 	<script type="text/javascript">patchNotice();</script>
+<!--{/if}-->
+<!--{if $_G['uid'] && $_G['member']['allowadmincp'] == 1 && empty($_G['cookie']['pluginnotice'])}-->
+	<div class="focus plugin" id="plugin_notice"></div>
+	<script type="text/javascript">pluginNotice();</script>
 <!--{/if}-->
 <!--{if $_G['member']['newprompt'] && (empty($_G['cookie']['promptstate_'.$_G[uid]]) || $_G['cookie']['promptstate_'.$_G[uid]] != $_G['member']['newprompt']) && $_GET['do'] != 'notice'}-->
 	<script type="text/javascript">noticeTitle();</script>
