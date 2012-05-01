@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: smilies.js 23838 2011-08-11 06:51:58Z monkey $
+	$Id: smilies.js 29684 2012-04-25 04:00:58Z zhangguosheng $
 */
 
 function _smilies_show(id, smcols, seditorkey) {
@@ -85,7 +85,7 @@ function smilies_switch(id, smcols, type, page, seditorkey) {
 	smiliesdata = '<table id="' + id + '_table" cellpadding="0" cellspacing="0"><tr>';
 	j = k = 0;
 	img = [];
-	for(i in smilies_array[type][page]) {
+	for(var i = 0; i < smilies_array[type][page].length; i++) {
 		if(j >= smcols) {
 			smiliesdata += '<tr>';
 			j = 0;
