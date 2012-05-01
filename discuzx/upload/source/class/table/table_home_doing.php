@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_home_doing.php 29155 2012-03-27 10:39:12Z zhengqingpeng $
+ *      $Id: table_home_doing.php 29700 2012-04-25 08:15:15Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -21,7 +21,7 @@ class table_home_doing extends discuz_table
 		parent::__construct();
 	}
 
-	public function update_replynum_by_doid($doid, $inc_replynum) {
+	public function update_replynum_by_doid($inc_replynum, $doid) {
 		return DB::query('UPDATE %t SET replynum=replynum+\'%d\' WHERE doid=%d', array($this->_table, $inc_replynum, $doid));
 	}
 
