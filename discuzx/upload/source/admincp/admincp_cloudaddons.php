@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_cloudaddons.php 29371 2012-04-09 06:36:06Z monkey $
+ *      $Id: admincp_cloudaddons.php 29634 2012-04-23 08:29:45Z monkey $
  */
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
@@ -98,7 +98,7 @@ if(!$operation) {
 		cpmsg('cloudaddons_installing', "action=cloudaddons&operation=download&addonids=$_GET[addonids]&i=$addoni&end=$end&step=2&md5hash=".$_GET['md5hash'].'&timestamp='.$_GET['timestamp'], 'loading', array('addonid' => $_GET['key'].'.'.$_GET['type']), FALSE);
 	} elseif($step == 2) {
 		$tmpdir = DISCUZ_ROOT.'./data/download/'.$_GET['rid'];
-		if(!is_dir($tmpdir)) {
+		if(!file_exists($tmpdir)) {
 			cloudaddons_faillog($_GET['rid'], 103);
 			cpmsg('cloudaddons_download_error', '', 'error', array('ErrorCode' => 103));
 		}
