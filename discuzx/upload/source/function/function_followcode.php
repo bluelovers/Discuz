@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_followcode.php 28355 2012-02-28 07:02:03Z zhengqingpeng $
+ *      $Id: function_followcode.php 29566 2012-04-19 03:28:14Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -39,6 +39,7 @@ function followcode($message, $tid = 0, $pid = 0, $length = 0, $allowimg = true)
 		$param = func_get_args();
 		hookscript('discuzcode', 'global', 'funcs', array('param' => $param, 'caller' => 'discuzcode'), 'discuzcode');
 	}
+	$_G['delattach'] = array();
 	$message = fparsesmiles($message);
 
 	if(strpos($msglower, 'attach://') !== FALSE) {
@@ -86,11 +87,12 @@ function followcode($message, $tid = 0, $pid = 0, $length = 0, $allowimg = true)
 		$message = preg_replace($_G['cache']['bbcodes'][-$allowbbcode]['searcharray'], '', $message);
 	}
 	if(strpos($msglower, '[/hide]') !== FALSE) {
+		preg_replace("/\[hide.*?\]\s*(.*?)\s*\[\/hide\]/ies", "hideattach('\\1')", $message);
 		if(strpos($msglower, '[hide]') !== FALSE) {
 			$message = preg_replace("/\[hide\]\s*(.*?)\s*\[\/hide\]/is", '', $message);
 		}
 		if(strpos($msglower, '[hide=') !== FALSE) {
-			$message = preg_replace("/\[hide=(\d+)\]\s*(.*?)\s*\[\/hide\]/ies", '', $message);
+			$message = preg_replace("/\[hide=(d\d+)?[,]?(\d+)?\]\s*(.*?)\s*\[\/hide\]/ies", '', $message);
 		}
 	}
 
@@ -138,6 +140,9 @@ function followcode($message, $tid = 0, $pid = 0, $length = 0, $allowimg = true)
 	if($tid && $pid) {
 		$_G['post_attach'] = C::t('forum_attachment_n')->fetch_all_by_id(getattachtableid($tid), 'pid', $pid);
 		foreach($_G['post_attach'] as $aid => $attach) {
+			if(!empty($_G['delattach']) && in_array($aid, $_G['delattach'])) {
+				continue;
+			}
 			$message .= "[attach]$attach[aid][/attach]";
 			$message = preg_replace("/\[attach\]$attach[aid]\[\/attach\]/i", fparseattach($attach['aid'], $length, $extra), $message, 1);
 		}
@@ -239,6 +244,14 @@ function clearnl($message) {
 	$message = preg_replace("/[\r\n|\n|\r]{2,}/i", "\n", $message);
 
 	return $message;
+}
+function hideattach($hidestr) {
+	global $_G;
+
+	preg_match_all("/\[attach\]\s*(.*?)\s*\[\/attach\]/is", $hidestr, $del);
+	foreach($del[1] as $aid) {
+		$_G['delattach'][$aid] = $aid;
+	}
 }
 function fparseurl($url, $text, $scheme) {
 	global $_G;
