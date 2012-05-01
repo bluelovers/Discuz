@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: update.php 29284 2012-03-31 09:42:04Z chenmengshu $
+ *      $Id: update.php 29729 2012-04-26 07:39:14Z houdelei $
  */
 
 include_once('../source/class/class_core.php');
@@ -124,20 +124,22 @@ if($_GET['step'] == 'start') {
 	$query = DB::fetch_all("SHOW FULL PROCESSLIST");
 	foreach($query as $row) {
 		if(in_array(md5($row['Info']), $_GET['sql'])) {
-			$list .= '[时长]:'.$row['Time'].'[状态]:<b>'.$row['State'].'</b>[信息]:'.$row['Info'].'<br><br>';
+			$list .= '[时长]:'.$row['Time'].'秒 [状态]:<b>'.$row['State'].'</b>[信息]:'.$row['Info'].'<br><br>';
 		}
 	}
 	if(empty($list) && empty($_GET['sendsql'])) {
 		$msg = '准备进入下一步操作，请稍后...';
+		$notice = '';
 		$url = "?step=$_GET[nextstep]";
 		$time = 5;
 	} else {
-		$msg = '正在升级数据，请稍后...<br><br>'.$list.base64_decode($_GET['sendsql']);
+		$msg = '正在升级数据，请稍后...';
+		$notice = '<br><br><b>以下是正在执行的数据库升级语句:</b><br>'.$list.base64_decode($_GET['sendsql']);
 		$sqlurl = implode('&sql[]=', $_GET['sql']);
 		$url = "?step=waitingdb&nextstep=$_GET[nextstep]&sql[]=".$sqlurl;
 		$time = 20;
 	}
-	show_msg($msg, $theurl.$url, $time*1000);
+	show_msg($msg, $theurl.$url, $time*1000, 0, $notice);
 } elseif ($_GET['step'] == 'prepare') {
 	if(!C::t('common_setting')->skey_exists('group_recommend')) {
 		C::t('forum_groupinvite')->truncate();
@@ -185,9 +187,13 @@ if($_GET['step'] == 'start') {
 	$posttables = get_special_tables_array('forum_post');
 	$posttables[] = 'forum_post';
 	foreach($posttables as $post_tablename) {
-		if(!$row = DB::fetch_first("SHOW COLUMNS FROM ".DB::table($post_tablename)." LIKE 'position'")) {
+		if(!DB::fetch_first("SHOW COLUMNS FROM ".DB::table($post_tablename)." LIKE 'position'")) {
 			$sql[] = "ALTER TABLE ".DB::table($post_tablename)." ORDER BY tid ASC, first DESC, pid ASC";
-			$sql[] = "ALTER TABLE ".DB::table($post_tablename)." CHANGE `pid` `pid` INT(10) UNSIGNED NOT NULL, CHANGE `replycredit` `replycredit` int(10) NOT NULL default '0', CHANGE `status` `status` int(10) NOT NULL default '0', ADD UNIQUE KEY pid (pid), DROP PRIMARY KEY, ADD `position` INT(8) UNSIGNED NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY(`tid`, `position`), DROP INDEX authorid, ADD INDEX authorid (authorid,invisible)";
+			$replycreditsql = '';
+			if(DB::fetch_first("SHOW COLUMNS FROM ".DB::table($post_tablename)." LIKE 'replycredit'")) {
+				$replycreditsql = "CHANGE `replycredit` `replycredit` int(10) NOT NULL default '0',";
+			}
+			$sql[] = "ALTER TABLE ".DB::table($post_tablename)." CHANGE `pid` `pid` INT(10) UNSIGNED NOT NULL,$replycreditsql CHANGE `status` `status` int(10) NOT NULL default '0', ADD UNIQUE KEY pid (pid), DROP PRIMARY KEY, ADD `position` INT(8) UNSIGNED NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY(`tid`, `position`), DROP INDEX authorid, ADD INDEX authorid (authorid,invisible)";
 			if(!$_GET['waitingdb']) {
 				waitingdb('prepare', $sql);
 			} else {
@@ -1470,7 +1476,11 @@ if($_GET['step'] == 'start') {
 	} elseif($_GET['op'] == 'moderate') {
 
 		$nextop = 'moderate_update';
-		$modcount = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_moderate'), array(), true);
+		if(DB::fetch_first("SHOW TABLES LIKE '%common_moderate'")) {
+			$modcount = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_moderate'), array(), true);
+		} else {
+			$modcount = false;
+		}
 		if(!$modcount) {
 			$query = DB::query("SELECT tid FROM ".DB::table('forum_thread')." WHERE displayorder='-2'");
 			while($row = DB::fetch($query)) {
@@ -1530,7 +1540,7 @@ if($_GET['step'] == 'start') {
 	} elseif($_GET['op'] == 'moderate_update') {
 		$nextop = 'founder';
 
-		if($first_to_2_5) {
+		if($first_to_2_5 && DB::fetch_first("SHOW TABLES LIKE '%common_moderate'")) {
 			$tables = array(
 				'tid' => 'forum_thread_moderate',
 				'pid' => 'forum_post_moderate',
@@ -1680,7 +1690,7 @@ if($_GET['step'] == 'start') {
 	preg_match_all("/CREATE\s+TABLE.+?pre\_(.+?)\s+\((.+?)\)\s*(ENGINE|TYPE)\s*\=/is", $sql, $matches);
 	$newtables = empty($matches[1])?array():$matches[1];
 
-	$connecttables = array('common_member_connect', 'common_uin_black', 'connect_feedlog', 'connect_memberbindlog', 'connect_tlog', 'connect_tthreadlog', 'connect_guest');
+	$connecttables = array('common_member_connect', 'common_uin_black', 'connect_feedlog', 'connect_memberbindlog', 'connect_tlog', 'connect_tthreadlog', 'common_connect_guest', 'connect_disktask');
 
 	$newsqls = empty($matches[0])?array():$matches[0];
 
@@ -1876,11 +1886,11 @@ function remakesql($value) {
 	return $value;
 }
 
-function show_msg($message, $url_forward='', $time = 1, $noexit = 0) {
+function show_msg($message, $url_forward='', $time = 1, $noexit = 0, $notice = '') {
 
 	if($url_forward) {
 		$url_forward = $_GET['from'] ? $url_forward.'&from='.rawurlencode($_GET['from']).'&frommd5='.rawurlencode($_GET['frommd5']) : $url_forward;
-		$message = "<a href=\"$url_forward\">$message (跳转中...)</a><script>setTimeout(\"window.location.href ='$url_forward';\", $time);</script>";
+		$message = "<a href=\"$url_forward\">$message (跳转中...)</a><br>$notice<script>setTimeout(\"window.location.href ='$url_forward';\", $time);</script>";
 	}
 
 	show_header();
@@ -1898,7 +1908,9 @@ function show_header() {
 	global $config;
 
 	$nowarr = array($_GET['step'] => ' class="current"');
-
+	if(in_array($_GET['step'], array('waitingdb','prepare'))) {
+		$nowarr = array('sql' => ' class="current"');
+	}
 	print<<<END
 	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 	<html xmlns="http://www.w3.org/1999/xhtml">
