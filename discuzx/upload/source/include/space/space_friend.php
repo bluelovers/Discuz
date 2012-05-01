@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_friend.php 28360 2012-02-28 07:11:53Z zhangguosheng $
+ *      $Id: space_friend.php 29610 2012-04-23 03:14:51Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -232,8 +232,8 @@ if($fuids) {
 		friend_check($fuids);
 	}
 	if($list) {
-		$fieldhome = C::t('common_member_field_home')->fetch_all($fuids, false, 0);
-		foreach(C::t('common_member')->fetch_all($fuids, false, 0) as $uid => $value) {
+		$fieldhome = C::t('common_member_field_home')->fetch_all($fuids);
+		foreach(C::t('common_member')->fetch_all($fuids) as $uid => $value) {
 			$value = array_merge($value, $fieldhome[$uid]);
 			$value['isfriend'] = $uid==$space['uid'] || $_G["home_friend_".$space['uid'].'_'.$uid] ? 1 : 0;
 			if(empty($list[$uid])) $list[$uid] = array();
