@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_forums.php 29392 2012-04-10 04:36:33Z monkey $
+ *      $Id: admincp_forums.php 29491 2012-04-16 08:23:18Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -400,14 +400,15 @@ var rowtypedata = [
 
 		$fidarray[] = $fid;
 		foreach($fidarray as $fid) {
-			$moderators = '';
+			$moderators = $tab = '';
+			$modorder = array();
 			$modmemberarray = C::t('forum_moderator')->fetch_all_no_inherited_by_fid($fid);
 			foreach($modmemberarray as $moduid => $modmember) {
 				$modorder[] = $moduid;
 			}
-			$members = C::t('common_member')->fetch_all_username_by_uid(array_keys($modmemberarray));
-			foreach($modorder as $mod) {
-				$moderators .= $tab.addslashes($members[$mod]);
+			$members = C::t('common_member')->fetch_all_username_by_uid($modorder);
+			foreach($members as $mod) {
+				$moderators .= $tab.addslashes($mod);
 				$tab = "\t";
 			}
 
