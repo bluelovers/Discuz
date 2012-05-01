@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_block.php 29445 2012-04-12 07:14:40Z zhangguosheng $
+ *      $Id: function_block.php 29507 2012-04-17 05:41:37Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -230,8 +230,10 @@ function block_updatecache($bid, $forceupdate=false) {
 			}
 			$leftnum = $block['shownum'] - count($datalist);
 			if($leftnum > 0 && empty($block['isblank'])) {
-				$block['param']['items'] = $leftnum;
-				$block['param']['bannedids'] = implode(',',$bannedids);
+				if($leftnum != $block['param']['items']) {
+					$block['param']['items'] = $leftnum;
+					$block['param']['bannedids'] = implode(',',$bannedids);
+				}
 				$return = $obj->getdata($thestyle, $block['param']);
 				$return['data'] = array_merge($datalist, (array)$return['data']);
 			} else {
