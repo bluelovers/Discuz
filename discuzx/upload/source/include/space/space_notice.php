@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_notice.php 29379 2012-04-09 09:43:09Z zhengqingpeng $
+ *      $Id: space_notice.php 29691 2012-04-25 06:53:43Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -108,7 +108,7 @@ if($view == 'userapp') {
 
 	if($newnotify) {
 		C::t('home_notification')->ignore($_G['uid'], true, true);
-		if($_G['setting']['cloud_status'] &&  $_G['setting']['connect']['allow'] && $_G['member']['conisbind']) {
+		if($_G['setting']['cloud_status']) {
 			$noticeService = Cloud::loadClass('Service_Client_Notification');
 			$noticeService->setNoticeFlag($_G['uid'], TIMESTAMP);
 		}
