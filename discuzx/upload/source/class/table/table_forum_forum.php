@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_forum_forum.php 28891 2012-03-19 02:09:40Z liulanbo $
+ *      $Id: table_forum_forum.php 29580 2012-04-20 02:53:59Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -37,7 +37,7 @@ class table_forum_forum extends discuz_table
 		return DB::fetch_all("SELECT * FROM ".DB::table($this->_table)." WHERE $typesql $statussql $fupsql $limitsql");
 	}
 	public function fetch_info_by_fid($fid) {
-		return DB::fetch_first("SELECT f.*, ff.* FROM %t f LEFT JOIN %t ff ON ff.fid=f.fid WHERE f.fid=%d", array($this->_table, 'forum_forumfield', $fid));
+		return DB::fetch_first("SELECT ff.*, f.* FROM %t f LEFT JOIN %t ff ON ff.fid=f.fid WHERE f.fid=%d", array($this->_table, 'forum_forumfield', $fid));
 	}
 	public function fetch_all_name_by_fid($fids) {
 		if(empty($fids)) {
@@ -61,7 +61,7 @@ class table_forum_forum extends discuz_table
 		if(!$sql) {
 			return array();
 		}
-		return DB::fetch_all("SELECT f.*, ff.* FROM %t f LEFT JOIN %t ff USING (fid) WHERE $sql $ordersql $limitsql", array($this->_table, 'forum_forumfield'), 'fid');
+		return DB::fetch_all("SELECT ff.*, f.* FROM %t f LEFT JOIN %t ff USING (fid) WHERE $sql $ordersql $limitsql", array($this->_table, 'forum_forumfield'), 'fid');
 	}
 	public function fetch_all_default_recommend($num = 10) {
 		return DB::fetch_all("SELECT f.fid, f.name, ff.description, ff.icon FROM ".DB::table($this->_table)." f LEFT JOIN ".DB::table('forum_forumfield')." ff USING(fid) WHERE f.status='3' AND f.type='sub' ORDER BY f.commoncredits desc ".DB::limit($num));
@@ -71,7 +71,7 @@ class table_forum_forum extends discuz_table
 		return DB::fetch_all("SELECT f.fid, f.type, f.status, f.name, f.fup, f.displayorder, f.forumcolumns, f.inheritedmod, ff.moderators, ff.password, ff.redirect, ff.groupnum FROM ".DB::table($this->_table)." f LEFT JOIN ".DB::table('forum_forumfield')." ff USING(fid) WHERE f.status='3' AND f.type IN('group', 'forum') ORDER BY $ordersql f.displayorder");
 	}
 	public function fetch_all_recommend_by_fid($fid) {
-		return DB::fetch_all("SELECT f.*, ff.* FROM %t f LEFT JOIN %t ff ON ff.fid=f.fid WHERE f.recommend=%d", array($this->_table, 'forum_forumfield', $fid));
+		return DB::fetch_all("SELECT ff.*, f.* FROM %t f LEFT JOIN %t ff ON ff.fid=f.fid WHERE f.recommend=%d", array($this->_table, 'forum_forumfield', $fid));
 	}
 	public function fetch_all_info_by_ignore_fid($fid) {
 		if(!intval($fid)) {
@@ -81,16 +81,16 @@ class table_forum_forum extends discuz_table
 	}
 	public function fetch_all_forum($status = 0) {
 		$statusql = intval($status) ? 'f.'.DB::field('status', $status) : 'f.status<>\'3\'';
-		return DB::fetch_all("SELECT f.*, ff.*, a.uid FROM ".DB::table($this->_table)." f LEFT JOIN ".DB::table('forum_forumfield')." ff ON ff.fid=f.fid LEFT JOIN ".DB::table('forum_access')." a ON a.fid=f.fid AND a.allowview>'0' WHERE $statusql ORDER BY f.type, f.displayorder");
+		return DB::fetch_all("SELECT ff.*, f.*, a.uid FROM ".DB::table($this->_table)." f LEFT JOIN ".DB::table('forum_forumfield')." ff ON ff.fid=f.fid LEFT JOIN ".DB::table('forum_access')." a ON a.fid=f.fid AND a.allowview>'0' WHERE $statusql ORDER BY f.type, f.displayorder");
 	}
 	public function fetch_all_subforum_by_fup($fups) {
 		return DB::fetch_all("SELECT fid, fup, name, threads, posts, todayposts, domain FROM %t WHERE status='1' AND fup IN (%n) AND type='sub' ORDER BY displayorder", array($this->_table, $fups));
 	}
 	public function fetch_all_forum_ignore_access() {
-		return DB::fetch_all("SELECT f.*, ff.* FROM ".DB::table($this->_table)." f LEFT JOIN ".DB::table('forum_forumfield')." ff ON ff.fid=f.fid WHERE status <3 ORDER BY f.fid");
+		return DB::fetch_all("SELECT ff.*, f.* FROM ".DB::table($this->_table)." f LEFT JOIN ".DB::table('forum_forumfield')." ff ON ff.fid=f.fid WHERE status <3 ORDER BY f.fid");
 	}
 	public function fetch_all_forum_for_sub_order() {
-		return DB::fetch_all("SELECT f.fid, f.type, f.status, f.name, f.fup, f.displayorder, f.inheritedmod, ff.* FROM ".DB::table($this->_table)." f LEFT JOIN ".DB::table('forum_forumfield')." ff USING(fid) WHERE f.status<>'3' ORDER BY f.type<>'group', f.displayorder");
+		return DB::fetch_all("SELECT ff.*, f.fid, f.type, f.status, f.name, f.fup, f.displayorder, f.inheritedmod FROM ".DB::table($this->_table)." f LEFT JOIN ".DB::table('forum_forumfield')." ff USING(fid) WHERE f.status<>'3' ORDER BY f.type<>'group', f.displayorder");
 	}
 	public function fetch_all_valid_forum() {
 		return DB::fetch_all("SELECT * FROM ".DB::table($this->_table)." WHERE status='1' AND type IN ('forum', 'sub') ORDER BY type");
@@ -257,10 +257,10 @@ class table_forum_forum extends discuz_table
 		if($fieldarray && is_array($fieldarray)) {
 			$fieldadd = '';
 			foreach($fieldarray as $field) {
-				$fieldadd .= ' ,'.$field;
+				$fieldadd .= $field.', ';
 			}
 		} else {
-			$fieldadd = ' ,ff.*';
+			$fieldadd = 'ff.*, ';
 		}
 		$start = 0;
 		if(is_array($num)) {
@@ -278,7 +278,7 @@ class table_forum_forum extends discuz_table
 			 $levelsql = " AND f.level>'-1'";
 		}
 
-		$fieldsql = 'f.fid, f.name, f.threads, f.posts, f.todayposts, f.level as flevel '.$fieldadd;
+		$fieldsql = $fieldadd.' f.fid, f.name, f.threads, f.posts, f.todayposts, f.level as flevel ';
 		if($getcount) {
 			return DB::result_first("SELECT count(*) FROM ".DB::table($this->_table)." f $useindex WHERE".($fids ? " $fids AND " : '')." f.type='sub' AND f.status=3 $levelsql");
 		}
