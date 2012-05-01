@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: collection_view.php 28409 2012-02-29 05:43:20Z chenmengshu $
+ *      $Id: collection_view.php 29503 2012-04-17 03:11:41Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -39,9 +39,11 @@ $collectionteamworker = C::t('forum_collectionteamworker')->fetch_all_by_ctid($_
 $_G['collection']['arraykeyword'] = parse_keyword($_G['collection']['keyword'], false, false);
 if($_G['collection']['arraykeyword']) {
 	foreach ($_G['collection']['arraykeyword'] as $kid=>$s_keyword) {
+		$metakeywords .= ($metakeywords ? ',' : '').$s_keyword;
 		$_G['collection']['urlkeyword'][$kid] = rawurlencode($s_keyword);
 	}
 }
+$metadescription = $_G['collection']['name'];
 
 if($_G['collection']['ratenum']) {
 	$star = imgdisplayrate($avgrate);
