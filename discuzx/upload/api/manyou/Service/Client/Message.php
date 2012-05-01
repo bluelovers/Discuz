@@ -3,7 +3,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: Message.php 29263 2012-03-31 05:45:08Z yexinhao $
+ *      $Id: Message.php 29721 2012-04-26 07:01:08Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -30,35 +30,30 @@ class Cloud_Service_Client_Message extends Cloud_Service_Client_Restful {
 		return parent::__construct($debug);
 	}
 
-	public function add($siteUid, $authorId, $author, $dateline) {
+	public function add($siteUids, $authorId, $author, $dateline) {
 		$toUids = array();
-		if($siteUid) {
-			foreach(C::t('#qqconnect#common_member_connect')->fetch_all((array)$siteUid) as $user) {
+		if($siteUids) {
+			foreach(C::t('#qqconnect#common_member_connect')->fetch_all((array)$siteUids) as $user) {
 				$toUids[$user['conopenid']] = $user['uid'];
 			}
-			if($toUids) {
-				$_params = array(
-						'openidData' => $toUids,
-						'authorId' => $authorId,
-						'author' => $author,
-						'dateline' => $dateline
-					);
-				return $this->_callMethod('connect.discuz.message.add', $_params);
-			}
+			$_params = array(
+					'openidData' => $toUids,
+					'authorId' => $authorId,
+					'author' => $author,
+					'dateline' => $dateline,
+					'deviceToken' => $this->getUserDeviceToken($siteUids)
+				);
+			return $this->_callMethod('connect.discuz.message.add', $_params);
 		}
 		return false;
 	}
 	public function setMsgFlag($siteUid, $dateline) {
-		$openId = $this->getUserOpenId($siteUid);
-		if($openId) {
-			$_params = array(
-					'openid' => $openId,
-					'sSiteUid' => $siteUid,
-					'dateline' => $dateline
+		$_params = array(
+				'openid' => $this->getUserOpenId($siteUid),
+				'sSiteUid' => $siteUid,
+				'dateline' => $dateline
 			);
-			return $this->_callMethod('connect.discuz.message.read', $_params);
-		}
-		return false;
+		return $this->_callMethod('connect.discuz.message.read', $_params);
 	}
 
 	protected function _callMethod($method, $args) {
