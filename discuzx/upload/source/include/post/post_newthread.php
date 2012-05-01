@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: post_newthread.php 29473 2012-04-13 07:12:18Z zhengqingpeng $
+ *      $Id: post_newthread.php 29632 2012-04-23 08:16:51Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -421,7 +421,9 @@ if(!submitcheck('topicsubmit', 0, $seccodecheck, $secqaacheck)) {
 	}
 
 
-	C::t('common_member_field_home')->update($_G['uid'], array('recentnote'=>$subject));
+	if(!$isanonymous) {
+		C::t('common_member_field_home')->update($_G['uid'], array('recentnote'=>$subject));
+	}
 
 	if($special == 3 && $_G['group']['allowpostreward']) {
 		updatemembercount($_G['uid'], array($_G['setting']['creditstransextra'][2] => -$realprice), 1, 'RTC', $tid);
