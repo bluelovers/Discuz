@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: helper_seo.php 29370 2012-04-09 04:39:11Z chenmengshu $
+ *      $Id: helper_seo.php 29720 2012-04-26 06:54:46Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -89,6 +89,7 @@ class helper_seo {
 				}
 			}
 			if($searcharray && $replacearray) {
+				$_G['trunsform_tmp'] = array();
 				$content = preg_replace("/(<a\s+.*?>.*?<\/a>)|(<img\s+.*?[\/]?>)|(\[attach\](\d+)\[\/attach\])/ies", "helper_seo::base64_transform('encode', '<relatedlink>', '\\1\\2\\3', '</relatedlink>')", $content);
 				$content = preg_replace($searcharray, $replacearray, $content, 1);
 				$content = preg_replace("/<relatedlink>(.*?)<\/relatedlink>/ies", "helper_seo::base64_transform('decode', '', '\\1', '')", $content);
@@ -99,10 +100,12 @@ class helper_seo {
 
 
 	public static function base64_transform($type, $prefix, $string, $suffix) {
+		global $_G;
 		if($type == 'encode') {
-			return $prefix.base64_encode(str_replace("\\\"", "\"", $string)).$suffix;
+			$_G['trunsform_tmp'][] = base64_encode(str_replace("\\\"", "\"", $string));
+			return $prefix.(count($_G['trunsform_tmp']) - 1).$suffix;
 		} elseif($type == 'decode') {
-			return $prefix.base64_decode($string).$suffix;
+			return $prefix.base64_decode($_G['trunsform_tmp'][$string]).$suffix;
 		}
 	}
 }
