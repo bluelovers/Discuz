@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_admincp_msg.php 29262 2012-03-31 05:19:44Z svn_project_zhangjie $
+ *      $Id: lang_admincp_msg.php 29634 2012-04-23 08:29:45Z monkey $
  *
  *      This file is automatically generate
  */
@@ -560,7 +560,7 @@ $lang = array (
   'upgrade_ftp_upload_error' => 'ftp上傳文件 {file} 出錯， 請修改文件權限後重新上傳 或 重新設置ftp賬號 {upgradeurl}',
   'upgrade_copy_error' => '複製文件 {file} 出錯，請檢測原始文件是否存在，重新複製 或 通過ftp上傳複製文件 {upgradeurl}',
   'upgrade_file_successful' => '文件升級成功，即將進入更新數據庫 {upgradeurl}',
-  'upgrade_successful' => '恭喜您，升級成功! <br />您當前的版本為：[Discuz! X{version} Release[{release}] {upgradeurl}',
+  'upgrade_successful' => '恭喜您，升級成功! <br />您當前的版本為：[Discuz! X{version} Release[{release}] <br /><br />為安全起見，升級文件已保存至{save_update_dir}目錄，<br />備份文件已保存至{save_back_dir}目錄 {upgradeurl}',
   'upgrade_checking' => '正在檢測新的升級版本',
   'upgrade_latest_version' => '您目前使用的已經是最新版本，不需要升級',
   'upgrade_param_error' => '請求的參數不正確',
@@ -619,7 +619,7 @@ $lang = array (
 
   'cloudaddons_ftp_path_error' => '站點 FTP 路徑錯誤，請重新填寫',
 
-  'cloudaddons_check_url_fopen_error' => '您的服務器無法訪問應用中心，這將會導致應用無法安裝。請聯繫您的服務商或者網站技術人員，確保您的服務器能夠正常訪問 addon.discuz.com',
+  'cloudaddons_check_url_fopen_error' => '您的服務器無法訪問應用中心，這將會導致應用無法安裝。請聯繫您的服務商或者網站技術人員，確保您的服務器能夠正常訪問 addon.discuz.com 或 addon1.discuz.com',
   'cloudaddons_genuine_message' => '對不起，您安裝的不是正版應用，安裝程序無法繼續執行<br /><br /><a href="admin.php?action=cloudaddons&id={addonid}">點擊這裡安裝正版應用</a>',);
 
 ?>
