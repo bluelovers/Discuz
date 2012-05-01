@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_styles.php 29236 2012-03-30 05:34:47Z chenmengshu $
+ *      $Id: admincp_styles.php 29628 2012-04-23 07:25:05Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -166,7 +166,7 @@ if($operation == 'admin') {
 			}
 			$stylelist .= ($i == 0 ? '<tr>' : '').
 				'<td width="33%"><table cellspacing="0" cellpadding="0" style="margin-left: 10px; width: 200px;"><tr><td style="width: 120px; text-align: center; border-top: none;">'.
-				($id > 0 ? "<p style=\"margin-bottom: 2px;\">&nbsp;</p><img ".($previewlarge ? 'style="cursor:pointer" title="'.$lang['preview_large'].'" onclick="zoom(this, \''.$previewlarge.'\', 1)" ' : '')."src=\"$preview\" alt=\"$lang[preview]\"/></a>
+				($id > 0 ? "<p style=\"margin-bottom: 2px;\">&nbsp;<img ".($previewlarge ? 'style="cursor:pointer" title="'.$lang['preview_large'].'" onclick="zoom(this, \''.$previewlarge.'\', 1)" ' : '')."src=\"$preview\" alt=\"$lang[preview]\"/></p>
 				<p style=\"margin: 2px 0\"><input type=\"text\" class=\"txt\" name=\"namenew[$id]\" value=\"$style[name]\" size=\"30\" style=\"margin-right:0; width: 80px;\"></p>
 				<p class=\"lightfont\">$style[tplname]</p>".$updatestring[$addonids[$style['styleid']]]."</td><td style=\"padding-top: 17px; width: 80px; border-top: none; vertical-align: top;\">
 				<p style=\"margin: 2px 0\"><label>$lang[default] <input type=\"radio\" class=\"radio\" name=\"defaultnew\" value=\"$id\" $isdefault /></label></p>
