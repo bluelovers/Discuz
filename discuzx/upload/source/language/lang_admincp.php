@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_admincp.php 29318 2012-04-01 08:13:06Z svn_project_zhangjie $
+ *      $Id: lang_admincp.php 29721 2012-04-26 07:01:08Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -430,6 +430,7 @@ $lang = array
 	'nav_members_confermedal' => '颁发勋章',
 	'nav_members_confermagic' => '道具赠送',
 	'nav_members_newsletter' => '站点通知',
+	'nav_members_newsletter_mobile' => '手机通知',
 	'nav_members_ipban' => '禁止 IP',
 	'nav_members_select' => '选取目标用户',
 	'nav_members_notify' => '填写通知内容',
@@ -552,7 +553,7 @@ $lang = array
 	'founder_upgrade_complete' => '升级完成',
 	'founder_upgrade_preupdatelist' => '待更新文件列表',
 	'founder_upgrade_store_directory' => '<b>文件存放目录:</b> ',
-	'founder_upgrade_diff_show' => '与本地文件的比对结果，状态 <span style="color:red;">差异</span> 表示该本地文件被修改过',
+	'founder_upgrade_diff_show' => '与本地文件的比对结果，状态 <span style="color:red;">差异</span> 表示该本地文件被修改过 <br /><br />注意：如果您的源文件是通过 <span style="color:red;">非二进制</span> 方式上传到服务器，可能导致对比结果不准确',
 	'founder_upgrade_diff' => '差异',
 	'founder_upgrade_normal' => '正常',
 	'founder_upgrade_new' => '新增',
@@ -1443,7 +1444,7 @@ $lang = array
 	'setting_serveropti_lazyload' => '开启图片延时加载',
 	'setting_serveropti_lazyload_comment' => '当开启后，页面中的图片在浏览器的当前窗口时再加载，可明显降低访问量很大的站点的服务器负担，建议开启本功能',
 	'setting_serveropti_blockmaxaggregationitem' => '<span class="spectitle">参与模块聚合数据条数</span>',
-	'setting_serveropti_blockmaxaggregationitem_comment' => '此值影响模块聚合时MYSQL检索数据的条数，设置太大将严重影响MYSQL的性能，设置太小将会影响模块聚合结果数据的理想程度。最大值为65535',
+	'setting_serveropti_blockmaxaggregationitem_comment' => '此值影响模块聚合时MYSQL检索数据的条数，设置太大将严重影响MYSQL的性能，设置太小将会影响模块聚合结果数据的理想程度。0为关闭些功能',
 	'setting_serveropti_blockcachetimerange' => '模块更新时间区间',
 	'setting_serveropti_blockcachetimerange_comment' => '设置全部模块在指定的时间区间内更新。可以根据网站的访问情况，避开访问高峰时间段。如：3点-7点',
 	'setting_serveropti_blockcachetimerangepoint' => '点',
@@ -3269,6 +3270,7 @@ $lang = array
 	'members_newsletter_posttype' => '内容解析方式',
 	'members_newsletter_posttype_text' => '文本方式',
 	'members_newsletter_posttype_html' => 'html方式',
+	'members_newsletter_mobile_tips' => '<li>您可以通过该功能给手机客户端用户发送通知，为了您更好的触达用户建议大力推广我们的手机客户端。</li><li>要使用本功能需要开启云平台服务、手机客户端插件</li><li><strong>请关注应用中心中"<a href="http://addon.discuz.com/?@mobile.plugin">手机客户端</a>"的更新，功能启用时将会在插件中做详细说明</strong></li>',
 
 	'members_grouppmlist' => '群发短消息记录',
 	'members_grouppmlist_newsletter' => '发送通知',
