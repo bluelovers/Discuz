@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: discuz_upgrade.php 29259 2012-03-31 04:16:47Z svn_project_zhangjie $
+ *      $Id: discuz_upgrade.php 29551 2012-04-18 08:08:28Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -184,6 +184,7 @@ class discuz_upgrade {
 			if(!@mkdir($dir, 0777)) {
 				return false;
 			}
+			@touch($dir.'/index.htm'); @chmod($dir.'/index.htm', 0777);
 		}
 		return true;
 	}
@@ -218,6 +219,38 @@ class discuz_upgrade {
 			break;
 		}
 		return $versionpath;
+	}
+
+	function copy_dir($srcdir, $destdir) {
+		$dir = @opendir($srcdir);
+		while($entry = @readdir($dir)) {
+			$file = $srcdir.$entry;
+			if($entry != '.' && $entry != '..') {
+				if(is_dir($file)) {
+					self::copy_dir($file.'/', $destdir.$entry.'/');
+				} else {
+					self::mkdirs(dirname($destdir.$entry));
+					copy($file, $destdir.$entry);
+				}
+			}
+		}
+		closedir($dir);
+	}
+
+	function rmdirs($srcdir) {
+		$dir = @opendir($srcdir);
+		while($entry = @readdir($dir)) {
+			$file = $srcdir.$entry;
+			if($entry != '.' && $entry != '..') {
+				if(is_dir($file)) {
+					self::rmdirs($file.'/');
+				} else {
+					@unlink($file);
+				}
+			}
+		}
+		closedir($dir);
+		rmdir($srcdir);
 	}
 }
 ?>
