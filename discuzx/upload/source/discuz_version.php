@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: discuz_version.php 29465 2012-04-13 05:55:08Z cnteacher $
+ *      $Id: discuz_version.php 29767 2012-04-27 02:56:00Z cnteacher $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -13,7 +13,7 @@ if(!defined('IN_DISCUZ')) {
 
 if(!defined('DISCUZ_VERSION')) {
 	define('DISCUZ_VERSION', 'X2.5');
-	define('DISCUZ_RELEASE', '20120413');
+	define('DISCUZ_RELEASE', '20120427');
 	define('DISCUZ_FIXBUG', '25000000');
 }
 
