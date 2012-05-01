@@ -51,6 +51,16 @@ body { background: #FCFAF0 url(bgimg.jpg) no-repeat 50% 0; }
 /* 重定义 Tab */
 .tb .a a { border-bottom-color: #FCFAF0; background: #FCFAF0; }
 
+/* 重定义广播 */
+#uhd, #flw_header .bar { background-color: #F9F9F9; }
+	#uhd .tb a, #flw_header .bar { border-top-color: #FCF0D7; }
+	#uhd .tb .a a { border-bottom-color: #FCFAF0; }
+.flw_replybox { background-color: #F9F9F9; }
+	.flw_replybox .px, .flw_autopt, #flw_header .tedt { border-color: #FC6; }
+#fastpostsubmit { background-image: url(flw_post.png); }
+.flw_replybox .pnc { background-image: url(pn_reply.png); }
+.flw_replybox td table .pnc { background-image: url(pn_rt.png); }
+
 /* 重定义版块快速跳转和侧边导航 */
 #fjump_menu li.a a { background-color: #FCF6E6; }
 .bdl, .bdl dt, .bdl dd.bdl_a a { border-color: #F5E3B4; background-color: #FCF6E6; }
