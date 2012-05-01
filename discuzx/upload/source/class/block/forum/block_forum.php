@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: block_forum.php 25525 2011-11-14 04:39:11Z zhangguosheng $
+ *      $Id: block_forum.php 29623 2012-04-23 06:54:18Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -145,7 +145,11 @@ class block_forum extends discuz_block {
 		$datalist = $list = array();
 		$attachurl = preg_match('/^(http|ftp|ftps|https):\/\//', $_G['setting']['attachurl']) ? $_G['setting']['attachurl'] : $_G['siteurl'].$_G['setting']['attachurl'];
 		while($data = DB::fetch($query)) {
-			$data['icon'] = $data['icon'] ? $data['icon'] : 'static/image/common/forum_new.gif';
+			if(!empty($data['icon'])) {
+				$data['icon'] = preg_match('/^(http|ftp|ftps|https):\/\//', $data['icon']) ? $data['icon'] : $attachurl.'common/'.$data['icon'];
+			} else {
+				$data['icon'] = 'static/image/common/forum_new.gif';
+			}
 			$list[] = array(
 				'id' => $data['fid'],
 				'idtype' => 'fid',
@@ -155,7 +159,7 @@ class block_forum extends discuz_block {
 				'summary' => cutstr($data['description'], $summarylength, ''),
 				'fields' => array(
 					'fulltitle' => $data['name'],
-					'icon' => preg_match('/^(http|ftp|ftps|https):\/\//', $data['icon']) ? $data['icon'] : $attachurl.'common/'.$data['icon'],
+					'icon' => $data['icon'],
 					'threads' => intval($data['threads']),
 					'posts' => intval($data['posts']),
 					'todayposts' => intval($data['todayposts'])
