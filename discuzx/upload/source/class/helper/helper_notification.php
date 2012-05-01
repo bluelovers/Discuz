@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: helper_notification.php 28251 2012-02-27 01:40:15Z zhengqingpeng $
+ *      $Id: helper_notification.php 29756 2012-04-26 11:54:42Z houdelei $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -71,7 +71,8 @@ class helper_notification {
 			$oldnote['new'] = 0;
 			$pkId = C::t('home_notification')->insert($setarr, true);
 		}
-		if($_G['setting']['cloud_status'] && $_G['setting']['connect']['allow'] && $tospace['conisbind']) {
+		$banType = array('task');
+		if($_G['setting']['cloud_status'] && !in_array($type, $banType)) {
 			$noticeService = Cloud::loadClass('Service_Client_Notification');
 			if($oldnote['id']) {
 				$noticeService->update($touid, $pkId, $setarr['from_num'], $setarr['dateline']);
