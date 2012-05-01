@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: block_article.php 27932 2012-02-17 02:26:59Z zhangguosheng $
+ *      $Id: block_article.php 29655 2012-04-24 05:51:56Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -230,12 +230,6 @@ class block_article extends discuz_block {
 		$list = array();
 		$wheres = array();
 
-		if(!$aids) {
-			$maxitemnum = $_G['setting']['blockmaxaggregationitem'] ? $_G['setting']['blockmaxaggregationitem'] : 65535;
-			if(($maxid = $this->getmaxid() - $maxitemnum) > 0) {
-				$wheres[] = 'at.aid > '.$maxid;
-			}
-		}
 		if($aids) {
 			$wheres[] = 'at.aid IN ('.dimplode($aids).')';
 		}
@@ -253,6 +247,11 @@ class block_article extends discuz_block {
 			$catid = array_merge($catid, $childids);
 			$catid = array_unique($catid);
 			$wheres[] = 'at.catid IN ('.dimplode($catid).')';
+		}
+		if(!$aids && !$catid && $_G['setting']['blockmaxaggregationitem']) {
+			if(($maxid = $this->getmaxid() - $_G['setting']['blockmaxaggregationitem'] ) > 0) {
+				$wheres[] = 'at.aid > '.$maxid;
+			}
 		}
 		if(empty($aids) && ($picrequired)) {
 			$wheres[] = "at.pic != ''";
