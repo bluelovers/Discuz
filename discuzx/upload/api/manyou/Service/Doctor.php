@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: Doctor.php 26504 2011-12-14 06:15:03Z yexinhao $
+ *      $Id: Doctor.php 29521 2012-04-17 09:24:42Z songlixin $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -156,4 +156,66 @@ class Cloud_Service_Doctor {
 		echo '<script type="text/javascript" src="http://cp.discuz.qq.com/cloud/siteTest?s_url=' . urlencode($_G['siteurl']) . '&charset=' . CHARSET . '&productVersion=' . DISCUZ_VERSION . '&position=' . $position . '" charset="utf-8"></script>';
 	}
 
+	public function showCloudDoctorJS($position = 'doctor') {
+		global $_G;
+
+		require_once DISCUZ_ROOT.'./source/discuz_version.php';
+		$url = $_G['siteurl'];
+		$charset = CHARSET;
+		$version = DISCUZ_VERSION;
+		$rand = rand();
+		$time = time();
+		$output = <<<EOF
+		<script type="text/javascript">
+			var discuzUrl = '$url';
+			var discuzCharset = '$charset';
+			var productVersion = '$version';
+			var checkPosition = '$position';
+			var discuzTime = '$time';
+		</script>
+		<script type="text/javascript" src="http://discuz.gtimg.cn/cloud/scripts/doctor.js?v=$rand" charset="utf-8"></script>
+EOF;
+		echo $output;
+	}
+
+	public function fixGuestGroup($name) {
+		$connect = C::t('common_setting')->fetch('connect', true);
+		$guestGroupId = $connect['guest_groupid'];
+		$group = C::t('common_usergroup')->fetch($guestGroupId);
+		if ($group) {
+			return true;
+		}
+		$userGroupData = array(
+			'type' => 'special',
+			'grouptitle' => $name,
+			'allowvisit' => 1,
+			'color' => '',
+			'stars' => '',
+		);
+		$newGroupId = C::t('common_usergroup')->insert($userGroupData, true);
+
+		$dataField = array(
+			'groupid' => $newGroupId,
+			'allowsearch' => 2,
+			'readaccess' => 1,
+			'allowgetattach' => 1,
+			'allowgetimage' => 1,
+		);
+		C::t('common_usergroup_field')->insert($dataField);
+
+		$connect['guest_groupid'] = $newGroupId;
+		C::t('common_setting')->update('connect', serialize($connect));
+		updatecache('usergroups');
+	}
+
+	public function checkGuestGroup() {
+		$connect = C::t('common_setting')->fetch('connect', true);
+		$guestGroupId = $connect['guest_groupid'];
+		$group = C::t('common_usergroup')->fetch($guestGroupId);
+		if ($group) {
+			return true;
+		}
+
+		return false;
+	}
 }
