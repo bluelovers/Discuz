@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: switch.inc.php 29364 2012-04-09 02:51:41Z monkey $
+ *      $Id: switch.inc.php 29558 2012-04-18 10:17:22Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -30,7 +30,6 @@ if(!empty($_GET['list'])) {
 		}
 	}
 
-	$userlist = get_rrepeats($_G['username']);
 	foreach(C::t('#myrepeats#myrepeats')->fetch_all_by_uid($_G['uid']) as $user) {
 		$userlist[$user['username']] = $user['username'];
 	}
