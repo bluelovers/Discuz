@@ -190,7 +190,7 @@
 								<td class="o"><input type="checkbox" value="$thread[tid]" name="delthread[]" /></td>
 								<!--{/if}-->
 								<th{if $thread['reason']} title="{lang collection_recommended_reason}: $thread['reason']"{/if}>
-									<a href="forum.php?mod=viewthread&tid=$thread[tid]{if !$memberrate}&ctid=$ctid{/if}" target="_blank" class="xst {if $thread[updatedthread]}xw1 xi2{/if}" title="$thread['htmlsubject']">$thread['cutsubject']</a>
+									<a href="forum.php?mod=viewthread&tid=$thread[tid]{if !$memberrate AND $_G['uid']}&ctid=$ctid{/if}" target="_blank" class="xst {if $thread[updatedthread]}xw1 xi2{/if}" title="$thread['htmlsubject']">$thread['cutsubject']</a>
 									<!--{if $thread['readperm']}--> - [{lang readperm} <span class="xw1">$thread[readperm]</span>]<!--{/if}-->
 									<!--{if $thread['price'] > 0}-->
 										<!--{if $thread['special'] == '3'}-->
