@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: discuz_application.php 29408 2012-04-11 02:57:51Z zhangguosheng $
+ *      $Id: discuz_application.php 29485 2012-04-16 02:27:34Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -54,53 +54,20 @@ class discuz_application extends discuz_base{
 
 	public function __construct() {
 		$this->_init_env();
-		if(defined('DEBUG_MEMORY')) {
-			setglobal('mpeak/_init_env', call_user_func(MEMORY_FUNC, MEMORY_FUNC_PARA));
-		}
 		$this->_init_config();
-		if(defined('DEBUG_MEMORY')) {
-			setglobal('mpeak/_init_config', call_user_func(MEMORY_FUNC, MEMORY_FUNC_PARA));
-		}
 		$this->_init_input();
-		if(defined('DEBUG_MEMORY')) {
-			setglobal('mpeak/_init_input', call_user_func(MEMORY_FUNC, MEMORY_FUNC_PARA));
-		}
 		$this->_init_output();
-		if(defined('DEBUG_MEMORY')) {
-			setglobal('mpeak/_init_output', call_user_func(MEMORY_FUNC, MEMORY_FUNC_PARA));
-		}
 	}
 
 	public function init() {
 		if(!$this->initated) {
 			$this->_init_db();
-			if(defined('DEBUG_MEMORY')) {
-				setglobal('mpeak/_init_db', call_user_func(MEMORY_FUNC, MEMORY_FUNC_PARA));
-			}
 			$this->_init_setting();
-			if(defined('DEBUG_MEMORY')) {
-				setglobal('mpeak/_init_setting', call_user_func(MEMORY_FUNC, MEMORY_FUNC_PARA));
-			}
 			$this->_init_user();
-			if(defined('DEBUG_MEMORY')) {
-				setglobal('mpeak/_init_user', call_user_func(MEMORY_FUNC, MEMORY_FUNC_PARA));
-			}
 			$this->_init_session();
-			if(defined('DEBUG_MEMORY')) {
-				setglobal('mpeak/_init_session', call_user_func(MEMORY_FUNC, MEMORY_FUNC_PARA));
-			}
 			$this->_init_mobile();
-			if(defined('DEBUG_MEMORY')) {
-				setglobal('mpeak/_init_mobile', call_user_func(MEMORY_FUNC, MEMORY_FUNC_PARA));
-			}
 			$this->_init_cron();
-			if(defined('DEBUG_MEMORY')) {
-				setglobal('mpeak/_init_cron', call_user_func(MEMORY_FUNC, MEMORY_FUNC_PARA));
-			}
 			$this->_init_misc();
-			if(defined('DEBUG_MEMORY')) {
-				setglobal('mpeak/_init_misc', call_user_func(MEMORY_FUNC, MEMORY_FUNC_PARA));
-			}
 		}
 		$this->initated = true;
 	}
@@ -137,10 +104,6 @@ class discuz_application extends discuz_base{
 			if (!isset($this->superglobal[$key])) {
 				$GLOBALS[$key] = null; unset($GLOBALS[$key]);
 			}
-		}
-
-		if(defined('DEBUG_MEMORY')) {
-			$mpeak['mpeak'] = (isset($_ENV['mpeak']) ? $_ENV['mpeak'] : array())  + array('class_application_start' => call_user_func(MEMORY_FUNC, MEMORY_FUNC_PARA));
 		}
 
 		global $_G;
@@ -201,11 +164,6 @@ class discuz_application extends discuz_base{
 			'mobile' => '',
 
 		);
-
-		if(defined('DEBUG_MEMORY')) {
-			$_G = $mpeak + $_G;
-			unset($mpeak);
-		}
 
 		$_G['PHP_SELF'] = dhtmlspecialchars($this->_get_script_url());
 		$_G['basescript'] = CURSCRIPT;
@@ -279,7 +237,7 @@ class discuz_application extends discuz_base{
 			$_GET['page'] = rawurlencode($_GET['page']);
 		}
 
-		$_GET['handlekey']= !empty($_GET['handlekey']) && ctype_alpha($_GET['handlekey']) ? $_GET['handlekey'] : '';
+		$_GET['handlekey']= !empty($_GET['handlekey']) && preg_match('/^\w+$/', $_GET['handlekey']) ? $_GET['handlekey'] : '';
 
 		if(!empty($this->var['config']['input']['compatible'])) {
 			foreach($_GET as $k => $v) {
