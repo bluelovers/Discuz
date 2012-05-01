@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_favorite.php 28511 2012-03-02 01:47:11Z liulanbo $
+ *      $Id: spacecp_favorite.php 29721 2012-04-26 07:01:08Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -16,7 +16,7 @@ if($_GET['op'] == 'delete') {
 	if($_GET['checkall']) {
 		if($_GET['favorite']) {
 			C::t('home_favorite')->delete($_GET['favorite'], false, $_G['uid']);
-			if($_G['setting']['cloud_status'] &&  $_G['setting']['connect']['allow'] && $_G['member']['conisbind']) {
+			if($_G['setting']['cloud_status']) {
 				$favoriteService = Cloud::loadClass('Service_Client_Favorite');
 				$favoriteService->remove($_G['uid'], $_GET['favorite'], TIMESTAMP);
 			}
@@ -31,7 +31,7 @@ if($_GET['op'] == 'delete') {
 
 		if(submitcheck('deletesubmit')) {
 			C::t('home_favorite')->delete($favid);
-			if($_G['setting']['cloud_status'] &&  $_G['setting']['connect']['allow']) {
+			if($_G['setting']['cloud_status']) {
 				$favoriteService = Cloud::loadClass('Service_Client_Favorite');
 				$favoriteService->remove($_G['uid'], $favid);
 			}
@@ -116,7 +116,7 @@ if($_GET['op'] == 'delete') {
 			'dateline' => TIMESTAMP
 		);
 		$favid = C::t('home_favorite')->insert($arr, true);
-		if($_G['setting']['cloud_status'] &&  $_G['setting']['connect']['allow'] && $_G['member']['conisbind']) {
+		if($_G['setting']['cloud_status']) {
 			$favoriteService = Cloud::loadClass('Service_Client_Favorite');
 			$favoriteService->add($arr['uid'], $favid, $arr['id'], $arr['idtype'], $arr['title'], $arr['description'], TIMESTAMP);
 		}
