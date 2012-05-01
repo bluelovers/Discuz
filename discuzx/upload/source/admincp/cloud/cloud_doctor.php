@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cloud_doctor.php 29273 2012-03-31 07:58:50Z yexinhao $
+ *      $Id: cloud_doctor.php 29521 2012-04-17 09:24:42Z songlixin $
  */
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
@@ -113,6 +113,8 @@ if(submitcheck('setidkeysubmit')) {
 
 } else {
 
+
+
 	$appService = Cloud::loadClass('Service_App');
 	$doctorService = Cloud::loadClass('Service_Doctor');
 	require_once DISCUZ_ROOT.'./source/discuz_version.php';
@@ -155,7 +157,10 @@ if(submitcheck('setidkeysubmit')) {
 
 	showtagheader('tbody', '', true);
 	showtitle('cloud_doctor_title_result');
-
+	showtablerow('', array('class="td24"'), array(
+		'<strong>'.cplang('cloud_timecheck').'</strong>',
+		'<span id="cloud_time_check">' . cplang('cloud_doctor_time_check', array('imgdir' => $_G['style']['imgdir'])) .'</span>',
+	));
 	showtablerow('', array('class="td24"'), array(
 		'<strong>'.cplang('cloud_doctor_gethostbyname_function').'</strong>',
 		function_exists('gethostbyname') ? $lang['cloud_doctor_result_success'].' '.$lang['available'] : $lang['cloud_doctor_result_failure'].$lang['cloud_doctor_function_disable']
@@ -215,6 +220,10 @@ if(submitcheck('setidkeysubmit')) {
 	showtagfooter('tbody');
 
 	if($appService->getCloudAppStatus('connect')) {
+		if ($op == 'fixGuest') {
+			$doctorService->fixGuestGroup(cplang('connect_guest_group_name'));
+		}
+
 		showtagheader('tbody', '', true);
 		showtitle('cloud_doctor_title_connect');
 		showtablerow('', array('class="td24"'), array(
@@ -225,11 +234,18 @@ if(submitcheck('setidkeysubmit')) {
 			'<strong>'.cplang('cloud_doctor_connect_app_key').'</strong>',
 			!empty($_G['setting']['connectappkey']) ? preg_replace('/(\w{2})\w*(\w{2})/', '\\1****\\2', $_G['setting']['connectappkey']).' '.$lang['cloud_site_key_safetips'] : $lang['cloud_doctor_connect_reopen']
 		));
+
+		$guestGroupStr = cplang('cloud_doctor_result_success') .' '. cplang('cloud_doctor_normal');
+		if (!$doctorService->checkGuestGroup()) {
+			$guestGroupStr = cplang('cloud_doctor_result_failure') . ' ' . cplang('cloud_doctor_connect_fix');
+		}
+		showtablerow('', array('class="td24"'), array(
+			'<strong>'.cplang('cloud_doctor_connect_guestgroup').'</strong>',
+			$guestGroupStr,
+		));
 		showtagfooter('tbody');
 	}
 
 	showtablefooter();
-	$doctorService->showAPIJS();
-	$doctorService->showSiteTestAPIJS();
-
+	$doctorService->showCloudDoctorJS();
 }
