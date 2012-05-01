@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_post.php 29250 2012-03-31 01:54:28Z chenmengshu $
+ *      $Id: function_post.php 29630 2012-04-23 07:42:53Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -126,12 +126,13 @@ function ftpupload($aids, $uid = 0) {
 		$attachtables[$attach['tableid']][] = $attach['aid'];
 	}
 	foreach($attachtables as $attachtable => $aids) {
+		$remoteaids = array();
 		foreach(C::t('forum_attachment_n')->fetch_all($attachtable, $aids, 0) as $attach) {
 			$attach['ext'] = fileext($attach['filename']);
-			if(((!$_G['setting']['ftp']['allowedexts'] && !$_G['setting']['ftp']['disallowedexts']) || ($_G['setting']['ftp']['allowedexts'] && in_array($attach['ext'], $_G['setting']['ftp']['allowedexts'])) || ($_G['setting']['ftp']['disallowedexts'] && !in_array($attach['ext'], $_G['setting']['ftp']['disallowedexts']))) && (!$_G['setting']['ftp']['minsize'] || $attach['filesize'] >= $_G['setting']['ftp']['minsize'] * 1024)) {
+			if(((!$_G['setting']['ftp']['allowedexts'] && !$_G['setting']['ftp']['disallowedexts']) || ($_G['setting']['ftp']['allowedexts'] && in_array($attach['ext'], $_G['setting']['ftp']['allowedexts'])) || ($_G['setting']['ftp']['disallowedexts'] && !in_array($attach['ext'], $_G['setting']['ftp']['disallowedexts']) && (!$_G['setting']['ftp']['allowedexts'] || $_G['setting']['ftp']['allowedexts'] && in_array($attach['ext'], $_G['setting']['ftp']['allowedexts'])) )) && (!$_G['setting']['ftp']['minsize'] || $attach['filesize'] >= $_G['setting']['ftp']['minsize'] * 1024)) {
 				if(ftpcmd('upload', 'forum/'.$attach['attachment']) && (!$attach['thumb'] || ftpcmd('upload', 'forum/'.getimgthumbname($attach['attachment'])))) {
 					dunlink($attach);
-					$aids[] = $attach['aid'];
+					$remoteaids[$attach['aid']] = $attach['aid'];
 					if($attach['picid']) {
 						$pics[] = $attach['picid'];
 					}
@@ -139,8 +140,8 @@ function ftpupload($aids, $uid = 0) {
 			}
 		}
 
-		if($aids) {
-			C::t('forum_attachment_n')->update($attachtable, $aids, array('remote' => 1));
+		if($remoteaids) {
+			C::t('forum_attachment_n')->update($attachtable, $remoteaids, array('remote' => 1));
 		}
 	}
 	if($pics) {
