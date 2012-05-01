@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: block_blog.php 29437 2012-04-12 05:24:35Z zhangguosheng $
+ *      $Id: block_blog.php 29655 2012-04-24 05:51:56Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -177,9 +177,8 @@ class block_blog extends discuz_block {
 
 		$datalist = $list = array();
 		$wheres = array();
-		if(!$blogids) {
-			$maxitemnum = $_G['setting']['blockmaxaggregationitem'] ? $_G['setting']['blockmaxaggregationitem'] : 65535;
-			if(($maxid = $this->getmaxid() - $maxitemnum) > 0) {
+		if(!$blogids && !$catid && $_G['setting']['blockmaxaggregationitem']) {
+			if(($maxid = $this->getmaxid() - $_G['setting']['blockmaxaggregationitem']) > 0) {
 				$wheres[] = 'b.blogid > '.$maxid;
 			}
 		}
