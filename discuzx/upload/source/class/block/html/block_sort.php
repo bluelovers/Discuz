@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: block_sort.php 29174 2012-03-28 04:00:20Z zhangguosheng $
+ *      $Id: block_sort.php 29557 2012-04-18 10:10:07Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -187,6 +187,7 @@ class block_sort extends commonblock_html {
 		require_once libfile('function/threadsort');
 		$templatearray = $sortoptionarray = array();
 		loadcache(array('threadsort_option_'.$sortid, 'threadsort_template_'.$sortid));
+		sortthreadsortselectoption($sortid);
 		$templatearray[$sortid] = $_G['cache']['threadsort_template_'.$sortid]['block'];
 		$sortoptionarray[$sortid] = $_G['cache']['threadsort_option_'.$sortid];
 		$isthreadtype = (strpos($templatearray[$sortid], '{typename}') !== false || strpos($templatearray[$sortid], '{typename_url}') !== false ) ? true : false;
