@@ -42,6 +42,13 @@ body { background: #FFF url(bgimg.jpg) no-repeat 50% 0; }
 .el .ec .hot, .clct_list .xld .m { background-image: url(hotspot.gif); }
 .pll .s { background-image:url(polljoins.gif); }
 
+/* 重定义广播 */
+#uhd, #flw_header .bar, .flw_replybox { background-color: #FCF9FC; }
+	#uhd .tb a, #flw_header .bar { border-top-color: #F8EFF8; }
+#fastpostsubmit { background-image: url(flw_post.png); }
+.flw_replybox .pnc { background-image: url(pn_reply.png); }
+.flw_replybox td table .pnc { background-image: url(pn_rt.png); }
+
 /* 重定义版块快速跳转和侧边导航 */
 #fjump_menu li.a a { background-color: #FCF8FC; }
 .bdl, .bdl dt, .bdl dd.bdl_a a { border-color: #DFCDDE; background-color: #FCF8FC; }
