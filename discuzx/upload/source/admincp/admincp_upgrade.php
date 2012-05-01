@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_upgrade.php 29328 2012-04-01 09:46:51Z svn_project_zhangjie $
+ *      $Id: admincp_upgrade.php 29551 2012-04-18 08:08:28Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -285,7 +285,15 @@ if($operation == 'patch' || $operation == 'cross') {
 		C::t('common_cache')->delete('upgrade_run');
 		C::t('common_setting')->update('upgrade', '');
 		updatecache('setting');
-		cpmsg('upgrade_successful', '', 'succeed', array('version' => $version, 'release' => $release, 'upgradeurl' => upgradeinformation(0)), '<script type="text/javascript">if(parent.document.getElementById(\'notice\')) parent.document.getElementById(\'notice\').style.display = \'none\';</script>');
+		$old_update_dir = './data/update/';
+		$new_update_dir = './data/update'.md5('update'.$_G['config']['security']['authkey']).'/';
+		$old_back_dir = './data/back/';
+		$new_back_dir = './data/back'.md5('back'.$_G['config']['security']['authkey']).'/';
+		$discuz_upgrade->copy_dir(DISCUZ_ROOT.$old_update_dir, DISCUZ_ROOT.$new_update_dir);
+		$discuz_upgrade->copy_dir(DISCUZ_ROOT.$old_back_dir, DISCUZ_ROOT.$new_back_dir);
+		$discuz_upgrade->rmdirs(DISCUZ_ROOT.$old_update_dir);
+		$discuz_upgrade->rmdirs(DISCUZ_ROOT.$old_back_dir);
+		cpmsg('upgrade_successful', '', 'succeed', array('version' => $version, 'release' => $release, 'save_update_dir' => $new_update_dir, 'save_back_dir' => $new_back_dir, 'upgradeurl' => upgradeinformation(0)), '<script type="text/javascript">if(parent.document.getElementById(\'notice\')) parent.document.getElementById(\'notice\').style.display = \'none\';</script>');
 	}
 	showtablefooter();
 
