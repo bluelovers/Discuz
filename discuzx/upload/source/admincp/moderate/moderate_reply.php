@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: moderate_reply.php 28954 2012-03-20 09:23:02Z monkey $
+ *      $Id: moderate_reply.php 29680 2012-04-25 02:01:05Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -287,9 +287,7 @@ if(!submitcheck('modsubmit') && !$_GET['fast']) {
 		}
 
 		if(!empty($pidarray)) {
-			$pidarray[] = 0;
 			C::t('forum_post')->update($posttable, $pidarray, array('status' => 4), false, false, null, -2, null, 0);
-			$pidarray[] = 0;
 			$validates = C::t('forum_post')->update($posttable, $pidarray, array('invisible' => 0));
 			updatemodworks('MOD', $validates);
 			updatemoderate('pid', $pidarray, 2);
