@@ -734,6 +734,7 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 				ul.litype_1 li { list-style-type: decimal; }
 				ul.litype_2 li { list-style-type: lower-alpha; }
 				ul.litype_3 li { list-style-type: upper-alpha; }
+		.t_f i { font-style: italic; }
 		.sign { overflow: hidden; margin-bottom: 10px; padding-top: 20px; line-height: 1.6em; background: url({IMGDIR}/sigline.gif) no-repeat 0 0; }
 			* html .sign { height: expression(signature(this)); }
 			.sign * { line-height: normal; }
