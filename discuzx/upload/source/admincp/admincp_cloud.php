@@ -4,7 +4,7 @@
  *	  [Discuz!] (C)2001-2099 Comsenz Inc.
  *	  This is NOT a freeware, use is subject to license terms
  *
- *	  $Id: admincp_cloud.php 29273 2012-03-31 07:58:50Z yexinhao $
+ *	  $Id: admincp_cloud.php 29521 2012-04-17 09:24:42Z songlixin $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -173,7 +173,7 @@ EOT;
 
 			echo '<script type="text/JavaScript" charset="UTF-8" src="'.$introUrl.'"></script>';
 			$doctorService = Cloud::loadClass('Service_Doctor');
-			$doctorService->showSiteTestAPIJS('open');
+			$doctorService->showCloudDoctorJS('open');
 
 		} elseif($step == 2) {
 
