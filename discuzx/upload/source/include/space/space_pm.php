@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_pm.php 29461 2012-04-13 02:14:54Z zhengqingpeng $
+ *      $Id: space_pm.php 29691 2012-04-25 06:53:43Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -167,7 +167,7 @@ if($_GET['subop'] == 'view') {
 	}
 	$newpmcount = $newpm + $announcepm;
 	if($_G['member']['newpm']) {
-		if($newpm && $_G['setting']['cloud_status'] &&  $_G['setting']['connect']['allow'] && $_G['member']['conisbind']) {
+		if($newpm && $_G['setting']['cloud_status']) {
 			$msgService = Cloud::loadClass('Cloud_Service_Client_Message');
 			$msgService->setMsgFlag($_G['uid'], $_G['timestamp']);
 		}
