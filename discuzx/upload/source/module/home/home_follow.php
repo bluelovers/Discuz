@@ -3,7 +3,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: home_follow.php 29107 2012-03-27 02:46:23Z zhangguosheng $
+ *      $Id: home_follow.php 29765 2012-04-27 02:30:30Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -163,6 +163,8 @@ if($do == 'feed') {
 	if(helper_access::check_module('follow')) {
 		$followerlist = C::t('home_follow')->fetch_all_following_by_uid($uid, 0, 9);
 	}
+	$seccodecheck = ($_G['setting']['seccodestatus'] & 4) && (!$_G['setting']['seccodedata']['minposts'] || getuserprofile('posts') < $_G['setting']['seccodedata']['minposts']);
+	$secqaacheck = $_G['setting']['secqaa']['status'] & 2 && (!$_G['setting']['secqaa']['minposts'] || getuserprofile('posts') < $_G['setting']['secqaa']['minposts']);
 } elseif($do == 'follower') {
 	$count = C::t('home_follow')->count_follow_user($uid, 1);
 	if($count) {
