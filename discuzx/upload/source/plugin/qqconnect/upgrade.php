@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: upgrade.php 29353 2012-04-06 03:00:07Z liudongdong $
+ *      $Id: upgrade.php 29521 2012-04-17 09:24:42Z songlixin $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -83,9 +83,7 @@ if($sql) {
 	runquery($sql);
 }
 
-$setting = C::t('common_setting')->fetch_all(array('connect'));
-$setting['connect'] = (array)dunserialize($setting['connect']);
-$connect = $setting['connect'];
+$connect = C::t('common_setting')->fetch('connect', true);
 
 if (!array_key_exists('reply', $connect['t'])) {
 	$connect['t']['reply'] = 1;
@@ -131,6 +129,6 @@ if ($needCreateGroup) {
 }
 
 $updateData = array_merge($connect, $newConnect);
-C::t('common_setting')->update_batch(array('connect' => serialize($updateData)));
+C::t('common_setting')->update('connect', serialize($updateData));
 updatecache('setting');
 $finish = true;
