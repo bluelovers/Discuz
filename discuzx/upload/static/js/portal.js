@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: portal.js 29037 2012-03-23 05:35:25Z zhengqingpeng $
+	$Id: portal.js 29595 2012-04-20 10:05:13Z zhangguosheng $
 */
 
 function block_get_setting(classname, script, bid) {
@@ -330,7 +330,7 @@ function strLenCalc(obj, checklen, maxlen) {
 	var v = obj.value, charlen = 0, maxlen = !maxlen ? 200 : maxlen, curlen = 0, len = strlen(v);
 	for(var i = 0; i < v.length; i++) {
 		if(v.charCodeAt(i) < 0 || v.charCodeAt(i) > 255) {
-			curlen += charset == 'utf-8' ? 2 : 1;
+			curlen += 2;
 		} else {
 			curlen += 1;
 		}
