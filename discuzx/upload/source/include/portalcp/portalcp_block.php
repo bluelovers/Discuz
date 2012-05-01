@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portalcp_block.php 29446 2012-04-12 07:46:32Z zhangguosheng $
+ *      $Id: portalcp_block.php 29567 2012-04-19 03:35:30Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -350,7 +350,13 @@ if($op == 'block') {
 		showmessage('do_success', "portal.php?mod=portalcp&ac=block&op=itemdata&bid=$bid&page=$page");
 	}
 
-	$datalist = C::t('common_block_item_data')->fetch_all_by_bid($bid, 1, $start, $perpage);
+	$count = C::t('common_block_item_data')->count_by_bid($bid);
+	$multi = '';
+	$datalist = array();
+	if($count) {
+		$datalist = C::t('common_block_item_data')->fetch_all_by_bid($bid, 1, $start, $perpage);
+		$multi = multi($count, $perpage, $page, "portal.php?mod=portalcp&ac=block&bid=$bid&op=itemdata");
+	}
 
 } elseif($op == 'setting') {
 
