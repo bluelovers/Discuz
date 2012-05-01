@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: Util.php 29283 2012-03-31 09:35:36Z liudongdong $
+ *      $Id: Util.php 29766 2012-04-27 02:43:58Z yexinhao $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -131,7 +131,7 @@ class Cloud_Service_Util {
 
 	public function getApiVersion() {
 
-		return '0.5';
+		return '0.6';
 	}
 
 	public function hashHmac($algo, $data, $key, $raw_output = false) {
