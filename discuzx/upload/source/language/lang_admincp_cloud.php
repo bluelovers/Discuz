@@ -4,7 +4,7 @@
  *	  [Discuz!] (C)2001-2099 Comsenz Inc.
  *	  This is NOT a freeware, use is subject to license terms
  *
- *	  $Id: lang_admincp_cloud.php 29353 2012-04-06 03:00:07Z liudongdong $
+ *	  $Id: lang_admincp_cloud.php 29521 2012-04-17 09:24:42Z songlixin $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -44,6 +44,7 @@ $extend_lang = array
 
 	'cloud_status_error' => '出了點小錯，由於站點ID/通信KEY等關鍵信息丟失導致Discuz!雲平台服務出現異常，使用<a href="admin.php?action=cloud&operation=doctor">診斷工具</a>檢測站點ID和KEY，如有疑問請訪問<a href="http://www.discuz.net/forum-3926-1.html" target="_blank">官方論壇</a>尋求幫助',
 
+	'cloud_timecheck' => '服務器時間檢查',
 	'cloud_introduction' => '查看介紹',
 	'cloud_confirm_open' => '確認開通',
 	'cloud_confirm_upgrade' => '確認升級',
@@ -86,9 +87,11 @@ $extend_lang = array
 
 	'cloud_siteinfo_tips' => '<li>如果站點名稱或者站點URL有變動，請點擊「同步站點信息」按鈕。</li><li>站點KEY是站點與雲平台通信的驗證密鑰，若近期有危險操作洩漏站點KEY等信息，請點擊「更換站點KEY」按鈕。<span style="color:red;">請謹慎使用此功能。</span></li>',
 
+	'cloud_doctor_normal' => '正常',
 	'cloud_doctor_tips' => '<li>Discuz!雲平台診斷工具是幫助您分析站點上的狀況，是否能與雲平台正常通信等功能。</li><li>站點ID是您的站點在雲平台的唯一標識，請勿和其他站點共用一套站點ID和站點通信KEY</li>',
 
 	'cloud_doctor_setidkey' => '修改Discuz!上的站點ID和KEY',
+	'cloud_doctor_connect_fix' => '<a href="./admin.php?action=cloud&operation=doctor&op=fixGuest">點擊修復</a>',
 	'cloud_doctor_setidkey_tips' => '<li style="color:red">修改Discuz!上的站點ID和KEY，可能會導致通信錯誤、簽名錯誤以及其他的故障，請勿在沒有官方人員指導的情況下修改。</li><li style="color:red">修改ID、KEY和狀態前，請先備份論壇的common_setting表。</li>',
 	'cloud_site_key' => '站點通信KEY',
 	'cloud_site_key_safetips' => '(出於安全考慮，部分隱藏)',
@@ -133,6 +136,7 @@ $extend_lang = array
 	'cloud_doctor_dns_qzone_test' => 'QQ互聯主接口測試',
 	'cloud_doctor_other_qzone_test' => 'QQ互聯其他接口測試',
 	'cloud_doctor_site_test' => '雲平台到站點測試',
+	'cloud_doctor_time_check' => '<img src="{imgdir}/loading.gif" class="vm"> 請稍候...',
 	'cloud_doctor_site_test_result' => '<div id="cloud_doctor_site_test_result_div"><img src="{imgdir}/loading.gif" class="vm"> 請稍候...</div>',
 
 	'cloud_doctor_setting_ip' => '手動設置的IP：',
@@ -148,6 +152,7 @@ $extend_lang = array
 
 	'cloud_doctor_title_connect' => 'QQ互聯檢測',
 	'cloud_doctor_connect_app_id' => 'QQ互聯appid',
+	'cloud_doctor_connect_guestgroup' => 'QQ互聯遊客用戶組',
 	'cloud_doctor_connect_app_key' => 'QQ互聯appkey',
 	'cloud_doctor_connect_reopen' => '當前站點appid/appkey丟失，請<a href="admin.php?action=cloud&operation=applist">重新開通</a>QQ互聯',
 
