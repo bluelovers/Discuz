@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_admincp.php 29318 2012-04-01 08:13:06Z svn_project_zhangjie $
+ *      $Id: lang_admincp.php 29721 2012-04-26 07:01:08Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -430,6 +430,7 @@ $lang = array
 	'nav_members_confermedal' => '頒發勳章',
 	'nav_members_confermagic' => '道具贈送',
 	'nav_members_newsletter' => '站點通知',
+	'nav_members_newsletter_mobile' => '手機通知',
 	'nav_members_ipban' => '禁止 IP',
 	'nav_members_select' => '選取目標用戶',
 	'nav_members_notify' => '填寫通知內容',
@@ -552,7 +553,7 @@ $lang = array
 	'founder_upgrade_complete' => '升級完成',
 	'founder_upgrade_preupdatelist' => '待更新文件列表',
 	'founder_upgrade_store_directory' => '<b>文件存放目錄:</b> ',
-	'founder_upgrade_diff_show' => '與本地文件的比對結果，狀態 <span style="color:red;">差異</span> 表示該本地文件被修改過',
+	'founder_upgrade_diff_show' => '與本地文件的比對結果，狀態 <span style="color:red;">差異</span> 表示該本地文件被修改過 <br /><br />注意：如果您的源文件是通過 <span style="color:red;">非二進制</span> 方式上傳到服務器，可能導致對比結果不準確',
 	'founder_upgrade_diff' => '差異',
 	'founder_upgrade_normal' => '正常',
 	'founder_upgrade_new' => '新增',
@@ -1443,7 +1444,7 @@ $lang = array
 	'setting_serveropti_lazyload' => '開啟圖片延時加載',
 	'setting_serveropti_lazyload_comment' => '當開啟後，頁面中的圖片在瀏覽器的當前窗口時再加載，可明顯降低訪問量很大的站點的服務器負擔，建議開啟本功能',
 	'setting_serveropti_blockmaxaggregationitem' => '<span class="spectitle">參與模塊聚合數據條數</span>',
-	'setting_serveropti_blockmaxaggregationitem_comment' => '此值影響模塊聚合時MYSQL檢索數據的條數，設置太大將嚴重影響MYSQL的性能，設置太小將會影響模塊聚合結果數據的理想程度。最大值為65535',
+	'setting_serveropti_blockmaxaggregationitem_comment' => '此值影響模塊聚合時MYSQL檢索數據的條數，設置太大將嚴重影響MYSQL的性能，設置太小將會影響模塊聚合結果數據的理想程度。0為關閉些功能',
 	'setting_serveropti_blockcachetimerange' => '模塊更新時間區間',
 	'setting_serveropti_blockcachetimerange_comment' => '設置全部模塊在指定的時間區間內更新。可以根據網站的訪問情況，避開訪問高峰時間段。如：3點-7點',
 	'setting_serveropti_blockcachetimerangepoint' => '點',
@@ -3269,6 +3270,7 @@ $lang = array
 	'members_newsletter_posttype' => '內容解析方式',
 	'members_newsletter_posttype_text' => '文本方式',
 	'members_newsletter_posttype_html' => 'html方式',
+	'members_newsletter_mobile_tips' => '<li>您可以通過該功能給手機客戶端用戶發送通知，為了您更好的觸達用戶建議大力推廣我們的手機客戶端。</li><li>要使用本功能需要開啟雲平台服務、手機客戶端插件</li><li><strong>請關注應用中心中"<a href="http://addon.discuz.com/?@mobile.plugin">手機客戶端</a>"的更新，功能啟用時將會在插件中做詳細說明</strong></li>',
 
 	'members_grouppmlist' => '群發短消息記錄',
 	'members_grouppmlist_newsletter' => '發送通知',
