@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_admincp_menu.php 29171 2012-03-28 02:59:31Z monkey $
+ *      $Id: lang_admincp_menu.php 29721 2012-04-26 07:01:08Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -72,6 +72,7 @@ $lang = array
 	'menu_members_add' => '添加用戶',
 	'menu_members_edit' => '用戶管理',
 	'menu_members_newsletter' => '發送通知',
+	'menu_members_mobile' => '發送手機通知',
 	'menu_usertag' => '用戶標籤',
 	'menu_members_edit_ban_user' => '禁止用戶',
 	'menu_members_ipban' => '禁止 IP',
