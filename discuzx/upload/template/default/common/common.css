@@ -1647,3 +1647,17 @@ DIYÍ¼Æ¬»ÃµÆÆ¬Î´¼ÓÔØÊ±Òþ²Ø,Ä£¿é±êÊ¶Òþ²Ø
 .imgzoom_exif_hover { height: auto; }
 .ie_all .imgzoom_exif, .imgzoom_exif_hover { background: #000; }
 .ie6 .imgzoom_exif { bottom: 39px; }
+
+.patch { width: 300px; }
+	.patch .bm { border-color: #F26C4F; background: #FFF; }
+	.patch .allfixed { border-color: #6C3; }
+	.patch .bm_h { border: solid #FFF; border-width: 1px 1px 0; background: #F26C4F; }
+		.patch .allfixed .bm_h { background: #6C3; }
+		.patch h2, .patch .bm_h .y { color: #FFF; }
+	.patch table { table-layout: fixed; }
+		.patch th, .patch td { padding: 2px; border-bottom: 1px dotted #CDCDCD; }
+		.patchdate { width: 70px; }
+		.patchstat { width: 55px; }
+	.unfixed { color: #F26C4F; }
+.plugin { width: 300px; }
+	.plugin .bm_h { border-color: {COMMONBORDER}; color: {TABLETEXT}; background: {COMMONBG}; }
