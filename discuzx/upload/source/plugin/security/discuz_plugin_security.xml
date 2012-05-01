@@ -12,7 +12,7 @@
 			<item id="datatables"><![CDATA[]]></item>
 			<item id="directory"><![CDATA[security/]]></item>
 			<item id="copyright"><![CDATA[Comsenz Inc.]]></item>
-			<item id="version"><![CDATA[1.05]]></item>
+			<item id="version"><![CDATA[1.06]]></item>
 			<item id="__modules">
 				<item id="0">
 					<item id="name"><![CDATA[security]]></item>
@@ -54,6 +54,9 @@
 			<item id="templatelang">
 				<item id="unlock_title"><![CDATA[请输入验证码，解除禁言状态]]></item>
 				<item id="unlock"><![CDATA[解禁]]></item>
+			</item>
+			<item id="installlang">
+				<item id="cron"><![CDATA[防水墙每日计划任务]]></item>
 			</item>
 		</item>
 	</item>
