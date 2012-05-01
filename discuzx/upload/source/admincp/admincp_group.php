@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_group.php 29459 2012-04-13 01:45:21Z chenmengshu $
+ *      $Id: admincp_group.php 29614 2012-04-23 04:23:34Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -55,39 +55,10 @@ if($operation == 'setting') {
 		showtablefooter();
 		showformfooter();
 	} else {
+
 		require_once libfile('function/group');
-		$group_recommend = array();
-		$recommend_num = 8;
-		$recommends = $_GET['settingnew']['group_recommend'] ? explode(',', $_GET['settingnew']['group_recommend']) : array();
-		if($recommends) {
-			$query = C::t('forum_forum')->fetch_all_info_by_fids($recommends, 3);
-			foreach($query as $val) {
-				$row = array();
-				if($val['type'] == 'sub') {
-					$row = array('fid' => $val['fid'], 'name' => $val['name'], 'description' => $val['description'], 'icon' => $val['icon']);
-					$row['icon'] = get_groupimg($row['icon'], 'icon');
-					$temp[$row[fid]] = $row;
-				}
-			}
-			foreach($recommends as $key) {
-				if(!empty($temp[$key])) {
-					$group_recommend[$key] = $temp[$key];
-				}
-			}
-		}
-		if(count($group_recommend) < $recommend_num) {
-			$query = C::t('forum_forum')->fetch_all_default_recommend($recommend_num);
-			foreach($query as $row) {
-				$row['icon'] = get_groupimg($row['icon'], 'icon');
-				if(count($group_recommend) == $recommend_num) {
-					break;
-				} elseif(empty($group_recommend[$row[fid]])) {
-					$group_recommend[$row[fid]] = $row;
-				}
-			}
-		}
 		$settings = array();
-		$settings['group_recommend'] = $group_recommend;
+		$settings['group_recommend'] = cacherecommend($_GET['settingnew']['group_recommend']);
 		require_once libfile('function/discuzcode');
 		$skey_array = array('groupstatus','group_imgsizelimit','group_allowfeed', 'groupmod');
 		foreach($_GET['settingnew'] as $skey => $svalue) {
@@ -470,6 +441,15 @@ var rowtypedata = [
 	$targetgroup = intval($_GET['targetgroup']);
 	if(submitcheck('confirmed', 1)){
 		$fidarray = explode(',', $fidarray);
+		$recommend = $_G['setting']['group_recommend'] ? array_keys(dunserialize($_G['setting']['group_recommend'])) : array();
+		$fidstr = $_G['setting']['group_recommend'] ? implode(',', $recommend) : '';
+		$updaterecommend = false;
+		foreach($fidarray as $fid) {
+			if(in_array($fid, $recommend)) {
+				$updaterecommend = true;
+				break;
+			}
+		}
 		if($optype == 'delete') {
 			delete_groupimg($fidarray);
 			require_once libfile('function/post');
@@ -514,7 +494,10 @@ var rowtypedata = [
 
 			require_once libfile('function/delete');
 			deletedomain($fidarray, 'group');
-			updatecache('grouptype');
+			if($updaterecommend) {
+				cacherecommend($fidstr, false);
+			}
+			updatecache(array('setting', 'grouptype'));
 			cpmsg('group_delete_succeed', 'action=group&operation=manage', 'succeed');
 		} elseif($optype == 'changetype') {
 			$fups = array();
@@ -601,9 +584,13 @@ var rowtypedata = [
 			C::t('home_favorite')->delete_by_id_idtype($fidarray, 'gid');
 			require_once libfile('function/delete');
 			deletedomain($fidarray, 'group');
-			updatecache('grouptype');
+			if($updaterecommend) {
+				cacherecommend($fidstr, false);
+			}
+			updatecache(array('setting', 'grouptype'));
 			cpmsg('group_mergegroup_succeed', 'action=group&operation=manage', 'succeed');
 		}
+
 	}
 	if(empty($optype) || !in_array($optype, array('delete', 'changetype', 'mergegroup'))) {
 		cpmsg('group_optype_no_choice', '', 'error');
@@ -1198,5 +1185,43 @@ function array_flip_keys($arr) {
 		}
 	}
 	return $arr2;
+}
+function cacherecommend($fidstr, $return = true) {
+	require_once libfile('function/group');
+	$group_recommend = array();
+	$recommend_num = 8;
+	$recommends = $fidstr ? explode(',', $fidstr) : array();
+	if($recommends) {
+		$query = C::t('forum_forum')->fetch_all_info_by_fids($recommends, 3);
+		foreach($query as $val) {
+			$row = array();
+			if($val['type'] == 'sub') {
+				$row = array('fid' => $val['fid'], 'name' => $val['name'], 'description' => $val['description'], 'icon' => $val['icon']);
+				$row['icon'] = get_groupimg($row['icon'], 'icon');
+				$temp[$row[fid]] = $row;
+			}
+		}
+		foreach($recommends as $key) {
+			if(!empty($temp[$key])) {
+				$group_recommend[$key] = $temp[$key];
+			}
+		}
+	}
+	if(count($group_recommend) < $recommend_num) {
+		$query = C::t('forum_forum')->fetch_all_default_recommend($recommend_num);
+		foreach($query as $row) {
+			$row['icon'] = get_groupimg($row['icon'], 'icon');
+			if(count($group_recommend) == $recommend_num) {
+				break;
+			} elseif(empty($group_recommend[$row[fid]])) {
+				$group_recommend[$row[fid]] = $row;
+			}
+		}
+	}
+	if($return) {
+		return $group_recommend;
+	} else {
+		C::t('common_setting')->update_batch(array('group_recommend' => $group_recommend));
+	}
 }
 ?>
