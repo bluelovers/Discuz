@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_membersearch.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: class_membersearch.php 29721 2012-04-26 07:01:08Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -39,7 +39,7 @@ class membersearch {
 			'qq'=>'profile', 'yahoo'=>'profile', 'msn'=>'profile', 'taobao'=>'profile', 'site'=>'profile',
 			'bio'=>'profile', 'interest'=>'profile', 'field1'=>'profile', 'field2'=>'profile',
 			'field3'=>'profile', 'field4'=>'profile', 'field5'=>'profile', 'field6'=>'profile',
-			'field7'=>'profile', 'field8'=>'profile');
+			'field7'=>'profile', 'field8'=>'profile', 'token' => 'token');
 		return $fieldid ? $fields[$fieldid] : $fields;
 	}
 
@@ -50,7 +50,7 @@ class membersearch {
 			'extcredits1'=>'int', 'extcredits2'=>'int', 'extcredits3'=>'int', 'extcredits4'=>'int',
 			'extcredits5'=>'int', 'extcredits6'=>'int', 'extcredits7'=>'int', 'extcredits8'=>'int',
 			'posts'=>'int', 'friends'=>'int', 'birthyear'=>'int', 'birthmonth'=>'int', 'birthday'=>'int', 'gender'=>'int',
-			'uin'=>'int', 'sid'=>'noempty'
+			'uin'=>'int', 'sid'=>'noempty', 'token' => 'noempty'
 			);
 		return $types[$fieldid] ? $types[$fieldid] : 'string';
 	}
@@ -61,15 +61,31 @@ class membersearch {
 		if($maxsearch) {
 			$sql .= " LIMIT $start, $maxsearch";
 		}
-		$query = DB::query($sql);
-		while($value = DB::fetch($query)) {
-			$list[] = intval($value['uid']);
+		if(isset($condition['token_noempty'])) {
+			try {
+				$query = DB::query($sql);
+				while($value = DB::fetch($query)) {
+					$list[] = intval($value['uid']);
+				}
+			} catch (Exception $e) {}
+		} else {
+			$query = DB::query($sql);
+			while($value = DB::fetch($query)) {
+				$list[] = intval($value['uid']);
+			}
 		}
 		return $list;
 	}
 
 	function getcount($condition) {
-		$count = DB::result_first(membersearch::makesql($condition, true));
+		$count = 0;
+		if(isset($condition['token_noempty'])) {
+			try {
+				$count = DB::result_first(membersearch::makesql($condition, true));
+			} catch (Exception $e) {}
+		} else {
+			$count = DB::result_first(membersearch::makesql($condition, true));
+		}
 		return intval($count);
 	}
 
@@ -241,7 +257,7 @@ class membersearch {
 
 
 	function gettable($alias, $isarchive = false) {
-		static $mapping = array('member'=>'common_member', 'status'=>'common_member_status', 'profile'=>'common_member_profile', 'count'=>'common_member_count', 'session'=>'common_session', 'groupuser' => 'forum_groupuser', 'verify' => 'common_member_verify', 'black'=>'common_uin_black', 'medal'=>'common_member_medal', 'tag'=>'common_tagitem');
+		static $mapping = array('member'=>'common_member', 'status'=>'common_member_status', 'profile'=>'common_member_profile', 'count'=>'common_member_count', 'session'=>'common_session', 'groupuser' => 'forum_groupuser', 'verify' => 'common_member_verify', 'black'=>'common_uin_black', 'medal'=>'common_member_medal', 'tag'=>'common_tagitem', 'token' => 'common_devicetoken');
 		return DB::table($isarchive && in_array($alias, array('member', 'status', 'profile', 'count')) ? $mapping[$alias].'_archive' : $mapping[$alias]);
 	}
 
