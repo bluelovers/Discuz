@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: discuz_database.php 28779 2012-03-13 02:01:51Z cnteacher $
+ *      $Id: discuz_database.php 29671 2012-04-24 08:38:02Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -177,7 +177,7 @@ class discuz_database {
 			return '\'' . addcslashes($str, "\n\r\\'\"\032") . '\'';
 
 		if (is_int($str) or is_float($str))
-			return $str;
+			return '\'' . $str . '\'';
 
 		if (is_array($str)) {
 			if($noarray === false) {
