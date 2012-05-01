@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: myrepeats.class.php 23901 2011-08-15 10:08:59Z monkey $
+ *      $Id: myrepeats.class.php 29558 2012-04-18 10:17:22Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -19,6 +19,23 @@ class plugin_myrepeats {
 		global $_G;
 		if(!$_G['uid']) {
 			return;
+		}
+
+		$myrepeatsusergroups = (array)dunserialize($_G['cache']['plugin']['myrepeats']['usergroups']);
+		if(in_array('', $myrepeatsusergroups)) {
+			$myrepeatsusergroups = array();
+		}
+		$userlist = array();
+		if(!in_array($_G['groupid'], $myrepeatsusergroups)) {
+			if(!isset($_G['cookie']['myrepeat_rr'])) {
+				$users = count(C::t('#myrepeats#myrepeats')->fetch_all_by_username($_G['username']));
+				dsetcookie('myrepeat_rr', 'R'.$users, 86400);
+			} else {
+				$users = substr($_G['cookie']['myrepeat_rr'], 1);
+			}
+			if(!$users) {
+				return '';
+			}
 		}
 
 		$this->value['global_usernav_extra1'] = '<script>'.
