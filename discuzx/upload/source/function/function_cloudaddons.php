@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_cloudaddons.php 29396 2012-04-10 08:11:12Z monkey $
+ *      $Id: function_cloudaddons.php 29634 2012-04-23 08:29:45Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -14,11 +14,11 @@ if(!defined('IN_DISCUZ')) {
 define('CLOUDADDONS_WEBSITE_URL', 'http://addon.discuz.com');
 define('CLOUDADDONS_DOWNLOAD_URL', 'http://addon.discuz.com/index.php');
 define('CLOUDADDONS_DOWNLOAD_IP', '');
-define('CLOUDADDONS_CHECK_URL', 'http://addon1.discuz.com/md5');
+define('CLOUDADDONS_CHECK_URL', 'http://addon1.discuz.com');
 define('CLOUDADDONS_CHECK_IP', '');
 
 function cloudaddons_md5($file) {
-	return dfsockopen(CLOUDADDONS_CHECK_URL.'/'.$file, 0, '', '', false, CLOUDADDONS_CHECK_IP);
+	return dfsockopen(CLOUDADDONS_CHECK_URL.'/md5/'.$file, 0, '', '', false, CLOUDADDONS_CHECK_IP, 999);
 }
 
 function cloudaddons_url($extra) {
@@ -34,7 +34,10 @@ function cloudaddons_url($extra) {
 }
 
 function cloudaddons_check() {
-	if(dfsockopen(CLOUDADDONS_WEBSITE_URL.'/image/logo.png', 4) !== chr(0x89).'PNG') {
+	if(dfsockopen(CLOUDADDONS_WEBSITE_URL.'/image/logo.png', 4, '', '', false, CLOUDADDONS_DOWNLOAD_IP, 999) !== chr(0x89).'PNG') {
+		cpmsg('cloudaddons_check_url_fopen_error', '', 'error');
+	}
+	if(dfsockopen(CLOUDADDONS_CHECK_URL.'/logo.png', 4, '', '', false, CLOUDADDONS_DOWNLOAD_IP, 999) !== chr(0x89).'PNG') {
 		cpmsg('cloudaddons_check_url_fopen_error', '', 'error');
 	}
 	foreach(array('download', 'addonmd5') as $path) {
