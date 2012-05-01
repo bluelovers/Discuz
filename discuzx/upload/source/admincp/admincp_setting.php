@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_setting.php 29284 2012-03-31 09:42:04Z chenmengshu $
+ *      $Id: admincp_setting.php 29652 2012-04-24 05:40:05Z zhangguosheng $
  */
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
@@ -2639,6 +2639,8 @@ EOT;
 		$settingnew['bannedmessages'] = bindec(intval($settingnew['bannedmessages'][3]).intval($settingnew['bannedmessages'][2]).intval($settingnew['bannedmessages'][1]));
 		$settingnew['activityextnum'] = intval($settingnew['activityextnum']);
 		$settingnew['activitypp'] = intval($settingnew['activitypp']) == 0 ? 8 : intval($settingnew['activitypp']);
+		if(!$settingnew['allowpostcomment']) $settingnew['allowpostcomment'] = array();
+		if(!$settingnew['activityfield']) $settingnew['activityfield'] = array();
 	}
 	if($operation == 'permissions') {
 		$settingnew['alloweditpost'] = bindec(intval($settingnew['alloweditpost'][6]).intval($settingnew['alloweditpost'][5]).intval($settingnew['alloweditpost'][4]).intval($settingnew['alloweditpost'][3]).intval($settingnew['alloweditpost'][2]).intval($settingnew['alloweditpost'][1]));
@@ -2952,7 +2954,7 @@ EOT;
 	}
 
 	if(isset($settingnew['blockmaxaggregationitem'])) {
-		$settingnew['blockmaxaggregationitem'] = min(intval($settingnew['blockmaxaggregationitem']), 65535);
+		$settingnew['blockmaxaggregationitem'] = intval($settingnew['blockmaxaggregationitem']);
 	}
 
 	if(isset($settingnew['blockcachetimerange'])) {
