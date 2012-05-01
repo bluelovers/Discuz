@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_founder.php 26660 2011-12-19 05:50:07Z monkey $
+ *      $Id: admincp_founder.php 29654 2012-04-24 05:48:42Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -299,7 +299,11 @@ if($operation == 'perm') {
 			} else {
 				$_permnew = !empty($_GET['permnew']) ? $_GET['permnew'] : array();
 				$cpgroupidnew = $_GET['cpgroupidnew'];
-				$perms = C::t('common_admincp_perm')->fetch_all_by_cpgroupid($cpgroupidnew);
+				$dbperms = C::t('common_admincp_perm')->fetch_all_by_cpgroupid($cpgroupidnew);
+				$perms = array();
+				foreach($dbperms as $dbperm) {
+					$perms[] = $dbperm['perm'];
+				}
 				$customperm = serialize(array_diff($perms, $_permnew));
 				C::t('common_admincp_member')->update($id, array('cpgroupid' => $cpgroupidnew, 'customperm' => $customperm));
 				cpmsg('founder_perm_member_update_succeed', 'action=founder&operation=perm&do=member', 'succeed');
