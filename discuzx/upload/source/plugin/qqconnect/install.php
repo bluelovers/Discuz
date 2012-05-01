@@ -4,12 +4,14 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: install.php 29353 2012-04-06 03:00:07Z liudongdong $
+ *      $Id: install.php 29521 2012-04-17 09:24:42Z songlixin $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
+
+$connect = C::t('common_setting')->fetch('connect', true);
 
 $sql = <<<EOF
 
@@ -101,29 +103,54 @@ CREATE TABLE IF NOT EXISTS `pre_connect_disktask` (
 
 
 REPLACE INTO pre_common_setting VALUES ('regconnect', '1');
-REPLACE INTO pre_common_setting VALUES ('connect', 'a:19:{s:5:"allow";s:1:"1";s:4:"feed";a:2:{s:5:"allow";s:1:"1";s:5:"group";s:1:"0";}s:1:"t";a:4:{s:5:"allow";s:1:"1";s:5:"group";s:1:"0";s:5:"reply";i:1;s:16:"reply_showauthor";i:1;}s:10:"like_allow";s:1:"1";s:7:"like_qq";s:0:"";s:10:"turl_allow";s:1:"1";s:7:"turl_qq";s:0:"";s:8:"like_url";s:0:"";s:17:"register_birthday";s:1:"0";s:15:"register_gender";s:1:"0";s:17:"register_uinlimit";s:0:"";s:21:"register_rewardcredit";s:1:"1";s:18:"register_addcredit";s:0:"";s:16:"register_groupid";s:1:"0";s:18:"register_regverify";s:1:"1";s:15:"register_invite";s:1:"1";s:10:"newbiespan";s:0:"";s:9:"turl_code";s:0:"";s:13:"mblog_app_key";s:3:"abc";}');
 
 EOF;
 
 runquery($sql);
 
-$setting = C::t('common_setting')->fetch_all(array('connect'));
-$setting['connect'] = (array)dunserialize($setting['connect']);
-$connect = $setting['connect'];
-
-$needCreateGroup = false;
-if ($connect['guest_groupid']) {
+$needCreateGroup = true;
+if ($connect['feed']) {
 	$group = C::t('common_usergroup')->fetch($connect['guest_groupid']);
-	if (!$group) {
-		$needCreateGroup = true;
+	if ($group) {
+		$needCreateGroup = false;
 	}
 } else {
-	$needCreateGroup = true;
+	$connect = array (
+		'allow' => '1',
+		'feed' =>
+		array (
+			'allow' => '1',
+			'group' => '0',
+		),
+		't' =>
+		array (
+			'allow' => '1',
+			'group' => '0',
+			'reply' => 1,
+			'reply_showauthor' => 1,
+		),
+		'like_allow' => '1',
+		'like_qq' => '',
+		'turl_allow' => '1',
+		'turl_qq' => '',
+		'like_url' => '',
+		'register_birthday' => '0',
+		'register_gender' => '0',
+		'register_uinlimit' => '',
+		'register_rewardcredit' => '1',
+		'register_addcredit' => '',
+		'register_groupid' => '0',
+		'register_regverify' => '1',
+		'register_invite' => '1',
+		'newbiespan' => '',
+		'turl_code' => '',
+		'mblog_app_key' => 'abc',
+	);
 }
 
-include DISCUZ_ROOT . 'source/language/lang_admincp_cloud.php';
-$name = $extend_lang['connect_guest_group_name'];
 if ($needCreateGroup) {
+	include DISCUZ_ROOT . 'source/language/lang_admincp_cloud.php';
+	$name = $extend_lang['connect_guest_group_name'];
 	$userGroupData = array(
 		'type' => 'special',
 		'grouptitle' => $name,
@@ -142,9 +169,10 @@ if ($needCreateGroup) {
 	);
 	C::t('common_usergroup_field')->insert($dataField);
 
-	$newConnect = array_merge($connect, array('guest_groupid' => $newGroupId));
-	C::t('common_setting')->update_batch(array('connect' => serialize($newConnect)));
+	$connect['guest_groupid'] = $newGroupId;
 	updatecache('usergroups');
 }
+
+C::t('common_setting')->update('connect', serialize($connect));
 updatecache('setting');
 $finish = true;
