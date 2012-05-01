@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_home_show.php 28041 2012-02-21 07:33:55Z chenmengshu $
+ *      $Id: table_home_show.php 29635 2012-04-23 09:00:27Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -54,12 +54,11 @@ class table_home_show extends discuz_table
 	}
 
 	public function update_credit_by_uid($uid, $inc_credit, $limit_credit = true, $unitprice = false, $note = false) {
-		$args = array($this->_table, $inc_credit, $uid);
+		$args = array($this->_table, $inc_credit);
 
 		if($limit_credit === true) {
 			$sql = ' AND credit>0';
 		}
-
 		if($unitprice !== false) {
 			$args[] = $unitprice;
 			$set_sql = ', unitprice=%d';
@@ -67,9 +66,9 @@ class table_home_show extends discuz_table
 
 		if($note !== false) {
 			$args[] = $note;
-			$set_sql .= ', note=%d';
+			$set_sql .= ', note=%s';
 		}
-
+		$args[] = $uid;
 		return DB::query("UPDATE %t SET credit=credit+'%d' {$set_sql} WHERE uid=%d {$sql}", $args);
 	}
 
