@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_misc.php 29327 2012-04-01 09:37:17Z liudongdong $
+ *      $Id: lang_misc.php 29624 2012-04-23 06:56:28Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -318,6 +318,10 @@ $lang = array
 	'patch_dateline' => '發佈日期',
 	'patch_status' => '當前狀態',
 	'patch_close' => '關閉',
+
+	'plugin_title' => '應用更新提醒',
+	'plugin_memo' => '您有 <span class="xi1">{number}</span> 款應用有可用更新',
+	'plugin_link' => '現在更新',
 
 );
 
