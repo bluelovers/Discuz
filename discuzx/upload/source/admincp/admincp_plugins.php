@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms'
  *
- *      $Id: admincp_plugins.php 29432 2012-04-12 03:31:59Z chenmengshu $
+ *      $Id: admincp_plugins.php 29688 2012-04-25 05:40:34Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -1255,6 +1255,15 @@ if(!$operation) {
 	}
 
 	if(!$_GET['confirmed']) {
+
+		$installtype = $modules['extra']['installtype'];
+		$importfile = DISCUZ_ROOT.'./source/plugin/'.$dir.'/discuz_plugin_'.$dir.($installtype ? '_'.$installtype : '').'.xml';
+		if(!file_exists($importfile)) {
+			cpmsg('plugin_file_error', '', 'error');
+		}
+
+		$importtxt = @implode('', file($importfile));
+		$pluginarray = getimportdata('Discuz! Plugin');
 
 		if(!empty($pluginarray['checkfile']) && preg_match('/^[\w\.]+$/', $pluginarray['checkfile'])) {
 			$filename = DISCUZ_ROOT.'./source/plugin/'.$plugin['identifier'].'/'.$pluginarray['checkfile'];
