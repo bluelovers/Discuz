@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_wall.php 24613 2011-09-28 05:07:03Z chenmengshu $
+ *      $Id: space_wall.php 29522 2012-04-17 09:39:32Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -29,7 +29,7 @@ $cid = empty($_GET['cid'])?0:intval($_GET['cid']);
 $list = array();
 $count = C::t('home_comment')->count_by_id_idtype($space['uid'], 'uid', $cid);
 if($count) {
-	$query = C::t('home_comment')->fetch_all_by_id_idtype($space['uid'], 'uid', $start, $perpage, $cid);
+	$query = C::t('home_comment')->fetch_all_by_id_idtype($space['uid'], 'uid', $start, $perpage, $cid, 'DESC');
 	foreach($query as $value) {
 		$list[] = $value;
 	}
