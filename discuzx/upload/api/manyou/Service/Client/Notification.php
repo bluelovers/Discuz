@@ -3,7 +3,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: Notification.php 29263 2012-03-31 05:45:08Z yexinhao $
+ *      $Id: Notification.php 29758 2012-04-27 01:35:41Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -30,50 +30,62 @@ class Cloud_Service_Client_Notification extends Cloud_Service_Client_Restful {
 		return parent::__construct($debug);
 	}
 	public function add($siteUid, $pkId, $type, $authorId, $author, $fromId, $fromIdType, $note, $fromNum, $dateline) {
-		$openId = $this->getUserOpenId($siteUid);
-		if($openId) {
-			$_params = array(
-					'openid' => $openId,
-					'sSiteUid' => $siteUid,
-					'pkId' => $pkId,
-					'type' => $type,
-					'authorId' => $authorId,
-					'author' => $author,
-					'fromId' => $fromId,
-					'fromIdType' => $fromIdType,
-					'fromNum' => $fromNum,
-					'content' => $note,
-					'dateline' => $dateline
+
+		$_params = array(
+				'openid' => $this->getUserOpenId($siteUid),
+				'sSiteUid' => $siteUid,
+				'pkId' => $pkId,
+				'type' => $type,
+				'authorId' => $authorId,
+				'author' => $author,
+				'fromId' => $fromId,
+				'fromIdType' => $fromIdType,
+				'fromNum' => $fromNum,
+				'content' => $note,
+				'dateline' => $dateline,
+				'deviceToken' => $this->getUserDeviceToken($siteUid)
 			);
-			return $this->_callMethod('connect.discuz.notification.add', $_params);
-		}
-		return false;
+		return $this->_callMethod('connect.discuz.notification.add', $_params);
 	}
 
 	public function update($siteUid, $pkId, $fromNum, $dateline) {
-		$openId = $this->getUserOpenId($siteUid);
-		if($openId) {
-			$_params = array(
-					'openid' => $openId,
-					'sSiteUid' => $siteUid,
-					'pkId' => $pkId,
-					'fromNum' => $fromNum,
-					'dateline' => $dateline
+		$_params = array(
+				'openid' => $this->getUserOpenId($siteUid),
+				'sSiteUid' => $siteUid,
+				'pkId' => $pkId,
+				'fromNum' => $fromNum,
+				'dateline' => $dateline
 			);
-			return $this->_callMethod('connect.discuz.notification.update', $_params);
-		}
-		return false;
+		return $this->_callMethod('connect.discuz.notification.update', $_params);
 	}
 
 	public function setNoticeFlag($siteUid, $dateline) {
-		$openId = $this->getUserOpenId($siteUid);
-		if($openId) {
-			$_params = array(
-					'openid' => $openId,
-					'sSiteUid' => $siteUid,
-					'dateline' => $dateline
+
+		$_params = array(
+				'openid' => $this->getUserOpenId($siteUid),
+				'sSiteUid' => $siteUid,
+				'dateline' => $dateline
 			);
-			return $this->_callMethod('connect.discuz.notification.read', $_params);
+		return $this->_callMethod('connect.discuz.notification.read', $_params);
+	}
+
+	public function addSiteMasterUserNotify($siteUids, $subject, $content, $authorId, $author, $fromType, $dateline) {
+		$toUids = array();
+		if($siteUids) {
+			foreach(C::t('#qqconnect#common_member_connect')->fetch_all((array)$siteUids) as $user) {
+				$toUids[$user['conopenid']] = $user['uid'];
+			}
+			$_params = array(
+					'openidData' => $toUids,
+					'subject' => $subject,
+					'content' => $content,
+					'authorId' => $authorId,
+					'author' => $author,
+					'fromType' => $fromType == 1 ? 1 : 2,
+					'dateline' => $dateline,
+					'deviceToken' => $this->getUserDeviceToken($siteUids)
+			);
+			return parent::_callMethod('connect.discuz.notification.addSiteMasterUserNotify', $_params);
 		}
 		return false;
 	}
