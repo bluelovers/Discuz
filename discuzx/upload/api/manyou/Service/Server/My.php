@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: My.php 29274 2012-03-31 08:03:58Z yexinhao $
+ *      $Id: My.php 29713 2012-04-26 01:51:38Z yexinhao $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -129,7 +129,11 @@ class Cloud_Service_Server_My extends Cloud_Service_Server_Restful {
 		} else {
 			$methodName = $this->_getMethodName($module, $method);
 			$className = sprintf('Cloud_Service_Server_%s', ucfirst($module));
-			$class = Cloud::loadClass($className);
+			try {
+				$class = Cloud::loadClass($className);
+			} catch (Exception $e) {
+				throw new Cloud_Service_Server_RestfulException('Class not implemented: ' . $className, 2);
+			}
 			if (method_exists($class, $methodName)) {
 				$result = call_user_func_array(array(&$class, $methodName), $params);
 				if ($result instanceof Cloud_Service_Server_ErrorResponse) {
