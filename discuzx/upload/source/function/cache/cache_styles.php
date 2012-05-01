@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_styles.php 24428 2011-09-19 09:45:41Z monkey $
+ *      $Id: cache_styles.php 29779 2012-04-27 06:26:09Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -16,12 +16,12 @@ function build_cache_styles() {
 
 	$stylevars = $styledata = array();
 	$defaultstyleid = $_G['setting']['styleid'];
-	foreach(C::t('common_stylevar')->fetch_all_by_styleid($defaultstyleid, 1) as $var) {
+	foreach(C::t('common_stylevar')->range() as $var) {
 		$stylevars[$var['styleid']][$var['variable']] = $var['substitute'];
 	}
 	foreach(C::t('common_style')->fetch_all_data(true) as $data) {
 		$data['tpldir'] = $data['directory'];
-		$data = array_merge($data, $stylevars[$data['styleid']]);
+		$data = array_merge($data, (array)$stylevars[$data['styleid']]);
 		$datanew = array();
 		$data['imgdir'] = $data['imgdir'] ? $data['imgdir'] : STATICURL.'image/common';
 		$data['styleimgdir'] = $data['styleimgdir'] ? $data['styleimgdir'] : $data['imgdir'];
