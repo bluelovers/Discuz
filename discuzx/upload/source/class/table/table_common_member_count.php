@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_member_count.php 28415 2012-02-29 07:03:42Z zhengqingpeng $
+ *      $Id: table_common_member_count.php 29977 2012-05-04 07:14:48Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -74,7 +74,7 @@ class table_common_member_count extends discuz_table_archive
 		}
 		$data = DB::query("UPDATE ".DB::table($this->_table)." SET digestposts=0", 'UNBUFFERED');
 		if(!empty($uids)) {
-			$this->update_batch_cache($uids, array('digestposts' => 0));
+			$this->update_batch_cache(array_keys($uids), array('digestposts' => 0));
 		}
 		return $data;
 	}
@@ -86,7 +86,7 @@ class table_common_member_count extends discuz_table_archive
 		}
 		$data = DB::query("UPDATE ".DB::table($this->_table)." SET todayattachs='0',todayattachsize='0'", 'UNBUFFERED');
 		if(!empty($uids)) {
-			$this->update_batch_cache($uids, array('todayattachs' => 0, 'todayattachsize' => 0));
+			$this->update_batch_cache(array_keys($uids), array('todayattachs' => 0, 'todayattachsize' => 0));
 		}
 		return $data;
 	}
