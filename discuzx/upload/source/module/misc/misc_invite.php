@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_invite.php 28113 2012-02-22 09:25:55Z svn_project_zhangjie $
+ *      $Id: misc_invite.php 30010 2012-05-07 07:29:48Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -107,7 +107,7 @@ if($_GET['action'] == 'group') {
 			$post['message'] = messagecutstr($post['message'], 150);
 			foreach(C::t('common_member')->fetch_all($uids, false, 0) as $uid => $user) {
 				if($at) {
-					notification_add($uid, 'at', 'at_message', array('from_id' => $id, 'from_idtype' => 'thread', 'buyerid' => $_G['uid'], 'buyer' => $_G['username'], 'tid' => $id, 'subject' => $thread['subject'], 'pid' => $post['pid'], 'message' => $post['message']));
+					notification_add($uid, 'at', 'at_message', array('from_id' => $id, 'from_idtype' => 'at', 'buyerid' => $_G['uid'], 'buyer' => $_G['username'], 'tid' => $id, 'subject' => $thread['subject'], 'pid' => $post['pid'], 'message' => $post['message']));
 				} else {
 					notification_add($uid, 'thread', 'thread_invite', array('subject' => $thread['subject'], 'invitename' => $invitename, 'tid' => $id, 'from_id' => $id, 'from_idtype' => 'invite_thread'));
 				}
