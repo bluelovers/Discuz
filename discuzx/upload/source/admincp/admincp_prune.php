@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_prune.php 27696 2012-02-10 03:39:50Z svn_project_zhangjie $
+ *      $Id: admincp_prune.php 29902 2012-05-02 08:19:00Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -103,7 +103,7 @@ EOT;
 	loadcache('posttableids');
 	$posttable = in_array($_GET['posttableid'], $_G['cache']['posttableids']) ? $_GET['posttableid'] : 0;
 	$log_handler = Cloud::loadClass('Cloud_Service_SearchHelper');
-	foreach(C::t('forum_post')->fetch_all($posttable, ($pids ? $pids : $_GET['pidarray']), false) as $post) {
+	foreach(C::t('forum_post')->fetch_all($posttable, ($pids ? explode(',', $pids) : $_GET['pidarray']), false) as $post) {
 		$prune['forums'][] = $post['fid'];
 		$prune['thread'][$post['tid']]++;
 
@@ -165,7 +165,8 @@ if(submitcheck('searchsubmit', 1)) {
 	loadcache('posttableids');
 	$posttable = in_array($_GET['posttableid'], $_G['cache']['posttableids']) ? $_GET['posttableid'] : 0;
 
-	$pids = $postcount = '0';
+	$pids = array();
+	$postcount = '0';
 	$sql = $error = '';
 	$operation == 'group' && $_GET['forums'] = 'isgroup';
 	$_GET['keywords'] = trim($_GET['keywords']);
@@ -259,7 +260,7 @@ if(submitcheck('searchsubmit', 1)) {
 		} else {
 			$postcount = 0;
 			foreach(C::t('forum_post')->fetch_all_prune_by_search($posttable, $isgroup, $keywords, $len_message, $fid, $authorid, $starttime, $endtime, $useip, false) as $post) {
-				$pids .= ','.$post['pid'];
+				$pids[] = $post['pid'];
 				$postcount++;
 			}
 			$multi = '';
@@ -272,7 +273,7 @@ if(submitcheck('searchsubmit', 1)) {
 
 	showtagheader('div', 'postlist', $searchsubmit);
 	showformheader('prune&frame=no'.($operation ? '&operation='.$operation : ''), 'target="pruneframe"');
-	showhiddenfields(array('pids' => authcode($pids, 'ENCODE'), 'posttableid' => $posttable));
+	showhiddenfields(array('pids' => authcode(implode(',', $pids), 'ENCODE'), 'posttableid' => $posttable));
 	showtableheader(cplang('prune_result').' '.$postcount.' <a href="###" onclick="$(\'searchposts\').style.display=\'\';$(\'postlist\').style.display=\'none\';$(\'pruneforum\').pp.value=\'\';$(\'pruneforum\').page.value=\'\';" class="act lightlink normal">'.cplang('research').'</a>', 'fixpadding');
 
 	if($error) {
