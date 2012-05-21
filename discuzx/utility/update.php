@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: update.php 29729 2012-04-26 07:39:14Z houdelei $
+ *      $Id: update.php 30041 2012-05-08 02:58:57Z zhengqingpeng $
  */
 
 include_once('../source/class/class_core.php');
@@ -1101,7 +1101,7 @@ if($_GET['step'] == 'start') {
 	} elseif($_GET['op'] == 'block_permission') {
 		$nextop = 'portalcategory_permission';
 		if(!C::t('common_setting')->skey_exists('group_recommend')) {
-			DB::query("UPDATE ".DB::table('common_block_permission')." SET allowmanage=allowsetting,allowrecomment=allowdata");
+			DB::query("UPDATE ".DB::table('common_block_permission')." SET allowmanage=allowsetting,allowrecommend=allowdata");
 		}
 		if(!DB::result_first('SELECT inheritedtplname FROM '.DB::table('common_template_permission')." WHERE inheritedtplname != '' LIMIT 1")) {
 			$query = DB::query('SELECT * FROM '.DB::table('common_template_permission')." WHERE inheritedtplname = ''");
@@ -1366,7 +1366,7 @@ if($_GET['step'] == 'start') {
 		}
 		show_msg("認證數據升級完畢", "$theurl?step=data&op=$nextop");
 	} elseif($_GET['op'] == 'forumattach') {
-		$nextop = 'moderate';
+		$nextop = 'forumstatlog';
 		$limit = 10000;
 		$start = !empty($_GET['start']) ? $_GET['start'] : 0;
 		$needupgrade = DB::query("SELECT COUNT(*) FROM ".DB::table('forum_attachmentfield'), 'SILENT');
@@ -1424,6 +1424,10 @@ if($_GET['step'] == 'start') {
 			");
 		}
 		show_msg("論壇附件表升級完畢", "$theurl?step=data&op=$nextop");
+	} elseif($_GET['op'] == 'forumstatlog') {
+		$nextop = 'moderate';
+		DB::query('DELETE FROM '.DB::table('forum_statlog')." WHERE logdate='0000-00-00'");
+		show_msg("論壇版塊統計數據升級完畢", "$theurl?step=data&op=$nextop");
 	} elseif($_GET['op'] == 'threadimage') {
 		$nextop = 'forumattach';
 		$defaultmonth = 10;
