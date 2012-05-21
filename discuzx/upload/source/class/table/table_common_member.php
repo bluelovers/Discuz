@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_member.php 29479 2012-04-13 08:21:02Z zhangguosheng $
+ *      $Id: table_common_member.php 30071 2012-05-09 02:22:31Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -269,6 +269,7 @@ class table_common_member extends discuz_table_archive
 				'adminid' => intval($adminid),
 				'groupid' => intval($groupid),
 				'regdate' => TIMESTAMP,
+				'emailstatus' => intval($extdata['emailstatus']),
 				'credits' => dintval($credits[0]),
 				'timeoffset' => 9999
 			);
