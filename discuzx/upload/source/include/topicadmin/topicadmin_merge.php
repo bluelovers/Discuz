@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: topicadmin_merge.php 28630 2012-03-06 09:43:46Z liulanbo $
+ *      $Id: topicadmin_merge.php 29956 2012-05-04 02:06:52Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -85,22 +85,24 @@ if(!submitcheck('modsubmit')) {
 	$postsmerged = C::t('forum_post')->update_by_tid('tid:'.$_G['tid'], $othertid, array('tid' => $_G['tid']));
 
 	updateattachtid('tid', array($othertid), $othertid, $_G['tid']);
-	C::t('forum_thread')->delete($othertid);
+	C::t('forum_thread')->delete_by_tid($othertid);
 	C::t('forum_threadmod')->delete_by_tid($othertid);
 
 	C::t('forum_post')->update_by_tid('tid:'.$_G['tid'], $_G['tid'], array('first' => 0, 'fid' => $_G['forum']['fid']));
 	C::t('forum_post')->update('tid:'.$_G['tid'], $firstpost['pid'], array('first' => 1));
 	$fieldarr = array(
-			'authorid' => array($firstpost['authorid']),
-			'author' => array($firstpost['author']),
-			'subject' => array($firstpost['subject']),
-			'dateline' => array($firstpost['dateline']),
 			'views' => $other['views'],
 			'replies' => $other['replies'],
 			'moderated' => 1
 		);
 	C::t('forum_thread')->increase($_G['tid'], $fieldarr);
-
+	$fieldarr = array(
+			'authorid' => $firstpost['authorid'],
+			'author' => $firstpost['author'],
+			'subject' => $firstpost['subject'],
+			'dateline' => $firstpost['dateline'],
+		);
+	C::t('forum_thread')->update($_G['tid'], $fieldarr);
 	updateforumcount($other['fid']);
 	updateforumcount($_G['fid']);
 
