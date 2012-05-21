@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: uc.php 29302 2012-04-01 02:59:58Z zhangguosheng $
+ *      $Id: uc.php 30176 2012-05-15 08:25:28Z zhangguosheng $
  */
 
 error_reporting(0);
@@ -117,7 +117,6 @@ class uc_note {
 		$tables = array(
 			'common_block' => array('id' => 'uid', 'name' => 'username'),
 			'common_invite' => array('id' => 'fuid', 'name' => 'fusername'),
-			'common_member' => array('id' => 'uid', 'name' => 'username'),
 			'common_member_verify_info' => array('id' => 'uid', 'name' => 'username'),
 			'common_mytask' => array('id' => 'uid', 'name' => 'username'),
 			'common_report' => array('id' => 'uid', 'name' => 'username'),
@@ -152,8 +151,9 @@ class uc_note {
 			'portal_topic' => array('id' => 'uid', 'name' => 'username'),
 			'portal_topic_pic' => array('id' => 'uid', 'name' => 'username'),
 		);
-		if(isset($_G['setting']['membersplit'])) {
-			$tables['common_member_archive'] = array('id' => 'uid', 'name' => 'username');
+
+		if(!C::t('common_member')->update($get['uid'], array('username' => $get[newusername])) && isset($_G['setting']['membersplit'])){
+			C::t('common_member_archive')->update($get['uid'], array('username' => $get[newusername]));
 		}
 
 		loadcache("posttableids");
@@ -347,7 +347,7 @@ class uc_note {
 		}
 		$uid = intval($get['uid']);
 		$credit = intval($get['credit']);
-		$_G['uid'] = $uid;
+		$_G['uid'] = $_G['member']['uid'] = $uid;
 		return getuserprofile('extcredits'.$credit);
 	}
 
