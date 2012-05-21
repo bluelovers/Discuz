@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_failedlogin.php 27745 2012-02-14 01:43:38Z monkey $
+ *      $Id: table_common_failedlogin.php 30175 2012-05-15 08:15:25Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -23,6 +23,9 @@ class table_common_failedlogin extends discuz_table
 
 	public function fetch_username($ip, $username) {
 		return DB::fetch_first("SELECT * FROM %t WHERE ip=%s AND username=%s", array($this->_table, $ip, $username));
+	}
+	public function fetch_ip($ip) {
+		return DB::fetch_first("SELECT * FROM %t WHERE ip=%s", array($this->_table, $ip));
 	}
 
 	public function delete_old($time) {
