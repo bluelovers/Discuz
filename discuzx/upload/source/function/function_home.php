@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_home.php 27938 2012-02-17 02:52:35Z zhangguosheng $
+ *      $Id: function_home.php 30195 2012-05-16 07:15:03Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -237,7 +237,21 @@ function ckfriend($touid, $friend, $target_ids='') {
 	}
 	return $_G[$var];
 }
+function ckfollow($followuid) {
+	global $_G;
 
+	if(empty($_G['uid'])) return false;
+
+	$var = 'home_follow_'.$_G['uid'].'_'.$followuid;
+	if(isset($_G[$var])) return $_G[$var];
+
+	$_G[$var] = false;
+	$follow = C::t('home_follow')->fetch_status_by_uid_followuid($_G['uid'], $followuid);
+	if(isset($follow[$_G['uid']])) {
+		$_G[$var] = true;
+	}
+	return $_G[$var];
+}
 function sub_url($url, $length) {
 	if(strlen($url) > $length) {
 		$url = str_replace(array('%3A', '%2F'), array(':', '/'), rawurlencode($url));
