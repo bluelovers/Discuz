@@ -4,7 +4,7 @@
  *		[Discuz! X] (C)2001-2099 Comsenz Inc.
  *		This is NOT a freeware, use is subject to license terms
  *
- *		$Id: security.class.php 29266 2012-03-31 06:05:45Z songlixin $
+ *		$Id: security.class.php 30252 2012-05-17 09:04:26Z songlixin $
  */
 
 
@@ -105,7 +105,7 @@ EOF;
 		$idType = $param[1];
 		$recycle = $param[4];
 
-		if ($_POST['formhash'] && $step == 'check' && $idType == 'pid') {
+		if ($step == 'check' && $idType == 'pid') {
 			self::$securityService->updatePostOperate($ids, 'delete');
 			if ($_POST['module'] == 'security' && $_POST['method'] == 'setEvilPost') {
 				return true;
@@ -126,7 +126,7 @@ EOF;
 		$param = $param['param'];
 		$ids = $param[0];
 
-		if ($_POST['formhash'] && $step == 'check') {
+		if ($step == 'check') {
 			self::$securityService->updateThreadOperate($ids, 'delete');
 			if ($_POST['module'] == 'security' && $_POST['method'] == 'setEvilPost') {
 				return true;
