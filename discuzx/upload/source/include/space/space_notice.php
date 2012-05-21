@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_notice.php 29691 2012-04-25 06:53:43Z zhengqingpeng $
+ *      $Id: space_notice.php 30269 2012-05-18 01:58:22Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -85,6 +85,9 @@ if($view == 'userapp') {
 	$newnotify = false;
 	$count = C::t('home_notification')->count_by_uid($_G['uid'], $new, $type);
 	if($count) {
+		if($new && $perpage == 30) {
+			$perpage = 200;
+		}
 		foreach(C::t('home_notification')->fetch_all_by_uid($_G['uid'], $new, $type, $start, $perpage) as $value) {
 			if($value['new']) {
 				$newnotify = true;
