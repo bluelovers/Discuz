@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: topicadmin_stickreply.php 25949 2011-11-28 02:37:17Z liulanbo $
+ *      $Id: topicadmin_stickreply.php 30209 2012-05-16 08:53:28Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -66,7 +66,7 @@ if(!submitcheck('modsubmit')) {
 
 	$resultarray = array(
 	'redirect'	=> "forum.php?mod=viewthread&tid=$_G[tid]&page=$page",
-	'reasonpm'	=> ($sendreasonpm ? array('data' => $posts, 'var' => 'post', 'item' => $_GET['stickreply'] ? 'reason_stickreply': 'reason_stickdeletereply') : array()),
+	'reasonpm'	=> ($sendreasonpm ? array('data' => array(array('authorid' => $post['authorid'])), 'var' => 'post', 'item' => $_GET['stickreply'] ? 'reason_stickreply': 'reason_stickdeletereply') : array()),
 	'reasonvar'	=> array('tid' => $thread['tid'], 'subject' => $thread['subject'], 'modaction' => $modaction, 'reason' => $reason),
 	'modlog'	=> $thread
 	);
