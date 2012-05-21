@@ -74,7 +74,7 @@
 			<!--{/if}-->
 			<input type="hidden" name="ictype" value="$_GET[ictype]" />
 			<div class="c">
-				<iframe src="misc.php?mod=imgcropper&op=loadcropper&img={$_G['setting']['attachurl']}/{$_GET['img']}&width=$_GET['width']&height=$_GET['height']" id="cropperiframe" frameborder="0" scrolling="no" marginwidth="0" onload="setWinHeight(this)"></iframe>
+				<iframe src="misc.php?mod=imgcropper&op=loadcropper&img={$prefix}/{$_GET['img']}&width=$_GET['width']&height=$_GET['height']" id="cropperiframe" frameborder="0" scrolling="no" marginwidth="0" onload="setWinHeight(this)"></iframe>
 			</div>
 			<p class="o pns">
 				<button type="submit" name="groupnamesubmit_btn" value="true" class="pn pnc"><strong>{lang imgcropper_crop}</strong></button>
