@@ -163,8 +163,8 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 			.quote blockquote { display: inline; margin: 0; padding-right: 16px; background: url({IMGDIR}/qz.gif) no-repeat 100% 100%; }
 			.m_c .quote { width: 585px; }
 		.blockcode { overflow: hidden; margin: 10px 0; padding: 5px 10px; background: #F7F7F7; color: {MIDTEXT}; }
-			.blockcode code { font-family: Monaco, Consolas, "Lucida Console", "Courier New", serif; font-size: 12px; line-height: 1.8em; }
-			* html .blockcode code { font-family: "Courier New", serif; }
+			.blockcode code { font-family: Monaco, Consolas, 'Lucida Console', 'Courier New', serif; font-size: 12px; line-height: 1.8em; }
+			* html .blockcode code { font-family: 'Courier New', serif; }
 /** end **/
 
 
@@ -595,7 +595,7 @@ Created & Modified by Monkey, Lushnis, Pony, Dfox & DragonLee.
 */
 	.vwthd { padding-right: 80px !important; }
 		.vwthd div.y { display: inline; margin-right: -60px; }
-		.ts { display: inline; font: 700 16px "Microsoft Yahei", Hei, Tahoma, SimHei, sans-serif; }
+		.ts { display: inline; font: 700 16px 'Microsoft Yahei', 'Hei', Tahoma, 'SimHei', sans-serif; }
 
 #nv_forum #ct { border-color: {SPECIALBORDER}; }
 
@@ -874,9 +874,9 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 
 	.pl .blockcode { padding: 10px 0 5px 10px; border: 1px solid {WRAPBORDERCOLOR}; background: #F7F7F7 url({IMGDIR}/codebg.gif) repeat-y 0 0; overflow: hidden; }
 		.pl .blockcode ol { margin: 0 0 0 10px !important; padding: 0 !important; }
-			.pl .blockcode ol li { padding-left: 10px; list-style-type: decimal-leading-zero; font-family: Monaco,Consolas,"Lucida Console","Courier New",serif; font-size: 12px; line-height: 1.8em; }
+			.pl .blockcode ol li { padding-left: 10px; list-style-type: decimal-leading-zero; font-family: Monaco,Consolas,'Lucida Console','Courier New',serif; font-size: 12px; line-height: 1.8em; }
 				.pl .blockcode ol li:hover { background: {WRAPBG}; color: {HIGHLIGHTLINK}; }
-			* html .pl .blockcode ol li { font-family: "Courier New",serif; }
+			* html .pl .blockcode ol li { font-family: 'Courier New',serif; }
 		.pl .blockcode em { margin-left: 43px; color: {HIGHLIGHTLINK} !important; font-size: 12px; cursor: pointer; }
 
 /*投票 poll optionvessel by dfox */
@@ -1893,6 +1893,7 @@ body { background: #FFF none !important; }
 #flw_header #subject { margin: 5px; width: 580px; height: 20px; border: none; outline: none; background: transparent; line-height: 20px; }
 #flw_checklen { padding-right: 10px; }
 #flw_post_extra { width: 629px; }
+	#flw_post_extra .sec { padding: 8px 15px; border: 1px solid #EFEFEF; background: #F9FBFC; border-radius: 4px; }
 .tedt { width: auto; border: 1px solid #9EB4C2; border-radius: 4px; overflow: hidden; }
 #flw_header .bar { padding-left: 10px; border-top: 1px solid #EFEFEF; border-bottom: none; background: #F9FBFC; border-radius: 0 0 4px 4px; }
 #flw_header .area { background: #FFF url({IMGDIR}/input_shadow.png) repeat-x 0 0; border-radius: 4px 4px 0 0; }
