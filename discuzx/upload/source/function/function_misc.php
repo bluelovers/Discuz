@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_misc.php 29236 2012-03-30 05:34:47Z chenmengshu $
+ *      $Id: function_misc.php 30186 2012-05-16 03:21:53Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -254,7 +254,11 @@ function procthread($thread, $timeformat = 'd') {
 	$postsnum = $thread['special'] ? $thread['replies'] : $thread['replies'] + 1;
 	$pagelinks = '';
 	if($postsnum  > $_G['ppp']) {
-		$domain = 'http://'.($_G['setting']['domain']['app']['forum'] ? $_G['setting']['domain']['app']['forum'] : ($_G['setting']['domain']['app']['default'] ? $_G['setting']['domain']['app']['default'] : '')).'/';
+		if($_G['setting']['domain']['app']['forum'] || $_G['setting']['domain']['app']['default']) {
+			$domain = 'http://'.($_G['setting']['domain']['app']['forum'] ? $_G['setting']['domain']['app']['forum'] : ($_G['setting']['domain']['app']['default'] ? $_G['setting']['domain']['app']['default'] : '')).'/';
+		} else {
+			$domain = $_G['siteurl'];
+		}
 		$posts = $postsnum;
 		$topicpages = ceil($posts / $_G['ppp']);
 		for($i = 1; $i <= $topicpages; $i++) {
