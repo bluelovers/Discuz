@@ -62,6 +62,7 @@ body { background: transparent url(bgimg.jpg) no-repeat 50% 0; }
 #fastpostsubmit { background-image: url(flw_post.png); }
 .flw_replybox .pnc { background-image: url(pn_reply.png); }
 .flw_replybox td table .pnc { background-image: url(pn_rt.png); }
+#flw_post_extra .sec { border-color: #FFE6E6; background-color: #FFF9F9; }
 
 /* 重定義版塊快速跳轉和側邊導航 */
 #fjump_menu li.a a { background-color: #FFF9F9; }
