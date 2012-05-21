@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_styles.php 29628 2012-04-23 07:25:05Z liulanbo $
+ *      $Id: admincp_styles.php 30036 2012-05-08 02:31:38Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -259,6 +259,11 @@ if($operation == 'admin') {
 
 			$delete = $_GET['delete'];
 			if(!empty($delete) && is_array($delete)) {
+				if(!$_GET['confirmed']) {
+					$deletestr = '&delete[]='.implode('&delete[]=', $delete);
+					cpmsg('styles_delete_confirm', 'action=styles'.$deletestr.'&confirmed=yes&stylesubmit=true', 'form');
+				}
+				dsetcookie('uninstallreason', $_GET['uninstallreason'] ? '|'.implode('|', $_GET['uninstallreason']).'|' : '');
 				$did = array();
 				foreach($delete as $id) {
 					$id = intval($id);
