@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_block.php 29507 2012-04-17 05:41:37Z zhangguosheng $
+ *      $Id: function_block.php 30122 2012-05-14 02:27:44Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -439,8 +439,8 @@ function block_template($bid) {
 			$template = preg_replace($value[0], $value[1], $template);
 		}
 	}
-	$template = preg_replace('/\s*\[(order\d{0,1})=\w+\](.*?)\[\/\\1\]\s*/is', '', $template);
-	$template = preg_replace('/\s*\[(index\d{0,1})=\w+\](.*?)\[\/\\1\]\s*/is', '', $template);
+	$template = preg_replace('/\s*\[(order\d+)=\w+\](.*?)\[\/\\1\]\s*/is', '', $template);
+	$template = preg_replace('/\s*\[(index\d+)=\w+\](.*?)\[\/\\1\]\s*/is', '', $template);
 	$template = preg_replace('/\s*\[(loop\d{0,1})\](.*?)\[\/\\1\]\s*/is', '', $template);
 
 	return $template;
@@ -996,7 +996,7 @@ function block_parse_template($str_template, &$arr) {
 		}
 	}
 	$match = array();
-	if(preg_match_all('/\[(order\d)=(\d+|odd|even)\](.*?)\[\/\\1]/is', $str_template, $match)) {
+	if(preg_match_all('/\[(order\d+)=(\d+|odd|even)\](.*?)\[\/\\1]/is', $str_template, $match)) {
 		foreach($match[1] as $key=>$value) {
 			$content = trim($match[3][$key]);
 			$order = $match[2][$key];
@@ -1005,13 +1005,13 @@ function block_parse_template($str_template, &$arr) {
 		}
 	}
 	$match = array();
-	if(preg_match_all('/\[index=(\d)\](.*?)\[\/index]/is', $str_template, $match)) {
+	if(preg_match_all('/\[index=(\d+)\](.*?)\[\/index]/is', $str_template, $match)) {
 		foreach($match[1] as $key=>$order) {
 			$template['index'][$order] = trim($match[2][$key]);
 		}
 	}
 	$match = array();
-	if(preg_match_all('/\[(index\d)=(\d)\](.*?)\[\/\\1]/is', $str_template, $match)) {
+	if(preg_match_all('/\[(index\d+)=(\d+)\](.*?)\[\/\\1]/is', $str_template, $match)) {
 		foreach($match[1] as $key=>$value) {
 			$content = trim($match[3][$key]);
 			$order = intval($match[2][$key]);
