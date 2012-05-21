@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_profile.php 28520 2012-03-02 03:25:45Z houdelei $
+ *      $Id: spacecp_profile.php 29992 2012-05-07 03:01:52Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -44,12 +44,11 @@ $allowcstatus = !empty($_G['group']['allowcstatus']) ? true : false;
 $verify = C::t('common_member_verify')->fetch($_G['uid']);
 $validate = array();
 if($_G['setting']['regverify'] == 2 && $_G['groupid'] == 8) {
-	if(($validate = C::t('common_member_validate')->fetch($_G['uid']) && $validate['status'] == 1)) {
-	} else {
+	$validate = C::t('common_member_validate')->fetch($_G['uid']);
+	if(empty($validate) || $validate['status'] != 1) {
 		$validate = array();
 	}
 }
-
 if($_G['setting']['connect']['allow']) {
 	$connect = C::t('#qqconnect#common_member_connect')->fetch($_G['uid']);
 	$conisregister = $operation == 'password' && $_G['setting']['connect']['allow'] && $connect['conisregister'];
@@ -301,7 +300,7 @@ if(submitcheck('profilesubmit')) {
 		$secquesnew = $_GET['questionidnew'] > 0 ? random(8) : '';
 	}
 
-	if($_G['setting']['strongpw']) {
+	if(!empty($_GET['newpassword']) && $_G['setting']['strongpw']) {
 		$strongpw_str = array();
 		if(in_array(1, $_G['setting']['strongpw']) && !preg_match("/\d+/", $_GET['newpassword'])) {
 			$strongpw_str[] = lang('member/template', 'strongpw_1');
