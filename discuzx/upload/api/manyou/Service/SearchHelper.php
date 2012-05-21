@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: SearchHelper.php 29319 2012-04-01 08:23:36Z zhouxiaobo $
+ *      $Id: SearchHelper.php 29915 2012-05-03 01:22:40Z zhouxiaobo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -757,12 +757,10 @@ class Cloud_Service_SearchHelper {
 				if(isset($result['status']) && $result['status'] === 0) {
 					$data = $result['result'];
 
-					if($data) {
-						if($cloudSettingTime) {
-							save_syscache($kname, array('ts' => TIMESTAMP, 'setting_ts' => $cloudSettingTime, 'result' => $data));
-						} else {
-							save_syscache($kname, array('ts' => TIMESTAMP, 'result' => $data));
-						}
+					if($cloudSettingTime) {
+						save_syscache($kname, array('ts' => TIMESTAMP, 'setting_ts' => $cloudSettingTime, 'result' => $data));
+					} else {
+						save_syscache($kname, array('ts' => TIMESTAMP, 'result' => $data));
 					}
 				}
 			}
