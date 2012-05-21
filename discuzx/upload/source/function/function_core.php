@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_core.php 29638 2012-04-23 09:26:04Z zhangguosheng $
+ *      $Id: function_core.php 30076 2012-05-09 04:22:32Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -980,8 +980,10 @@ function output() {
 	if(defined('IN_MOBILE')) {
 		mobileoutput();
 	}
-	$tipsService = Cloud::loadClass('Service_DiscuzTips');
-	$tipsService->show();
+	if(!defined('IN_MOBILE') && !defined('IN_ARCHIVER')) {
+		$tipsService = Cloud::loadClass('Service_DiscuzTips');
+		$tipsService->show();
+	}
 	$havedomain = implode('', $_G['setting']['domain']['app']);
 	if($_G['setting']['rewritestatus'] || !empty($havedomain)) {
 		$content = ob_get_contents();
