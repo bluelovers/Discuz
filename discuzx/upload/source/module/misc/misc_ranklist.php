@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_ranklist.php 28362 2012-02-28 07:17:05Z monkey $
+ *      $Id: misc_ranklist.php 30273 2012-05-18 02:34:19Z monkey $
  */
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
@@ -34,6 +34,7 @@ if($type != 'index') {
 
 include libfile('misc/ranklist_'.$type, 'include');
 function getranklist_thread($num = 20, $view = 'replies', $orderby = 'all') {
+	global $_G;
 	$dateline = '';
 	$timestamp = 0;
 	if($orderby == 'today') {
@@ -56,6 +57,7 @@ function getranklist_thread($num = 20, $view = 'replies', $orderby = 'all') {
 }
 
 function getranklist_poll($num = 20, $view = 'heats', $orderby = 'all') {
+	global $_G;
 	$dateline = '';
 	$timestamp = 0;
 	if($orderby == 'today') {
@@ -114,7 +116,7 @@ function getranklist_activity($num = 20, $view = 'heats', $orderby = 'all') {
 	foreach($attachtables as $attachtable => $aids) {
 		$attachs = C::t('forum_attachment_n')->fetch_all($attachtable, $aids);
 		foreach($attachs as $attach) {
-			$attach['attachurl'] = ($thread['remote'] ? $_G['setting']['ftp']['attachurl'] : $_G['setting']['attachurl']).'forum/'.$attach['attachment'];
+			$attach['attachurl'] = ($attach['remote'] ? $_G['setting']['ftp']['attachurl'] : $_G['setting']['attachurl']).'forum/'.$attach['attachment'];
 			$data[$attach['tid']] = array_merge($data[$attach['tid']], $attach);
 		}
 	}
