@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portalcp_article.php 29116 2012-03-27 03:38:32Z zhangguosheng $
+ *      $Id: portalcp_article.php 30019 2012-05-07 08:30:07Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -571,7 +571,7 @@ if($op == 'delete') {
 						}
 					} else {
 					}
-					$value['from'] = 'forum';
+					$attach['from'] = 'forum';
 					$attachs[] = $attach;
 				}
 			}
