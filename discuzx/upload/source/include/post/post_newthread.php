@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: post_newthread.php 29632 2012-04-23 08:16:51Z zhengqingpeng $
+ *      $Id: post_newthread.php 30010 2012-05-07 07:29:48Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -592,7 +592,7 @@ if(!submitcheck('topicsubmit', 0, $seccodecheck, $secqaacheck)) {
 	));
 	if($_G['group']['allowat'] && $atlist) {
 		foreach($atlist as $atuid => $atusername) {
-			notification_add($atuid, 'at', 'at_message', array('from_id' => $tid, 'from_idtype' => 'thread', 'buyerid' => $_G['uid'], 'buyer' => $_G['username'], 'tid' => $tid, 'subject' => $subject, 'pid' => $pid, 'message' => messagecutstr($message, 150)));
+			notification_add($atuid, 'at', 'at_message', array('from_id' => $tid, 'from_idtype' => 'at', 'buyerid' => $_G['uid'], 'buyer' => $_G['username'], 'tid' => $tid, 'subject' => $subject, 'pid' => $pid, 'message' => messagecutstr($message, 150)));
 		}
 		set_atlist_cookie(array_keys($atlist));
 	}
