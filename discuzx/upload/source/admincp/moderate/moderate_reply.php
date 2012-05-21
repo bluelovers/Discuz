@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: moderate_reply.php 29680 2012-04-25 02:01:05Z zhangguosheng $
+ *      $Id: moderate_reply.php 30248 2012-05-17 08:46:56Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -217,13 +217,11 @@ if(!submitcheck('modsubmit') && !$_GET['fast']) {
 				);
 			}
 		}
-
+		require_once libfile('function/delete');
 		if($recyclebinpids) {
-			C::t('forum_post')->update($posttable, $recyclebinpids, array('invisible' => -5));
+			deletepost($recyclebinpids, 'pid', false, $posttable, true);
 		}
-
 		if($pids) {
-			require_once libfile('function/delete');
 			$deletes = deletepost($pids, 'pid', false, $posttable);
 		}
 		$deletes += count($recyclebinpids);
