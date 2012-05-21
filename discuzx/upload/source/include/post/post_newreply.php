@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: post_newreply.php 29236 2012-03-30 05:34:47Z chenmengshu $
+ *      $Id: post_newreply.php 30010 2012-05-07 07:29:48Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -97,6 +97,8 @@ if($_G['setting']['commentnumber'] && !empty($_GET['comment'])) {
 			'tid' => $_G['tid'],
 			'pid' => $_GET['pid'],
 			'subject' => $thread['subject'],
+			'from_id' => $_G['tid'],
+			'from_idtype' => 'pcomment',
 			'commentmsg' => cutstr(str_replace(array('[b]', '[/b]', '[/color]'), '', preg_replace("/\[color=([#\w]+?)\]/i", "", $comment)), 200)
 		));
 	}
@@ -423,7 +425,7 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 	));
 	if($_G['group']['allowat'] && $atlist) {
 		foreach($atlist as $atuid => $atusername) {
-			notification_add($atuid, 'at', 'at_message', array('from_id' => $_G['tid'], 'from_idtype' => 'thread', 'buyerid' => $_G['uid'], 'buyer' => $_G['username'], 'tid' => $_G['tid'], 'subject' => $thread['subject'], 'pid' => $pid, 'message' => messagecutstr($message, 150)));
+			notification_add($atuid, 'at', 'at_message', array('from_id' => $_G['tid'], 'from_idtype' => 'at', 'buyerid' => $_G['uid'], 'buyer' => $_G['username'], 'tid' => $_G['tid'], 'subject' => $thread['subject'], 'pid' => $pid, 'message' => messagecutstr($message, 150)));
 		}
 		set_atlist_cookie(array_keys($atlist));
 	}
@@ -448,6 +450,8 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 					'subject' => $thread['subject'],
 					'fid' => $_G['fid'],
 					'pid' => $pid,
+					'from_id' => $pid,
+					'from_idtype' => 'quote',
 				));
 			} elseif($ac == 'r') {
 				notification_add($nauthorid, 'post', 'reppost_noticeauthor', array(
