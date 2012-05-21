@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_cloudaddons.php 29634 2012-04-23 08:29:45Z monkey $
+ *      $Id: function_cloudaddons.php 30036 2012-05-08 02:31:38Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -84,7 +84,10 @@ function cloudaddons_faillog($rid, $type) {
 }
 
 function cloudaddons_removelog($rid) {
-	cloudaddons_open('&mod=app&ac=removelog&rid='.$rid);
+	global $_G;
+	$reason = $_G['cookie']['uninstallreason'];
+	dsetcookie('uninstallreason', '', -1);
+	cloudaddons_open('&mod=app&ac=removelog&rid='.$rid.'&reason='.$reason);
 }
 
 function cloudaddons_validator($addonid) {
