@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_member.php 29332 2012-04-05 01:46:59Z cnteacher $
+ *      $Id: class_member.php 30071 2012-05-09 02:22:31Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -429,13 +429,14 @@ class register_ctl {
 				}
 				showmessage('register_email_send_succeed', dreferer(), array('bbname' => $this->setting['bbname']), array('showdialog' => true, 'msgtype' => 3, 'closetime' => 10));
 			}
-
+			$emailstatus = 0;
 			if($this->setting['sendregisterurl'] && !$sendurl) {
 				$_GET['email'] = strtolower($hash[0]);
 				$this->setting['regverify'] = $this->setting['regverify'] == 1 ? 0 : $this->setting['regverify'];
 				if(!$this->setting['regverify']) {
 					$groupinfo['groupid'] = $this->setting['newusergroupid'];
 				}
+				$emailstatus = 1;
 			}
 
 			if($this->setting['regstatus'] == 2 && empty($invite) && !$invitestatus) {
@@ -660,9 +661,12 @@ class register_ctl {
 				$groupinfo['groupid'] = $this->setting['inviteconfig']['invitegroupid'];
 			}
 
-			$init_arr = array('credits' => explode(',', $this->setting['initcredits']), 'profile'=>$profile);
+			$init_arr = array('credits' => explode(',', $this->setting['initcredits']), 'profile'=>$profile, 'emailstatus' => $emailstatus);
 
 			C::t('common_member')->insert($uid, $username, $password, $email, $_G['clientip'], $groupinfo['groupid'], $init_arr);
+			if($emailstatus) {
+				updatecreditbyaction('realemail', $uid);
+			}
 			if($verifyarr) {
 				$setverify = array(
 					'uid' => $uid,
