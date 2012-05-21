@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portalcp_upload.php 27879 2012-02-16 05:24:55Z svn_project_zhangjie $
+ *      $Id: portalcp_upload.php 30107 2012-05-11 02:10:58Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -25,8 +25,8 @@ if($aid) {
 		portal_upload_error(lang('portalcp', 'article_noallowed'));
 	}
 } else {
-	if(check_articleperm($catid, $aid, null, false, true) !== true) {
-		portal_upload_error(lang('portalcp', 'article_publish_noallowed'));
+	if(($return = check_articleperm($catid, $aid, null, false, true)) !== true) {
+		portal_upload_error(lang('portalcp', $return));
 	}
 }
 
