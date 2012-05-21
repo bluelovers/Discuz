@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_counter.php 29536 2012-04-18 06:28:38Z chenmengshu $
+ *      $Id: admincp_counter.php 29889 2012-05-02 07:38:38Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -86,7 +86,7 @@ if(submitcheck('forumsubmit', 1)) {
 	}
 
 	foreach($membersarray as $uid => $posts) {
-		$postsarray[$posts] .= ','.$uid;
+		$postsarray[$posts][] = $uid;
 	}
 	unset($membersarray);
 
@@ -184,7 +184,7 @@ if(submitcheck('forumsubmit', 1)) {
 	}
 
 	if($tids) {
-		C::t('forum_thread')->delete($tids, true);
+		C::t('forum_thread')->delete_by_tid($tids, true);
 	}
 	if($updateclosed) {
 		C::t('forum_thread')->update($updateclosed, array('closed' => ''));
