@@ -30,10 +30,12 @@ $recwords[$k+1] = $v;
 			<div class="filter">
 				<ul class="cl">
 				<!--{loop $recwords $key $recword}-->
-				<!--{if empty($recword[inc_num])}-->
-					<li><a href="$searchparams[url]?q=$recword[word]&source=word.$position.$key$srchotquery&num=$recword[result_num]" sc="1" target="_blank">$recword[word]<span class="number">($recword[result_num])</span></a></li>
-				<!--{else}-->
-					<li class="clewcolor"><a href="$searchparams[url]?q=$recword[word]&source=word.$position.$key$srchotquery&num=$recword[result_num]" sc="1"  target="_blank">$recword[word]<span class="number">($recword[result_num])</span></a></li>
+				<!--{if $encodeWord=rawurlencode(trim($recword[word]))}-->
+					<!--{if empty($recword[inc_num])}-->
+						<li><a href="$searchparams[url]?q=$encodeWord&source=word.$position.$key$srchotquery&num=$recword[result_num]" sc="1" target="_blank">$recword[word]<span class="number">($recword[result_num])</span></a></li>
+					<!--{else}-->
+						<li class="clewcolor"><a href="$searchparams[url]?q=$encodeWord&source=word.$position.$key$srchotquery&num=$recword[result_num]" sc="1"  target="_blank">$recword[word]<span class="number">($recword[result_num])</span></a></li>
+					<!--{/if}-->
 				<!--{/if}-->
 				<!--{/loop}-->
 				</ul>
@@ -358,14 +360,16 @@ function tpl_cloudsearch_global_footer_related() {
 global $_G;
 $rel_title = urlencode($_G['forum_thread']['subject']);
 $widthauto = widthauto();
+$get_reltid = dintval($_GET[reltid]);
+$get_pre_pos = dhtmlspecialchars(trim($_GET[pre_pos]));
 }
 <!--{block return}-->
-	<!--{if empty($_GET['inajax'])}-->
+	<!--{if empty($_G['inajax'])}-->
 	<script type="text/javascript">
 	var rel_tid = "$_G['tid']";
 	var rel_title = "$rel_title";
-	var rel_reltid = "$_GET[reltid]";
-	var rel_prepos = "$_GET[pre_pos]";
+	var rel_reltid = "$get_reltid";
+	var rel_prepos = "$get_pre_pos";
 	var my_siteid = "$_G['setting']['my_siteid']";
 	var rel_uid = "$_G['uid']";
 	var rel_views = "$_G['forum_thread']['views']";
