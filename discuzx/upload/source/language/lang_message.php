@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_message.php 28860 2012-03-15 07:17:21Z monkey $
+ *      $Id: lang_message.php 30103 2012-05-10 08:13:44Z chenmengshu $
  *
  *      This file is automatically generate
  */
@@ -145,6 +145,7 @@ $lang = array (
   'search_forum_invalid' => '抱歉，您尚未指定搜索論壇的範圍',
   'search_invalid' => '抱歉，您尚未指定要搜索的關鍵字或用戶名',
   'search_redirect' => '搜索成功，現在將轉入結果頁面',
+  'search_closed' => '搜索功能已關閉',
   'to_view_the_photo_does_not_exist' => '抱歉，您要查看的相冊不存在或正在審核',
   'ban_view_other_thead' => '抱歉，禁止查看其他用戶的主題和帖子',
   'album_does_not_exist' => '抱歉，指定的相冊不存在',
