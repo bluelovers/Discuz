@@ -3,7 +3,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_imgcropper.php 28859 2012-03-15 07:09:05Z zhangguosheng $
+ *      $Id: misc_imgcropper.php 30074 2012-05-09 03:04:37Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -20,6 +20,8 @@ if(!submitcheck('imgcroppersubmit')) {
 		$cbgboxheight = $cboxheight + 300;
 		$dragpt = ($cbgboxwidth - $cboxwidth)/2;
 		$dragpl = ($cbgboxheight - $cboxheight)/2;
+	} else {
+		$prefix = $_GET['picflag'] == 2 ? $_G['setting']['ftp']['attachurl'] : $_G['setting']['attachurl'];
 	}
 	include_once template("common/misc_imgcropper");
 } else {
@@ -43,7 +45,8 @@ if(!submitcheck('imgcroppersubmit')) {
 
 	require_once libfile('class/image');
 	$image = new image();
-	if(!$image->Thumb($_G['setting']['attachurl'].$_GET['cutimg'], $cropfile, $picwidth, $picheight)) {
+	$prefix = $_GET['picflag'] == 2 ? $_G['setting']['ftp']['attachurl'] : $_G['setting']['attachurl'];
+	if(!$image->Thumb($prefix.$_GET['cutimg'], $cropfile, $picwidth, $picheight)) {
 		showmessage('imagepreview_errorcode_'.$image->errorcode, null, null, array('showdialog' => true, 'closetime' => true));
 	}
 	$image->Cropper($image->target, $cropfile, $cutwidth, $cutheight, $left, $top);
