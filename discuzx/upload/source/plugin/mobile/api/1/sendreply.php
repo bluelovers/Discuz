@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: sendreply.php 27479 2012-02-02 04:11:38Z monkey $
+ *      $Id: sendreply.php 30247 2012-05-17 08:14:54Z monkey $
  */
 
 if(!defined('IN_MOBILE_API')) {
@@ -80,7 +80,7 @@ class mobile_api {
 		global $_G;
 		$variable = array(
 			'tid' => $_G['tid'],
-			'pid' => $GLOBLS['pid'],
+			'pid' => $GLOBALS['pid'],
 		);
 		mobile_core::result(mobile_core::variable($variable));
 	}
