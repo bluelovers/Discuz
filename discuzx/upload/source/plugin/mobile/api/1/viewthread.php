@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: viewthread.php 29305 2012-04-01 03:34:49Z congyushuai $
+ *      $Id: viewthread.php 30144 2012-05-14 08:38:01Z monkey $
  */
 
 if(!defined('IN_MOBILE_API')) {
@@ -21,6 +21,14 @@ class mobile_api {
 
 	function output() {
 		global $_G;
+		if($GLOBALS['hiddenreplies']) {
+			foreach($GLOBALS['postlist'] as $k => $post) {
+				if(!$post['first'] && $_G['uid'] != $post['authorid'] && $_G['uid'] != $_G['forum_thread']['authorid'] && !$_G['forum']['ismoderator']) {
+					$GLOBALS['postlist'][$k]['message'] = '';
+					$GLOBALS['postlist'][$k]['attachments'] = array();
+				}
+			}
+		}
 		$variable = array(
 			'thread' => mobile_core::getvalues($_G['thread'], array('tid', 'author', 'authorid', 'subject', 'views', 'replies', 'attachment', 'price', 'freemessage')),
 			'fid' => $_G['fid'],
