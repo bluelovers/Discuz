@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: post_editpost.php 29454 2012-04-12 10:23:18Z liulanbo $
+ *      $Id: post_editpost.php 30010 2012-05-07 07:29:48Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -918,7 +918,7 @@ if(!submitcheck('editsubmit')) {
 		C::t('forum_post')->update('tid:'.$_G['tid'], $pid, $setarr);
 		if($_G['group']['allowat'] && $atlist) {
 			foreach($atlist as $atuid => $atusername) {
-				notification_add($atuid, 'at', 'at_message', array('from_id' => $_G['tid'], 'from_idtype' => 'thread', 'buyerid' => $_G['uid'], 'buyer' => $_G['username'], 'tid' => $_G['tid'], 'subject' => $thread['subject'], 'pid' => $pid, 'message' => messagecutstr($message, 150)));
+				notification_add($atuid, 'at', 'at_message', array('from_id' => $_G['tid'], 'from_idtype' => 'at', 'buyerid' => $_G['uid'], 'buyer' => $_G['username'], 'tid' => $_G['tid'], 'subject' => $thread['subject'], 'pid' => $pid, 'message' => messagecutstr($message, 150)));
 			}
 			set_atlist_cookie(array_keys($atlist));
 		}
@@ -1036,7 +1036,8 @@ if(!submitcheck('editsubmit')) {
 			foreach ($tablearray as $table) {
 				DB::query("DELETE FROM ".DB::table($table)." WHERE tid='$_G[tid]'", 'UNBUFFERED');
 			}
-			C::t('forum_thread')->delete($_G['tid']);
+			C::t('forum_thread')->delete_by_tid($_G['tid']);
+			C::t('common_moderate')->delete($_G['tid'], 'tid');
 			C::t('forum_threadmod')->delete_by_tid($_G['tid']);
 			C::t('forum_typeoptionvar')->delete_by_tid($_G['tid']);
 			if($_G['setting']['globalstick'] && in_array($thread['displayorder'], array(2, 3))) {
