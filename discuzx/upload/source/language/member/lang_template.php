@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_template.php 28113 2012-02-22 09:25:55Z svn_project_zhangjie $
+ *      $Id: lang_template.php 29882 2012-05-02 07:21:37Z liulanbo $
  *
  *      This file is automatically generate
  */
@@ -14,6 +14,11 @@ $lang = array (
   'login_guest' => '沒有帳號？<a href="member.php?mod={$_G[setting][regname]}">{$_G[setting][reglinkname]}</a>',
   'new_password' => '新密碼',
   'new_password_confirm' => '確認密碼',
+  'password_weak' => '密碼太弱，密碼中必須包含',
+  'strongpw_1' => '數字',
+  'strongpw_2' => '小寫字母',
+  'strongpw_3' => '大寫字母',
+  'strongpw_4' => '特殊符號',
   'submit' => '提交',
   'close' => '關閉',
   'faq' => '幫助',
