@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_admincp.php 29721 2012-04-26 07:01:08Z zhengqingpeng $
+ *      $Id: lang_admincp.php 30094 2012-05-10 06:22:44Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -5178,8 +5178,8 @@ $lang = array
 	'ec_alipay_contract_comment' => '如果您的支付寶賬號是簽約用戶，可以選擇「是」讓論壇使用您自己的商家服務平台。如果您還未簽約，<a href="http://act.life.alipay.com/systembiz/discuz/" target="_blank">請點擊這裡簽約</a>',
 	'ec_alipay_securitycode' => '交易安全校驗碼 (key)',
 	'ec_alipay_securitycode_comment' => '支付寶簽約用戶可以在此處填寫支付寶分配給您的交易安全校驗碼，此校驗碼您可以到支付寶官方的商家服務功能處查看',
-	'ec_alipay_partner' => '合作者身份 (partnerID)',
-	'ec_alipay_partner_comment' => '支付寶簽約用戶請在此處填寫支付寶分配給您的合作者身份，簽約用戶的手續費按照您與支付寶官方的簽約協議為準。如果您還未簽約，<a href="http://act.life.alipay.com/systembiz/discuz/" target="_blank">請點擊這裡簽約</a>；如果在簽約時出現合同模板衝突，請咨詢0571-88158090',
+	'ec_alipay_partner' => '合作者身份 (PID)',
+	'ec_alipay_partner_comment' => '支付寶簽約用戶請在此處填寫支付寶分配給您的合作者身份，簽約用戶的手續費按照您與支付寶官方的簽約協議為準。<br/>如果您還未簽約，<a href="http://act.life.alipay.com/systembiz/discuz/" target="_blank">請點擊這裡簽約</a>；如果已簽約,<a href="https://b.alipay.com/order/pidKey.htm?pid=2088501719138773&product=fastpay" target="_blank">請點擊這裡獲取PID、Key</a>;如果在簽約時出現合同模板衝突，請咨詢0571-88158090',
 	'ec_alipay_creditdirectpay' => '使用純即時到帳接口',
 	'ec_alipay_creditdirectpay_comment' => '如果您的簽約協議中包含純即時到帳接口（不是標準雙接口）可以選擇此項，讓積分充值只能使用即時到賬方式付款',
 
@@ -6456,6 +6456,7 @@ $lang = array
 	'membersplit_check' => '立即體檢',
 	'membersplit_lasttime_check' => '上次體檢',
 	'membersplit_has_no_check' => '您的網站從未進行過用戶表優化，建議立即體檢',
+	'membersplit_without_optimization' => '用戶表良好，目前不用優化',
 	'membersplit_check_tips' => '<li>通過用戶優化可以大幅度提高網站的性能。</li><li>因體檢操作較慢，所以體檢的結果會緩存一天的時間</li>',
 	'membersplit_tips' => '<li>通過用戶優化可以大幅度提高網站的性能。</li><li>當可優化用戶數大於30%以上時，我們強烈建議進行用戶表優化操作</li><li>請根據服務器性能，適當調整單步優化數。</li><li>建議在關閉站點下進行優化操作。</li>',
 	'membersplit_combie_count' => '可優化用戶數',
