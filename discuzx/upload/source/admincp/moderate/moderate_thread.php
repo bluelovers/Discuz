@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: moderate_thread.php 28954 2012-03-20 09:23:02Z monkey $
+ *      $Id: moderate_thread.php 30248 2012-05-17 08:46:56Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -224,20 +224,13 @@ if(!submitcheck('modsubmit') && !$_GET['fast']) {
 				);
 			}
 		}
-
+		require_once libfile('function/delete');
 		if($recyclebintids) {
-			$recycles = C::t('forum_thread')->update($recyclebintids, array('displayorder' => -1, 'moderated' => 1));
+			$recycles = deletethread($recyclebintids, false, false, true);
 			updatemodworks('MOD', $recycles);
-
-			loadcache('posttableids');
-			$posttableids = $_G['cache']['posttableids'] ? $_G['cache']['posttableids'] : array('0');
-			foreach($posttableids as $id) {
-				C::t('forum_post')->update_by_tid($id, $recyclebintids, array('invisible' => '-1'));
-			}
 			updatemodlog($recyclebintids, 'DEL');
 		}
 
-		require_once libfile('function/delete');
 		$deletes = deletethread($deletetids);
 		updatemoderate('tid', $moderation['delete'], 2);
 	}
