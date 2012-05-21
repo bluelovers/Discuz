@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: search_group.php 29236 2012-03-30 05:34:47Z chenmengshu $
+ *      $Id: search_group.php 30188 2012-05-16 03:25:14Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -75,7 +75,7 @@ if(!submitcheck('searchsubmit', 1)) {
 			}
 			$forums = C::t('forum_forum')->fetch_all_name_by_fid($fids);
 			foreach($threads as $thread) {
-				$thread['forumname'] = $forums[$value['fid']]['name'];
+				$thread['forumname'] = $forums[$thread['fid']]['name'];
 				$thread['subject'] = bat_highlight($thread['subject'], $keyword);
 				$thread['realtid'] = $thread['tid'];
 				$threadlist[$thread['tid']] = procthread($thread);
