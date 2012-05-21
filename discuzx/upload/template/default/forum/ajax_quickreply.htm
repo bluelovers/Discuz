@@ -24,7 +24,9 @@
 </ul>
 <div class="cl">
 	<a href="javascript:;" onclick="display('replybox_{$_GET['feedid']}')" class="y xg1">&uarr; {lang close}</a>
+	<!--{if $fid != $_G[setting][followforumid]}-->
 	<a href="forum.php?mod=viewthread&tid={$_GET[tid]}&extra=page%3D1" target="_blank" class="xi2">&rarr; {lang view_all_replies}</a>
+	<!--{/if}-->
 </div>
 <script type="text/javascript">
 	function succeedhandle_$_GET[handlekey](url, msg, values) {
