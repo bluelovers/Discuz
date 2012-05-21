@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_pm.php 29691 2012-04-25 06:53:43Z zhengqingpeng $
+ *      $Id: space_pm.php 30277 2012-05-18 02:57:25Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -174,7 +174,7 @@ if($_GET['subop'] == 'view') {
 		C::t('common_member')->update($_G['uid'], array('newpm' => 0));
 		uc_pm_ignore($_G['uid']);
 	}
-	$multi = multi($count, $perpage, $page, "home.php?mod=space&do=pm&filter=$filter");
+	$multi = multi($count, $perpage, $page, "home.php?mod=space&do=pm&filter=$filter", 0, 5);
 	$actives = array($filter=>' class="a"');
 }
 
