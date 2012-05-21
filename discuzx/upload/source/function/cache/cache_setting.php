@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_setting.php 29247 2012-03-30 11:07:54Z monkey $
+ *      $Id: cache_setting.php 30175 2012-05-15 08:15:25Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -17,14 +17,14 @@ function build_cache_setting() {
 	$skipkeys = array('posttableids', 'mastermobile', 'masterqq', 'masteremail', 'closedreason',
 		'creditsnotify', 'backupdir', 'custombackup', 'jswizard', 'maxonlines', 'modreasons', 'newsletter',
 		'postno', 'postnocustom', 'customauthorinfo', 'domainwhitelist', 'ipregctrl',
-		'ipverifywhite', 'fastsmiley', 'defaultdoing', 'profilegroup',
+		'ipverifywhite', 'fastsmiley', 'defaultdoing',
 		);
 	$serialized = array('reginput', 'memory', 'search', 'creditspolicy', 'ftp', 'secqaa', 'ec_credit', 'qihoo', 'spacedata',
 		'infosidestatus', 'uc', 'indexhot', 'relatedtag', 'sitemessage', 'uchome', 'heatthread', 'recommendthread',
 		'disallowfloat', 'allowviewuserthread', 'advtype', 'click', 'card', 'rewritestatus', 'rewriterule', 'privacy', 'focus',
 		'forumkeys', 'article_tags', 'verify', 'seotitle', 'seodescription', 'seokeywords', 'domain', 'ranklist', 'my_search_data',
 		'seccodedata', 'inviteconfig', 'advexpiration', 'allowpostcomment', /*(IN_MOBILE)*/ 'mobile', 'connect', 'upgrade', 'patch', 'strongpw',
-		'posttable_info', 'threadtable_info'
+		'posttable_info', 'threadtable_info', 'profilegroup'
 		);
 
 	$data = array();
@@ -70,6 +70,18 @@ function build_cache_setting() {
 				$setting['svalue']['attachurl'] .= substr($setting['svalue']['attachurl'], -1, 1) != '/' ? '/' : '';
 			} elseif($setting['skey'] == 'inviteconfig') {
 				$setting['svalue']['invitecodeprompt'] = stripslashes($setting['svalue']['invitecodeprompt']);
+			} elseif($setting['skey'] == 'profilegroup') {
+				$profile_settings = C::t('common_member_profile_setting')->fetch_all_by_available(1);
+				foreach($setting['svalue'] as $key => $val) {
+					$temp = array();
+					foreach($profile_settings as $pval) {
+						if(in_array($pval['fieldid'], $val['field'])) {
+							$temp[$pval['fieldid']] = $pval['fieldid'];
+						}
+					}
+					$setting['svalue'][$key]['field'] = $temp;
+				}
+				C::t('common_setting')->update('profilegroup', $setting['svalue']);
 			}
 		}
 		$_G['setting'][$setting['skey']] = $data[$setting['skey']] = $setting['svalue'];
