@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: discuz_application.php 29485 2012-04-16 02:27:34Z zhangguosheng $
+ *      $Id: discuz_application.php 30190 2012-05-16 06:14:24Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -24,6 +24,7 @@ class discuz_application extends discuz_base{
 
 	var $cachelist = array();
 
+	var $init_db = true;
 	var $init_setting = true;
 	var $init_user = true;
 	var $init_session = true;
@@ -237,7 +238,9 @@ class discuz_application extends discuz_base{
 			$_GET['page'] = rawurlencode($_GET['page']);
 		}
 
-		$_GET['handlekey']= !empty($_GET['handlekey']) && preg_match('/^\w+$/', $_GET['handlekey']) ? $_GET['handlekey'] : '';
+		if(!(!empty($_GET['handlekey']) && preg_match('/^\w+$/', $_GET['handlekey']))) {
+			unset($_GET['handlekey']);
+		}
 
 		if(!empty($this->var['config']['input']['compatible'])) {
 			foreach($_GET as $k => $v) {
@@ -359,11 +362,13 @@ class discuz_application extends discuz_base{
 	}
 
 	private function _init_db() {
-		$driver = 'db_driver_mysql';
-		if(count(getglobal('config/db/slave'))) {
-			$driver = 'db_driver_mysql_slave';
+		if($this->init_db) {
+			$driver = 'db_driver_mysql';
+			if(count(getglobal('config/db/slave'))) {
+				$driver = 'db_driver_mysql_slave';
+			}
+			DB::init($driver, $this->config['db']);
 		}
-		DB::init($driver, $this->config['db']);
 	}
 
 	private function _init_session() {
