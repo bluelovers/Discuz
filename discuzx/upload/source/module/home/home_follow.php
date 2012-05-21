@@ -3,7 +3,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: home_follow.php 29765 2012-04-27 02:30:30Z zhengqingpeng $
+ *      $Id: home_follow.php 30179 2012-05-15 09:13:07Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -32,6 +32,8 @@ if(empty($space)) {
 }
 space_merge($space, 'count');
 space_merge($space, 'profile');
+space_merge($space, 'field_home');
+
 if($viewself) {
 	$showguide = false;
 } else {
