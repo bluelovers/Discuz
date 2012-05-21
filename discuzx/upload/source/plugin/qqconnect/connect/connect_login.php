@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: connect_login.php 29265 2012-03-31 06:03:26Z yexinhao $
+ *      $Id: connect_login.php 30155 2012-05-15 02:24:14Z songlixin $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -40,7 +40,7 @@ if($op == 'init') {
 	try {
 		$response = $connectOAuthClient->connectGetRequestToken();
 	} catch(Exception $e) {
-		showmessage('qqconnect:connect_get_request_token_failed', $referer);
+		showmessage('qqconnect:connect_get_request_token_failed_code', $referer, array('code' => $e->getmessage()));
 	}
 
 	$request_token = $response['oauth_token'];
@@ -71,7 +71,7 @@ if($op == 'init') {
 	try {
 		$response = $connectOAuthClient->connectGetAccessToken($params, $_G['cookie']['con_request_token_secret']);
 	} catch(Exception $e) {
-		showmessage('qqconnect:connect_get_access_token_failed', $referer);
+		showmessage('qqconnect:connect_get_access_token_failed_code', $referer, array('code' => $e->getmessage()));
 	}
 
 	dsetcookie('con_request_token');
@@ -81,7 +81,7 @@ if($op == 'init') {
 	$conuinsecret = $response['oauth_token_secret'];
 	$conopenid = strtoupper($response['openid']);
 	if(!$conuin || !$conuinsecret || !$conopenid) {
-		showmessage('qqconnect:connect_get_access_token_failed', $referer);
+		showmessage('qqconnect:connect_get_access_token_failed_code', $referer, array('code' => $e->getmessage()));
 	}
 
 	loadcache('connect_blacklist');
@@ -303,7 +303,7 @@ if($op == 'init') {
 	try {
 		$response = $connectOAuthClient->connectGetRequestToken();
 	} catch(Exception $e) {
-		showmessage('qqconnect:connect_get_request_token_failed', $referer);
+		showmessage('qqconnect:connect_get_request_token_failed_code', $referer, array('code' => $e->getmessage()));
 	}
 
 	$request_token = $response['oauth_token'];
