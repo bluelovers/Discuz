@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_admincp_msg.php 29634 2012-04-23 08:29:45Z monkey $
+ *      $Id: lang_admincp_msg.php 30255 2012-05-17 09:14:49Z zhengqingpeng $
  *
  *      This file is automatically generate
  */
@@ -75,7 +75,7 @@ $lang = array (
   'plugins_upgrade_succeed' => '插件成功更新到 {toversion}<br /><br /><a href="http://addon.discuz.com?view=plugins">點擊這裡返回應用中心</a><br />',
   'plugins_edit_name_invalid' => '您沒有輸入插件名稱',
   'plugins_edit_succeed' => '插件配置更新成功 ',
-  'plugins_delete_succeed' => '插件成功卸載！<br />為了正常使用此插件，您可能還需要刪除或修改相應的文件或模板，詳情請查看本插件的安裝說明',
+  'plugins_delete_succeed' => '插件成功卸載！<br />為了正常卸載此插件，您可能還需要刪除或修改相應的文件或模板，詳情請查看本插件的安裝說明',
   'portalcategory_move_category_failed' => '無法移動文章到所選分類',
   'portalcategory_delete_succeed' => '刪除分類成功 ',
   'portalcategory_catgory_not_found' => '分類不存在或沒有選擇分類',
@@ -409,10 +409,12 @@ $lang = array (
   'plugins_edit_modules_duplicated' => '您輸入的程序模塊名稱與現有模塊重複',
   'plugins_edit_var_invalid' => '您輸入的配置變量名不合法或重複',
   'plugins_delete_error' => '您不能卸載系統插件。',
-  'plugins_delete_confirm' => '您確定要卸載 {pluginname} {toversion} 插件嗎？',
+  'plugins_delete_confirm' => '您確定要卸載 {pluginname} {toversion} 插件嗎？<br /><br />請選擇您卸載該應用的原因，以便我們以後為您提供更好的應用：<br /><br /><label><input name="uninstallreason[]" class="checkbox" type="checkbox" value="1" />功能不滿足需求</label> <label><input name="uninstallreason[]" class="checkbox" type="checkbox" value="2" />界面不美觀</label> <label><input name="uninstallreason[]" class="checkbox" type="checkbox" value="3" />效率問題運行速度慢</label> <label><input name="uninstallreason[]" class="checkbox" type="checkbox" value="4" />發現了更好的應用</label><label><input name="uninstallreason[]" class="checkbox" type="checkbox" value="5" />純試用現在卸載</label>',
+  'styles_delete_confirm' => '您確定要卸載這些風格嗎？<br /><br />請選擇您卸載該應用的原因，以便我們以後為您提供更好的應用：<br /><br /><label><input name="uninstallreason[]" class="checkbox" type="checkbox" value="1" />功能不滿足需求</label> <label><input name="uninstallreason[]" class="checkbox" type="checkbox" value="2" />界面不美觀</label> <label><input name="uninstallreason[]" class="checkbox" type="checkbox" value="3" />效率問題運行速度慢</label> <label><input name="uninstallreason[]" class="checkbox" type="checkbox" value="4" />發現了更好的應用</label><label><input name="uninstallreason[]" class="checkbox" type="checkbox" value="5" />純試用現在卸載</label>',
   'pluginvar_not_found' => '插件變量未找到',
   'plugins_edit_var_title_invalid' => '您沒有輸入配置名稱',
   'plugins_edit_vars_succeed' => '插件變量配置更新成功 ',
+  'plugins_edit_vars_invalid' => '插件配置變量名不合法或者已被佔用',
   'plugins_validator_noupdate' => '沒有檢測到新版本插件',
 
   'portalcategory_update_succeed' => '更新分類成功 ',
