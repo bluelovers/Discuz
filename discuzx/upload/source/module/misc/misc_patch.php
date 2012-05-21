@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_patch.php 29774 2012-04-27 03:41:02Z monkey $
+ *      $Id: misc_patch.php 30218 2012-05-17 01:20:33Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -27,7 +27,7 @@ if($_GET['action'] == 'checkpatch') {
 		$patchnotice = $discuz_patch->fetch_patch_notice();
 		if(!empty($patchnotice['data'])) {
 			$lang = lang('forum/misc');
-			$patchlist .= '<div class="bm'.($patchnotice['fixed'] ? ' allfixed' : '').'"><div class="bm_h cl"><a href="javascript:;" onclick="$(\'patch_notice\').style.display=\'none\'" class="y" title="'.$lang['patch_close'].'">'.$lang['patch_close'].'</a><h2>';
+			$patchlist .= '<div class="bm'.($patchnotice['fixed'] ? ' allfixed' : '').'"><div class="bm_h cl"><a href="javascript:;" onclick="$(\'patch_notice\').style.display=\'none\'" class="y" title="'.$lang['patch_close'].'">'.$lang['patch_close'].'</a><h2 class="i">';
 			if($patchnotice['fixed']) {
 				$patchlist .= $lang['patch_site_have'].' '.count($patchnotice['data']).' '.$lang['patch_is_fixed'];
 			} else {
@@ -77,8 +77,8 @@ if($_GET['action'] == 'checkpatch') {
 	include template('common/header_ajax');
 	if($newversion) {
 		$lang = lang('forum/misc');
-		echo '<div class="bm"><div class="bm_h cl"><a href="javascript:;" onclick="$(\'plugin_notice\').style.display=\'none\';setcookie(\'pluginnotice\', 1, 86400)" class="y" title="'.$lang['patch_close'].'">'.$lang['patch_close'].'</a><h2>';
-		echo '<h2>'.$lang['plugin_title'].'</h2></div><div class="bm_c">';
+		echo '<div class="bm"><div class="bm_h cl"><a href="javascript:;" onclick="$(\'plugin_notice\').style.display=\'none\';setcookie(\'pluginnotice\', 1, 86400)" class="y" title="'.$lang['patch_close'].'">'.$lang['patch_close'].'</a>';
+		echo '<h2 class="i">'.$lang['plugin_title'].'</h2></div><div class="bm_c">';
 		echo lang('forum/misc', 'plugin_memo', array('number' => $newversion));
 		echo '<div align="right"><a href="admin.php?action=plugins" class="xi2">'.$lang['plugin_link'].'</a></div>';
 		echo '</div></div>';
