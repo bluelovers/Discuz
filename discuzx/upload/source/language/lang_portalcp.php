@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_portalcp.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: lang_portalcp.php 30107 2012-05-11 02:10:58Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -32,6 +32,8 @@ $lang = array(
 	'article_noexist' => '指定的文章不存在，請檢查',
 	'article_noallowed' => '您沒有權限對指定的文章進行操作',
 	'article_publish_noallowed' => '您沒有權限進行文章發佈操作',
+	'article_category_empty' => '抱歉，欄目不能為空',
+	'article_edit_nopermission' => '抱歉，您沒有權限進行當前文章操作',
 	'article_publish' => '發佈文章',
 	'article_manage' => '文章管理',
 	'article_tag' => '標籤',
