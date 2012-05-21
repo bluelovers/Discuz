@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms'
  *
- *      $Id: admincp_plugins.php 29688 2012-04-25 05:40:34Z monkey $
+ *      $Id: admincp_plugins.php 30036 2012-05-08 02:31:38Z monkey $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -1277,6 +1277,8 @@ if(!$operation) {
 		cpmsg('plugins_delete_confirm', 'action=plugins&operation=delete&pluginid='.$pluginid.'&confirmed=yes', 'form', array('pluginname' => $plugin['name'], 'toversion' => $plugin['version']));
 
 	} else {
+
+		dsetcookie('uninstallreason', $_GET['uninstallreason'] ? '|'.implode('|', $_GET['uninstallreason']).'|' : '');
 
 		$identifier = $plugin['identifier'];
 		C::t('common_plugin')->delete($pluginid);
