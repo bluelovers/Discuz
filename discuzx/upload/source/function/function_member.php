@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_member.php 28471 2012-03-01 07:44:19Z zhengqingpeng $
+ *      $Id: function_member.php 30175 2012-05-15 08:15:25Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -106,7 +106,7 @@ function logincheck($username) {
 	if(function_exists('uc_user_logincheck')) {
 		$return = uc_user_logincheck(addslashes($username), $_G['clientip']);
 	} else {
-		$login = C::t('common_failedlogin')->fetch_username($_G['clientip'], $username);
+		$login = C::t('common_failedlogin')->fetch_ip($_G['clientip']);
 		$return = (!$login || (TIMESTAMP - $login['lastupdate'] > 900)) ? 5 : max(0, 5 - $login['count']);
 
 		if(!$login) {
