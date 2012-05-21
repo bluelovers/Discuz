@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_members.php 29761 2012-04-27 01:56:01Z zhengqingpeng $
+ *      $Id: admincp_members.php 30184 2012-05-16 02:49:45Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -927,7 +927,7 @@ EOF;
 
 		$newusername = trim($_GET['newusername']);
 		$newpassword = trim($_GET['newpassword']);
-		$newemail = trim($_GET['newemail']);
+		$newemail = strtolower(trim($_GET['newemail']));
 
 		if(!$newusername || !isset($_GET['confirmed']) && !$newpassword || !isset($_GET['confirmed']) && !$newemail) {
 			cpmsg('members_add_invalid', '', 'error');
@@ -1965,7 +1965,7 @@ EOF;
 		require_once libfile('function/discuzcode');
 
 		$questionid = $_GET['clearquestion'] ? 0 : '';
-		$ucresult = uc_user_edit(addslashes($member['username']), $_GET['passwordnew'], $_GET['passwordnew'], addslashes($_GET['emailnew']), 1, $questionid);
+		$ucresult = uc_user_edit(addslashes($member['username']), $_GET['passwordnew'], $_GET['passwordnew'], addslashes(strtolower(trim($_GET['emailnew']))), 1, $questionid);
 		if($ucresult < 0) {
 			if($ucresult == -4) {
 				cpmsg('members_email_illegal', '', 'error');
@@ -2036,7 +2036,7 @@ EOF;
 
 		$memberupdate = array();
 		if($ucresult >= 0) {
-			$memberupdate['email'] = $_GET['emailnew'];
+			$memberupdate['email'] = strtolower(trim($_GET['emailnew']));
 		}
 		if($ucresult >= 0 && !empty($_GET['passwordnew'])) {
 			$memberupdate['password'] = md5(random(10));
