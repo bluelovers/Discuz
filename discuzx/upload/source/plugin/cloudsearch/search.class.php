@@ -4,7 +4,7 @@
  *      [Discuz! X] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: search.class.php 29372 2012-04-09 07:24:47Z zhouxiaobo $
+ *      $Id: search.class.php 30263 2012-05-17 13:44:07Z zhouxiaobo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -379,7 +379,7 @@ class plugin_cloudsearch_forum extends plugin_cloudsearch {
 		$srchotquery = '';
 		if(!empty($searchparams['params'])) {
 			foreach($searchparams['params'] as $key => $value) {
-				$srchotquery .= '&' . $key . '=' . $value;
+				$srchotquery .= '&' . $key . '=' . rawurlencode($value);
 			}
 		}
 		return tpl_cloudsearch_index_top($recwords, $searchparams, $srchotquery);
@@ -475,7 +475,7 @@ class plugin_cloudsearch_forum extends plugin_cloudsearch {
 			$srchotquery = '';
 			if(!empty($searchparams['params'])) {
 				foreach($searchparams['params'] as $key => $value) {
-					$srchotquery .= '&' . $key . '=' . $value;
+					$srchotquery .= '&' . $key . '=' . rawurlencode($value);
 				}
 			}
 			$result = tpl_cloudsearch_index_top($recwords, $searchparams, $srchotquery, 'hotopic_fm');
@@ -536,7 +536,7 @@ class plugin_cloudsearch_forum extends plugin_cloudsearch {
 		$srchotquery = '';
 		if(!empty($searchparams['params'])) {
 			foreach($searchparams['params'] as $key => $value) {
-				$srchotquery .= '&' . $key . '=' . $value;
+				$srchotquery .= '&' . $key . '=' . rawurlencode($value);
 			}
 		}
 
