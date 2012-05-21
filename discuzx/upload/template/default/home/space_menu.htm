@@ -7,7 +7,7 @@
 		<ul>
 			<!--{if helper_access::check_module('follow')}-->
 			<li class="addflw">
-				<!--{if !$follow}-->
+				<!--{if !ckfollow($space['uid'])}-->
 					<a id="followmod" onclick="showWindow(this.id, this.href, 'get', 0);" href="home.php?mod=spacecp&ac=follow&op=add&hash={FORMHASH}&fuid=$space[uid]">{lang follow_add}TA</a>
 				<!--{else}-->
 					<a id="followmod" onclick="showWindow(this.id, this.href, 'get', 0);" href="home.php?mod=spacecp&ac=follow&op=del&fuid=$space[uid]">{lang follow_del}</a>
