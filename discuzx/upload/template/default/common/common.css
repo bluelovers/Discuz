@@ -164,7 +164,7 @@ CSS 寫作注意事項：
 	Last Modify:	lushnis
 */
 	/* .wx --> weight text 粗體字，通常用於大標題 */
-	.wx, .ph { font-family: "Microsoft YaHei", "Hiragino Sans GB", STHeiti, Tahoma, SimHei, sans-serif; font-weight: 100; }
+	.wx, .ph { font-family: 'Microsoft YaHei', 'Hiragino Sans GB', 'STHeiti', Tahoma, 'SimHei', sans-serif; font-weight: 100; }
 	/* Page header */ .ph { font-size: 20px; }
 	/* Main title */ .mt { padding: 10px 0; font-size: 16px; }
 
@@ -1108,8 +1108,8 @@ CSS 寫作注意事項：
 					.pmd .quote { overflow: hidden; margin: 0; padding-left: 16px; background: url({IMGDIR}/qa.gif) no-repeat 0 0; color: {MIDTEXT}; }
 						.pmd .quote blockquote { display: inline; margin: 0; padding-right: 16px; background: url({IMGDIR}/qz.gif) no-repeat 100% 100%; }
 					.pmd .blockcode { overflow: hidden; margin: 0; padding: 0; background: transparent; color: {MIDTEXT}; }
-						.pmd .blockcode code { font-family: Monaco, Consolas, "Lucida Console", "Courier New", serif; font-size: 12px; line-height: 1.8em; }
-						* html .pmd .blockcode code { font-family: "Courier New", serif; }
+						.pmd .blockcode code { font-family: Monaco, Consolas, 'Lucida Console', 'Courier New', serif; font-size: 12px; line-height: 1.8em; }
+						* html .pmd .blockcode code { font-family: 'Courier New', serif; }
 				.pmm .pmt { right: -6px; left: auto; background-position: 0 -47px; }
 				.pmm .pmd { float: right; background: #FEF5E7 url({IMGDIR}/pm-bg2.png) repeat-x; border-color: #FFC68C #F9D4A7 #F3BB65 #DDC4A9; -moz-box-shadow: -2px 2px 4px #DDD; -webkit-box-shadow: -2px 2px 4px #DDD; box-shadow: -2px 2px 4px #DDD; -moz-border-radius: 10px 10px 0 10px; -webkit-border-radius: 10px 10px 0 10px; border-radius: 10px 10px 0 10px; }
 			.pmb h4 { text-align: center; }
