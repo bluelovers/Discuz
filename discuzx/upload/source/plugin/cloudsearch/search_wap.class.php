@@ -3,7 +3,7 @@
  *      [Discuz! X] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: search_wap.class.php 29278 2012-03-31 09:02:13Z zhouxiaobo $
+ *      $Id: search_wap.class.php 30263 2012-05-17 13:44:07Z zhouxiaobo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -38,7 +38,7 @@ class mobileplugin_cloudsearch {
 		$srchotquery = '';
 		if(!empty($searchparams['params'])) {
 			foreach($searchparams['params'] as $key => $value) {
-				$srchotquery .= '&' . $key . '=' . $value;
+				$srchotquery .= '&' . $key . '=' . rawurlencode($value);
 			}
 		}
 
