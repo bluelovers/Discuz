@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_membersplit.php 28655 2012-03-07 03:46:59Z zhangguosheng $
+ *      $Id: admincp_membersplit.php 29851 2012-05-02 02:18:40Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -32,12 +32,19 @@ if($operation == 'check') {
 
 	showsubtitle(array('','','membersplit_count', 'membersplit_lasttime_check'));
 
-	$color = empty($_G['cache']['membersplitdata']) || $_G['cache']['membersplitdata']['dateline'] < TIMESTAMP - 86400*10 ?
+	if($membercount < 20000) {
+		$color = 'green';
+		$msg = $lang['membersplit_without_optimization'];
+	} else {
+		$color = empty($_G['cache']['membersplitdata']) || $_G['cache']['membersplitdata']['dateline'] < TIMESTAMP - 86400*10 ?
 			'red' : 'green';
-	$msg = empty($_G['cache']['membersplitdata']) ? $lang['membersplit_has_no_check'] : dgmdate($_G['cache']['membersplitdata']['dateline']);
+		$msg = empty($_G['cache']['membersplitdata']) ? $lang['membersplit_has_no_check'] : dgmdate($_G['cache']['membersplitdata']['dateline']);
+	}
 	showtablerow('', '', array('','', number_format($membercount), '<span style="color:'.$color.'">'.$msg.'</span>'));
 
-	showsubmit('membersplit_check_submit', 'membersplit_check');
+	if($membercount >= 20000) {
+		showsubmit('membersplit_check_submit', 'membersplit_check');
+	}
 	showtablefooter();
 	showformfooter();
 
