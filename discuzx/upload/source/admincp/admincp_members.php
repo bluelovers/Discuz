@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_members.php 30184 2012-05-16 02:49:45Z chenmengshu $
+ *      $Id: admincp_members.php 30465 2012-05-30 04:10:03Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -1552,12 +1552,15 @@ EOF;
 		if($_GET['bannew'] == 'post') {
 			$crimeaction = 'crime_banspeak';
 			$noticekey = 'member_ban_speak';
+			$from_idtype = 'banspeak';
 		} elseif($_GET['bannew'] == 'visit') {
 			$crimeaction = 'crime_banvisit';
 			$noticekey = 'member_ban_visit';
+			$from_idtype = 'banvisit';
 		} elseif($_GET['bannew'] == 'status') {
 			$crimeaction = 'crime_banstatus';
 			$noticekey = 'member_ban_status';
+			$from_idtype = 'banstatus';
 		}
 		if($crimeaction) {
 			crime('recordaction', $member['uid'], $crimeaction, lang('forum/misc', 'crime_reason', array('reason' => $reason)));
@@ -1566,7 +1569,9 @@ EOF;
 			$notearr = array(
 				'user' => "<a href=\"home.php?mod=space&uid=$_G[uid]\">$_G[username]</a>",
 				'day' => intval($_POST['banexpirynew']),
-				'reason' => $reason
+				'reason' => $reason,
+				'from_id' => 0,
+				'from_idtype' => $from_idtype
 			);
 			notification_add($member['uid'], 'system', $noticekey, $notearr, 1);
 		}
@@ -3112,7 +3117,7 @@ function notifymembers($operation, $variable) {
 					$newpm = setstatus(2, 1, $member['newpm']);
 					C::t('common_member')->update($member['uid'], array('newpm'=>$newpm));
 				} elseif($_GET['notifymembers'] == 'notice') {
-					notification_add($member['uid'], 'system', 'system_notice', array('subject' => $subject, 'message' => $message.$addmsg), 1);
+					notification_add($member['uid'], 'system', 'system_notice', array('subject' => $subject, 'message' => $message.$addmsg, 'from_id' => 0, 'from_idtype' => 'sendnotice'), 1);
 				} elseif($_GET['notifymembers'] == 'email') {
 					if(!sendmail("$member[username] <$member[email]>", $subject, $message.$addmsg)) {
 						runlog('sendmail', "$member[email] sendmail failed.");
