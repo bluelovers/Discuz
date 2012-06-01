@@ -4,7 +4,7 @@
  *		[Discuz!] (C)2001-2099 Comsenz Inc.
  *		This is NOT a freeware, use is subject to license terms
  *
- *		$Id: Disk.php 29353 2012-04-06 03:00:07Z liudongdong $
+ *		$Id: Disk.php 30408 2012-05-28 02:52:40Z songlixin $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -36,7 +36,7 @@ class Cloud_Service_Disk {
 
 		$this->_util = Cloud::loadClass('Service_Util');
 		$this->_client = Cloud::loadClass('Service_Client_Disk');
-		$this->_baseUrl = $_G['siteurl'] . 'plugin.php?id=qqconnect:disk&';
+		$this->_baseUrl = $_G['siteurl'] . 'apptest.php?';
 	}
 
 	public function saveTask($attach, $openid) {
@@ -67,18 +67,24 @@ class Cloud_Service_Disk {
 		$downloadUrl = $this->_baseUrl . $this->_util->generateSiteSignUrl($downParams);
 		$filePath = self::_getFullPath($attach['attachment']);
 		if ($attach['filesize'] <= 10000000 && file_exists($filePath)) {
-			$md5 = md5_file($filepath);
-			$hash = hash_file('sha1', $filepath);
+			$md5 = md5_file($filePath);
+			$hash = hash_file('sha1', $filePath);
 		}
 		$cloudData = array(
 			'sId' => $_G['setting']['my_siteid'],
 			'openid' => $openid,
-			'filename' => $attach['filename'],
-			'downloadUrl' => $downloadUrl,
-			'md5' => $md5,
-			'hash' => $hash,
+			'batchTasks' => array(
+				array(
+					'filename' => $attach['filename'],
+					'downloadUrl' => $downloadUrl,
+					'size' => filesize($filePath),
+					'md5' => $md5,
+					'hash' => $hash,
+				),
+			),
+			'clientIp' => $_G['clientip'],
 		);
-		$this->_client->sendTask($cloudData);
+		return $this->_client->sendTask($cloudData);
 	}
 
 	public function getAttachment() {
