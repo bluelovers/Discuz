@@ -4,7 +4,7 @@
  *		[Discuz!] (C)2001-2099 Comsenz Inc.
  *		This is NOT a freeware, use is subject to license terms
  *
- *		$Id: Security.php 29263 2012-03-31 05:45:08Z yexinhao $
+ *		$Id: Security.php 30419 2012-05-28 05:34:35Z songlixin $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -33,6 +33,10 @@ class Cloud_Service_Security {
 		}
 
 		return self::$_instance;
+	}
+
+	private function _getUA() {
+		return $_SERVER['HTTP_USER_AGENT'];
 	}
 
 	private function _setClient() {
@@ -70,6 +74,7 @@ class Cloud_Service_Security {
 			'remoteIp' => $_SERVER['REMOTE_ADDR'],
 			'hasVerifyCode' => $secReportCodeStatus,
 			'regResult' => 1,
+			'userAgent' => $this->_getUA(),
 			'extra' => $extra
 		);
 		$result = false;
@@ -151,6 +156,7 @@ class Cloud_Service_Security {
 			'posts' => $posts,
 			'signature' => $signature,
 			'userBitMap' => $userBitMap,
+			'userAgent' => $this->_getUA(),
 			'extra' => $extra
 		);
 
@@ -362,6 +368,10 @@ class Cloud_Service_Security {
 			}
 		}
 		$contentBitMap['threadSort'] = $threadSort;
+		if ($_GET['action'] == 'newtrade') {
+			$type = 'newThread';
+			$pid = $firstPost['pid'];
+		}
 
 		$batchData[] = array(
 						'tId' => $tid,
@@ -386,6 +396,7 @@ class Cloud_Service_Security {
 						'shares' => $shares,
 						'title' => $post['subject'],
 						'content' => $post['message'],
+						'sortMessage' => $sortMessage,
 						'attachList' => $postAttachs,
 						'reportType' => $type,
 						'contentBitMap' => $contentBitMap,
@@ -393,6 +404,7 @@ class Cloud_Service_Security {
 						'extra' => $extra,
 						'specialType' => $threadSpecial,
 						'signature' => $memberField['sightml'],
+						'userAgent' => $this->_getUA(),
 					);
 
 		$result = false;
