@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_home_comment.php 28826 2012-03-14 07:45:14Z svn_project_zhangjie $
+ *      $Id: table_home_comment.php 30374 2012-05-24 09:24:58Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -156,9 +156,9 @@ class table_home_comment extends discuz_table
 				for($i = 0; $i < count($keywords); $i++) {
 					if(preg_match("/\{(\d+)\}/", $keywords[$i])) {
 						$keywords[$i] = preg_replace("/\\\{(\d+)\\\}/", ".{0,\\1}", preg_quote($keywords[$i], '/'));
-						$sqlkeywords .= " $or message REGEXP '".$keywords[$i]."'";
+						$sqlkeywords .= " $or message REGEXP '".addslashes(stripsearchkey($keywords[$i]))."'";
 					} else {
-						$sqlkeywords .= " $or message LIKE '%".$keywords[$i]."%'";
+						$sqlkeywords .= " $or message LIKE '%".addslashes(stripsearchkey($keywords[$i]))."%'";
 					}
 					$or = 'OR';
 				}
