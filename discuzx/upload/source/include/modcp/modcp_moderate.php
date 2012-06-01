@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: modcp_moderate.php 29561 2012-04-19 01:52:54Z chenmengshu $
+ *      $Id: modcp_moderate.php 30465 2012-05-30 04:10:03Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_MODCP')) {
@@ -294,7 +294,7 @@ if($op == 'replies') {
 				if($post['authorid'] && $post['authorid'] != $_G['uid']) {
 					$pmlist[] = array(
 						'act' => 'modreplies_validate',
-						'notevar' => array('reason' => dhtmlspecialchars($_GET['reason']), 'pid' => $post['pid'], 'tid' => $post['tid'], 'post' => messagecutstr($post['message'], 30)),
+						'notevar' => array('reason' => dhtmlspecialchars($_GET['reason']), 'pid' => $post['pid'], 'tid' => $post['tid'], 'post' => messagecutstr($post['message'], 30), 'from_id' => 0, 'from_idtype' => 'modreplies'),
 						'authorid' => $post['authorid'],
 					);
 				}
@@ -443,7 +443,7 @@ if($op == 'replies') {
 				if($thread['authorid'] && $thread['authorid'] != $_G['uid']) {
 					$pmlist[] = array(
 						'act' => 'modthreads_validate',
-						'notevar' => array('reason' => dhtmlspecialchars($_GET['reason']), 'tid' => $thread['tid'], 'threadsubject' => $thread['subject']),
+						'notevar' => array('reason' => dhtmlspecialchars($_GET['reason']), 'tid' => $thread['tid'], 'threadsubject' => $thread['subject'], 'from_id' => 0, 'from_idtype' => 'modthreads'),
 						'authorid' => $thread['authorid'],
 					);
 				}
