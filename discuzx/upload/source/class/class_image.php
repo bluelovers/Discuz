@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_image.php 29241 2012-03-30 07:20:36Z monkey $
+ *      $Id: class_image.php 30471 2012-05-30 06:06:09Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -73,7 +73,7 @@ class image {
 			return $this->returncode($return);
 		}
 		if($dstwidth < 0 || $dstheight < 0) {
-			return false;
+			return $this->returncode(false);
 		}
 		$this->param['dstwidth'] = $dstwidth;
 		$this->param['dstheight'] = $dstheight;
