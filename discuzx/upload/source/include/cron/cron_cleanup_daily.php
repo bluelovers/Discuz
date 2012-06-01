@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cron_cleanup_daily.php 28525 2012-03-02 04:18:37Z liulanbo $
+ *      $Id: cron_cleanup_daily.php 30465 2012-05-30 04:10:03Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -32,7 +32,7 @@ if($settingnew['heatthread']['type'] == 2 && $settingnew['heatthread']['period']
 
 C::t('common_member_count')->clear_today_data();
 
-C::t('forum_trade')->update_closed($expiration);
+C::t('forum_trade')->update_closed($_G['timestamp']);
 C::t('forum_tradelog')->clear_failure(7);
 C::t('forum_tradelog')->expiration_payed(7);
 C::t('forum_tradelog')->expiration_finished(7);
@@ -83,7 +83,7 @@ if(!empty($_G['setting']['advexpiration']['allow'])) {
 		$users = array_map('trim', $users);
 		if($users) {
 			foreach(C::t('common_member')->fetch_all_by_username($users) as $member) {
-				$noticelang = array('day' => $_G['setting']['advexpiration']['day'], 'advs' => implode("<br />", $advs));
+				$noticelang = array('day' => $_G['setting']['advexpiration']['day'], 'advs' => implode("<br />", $advs), 'from_id' => 0, 'from_idtype' => 'advexpire');
 				if(in_array('notice', $_G['setting']['advexpiration']['method'])) {
 					notification_add($member['uid'], 'system', 'system_adv_expiration', $noticelang, 1);
 				}
