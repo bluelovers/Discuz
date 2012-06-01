@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_admincp.php 30094 2012-05-10 06:22:44Z zhengqingpeng $
+ *      $Id: lang_admincp.php 30436 2012-05-29 03:35:07Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -3839,7 +3839,7 @@ $lang = array
 	'usergroups_edit_post_allow_down_remote_img_comment' => '遠程圖片本地化保存',
 	'usergroups_edit_post_allowreplycredit' => '允許設置回帖獎勵',
 	'usergroups_edit_post_allowreplycredit_comment' => '允許用戶在發佈主題時給予回帖者一定的擴展積分獎勵。回帖獎勵默認積分可在<a href="?action=setting&operation=credits">全局 - 積分設置</a>指定',
-	'usergroups_edit_post_allowsetpublishdate' => '允許設置預發帖時間',
+	'usergroups_edit_post_allowsetpublishdate' => '允許設置定時發佈',
 	'usergroups_edit_post_allowsetpublishdate_comment' => '允許用戶在發佈主題時設置指定的發帖時間。只能設置在每半小時（如 13:00 或 13:30）自動發佈。',
 	'usergroups_edit_post_allowcommentcollection' => '允許評論淘專輯',
 	'usergroups_edit_post_allowcommentcollection_comment' => '允許用戶在主題和淘專輯頁面進行評論。',
