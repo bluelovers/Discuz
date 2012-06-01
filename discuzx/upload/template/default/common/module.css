@@ -866,11 +866,12 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 		Level:			Function
 		Explain:		帖子代碼/引用等樣式
 		Author:			lushnis
-		Last Modify:	Pony 11053010
+		Last Modify:	Pony 1205241556
 	*/
 	.pl .quote, .pl .blockcode { margin: 10px 0; padding: 10px 10px 10px 65px; zoom: 1; }
 	.pl .quote { padding-bottom: 5px; background: #F9F9F9 url({IMGDIR}/icon_quote_s.gif) no-repeat 20px 6px; }
-		.pl .quote blockquote { margin: 0; padding: 0 65px 5px 0; background: url({IMGDIR}/icon_quote_e.gif) no-repeat 100% 100%; line-height: 1.6; zoom: 1; }
+		.pl .quote blockquote { display: inline-block; margin: 0; padding: 0 65px 5px 0; background: url({IMGDIR}/icon_quote_e.gif) no-repeat 100% 100%; line-height: 1.6; zoom: 1; }
+			.ie6 .pl .quote blockquote, .ie7 .pl .quote blockquote { display: inline }
 
 	.pl .blockcode { padding: 10px 0 5px 10px; border: 1px solid {WRAPBORDERCOLOR}; background: #F7F7F7 url({IMGDIR}/codebg.gif) repeat-y 0 0; overflow: hidden; }
 		.pl .blockcode ol { margin: 0 0 0 10px !important; padding: 0 !important; }
@@ -1874,6 +1875,7 @@ body { background: #FFF none !important; }
 .flw_readfull { padding: 3px 5px; border: 1px solid #DDD; border-radius: 3px; background: #FFF; }
 	.flw_readfull:hover { border-color: #9EB4C2; text-decoration: none; }
 .flw_delete { visibility: hidden; float: right; width: 20px; height: 20px; background: url({IMGDIR}/cls.gif) no-repeat 0 0; text-indent: -9999px; overflow: hidden; }
+	.ie8 .flw_delete { position: relative; z-index: 1; }
 	.flw_delete:hover { background-position: 0 100%; }
 	.flw_feed_hover .flw_delete { visibility: visible; }
 .flw_loading { margin: 0 0 10px 80px; padding: 10px; box-shadow: 0 1px 0 rgba(0,0,0,0.05); border: 1px solid #DBDBDB; border-radius: 4px; background: #F4F7F9; }
