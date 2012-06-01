@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_post.php 29630 2012-04-23 07:42:53Z zhengqingpeng $
+ *      $Id: function_post.php 30487 2012-05-30 09:11:07Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -120,7 +120,7 @@ function ftpupload($aids, $uid = 0) {
 	}
 	$attachtables = $pics = array();
 	foreach(C::t('forum_attachment')->fetch_all($aids) as $attach) {
-		if($uid != $attach['uid']) {
+		if($uid != $attach['uid'] && !$_G['forum']['ismoderator']) {
 			continue;
 		}
 		$attachtables[$attach['tableid']][] = $attach['aid'];
