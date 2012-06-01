@@ -3,7 +3,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: home_follow.php 30179 2012-05-15 09:13:07Z zhangguosheng $
+ *      $Id: home_follow.php 30281 2012-05-18 03:43:42Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -24,7 +24,7 @@ $multi = '';
 $theurl = 'home.php?mod='.($do == 'view' ? 'space' : 'follow').(!in_array($do, array('feed', 'view')) ? '&do='.$do : '');
 $uid = $_GET['uid'] ? $_GET['uid'] : $_G['uid'];
 $viewself = $uid == $_G['uid'] ? true : false;
-$space = $viewself ? $_G['member'] : getuserbyuid($uid);
+$space = $viewself ? $_G['member'] : getuserbyuid($uid, 1);
 if(empty($space)) {
 	showmessage('follow_visituser_not_exist');
 } elseif(in_array($space['groupid'], array(4, 5, 6)) && ($_G['adminid'] != 1 && $space['uid'] != $_G['uid'])) {
