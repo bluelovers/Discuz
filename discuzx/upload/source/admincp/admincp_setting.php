@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_setting.php 29652 2012-04-24 05:40:05Z zhangguosheng $
+ *      $Id: admincp_setting.php 30458 2012-05-30 01:50:37Z zhangguosheng $
  */
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
@@ -2037,7 +2037,7 @@ EOT;
 		$ea = array('eAccelerator',
 			$cache_extension['eaccelerator'] ? cplang('setting_memory_php_enable') : cplang('setting_memory_php_disable'),
 			$cache_config['eaccelerator'] ? cplang('open') : cplang('closed'),
-			'--'
+			$cache_type == 'eaccelerator' ? $do_clear_link : '--'
 			);
 
 		showtablerow('', array('width="100"', 'width="120"', 'width="120"'), $redis);
@@ -2778,7 +2778,7 @@ EOT;
 		if(isset($settingnew['watermarktext']['album'])) {
 			watermarkinit('album');
 		}
-		foreach(array('protal', 'forum', 'album') as $imgwatertype) {
+		foreach(array('portal', 'forum', 'album') as $imgwatertype) {
 			if($settingnew['watermarkstatus'][$imgwatertype]) {
 				$settingnew['watermarktrans'][$imgwatertype] = intval($settingnew['watermarktrans'][$imgwatertype]);
 				$settingnew['watermarkquality'][$imgwatertype] = intval($settingnew['watermarkquality'][$imgwatertype]);
