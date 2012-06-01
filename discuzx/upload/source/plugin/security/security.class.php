@@ -4,7 +4,7 @@
  *		[Discuz! X] (C)2001-2099 Comsenz Inc.
  *		This is NOT a freeware, use is subject to license terms
  *
- *		$Id: security.class.php 30252 2012-05-17 09:04:26Z songlixin $
+ *		$Id: security.class.php 30417 2012-05-28 05:22:31Z songlixin $
  */
 
 
@@ -40,7 +40,6 @@ class plugin_security {
 		if ($_G['uid']) {
 			$lastCookieReportTime = $this->_decodeReportTime($_G['cookie']['security_cookiereport']);
 			if ($lastCookieReportTime < strtotime('today')) {
-
 				$this->_reportLoginUser(array('uid' => $_G['uid']));
 			}
 		}
@@ -214,7 +213,7 @@ EOF;
 		$this->secLog('USERLOG-UID', $param['uid']);
 		self::$securityService->reportLogin($param['uid']);
 		$this->_retryReport();
-		$cookieTime = strtotime('tomorrow') - TIMESTAMP;
+		$cookieTime = 43200;
 		dsetcookie('security_cookiereport', $this->_encodeReportTime($_G['timestamp']), $cookieTime, 1);
 		return true;
 	}
