@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_template.php 29108 2012-03-27 02:46:40Z chenmengshu $
+ *      $Id: lang_template.php 30283 2012-05-18 05:50:47Z chenmengshu $
  *
  *      This file is automatically generate
  */
@@ -111,7 +111,7 @@ $lang = array (
   'collection_sortby_coomentnum' => '按評論數排序',
   'collection_sortby_follownum' => '按訂閱數排序',
   'collection_sortby_threadnum' => '按主題數排序',
-  'collection_sortby_update' => '按最後更新排序',
+  'collection_sortby_update' => '按創建時間排序',
   'collection_backcollection' => '返回專輯',
   'collection_comment_submit' => '發表評論',
   'collection_commentlist' => '評論列表',
