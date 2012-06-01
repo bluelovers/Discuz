@@ -159,7 +159,7 @@ var fid = parseInt('$_G[fid]');
 					</span>
 				<!--{/if}-->
 				<!--{if helper_access::check_module('follow')}-->
-				<label><input type="checkbox" name="adddynamic" value="1" {if $_G['forum']['allowfeed'] && !$_G[tid] && empty($_G['forum']['viewperm'])}checked="checked"{/if} />{lang post_relay}</label>
+				<label><input type="checkbox" name="adddynamic" class="pc" value="1" {if $_G['forum']['allowfeed'] && !$_G[tid] && empty($_G['forum']['viewperm'])}checked="checked"{/if} />{lang post_relay}</label>
 				<!--{/if}-->
 			</p>
 		</form>
