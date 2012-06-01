@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: memory_driver_eaccelerator.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: memory_driver_eaccelerator.php 30458 2012-05-30 01:50:37Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -30,6 +30,9 @@ class memory_driver_eaccelerator
 		return eaccelerator_rm($key);
 	}
 
+	public function clear() {
+		return @eaccelerator_clear();
+	}
 
 }
 
