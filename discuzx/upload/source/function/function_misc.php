@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_misc.php 30186 2012-05-16 03:21:53Z zhengqingpeng $
+ *      $Id: function_misc.php 30465 2012-05-30 04:10:03Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -319,6 +319,8 @@ function sendreasonpm($var, $item, $notevar) {
 	global $_G;
 	if(!empty($var['authorid']) && $var['authorid'] != $_G['uid']) {
 		if(!empty($notevar['modaction'])) {
+			$notevar['from_id'] = 0;
+			$notevar['from_idtype'] = 'moderate_'.$notevar['modaction'];
 			$notevar['modaction'] = lang('forum/modaction', $notevar['modaction']);
 		}
 		notification_add($var['authorid'], 'system', $item, $notevar, 1);
