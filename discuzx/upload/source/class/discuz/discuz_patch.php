@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: discuz_patch.php 27678 2012-02-09 08:11:21Z svn_project_zhangjie $
+ *      $Id: discuz_patch.php 30481 2012-05-30 07:34:12Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -81,8 +81,8 @@ class discuz_patch {
 				$insertarrlist = array();
 				foreach($serial_md5s as $serial_md5) {
 					$downloadpatch = $patch = '';
-					list($serial, $md5) = explode(' ', $serial_md5);
-					if($serial > $maxpatch) {
+					list($serial, $md5, $release) = explode(' ', $serial_md5);
+					if($serial > $maxpatch && (!$release || in_array(DISCUZ_RELEASE, explode(',', $release)))) {
 						$downloadpatch = $patchdir.$serial.'.xml';
 						$patch = dfsockopen($downloadpatch);
 						$patch = xml2array($patch);
