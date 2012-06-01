@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portalcp_category.php 26894 2011-12-27 06:34:22Z chenmengshu $
+ *      $Id: portalcp_category.php 30378 2012-05-24 09:52:46Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -54,7 +54,7 @@ if($catids) {
 	$wherearr[] = " catid IN (".dimplode($catids).")";
 }
 if($_GET['searchkey']) {
-	$_GET['searchkey'] = stripsearchkey($_GET['searchkey']);
+	$_GET['searchkey'] = addslashes(stripsearchkey($_GET['searchkey']));
 	$wherearr[] = "title LIKE '%$_GET[searchkey]%'";
 	$_GET['searchkey'] = dhtmlspecialchars($_GET['searchkey']);
 }
