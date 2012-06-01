@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_group.php 29459 2012-04-13 01:45:21Z chenmengshu $
+ *      $Id: forum_group.php 30373 2012-05-24 09:10:34Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -523,7 +523,7 @@ if($action == 'index') {
 			} else {
 				$start = 0;
 			}
-			$userlist = C::t('forum_groupuser')->groupuserlist($_G['fid'], '', $perpage, $start, $_GET['srchuser'] ? "AND username like '$_GET[srchuser]%'" : "AND level='4'");
+			$userlist = C::t('forum_groupuser')->groupuserlist($_G['fid'], '', $perpage, $start, $_GET['srchuser'] ? "AND username like '".addslashes($_GET[srchuser])."%'" : "AND level='4'");
 		} else {
 			$muser = getgpc('muid');
 			$targetlevel = $_GET['targetlevel'];
