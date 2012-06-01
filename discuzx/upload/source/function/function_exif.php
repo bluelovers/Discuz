@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_exif.php 23110 2011-06-20 05:08:35Z monkey $
+ *      $Id: function_exif.php 30346 2012-05-24 03:16:28Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -46,6 +46,19 @@ function getexif($img) {
 		$new_img_info	=	exif_lang('img_info');
 	} else {
 		@$exif = exif_read_data($img, 0, true);
+		foreach($exif as $type => $typearr) {
+			foreach($typearr as $key => $kval) {
+				if(is_array($kval)) {
+					foreach($kval as $vkey => $value) {
+						$str = dhtmlspecialchars(preg_replace("/[^\[A-Za-z0-9_\.\/:\s-\]]/", '', trim($value)));
+						$exif[$type][$key][$vkey] = $str;
+					}
+				} elseif(!in_array($key, array('ComponentsConfiguration', 'FileSource', 'SceneType'))) {
+					$str = dhtmlspecialchars(preg_replace("/[^\[A-Za-z0-9_\.\/:\s-\]]/", '', trim($kval)));
+					$exif[$type][$key] = $str;
+				}
+			}
+		}
 		$new_img_info	=	array (
 		exif_lang('FileName')			=>	$exif[FILE][FileName],
 		exif_lang('FileType')		=>	$imgtype[$exif[FILE][FileType]],
