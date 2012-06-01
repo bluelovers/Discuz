@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_misc.php 29156 2012-03-27 11:22:40Z zhaobing $
+ *      $Id: forum_misc.php 30465 2012-05-30 04:10:03Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -649,6 +649,8 @@ if($_GET['action'] == 'votepoll' && submitcheck('pollsubmit', 1)) {
 				'subject' => $thread['subject'],
 				'ratescore' => $ratescore,
 				'reason' => $reason,
+				'from_id' => 0,
+				'from_idtype' => 'rate'
 			));
 		}
 
@@ -739,6 +741,8 @@ if($_GET['action'] == 'votepoll' && submitcheck('pollsubmit', 1)) {
 					'subject' => $thread['subject'],
 					'ratescore' => $ratescore,
 					'reason' => $reason,
+					'from_id' => 0,
+					'from_idtype' => 'removerate'
 				));
 			}
 			C::t('forum_post')->increase_rate_by_pid('tid:'.$_G['tid'], $_GET['pid'], $rate, $ratetimes);
