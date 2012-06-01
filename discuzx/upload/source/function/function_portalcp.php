@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_portalcp.php 29236 2012-03-30 05:34:47Z chenmengshu $
+ *      $Id: function_portalcp.php 30318 2012-05-22 07:48:40Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -1025,7 +1025,7 @@ function addportalarticlecomment($id, $message, $idtype = 'aid') {
 		'username' => $_G['username'],
 		'id' => $id,
 		'idtype' => $idtype,
-		'postip' => $_G['onlineip'],
+		'postip' => $_G['clientip'],
 		'dateline' => $_G['timestamp'],
 		'status' => $comment_status,
 		'message' => $message
