@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: mod_cron.php 30190 2012-05-16 06:14:24Z zhangguosheng $
+ *      $Id: mod_cron.php 30364 2012-05-24 07:43:27Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -22,7 +22,7 @@ class mod_cron extends remote_service
 		$discuz = C::app();
 		$discuz->initated = false;
 		$discuz->init_db = false;
-		$discuz->init_setting = false;
+		$discuz->init_setting = true;
 		$discuz->init_user = false;
 		$discuz->init_session = false;
 		$discuz->init_misc = false;
