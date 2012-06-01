@@ -4,7 +4,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc111.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: home_magic.php 28297 2012-02-27 08:35:59Z monkey $
+	$Id: home_magic.php 30302 2012-05-21 01:38:51Z liulanbo $
 */
 
 if(!defined('IN_DISCUZ')) {
@@ -303,7 +303,7 @@ if($action == 'shop') {
 			dexit();
 
 		} elseif($operation == 'sell') {
-
+			$magic['price'] = $_G['group']['magicsdiscount'] ? intval($magic['price'] * ($_G['group']['magicsdiscount'] / 10)) : intval($magic['price']);
 			$discountprice = floor($magic['price'] * $_G['setting']['magicdiscount'] / 100);
 			if(!submitcheck('operatesubmit')) {
 				include template('home/space_magic_mybox_opreation');
