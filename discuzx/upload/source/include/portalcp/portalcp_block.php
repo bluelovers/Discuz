@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portalcp_block.php 29567 2012-04-19 03:35:30Z zhangguosheng $
+ *      $Id: portalcp_block.php 30465 2012-05-30 04:10:03Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -661,6 +661,8 @@ if($op == 'block') {
 					sendreasonpm($sendreasonpmcontent, 'recommend_note_post', array(
 						'tid' => $item['id'],
 						'subject' => $sendreasonpmcontent['subject'],
+						'from_id' => 0,
+						'from_idtype' => 'recommend'
 					));
 				}
 			}
