@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_menu.php 29721 2012-04-26 07:01:08Z zhengqingpeng $
+ *      $Id: admincp_menu.php 30365 2012-05-24 07:51:03Z chenmengshu $
  */
 
 global $_G;
@@ -61,7 +61,7 @@ $menu['global'] = array(
 );
 
 $menu['style'] = array(
-	array('menu_setting_customnav', 'nav_headernav'),
+	array('menu_setting_customnav', 'nav'),
 	array('menu_setting_styles', 'setting_styles'),
 	array('menu_styles', 'styles'),
 	$isfounder ? array('menu_styles_templates', 'templates') : null,
