@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_styles.php 30036 2012-05-08 02:31:38Z monkey $
+ *      $Id: admincp_styles.php 30450 2012-05-29 08:17:06Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -210,7 +210,7 @@ if($operation == 'admin') {
 		showtablefooter();
 		showformfooter();
 
-		if(empty($_G['cookie']['addoncheck_template'])||1) {
+		if(empty($_G['cookie']['addoncheck_template'])) {
 			$checkresult = dunserialize(cloudaddons_upgradecheck($addonids));
 			savecache('addoncheck_template', $checkresult);
 			dsetcookie('addoncheck_template', 1, 3600);
@@ -250,10 +250,12 @@ if($operation == 'admin') {
 				C::t('common_setting')->update('styleid', $defaultid);
 			}
 
-			foreach($sarray as $id => $old) {
-				$namenew[$id] = trim($_GET['namenew'][$id]);
-				if($namenew[$id] != $old['name']) {
-					C::t('common_style')->update($id, array('name' => $namenew[$id]));
+			if(isset($_GET['namenew'])) {
+				foreach($sarray as $id => $old) {
+					$namenew[$id] = trim($_GET['namenew'][$id]);
+					if($namenew[$id] != $old['name']) {
+						C::t('common_style')->update($id, array('name' => $namenew[$id]));
+					}
 				}
 			}
 
