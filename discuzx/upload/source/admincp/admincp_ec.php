@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_ec.php 29202 2012-03-28 09:51:19Z chenmengshu $
+ *      $Id: admincp_ec.php 30465 2012-05-30 04:10:03Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -338,6 +338,8 @@ if($operation == 'alipay') {
 				notification_add($order['uid'], 'system', 'addfunds', array(
 					'orderid' => $order['orderid'],
 					'price' => $order['price'],
+					'from_id' => 0,
+					'from_idtype' => 'buycredit',
 					'value' => $_G['setting']['extcredits'][$_G['setting']['creditstrans']]['title'].' '.$order['amount'].' '.$_G['setting']['extcredits'][$_G['setting']['creditstrans']]['unit']
 				), 1);
 			}
