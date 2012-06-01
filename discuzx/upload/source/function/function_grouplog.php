@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_grouplog.php 25885 2011-11-24 09:30:09Z monkey $
+ *      $Id: function_grouplog.php 30465 2012-05-30 04:10:03Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -44,7 +44,9 @@ function updategroupcreditlog($fid, $uid) {
 					$groupfounderuid = $query['founderuid'];
 					notification_add($groupfounderuid, 'system', 'grouplevel_update', array(
 						'groupname' => '<a href="forum.php?mod=group&fid='.$fid.'">'.$forum['name'].'</a>',
-						'newlevel' => $_G['grouplevels'][$levelid]['leveltitle']
+						'newlevel' => $_G['grouplevels'][$levelid]['leveltitle'],
+						'from_id' => 0,
+						'from_idtype' => 'changeusergroup'
 					));
 				}
 			}
