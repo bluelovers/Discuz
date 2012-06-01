@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portalcp_related.php 25889 2011-11-24 09:52:20Z monkey $
+ *      $Id: portalcp_related.php 30378 2012-05-24 09:52:46Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -49,7 +49,7 @@ if($op == 'manual') {
 } elseif($op == 'search') {
 
 	$catids = array();
-	$searchkey = stripsearchkey($_GET['searchkey']);
+	$searchkey = addslashes(stripsearchkey($_GET['searchkey']));
 	$searchcate = intval($_GET['searchcate']);
 	$catids = category_get_childids('portal', $searchcate);
 	$catids[] = $searchcate;
