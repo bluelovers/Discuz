@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: post_newreply.php 30010 2012-05-07 07:29:48Z zhengqingpeng $
+ *      $Id: post_newreply.php 30397 2012-05-25 09:03:57Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -755,7 +755,7 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 			C::t('forum_thread')->update($_G['tid'], $updatethreaddata, false, false, 0, true);
 		}
 		if($special == 2 && !empty($_GET['continueadd'])) {
-			dheader("location: forum.php?mod=post&action=reply&fid={$_G[forum][fid]}&firstpid=$pid&tid={$thread[tid]}&addtrade=yes");
+			showmessage('post_reply_succeed', "forum.php?mod=post&action=reply&fid={$_G[forum][fid]}&firstpid=$pid&tid={$thread[tid]}&addtrade=yes", $param, array('header' => true));
 		} else {
 			$url = empty($_POST['portal_referer']) ? "forum.php?mod=viewthread&tid={$thread[tid]}&pid=$pid&page=$page&extra=$extra#pid$pid" : $_POST['portal_referer'];
 		}
