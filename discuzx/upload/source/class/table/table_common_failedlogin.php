@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_failedlogin.php 30175 2012-05-15 08:15:25Z liulanbo $
+ *      $Id: table_common_failedlogin.php 30409 2012-05-28 02:53:10Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -33,7 +33,7 @@ class table_common_failedlogin extends discuz_table
 	}
 
 	public function update_failed($ip, $username) {
-		DB::query("UPDATE %t SET count=count+1, lastupdate=%d WHERE ip=%s AND username=%s", array($this->_table, TIMESTAMP, $ip, $username));
+		DB::query("UPDATE %t SET count=count+1, lastupdate=%d WHERE ip=%s", array($this->_table, TIMESTAMP, $ip));
 	}
 
 }
