@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_space.php 29354 2012-04-06 03:12:07Z zhangguosheng $
+ *      $Id: function_space.php 30433 2012-05-29 02:45:59Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -110,7 +110,9 @@ function getblockhtml($blockname,$parameters = array()) {
 				$showmagicgift = true;
 				$magicinfo = !empty($space['magicgift']) ? dunserialize($space['magicgift']) : array();
 			}
-			$html .= '<li class="ul_broadcast"><a href="home.php?mod=space&uid='.$uid.'">'.lang('space', 'block_profile_follow').'</a></li>';
+			if(helper_access::check_module('follow')) {
+				$html .= '<li class="ul_broadcast"><a href="home.php?mod=space&uid='.$uid.'">'.lang('space', 'block_profile_follow').'</a></li>';
+			}
 			if ($space['self']) {
 				$html .= '<li class="ul_diy"><a href="home.php?mod=space&do=index&diy=yes">'.lang('space', 'block_profile_diy').'</a></li>';
 				$html .= '<li class="ul_msg"><a href="home.php?mod=space&uid='.$uid.'&do=wall">'.lang('space', 'block_profile_wall').'</a></li>';
