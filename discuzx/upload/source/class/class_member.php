@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_member.php 30071 2012-05-09 02:22:31Z zhengqingpeng $
+ *      $Id: class_member.php 30465 2012-05-30 04:10:03Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -749,17 +749,17 @@ class register_ctl {
 			}
 
 			if($welcomemsg && !empty($welcomemsgtxt)) {
-				$welcomemsgtitle = addslashes(replacesitevar($welcomemsgtitle));
-				$welcomemsgtxt = addslashes(replacesitevar($welcomemsgtxt));
+				$welcomemsgtitle = replacesitevar($welcomemsgtitle);
+				$welcomemsgtxt = replacesitevar($welcomemsgtxt);
 				if($welcomemsg == 1) {
 					$welcomemsgtxt = nl2br(str_replace(':', '&#58;', $welcomemsgtxt));
-					notification_add($uid, 'system', $welcomemsgtxt, array(), 1);
+					notification_add($uid, 'system', $welcomemsgtxt, array('from_id' => 0, 'from_idtype' => 'welcomemsg'), 1);
 				} elseif($welcomemsg == 2) {
 					sendmail_cron($email, $welcomemsgtitle, $welcomemsgtxt);
 				} elseif($welcomemsg == 3) {
 					sendmail_cron($email, $welcomemsgtitle, $welcomemsgtxt);
 					$welcomemsgtxt = nl2br(str_replace(':', '&#58;', $welcomemsgtxt));
-					notification_add($uid, 'system', $welcomemsgtxt, array(), 1);
+					notification_add($uid, 'system', $welcomemsgtxt, array('from_id' => 0, 'from_idtype' => 'welcomemsg'), 1);
 				}
 			}
 
