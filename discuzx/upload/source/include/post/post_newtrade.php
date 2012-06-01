@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: post_newtrade.php 28586 2012-03-05 07:41:37Z liulanbo $
+ *      $Id: post_newtrade.php 30397 2012-05-25 09:03:57Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -290,7 +290,7 @@ if($modnewthreads) {
 	}
 
 	if(!empty($_GET['continueadd'])) {
-		dheader("location: forum.php?mod=post&action=reply&fid=$_G[fid]&tid=$tid&addtrade=yes");
+		showmessage('post_newthread_succeed', "forum.php?mod=post&action=reply&fid=$_G[fid]&tid=$tid&addtrade=yes", $param, array('header' => true));
 	} else {
 		showmessage('post_newthread_succeed', "forum.php?mod=viewthread&tid=$tid&extra=$extra", $param);
 	}
