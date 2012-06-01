@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_forumlist.php 28510 2012-03-02 01:27:48Z svn_project_zhangjie $
+ *      $Id: function_forumlist.php 30293 2012-05-18 09:04:02Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -258,9 +258,9 @@ function recommendupdate($fid, &$modrecommend, $force = '', $position = 0) {
 					$recommendlist[$attachment['tid']]['filename'] = $attachment['aid']."\t".$imgw."\t".$imgh."\t".$key;
 					$recommendimagelist[$attachment['tid']] = $recommendlist[$attachment['tid']];
 					$recommendimagelist[$attachment['tid']]['subject'] = addslashes($recommendimagelist[$attachment['tid']]['subject']);
-					$addthread[$thread['tid']]['aid'] = '';
-					$addthread[$thread['tid']]['filename'] = $recommendlist[$attachment['tid']]['filename'];
-					$addthread[$thread['tid']]['typeid'] = 1;
+					$addthread[$attachment['tid']]['aid'] = '';
+					$addthread[$attachment['tid']]['filename'] = $recommendlist[$attachment['tid']]['filename'];
+					$addthread[$attachment['tid']]['typeid'] = 1;
 					if(count($recommendimagelist) == $imagenum) {
 						break;
 					}
