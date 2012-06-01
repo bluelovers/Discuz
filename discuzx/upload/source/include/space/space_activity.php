@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: space_activity.php 28220 2012-02-24 07:52:50Z zhengqingpeng $
+ *      $Id: space_activity.php 30378 2012-05-24 09:52:46Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -79,7 +79,9 @@ if($_GET['view'] == 'me') {
 $actives = array($_GET['view'] =>' class="a"');
 
 if($need_count) {
-
+	if(!empty($_GET['searchkey'])) {
+		$_GET['searchkey'] = stripsearchkey($_GET['searchkey']);
+	}
 	$count = C::t('forum_activity')->fetch_all_for_search($_GET['view'], $_GET['order'], $_GET['searchkey'], $_GET['type'], $frienduid, $space['uid'], $minhot, 1);
 	if($count) {
 		$query = C::t('forum_activity')->fetch_all_for_search($_GET['view'], $_GET['order'], $_GET['searchkey'], $_GET['type'], $frienduid, $space['uid'], $minhot, 0, $start, $perpage);
