@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_forum_activity.php 29287 2012-03-31 10:19:20Z liulanbo $
+ *      $Id: table_forum_activity.php 30378 2012-05-24 09:52:46Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -50,7 +50,7 @@ class table_forum_activity extends discuz_table
 			$ordersql = 'DESC';
 		}
 		if($searchkey) {
-			$threadsql .= " AND t.subject LIKE ".DB::quote('%'.$searchkey.'%');
+			$threadsql .= " AND t.subject LIKE ".DB::quote('%'.addslashes($searchkey).'%');
 		}
 		if($count) {
 			return DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('forum_activity')." a $apply_sql WHERE $wheresql"),0);
