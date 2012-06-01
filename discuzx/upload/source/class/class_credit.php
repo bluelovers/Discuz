@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_credit.php 28415 2012-02-29 07:03:42Z zhengqingpeng $
+ *      $Id: class_credit.php 30465 2012-05-30 04:10:03Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -332,7 +332,7 @@ class credit {
 			C::t('common_member')->update($uid, $updatearray);
 		}
 		if($sendnotify) {
-			notification_add($uid, 'system', 'user_usergroup', array('usergroup' => '<a href="home.php?mod=spacecp&ac=credit&op=usergroup">'.$newgroup['grouptitle'].'</a>'), 1);
+			notification_add($uid, 'system', 'user_usergroup', array('usergroup' => '<a href="home.php?mod=spacecp&ac=credit&op=usergroup">'.$newgroup['grouptitle'].'</a>', 'from_id' => 0, 'from_idtype' => 'changeusergroup'), 1);
 		}
 
 		return $groupid;
