@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_home_doing.php 29700 2012-04-25 08:15:15Z chenmengshu $
+ *      $Id: table_home_doing.php 30377 2012-05-24 09:52:22Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -80,6 +80,7 @@ class table_home_doing extends discuz_table
 				$keywords = explode(',', str_replace(' ', '', $keywords));
 
 				for($i = 0; $i < count($keywords); $i++) {
+					$keywords[$i] = addslashes(stripsearchkey($keywords[$i]));
 					if(preg_match("/\{(\d+)\}/", $keywords[$i])) {
 						$keywords[$i] = preg_replace("/\\\{(\d+)\\\}/", ".{0,\\1}", preg_quote($keywords[$i], '/'));
 						$sqlkeywords .= " $or message REGEXP '".$keywords[$i]."'";
