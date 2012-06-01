@@ -3,7 +3,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: Notification.php 29758 2012-04-27 01:35:41Z zhengqingpeng $
+ *      $Id: Notification.php 30479 2012-05-30 07:28:46Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -29,7 +29,7 @@ class Cloud_Service_Client_Notification extends Cloud_Service_Client_Restful {
 
 		return parent::__construct($debug);
 	}
-	public function add($siteUid, $pkId, $type, $authorId, $author, $fromId, $fromIdType, $note, $fromNum, $dateline) {
+	public function add($siteUid, $pkId, $type, $authorId, $author, $fromId, $fromIdType, $note, $fromNum, $dateline, $extra = array()) {
 
 		$_params = array(
 				'openid' => $this->getUserOpenId($siteUid),
@@ -43,8 +43,18 @@ class Cloud_Service_Client_Notification extends Cloud_Service_Client_Restful {
 				'fromNum' => $fromNum,
 				'content' => $note,
 				'dateline' => $dateline,
-				'deviceToken' => $this->getUserDeviceToken($siteUid)
+				'deviceToken' => $this->getUserDeviceToken($siteUid),
+				'extra' => array(
+						'isAdminGroup' => getglobal('adminid'),
+						'groupId' => getglobal('groupid'),
+						'groupName' => getglobal('group/grouptitle')
+					)
 			);
+		if($extra) {
+			foreach($extra as $key => $value) {
+				$_params['extra'][$key] = $value;
+			}
+		}
 		return $this->_callMethod('connect.discuz.notification.add', $_params);
 	}
 
