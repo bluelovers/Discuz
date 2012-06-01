@@ -49,7 +49,7 @@
 				<li $currentview['hot']><a href="forum.php?mod=guide&view=hot">{lang guide_hot}</a></li>
 				<li $currentview['digest']><a href="forum.php?mod=guide&view=digest">{lang guide_digest}</a></li>
 				<li $currentview['new']><a href="forum.php?mod=guide&view=new">{lang guide_new}</a></li>
-				<li $currentview['my']><a href="forum.php?mod=guide&view=my">{lang guide_my}</a></li>
+				<li $currentview['my']><a id="filter_special" href="forum.php?mod=guide&view=my" onmouseover="showMenu(this.id)">{lang guide_my}</a></li>
 				<!--{hook/guide_nav_extra}-->
 			</ul>
 			<!--{hook/guide_top}-->
@@ -132,7 +132,6 @@
 									<!--{if $viewtype == 'thread'}-->
 									&nbsp; {lang keyword}: <input type="text" id="searchmypost" class="px vm" name="searchkey" size="20" value="$searchkey" >
 									<!--{/if}--><button class="pn vm"><em>{lang search}</em></button>
-									&nbsp;<a id="filter_special" href="javascript:;" class="showmenu xi2" onclick="showMenu(this.id)">{lang posts_type}</a>
 									</form>
 								</th>
 							</tr>
@@ -157,7 +156,7 @@
 		</div>
 	</div>
 </div>
-<!--{if $view == 'my' && !IS_ROBOT}-->
+<!--{if !IS_ROBOT}-->
 	<div id="filter_special_menu" class="p_pop" style="display:none">
 		<ul>
 			<li><a href="home.php?mod=space&do=poll&view=me" target="_blank">{lang thread_poll}</a></li>
