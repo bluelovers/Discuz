@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: moderate_thread.php 30248 2012-05-17 08:46:56Z zhengqingpeng $
+ *      $Id: moderate_thread.php 30465 2012-05-30 04:10:03Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -261,7 +261,7 @@ if(!submitcheck('modsubmit') && !$_GET['fast']) {
 			if($thread['authorid'] && $thread['authorid'] != $_G['uid']) {
 				$pmlist[] = array(
 					'action' => 'modthreads_validate',
-					'notevar' => array('tid' => $thread['tid'], 'threadsubject' => $thread['subject'], 'reason' => dhtmlspecialchars($_GET[''.$pm])),
+					'notevar' => array('tid' => $thread['tid'], 'threadsubject' => $thread['subject'], 'reason' => dhtmlspecialchars($_GET[''.$pm]), 'from_id' => 0, 'from_idtype' => 'modthreads'),
 					'authorid' => $thread['authorid'],
 				);
 			}
