@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: modcp_member.php 26578 2011-12-15 10:10:18Z yangli $
+ *      $Id: modcp_member.php 30465 2012-05-30 04:10:03Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_MODCP')) {
@@ -125,7 +125,9 @@ if($op == 'edit') {
 			$notearr = array(
 				'user' => "<a href=\"home.php?mod=space&uid=$_G[uid]\">$_G[username]</a>",
 				'day' => $_GET['banexpirynew'],
-				'reason' => $reason
+				'reason' => $reason,
+				'from_id' => 0,
+				'from_idtype' => 'banspeak'
 			);
 			notification_add($member['uid'], 'system', 'member_ban_speak', $notearr, 1);
 		}
@@ -133,7 +135,9 @@ if($op == 'edit') {
 			$notearr = array(
 				'user' => "<a href=\"home.php?mod=space&uid=$_G[uid]\">$_G[username]</a>",
 				'day' => $_GET['banexpirynew'],
-				'reason' => $reason
+				'reason' => $reason,
+				'from_id' => 0,
+				'from_idtype' => 'banvisit'
 			);
 			notification_add($member['uid'], 'system', 'member_ban_visit', $notearr, 1);
 		}
