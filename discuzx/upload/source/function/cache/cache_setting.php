@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: cache_setting.php 30175 2012-05-15 08:15:25Z liulanbo $
+ *      $Id: cache_setting.php 30309 2012-05-21 03:47:30Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -77,6 +77,11 @@ function build_cache_setting() {
 					foreach($profile_settings as $pval) {
 						if(in_array($pval['fieldid'], $val['field'])) {
 							$temp[$pval['fieldid']] = $pval['fieldid'];
+						}
+					}
+					foreach($val['field'] as $fieldid) {
+						if(!in_array($fieldid, $temp)) {
+							$temp[$fieldid] = $fieldid;
 						}
 					}
 					$setting['svalue'][$key]['field'] = $temp;
