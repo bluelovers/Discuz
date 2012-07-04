@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: ConnectOAuth.php 29263 2012-03-31 05:45:08Z yexinhao $
+ *      $Id: ConnectOAuth.php 30537 2012-06-01 07:11:25Z songlixin $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -80,7 +80,7 @@ class Cloud_Service_Client_ConnectOAuth extends Cloud_Service_Client_OAuth {
 		if($params['oauth_token'] && $params['oauth_token_secret']) {
 			return $params;
 		} else {
-			$params['error_code'] = $params['error_code'] ? $params['error_code'] : RESPONSE_ERROR;
+			$params['error_code'] = $params['error_code'] ? $params['error_code'] : self::RESPONSE_ERROR;
 			throw new Exception($params['error_code'], __LINE__);
 		}
 
@@ -128,7 +128,7 @@ class Cloud_Service_Client_ConnectOAuth extends Cloud_Service_Client_OAuth {
 		if($result['oauth_token'] && $result['oauth_token_secret'] && $result['openid']) {
 			return $result;
 		} else {
-			$result['error_code'] = $result['error_code'] ? $result['error_code'] : RESPONSE_ERROR;
+			$result['error_code'] = $result['error_code'] ? $result['error_code'] : self::RESPONSE_ERROR;
 			throw new Exception($result['error_code'], __LINE__);
 		}
 	}
