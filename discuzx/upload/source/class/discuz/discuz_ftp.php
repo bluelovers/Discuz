@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: discuz_ftp.php 27449 2012-02-01 05:32:35Z zhangguosheng $
+ *      $Id: discuz_ftp.php 30582 2012-06-05 06:09:06Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -56,7 +56,7 @@ class discuz_ftp
 				$this->config['host'] = discuz_ftp::clear($this->config['host']);
 				$this->config['port'] = intval($this->config['port']);
 				$this->config['ssl'] = intval($this->config['ssl']);
-				$this->config['host'] = discuz_ftp::clear($this->config['host']);
+				$this->config['username'] = discuz_ftp::clear($this->config['username']);
 				$this->config['password'] = authcode($this->config['password'], 'DECODE', md5(getglobal('config/security/authkey')));
 				$this->config['timeout'] = intval($this->config['timeout']);
 				$this->enabled = true;
