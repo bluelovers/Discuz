@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portalcp_diy.php 28956 2012-03-20 10:15:37Z zhangguosheng $
+ *      $Id: portalcp_diy.php 30764 2012-06-18 10:11:48Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -319,6 +319,7 @@ if($op == 'blockclass') {
 		}
 		if($filename) {
 			$arr = import_diy($filename);
+			@unlink($filename);
 			if (!empty($arr)) {
 				$search = array('/\<script/i', '/\<\/script\>/i', "/\r/", "/\n/", '/(\[script [^>]*?)(src=)(.*?\[\/script\])/');
 				$replace = array('[script', '[/script]', '', '', '$1[src=]$3');
