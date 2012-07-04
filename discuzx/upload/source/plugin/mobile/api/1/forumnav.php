@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forumnav.php 27821 2012-02-15 05:26:17Z monkey $
+ *      $Id: forumnav.php 30851 2012-06-26 03:08:50Z congyushuai $
  */
 
 if(!defined('IN_MOBILE_API')) {
@@ -28,7 +28,22 @@ class mobile_api {
 					$forum['threadsorts'] = mobile_core::getvalues(unserialize($forum['threadsorts']), array('required', 'types'));
 				}
 				if($forum['threadtypes']) {
-					$forum['threadtypes'] = mobile_core::getvalues(unserialize($forum['threadtypes']), array('required', 'types'));
+					$forum['threadtypes'] = unserialize($forum['threadtypes']);
+					$unsetthreadtype = false;
+					if($_G['adminid'] == 3 && strpos($forum['moderators'], $_G['username']) === false) {
+						$unsetthreadtype = true;
+					}
+					if($_G['adminid'] == 0) {
+						$unsetthreadtype = true;
+					}
+					if($unsetthreadtype) {
+						foreach ($forum['threadtypes']['moderators'] AS $k => $v) {
+							if(!empty($v)) {
+								unset($forum['threadtypes']['types'][$k]);
+							}
+						}
+					}
+					$forum['threadtypes'] = mobile_core::getvalues($forum['threadtypes'], array('required', 'types'));
 				}
 				$forums[] = mobile_core::getvalues($forum, array('fid', 'type', 'name', 'fup', 'viewperm', 'postperm', 'status', 'threadsorts', 'threadtypes'));
 			}
