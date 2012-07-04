@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_template.php 29462 2012-04-13 02:21:59Z zhengqingpeng $
+ *      $Id: lang_template.php 30789 2012-06-19 09:05:13Z zhengqingpeng $
  *
  *      This file is automatically generate
  */
@@ -91,7 +91,7 @@ $lang = array (
   'did_not_follow_to_me' => 'TA未收聽您',
   'accept_invitation' => '接受邀請',
   'and_play_together' => '，並一起玩',
-  'become_friend' => '<p>成為好友後，您們就可以一起討論話題，及時關注對方的更新，還可以玩有趣的遊戲 $userapp[appname] ……</p>
+  'become_friend' => '<p>成為好友後，你們就可以一起討論話題，及時關注對方的更新，還可以玩有趣的遊戲 $userapp[appname] ……</p>
 						<p>您也可以方便快捷地發佈自己的日誌、上傳圖片、記錄生活點滴與好友分享</p>
 						<p>還等什麼呢？趕快加入我們吧</p>',
   'friend_information' => '<p>已有 $space[friends] 個好友, $space[albums] 個相冊, $space[doings] 條記錄, $space[blogs] 篇日誌, $space[threads] 個話題</p>',
@@ -1136,9 +1136,9 @@ $lang = array (
   'surprise_they_near' => '驚喜，他們就在您的附近 ',
   'they_online_add_friend' => '他們當前正在線，加為好友就可以互動啦 ',
   'view_note_message' => '附言為可選，{$tospace[username]} 會看到這條附言，最多50個字符 ',
-  'you_have_common_friends' => '您們目前有 {eval echo count($list)} 位共同的好友',
-  'you_have_no_common_friends' => '您們目前還沒有共同的好友',
-  'your_common_friends' => '查看您們的共同好友',
+  'you_have_common_friends' => '你們目前有 {eval echo count($list)} 位共同的好友',
+  'you_have_no_common_friends' => '你們目前還沒有共同的好友',
+  'your_common_friends' => '查看你們的共同好友',
   'add_music' => '添加音樂',
   'album_cover_documents_address' => '唱片集封面和文件地址',
   'auto_run' => '自動',
@@ -1352,7 +1352,7 @@ $lang = array (
   'topic_reply' => '話題回復',
   'update_presonal_profile' => '更新個人資料',
   'view_my_certified_photo' => '查看認證照片',
-  'view_right_setting_effective' => '相關瀏覽權限需要在每篇日誌中單獨設置方可完全生效',
+  'view_right_setting_effective' => '相關瀏覽權限需要在發表時單獨設置方可完全生效',
   'write_blog' => '撰寫日誌',
   'you_control_see_content' => '您可以完全控制哪些人可以看到您的主頁上面的內容',
   'check_date_item' => '請檢查該資料項',
