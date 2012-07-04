@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_forumdisplay.php 29464 2012-04-13 03:58:54Z monkey $
+ *      $Id: forum_forumdisplay.php 30548 2012-06-01 09:14:29Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -481,7 +481,21 @@ if($_G['forum']['relatedgroup']) {
 	$filterarr['inforum'] = $_G['fid'];
 }
 if(empty($filter) && empty($_GET['sortid']) && empty($_G['forum']['relatedgroup'])) {
-	$_G['forum_threadcount'] = $_G['forum']['threads'];
+	if($forumarchive) {
+		if($_GET['archiveid']) {
+			$_G['forum_threadcount'] = $forumarchive[$_GET['archiveid']]['threads'];
+		} else {
+			$primarytabthreads = $_G['forum']['threads'];
+			foreach($forumarchive as $arcid => $avalue) {
+				if($arcid) {
+					$primarytabthreads = $primarytabthreads - $avalue['threads'];
+				}
+			}
+			$_G['forum_threadcount'] = $primarytabthreads;
+		}
+	} else {
+		$_G['forum_threadcount'] = $_G['forum']['threads'];
+	}
 } else {
 	$filterarr['sticky'] = 0;
 	$_G['forum_threadcount'] = C::t('forum_thread')->count_search($filterarr, $tableid);
@@ -579,6 +593,10 @@ if(($start_limit && $start_limit > $stickycount) || !$stickycount || $filterbool
 		$query = '';
 	}
 
+}
+if(empty($threadlist) && $page <= ceil($_G['forum_threadcount'] / $_G['tpp'])) {
+	require_once libfile('function/post');
+	updateforumcount($_G['fid']);
 }
 
 $_G['ppp'] = $_G['forum']['threadcaches'] && !$_G['uid'] ? $_G['setting']['postperpage'] : $_G['ppp'];
