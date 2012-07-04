@@ -114,7 +114,10 @@ function insertFile(file, url) {
 	edit_insert(html);
 }
 
-function createImageBox() {
+function createImageBox(fn) {
+	if(typeof fn == 'function' && !fn()) {
+		return false;
+	}
 	var menu = $('icoImg_image_menu');
 	if(menu) {
 		if(menu.style.visibility == 'hidden') {
@@ -126,7 +129,10 @@ function createImageBox() {
 	}
 }
 
-function createAttachBox() {
+function createAttachBox(fn) {
+	if(typeof fn == 'function' && !fn()) {
+		return false;
+	}
 	var menu = $('icoAttach_attach_menu');
 	if(menu) {
 		if(menu.style.visibility == 'hidden') {
