@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: handlers.js 28886 2012-03-16 08:29:18Z zhengqingpeng $
+	$Id: handlers.js 30714 2012-06-13 09:54:07Z zhengqingpeng $
 */
 
 var sdCloseTime = 2;
@@ -224,23 +224,27 @@ function uploadSuccess(file, serverData) {
 			}
 		} else if(this.customSettings.uploadType == 'album') {
 			var data = eval('('+serverData+')');
-			var newTr = document.createElement("TR");
-			var newTd = document.createElement("TD");
-			var img = new Image();
-			img.src = data.url;
-			var imgObj = document.createElement("img");
-			imgObj.src = img.src;
-			newTd.className = 'c';
-			newTd.appendChild(imgObj);
-			newTr.appendChild(newTd);
-			newTd = document.createElement("TD");
-			newTd.innerHTML = '<strong>'+file.name+'</strong>';
-			newTr.appendChild(newTd);
-			newTd = document.createElement("TD");
-			newTd.className = 'd';
-			newTd.innerHTML = '圖片描述<br/><textarea name="title['+data.picid+']" cols="40" rows="2" class="pt"></textarea>';
-			newTr.appendChild(newTd);
-			this.customSettings.imgBoxObj.appendChild(newTr);
+			if(parseInt(data.picid)) {
+				var newTr = document.createElement("TR");
+				var newTd = document.createElement("TD");
+				var img = new Image();
+				img.src = data.url;
+				var imgObj = document.createElement("img");
+				imgObj.src = img.src;
+				newTd.className = 'c';
+				newTd.appendChild(imgObj);
+				newTr.appendChild(newTd);
+				newTd = document.createElement("TD");
+				newTd.innerHTML = '<strong>'+file.name+'</strong>';
+				newTr.appendChild(newTd);
+				newTd = document.createElement("TD");
+				newTd.className = 'd';
+				newTd.innerHTML = '圖片描述<br/><textarea name="title['+data.picid+']" cols="40" rows="2" class="pt"></textarea>';
+				newTr.appendChild(newTd);
+				this.customSettings.imgBoxObj.appendChild(newTr);
+			} else {
+				showDialog('圖片上傳失敗', 'notice', null, null, 0, null, null, null, null, sdCloseTime);
+			}
 			$(file.id).style.display = 'none';
 		} else if(this.customSettings.uploadType == 'blog') {
 			var data = eval('('+serverData+')');
