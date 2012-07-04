@@ -4,7 +4,7 @@
  *		[Discuz!] (C)2001-2099 Comsenz Inc.
  *		This is NOT a freeware, use is subject to license terms
  *
- *		$Id: Security.php 28977 2012-03-21 05:21:17Z songlixin $
+ *		$Id: Security.php 30666 2012-06-11 03:49:30Z songlixin $
  */
 
 if(!defined('IN_DISCUZ')) {
