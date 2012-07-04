@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: admincp_ec.php 30465 2012-05-30 04:10:03Z zhengqingpeng $
+ *      $Id: admincp_ec.php 30773 2012-06-19 03:41:56Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -88,15 +88,29 @@ if($operation == 'alipay') {
 			'<a href="'.ADMINSCRIPT.'?action=ec&operation=alipay&checktype=credit" target="_blank">'.$lang['ec_alipay_checklink_credit'].'</a><br />'
 		);
 		showtitle('ec_contract');
+		showsetting('ec_alipay_creditdirectpay', 'settingsnew[ec_creditdirectpay]', $ec_creditdirectpay, 'radio', '', 0, '', ' onclick="changeAliApi(this.value)"');
 		showsetting('ec_alipay_partner', 'settingsnew[ec_partner]', $ec_partner, 'text');
 		showsetting('ec_alipay_securitycode', 'settingsnew[ec_securitycode]', $ec_securitycodemask, 'text');
-		showsetting('ec_alipay_creditdirectpay', 'settingsnew[ec_creditdirectpay]', $ec_creditdirectpay, 'radio');
 		showtablefooter();
 
 		showtableheader('', 'notop');
 		showsubmit('alipaysubmit');
 		showtablefooter();
 		showformfooter();
+		echo <<<EOT
+<script type="text/JavaScript">
+function changeAliApi(type) {
+	var apiUrl = 'https://b.alipay.com/order/pidKey.htm?pid=2088501719138773&product=';
+	if(type == 1) {
+		apiUrl += 'fastpay';
+	} else {
+		apiUrl += 'dualpay';
+	}
+	$('aliapitype').href = apiUrl;
+}
+changeAliApi($ec_creditdirectpay);
+</script>
+EOT;
 
 	} else {
 		$settingsnew = $_GET['settingsnew'];
