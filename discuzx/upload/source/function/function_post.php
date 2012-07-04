@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_post.php 30487 2012-05-30 09:11:07Z svn_project_zhangjie $
+ *      $Id: function_post.php 30627 2012-06-07 07:03:04Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -245,6 +245,9 @@ function updateattach($modnewthreads, $tid, $pid, $attachnew, $attachupdate = ar
 				'updatetime' => $_G['timestamp'],
 			);
 			C::t('home_album')->update($_GET['uploadalbum'], $albumdata);
+			require_once libfile('function/home');
+			require_once libfile('function/spacecp');
+			album_update_pic($_GET['uploadalbum']);
 		}
 		if($newattach) {
 			ftpupload($newaids, $uid);
