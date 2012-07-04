@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: post_editpost.php 30010 2012-05-07 07:29:48Z zhengqingpeng $
+ *      $Id: post_editpost.php 30607 2012-06-06 06:31:41Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -324,7 +324,7 @@ if(!submitcheck('editsubmit')) {
 
 
 
-			$readperm = $_G['group']['allowsetreadperm'] ? intval($readperm) : ($isorigauthor ? 0 : 'readperm');
+			$readperm = $_G['group']['allowsetreadperm'] ? intval($readperm) : ($isorigauthor ? 0 : 'ignore');
 			if($thread['special'] == 3) {
 				$price = $isorigauthor ? ($thread['price'] > 0 && $thread['price'] != $_GET['rewardprice'] ? $_GET['rewardprice'] : 0) : $thread['price'];
 			} else {
@@ -665,7 +665,9 @@ if(!submitcheck('editsubmit')) {
 			$threadupdatearr['typeid'] = $typeid;
 			$threadupdatearr['sortid'] = $sortid;
 			$threadupdatearr['subject'] = $subject;
-			$threadupdatearr['readperm'] = $readperm;
+			if($readperm != 'ignore') {
+				$threadupdatearr['readperm'] = $readperm;
+			}
 			$threadupdatearr['price'] = $price;
 			$threadupdatearr['status'] = $thread['status'];
 			if($_G['forum_auditstatuson'] && $audit == 1) {
