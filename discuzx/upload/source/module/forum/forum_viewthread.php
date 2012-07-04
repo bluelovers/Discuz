@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_viewthread.php 29474 2012-04-13 07:19:58Z zhengqingpeng $
+ *      $Id: forum_viewthread.php 30837 2012-06-25 08:24:29Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -322,9 +322,6 @@ if(!isset($_G['cookie']['collapse']) || strpos($_G['cookie']['collapse'], 'modar
 }
 
 $threadtag = array();
-$row = C::t('forum_threadaddviews')->fetch($_G['tid']);
-$thread['addviews'] = intval($row['addviews']);
-$thread['views'] += $thread['addviews'];
 viewthread_updateviews($archiveid);
 
 $_G['setting']['infosidestatus']['posts'] = $_G['setting']['infosidestatus'][1] && isset($_G['setting']['infosidestatus']['f'.$_G['fid']]['posts']) ? $_G['setting']['infosidestatus']['f'.$_G['fid']]['posts'] : $_G['setting']['infosidestatus']['posts'];
