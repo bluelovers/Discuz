@@ -45,7 +45,7 @@ body { background: #FFF url(bgimg.jpg) no-repeat 50% 0; }
 /* 重定義廣播 */
 #uhd, #flw_header .bar, .flw_replybox { background-color: #FCF9FC; }
 	#uhd .tb a, #flw_header .bar { border-top-color: #F8EFF8; }
-#fastpostsubmit { background-image: url(flw_post.png); }
+.pg_follow #fastpostsubmit { background-image: url(flw_post.png); }
 .flw_replybox .pnc { background-image: url(pn_reply.png); }
 .flw_replybox td table .pnc { background-image: url(pn_rt.png); }
 #flw_post_extra .sec { border-color: #F8EFF8; background-color: #FCF9FC; }
