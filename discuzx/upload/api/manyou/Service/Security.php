@@ -4,7 +4,7 @@
  *		[Discuz!] (C)2001-2099 Comsenz Inc.
  *		This is NOT a freeware, use is subject to license terms
  *
- *		$Id: Security.php 30419 2012-05-28 05:34:35Z songlixin $
+ *		$Id: Security.php 30565 2012-06-04 05:39:36Z songlixin $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -364,7 +364,6 @@ class Cloud_Service_Security {
 			$threadSort = 1;
 			if ($post['first']) {
 				$sortMessage = $this->_convertSortInfo($thread['sortid'], $thread['tid']);
-				$post['message'] = $sortMessage . '<br/>' . $post['message'];
 			}
 		}
 		$contentBitMap['threadSort'] = $threadSort;
