@@ -59,7 +59,7 @@ body { background: transparent url(bgimg.jpg) no-repeat 50% 0; }
 	#uhd .tb .a a { border-bottom-color: #FAF6ED; }
 .flw_replybox { background-color: #FFF9F9; }
 	.flw_replybox .px, .flw_autopt, #flw_header .tedt { border-color: #FCC; }
-#fastpostsubmit { background-image: url(flw_post.png); }
+.pg_follow #fastpostsubmit { background-image: url(flw_post.png); }
 .flw_replybox .pnc { background-image: url(pn_reply.png); }
 .flw_replybox td table .pnc { background-image: url(pn_rt.png); }
 #flw_post_extra .sec { border-color: #FFE6E6; background-color: #FFF9F9; }
