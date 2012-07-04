@@ -4,7 +4,7 @@
  *	  [Discuz!] (C)2001-2099 Comsenz Inc.
  *	  This is NOT a freeware, use is subject to license terms
  *
- *	  $Id: lang_admincp_cloud.php 29521 2012-04-17 09:24:42Z songlixin $
+ *	  $Id: lang_admincp_cloud.php 30537 2012-06-01 07:11:25Z songlixin $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -334,7 +334,7 @@ $extend_lang = array
 	'security_foldall' => '全部折疊',
 	'security_exfoldall' => '全部展開',
 	'security_userdeleted' => '該用戶已被管理人員刪除',
-	'security_postdeleted' => '該帖子已被管理人員刪除',
+	'security_postdeleted' => '該帖子已被網站管理人員從回收站徹底刪除',
 	'security_modreason' => '防水牆自動處理',
 	'security_restore_user' => '恢復該用戶',
 	'security_change_usergroup' => '更改用戶組',
