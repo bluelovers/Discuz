@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_common_pluginvar.php 27777 2012-02-14 07:07:26Z zhengqingpeng $
+ *      $Id: table_common_pluginvar.php 30873 2012-06-28 01:27:03Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -25,7 +25,7 @@ class table_common_pluginvar extends discuz_table
 		return DB::fetch_all("SELECT * FROM %t WHERE pluginid=%d ORDER BY displayorder", array($this->_table, $pluginid));
 	}
 	public function count_by_pluginid($pluginid) {
-		return DB::result_first("SELECT COUNT(*) FROM %t WHERE pluginid=%d", array($this->_table, $pluginid));
+		return DB::result_first("SELECT COUNT(*) FROM %t WHERE pluginid=%d %i", array($this->_table, $pluginid, "AND (`type` NOT LIKE 'forum_%' AND `type` NOT LIKE 'group_%')"));
 	}
 
 	public function update_by_variable($pluginid, $variable, $data) {
