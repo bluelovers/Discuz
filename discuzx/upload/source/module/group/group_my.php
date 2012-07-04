@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: group_my.php 28090 2012-02-22 07:33:13Z zhengqingpeng $
+ *      $Id: group_my.php 30630 2012-06-07 07:16:14Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -91,13 +91,13 @@ if($view == 'groupthread' || $view == 'mythread') {
 			$mygroupfid = array_diff($mygroupfid, explode(',', $attentiongroupfid));
 		}
 		if($mygroupfid) {
-			$lastpost = $authorid = 0;
+			$lastpost = 0;
 			$displayorder = null;
 			if($view != 'mythread') {
 				$displayorder = 0;
-				$authorid = $_G['uid'];
 				$lastpost = TIMESTAMP - 86400*30;
 			}
+			$authorid = $_G['uid'];
 			foreach(C::t('forum_thread')->fetch_all_by_fid_authorid_displayorder($mygroupfid, $authorid, $displayorder, $lastpost, $start, $perpage) as $thread) {
 				$groupthreadlist[$thread['tid']]['fid'] = $thread['fid'];
 				$groupthreadlist[$thread['tid']]['subject'] = $thread['subject'];
