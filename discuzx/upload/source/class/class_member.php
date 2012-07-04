@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: class_member.php 30465 2012-05-30 04:10:03Z zhengqingpeng $
+ *      $Id: class_member.php 30840 2012-06-25 09:12:00Z zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -382,7 +382,6 @@ class register_ctl {
 					}
 				}
 
-				$bbrulestxt = nl2br("\n$bbrulestxt\n\n");
 				if($_GET['action'] == 'activation') {
 					$auth = dhtmlspecialchars($auth);
 				}
@@ -409,6 +408,7 @@ class register_ctl {
 					require_once $this->extrafile;
 				}
 			}
+			$bbrulestxt = nl2br("\n$bbrulestxt\n\n");
 			$dreferer = dreferer();
 
 			include template($this->template);
