@@ -41,6 +41,17 @@ if ($sql) {
 	runquery($sql);
 }
 
+$field = C::t('#security#security_evilpost')->fetch_all_field();
+$table = DB::table('security_evilpost');
+$sql = '';
+if (!$field['censorword']) {
+	$sql .= "ALTER TABLE $table ADD `censorword` char(50) NOT NULL;\n";
+}
+
+if ($sql) {
+	runquery($sql);
+}
+
 $table = DB::table('common_plugin');
 include DISCUZ_ROOT . 'source/language/lang_admincp_cloud.php';
 $format = "UPDATE $table SET name = '%s' WHERE identifier = 'security'";
