@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: helper_form.php 29417 2012-04-11 06:03:47Z chenmengshu $
+ *      $Id: helper_form.php 30757 2012-06-18 06:23:23Z chenmengshu $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -65,9 +65,9 @@ class helper_form {
 						$message = str_replace('[url]'.$urllist[0][$key].'[/url]', $urllist[0][$key], $message);
 						$message = preg_replace(
 							array(
-								"@\[url=.*?".preg_quote($urllist[0][$key],'@').".*?\](.*?)\[/url\]@is",
+								"@\[url=[^\]]*?".preg_quote($urllist[0][$key],'@')."[^\]]*?\](.*?)\[/url\]@is",
 								"@href=('|\")".preg_quote($urllist[0][$key],'@')."\\1@is",
-								"@\[url\](.*?".preg_quote($urllist[0][$key],'@').".*?)\[/url\]@is",
+								"@\[url\]([^\]]*?".preg_quote($urllist[0][$key],'@')."[^\]]*?)\[/url\]@is",
 							),
 							array(
 								'\\1',
