@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_forum.php 29218 2012-03-29 08:41:31Z monkey $
+ *      $Id: function_forum.php 30837 2012-06-25 08:24:29Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -597,6 +597,10 @@ function get_thread_by_tid($tid, $forcetableid = null) {
 
 	if(!is_array($ret)) {
 		$ret = array();
+	} elseif($_G['setting']['optimizeviews']) {
+		$row = C::t('forum_threadaddviews')->fetch($tid);
+		$ret['addviews'] = intval($row['addviews']);
+		$ret['views'] += $ret['addviews'];
 	}
 
 	return $ret;
