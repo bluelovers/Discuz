@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_message.php 30384 2012-05-25 04:48:52Z liulanbo $
+ *      $Id: lang_message.php 30846 2012-06-25 10:17:09Z zhangjie $
  *
  *      This file is automatically generate
  */
@@ -163,7 +163,7 @@ $lang = array (
   'eccredit_nofound' => '指定的評價不存在或已被刪除',
   'non_normal_operation' => '非正常操作',
   'failed_to_delete_operation' => '抱歉，刪除失敗，請檢查操作',
-  'you_have_friends' => '您們已成為好友',
+  'you_have_friends' => '你們已成為好友',
   'no_privilege_addfriend' => '抱歉，您目前沒有權限添加好友，<a href="home.php?mod=spacecp&ac=usergroup" target="_blank">點擊這裡查看權限</a>',
   'enough_of_the_number_of_friends_with_magic' => '抱歉，您當前的好友數目達到系統限制，<a id="a_magic_friendnum2" href="magic.php?mid=friendnum" onclick="ajaxmenu(event, this.id, 1)">請使用好友增容卡增容</a>',
   'enough_of_the_number_of_friends' => '抱歉，您當前的好友數目達到系統限制，請先刪除部分好友',
@@ -229,7 +229,7 @@ $lang = array (
   'task_nonexistence' => '抱歉，該任務不存在或已被刪除',
   'task_not_found' => '任務文件丟失，{taskclassname}',
   'task_not_underway' => '不是進行中的任務',
-  'user_banned' => '抱歉，您的 IP 地址不在被允許，或您的賬號被禁用，無法訪問本站點',
+  'user_banned' => '抱歉，您的 IP 地址不在允許範圍內，或您的賬號被禁用，無法訪問本站點',
   'submit_seccode_invalid' => '抱歉，驗證碼填寫錯誤',
   'submit_invalid' => '抱歉，您的請求來路不正確或表單驗證串不符，無法提交',
   'word_banned' => '抱歉，您填寫的內容包含不良信息而無法提交',
