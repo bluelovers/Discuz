@@ -12,7 +12,7 @@
 			<item id="datatables"><![CDATA[]]></item>
 			<item id="directory"><![CDATA[qqconnect/]]></item>
 			<item id="copyright"><![CDATA[Comsenz Inc.]]></item>
-			<item id="version"><![CDATA[1.10]]></item>
+			<item id="version"><![CDATA[1.11]]></item>
 			<item id="__modules">
 				<item id="0">
 					<item id="name"><![CDATA[connect]]></item>
@@ -77,15 +77,15 @@
 				<item id="connect_register_bind"><![CDATA[綁定已有帳號]]></item>
 				<item id="connect_register_profile"><![CDATA[完善帳號信息]]></item>
                 <item id="connect_get_access_token_failed"><![CDATA[抱歉，當前存在網絡問題或服務器繁忙，請您稍候再試。謝謝。]]></item>
-				<item id="connect_get_access_token_failed_code"><![CDATA[抱歉，當前存在網絡問題或服務器繁忙，錯誤代碼：<a target=_blank href="http://wiki.opensns.qq.com/wiki/%E3%80%90QQ%E7%99%BB%E5%BD%95%E3%80%91%E5%85%AC%E5%85%B1%E8%BF%94%E5%9B%9E%E7%A0%81%E8%AF%B4%E6%98%8E">{code}</a>，請您稍候再試。謝謝。]]></item>
+				<item id="connect_get_access_token_failed_code"><![CDATA[抱歉，當前存在網絡問題或服務器繁忙，詳細錯誤：{codeMessage}，錯誤代碼：<a target=_blank href="http://wiki.opensns.qq.com/wiki/%E3%80%90QQ%E7%99%BB%E5%BD%95%E3%80%91%E5%85%AC%E5%85%B1%E8%BF%94%E5%9B%9E%E7%A0%81%E8%AF%B4%E6%98%8E">{code}</a>，請您稍候再試。謝謝。]]></item>
 				<item id="connect_get_request_token_failed"><![CDATA[抱歉，當前存在網絡問題或服務器繁忙，請您稍候再試。謝謝。]]></item>
-                <item id="connect_get_request_token_failed_code"><![CDATA[抱歉，當前存在網絡問題或服務器繁忙，錯誤代碼：<a target=_blank href="http://wiki.opensns.qq.com/wiki/%E3%80%90QQ%E7%99%BB%E5%BD%95%E3%80%91%E5%85%AC%E5%85%B1%E8%BF%94%E5%9B%9E%E7%A0%81%E8%AF%B4%E6%98%8E">{code}</a>，請您稍候再試。謝謝。]]></item>
+                <item id="connect_get_request_token_failed_code"><![CDATA[抱歉，當前存在網絡問題或服務器繁忙，詳細錯誤：{codeMessage}，錯誤代碼：<a target=_blank href="http://wiki.opensns.qq.com/wiki/%E3%80%90QQ%E7%99%BB%E5%BD%95%E3%80%91%E5%85%AC%E5%85%B1%E8%BF%94%E5%9B%9E%E7%A0%81%E8%AF%B4%E6%98%8E">{code}</a>，請您稍候再試。謝謝。]]></item>
 				<item id="connect_register_bind_uin_already"><![CDATA[抱歉，該QQ用戶已綁定了本站的另一個用戶，無法再次綁定]]></item>
 				<item id="connect_config_success"><![CDATA[QQ互聯設置更新成功]]></item>
 				<item id="connect_login_first"><![CDATA[請先使用QQ互聯登錄再進行此操作]]></item>
 				<item id="connect_config_unbind_failed"><![CDATA[抱歉，解綁失敗，請重試使用QQ登錄後再進行解綁操作]]></item>
                 <item id="connect_config_unbind_busy"><![CDATA[抱歉，當前存在網絡問題或服務器繁忙，請您稍候再嘗試解綁。謝謝。]]></item>
-				<item id="connect_config_unbind_busy_code"><![CDATA[抱歉，當前存在網絡問題或服務器繁忙，錯誤代碼：<a target=_blank href="http://wiki.opensns.qq.com/wiki/%E3%80%90QQ%E7%99%BB%E5%BD%95%E3%80%91%E5%85%AC%E5%85%B1%E8%BF%94%E5%9B%9E%E7%A0%81%E8%AF%B4%E6%98%8E">{code}</a>，請您稍候再嘗試解綁。謝謝。]]></item>
+				<item id="connect_config_unbind_busy_code"><![CDATA[抱歉，當前存在網絡問題或服務器繁忙，詳細錯誤：{codeMessage}，錯誤代碼：<a target=_blank href="http://wiki.opensns.qq.com/wiki/%E3%80%90QQ%E7%99%BB%E5%BD%95%E3%80%91%E5%85%AC%E5%85%B1%E8%BF%94%E5%9B%9E%E7%A0%81%E8%AF%B4%E6%98%8E">{code}</a>，請您稍候再嘗試解綁。謝謝。]]></item>
 				<item id="connect_config_unbind_success"><![CDATA[您的論壇帳號和QQ帳號解除綁定成功。]]></item>
 				<item id="connect_uin_in_blacklist"><![CDATA[抱歉，此QQ帳號已被本站屏蔽，您可以<a href="{changeqqurl}">更換其他QQ賬號登錄</a>]]></item>
 				<item id="connect_reauth_success"><![CDATA[QQ互聯授權修改成功]]></item>
@@ -108,8 +108,28 @@
 				<item id="connect_tthread_message"><![CDATA[<br><br><img class="vm" src="static/image/common/weibo.png">&nbsp;<a href="http://t.qq.com/{username}" target="_blank">來自 {nick} 的騰訊微博</a>]]></item>
 				<item id="connect_tthread_comment"><![CDATA[微博評論]]></item>
                 <item id="connect_server_busy"><![CDATA[抱歉，當前存在網絡問題或服務器繁忙，請您稍候再試。謝謝。]]></item>
-				<item id="connect_server_busy_code"><![CDATA[抱歉，當前存在網絡問題或服務器繁忙，錯誤代碼：{code}，請您稍候再試。謝謝。]]></item>
+				<item id="connect_server_busy_code"><![CDATA[抱歉，當前存在網絡問題或服務器繁忙，詳細錯誤：{codeMessage}，錯誤代碼：{code}，請您稍候再試。謝謝。]]></item>
 				<item id="connectguest_message_complete_or_bind"><![CDATA[抱歉，您尚未 <a href="member.php?mod=connect" class="xi2">完善帳號信息</a> 或 <a href="member.php?mod=connect&ac=bind" class="xi2">綁定已有帳號</a>，無法進行此操作]]></item>
+				<item id="connect_error_code_999"><![CDATA[請求失敗]]></item>
+				<item id="connect_error_code_10001"><![CDATA[QQ 互聯 APPID 無效]]></item>
+				<item id="connect_error_code_10002"><![CDATA[QQ 互聯插件異常，請更新程序後重新安裝]]></item>
+				<item id="connect_error_code_10003"><![CDATA[QQ 互聯插件異常，請更新程序後重新安裝]]></item>
+				<item id="connect_error_code_10004"><![CDATA[QQ 互聯插件異常，請更新程序後重新安裝]]></item>
+				<item id="connect_error_code_10005"><![CDATA[網站服務器時間誤差超過 5 分鐘]]></item>
+				<item id="connect_error_code_10006"><![CDATA[QQ 互聯 APPID 無效]]></item>
+				<item id="connect_error_code_11000"><![CDATA[QQ 互聯 APPKEY 無效]]></item>
+				<item id="connect_error_code_11001"><![CDATA[QQ 互聯 APPID 被禁用]]></item>
+				<item id="connect_error_code_30001"><![CDATA[QQ 互聯 APPID 無效]]></item>
+				<item id="connect_error_code_30002"><![CDATA[QQ 互聯插件異常，請更新程序後重新安裝]]></item>
+				<item id="connect_error_code_30003"><![CDATA[QQ 互聯插件異常，請更新程序後重新安裝]]></item>
+				<item id="connect_error_code_30004"><![CDATA[QQ 互聯插件異常，請更新程序後重新安裝]]></item>
+				<item id="connect_error_code_30005"><![CDATA[網站服務器時間誤差超過 5 分鐘]]></item>
+				<item id="connect_error_code_30006"><![CDATA[QQ 互聯插件異常，請更新程序後重新安裝]]></item>
+				<item id="connect_error_code_30007"><![CDATA[QQ 互聯插件異常，請更新程序後重新安裝]]></item>
+				<item id="connect_error_code_30008"><![CDATA[APPID 未註冊，請重新開通 QQ 互聯服務]]></item>
+				<item id="connect_error_code_31000"><![CDATA[QQ 互聯插件異常，請更新程序後重新安裝]]]></item>
+				<item id="connect_error_code_31001"><![CDATA[QQ 互聯插件異常，請更新程序後重新安裝]]]></item>
+				<item id="connect_error_code_31002"><![CDATA[QQ 互聯 APPID 被禁用]]></item>
 			</item>
 			<item id="templatelang">
 				<item id="connect_header_login"><![CDATA[QQ登錄]]></item>
