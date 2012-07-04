@@ -276,6 +276,15 @@ function validate(obj) {
 			return false;
 		}
 	}
+	if(!check_catid()) {
+		return false;
+	}
+	edit_save();
+	window.onbeforeunload = null;
+	obj.form.submit();
+	return false;
+}
+function check_catid(){
 	var catObj = $("catid");
 	if(catObj) {
 		if (catObj.value < 1) {
@@ -284,10 +293,7 @@ function validate(obj) {
 			return false;
 		}
 	}
-	edit_save();
-	window.onbeforeunload = null;
-	obj.form.submit();
-	return false;
+	return true;
 }
 function raid_add() {
 	var raid = $('raid').value;
