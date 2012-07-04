@@ -4,7 +4,7 @@
  *		[Discuz!] (C)2001-2099 Comsenz Inc.
  *		This is NOT a freeware, use is subject to license terms
  *
- *		$Id: Disk.php 30408 2012-05-28 02:52:40Z songlixin $
+ *		$Id: Disk.php 30716 2012-06-14 03:02:50Z songlixin $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -39,20 +39,20 @@ class Cloud_Service_Disk {
 		$this->_baseUrl = $_G['siteurl'] . 'apptest.php?';
 	}
 
-	public function saveTask($attach, $openid) {
+	public function saveTask($attach, $openId) {
 		global $_G;
 
 		if (!$_G['uid']) {
 			throw new Cloud_Exception('noLogin', '30001');
 		}
-		if (!$openid) {
-			throw new Cloud_Exception('noOpenid', '30002');
+		if (!$openId) {
+			throw new Cloud_Exception('noopenId', '30002');
 		}
-		$verifyCode = md5($openid . $attach['aid'] . $_G['timestamp'] . $_G['uid']);
+		$verifyCode = md5($openId . $attach['aid'] . $_G['timestamp'] . $_G['uid']);
 		$taskData = array(
 			'aid' => $attach['aid'],
 			'uid' => $_G['uid'],
-			'openid' => $openid,
+			'openId' => $openId,
 			'filename' => $attach['filename'],
 			'verifycode' => $verifyCode,
 			'status' => 0,
@@ -72,10 +72,11 @@ class Cloud_Service_Disk {
 		}
 		$cloudData = array(
 			'sId' => $_G['setting']['my_siteid'],
-			'openid' => $openid,
+			'openId' => $openId,
 			'batchTasks' => array(
 				array(
-					'filename' => $attach['filename'],
+					'aId' => $attach['aid'],
+					'fileName' => $attach['filename'],
 					'downloadUrl' => $downloadUrl,
 					'size' => filesize($filePath),
 					'md5' => $md5,
