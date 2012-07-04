@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: home.js 27410 2012-01-30 09:53:20Z zhengqingpeng $
+	$Id: home.js 30720 2012-06-14 03:42:20Z zhengqingpeng $
 */
 
 var note_step = 0;
@@ -757,7 +757,7 @@ function poke_send(id, result) {
 }
 function myfriend_post(uid) {
 	if($('friend_'+uid)) {
-		$('friend_'+uid).innerHTML = '<p>您們現在是好友了，接下來，您還可以：<a href="home.php?mod=space&do=wall&uid='+uid+'" class="xi2" target="_blank">給TA留言</a> ，或者 <a href="home.php?mod=spacecp&ac=poke&op=send&uid='+uid+'&handlekey=propokehk_'+uid+'" id="a_poke_'+uid+'" class="xi2" onclick="showWindow(this.id, this.href, \'get\', 0, {\'ctrlid\':this.id,\'pos\':\'13\'});">打個招呼</a></p>';
+		$('friend_'+uid).innerHTML = '<p>你們現在是好友了，接下來，您還可以：<a href="home.php?mod=space&do=wall&uid='+uid+'" class="xi2" target="_blank">給TA留言</a> ，或者 <a href="home.php?mod=spacecp&ac=poke&op=send&uid='+uid+'&handlekey=propokehk_'+uid+'" id="a_poke_'+uid+'" class="xi2" onclick="showWindow(this.id, this.href, \'get\', 0, {\'ctrlid\':this.id,\'pos\':\'13\'});">打個招呼</a></p>';
 	}
 	showCreditPrompt();
 }
