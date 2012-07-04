@@ -4,12 +4,14 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_sendmail.php 25889 2011-11-24 09:52:20Z monkey $
+ *      $Id: misc_sendmail.php 30849 2012-06-26 02:21:32Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
+
+header('Content-Type: text/javascript');
 
 $pernum = 1;
 
