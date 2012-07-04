@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_cloudaddons.php 30036 2012-05-08 02:31:38Z monkey $
+ *      $Id: function_cloudaddons.php 30741 2012-06-15 08:53:29Z monkey $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -34,10 +34,13 @@ function cloudaddons_url($extra) {
 }
 
 function cloudaddons_check() {
+	if(!function_exists('gzuncompress')) {
+		cpmsg('cloudaddons_check_gzuncompress_error', '', 'error');
+	}
 	if(dfsockopen(CLOUDADDONS_WEBSITE_URL.'/image/logo.png', 4, '', '', false, CLOUDADDONS_DOWNLOAD_IP, 999) !== chr(0x89).'PNG') {
 		cpmsg('cloudaddons_check_url_fopen_error', '', 'error');
 	}
-	if(dfsockopen(CLOUDADDONS_CHECK_URL.'/logo.png', 4, '', '', false, CLOUDADDONS_DOWNLOAD_IP, 999) !== chr(0x89).'PNG') {
+	if(dfsockopen(CLOUDADDONS_CHECK_URL.'/logo.png', 4, '', '', false, CLOUDADDONS_CHECK_IP, 999) !== chr(0x89).'PNG') {
 		cpmsg('cloudaddons_check_url_fopen_error', '', 'error');
 	}
 	foreach(array('download', 'addonmd5') as $path) {
