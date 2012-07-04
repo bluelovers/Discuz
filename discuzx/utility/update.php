@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: update.php 30041 2012-05-08 02:58:57Z zhengqingpeng $
+ *      $Id: update.php 30824 2012-06-21 10:01:03Z liulanbo $
  */
 
 include_once('../source/class/class_core.php');
@@ -164,7 +164,7 @@ if($_GET['step'] == 'start') {
 		DB::query("ALTER TABLE ".DB::table('forum_forumfield')." ADD seodescription text NOT NULL default '' COMMENT '版塊seo描述' AFTER keywords");
 		DB::query("UPDATE ".DB::table('forum_forumfield')." SET seodescription=description WHERE membernum='0'");
 	}
-	if(DB::fetch_first("SHOW TABLES LIKE '%common_tagitem'")) {
+	if(DB::fetch_first("SHOW TABLES LIKE '".DB::table('common_tagitem')."'")) {
 		$noexist_itemkey = true;
 		$query = DB::query("SHOW INDEX FROM ".DB::table('common_tagitem'));
 		while($row = DB::fetch($query)) {
@@ -1480,7 +1480,7 @@ if($_GET['step'] == 'start') {
 	} elseif($_GET['op'] == 'moderate') {
 
 		$nextop = 'moderate_update';
-		if(DB::fetch_first("SHOW TABLES LIKE '%common_moderate'")) {
+		if(DB::fetch_first("SHOW TABLES LIKE '".DB::table('common_moderate')."'")) {
 			$modcount = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_moderate'), array(), true);
 		} else {
 			$modcount = false;
@@ -1544,7 +1544,7 @@ if($_GET['step'] == 'start') {
 	} elseif($_GET['op'] == 'moderate_update') {
 		$nextop = 'founder';
 
-		if($first_to_2_5 && DB::fetch_first("SHOW TABLES LIKE '%common_moderate'")) {
+		if($first_to_2_5 && DB::fetch_first("SHOW TABLES LIKE '".DB::table('common_moderate')."'")) {
 			$tables = array(
 				'tid' => 'forum_thread_moderate',
 				'pid' => 'forum_post_moderate',
