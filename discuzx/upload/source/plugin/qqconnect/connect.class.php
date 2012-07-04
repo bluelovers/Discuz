@@ -4,7 +4,7 @@
  *		[Discuz! X] (C)2001-2099 Comsenz Inc.
  *		This is NOT a freeware, use is subject to license terms
  *
- *		$Id: connect.class.php 29471 2012-04-13 06:54:01Z houdelei $
+ *		$Id: connect.class.php 30759 2012-06-18 08:36:12Z liudongdong $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -310,6 +310,10 @@ class plugin_qqconnect extends plugin_qqconnect_base {
 		$_G['connect']['weibo_share_url'] = $_G['siteurl'] . 'home.php?mod=spacecp&ac=plugin&id=qqconnect:spacecp&pluginop=share&sh_type=2&thread_id=' . $_G['tid'];
 		$_G['connect']['pengyou_share_url'] = $_G['siteurl'] . 'home.php?mod=spacecp&ac=plugin&id=qqconnect:spacecp&pluginop=share&sh_type=3&thread_id=' . $_G['tid'];
 		$_G['connect']['first_post'] = $postlist[$_G['forum_firstpid']];
+		if ($_G['connect']['first_post']['anonymous']) {
+			$_G['connect']['first_post']['authorid'] = 0;
+			$_G['connect']['first_post']['author'] = '';
+		}
 		$_GET['connect_autoshare'] = !empty($_GET['connect_autoshare']) ? 1 : 0;
 
 		$_G['connect']['weibo_appkey'] = $_G['connect']['weibo_public_appkey'];
