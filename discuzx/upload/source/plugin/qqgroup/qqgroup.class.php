@@ -4,7 +4,7 @@
  *		[Discuz!] (C)2001-2099 Comsenz Inc.
  *		This is NOT a freeware, use is subject to license terms
  *
- *		$Id: qqgroup.class.php 29283 2012-03-31 09:35:36Z liudongdong $
+ *		$Id: qqgroup.class.php 30904 2012-06-29 07:50:16Z songlixin $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -49,7 +49,7 @@ class plugin_qqgroup {
 		$content = strip_tags(discuzcode($content, 0, 0, 0));
 		$content = preg_replace('%\[attach\].*\[/attach\]%im', '', $content);
 		$content = str_replace('&nbsp;', ' ', $content);
-		$content = urlencode(cutstr($content, 500, ''));
+		$content = urlencode(cutstr($content, 50, ''));
 		include template('qqgroup:push');
 
 		return trim($return);
