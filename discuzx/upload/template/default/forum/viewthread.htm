@@ -200,7 +200,7 @@
 					<!--{if $_G['forum_thread']['closed'] == 1}-->
 						&nbsp;<img src="{IMGDIR}/locked.gif" alt="{lang close}" title="{lang close}" class="vm" />
 					<!--{/if}-->
-					<a href="forum.php?mod=viewthread&tid=$_G[tid]$fromuid" onclick="return copyThreadUrl(this)" title="{lang share_url_copy_comment}">[{lang share_url_copy}]</a>
+					<a href="forum.php?mod=viewthread&tid=$_G[tid]$fromuid" onclick="return copyThreadUrl(this)" {if $fromuid}title="{lang share_url_copy_comment}"{/if}>[{lang share_url_copy}]</a>
 				</span>
 				<!--{hook/viewthread_title_extra}-->
 			</td>
