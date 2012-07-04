@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: common.js 29624 2012-04-23 06:56:28Z monkey $
+	$Id: common.js 30758 2012-06-18 06:48:59Z chenmengshu $
 */
 
 var BROWSER = {};
@@ -671,7 +671,16 @@ function ajaxpost(formid, showid, waitid, showidclass, submitbtn, recall) {
 		}
 		if(!evaled) evalscript(s);
 		ajaxframe.loading = 0;
-		$('append_parent').removeChild(ajaxframe.parentNode);
+		if(!BROWSER.firefox) {
+			$('append_parent').removeChild(ajaxframe.parentNode);
+		} else {
+			setTimeout(
+				function(){
+					$('append_parent').removeChild(ajaxframe.parentNode);
+				},
+				100
+			);
+		}
 	};
 	if(!ajaxframe) {
 		var div = document.createElement('div');
