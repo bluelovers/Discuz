@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: discuz_upgrade.php 29551 2012-04-18 08:08:28Z svn_project_zhangjie $
+ *      $Id: discuz_upgrade.php 30700 2012-06-12 10:39:22Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -156,23 +156,37 @@ class discuz_upgrade {
 		return $writeable;
 	}
 
-	public function download_file($upgradeinfo, $file, $folder = 'upload', $md5 = '') {
+	public function download_file($upgradeinfo, $file, $folder = 'upload', $md5 = '', $position = 0, $offset = 0) {
 		$dir = DISCUZ_ROOT.'./data/update/Discuz! X'.$upgradeinfo['latestversion'].' Release['.$upgradeinfo['latestrelease'].']/';
 		$this->mkdirs(dirname($dir.$file));
-		$fp = fopen($dir.$file, 'w');
-		if(!$fp) {
-			return false;
+		$downloadfileflag = true;
+
+		if(!$position) {
+			$mode = 'wb';
+		} else {
+			$mode = 'ab';
 		}
-		$response = dfsockopen($this->upgradeurl.$upgradeinfo['latestversion'].'/'.$upgradeinfo['latestrelease'].'/'.$this->locale.'_'.$this->charset.'/'.$folder.'/'.$file.'sc');
+		$fp = fopen($dir.$file, $mode);
+		if(!$fp) {
+			return 0;
+		}
+		$response = dfsockopen($this->upgradeurl.$upgradeinfo['latestversion'].'/'.$upgradeinfo['latestrelease'].'/'.$this->locale.'_'.$this->charset.'/'.$folder.'/'.$file.'sc', $offset, '', '', FALSE, '', 15, TRUE, 'URLENCODE', FALSE, $position);
 		if($response) {
+			if($offset && strlen($response) == $offset) {
+				$downloadfileflag = false;
+			}
 			fwrite($fp, $response);
 		}
 		fclose($fp);
 
-		if(md5_file($dir.$file) == $md5) {
-			return true;
+		if($downloadfileflag) {
+			if(md5_file($dir.$file) == $md5) {
+				return 2;
+			} else {
+				return 0;
+			}
 		} else {
-			return false;
+			return 1;
 		}
 	}
 
