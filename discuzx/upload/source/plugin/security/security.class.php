@@ -4,7 +4,7 @@
  *		[Discuz! X] (C)2001-2099 Comsenz Inc.
  *		This is NOT a freeware, use is subject to license terms
  *
- *		$Id: security.class.php 30417 2012-05-28 05:22:31Z songlixin $
+ *		$Id: security.class.php 30568 2012-06-04 08:30:22Z songlixin $
  */
 
 
@@ -89,7 +89,7 @@ EOF;
 	}
 
 	function global_footerlink() {
-		return '&nbsp;<a href="http://discuz.qq.com/service/security" target="_blank" title="'.lang('plugin/security', 'title').'"><img src="static/image/common/security.png"></a>&nbsp;';
+		return '&nbsp;<a href="http://discuz.qq.com/service/security" target="_blank" title="'.lang('plugin/security', 'title').'"><img src="static/image/common/security.png"></a>';
 	}
 
 	public function deletepost($param) {
