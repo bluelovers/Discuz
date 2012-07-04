@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: connect_login.php 30155 2012-05-15 02:24:14Z songlixin $
+ *      $Id: connect_login.php 30537 2012-06-01 07:11:25Z songlixin $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -40,7 +40,7 @@ if($op == 'init') {
 	try {
 		$response = $connectOAuthClient->connectGetRequestToken();
 	} catch(Exception $e) {
-		showmessage('qqconnect:connect_get_request_token_failed_code', $referer, array('code' => $e->getmessage()));
+		showmessage('qqconnect:connect_get_request_token_failed_code', $referer, array('codeMessage' => getErrorMessage($e->getmessage()), 'code' => $e->getmessage()));
 	}
 
 	$request_token = $response['oauth_token'];
@@ -71,7 +71,7 @@ if($op == 'init') {
 	try {
 		$response = $connectOAuthClient->connectGetAccessToken($params, $_G['cookie']['con_request_token_secret']);
 	} catch(Exception $e) {
-		showmessage('qqconnect:connect_get_access_token_failed_code', $referer, array('code' => $e->getmessage()));
+		showmessage('qqconnect:connect_get_access_token_failed_code', $referer, array('codeMessage' => getErrorMessage($e->getmessage()), 'code' => $e->getmessage()));
 	}
 
 	dsetcookie('con_request_token');
@@ -81,7 +81,7 @@ if($op == 'init') {
 	$conuinsecret = $response['oauth_token_secret'];
 	$conopenid = strtoupper($response['openid']);
 	if(!$conuin || !$conuinsecret || !$conopenid) {
-		showmessage('qqconnect:connect_get_access_token_failed_code', $referer, array('code' => $e->getmessage()));
+		showmessage('qqconnect:connect_get_access_token_failed_code', $referer, array('codeMessage' => getErrorMessage($e->getmessage()), 'code' => $e->getmessage()));
 	}
 
 	loadcache('connect_blacklist');
@@ -303,7 +303,7 @@ if($op == 'init') {
 	try {
 		$response = $connectOAuthClient->connectGetRequestToken();
 	} catch(Exception $e) {
-		showmessage('qqconnect:connect_get_request_token_failed_code', $referer, array('code' => $e->getmessage()));
+		showmessage('qqconnect:connect_get_request_token_failed_code', $referer, array('codeMessage' => getErrorMessage($e->getmessage()), 'code' => $e->getmessage()));
 	}
 
 	$request_token = $response['oauth_token'];
@@ -341,4 +341,10 @@ function connect_login($connect_member) {
 	dsetcookie('connect_is_bind', '1', 31536000);
 	dsetcookie('connect_uin', $connect_member['conopenid'], 31536000);
 	return true;
+}
+
+function getErrorMessage($errroCode) {
+	$str = sprintf('connect_error_code_%d', $errroCode);
+
+	return lang('plugin/qqconnect', $str);
 }
