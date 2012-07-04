@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: post_newreply.php 30397 2012-05-25 09:03:57Z zhengqingpeng $
+ *      $Id: post_newreply.php 30842 2012-06-25 09:23:12Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -481,6 +481,7 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 						'useip' => $_G['clientip'],
 					));
 					C::t('forum_post')->update('tid:'.$thread['tid'], $rpid, array('comment' => 1));
+					C::t('forum_postcache')->delete($rpid);
 				}
 			}
 			unset($postcomment);
