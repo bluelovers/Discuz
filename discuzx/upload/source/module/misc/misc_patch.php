@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: misc_patch.php 30218 2012-05-17 01:20:33Z zhengqingpeng $
+ *      $Id: misc_patch.php 30849 2012-06-26 02:21:32Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -12,6 +12,8 @@ if(!defined('IN_DISCUZ')) {
 }
 
 if($_GET['action'] == 'checkpatch') {
+
+	header('Content-Type: text/javascript');
 
 	if($_G['uid'] && $_G['member']['allowadmincp'] == 1) {
 		$discuz_patch = new discuz_patch();
