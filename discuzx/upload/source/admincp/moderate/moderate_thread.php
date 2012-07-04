@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: moderate_thread.php 30465 2012-05-30 04:10:03Z zhengqingpeng $
+ *      $Id: moderate_thread.php 30609 2012-06-06 07:09:27Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
@@ -145,7 +145,7 @@ if(!submitcheck('modsubmit') && !$_GET['fast']) {
 			"<ul class=\"nofloat\"><li><input class=\"radio\" type=\"radio\" name=\"moderate[$thread[tid]]\" id=\"mod_$thread[tid]_1\" value=\"validate\" onclick=\"mod_setbg($thread[tid], 'validate');\"><label for=\"mod_$thread[tid]_1\">$lang[validate]</label></li><li><input class=\"radio\" type=\"radio\" name=\"moderate[$thread[tid]]\" id=\"mod_$thread[tid]_2\" value=\"delete\" onclick=\"mod_setbg($thread[tid], 'delete');\"><label for=\"mod_$thread[tid]_2\">$lang[delete]</label></li><li><input class=\"radio\" type=\"radio\" name=\"moderate[$thread[tid]]\" id=\"mod_$thread[tid]_3\" value=\"ignore\" onclick=\"mod_setbg($thread[tid], 'ignore');\"><label for=\"mod_$thread[tid]_3\">$lang[ignore]</label></li></ul>",
 			"<h3><a href=\"javascript:;\" onclick=\"display_toggle('$thread[tid]');\">$thread[subject]</a> $thread_censor_text</h3><p>$thread[useip]</p>",
 			"<a target=\"_blank\" href=\"forum.php?mod=forumdisplay&fid=$thread[fid]\">$forumname</a>",
-			"<p><a target=\"_blank\" href=\"".ADMINSCRIPT."?action=members&operation=search&uid=$thread[authorid]&submit=yes\">$thread[author]</a></p> <p>$thread[dateline]</p>",
+			"<p>$thread[author]</p> <p>$thread[dateline]</p>",
 			"<a target=\"_blank\" href=\"forum.php?mod=viewthread&tid=$thread[tid]&modthreadkey=$thread[modthreadkey]\">$lang[view]</a>&nbsp;<a href=\"forum.php?mod=post&action=edit&fid=$thread[fid]&tid=$thread[tid]&pid=$thread[pid]&modthreadkey=$thread[modthreadkey]\" target=\"_blank\">$lang[edit]</a>",
 		));
 		showtablerow("id=\"mod_$thread[tid]_row2\"", 'colspan="4" style="padding: 10px; line-height: 180%;"', '<div style="overflow: auto; overflow-x: hidden; max-height:120px; height:auto !important; height:120px; word-break: break-all;">'.$thread['message'].'<br /><br />'.$threadsortinfo.'</div>');
@@ -228,7 +228,7 @@ if(!submitcheck('modsubmit') && !$_GET['fast']) {
 		if($recyclebintids) {
 			$recycles = deletethread($recyclebintids, false, false, true);
 			updatemodworks('MOD', $recycles);
-			updatemodlog($recyclebintids, 'DEL');
+			updatemodlog(implode(',', $recyclebintids), 'DEL');
 		}
 
 		$deletes = deletethread($deletetids);
