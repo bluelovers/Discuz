@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_admincp_msg.php 30255 2012-05-17 09:14:49Z zhengqingpeng $
+ *      $Id: lang_admincp_msg.php 30741 2012-06-15 08:53:29Z monkey $
  *
  *      This file is automatically generate
  */
@@ -553,8 +553,8 @@ $lang = array (
   'upgrade_continue' => '您上次升級到 {step}，請繼續完成升級',
   'upgrade_download_upgradelist_error' => '獲取待更新文件列表失敗，是否重新獲取？ {upgradeurl}',
   'upgrade_download_complete_to_compare' => '待更新文件下載完成，即將進行本地文件比較 {upgradeurl}',
-  'upgrade_redownload' => '更新文件 {file} 下載出現問題，是否進行重試？ {upgradeurl}',
-  'upgrade_downloading_file' => '正在從官方下載更新文件 {file} {upgradeurl}',
+  'upgrade_redownload' => '文件 {file} 下載出現問題，請查看您的服務器網絡以及data目錄是否有寫權限，請確認無誤後點擊確定 {upgradeurl}',
+  'upgrade_downloading_file' => '正在從官方下載更新文件 {file} <br>已完成{percent} {upgradeurl}',
   'upgrade_cannot_access_file' => '發現您的目錄及文件無修改權限，請您填寫 ftp 賬號，或者修改文件權限為可讀可寫後重試',
   'upgrade_backuping' => '正在備份原始文件... {upgradeurl}',
   'upgrade_backup_error' => '備份原始文件出錯 {upgradeurl}',
@@ -622,6 +622,7 @@ $lang = array (
   'cloudaddons_ftp_path_error' => '站點 FTP 路徑錯誤，請重新填寫',
 
   'cloudaddons_check_url_fopen_error' => '您的服務器無法訪問應用中心，這將會導致應用無法安裝。請聯繫您的服務商或者網站技術人員，確保您的服務器能夠正常訪問 addon.discuz.com 或 addon1.discuz.com',
+  'cloudaddons_check_gzuncompress_error' => '您的服務器不支持 Zlib，這將會導致應用無法安裝。請聯繫您的服務商或者網站技術人員。',
   'cloudaddons_genuine_message' => '對不起，您安裝的不是正版應用，安裝程序無法繼續執行<br /><br /><a href="admin.php?action=cloudaddons&id={addonid}">點擊這裡安裝正版應用</a>',);
 
 ?>
