@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: block_thread.php 29655 2012-04-24 05:51:56Z zhangguosheng $
+ *      $Id: block_thread.php 30726 2012-06-14 04:10:48Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -349,7 +349,7 @@ class block_thread extends discuz_block {
 		}
 
 		$maxwhere = '';
-		if(!$tids && !$fids && $_G['setting']['blockmaxaggregationitem']) {
+		if(!$tids && !$fids && !$digest && !$stick  && $_G['setting']['blockmaxaggregationitem']) {
 			$maxwhere = ($maxid = $this->getmaxid() - $_G['setting']['blockmaxaggregationitem']) > 0 ? 't.tid > '.$maxid.' AND ' : '';
 		}
 
