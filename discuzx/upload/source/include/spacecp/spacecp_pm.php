@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: spacecp_pm.php 29236 2012-03-30 05:34:47Z chenmengshu $
+ *      $Id: spacecp_pm.php 30849 2012-06-26 02:21:32Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -26,6 +26,8 @@ $daterange = empty($_GET['daterange'])?1:intval($_GET['daterange']);
 loaducenter();
 
 if($_GET['op'] == 'checknewpm') {
+
+	header('Content-Type: text/javascript');
 
 	if($_G['uid'] && !getstatus($_G['member']['newpm'], 1)) {
 		$ucnewpm = intval(uc_pm_checknew($_G['uid']));
