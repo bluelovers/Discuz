@@ -4,9 +4,9 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: mobile.class.php 29292 2012-03-31 11:00:07Z congyushuai $
+ *      $Id: mobile.class.php 30858 2012-06-26 10:30:21Z congyushuai $
  */
-
+define("MOBILE_PLUGIN_VERSION", "1");
 class mobile_core {
 
 	function result($result) {
@@ -71,7 +71,7 @@ class mobile_core {
 			}
 		}
 		$xml = array(
-			'Version' => '2',
+			'Version' => $_GET['version'],
 			'Charset' => strtoupper($_G['charset']),
 			'Variables' => array_merge($globals, $variables),
 		);
@@ -98,7 +98,7 @@ class mobile_core {
 			if($_GET['mobilemessage']) {
 				$return = mobile_core::json($xml);
 				header("HTTP/1.1 301 Moved Permanently");
-				header("Location:discuz://" . $_G['messageparam'][0] . "//" . rawurlencode(diconv($message_result, $_G['charset'], "utf-8")) . ($return ? "//" . rawurlencode($return) : '' ));
+				header("Location:discuz://" . rawurlencode($_G['messageparam'][0]) . "//" . rawurlencode(diconv($message_result, $_G['charset'], "utf-8")) . ($return ? "//" . rawurlencode($return) : '' ));
 				exit;
 			}
 		}
