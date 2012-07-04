@@ -44,6 +44,9 @@
                             [<a href="forum.php?mod=forumdisplay&fid={$groupnames[$thread[tid]][fid]}" target="_blank">{lang group}</a>]
                         <!--{/if}-->
                     <!--{/if}-->
+					<!--{if $thread['moved']}-->
+						<!--{eval $thread[tid]=$thread[closed];}-->
+					<!--{/if}-->
                     <!--{hook/forumdisplay_thread_mobile $key}-->
                     <a href="forum.php?mod=viewthread&tid=$thread[tid]" $thread[highlight] >
                     <!--{if $_G['setting']['mobile']['mobilesimpletype'] == 0}-->
