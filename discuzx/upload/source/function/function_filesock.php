@@ -4,14 +4,14 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_filesock.php 29511 2012-04-17 07:26:56Z zhangguosheng $
+ *      $Id: function_filesock.php 30700 2012-06-12 10:39:22Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
-function _dfsockopen($url, $limit = 0, $post = '', $cookie = '', $bysocket = FALSE, $ip = '', $timeout = 15, $block = TRUE, $encodetype  = 'URLENCODE', $allowcurl = TRUE) {
+function _dfsockopen($url, $limit = 0, $post = '', $cookie = '', $bysocket = FALSE, $ip = '', $timeout = 15, $block = TRUE, $encodetype  = 'URLENCODE', $allowcurl = TRUE, $position = 0) {
 	$return = '';
 	$matches = parse_url($url);
 	$scheme = $matches['scheme'];
@@ -101,6 +101,11 @@ function _dfsockopen($url, $limit = 0, $post = '', $cookie = '', $bysocket = FAL
 					break;
 				}
 			}
+
+			if($position) {
+				fseek($fp, $position, SEEK_CUR);
+			}
+
 			if($limit) {
 				$return = stream_get_contents($fp, $limit);
 			} else {
