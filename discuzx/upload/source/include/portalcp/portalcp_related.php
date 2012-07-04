@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: portalcp_related.php 30378 2012-05-24 09:52:46Z zhangguosheng $
+ *      $Id: portalcp_related.php 30723 2012-06-14 03:49:17Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -63,7 +63,7 @@ if($op == 'manual') {
 	$wheresql = implode(' AND ', $wherearr);
 	$count = C::t('portal_article_title')->fetch_all_by_sql($wheresql, '', 0, 0, 1);
 	if($count) {
-		$query = C::t('portal_article_title')->fetch_all_by_sql($wheresql, 'ORDER BY dateline', 0, 50);
+		$query = C::t('portal_article_title')->fetch_all_by_sql($wheresql, 'ORDER BY dateline DESC', 0, 50);
 		foreach($query as $value) {
 			$articlelist[] = $value;
 		}
