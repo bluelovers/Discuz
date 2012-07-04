@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_forum_post.php 28985 2012-03-21 07:24:35Z zhangguosheng $
+ *      $Id: table_forum_post.php 30707 2012-06-13 03:40:15Z liulanbo $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -210,10 +210,10 @@ class table_forum_post extends discuz_table
 		$parameter = $this->handle_viewthread_parameter($visibleallflag, $authorid, $forum_pagebydesc, $ordertype, 'p.');
 		$query = DB::query("SELECT dp.*, p.* FROM %t p LEFT JOIN %t dp ON p.pid=dp.pid WHERE p.tid=%d".
 				($parameter['invisible'] ? ' AND '.$parameter['invisible'] : '').($parameter['authorid'] ? ' AND '.$parameter['authorid'] : '').
-				(isset($stand) && ($stand ? ' AND (dp.stand=%d OR p.first=1)' : ' AND (dp.stand=0 OR dp.stand IS NULL OR p.first=1)')).
+				(isset($stand) ? ($stand ? ' AND (dp.stand='.intval($stand).' OR p.first=1)' : ' AND (dp.stand=0 OR dp.stand IS NULL OR p.first=1)') : '').
 				' '.$parameter['orderby'].
 				' '.DB::limit($start, $limit),
-				array(self::get_tablename('tid:'.$tid), 'forum_debatepost', $tid, $stand));
+				array(self::get_tablename('tid:'.$tid), 'forum_debatepost', $tid));
 		while($post = DB::fetch($query)) {
 			$data[$post['pid']] = $post;
 		}
