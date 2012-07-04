@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_core.php 30076 2012-05-09 04:22:32Z zhengqingpeng $
+ *      $Id: function_core.php 30700 2012-06-12 10:39:22Z svn_project_zhangjie $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -190,9 +190,9 @@ function fsocketopen($hostname, $port = 80, &$errno, &$errstr, $timeout = 15) {
 	return $fp;
 }
 
-function dfsockopen($url, $limit = 0, $post = '', $cookie = '', $bysocket = FALSE, $ip = '', $timeout = 15, $block = TRUE, $encodetype  = 'URLENCODE', $allowcurl = TRUE) {
+function dfsockopen($url, $limit = 0, $post = '', $cookie = '', $bysocket = FALSE, $ip = '', $timeout = 15, $block = TRUE, $encodetype  = 'URLENCODE', $allowcurl = TRUE, $position = 0) {
 	require_once libfile('function/filesock');
-	return _dfsockopen($url, $limit, $post, $cookie, $bysocket, $ip, $timeout, $block, $encodetype, $allowcurl);
+	return _dfsockopen($url, $limit, $post, $cookie, $bysocket, $ip, $timeout, $block, $encodetype, $allowcurl, $position);
 }
 
 function dhtmlspecialchars($string, $flags = null) {
