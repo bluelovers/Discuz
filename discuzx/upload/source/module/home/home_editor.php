@@ -3,7 +3,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: home_editor.php 28113 2012-02-22 09:25:55Z svn_project_zhangjie $
+ *      $Id: home_editor.php 30774 2012-06-19 03:47:07Z zhangguosheng $
  */
 if (!defined('IN_DISCUZ')) {
 	exit('Access Denied');
@@ -167,9 +167,9 @@ if (empty($_GET['op'])) {
 												<div class="sepline"></div>
 												<a href="javascript:;" class="icoUrl" id="icoUrl" onClick="createLink(event, 1);return false;" title="<?php echo lang('home/editor', 'editor_hyperlink'); ?>"></a>
 												<a href="javascript:;" class="icoMoveUrl" onClick="clearLink();return false;" title="<?php echo lang('home/editor', 'editor_remove_link'); ?>"></a>
-												<a href="javascript:;" class="icoImg" id="icoImg" onClick="parent.createImageBox();return false;" title="<?php echo lang('home/editor', 'editor_link_image'); ?>"></a>
+												<a href="javascript:;" class="icoImg" id="icoImg" onClick="parent.createImageBox(<?php echo ($isportal ? 'parent.check_catid' : '')?>);return false;" title="<?php echo lang('home/editor', 'editor_link_image'); ?>"></a>
 	<?php if ($isportal) { ?>
-													<a href="javascript:;" class="icoAttach" id="icoAttach" onClick="parent.createAttachBox();return false;" title="<?php echo lang('home/editor', 'editor_link_attach'); ?>"></a>
+													<a href="javascript:;" class="icoAttach" id="icoAttach" onClick="parent.createAttachBox(<?php echo ($isportal ? 'parent.check_catid' : '')?>);return false;" title="<?php echo lang('home/editor', 'editor_link_attach'); ?>"></a>
 												<?php } ?>
 												<a href="javascript:;" class="icoSwf" id="icoSwf" onClick="createFlash(event, 1);return false;" title="<?php echo lang('home/editor', 'editor_link_flash'); ?>"></a>
 												<a href="javascript:;" class="icoFace" id="faceBox" onClick="faceBox(event);return false;" title="<?php echo lang('home/editor', 'editor_insert_smiley'); ?>"></a>
