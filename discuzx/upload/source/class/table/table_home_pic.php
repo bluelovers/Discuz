@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: table_home_pic.php 28387 2012-02-28 10:05:55Z svn_project_zhangjie $
+ *      $Id: table_home_pic.php 30713 2012-06-13 09:44:05Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -93,7 +93,7 @@ class table_home_pic extends discuz_table
 		return DB::result_first("SELECT COUNT(*) FROM %t WHERE $sql", array($this->_table));
 	}
 	public function count_size_by_uid($uid) {
-		return DB::result_first("SELECT SUM(size) FROM ".DB::table($this->_table)." WHERE uid=%d", array($this->_table, $uid));
+		return DB::result_first("SELECT SUM(size) FROM %t WHERE uid=%d", array($this->_table, $uid));
 	}
 	public function fetch_by_id_idtype($id) {
 		if(!$id) {
