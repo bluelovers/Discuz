@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_group.php 30373 2012-05-24 09:10:34Z liulanbo $
+ *      $Id: forum_group.php 30894 2012-06-29 03:14:36Z zhangguosheng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -358,12 +358,13 @@ if($action == 'index') {
 				if($_G['setting']['allowgroupdomain'] && !empty($_G['setting']['domain']['root']['group']) && $domainlength) {
 					checklowerlimit('modifydomain');
 				}
+				require_once libfile('function/delete');
 				if(empty($domainlength) || empty($domain)) {
 					$domain = '';
+					deletedomain($_G['fid'], 'group');
 				} else {
 					require_once libfile('function/domain');
 					if(domaincheck($domain, $_G['setting']['domain']['root']['group'], $domainlength)) {
-						require_once libfile('function/delete');
 						deletedomain($_G['fid'], 'group');
 						C::t('common_domain')->insert(array('domain' => $domain, 'domainroot' => $_G['setting']['domain']['root']['group'], 'id' => $_G['fid'], 'idtype' => 'group'));
 					}
