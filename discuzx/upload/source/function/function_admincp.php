@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_admincp.php 29992 2012-05-07 03:01:52Z liulanbo $
+ *      $Id: function_admincp.php 30773 2012-06-19 03:41:56Z zhengqingpeng $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -646,7 +646,7 @@ function showsetting($setname, $varname, $value, $type = 'radio', $disabled = ''
 		$value ? $check['false'] = '' : $check['true'] = '';
 		$check['hidden1'] = $hidden ? ' onclick="$(\'hidden_'.$setname.'\').style.display = \'\';"' : '';
 		$check['hidden0'] = $hidden ? ' onclick="$(\'hidden_'.$setname.'\').style.display = \'none\';"' : '';
-		$onclick = $disabled && $disabled == 'readonly' ? ' onclick="return false"' : '';
+		$onclick = $disabled && $disabled == 'readonly' ? ' onclick="return false"' : ($extra ? $extra : '');
 		$s .= '<ul onmouseover="altStyle(this'.$check['disabledaltstyle'].');">'.
 			'<li'.($check['true'] ? ' class="checked"' : '').'><input class="radio" type="radio"'.($varnameid ? ' id="_v1_'.$varnameid.'"' : '').' name="'.$varname.'" value="1" '.$check['true'].$check['hidden1'].$check['disabled'].$onclick.'>&nbsp;'.cplang('yes').'</li>'.
 			'<li'.($check['false'] ? ' class="checked"' : '').'><input class="radio" type="radio"'.($varnameid ? ' id="_v0_'.$varnameid.'"' : '').' name="'.$varname.'" value="0" '.$check['false'].$check['hidden0'].$check['disabled'].$onclick.'>&nbsp;'.cplang('no').'</li>'.
@@ -1323,7 +1323,7 @@ function rewritedata($alldata = 1) {
 	$data = array();
 	if(!$alldata) {
 		if(in_array('portal_topic', $_G['setting']['rewritestatus'])) {
-			$data['search']['portal_topic'] = "/".$_G['domain']['pregxprw']['portal']."\?mod\=topic&(amp;)?topicid\=(.+?)?\"([^\>]*)\>/e";
+			$data['search']['portal_topic'] = "/".$_G['domain']['pregxprw']['portal']."\?mod\=topic&(amp;)?topic\=([^#]+?)?\"([^\>]*)\>/e";
 			$data['replace']['portal_topic'] = "rewriteoutput('portal_topic', 0, '\\1', '\\3', '\\4')";
 		}
 
@@ -1368,7 +1368,7 @@ function rewritedata($alldata = 1) {
 		}
 	} else {
 		$data['rulesearch']['portal_topic'] = 'topic-{name}.html';
-		$data['rulereplace']['portal_topic'] = 'portal.php?mod=topic&topicid={name}';
+		$data['rulereplace']['portal_topic'] = 'portal.php?mod=topic&topic={name}';
 		$data['rulevars']['portal_topic']['{name}'] = '(.+)';
 
 		$data['rulesearch']['portal_article'] = 'article-{id}-{page}.html';
