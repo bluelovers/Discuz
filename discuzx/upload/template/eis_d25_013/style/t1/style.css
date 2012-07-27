@@ -1,0 +1,92 @@
+/*
+[name]橙1[/name]
+[iconbgcolor]#f57213[/iconbgcolor]
+Powered by Discuz! X
+*/
+
+html { background: #FFF url(background.png) repeat-x left top; }
+body { background:none; }
+#eis_bg .eis_bg1{ background:url(eis_bg1.jpg) no-repeat left top!important;}
+#eis_bg .eis_bg2{background:url(eis_bg2.jpg) no-repeat right top!important;}
+#hd h2{ background:url(logo_bg.png) no-repeat left center!important;}
+#eis_nv .eis_ul li.a {background:url(eis_nv_li.png) no-repeat left center!important;}
+	#eis_nv .eis_ul  li.a a { background:url(eis_nv_a.jpg) no-repeat right center!important;}
+	#eis_nv .eis_ul li a:hover { text-decoration:none; background:url(eis_nv_a.jpg) no-repeat right center!important;}
+	#eis_nv .eis_ul li:hover {background:url(eis_nv_li.png) no-repeat left center!important;}
+	#eis_nv .eis_ul li.hover {background:url(eis_nv_li.png) no-repeat left center!important;}
+	#eis_nv .eis_ul li.hover a{background:url(eis_nv_a.jpg) no-repeat right center!important;}
+#qmenu { background-image: url(qmenu.png); color:#FFF!important; }
+
+/*ie6*/
+ .ie6 #qmenu{ background:url(eis_qmenu.png) no-repeat 0 0!important;}
+	.ie6 .scbar_icon_td {background: url(eis_ie6s.png) no-repeat 0 -74px!important; }
+				.ie6 .scbar_txt_td,.ie6 .scbar_type_td { background: url(eis_ie6s.png) repeat-x 0 -222px!important; }
+				.ie6 .scbar_btn_td {background: url(eis_ie6s.png) no-repeat right -296px!important; }
+				.ie6 .scbar_type_td { background: url(eis_ie6s.png) no-repeat 0 -370px!important; }
+				
+	.ie6 #eis_nv .eis_ul li.a { margin-left:1px; margin-right:1px;background:url({IMGDIR}/eis_ie6nv_li.png) no-repeat left center;}
+	.ie6 #eis_nv .eis_ul li.a a { color:#FFF; background:url({IMGDIR}/eis_nv_a.jpg) no-repeat right center;}
+	.ie6 #eis_nv .eis_ul li a:hover { text-decoration:underline; background:none!important;}
+	.ie6 #eis_nv .eis_ul li:hover {background:none!important;}
+	.ie6 #eis_nv .eis_ul li.hover {background:none!important;}
+	.ie6 #eis_nv .eis_ul li.hover a{background:none!important;}	
+
+/*字體顏色*/
+	#pt a{ color:#505050!important;}
+	#chart a{ color:#F46B0F!important;}
+	#ct .bm_h h2 a{color:#505050!important;}
+	#ct .bm_h a{ color:#F46B0F!important;}
+	#ct .bm_c td h2 a{color:#505050!important;}
+	#ct .bm_c td.fl_by a{color:#F46B0F!important;}
+	#ct .bm_c td.fl_i .xi2{color:#F46B0F!important;}
+	
+	/**/
+	#eis_fl .bm_h{ background:#F46B0F!important; color:#FFF;}
+
+.tbn li.a { background: #FFF; }
+	#nv_portal.pg_portalcp .ct2_a_r, #nv_forum.pg_post .ct2_a_r { background-image: none; }
+
+/* 重定義 {SPECIALBORDER} */
+.bmn, .pg a, .pgb a, .pg strong, .card, .card .o, div.exfm  { border-color: #F46B0F; }
+.pg strong { background-color: #F46B0F; color:#FFF; }
+.pn, .tb .o, .tb .o a { background-image: url(pn.png); }
+	.pnc, a.pnc, .tb .o { border:none; }
+
+.mi .hover .moodfm_input { background-color: #FCC !important; }
+
+/* 重定義字體 */
+#qmenu, .fl .bm_h h2 a, .xi1, #um .new, .topnav .new, .sch .new, .el .ec .hot em, .pll .s a.joins { color: #BA350F; }
+.pll .s a.go { color: #FFF; }
+.xi2, .xi2 a { color: #000; }
+
+/* 重定義按鈕 */
+.pgs #newspecial, .pgs #newspecialtmp { float: left; background: url(pn_post.png) no-repeat 0 0; }
+#post_reply, #post_replytmp { float: left; background: url(pn_reply.png) no-repeat 0 0; }
+	#newspecial img, #newspecialtmp img, #post_reply img, #post_replytmp img { opacity: 0; filter: alpha(opacity=0); }
+.moodfm_btn { background-image: url(mood_input_btn.png) !important; }
+#create_group_btn { display: block; background: url(create_group.png) no-repeat 0 0; }
+	#create_group_btn img { opacity: 0; filter: alpha(opacity=0); }
+.el .ec .hot { background-image: url(hotspot.gif); }
+.pll .s { background-image:url(polljoins.gif); }
+
+/* 重定義 Tab */
+.tb .a a { border-bottom-color:#fff; }
+
+/* 重定義側邊導航 */
+.bdl, .bdl dt, .bdl dd.bdl_a a { border-color: #FCC; background-color: #FFF9F9; }
+	.bdl dt { background-image: url(titlebg_sd.png); }
+.bdl dd.bdl_a a { color: #BA350F; }
+
+/* 重定義下拉菜單 */
+.p_pop a { border-bottom-color: #F1F1F1; }
+	.p_pop a:hover, .p_pop a.a, #sctype_menu .sca { background-color: #F1F1F1; color: #BA350F; }
+	.blk a:hover { background-color: transparent; }
+
+/* 重定義好友列表 */
+#nv_home .buddy li { background-color: transparent; border: none; }
+/*快速發帖*/
+#f_pst{ background:F1F1F1!important;}
+#f_pst .bm_h{ background:#F1F1F1!important;}
+/**/
+.ttp li.a a{ background:none!important; border:1px solid #F1F1F1; color:#F46B0F!important;}
+.ttp li a:hover{ background:none!important; border:1px solid #F1F1F1; color:#F46B0F!important;}
