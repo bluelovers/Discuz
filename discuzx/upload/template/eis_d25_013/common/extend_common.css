@@ -1,0 +1,111 @@
+
+
+.wp1000{ width:1000px; margin:0px auto;}
+
+#eis_toptb{ height:29px; line-height:29px; overflow:hidden; border-bottom:1px solid #000; background:#000;}
+#eis_toptb a{ color:#8c8c8c; margin:0px 3px;}
+
+#hd{ height:131px; overflow:hidden; padding-top:0px;}
+#hd .wp{ padding-top:0px;}
+#hd h2{ padding-left:40px;background:url({IMGDIR}/logo_bg.png) no-repeat left center;}
+#space #hd h2{ background:none!important; }
+
+#hd .hdc{ height:71px; overflow:hidden;}
+#um{ color:#8c8c8c;}
+#um a{ color:#8c8c8c;}
+#um .pipe{ color:#8c8c8c;}
+#um .avt img{ padding:0px; background:none; border:none;}
+
+#eis_nv { overflow: hidden; padding-left: 3px;}
+#eis_nv .eis_ul{ height:60px; line-height:60px; overflow:hidden;}
+#eis_nv .eis_ul li { float: left; height:60px; line-height:60px; font-weight:100; font-size:15px; text-align:center; }
+.ie_all #eis_nv .eis_ul li { line-height:63px; }
+.ie6 #eis_nv .eis_ul li { line-height: 60px; }
+#eis_nv .eis_ul li a { float: left; padding: 0 25px; height: 60px; text-align:center;}
+#eis_nv .eis_ul li a { color:#FFF;}
+#eis_nv .eis_ul li span { display: none; }
+/*當前頁*/
+#eis_nv .eis_ul li.a { margin-left:1px; margin-right:1px;background:url({IMGDIR}/eis_nv_li.png) no-repeat left center;}
+#eis_nv .eis_ul  li.a a { color:#FFF; background:url({IMGDIR}/eis_nv_a.jpg) no-repeat right center;}
+#eis_nv .eis_ul li a:hover { text-decoration:none; background:url({IMGDIR}/eis_nv_a.jpg) no-repeat right center;}
+#eis_nv .eis_ul li:hover {background:url({IMGDIR}/eis_nv_li.png) no-repeat left center;}
+#eis_nv .eis_ul li.hover {background:url({IMGDIR}/eis_nv_li.png) no-repeat left center;}
+#eis_nv .eis_ul li.hover a{background:url({IMGDIR}/eis_nv_a.jpg) no-repeat right center;}
+
+#qmenu{ margin-top:16px; color:#FFF;}
+
+.ie6 #eis_nv .eis_ul li.a { margin-left:1px; margin-right:1px;background:url({IMGDIR}/eis_ie6nv_li.png) no-repeat left center;}
+.ie6 #eis_nv .eis_ul li.a a { color:#FFF; background:url({IMGDIR}/eis_nv_a.jpg) no-repeat right center;}
+.ie6 #eis_nv .eis_ul li a:hover { text-decoration:underline; background:none!important;}
+.ie6 #eis_nv .eis_ul li:hover { background:none!important;}
+.ie6 #eis_nv .eis_ul li.hover { background:none!important;}
+.ie6 #eis_nv .eis_ul li.hover a{ background:none!important;}
+
+.ie6 #qmenu{ background:url({IMGDIR}/eis_qmenu.png) no-repeat 0 0;}
+.ie6 .scbar_icon_td {background: url({IMGDIR}/eis_ie6s.png) no-repeat 0 -74px; }
+.ie6 .scbar_txt_td,.ie6 .scbar_type_td { background: url({IMGDIR}/eis_ie6s.png) repeat-x 0 -222px; }
+.ie6 .scbar_btn_td {background: url({IMGDIR}/eis_ie6s.png) no-repeat right -296px; }
+.ie6 .scbar_type_td { background: url({IMGDIR}/eis_ie6s.png) no-repeat 0 -370px; }
+
+
+#scbar{ background:none!important; border:none!important; height:44px; line-height:44px; overflow:hidden; width:200px; margin-top:10px;}
+.scbar_icon_td { width:10px; background: url({IMGDIR}/eis_search.png) no-repeat 0 -74px; }
+.scbar_txt_td, .scbar_type_td { background: url({IMGDIR}/eis_search.png) repeat-x 0 -222px; }
+#scbar_txt { width: 100px; _line-height:14px;  background:none; border:none;outline: none; font-size: 12px; }
+.scbar_btn_td { width:27px; background: url({IMGDIR}/eis_search.png) no-repeat right -296px; text-align: center; }
+#scbar_btn { margin: 0; padding: 0; border: none; background: transparent none; }
+.scbar_type_td { background: url({IMGDIR}/eis_search.png) no-repeat 0 -370px; }
+#scbar_type { display: block; padding-left: 5px; text-align: left; text-decoration: none; }
+#scbar_type_menu { margin-top: -8px; }
+#scbar .eis_pn{ padding:20px 10px;}
+
+
+.fastlg_l{ border-right:1px solid #373737;}
+.fastlg_l .eis_pn{ border:1px solid #2d2d2d;background:#373737;}
+.fastlg_l .eis_pn em{ color:#ccc;}
+.fastlg .xi2{ color:#179ed5}
+.fastlg_l,.fastlg_l a{ color:#ccc!important;}
+
+#ls_password,#ls_username{ border:1px solid #2d2d2d;background:#373737;color:#ccc;}
+
+#eis_ft{ width:100%; background:#191919;}
+#ft{ border:none; color:#4b4b4b;}
+#ft .pipe{ color:#4b4b4b;}
+#ft ,#ft a{ color:#CCC;}
+
+#eis_bg{ margin-top:10px; background:url({IMGDIR}/eis_wbg1.png) no-repeat left top;}
+.eis_wbg1{ background:url({IMGDIR}/eis_wbg2.png) no-repeat right top;}
+.eis_bgtop{ background:url({IMGDIR}/eis_bgtop.png) repeat-x left top;}
+#eis_bg .eis_bg1{ background:url({IMGDIR}/eis_bg1.jpg) no-repeat left top;}
+#eis_bg .eis_bg2{background:url({IMGDIR}/eis_bg2.jpg) no-repeat right top;}
+#eis_hot{ height:40px; line-height:40px;color:#CCC; text-align:right;}
+#eis_hot a{ color:#FFF; padding-left:10px;}		
+
+#ct{}
+#ct .fl{ background:none; border:none;}
+#ct .fl .bm{  margin-bottom:10px; border:none;background:url({IMGDIR}/eis_bar_bg.gif) repeat-x left top;}
+#ct .fl .bm .bm_h{ height:35px; line-height:35px; border:none; padding:0px; padding-left:10px; background:url({IMGDIR}/eis_bar_l.gif) no-repeat left top;}
+#ct .fl .bm .bm_h  h2{ padding-right:10px; background:url({IMGDIR}/eis_bar_r.gif) no-repeat right top;}
+#ct .fl .bm .bm_h  h2 a{ color:#333;}
+#ct .fl .bm .bm_h .o{ padding-right:10px;}
+#ct .eis_bmw{ border:none; background:url({IMGDIR}/eis_bar_bg.gif) repeat-x left top;}
+#ct .eis_bmw .bm_h{ height:35px; line-height:35px; border:none; padding:0px; padding-left:10px; background:url({IMGDIR}/eis_bar_l.gif) no-repeat left top; }
+#ct .eis_bmw .bm_h  h2{ padding-right:10px; background:url({IMGDIR}/eis_bar_r.gif) no-repeat right top;}
+#ct .eis_bmw .bm_h .o,#ct .bmw .bm_h .y{ padding-right:10px;}
+
+#online {  margin-bottom:10px; border:none;background:url({IMGDIR}/eis_bar_bg.gif) repeat-x left top;}
+#online .bm_h{ height:35px; line-height:35px; border:none; padding:0px; padding-left:10px; background:url({IMGDIR}/eis_bar_l.gif) no-repeat left top;}
+#online .bm_h  h3{ padding-right:10px; background:url({IMGDIR}/eis_bar_r.gif) no-repeat right top;}
+#online .bm_h .o{ padding-right:10px;}
+
+.ttp li.a a{ background:none; border:1px solid #F1F1F1; }
+.ttp li a:hover{ background:none; border:1px solid #F1F1F1;}
+
+#threadlist{ border:1px solid #DCDCDC!important}
+
+.pnc,.pnc a,.tb_h .o{ border:none!important;}
+
+.bdl { float: left; overflow: hidden; border: 1px solid #DCDCDC!important; background-color: #F6F6F6!important; }
+.bdl dt { overflow: hidden; height: 27px; line-height: 27px; border: solid #e4e4e4!important; border-width: 1px 0!important; background: url({IMGDIR}/titlebg_sd.png) repeat-x 100% 0; }
+/* 當前版塊 */
+.bdl dd.bdl_a a { background-color: #F5F9F9!important;  }
