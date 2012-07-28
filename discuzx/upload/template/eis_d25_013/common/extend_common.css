@@ -78,8 +78,8 @@
 .eis_bgtop{ background:url({IMGDIR}/eis_bgtop.png) repeat-x left top;}
 #eis_bg .eis_bg1{ background:url({IMGDIR}/eis_bg1.jpg) no-repeat left top;}
 #eis_bg .eis_bg2{background:url({IMGDIR}/eis_bg2.jpg) no-repeat right top;}
-#eis_hot{ height:40px; line-height:40px;color:#CCC; text-align:right;}
-#eis_hot a{ color:#FFF; padding-left:10px;}		
+#eis_hot{ height:40px; line-height:40px;color:#CCC; text-align:right; overflow: hidden; }
+#eis_hot a{ color:#FFF; padding-left:10px;}
 
 #ct{}
 #ct .fl{ background:none; border:none;}
