@@ -1,0 +1,38 @@
+<!--{if $leftside['favorites']}-->
+	<h2 class="mbn"><a href="home.php?mod=space&do=favorite&type=forum">{lang favorite_forums}</a></h2>
+	<dl id="lf_fav" class="bdl_fav mbm">
+		<!--{loop $leftside['favorites'] $favfid $fdata}-->
+			<dd>
+				<a href="forum.php?mod=forumdisplay&fid=$favfid">$fdata[0]</a>
+			</dd>
+		<!--{/loop}-->
+	</dl>
+<!--{else}-->
+	<h2 class="bdl_h">{lang forum_nav}</h2>
+<!--{/if}-->
+<dl id="lf_2065" class="a">
+  <dt><a href="javascript:;" hidefocus="true" onclick="leftside('lf_2065')">广告位</a></dt>
+  <dd>
+    <!--{ad/custom_1}-->
+  </dd>
+</dl>
+<!--{loop $leftside['forums'] $upfid $gdata}-->
+	<dl class="{if $fgroupid == $upfid || $_G['setting']['leftsideopen']}a{/if}" id="lf_$upfid">
+		<dt><a href="javascript:;" hidefocus="true" onclick="leftside('lf_$upfid')" title="$gdata['name']">$gdata['name']</a></dt>
+	<!--{loop $gdata['sub'] $subfid $name}-->
+		<dd{if $_G['fid'] == $subfid || $_G['forum']['fup'] == $subfid} class="bdl_a"{/if}>
+			<a href="forum.php?mod=forumdisplay&fid=$subfid" title="$name">$name</a>
+		</dd>
+	<!--{/loop}-->
+	</dl>
+<!--{/loop}-->
+<dl id="lf_2066" class="a">
+  <dt><a href="javascript:;" hidefocus="true" onclick="leftside('lf_2066')">广告位</a></dt>
+  <dd>
+    <!--{ad/custom_2}-->
+  </dd>
+</dl>
+<dl id="lf_2067" class="a">
+  <dt><a href="javascript:;" hidefocus="true" onclick="leftside('lf_2067')">实时关注</a></dt>
+<!--{block/208}-->
+</dl>
