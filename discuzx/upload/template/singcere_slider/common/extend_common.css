@@ -1,0 +1,103 @@
+.ph { font-size: 26px; }
+.showmenu2 { position:absolute; right:110px; padding-right: 16px; background: url({IMGDIR}/arrwd.gif) no-repeat 100% 50%; cursor: pointer; white-space: nowrap; }
+.ie_all .showmenu2 { right:100px; z-index:20;  }
+.wp { margin: 0 auto; width: 940px; display:none; }
+#main .wp { width: auto; }
+#toptb .wp { width:980px;}
+#um { width:500px; float:right; padding-top:0; }
+.wp{ display:block;}
+#header h1 { float:left; margin:0; }
+#header h1 a { color:#fff; border:0; font-size:19px; text-shadow:0 -1px 1px #666; line-height:48px; }
+#header h1 a:hover { text-decoration:none; }
+#header .header_right { position:absolute; right:0; top:0; width:15px; height:51px; background: url({STYLEIMGDIR}/header_right.png) no-repeat top right;}
+#nav ul { list-style:none; margin:0; padding:0; float:right; }
+#nav ul li { display:inline; }
+#nav ul li span { display:none; }
+#nav a { font-weight:bold; color:#d6e7ff; border:0; line-height:46px; margin-left:25px; }
+#nav a#qmenu { color:#336699; }
+#nav a:hover, #nav .current_page_item a, #nav .current_page_parent a, #nav .current-page-ancestor a { color:#fff; text-decoration:none; }
+#main { width:960px; margin:0 auto; background:#fff; padding:10px 10px 20px 10px; -webkit-border-radius:4px; -moz-border-radius:4px; border-radius:4px; -moz-box-shadow:0 1px 3px #8493a6; -webkit-box-shadow:0 1px 3px #8493a6; box-shadow:0 1px 3px #8493a6; }
+#qmenu { margin: 3px 4px 0; margin-top: 10px; line-height: 26px !important; }
+#pt { margin:10px 0; }
+.tb { padding-left:0; }
+.xl li { margin: 4px 0; }
+.xld dt { padding: 4px 0 1px; }
+.rfm { width: 760px; border-bottom:none; }
+.rfm .px { height:24px; line-height:24px; }
+.fwin .rfm th, .fwin .rfm td, .nfl .f_c .rfm th, .nfl .f_c .rfm td { padding: 6px 5px; }
+.title { padding: 0 10px; height: 31px; font-size: 12px; font-weight: 700; line-height: 31px; overflow: hidden; }
+.frame-title, .frametitle, .tab-title { background: {TITLEBGCOLOR}; border-top: 1px solid #FFFFFF; }
+.frame-tab .tb-c { padding: 10px; }
+.tns th { border-color: {WRAPBORDERCOLOR}}
+#ft { border-top:none; width:980px; padding:10px 0 30px}
+#ct .frame { border:1px solid #2267B5; border-top:0px; margin-bottom:10px;}
+.fl .bm_h { background-image:none; border-color: {COMMONBORDER};}
+.bm_h { border-bottom:none;}
+.pn, .tb .o, .tb .o a { border-radius:3px;}
+
+
+
+
+
+/*-------------------------form qing-------------------------*/
+/*home-space*/
+.ct2_a {  border-radius: 5px;}
+.tbn ul {margin: -1px 1px 0 0; border-top: 1px solid {WRAPBORDERCOLOR}; border-bottom: 1px solid white;}
+.tbn li { margin:0;border-top: 1px solid white;border-bottom: 1px solid {WRAPBORDERCOLOR};}
+.tbn li.a { margin: -1px -1px 0 0; padding: 0; background: #F0F0F0 url({STYLEIMGDIR}/bg_tbn_a.png) no-repeat 100% 50%;}
+.tbn li a {padding: 0 9px 0 10px;}
+/*all-tb*/
+.ie6 .tb, .ie7 .tb { height: 35px; }
+.tb li { margin: 0 3px 3px 0; }
+.tb a { padding: 0 9px; border-color: {COMMONBORDER}; background: url({STYLEIMGDIR}/bg_tb.png) repeat-x 0 50%; font-size: 14px; border-radius: 5px; }
+.tb .a, .tb .a a, .tb .current, .tb .current a { margin-bottom: -4px; padding-bottom: 4px; color: {HIGHLIGHTLINK}; border-radius: 5px 5px 0 0; }
+.tb_w { padding-left: 20px; }
+.tb_w a { padding-left: 30px; padding-right: 30px; }
+.tb_w .y a { padding-left: 5px; padding-right: 0; }
+.ie6 .tb_w .a { position: relative !important; }
+.tb .o { float: right; }
+.tb .o, .tb .o a { margin-right: 0; height: 26px; line-height: 24px; border-radius: 5px; }
+.tb .o:active, .tb .o a:active { background-position: 0 -60px; }
+/*tb-tao*/
+.tb_h li { margin: 3px 3px 3px 0; }
+.tb_h .a { margin-top: 0; }
+.tb_h .a a { padding-top: 3px; }
+.tb_h .o { margin: 4px 5px 0; }
+/*forumdisplay-pubu */
+.waterfall { position: relative; margin-top: 15px; }
+.waterfall li { margin: 0 10px 10px 0; padding: 0 0 3px; text-align: left; border-width: 1px 0 0; border-top: 1px solid #EAEAEA; background: url({STYLEIMGDIR}/bg_waterfall.png) no-repeat 100% 100%; }
+.waterfall .c, .waterfall h3 { padding: 10px; border: solid #EAEAEA; border-width: 0 1px; background-color: #F8F8F8; }
+.waterfall .c { overflow: hidden; padding-bottom: 0; max-height: 800px; }
+.waterfall .c .nopic { display: block; background:{WRAPBG} url({IMGDIR}/nophototiny.png) no-repeat 50% 50%; cursor: pointer; }
+.waterfall .auth { padding: 0 10px 10px; border-width: 0 1px 1px; border-style: solid; border-color: transparent #EAEAEA #B9B9B9; background: #F8F8F8; }
+.waterfall .auth img { display: inline-block; margin: 0 1px; }
+/* 大分页按钮 by Pony 1203121325 */
+.pgbtn { margin: 5px 0 10px; }
+.pgbtn a { display: block; height: 40px; line-height: 40px; letter-spacing: 5px; text-align: center; border: 1px solid #DCDCDC; background: #F5F5F5 url({STYLEIMGDIR}/bg_pgbtn.png) repeat-x 0 0; font-size: 14px; outline: none; border-radius: 5px; box-shadow: 0 1px 0 #F5F5F5; }
+.pgbtn a:hover { border-color: #BABABA; text-decoration: none; }
+.pgbtn a:active { background: #EEE; border-color: #D0D0D0; box-shadow: none; }
+/*-------------------------form qing-------------------------*/
+
+
+
+
+
+
+/*=== Main Styles ===*/
+body { color:#595a5a;}
+/* HTML5 tags */
+header, section, footer, aside, nav, article, figure { display: block; }
+/*=== Structure Styles ===*/
+#wrapper { width:990px; margin:0 auto; }
+#header { background:url("{STYLEIMGDIR}/header.png") no-repeat; width:954px; height:51px; margin:5px auto 20px auto; padding:0 10px 0 20px; position:relative; }
+/* search styles */
+#primary.support { background: #f9f9f9; margin:-10px -10px 0px -10px; padding: 10px 10px 0 10px; -webkit-border-radius:4px; -moz-border-radius:4px; border-radius:4px 4px 0 0; border-bottom:1px solid #DFDFDF; }
+#support-title { font-size: 14px; font-weight: bold; color:#000; margin: 0 0 20px 0; }
+#support-title a { color:#000; border:0; }
+#scbar { height:auto; border:none; background:none; line-height:auto; float:left; margin-top:10px; position:relative; }
+#scbar_type { display: inline; padding-left:0;}
+#scbar .search { background: transparent url("{STYLEIMGDIR}/support_search.png") no-repeat; width:195px; height:35px; font-size:12px; line-height:20px; border:0; margin:0 5px 0 0; outline: none; padding:3px 15px 0 39px; }
+.ie_all #scbar .search { padding-top:10px; height:28px; z-index:0;}
+#scbar .search:focus { background-position: 0 -38px; -moz-box-shadow:none; -webkit-box-shadow:none; box-shadow:none; }
+#scbar .submit { background: transparent url("{STYLEIMGDIR}/support_search_button.png") no-repeat 0 2px; cursor:pointer; width:70px; height:37px; border:0; text-indent: -9999px; outline: none; position: relative; top:2px; }
+#scbar .submit:active { position: relative; top:4px; }
